@@ -1,0 +1,29 @@
+rules:
+  - id: assert-eqeq-is-ok
+    pattern: |
+      def __eq__():
+          ...
+          $X == $X
+    message: "possibly useless comparison but in eq function"
+    languages: [python]
+    severity: OK
+  - id: assert-eqeq-is-ok
+    pattern: assert $X == $X
+    message: "possibly, useless comparison but guarded by assert"
+    languages: [python]
+    severity: OK
+  - id: assert-eqeq-is-ok2
+    pattern: assertTrue($X == $X)
+    message: "possibly, useless comparison but guarded by assert"
+    languages: [python]
+    severity: OK
+  - id: assert-eqeq-is-ok
+    pattern: 1 == 1
+    message: "possibly, useless comparison but probably used for True"
+    languages: [python]
+    severity: OK
+  - id: eqeq-is-bad
+    pattern: $X == $X
+    message: "useless comparison"
+    languages: [python]
+    severity: ERROR
