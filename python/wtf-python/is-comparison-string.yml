@@ -1,0 +1,36 @@
+rules:
+  - id: identical-is-comparison
+    pattern: $S is $S
+    message: "Found identical comparison using is"
+    languages: [python]
+    severity: ERROR
+  - id: none-comparison-ok
+    pattern: $S is None
+    message: "is None is OK"
+    languages: [python]
+    severity: OK
+  - id: type-comparison-ok
+    pattern: type($X) is $T
+    message: "type check with is is OK"
+    languages: [python]
+    severity: OK
+  - id: true-comparison-ok
+    pattern: $S is True
+    message: "is True is OK"
+    languages: [python]
+    severity: OK
+  - id: false-comparison-ok
+    pattern: $S is False
+    message: "is False is OK"
+    languages: [python]
+    severity: OK
+  - id: string-is-comparison-r
+    pattern: $S is "..."
+    message: "Found string comparison using is"
+    languages: [python]
+    severity: ERROR
+  - id: is-comparison
+    pattern: $S is $R
+    message: "Found comparison using is"
+    languages: [python]
+    severity: WARNING
