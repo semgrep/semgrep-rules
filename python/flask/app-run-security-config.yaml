@@ -1,0 +1,53 @@
+
+# Flask check3: Flask application app.run best practices https://flask.palletsprojects.com/en/1.1.x/api/?highlight=run#flask.Flask.run
+rules:
+  # # . Rules for app.run() scope
+  - id: app_run_with_guard
+    pattern: |
+      if $X == '__main__':
+        app.run(...)
+    message: Running app.run(...) with guard is recommended
+    languages: [python]
+    severity: OK
+  - id: app_run_with_guard
+    pattern: |
+      if $X == '__main__':
+        ...
+        app.run(...)
+    message: Running app.run(...) with guard is recommended
+    languages: [python]
+    severity: OK
+  - id: app_run_with_guard_no_option
+    pattern: |
+      if $X == '__main__':
+        app.run()
+    message: Running app.run() with guard is recommended
+    languages: [python]
+    severity: OK
+  - id: app_run_with_guard_no_option
+    pattern: |
+      if $X == '__main__':
+        ...
+        app.run()
+    message: Running app.run() with guard is recommended
+    languages: [python]
+    severity: OK
+  # - id: app_run_within_func
+  #   pattern: |
+  #     def $X(...):
+  #       app.run()
+  #   message: Running app.run() with guard is recommended
+  #   languages: [python]
+  #   severity: OK
+  - id: avoid_using_app_run_directly_no_option
+    pattern: |
+        app.run()
+    message: app.run() is ignored by flask. Consider putting app.run() behind a guard
+    languages: [python]
+    severity: WARNING
+  - id: avoid_using_app_run_directly
+    pattern: |
+        app.run(...)
+    message: app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard
+    languages: [python]
+    severity: WARNING
