@@ -74,28 +74,21 @@ rules:
     message: "this function is only available on Python 3.7+"
     languages: [python]
     severity: ERROR
-  - id: python37-compatibility-os2-ok
-    pattern: |
-      if hasattr(os, 'pwrite'):
-          ...
-          os.pwrite(...)
-    message: "guarded usage: ok"
-    languages: [python]
-    severity: OK
-  - id: python37-compatibility-os2-ok2
-    pattern: |
-      if hasattr(os, 'pwrite'):
-          os.pwrite(...)
-    message: "guarded usage: ok"
-    languages: [python]
-    severity: OK
-  - id: python37-compatibility-os2
-    pattern: os.pwrite(...)
+  - id: python37-compatability-os-module
+    patterns:
+      - pattern-not-inside: |
+          if hasattr(os, 'pwrite'):
+              ...
+      - pattern: os.pwrite(...)
     message: "this function is only available on Python 3.7+"
     languages: [python]
     severity: ERROR
-  - id: python37-compatibility-os3
-    pattern: os.pwritev(...)
+  - id: python37-compatibility-os2-ok2
+    patterns:
+      - pattern-not-inside: |
+          if hasattr(os, 'pwritev):
+              ...
+      - pattern: os.pwritev(...)
     message: "this function is only available on Python 3.7+"
     languages: [python]
     severity: ERROR

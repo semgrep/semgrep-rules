@@ -1,0 +1,14 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: returntocorp/sgrep
+    steps:
+      - checkout
+      - run: sgrep-lint --validate python .
+      - run: sgrep-lint --validate c .
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - test
