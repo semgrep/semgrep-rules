@@ -74,16 +74,16 @@ rules:
     message: "this function is only available on Python 3.7+"
     languages: [python]
     severity: ERROR
-    - id: python37-compatability-os-module
+  - id: python37-compatability-os-module
     patterns:
       - pattern-not-inside: |
           if hasattr(os, 'pwrite'):
               ...
       - pattern: os.pwrite(...)
-      message: "this function is only available on Python 3.7+"
-      languages: [python]
-      severity: ERROR      
-    - id: python37-compatibility-os2-ok2
+    message: "this function is only available on Python 3.7+"
+    languages: [python]
+    severity: ERROR
+  - id: python37-compatibility-os2-ok2
     patterns:
       - pattern-not-inside: |
           if hasattr(os, 'pwritev):
@@ -91,7 +91,7 @@ rules:
       - pattern: os.pwritev(...)
     message: "this function is only available on Python 3.7+"
     languages: [python]
-    severity: ERROR      
+    severity: ERROR
   - id: python37-compatibility-pdb
     pattern: pdb.set_trace(header=$X, ...)
     message: "this function is only available on Python 3.7+"
