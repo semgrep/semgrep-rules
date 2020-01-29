@@ -1,16 +1,13 @@
 version: 2.1
 jobs:
-  build:
+  test:
     docker:
       - image: returntocorp/sgrep
     steps:
       - checkout
-      - run: sgrep-lint --validate .
+      - run: sgrep-lint --validate . .
 workflows:
   version: 2.1
   build_and_test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
