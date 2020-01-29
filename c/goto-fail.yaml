@@ -1,9 +1,10 @@
 rules:
   - id: double_goto
     pattern: |
-      $COND:
-        goto $FAIL
-        goto $FAIL
+      if ($COND) {
+        goto $FAIL;      
+        goto $FAIL;
+      }
     message: The second goto statement will always be executed
     languages: [c]
     severity: WARNING
