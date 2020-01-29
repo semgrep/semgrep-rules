@@ -4,8 +4,8 @@
 rules:
   - id: avoid_send_file_without_path_sanitization
     pattern: |
-      def $X(filename: $Y, ...):
-        flask.send_file(...)
+      def $X():
+        ...
     message: Looks like `filename` could flow to `flask.send_file()` function. Make sure to properly sanitize filename or use `flask.send_from_directory`
     languages: [python]
     severity: WARNING
