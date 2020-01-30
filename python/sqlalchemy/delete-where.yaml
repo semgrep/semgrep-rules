@@ -1,0 +1,9 @@
+rules:
+  - id: delete-where-no-execute
+    patterns: 
+      - pattern-not: $X.delete().where(...).execute()
+      - pattern-not: $X.delete().where(...).$Y.execute()
+      - pattern: $X.delete().where(...)
+    message: ".delete().where(...) results in a no-op in SQLAlchemy unless the command is executed, use .filter(...).delete() instead."
+    languages: [python]
+    severity: ERROR
