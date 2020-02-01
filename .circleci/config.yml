@@ -6,9 +6,7 @@ jobs:
     steps:
       - run: apk add make
       - checkout
-      - run: sgrep-lint --validate --config=./python .
-      - run: sgrep-lint --validate --config=./c .
-      - run: ./test.py --ignore-todo .
+      - run: make test
 workflows:
   version: 2.1
   build_and_test:
