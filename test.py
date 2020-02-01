@@ -140,7 +140,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
             print(f'{status} - {check_id.ljust(60)}TP: {tp}\tTN:{tn}\t FP: {fp}\t FN: {fn} {todo_text}')
 
     if count_failures > 0:
-        print("{count_failures} checks failed tests")
+        print(f"{count_failures} checks failed tests")
         sys.exit(1)
     else:
         print("all tests passed")
