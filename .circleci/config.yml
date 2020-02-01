@@ -4,6 +4,7 @@ jobs:
     docker:
       - image: returntocorp/sgrep
     steps:
+      - run: apk add make
       - checkout
       - run: sgrep-lint --validate --config=./python .
       - run: sgrep-lint --validate --config=./c .
