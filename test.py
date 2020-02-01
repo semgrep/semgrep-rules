@@ -86,8 +86,6 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         return set(a.keys()).union(set(b.keys()))
 
     for file_path in join_keys(comment_lines, reported_lines):
-        print_debug(comment_lines)
-        print_debug(reported_lines)
         for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):
             assert len(set(reported_lines[file_path][check_id])) == len(reported_lines[file_path][check_id]), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path})"
             reported = set(reported_lines[file_path][check_id])
@@ -104,6 +102,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
     no_tests = []
     tested = []
     sgrep_error = []
+    print('starting tests...')
     for filename in filenames:
         if filename.suffix in YML_EXTENSIONS:
             # find all filenames that have the same name but not extension

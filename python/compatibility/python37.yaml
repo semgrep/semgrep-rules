@@ -86,7 +86,7 @@ rules:
   - id: python37-compatibility-os2-ok2
     patterns:
       - pattern-not-inside: |
-          if hasattr(os, 'pwritev):
+          if hasattr(os, 'pwritev'):
               ...
       - pattern: os.pwritev(...)
     message: "this function is only available on Python 3.7+"
