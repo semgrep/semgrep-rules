@@ -13,9 +13,7 @@ class B:
     def method1(self, args):
         print('hello there')
 
-# ruleid: baseclass-attribute-override
-
-
+# todoruleid: baseclass-attribute-override
 class C(A, B):
     def __init__():
         print('initialized')

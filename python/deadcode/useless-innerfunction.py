@@ -1,4 +1,4 @@
-# ruleid:uselses-inner-function
+# todoruleid:useless-inner-function
 def A():
     print_error('test')
 
@@ -9,7 +9,7 @@ def A():
         print_error('another')
     return None
 
-# ruleid:uselses-inner-function
+# todoruleid:useless-inner-function
 def A():
     print_error('test')
 

@@ -19,7 +19,7 @@ elif b:
     print('1')
 
 
-# ruleid: useless-if-body
+# todoruleid: useless-if-body
 if a:
     print('this is a')
 elif b:

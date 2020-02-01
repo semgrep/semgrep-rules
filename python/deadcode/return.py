@@ -6,7 +6,7 @@ return 5
 def alwaysblue():
     if isblue():
         return 'blue'
-    # ruleid: code-after-unconditional-return
+    # todoruleid: code-after-unconditional-return
     return 'red'
     return 'green'
 
@@ -14,6 +14,6 @@ def alwaysblue():
 def alwaysblue():
     if isblue():
         return 'blue'
-    # ruleid: code-after-unconditional-return
+    # todoruleid: code-after-unconditional-return
     return 'red'
     x = 5
