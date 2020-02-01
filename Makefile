@@ -1,4 +1,4 @@
 test:
-	sgrep-lint --validate python .
-    sgrep-lint --validate c .
+	sgrep-lint --validate --config=./python .
+    sgrep-lint --validate --config=./c .
     ./test.py --ignore-todo .
