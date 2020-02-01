@@ -97,7 +97,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
 
     return (score_by_checkid, num_todo)
 
-def generate_file_pairs(location: Path, ignore_todo: bool):
+def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
     filenames = list(location.rglob("*"))
     no_tests = []
     tested = []
@@ -111,7 +111,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
                 no_tests.append(filename)
                 continue
             # invoke sgrep
-            cmd = ['sgrep-lint', '--no-rewrite-rule-ids', '-f', str(filename)] + [str(t) for t in test_files]
+            cmd = ['sgrep-lint', '--strict', '--no-rewrite-rule-ids', '-f', str(filename)] + [str(t) for t in test_files]
             print_debug(cmd)
             try:
                 output = subprocess.check_output(cmd, shell=False)
@@ -121,7 +121,11 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
             except subprocess.CalledProcessError as ex:
                 print(f'sgrep error running {cmd}: {ex}')
                 sgrep_error.append(cmd)
-    
+
+    if len(sgrep_error) and strict:
+        print('exiting due to sgrep/config errors and strict flag')
+        sys.exit(1)
+
     print(f"{len(no_tests)} yaml files missing tests")
     print(f"{len(tested)} yaml files tested")
     print('check id scoring:')
@@ -146,10 +150,10 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
         print("all tests passed")
         sys.exit(0)
 
-def main(location: Path, ignore_todo: bool, verbose: bool):
+def main(location: Path, ignore_todo: bool, verbose: bool, strict: bool):
     global DEBUG
     DEBUG = verbose
-    generate_file_pairs(location, ignore_todo)
+    generate_file_pairs(location, ignore_todo, strict)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -168,10 +172,15 @@ if __name__ == '__main__':
         action='store_true'
     )
     parser.add_argument(
+        '-s', '--strict', 
+        help='fail on any error',
+        action='store_true'
+    )
+    parser.add_argument(
         '-v', '--verbose', 
         help='debug output',
         action='store_true'
     )
     args = parser.parse_args()
     _test_compute_confusion_matrix()
-    main(Path(args.directory), args.ignore_todo, args.verbose)
+    main(Path(args.directory), args.ignore_todo, args.verbose, args.strict)
