@@ -21,6 +21,11 @@ Validate that the output is annotated in the source file with by looking for a c
  """
 YML_EXTENSIONS = {".yml", ".yaml"}
 
+def print_debug(msg):
+    global DEBUG
+    if DEBUG:
+        print(msg, file=sys.stderr)
+
 def normalize_rule_id(line):
     """
     given a line like `     # ruleid:foobar` 
@@ -81,14 +86,14 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         return set(a.keys()).union(set(b.keys()))
 
     for file_path in join_keys(comment_lines, reported_lines):
-        print(comment_lines)
-        print(reported_lines)
+        print_debug(comment_lines)
+        print_debug(reported_lines)
         for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):
             assert len(set(reported_lines[file_path][check_id])) == len(reported_lines[file_path][check_id]), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path})"
             reported = set(reported_lines[file_path][check_id])
             expected = set(comment_lines[file_path][check_id])
             new_cm = compute_confusion_matrix(reported, expected)
-            print(reported, expected, new_cm)
+            print_debug(f"reported: {reported}, expected: {expected}, confusion matrix: {new_cm}")
             old_cm = score_by_checkid[check_id]
             score_by_checkid[check_id] = [old_cm[i] + new_cm[i] for i in range(len(new_cm))]
 
@@ -108,11 +113,11 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
                 continue
             # invoke sgrep
             cmd = ['sgrep-lint', '--no-rewrite-rule-ids', '-f', str(filename)] + [str(t) for t in test_files]
-            print(cmd)
+            print_debug(cmd)
             try:
                 output = subprocess.check_output(cmd, shell=False)
                 output_json = json.loads((output.decode("utf-8")))
-                print(output_json)
+                print_debug(output_json)
                 tested.append((filename, score_output_json(output_json, test_files, ignore_todo)))
             except subprocess.CalledProcessError as ex:
                 print(f'sgrep error running {cmd}: {ex}')
@@ -120,7 +125,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
     
     print(f"{len(no_tests)} yaml files missing tests")
     print(f"{len(tested)} yaml files tested")
-    print('check id scoring follows')
+    print('check id scoring:')
     count_failures = 0
     for (filename, (output, num_todo)) in tested:
         print('='*120)
@@ -134,8 +139,13 @@ def generate_file_pairs(location: Path, ignore_todo: bool):
             status = '✔' if good else '⚠'
             todo_text = f"(TODOs: {num_todo})" if num_todo > 0 else ''
             print(f'{status} - {check_id.ljust(60)}TP: {tp}\tTN:{tn}\t FP: {fp}\t FN: {fn} {todo_text}')
+
     if count_failures > 0:
+        print("{count_failures} checks failed tests")
         sys.exit(1)
+    else:
+        print("all tests passed")
+        sys.exit(0)
 
 def main(location: Path, ignore_todo: bool, verbose: bool):
     global DEBUG
