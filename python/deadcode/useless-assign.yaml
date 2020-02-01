@@ -1,0 +1,21 @@
+rules:
+  - id: useless-assignment-keyed
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $X[$Y] = ...
+              $X[$Y] = ...
+          - pattern: |
+              $X[$Y][$Z] = ...
+              $X[$Y][$Z] = ...
+    message: "key `$Y` in `$X` is uselessly assigned the same value twice"
+    languages: [python]
+    severity: WARNING
+  - id: useless-assignment
+    patterns:
+      - pattern: |
+          $X = $Y
+          $X = $Y
+    message: "`$X` is uselessly assigned to the same value (`$Y`) twice"
+    languages: [python]
+    severity: WARNING

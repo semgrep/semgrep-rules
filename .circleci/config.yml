@@ -4,9 +4,9 @@ jobs:
     docker:
       - image: returntocorp/sgrep
     steps:
+      - run: apk add make
       - checkout
-      - run: sgrep-lint --validate python .
-      - run: sgrep-lint --validate c .
+      - run: make test
 workflows:
   version: 2.1
   build_and_test:

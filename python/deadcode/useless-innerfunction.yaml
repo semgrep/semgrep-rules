@@ -1,0 +1,19 @@
+rules:
+  - id: useless-inner-function
+    patterns:
+      - pattern-not-inside: |
+          def $F(...):
+              ...
+              def $F2(...):
+                 ...
+              ...
+              $F2
+      - pattern: |
+          def $F(...):
+              ...
+              def $F2(...):
+                 ...
+              ...
+    message: "function `$F2` is defined inside a function but never used"
+    languages: [python]
+    severity: ERROR
