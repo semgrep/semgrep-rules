@@ -12,10 +12,6 @@ We welcome contributions to this repo! Please fork and make a pull request; we'l
 
 If you want run these rules rather than write them, check out the easy-to-use [bento.dev](https://bento.dev)
 
-## Contributing 
-
-Please make a PR to submit your rules!
-
 ## Help
 
 Contact the team at [sgrep@r2c.dev](mailto:sgrep@r2c.dev) for help.
