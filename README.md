@@ -1,10 +1,12 @@
 # sgrep-rules
 
-[![CircleCI](https://circleci.com/gh/returntocorp/sgrep-rules.svg?style=svg)](https://circleci.com/gh/returntocorp/sgrep-rules)
+[![r2c community slack](https://img.shields.io/badge/r2c_slack-join-brightgreen?style=for-the-badge&logo=slack&labelColor=4A154B)](https://join.slack.com/t/r2c-community/shared_invite/enQtNjU0NDYzMjAwODY4LWE3NTg1MGNhYTAwMzk5ZGRhMjQ2MzVhNGJiZjI1ZWQ0NjQ2YWI4ZGY3OGViMGJjNzA4ODQ3MjEzOWExNjZlNTA)
 
 This is an repository containing rules written for [sgrep](https://sgrep.dev), organized by language. Go to the main sgrep documentation for details on sgrep and the syntax for the yaml files in this repository.
 
 ## Contributing
+
+[![CircleCI](https://circleci.com/gh/returntocorp/sgrep-rules.svg?style=svg)](https://circleci.com/gh/returntocorp/sgrep-rules)
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
