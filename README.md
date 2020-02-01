@@ -4,6 +4,10 @@
 
 This is an repository containing rules written for [sgrep](https://sgrep.dev), organized by language. Go to the main sgrep documentation for details on sgrep and the syntax for the yaml files in this repository.
 
+## Contributing
+
+We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
+
 ## Running Rules in CI/Pre-Commit/Developer Workflow
 
 If you want run these rules rather than write them, check out the easy-to-use [bento.dev](https://bento.dev)
