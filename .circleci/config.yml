@@ -5,9 +5,7 @@ jobs:
       - image: returntocorp/sgrep
     steps:
       - checkout
-      - run: sgrep-lint --validate python .
-      - run: sgrep-lint --validate c .
-      - run: ./test.py --ignore-todo .
+      - run: make test
 workflows:
   version: 2.1
   build_and_test:
