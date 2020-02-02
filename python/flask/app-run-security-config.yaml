@@ -6,6 +6,6 @@ rules:
           if $X == '__main__':
               ...
       - pattern: app.run(...)
-    message: app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard
+    message: "top-level app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard, like inside a function"
     languages: [python]
     severity: WARNING
