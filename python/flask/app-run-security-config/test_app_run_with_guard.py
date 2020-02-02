@@ -4,4 +4,3 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     x = None
-    app.run(foo=None)

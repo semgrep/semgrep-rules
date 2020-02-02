@@ -91,7 +91,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
             reported = set(reported_lines[file_path][check_id])
             expected = set(comment_lines[file_path][check_id])
             new_cm = compute_confusion_matrix(reported, expected)
-            print_debug(f"reported: {reported}, expected: {expected}, confusion matrix: {new_cm}")
+            print_debug(f"reported lines: {reported}, expected lines: {expected}, confusion matrix: {new_cm}")
             old_cm = score_by_checkid[check_id]
             score_by_checkid[check_id] = [old_cm[i] + new_cm[i] for i in range(len(new_cm))]
 
@@ -104,9 +104,15 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
     sgrep_error = []
     print('starting tests...')
     for filename in filenames:
-        if filename.suffix in YML_EXTENSIONS:
-            # find all filenames that have the same name but not extension
-            test_files = [path for path in filenames if (path.suffix not in YML_EXTENSIONS and path.with_suffix('') == filename.with_suffix(''))]
+        if filename.suffix in YML_EXTENSIONS and not filename.name.startswith('.') and not filename.parent.name.startswith('.'):
+            # find all filenames that have the same name but not extension, or are in a folder with the same name as a the yaml file
+            yaml_file_name_without_ext = filename.with_suffix('')
+
+            #import pdb
+            #pdb.set_trace()
+            children_test_files = [p for p in filenames if str(p).startswith(str(yaml_file_name_without_ext))]
+            # remove yaml files from the test lists
+            test_files = [path for path in children_test_files if path.suffix not in YML_EXTENSIONS and path.is_file()]
             if not len(test_files):
                 no_tests.append(filename)
                 continue
@@ -116,7 +122,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
             try:
                 output = subprocess.check_output(cmd, shell=False)
                 output_json = json.loads((output.decode("utf-8")))
-                print_debug(output_json)
+                #print_debug(output_json)
                 tested.append((filename, score_output_json(output_json, test_files, ignore_todo)))
             except subprocess.CalledProcessError as ex:
                 print(f'sgrep error running {cmd}: {ex}')
@@ -127,6 +133,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
         sys.exit(1)
 
     print(f"{len(no_tests)} yaml files missing tests")
+    print_debug(f"missing tests: {no_tests}")
     print(f"{len(tested)} yaml files tested")
     print('check id scoring:')
     count_failures = 0
@@ -144,7 +151,7 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
             print(f'{status} - {check_id.ljust(60)}TP: {tp}\tTN:{tn}\t FP: {fp}\t FN: {fn} {todo_text}')
 
     if count_failures > 0:
-        print(f"{count_failures} checks failed tests")
+        print(f"{count_failures} checks failed tests (run with verbose flag for more details)")
         sys.exit(1)
     else:
         print("all tests passed")
