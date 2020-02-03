@@ -1,8 +1,15 @@
 version: 2.1
 jobs:
+  test-develop:
+    docker:
+      - image: returntocorp/sgrep:develop
+    steps:
+      - run: apk add make
+      - checkout
+      - run: make test
   test:
     docker:
-      - image: returntocorp/sgrep
+      - image: returntocorp/sgrep:latest
     steps:
       - run: apk add make
       - checkout
@@ -11,4 +18,5 @@ workflows:
   version: 2.1
   build_and_test:
     jobs:
+      - test-develop
       - test
