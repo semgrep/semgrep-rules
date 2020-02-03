@@ -13,3 +13,7 @@ jobs:
         uses: returntocorp/sgrep-run-tests-action@master
       - name: Get the output from tests
         run: echo "results ${{ steps.sgrep-tests.outputs.results }}"
+      - uses: actions/upload-artifact@v1
+        with:
+          name: test stdout
+          path: test_stdout.txt
