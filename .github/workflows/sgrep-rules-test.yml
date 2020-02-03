@@ -15,5 +15,5 @@ jobs:
         run: echo "results ${{ steps.sgrep-tests.outputs.results }}"
       - uses: actions/upload-artifact@v1
         with:
-          name: make test output
-          path: test_stdout.txt
+          name: test output
+          path: ${{ steps.sgrep-tests.outputs.output_dir }}
