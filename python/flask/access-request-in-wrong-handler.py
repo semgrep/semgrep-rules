@@ -2,6 +2,7 @@ from flask import request
 
 app = Flask(__name__)
 
+
 # ruleid:avoid-accessing-request-in-wrong-handler
 @app.route('/', method="GET")
 def handler_with_get_json(ff):
