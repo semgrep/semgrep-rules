@@ -1,6 +1,5 @@
 
-# ruleid: return-not-in-function
-return 5
+#return 5
 
 
 def alwaysblue():
