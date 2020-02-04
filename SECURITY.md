@@ -1,6 +1,7 @@
 # Security Policy
 
 ## Supported Versions
+
 All rules on `master` are supported.
 
 ## Reporting a Vulnerability
