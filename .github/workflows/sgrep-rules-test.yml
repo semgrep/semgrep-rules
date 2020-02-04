@@ -12,6 +12,7 @@ jobs:
         id: sgrep-tests
         uses: returntocorp/sgrep-rules-test-action@master
       - uses: actions/upload-artifact@v1
+        if: always()
         with:
           name: tests
           path: ${{ steps.sgrep-tests.outputs.output_dir }}
