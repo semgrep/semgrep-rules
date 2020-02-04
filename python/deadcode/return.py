@@ -1,5 +1,6 @@
 
-#return 5
+# todoruleid: return-not-in-function
+return 5
 
 
 def alwaysblue():
