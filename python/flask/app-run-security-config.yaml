@@ -1,0 +1,11 @@
+# Flask check3: Flask application app.run best practices https://flask.palletsprojects.com/en/1.1.x/api/?highlight=run#flask.Flask.run
+rules:
+  - id: avoid_using_app_run_directly
+    patterns:
+      - pattern-not-inside: |
+          if $X == '__main__':
+              ...
+      - pattern: app.run(...)
+    message: "top-level app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard, like inside a function"
+    languages: [python]
+    severity: WARNING
