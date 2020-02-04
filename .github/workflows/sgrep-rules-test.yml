@@ -5,14 +5,12 @@ on: [push]
 jobs:
   self_test:
     runs-on: ubuntu-latest
-    name: A job to run sgrep rules tests
+    name: run sgrep rules tests
     steps:
       - uses: actions/checkout@v2
       - name: run tests
         id: sgrep-tests
         uses: returntocorp/sgrep-run-tests-action@master
-      - name: Get the output from tests
-        run: echo "results ${{ steps.sgrep-tests.outputs.results }}"
       - uses: actions/upload-artifact@v1
         with:
           name: tests
