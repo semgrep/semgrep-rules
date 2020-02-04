@@ -37,3 +37,7 @@ If you have a rule that is not working, but you want to commit it soo it's docum
 # todoruleid:my-eqeq-bad
 x != x
 ```
+
+### Github Action To Run Tests
+
+If you fork this repo or create your own, you can add a special [sgrep-rules-test](https://github.com/marketplace/actions/sgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of sgrep.
