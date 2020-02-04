@@ -5,6 +5,7 @@ rules:
   - id: avoid_send_file_without_path_sanitization
     patterns:
       - pattern-inside: |
+          @app.route(...)
           def $X(filename):
             ...
       - pattern-either:
