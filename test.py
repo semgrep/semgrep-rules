@@ -97,7 +97,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
 
     return (score_by_checkid, num_todo)
 
-def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
+def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool, sgrep_verbose: bool):
     filenames = list(location.rglob("*"))
     no_tests = []
     tested = []
@@ -117,12 +117,12 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
                 no_tests.append(filename)
                 continue
             # invoke sgrep
-            cmd = ['sgrep-lint', '--strict', '--no-rewrite-rule-ids', '-f', str(filename)] + [str(t) for t in test_files]
+            extra_args =  ['--verbose'] if sgrep_verbose else []
+            cmd = ['sgrep-lint'] + extra_args + ['--strict', '--no-rewrite-rule-ids', '-f', str(filename)] + [str(t) for t in test_files]
             print_debug(cmd)
             try:
                 output = subprocess.check_output(cmd, shell=False)
                 output_json = json.loads((output.decode("utf-8")))
-                #print_debug(output_json)
                 tested.append((filename, score_output_json(output_json, test_files, ignore_todo)))
             except subprocess.CalledProcessError as ex:
                 print(f'sgrep error running {cmd}: {ex}')
@@ -157,10 +157,10 @@ def generate_file_pairs(location: Path, ignore_todo: bool, strict: bool):
         print("all tests passed")
         sys.exit(0)
 
-def main(location: Path, ignore_todo: bool, verbose: bool, strict: bool):
+def main(location: Path, ignore_todo: bool, verbose: bool, strict: bool, sgrep_verbose: bool):
     global DEBUG
     DEBUG = verbose
-    generate_file_pairs(location, ignore_todo, strict)
+    generate_file_pairs(location, ignore_todo, strict, sgrep_verbose)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -188,6 +188,11 @@ if __name__ == '__main__':
         help='debug output',
         action='store_true'
     )
+    parser.add_argument(
+        '-sv', '--sgrep-verbose', 
+        help='pass verbose flag to sgrpe',
+        action='store_true'
+    )
     args = parser.parse_args()
     _test_compute_confusion_matrix()
-    main(Path(args.directory), args.ignore_todo, args.verbose, args.strict)
+    main(Path(args.directory), args.ignore_todo, args.verbose, args.strict, args.sgrep_verbose)
