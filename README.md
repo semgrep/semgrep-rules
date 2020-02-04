@@ -6,7 +6,10 @@ This is an repository containing rules written for [sgrep](https://sgrep.dev), o
 
 ## Contributing
 
-[![CircleCI](https://circleci.com/gh/returntocorp/sgrep-rules.svg?style=svg)](https://circleci.com/gh/returntocorp/sgrep-rules)
+| sgrep | test status          |
+| ------- | ------------------ |
+| `latest`   | ![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test/badge.svg) |
+| `develop`  | ![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test-develop/badge.svg) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
@@ -41,3 +44,5 @@ x != x
 ### Github Action To Run Tests
 
 If you fork this repo or create your own, you can add a special [sgrep-rules-test](https://github.com/marketplace/actions/sgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of sgrep.
+
+See ours [here](.github/workflows/sgrep-rules-test.yml)
