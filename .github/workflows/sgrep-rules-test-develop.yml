@@ -1,0 +1,17 @@
+name: sgrep-rules-test-develop
+
+on: [push]
+
+jobs:
+  self_test:
+    runs-on: ubuntu-latest
+    name: run sgrep rules tests using the develop version of sgrep
+    steps:
+      - uses: actions/checkout@v2
+      - name: run tests
+        id: sgrep-tests
+        uses: returntocorp/sgrep-run-tests-action-develop@master
+      - uses: actions/upload-artifact@v1
+        with:
+          name: tests
+          path: ${{ steps.sgrep-tests.outputs.output_dir }}
