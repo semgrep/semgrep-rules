@@ -1,20 +1,20 @@
 rules:
+    # - id: return-in-init
+    #   patterns:
+    #     - pattern-inside: |
+    #         class A(...):
+    #           ...
+    #     - pattern-inside: |
+    #         def __init__(...):
+    #           ...
+    #     - pattern: return $X
+    #   message: "`return` should never appear inside a class __init__ function"
+    #   languages: [python]
+    #   severity: ERROR
     - id: return-in-init
       patterns:
         - pattern-inside: |
-            class A(...): 
-                ...
-        - pattern-inside: |
-            def __init__(...):
-                ...
-        - pattern: return $X
-      message: "`return` should never appear inside a class __init__ function"
-      languages: [python]
-      severity: ERROR
-    - id: return-in-init
-      patterns:
-        - pattern-inside: |
-            class A(...): 
+            class A(...):
                 ...
         - pattern-inside: |
             def __init__(...):
