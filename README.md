@@ -8,8 +8,8 @@ This is an repository containing rules written for [sgrep](https://sgrep.dev), o
 
 | sgrep | test status          |
 | ------- | ------------------ |
-| sgrep:latest   | ![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test/badge.svg) |
-| sgrep:develop  | ![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test-develop/badge.svg) |
+| `latest`   | ![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test/badge.svg) |
+| `develop`  | ![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test-develop/badge.svg) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
