@@ -3,4 +3,4 @@ test:
 	sgrep-lint --validate --config=./c .
 	sgrep-lint --validate --config=./javascript .
 	sgrep-lint --validate --config=./java .
-	./test.py --ignore-todo .
+	./test.py --strict --ignore-todo .
