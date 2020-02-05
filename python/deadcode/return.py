@@ -1,5 +1,5 @@
 
-# todoruleid: return-not-in-function
+# ruleid: return-not-in-function
 return 5
 
 
