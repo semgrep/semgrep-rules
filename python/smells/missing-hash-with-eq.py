@@ -1,5 +1,5 @@
 
-# todoruleid:missing-hash-with-eq
+# ruleid:missing-hash-with-eq
 class A:
     def __eq__(self, someother):
         pass
