@@ -1,7 +1,7 @@
 # ruleid:raise-not-base-exception
 raise "error here"
 
-# todoruleid:raise-not-base-exception
+# ruleid:raise-not-base-exception
 raise 5
 
 
