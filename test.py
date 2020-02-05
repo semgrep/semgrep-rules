@@ -97,7 +97,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):
             assert len(set(reported_lines[file_path][check_id])) == len(
                 reported_lines[file_path][check_id]
-            ), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path})"
+            ), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path} fired on lines {reported_lines[file_path][check_id]})"
             reported = set(reported_lines[file_path][check_id])
             expected = set(comment_lines[file_path][check_id])
             new_cm = compute_confusion_matrix(reported, expected)

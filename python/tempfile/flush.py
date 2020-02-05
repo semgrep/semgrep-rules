@@ -32,30 +32,34 @@ def main_c():
 
 
 def main_c():
-    # todoruleid:tempfile-without-flush
+    
     with tempfile.NamedTemporaryFile("w") as fout:
         debug_print(astr)
         fout.write(astr)
         debug_print('wrote file')
-        
+
+        # ruleid:tempfile-without-flush-with-stmt
         cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
 
 def main_d():
-    # ruleid:tempfile-without-flush
     fout = tempfile.NamedTemporaryFile('w')
     debug_print(astr)
     fout.write(astr)
     
+    # ruleid:tempfile-without-flush
     fout.name
+    # ruleid:tempfile-without-flush
     cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
 
 def main_e():
-    # totoruleid:tempfile-without-flush
+
     fout = tempfile.NamedTemporaryFile('w')
     debug_print(astr)
     fout.write(astr)
     
+    # ruleid:tempfile-without-flush
     print(fout.name)
+    # ruleid:tempfile-without-flush    
     cmd = [binary_name, fout.name, *[str(path) for path in targets]]
