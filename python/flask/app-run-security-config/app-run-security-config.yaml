@@ -3,8 +3,11 @@ rules:
   - id: avoid_using_app_run_directly
     patterns:
       - pattern-not-inside: |
-          if $X == '__main__':
-              ...
+          if __name__ == '__main__':
+            ...
+      - pattern-not-inside: |
+          def $X(...):
+            ...
       - pattern: app.run(...)
     message: "top-level app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard, like inside a function"
     languages: [python]
