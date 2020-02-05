@@ -2,7 +2,7 @@ rules:
   - id: code-after-unconditional-return
     patterns:
       - pattern: |
-          return $X
+          return ...
           $S
     message: "code after return statement will not be executed"
     languages: [python]
@@ -12,7 +12,7 @@ rules:
       - pattern-not-inside: |
           def $F(...):
               ...
-      - pattern: return $X
+      - pattern: return ...
     message: "`return` only makes sense inside a function"
     languages: [python]
     severity: WARNING
