@@ -1,17 +1,18 @@
-name: sgrep-rules-test
+name: sgrep
 
 on: [push]
 
 jobs:
   self_test:
     runs-on: ubuntu-latest
-    name: run sgrep rules tests
+    name: test
     steps:
       - uses: actions/checkout@v2
-      - name: run tests
-        id: sgrep-tests
+      - name: test
+        id: test
         uses: returntocorp/sgrep-rules-test-action@master
       - uses: actions/upload-artifact@v1
+        if: always()
         with:
           name: tests
-          path: ${{ steps.sgrep-tests.outputs.output_dir }}
+          path: ${{ steps.test.outputs.output_dir }}
