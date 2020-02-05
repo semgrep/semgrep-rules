@@ -6,3 +6,7 @@ app = Flask(__name__)
 def download_file(filename):
   # ruleid:avoid_send_file_without_path_sanitization
   return send_file(filename)
+
+def download_not_flask_route(filename):
+  # ok
+  return send_file(filename)
