@@ -12,8 +12,11 @@ t.sleep
 t.sleep(5)
 # ruleid:arbitrary-sleep
 t.sleep(0.1)
-# ruleid:arbitrary-sleep
+# todoruleid:arbitrary-sleep
 time.sleep("bad")
 
 # OK
 t.sleep(a())
+
+# ok
+t.sleep(some_var)
