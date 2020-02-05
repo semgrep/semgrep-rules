@@ -5,6 +5,7 @@ class A:
         pass
 
 
+# ok
 class A2:
     def __eq__(self, someother):
         pass

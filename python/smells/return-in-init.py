@@ -1,8 +1,14 @@
 class A:
 
     def __init__(a, b, c):
-        # todoruleid:return-in-init
+        # ruleid:return-in-init
         return A(a, b, c)
+
+class A:
+
+    def __init__(a, b, c):
+        # ruleid:return-in-init
+        return
 
 
 class B:
