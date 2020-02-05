@@ -13,7 +13,7 @@ for i in xrange(100):
         da[i*1][j] = z[i]
         da[i*4] = z[i]
 
-# todoruleid: useless-assignment
+# ruleid: useless-assignment
 x = 5
 x = 5
 

@@ -1,0 +1,10 @@
+rules:
+    - id: useless-assignment
+      patterns:
+        - pattern: |
+            $X = $Y;
+            $X = $Z;
+      message: "`$X` is assigned twice; the first assignment is useless"
+      languages: [js]
+      severity: WARNING
+  
