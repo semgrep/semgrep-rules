@@ -31,6 +31,7 @@ def print_debug(msg):
 def normalize_rule_id(line):
     """
     given a line like `     # ruleid:foobar` 
+    or `      // ruleid:foobar`
     return `foobar`
     """
     return line.strip().split(":")[1].strip()
@@ -76,12 +77,11 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         with open(test_file) as fin:
             all_lines = fin.readlines()
             for i, line in enumerate(all_lines):
-                todo_in_line = "#todoruleid:" in line or "# todoruleid" in line
+                todo_in_line = ('#todoruleid:' in line or '# todoruleid' in line or '// todoruleid:' in line or '//todoruleid:' in line)
                 if todo_in_line:
                     num_todo += 1
-                if (not ignore_todo and todo_in_line) or (
-                    "#ruleid:" in line or "# ruleid:" in line
-                ):
+                if (not ignore_todo and todo_in_line) or \
+                    ('#ruleid:' in line or "# ruleid:" in line or '//ruleid:' in line or '// ruleid:' in line):
                     # +1 because we are 0 based and sgrep output is not, plus skip the comment line
                     comment_lines[test_file][normalize_rule_id(line)].append(i + 2)
 
