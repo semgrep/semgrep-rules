@@ -1,0 +1,15 @@
+rules:
+  - id: pass-body-fn
+    pattern: |
+      def $X(...):
+        pass
+    message: "`pass` is the body of function $X. Consider removing this or raise NotImplementedError() if this is a TODO"
+    languages: [python]
+    severity: WARNING
+  - id: pass-body-range
+    pattern: |
+      for $X in $Y:
+        pass
+    message: "`pass` is the body of for $X in $Y. Consider removing this or raise NotImplementedError() if this is a TODO"
+    languages: [python]
+    severity: WARNING
