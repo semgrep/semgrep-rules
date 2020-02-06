@@ -3,13 +3,13 @@ rules:
     pattern: |
       def $X(...):
         pass
-    message: ""
+    message: "`pass` is the body of function $X. Consider removing this"
     languages: [python]
     severity: WARNING
   - id: pass-body-range
     pattern: |
       for $X in $Y:
         pass
-    message: ""
+    message: "`pass` is the body of for $X in $Y. Consider removing this"
     languages: [python]
     severity: WARNING
