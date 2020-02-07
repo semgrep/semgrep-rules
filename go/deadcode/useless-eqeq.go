@@ -9,6 +9,7 @@ func main() {
     // ok
     assert(y == y)
 
+    // ruleid:hardcoded-eq-true-or-false
     if (false) {
         fmt.Println("never") 
     }
