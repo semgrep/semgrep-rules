@@ -155,7 +155,7 @@ def generate_file_pairs(
             cmd = (
                 ["sgrep-lint"]
                 + extra_args
-                + ["--strict", "--no-rewrite-rule-ids", "-f", str(filename)]
+                + ["--strict", "--json", "--no-rewrite-rule-ids", "-f", str(filename)]
                 + [str(t) for t in test_files]
             )
             print_debug(cmd)
