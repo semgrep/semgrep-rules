@@ -1,5 +1,8 @@
 rules:
   - id: pass-body-fn
+    pattern-not-inside: |
+      def __init__(self, ...): 
+        ...
     pattern: |
       def $X(...):
         pass
