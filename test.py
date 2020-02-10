@@ -70,6 +70,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
     comment_lines = collections.defaultdict(lambda: collections.defaultdict(list))
     reported_lines = collections.defaultdict(lambda: collections.defaultdict(list))
     score_by_checkid = collections.defaultdict(lambda: [0, 0, 0, 0])
+    expected_reported_by_check_id = collections.defaultdict(dict)
     num_todo = 0
 
     for test_file in test_files:
@@ -94,22 +95,24 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         return set(a.keys()).union(set(b.keys()))
 
     for file_path in join_keys(comment_lines, reported_lines):
-        for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):
-            assert len(set(reported_lines[file_path][check_id])) == len(
-                reported_lines[file_path][check_id]
-            ), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path} fired on lines {reported_lines[file_path][check_id]})"
+        for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):            
             reported = set(reported_lines[file_path][check_id])
             expected = set(comment_lines[file_path][check_id])
             new_cm = compute_confusion_matrix(reported, expected)
             print_debug(
                 f"reported lines for check {check_id}: {reported}, expected lines: {expected}, confusion matrix: {new_cm}"
             )
+            expected_reported_by_check_id[check_id][file_path] = (expected, reported)
+            # TODO: -- re-enable this
+            # assert len(set(reported_lines[file_path][check_id])) == len(
+            #    reported_lines[file_path][check_id]
+            #), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path} on lines {reported_lines[file_path][check_id]})"
             old_cm = score_by_checkid[check_id]
             score_by_checkid[check_id] = [
                 old_cm[i] + new_cm[i] for i in range(len(new_cm))
             ]
 
-    return (score_by_checkid, num_todo)
+    return (score_by_checkid, expected_reported_by_check_id, num_todo)
 
 
 def confusion_matrix_to_string(confusion: List[int]) -> str:
@@ -139,7 +142,7 @@ def generate_file_pairs(
             children_test_files = [
                 p
                 for p in filenames
-                if str(p).startswith(str(yaml_file_name_without_ext))
+                if str(p.with_suffix("")) == (str(yaml_file_name_without_ext))
             ]
             # remove yaml files from the test lists
             test_files = [
@@ -155,7 +158,7 @@ def generate_file_pairs(
             cmd = (
                 ["sgrep-lint"]
                 + extra_args
-                + ["--strict", "--no-rewrite-rule-ids", "-f", str(filename)]
+                + ["--strict", "--json", "--no-rewrite-rule-ids", "-f", str(filename)]
                 + [str(t) for t in test_files]
             )
             print_debug(cmd)
@@ -166,7 +169,7 @@ def generate_file_pairs(
                     (filename, score_output_json(output_json, test_files, ignore_todo))
                 )
             except subprocess.CalledProcessError as ex:
-                print(f"sgrep error running {cmd}: {ex}")
+                print(f"sgrep error running {' '.join(cmd)}:\n{ex}")
                 sgrep_error.append(cmd)
 
     if len(sgrep_error) and strict:
@@ -181,14 +184,14 @@ def generate_file_pairs(
     failed_tests = []
     total_confusion = [0, 0, 0, 0]
 
-    for (filename, (output, num_todo)) in tested:
+    for (filename, (output, expected_reported_by_check_id, num_todo)) in tested:
         print(filename)
         if not len(output.items()):
             print(f"  no checks fired (TODOs: {num_todo})")
         for check_id, (tp, tn, fp, fn) in output.items():
             good = (fp == 0) and (fn == 0)
             if not good:
-                failed_tests.append((filename, check_id))
+                failed_tests.append((filename, check_id, expected_reported_by_check_id[check_id]))
             status = "✔" if good else "✖"
             todo_text = f"(TODOs: {num_todo})" if num_todo > 0 else ""
             confusion = [tp, tn, fp, fn]
@@ -202,14 +205,17 @@ def generate_file_pairs(
 
     print("=" * 80)
     print(f"final confusion matrix: {confusion_matrix_to_string(total_confusion)}")
+    print("=" * 80)
 
     if len(failed_tests) > 0:
+        print(f"failing rule files: ")
+        for (filename, check_id, failed_test_files) in failed_tests:
+            print(f" ✖ FAILED rule file: {filename} check: {check_id}")
+            for test_file_path, (expected, reported) in failed_test_files.items():
+                print(f"              in test: {test_file_path}, expected lines: {expected} != reported: {reported}")
         print(
             f"{len(failed_tests)} checks failed tests (run with verbose flag for more details)"
         )
-        print(f"failing checks: ")
-        for (filename, check_id) in failed_tests:
-            print(f" ✖ FAILED file: {filename} check: {check_id}")
         sys.exit(1)
     else:
         print("all tests passed")
