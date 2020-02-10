@@ -1,8 +1,29 @@
 rules:
   - id: assignment-comparison
     patterns: 
-      - pattern: if($X=true) {}
-      - pattern: if($X=false) {}
-    message: "This exception is being ignored. The best practice is to handle exceptions, throw them and show an error dialogue, or add a message to the log."
+      - pattern-either:
+        - pattern: if ($X=true) { ... }
+        - pattern: if ($X=false) { ... }
+    message: "The value of `$X` is being ignored and will be used in the conditional test"
+    languages: [java]
+    severity: ERROR
+  - id: eqeq-is-bad
+    patterns:
+      - pattern-not-inside: assert $X;
+      - pattern-not-inside: |
+          assert $X : $Y;
+      - pattern-either:
+          - pattern: $X == $X
+          - pattern: $X != $X
+      - pattern-not: 1 == 1
+    message: "useless comparison operation `$X == $X` or `$X != $X`"
+    languages: [java]
+    severity: ERROR
+  - id: hardcoded-eq-true-or-false
+    patterns:
+      - pattern-either:
+          - pattern: if (true) { ... }
+          - pattern: if (false) { ... }
+    message: "useless if statement, always the same behavior"
     languages: [java]
     severity: ERROR
