@@ -12,6 +12,10 @@ rules:
       - pattern-not-inside: |
           def $F(...):
               ...
+      # TODO: first pattern should just automatically include this one
+      - pattern-not-inside: |
+              def $F(...) ->  $Y:
+                  ...
       - pattern: return ...
     message: "`return` only makes sense inside a function"
     languages: [python]

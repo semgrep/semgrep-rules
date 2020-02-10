@@ -3,6 +3,7 @@ rules:
     patterns: 
       - pattern: $X.delete().where(...)
       - pattern-not-inside: $X.delete().where(...).execute()
+      - pattern-not-inside: $C.execute(...)
     message: ".delete().where(...) results in a no-op in SQLAlchemy unless the command is executed, use .filter(...).delete() instead."
     languages: [python]
     severity: ERROR
