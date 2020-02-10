@@ -21,6 +21,8 @@ theirs.bind('', 1337)
 
 # easy
 
+#  (TODO-false positive)
+# ruleid:avoid-bind-to-all-interfaces
 easy_s = socket.socket(doesnt, matter)
 easy_s.bind()
 # todoruleid:avoid-bind-to-all-interfaces
