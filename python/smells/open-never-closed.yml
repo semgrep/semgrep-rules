@@ -10,10 +10,6 @@ rules:
             ...
             $F.close()
         - pattern-not-inside: |
-            $F = os.open(...)
-            ...
-            $F.close()
-        - pattern-not-inside: |
             $F = tarfile.open(...)
             ...
             $F.close()
@@ -36,7 +32,6 @@ rules:
         - pattern-either:
             - pattern: $F = open(...)
             - pattern: $F = io.open(...)
-            - pattern: $F = os.open(...)
             - pattern: $F = tarfile.open(...)
             - pattern: $F = ZipFile.open(...)
             - pattern: $F = tempfile.TemporaryFile(...)
