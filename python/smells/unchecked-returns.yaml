@@ -1,0 +1,10 @@
+rules:
+  - rule:
+    id: unchecked-subprocess-call
+    patterns:
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern: subprocess.call(...)
+    message: "Not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call()?"
+    languages: [python]
+    severity: WARNING
