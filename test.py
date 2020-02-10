@@ -142,7 +142,7 @@ def generate_file_pairs(
             children_test_files = [
                 p
                 for p in filenames
-                if str(p).startswith(str(yaml_file_name_without_ext))
+                if str(p.with_suffix("")) == (str(yaml_file_name_without_ext))
             ]
             # remove yaml files from the test lists
             test_files = [
