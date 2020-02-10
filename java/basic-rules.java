@@ -2,6 +2,9 @@ class Bar {
     void main() {
         boolean myBoolean; 
 
+        //myBoolean == myBoolean;
+
+        // ruleid:assignment-comparison
         if (myBoolean = true) {
             continue;
         }
@@ -13,7 +16,7 @@ class Bar {
 
         // todoruleid:hardcoded-eq-true-or-false
         if (true && false) { 
-            continue
+            continue;
         }
 
         // ok
