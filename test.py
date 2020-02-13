@@ -161,7 +161,7 @@ def generate_file_pairs(
                 + ["--strict", "--json", "--no-rewrite-rule-ids", "-f", str(filename)]
                 + [str(t) for t in test_files]
             )
-            print_debug(cmd)
+            print_debug(' '.join(cmd))
             try:
                 output = subprocess.check_output(cmd, shell=False)
                 output_json = json.loads((output.decode("utf-8")))
