@@ -1,0 +1,16 @@
+rules:
+  - id: useless-comparison
+    patterns:
+    - pattern-either:
+      - pattern: |
+          if "..." and ...:
+              ...
+      - pattern: |
+          if "..." or ...:
+              ...  
+      - pattern: |
+          if "...":
+              ...  
+    message: "don't use strings as booleans"
+    languages: [python]
+    severity: ERROR
