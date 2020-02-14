@@ -1,6 +1,12 @@
 rules:
   - id: useless-assignment
     patterns:
+      - pattern-not: |
+          $X = $Y
+          $X = $Z(...)
+      - pattern-not: |
+          $X = $Y
+          $X = $X.$Z(...)
       - pattern: |
           $X = $Y
           $X = $Z

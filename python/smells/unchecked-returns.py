@@ -8,3 +8,7 @@ sub.call('foo')
 
 # OK
 sub.check_call('foo')
+
+# OK
+sub.check_call('foo ') == 0
+

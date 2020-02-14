@@ -15,6 +15,9 @@ class A:
         return self == self and self == other
 
 
+assert(x == x)
+assert x == x
+assert x == x, "of course"
 assertTrue(x ==x)
 assertFalse(x == x)
 

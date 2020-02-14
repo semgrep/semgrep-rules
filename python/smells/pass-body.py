@@ -13,3 +13,15 @@ def __init__(self):
 def __init__(self, other):
     # ok
     pass
+
+class foo:
+    def somemethod():
+        # ok
+        pass
+
+
+class foobar:
+    def someothermethod():
+        # ruleid:pass-body-range
+        for i in range(100): 
+            pass
