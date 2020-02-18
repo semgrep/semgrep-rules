@@ -19,3 +19,7 @@ if ("detached HEAD" in expected) and ("master" in expected):
 # ruleid:useless-comparison
 if "":
   pass
+
+# ok
+if some_id == "foobar":
+     pass
