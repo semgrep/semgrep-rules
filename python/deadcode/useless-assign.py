@@ -18,7 +18,7 @@ xz = y()
 
 y() = y()
 
-# todo, this should be ok 
+# todo, this should be ok
 # ruleid: useless-assignment
 x1 = 1
 x1 = x1 + 1

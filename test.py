@@ -9,10 +9,10 @@ from pathlib import Path
 from typing import List
 
 """
-For each directory containing YAML rules, run those rules on the file in the same directory with the same name but different extension. 
+For each directory containing YAML rules, run those rules on the file in the same directory with the same name but different extension.
 E.g. eqeq.yaml runs on eqeq.py.
 Validate that the output is annotated in the source file with by looking for a comment like:
- 
+
  ```
  # ruleid:eqeq-is-bad
  ```
@@ -30,7 +30,7 @@ def print_debug(msg):
 
 def normalize_rule_id(line):
     """
-    given a line like `     # ruleid:foobar` 
+    given a line like `     # ruleid:foobar`
     or `      // ruleid:foobar`
     return `foobar`
     """
@@ -95,7 +95,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         return set(a.keys()).union(set(b.keys()))
 
     for file_path in join_keys(comment_lines, reported_lines):
-        for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):            
+        for check_id in join_keys(comment_lines[file_path], reported_lines[file_path]):
             reported = set(reported_lines[file_path][check_id])
             expected = set(comment_lines[file_path][check_id])
             new_cm = compute_confusion_matrix(reported, expected)
