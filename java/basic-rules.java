@@ -1,6 +1,6 @@
 class Bar {
     void main() {
-        boolean myBoolean; 
+        boolean myBoolean;
 
         //myBoolean == myBoolean;
 
@@ -10,12 +10,12 @@ class Bar {
         }
 
         // ruleid:hardcoded-eq-true-or-false
-        if (true) { 
+        if (true) {
             continue;
         }
 
         // todoruleid:hardcoded-eq-true-or-false
-        if (true && false) { 
+        if (true && false) {
             continue;
         }
 
@@ -25,14 +25,14 @@ class Bar {
         }
 
         // ruleid:eqeq-is-bad
-        if (myBoolean == myBoolean) { 
+        if (myBoolean == myBoolean) {
             continue;
         }
 
         // ruleid:eqeq-is-bad
-        if (myBoolean != myBoolean) { 
+        if (myBoolean != myBoolean) {
             continue;
         }
 
-    } 
-} 
+    }
+}
