@@ -11,6 +11,6 @@ func main() {
 
     // ruleid:hardcoded-eq-true-or-false
     if (false) {
-        fmt.Println("never") 
+        fmt.Println("never")
     }
 }

@@ -37,7 +37,7 @@ def main_c():
         debug_print(astr)
         fout.write(astr)
         debug_print('wrote file')
-        
+
         cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
 
@@ -46,7 +46,7 @@ def main_d():
     fout = tempfile.NamedTemporaryFile('w')
     debug_print(astr)
     fout.write(astr)
-    
+
     fout.name
     cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
@@ -56,6 +56,6 @@ def main_e():
     fout = tempfile.NamedTemporaryFile('w')
     debug_print(astr)
     fout.write(astr)
-    
+
     print(fout.name)
     cmd = [binary_name, fout.name, *[str(path) for path in targets]]
