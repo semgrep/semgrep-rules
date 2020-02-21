@@ -1,9 +1,34 @@
 rules:
     - id: hardcoded-jwt-key
       pattern: |
-            var $X = []byte("...")
-            ...
-            $Y = token.SignedString($X)
+        var $X = []byte("...")
+        ...
+        $TOKEN = jwt.NewWithClaims(...)
+        ...
+        $Y = $TOKEN.SignedString($X)
       message: "JWT token is hardcoded"
+      languages: [go]
+      severity: WARNING
+    - id: test-intermediate
+      pattern: |
+        var $X = []byte("...")
+        ...
+        $TOKEN := jwt.NewWithClaims(...)
+      message: "test-intermediate"
+      languages: [go]
+      severity: WARNING
+    - id: test-1
+      pattern: var $X = []byte("...")
+      message: "test-1"
+      languages: [go]
+      severity: WARNING
+    - id: test-2
+      pattern: $TOKEN := jwt.NewWithClaims(...)
+      message: "test-2"
+      languages: [go]
+      severity: WARNING      
+    - id: test-3
+      pattern: $Y := $TOKEN.SignedString($X)
+      message: "test-3"
       languages: [go]
       severity: WARNING
