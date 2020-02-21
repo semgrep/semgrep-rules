@@ -1,5 +1,6 @@
 // https://www.sohamkamani.com/blog/golang/2019-01-01-jwt-authentication/
 package main
+import "fmt"
 
 import (
 	//...
@@ -34,7 +35,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	// ruleid:hardcoded-jwt-key
 	var jwtKey = []byte("my_secret_key")
 	//var x = "foo"
-
+/*
 	var creds Credentials
 	// Get the JSON body and decode into credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
@@ -65,7 +66,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expirationTime.Unix(),
 		},
-	}
+	} */
 
 	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -84,4 +85,11 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		Value:   tokenString,
 		Expires: expirationTime,
 	})
+
+	var jwtKey = []byte("my_secret_key")
+	fmt.Println(1)
+    fmt.Println(2)
+    fmt.Println(3)
+	var jwtKey = []byte("my_secret_key")
+	fmt.Println(4)
 }

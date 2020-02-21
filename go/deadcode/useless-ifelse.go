@@ -23,4 +23,13 @@ func main() {
         fmt.Println("of course")
     }
     
+<<<<<<< Updated upstream
+=======
+    fmt.Println("of course2")
+    fmt.Println(1)
+    fmt.Println(2)
+    fmt.Println(3)
+    fmt.Println("of course2")
+
+>>>>>>> Stashed changes
 }
