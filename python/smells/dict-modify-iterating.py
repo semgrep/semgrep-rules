@@ -17,4 +17,3 @@ for k in d.keys():
 for k in d.keys():
     print(d[k])
     x = d[k]
-
