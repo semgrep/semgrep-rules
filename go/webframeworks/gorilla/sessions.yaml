@@ -1,0 +1,10 @@
+rules:
+  - id: gorilla-sessions-test
+    patterns:
+      - pattern: |
+          if $AUTH, $OK := session.Values["authenticated"].(bool); !$OK || !$AUTH {
+            $S
+          }
+    message: "test matching on session"
+    languages: [go]
+    severity: WARNING
