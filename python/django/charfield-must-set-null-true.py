@@ -10,6 +10,11 @@ class FakeModel(Model):
         blank=True,
         max_length=30
     )
+    fieldAAAAA = models.TextField(
+        unique=True,
+        blank=True,
+        max_length=30
+    )
     fieldThree = models.CharField(
         unique=True,
         null=True,
