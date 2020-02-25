@@ -1,11 +1,11 @@
 rules:
-  - id: nontext-field-must-set-null-true
+  - id: use-decimalfield-for-money
     patterns:
       - pattern-inside: |
           class $M(...):
             ...
       - pattern: $F = django.db.models.FloatField(...)
-      - where-python: 'money' in $F
-    message: "null=True should be set if blank=True is set on non-text fields."
+#      - where-python: "'price' in vars['$F']"
+    message: "Found a FloatField used for variable $F. Use DecimalField for money to avoid float-rounding errors."
     languages: [python]
     severity: ERROR
