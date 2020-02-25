@@ -1,0 +1,11 @@
+rules:
+  - id: nontext-field-must-set-null-true
+    patterns:
+      - pattern-inside: |
+          class $M(...):
+            ...
+      - pattern: $F = django.db.models.FloatField(...)
+      - where-python: 'money' in $F
+    message: "null=True should be set if blank=True is set on non-text fields."
+    languages: [python]
+    severity: ERROR
