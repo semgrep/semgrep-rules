@@ -1,13 +1,15 @@
 rules:
-  - id: charfield-must-set-null-true
+  - id: text-field-must-set-null-true
     patterns:
       - pattern-inside: |
           class $M(...):
             ...
       - pattern-not: $F = django.db.models.CharField(..., unique=True, blank=True, null=True, ...)
+      - pattern-not: $F = django.db.models.TextField(..., unique=True, blank=True, null=True, ...)
       - pattern-either:
           - pattern: $F = django.db.models.CharField(..., unique=True, blank=True, ...)
-    message: "If a CharField declares unique=True and blank=True, null=True must also be set to avoid unique constraint violations when saving multiple objects with blank values."
+          - pattern: $F = django.db.models.TextField(..., unique=True, blank=True, ...)
+    message: "If a text field declares unique=True and blank=True, null=True must also be set to avoid unique constraint violations when saving multiple objects with blank values."
     languages: [python]
     severity: ERROR
         
