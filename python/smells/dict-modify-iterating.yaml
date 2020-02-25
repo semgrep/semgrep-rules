@@ -10,12 +10,6 @@ rules:
               for $KEY in $DICT.keys():
                   ...
                   del $DICT[$KEY]
-          - pattern: |
-              for $KEY, $VALUE in $DICT.items():
-                  del $DICT[$KEY]
-          - pattern: |
-              for $KEY in $DICT.keys():
-                  del $DICT[$KEY]
     message: "It appears that `$DICT[$KEY]` is a dict with items being deleted while in a for loop. This is usually a bad idea and will likely lead to a RuntimeError: dictionary changed size during iteration"
     languages: [python]
     severity: WARNING
