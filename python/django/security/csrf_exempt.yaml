@@ -1,12 +1,19 @@
 rules:
   - id: django-csrf_exempt
-    pattern: |
-      from django.views.decorators.csrf import csrf_exempt
-      ...
+    patterns:
+      - pattern-either:
+          - pattern: |
+              from django.views.decorators.csrf import csrf_exempt
+              ...
 
-      @csrf_exempt
-      def $R(...):
-        ...
+              @csrf_exempt
+              def $R(...):
+                ...
+          - pattern: |
+              @django.views.decorators.csrf.csrf_exempt
+              def $R(...):
+                ...
+
     message: "There is rarely a good reason to use @csrf_exempt as is used for `$R`."
     languages: [python]
     severity: WARNING
