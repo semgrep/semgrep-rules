@@ -78,11 +78,20 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
         with open(test_file) as fin:
             all_lines = fin.readlines()
             for i, line in enumerate(all_lines):
-                todo_in_line = ('#todoruleid:' in line or '# todoruleid' in line or '// todoruleid:' in line or '//todoruleid:' in line)
+                todo_in_line = (
+                    "#todoruleid:" in line
+                    or "# todoruleid" in line
+                    or "// todoruleid:" in line
+                    or "//todoruleid:" in line
+                )
                 if todo_in_line:
                     num_todo += 1
-                if (not ignore_todo and todo_in_line) or \
-                    ('#ruleid:' in line or "# ruleid:" in line or '//ruleid:' in line or '// ruleid:' in line):
+                if (not ignore_todo and todo_in_line) or (
+                    "#ruleid:" in line
+                    or "# ruleid:" in line
+                    or "//ruleid:" in line
+                    or "// ruleid:" in line
+                ):
                     # +1 because we are 0 based and sgrep output is not, plus skip the comment line
                     comment_lines[test_file][normalize_rule_id(line)].append(i + 2)
 
@@ -106,7 +115,7 @@ def score_output_json(json_out, test_files: List[str], ignore_todo: bool):
             # TODO: -- re-enable this
             # assert len(set(reported_lines[file_path][check_id])) == len(
             #    reported_lines[file_path][check_id]
-            #), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path} on lines {reported_lines[file_path][check_id]})"
+            # ), f"for testing, please don't make rules that fire multiple times on the same line ({check_id} in {file_path} on lines {reported_lines[file_path][check_id]})"
             old_cm = score_by_checkid[check_id]
             score_by_checkid[check_id] = [
                 old_cm[i] + new_cm[i] for i in range(len(new_cm))
@@ -137,8 +146,6 @@ def generate_file_pairs(
             # find all filenames that have the same name but not extension, or are in a folder with the same name as a the yaml file
             yaml_file_name_without_ext = filename.with_suffix("")
 
-            # import pdb
-            # pdb.set_trace()
             children_test_files = [
                 p
                 for p in filenames
@@ -158,10 +165,17 @@ def generate_file_pairs(
             cmd = (
                 ["sgrep-lint"]
                 + extra_args
-                + ["--strict", "--json", "--no-rewrite-rule-ids", "-f", str(filename)]
+                + [
+                    "--dangerously-allow-arbitrary-code-execution-from-rules",
+                    "--strict",
+                    "--json",
+                    "--no-rewrite-rule-ids",
+                    "-f",
+                    str(filename),
+                ]
                 + [str(t) for t in test_files]
             )
-            print_debug(' '.join(cmd))
+            print_debug(" ".join(cmd))
             try:
                 output = subprocess.check_output(cmd, shell=False)
                 output_json = json.loads((output.decode("utf-8")))
@@ -191,7 +205,9 @@ def generate_file_pairs(
         for check_id, (tp, tn, fp, fn) in output.items():
             good = (fp == 0) and (fn == 0)
             if not good:
-                failed_tests.append((filename, check_id, expected_reported_by_check_id[check_id]))
+                failed_tests.append(
+                    (filename, check_id, expected_reported_by_check_id[check_id])
+                )
             status = "✔" if good else "✖"
             todo_text = f"(TODOs: {num_todo})" if num_todo > 0 else ""
             confusion = [tp, tn, fp, fn]
@@ -212,7 +228,9 @@ def generate_file_pairs(
         for (filename, check_id, failed_test_files) in failed_tests:
             print(f" ✖ FAILED rule file: {filename} check: {check_id}")
             for test_file_path, (expected, reported) in failed_test_files.items():
-                print(f"              in test: {test_file_path}, expected lines: {expected} != reported: {reported}")
+                print(
+                    f"              in test: {test_file_path}, expected lines: {expected} != reported: {reported}"
+                )
         print(
             f"{len(failed_tests)} checks failed tests (run with verbose flag for more details)"
         )

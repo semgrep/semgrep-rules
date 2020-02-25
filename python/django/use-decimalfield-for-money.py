@@ -7,6 +7,7 @@ class Product(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    # ruleid:use-decimalfield-for-money
     old_price = models.FloatField()
     image = models.CharField(max_length=256)
     stock = models.IntegerField(null=True)

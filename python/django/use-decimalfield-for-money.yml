@@ -5,7 +5,7 @@ rules:
           class $M(...):
             ...
       - pattern: $F = django.db.models.FloatField(...)
-#      - where-python: "'price' in vars['$F']"
+      - pattern-where-python: "'price' in vars['$F']"
     message: "Found a FloatField used for variable $F. Use DecimalField for money to avoid float-rounding errors."
     languages: [python]
     severity: ERROR
