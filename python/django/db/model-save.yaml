@@ -4,9 +4,13 @@ rules:
       - pattern-inside: |
           class $MODEL(django.db.models.Model):
               ...
-              def save($SELF, ...):
-                  ...
-      - pattern-not: super($MODEL, $SELF).save(...)
+      - pattern-not: |
+          def save(self, ...):
+              ...
+              super($MODEL, self).save(...)
+      - pattern: |
+          def save(self, ...):
+              ...
 
     message: "Appears that django model `$MODEL` is not calling super().save() inside of the save method"
     languages: [python]
