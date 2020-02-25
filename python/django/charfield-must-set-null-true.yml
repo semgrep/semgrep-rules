@@ -1,14 +1,12 @@
 rules:
-  - id: charfield-must-set-null-true        # https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.unique
-    patterns:                               # https://github.com/django/django/blob/89abecc75d7eadab681f29be5237972c6c2f997b/docs/ref/models/fields.txt#L45
+  - id: charfield-must-set-null-true
+    patterns:
       - pattern-inside: |
           class $M(...):
             ...
-      - pattern-not: $F = $D.CharField(..., unique=True, blank=True, null=True, ...)
-      - pattern-not: $F = CharField(..., unique=True, blank=True, null=True, ...)
+      - pattern-not: $F = django.db.models.CharField(..., unique=True, blank=True, null=True, ...)
       - pattern-either:
-          - pattern: $F = $D.CharField(..., unique=True, blank=True, ...)
-          - pattern: $F = CharField(..., unique=True, blank=True, ...)
+          - pattern: $F = django.db.models.CharField(..., unique=True, blank=True, ...)
     message: "If a CharField declares unique=True and blank=True, null=True must also be set to avoid unique constraint violations when saving multiple objects with blank values."
     languages: [python]
     severity: ERROR
