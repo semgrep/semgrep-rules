@@ -1,0 +1,13 @@
+rules:
+  - id: django-db-model-save-super
+    patterns:
+      - pattern-inside: |
+          class $MODEL(django.db.models.Model):
+              ...
+              def save($SELF, ...):
+                  ...
+      - pattern-not: super($MODEL, $SELF).save(...)
+
+    message: "Appears that django model `$MODEL` is not calling super().save() inside of the save method"
+    languages: [python]
+    severity: WARNING
