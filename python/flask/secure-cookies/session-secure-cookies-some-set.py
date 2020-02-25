@@ -1,5 +1,6 @@
 import flask
 
+# ruleid: secure-session-cookies
 app = flask.Flask()
 
 app.config.update(
