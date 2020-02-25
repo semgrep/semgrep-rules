@@ -1,0 +1,10 @@
+rules:
+  - id: avoid-query-set-extra
+    patterns:
+      - pattern-either:
+        - pattern: $X.objects.$FUNC(...).extra(...)
+        - pattern: $X.objects.$FUNC(...).$FILTER().extra(...)
+        - pattern: $X.objects.$FUNC(...).$FILTER().$UPDATE(...).extra(...)
+    message: "This is a last resort. You should be careful when using QuerySet.extra due to SQLi https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra"
+    languages: [python]
+    severity: ERROR
