@@ -1,5 +1,19 @@
 rules:
-  - id: text-field-must-set-null-true
+  - id: no-null-string-field
+    patterns:
+      - pattern-not: django.db.models.CharField(..., null=True, unique=True, blank=True, ...)
+      - pattern-not: django.db.models.TextField(..., null=True, unique=True, blank=True, ...)
+      - pattern-either:
+        - pattern: django.db.models.CharField(..., null=True, ...)
+        - pattern: django.db.models.TextField(..., null=True, ...)
+    message: |
+      Avoid using null on string-based fields such as CharField and TextField. If a string-based field
+      has null=True, that means it has two possible values for "no data": NULL, and the empty string. In
+      most cases, it's redundant to have two possible values for "no data;" the Django convention is to
+      use the empty string, not NULL.
+    languages: [python]
+    severity: WARNING
+  - id: string-field-must-set-null-true
     patterns:
       - pattern-inside: |
           class $M(...):
@@ -12,4 +26,3 @@ rules:
     message: "If a text field declares unique=True and blank=True, null=True must also be set to avoid unique constraint violations when saving multiple objects with blank values."
     languages: [python]
     severity: ERROR
-        
