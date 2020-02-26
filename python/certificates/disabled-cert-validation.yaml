@@ -10,7 +10,11 @@ rules:
             - pattern: urllib3.proxy_from_url(..., cert_reqs=$REQS, ...)                
             - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
             - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
-        - pattern-where-python: "vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL']"
+        - pattern-where-python: |-
+            vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL', 
+                              "'NONE'", "'CERT_NONE'", "'ssl.CERT_NONE'", "'ssl.CERT_OPTIONAL'", "'CERT_OPTIONAL'",
+                              '"NONE"', '"CERT_NONE"', '"ssl.CERT_NONE"', '"ssl.CERT_OPTIONAL"', '"CERT_OPTIONAL"']
+          
       message: "certificate verification explicitly disabled, insecure connections possible"
       languages: [python]
       severity: WARNING
