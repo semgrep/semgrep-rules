@@ -1,0 +1,22 @@
+rules:
+    - id: disabled-cert-validation
+      patterns:
+        - pattern-either:
+            - pattern: urllib3.PoolManager(..., cert_reqs=$REQS, ...)
+            - pattern: urllib3.ProxyManager(..., cert_reqs=$REQS, ...)
+            - pattern: urllib3.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
+            - pattern: urllib3.connection_from_url(..., cert_reqs=$REQS, ...)
+            - pattern: urllib3.proxy_from_url(..., cert_reqs=$REQS, ...)                
+            - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
+        - pattern-where-python: "vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE']"
+      message: "certificate verification explicitly disabled, insecure connections possible"
+      languages: [python]
+      severity: WARNING
+    - id: disabled-cert-validation-requests
+      patterns:
+        - pattern-either:
+            - pattern: requests.get(..., verify=False, ...)
+            - pattern: requests.post(..., verify=False, ...)
+      message: "certificate verification explicitly disabled, insecure connections possible"
+      languages: [python]
+      severity: WARNING
