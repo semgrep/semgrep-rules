@@ -2,10 +2,10 @@ from django.db import models
 from django.db.models import Model
 
 class FakeModel(Model):
-    # ok
+    #ruleid: no-null-string-field
     fieldOne = models.CharField(
         max_length=200,
-        unique=True)
+        null=True)
     # ruleid: string-field-must-set-null-true
     fieldTwo = models.CharField(
         unique=True,

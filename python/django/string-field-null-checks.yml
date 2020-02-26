@@ -1,11 +1,14 @@
 rules:
   - id: no-null-string-field
     patterns:
-      - pattern-not: django.db.models.CharField(..., null=True, unique=True, blank=True, ...)
-      - pattern-not: django.db.models.TextField(..., null=True, unique=True, blank=True, ...)
+      - pattern-inside: |
+          class $M(...):
+            ...
+      - pattern-not: $F = django.db.models.CharField(..., null=True, unique=True, blank=True, ...)
+      - pattern-not: $F = django.db.models.TextField(..., null=True, unique=True, blank=True, ...)
       - pattern-either:
-        - pattern: django.db.models.CharField(..., null=True, ...)
-        - pattern: django.db.models.TextField(..., null=True, ...)
+        - pattern: $F = django.db.models.CharField(..., null=True, ...)
+        - pattern: $F = django.db.models.TextField(..., null=True, ...)
     message: |
       Avoid using null on string-based fields such as CharField and TextField. If a string-based field
       has null=True, that means it has two possible values for "no data": NULL, and the empty string. In

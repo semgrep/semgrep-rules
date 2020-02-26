@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Model, CharField, IntegerField
+from django.db.models import Model, CharField, IntegerField, TextField
 
 class FakeModel(Model):
     # ok
@@ -8,6 +8,12 @@ class FakeModel(Model):
         unique=True)
     # ruleid: string-field-must-set-null-true
     fieldTwo = CharField(
+        unique=True,
+        blank=True,
+        max_length=30
+    )
+    # ruleid: string-field-must-set-null-true
+    fieldTwo = TextField(
         unique=True,
         blank=True,
         max_length=30
