@@ -4,4 +4,5 @@ Person.objects.raw(query)
 
 
 from django.db.models.expressions import RawSQL
+# ruleid: avoid-raw-sql
 queryset.annotate(val=RawSQL("select col from sometable where othercol = %s", (someparam,)))
