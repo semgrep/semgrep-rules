@@ -5,11 +5,20 @@ rules:
             - pattern: urllib3.PoolManager(..., cert_reqs=$REQS, ...)
             - pattern: urllib3.ProxyManager(..., cert_reqs=$REQS, ...)
             - pattern: urllib3.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
+            - pattern: urllib3.connectionpool.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
             - pattern: urllib3.connection_from_url(..., cert_reqs=$REQS, ...)
             - pattern: urllib3.proxy_from_url(..., cert_reqs=$REQS, ...)                
             - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
-        - pattern-where-python: "vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE']"
+        - pattern-where-python: "vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL']"
       message: "certificate verification explicitly disabled, insecure connections possible"
+      languages: [python]
+      severity: WARNING
+    - id: disabled-cert-validation
+      patterns:
+        - pattern-either:
+            - pattern: urllib3.HTTPConnectionPool(...)
+            - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
+      message: "suggest HTTPS over HTTP connection"
       languages: [python]
       severity: WARNING
     - id: disabled-cert-validation-requests
