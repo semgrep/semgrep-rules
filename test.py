@@ -168,7 +168,6 @@ def generate_file_pairs(
                 + [
                     "--dangerously-allow-arbitrary-code-execution-from-rules",
                     "--strict",
-                    "--strict-parsing",
                     "--json",
                     "--no-rewrite-rule-ids",
                     "-f",
