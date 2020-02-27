@@ -54,6 +54,6 @@ rules:
             $V = flask.request.$W
             ...
             return flask.redirect($V)
-    message: "Found data from flask.request passed in to flask.redirect. This is an open redirect and could be exploited"
+    message: "Data from request is passed to redirect(). This is an open redirect and could be exploited. See https://cwe.mitre.org/data/definitions/601.html"
     languages: [python]
     severity: ERROR
