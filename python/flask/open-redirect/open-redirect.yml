@@ -21,39 +21,39 @@ rules:
         - pattern: |
             $V = flask.request.$W[$X]
             ...
-            flask.redirect($V)        
+            flask.redirect($V)
         - pattern: |
             $V = flask.request.$W[$X]
             ...
-            $Z = flask.redirect($V)        
+            $Z = flask.redirect($V)
         - pattern: |
             $V = flask.request.$W[$X]
             ...
-            return flask.redirect($V)        
+            return flask.redirect($V)
         - pattern: |
             $V = flask.request.$W($X)
             ...
-            flask.redirect($V)        
+            flask.redirect($V)
         - pattern: |
             $V = flask.request.$W($X)
             ...
-            $Z = flask.redirect($V)        
+            $Z = flask.redirect($V)
         - pattern: |
             $V = flask.request.$W($X)
             ...
-            return flask.redirect($V)        
+            return flask.redirect($V)
         - pattern: |
             $V = flask.request.$W
             ...
-            flask.redirect($V)        
+            flask.redirect($V)
         - pattern: |
             $V = flask.request.$W
             ...
-            $Z = flask.redirect($V)        
+            $Z = flask.redirect($V)
         - pattern: |
             $V = flask.request.$W
             ...
-            return flask.redirect($V)        
+            return flask.redirect($V)
     message: "Found data from flask.request passed in to flask.redirect. This is an open redirect and could be exploited"
     languages: [python]
     severity: ERROR
