@@ -31,7 +31,6 @@ def error2(e):
 ## Doesn't work yet
 #@app.route("/error3")
 #def error3(e):
-#    # ruleid: dangerous-template-string
 #    template = f'''{  extends "layout.html"  }
 #{  block body  }
 #    <div class="center-content error">
