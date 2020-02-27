@@ -1,0 +1,43 @@
+rules:
+  - id: open-redirect
+    patterns:
+      - pattern-inside: |
+          @$APP.route(...)
+          def $X():
+            ...
+      - pattern-either:
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            flask.redirect($V)
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            return flask.redirect($V)
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            return flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            return flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            return flask.redirect($V)        
+    message: "Found data from flask.request passed in to flask.redirect. This is an open redirect and could be exploited"
+    languages: [python]
+    severity: ERROR
