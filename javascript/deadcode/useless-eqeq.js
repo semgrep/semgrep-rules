@@ -3,7 +3,7 @@
 x == x
 
 // ok
-assert(x == x) 
+assert(x == x)
 
 // ok, harmless
 1 == 1
