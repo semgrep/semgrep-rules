@@ -13,6 +13,10 @@ rules:
         - pattern: |
             $V = flask.request.$W.get($X)
             ...
+            $Z = flask.redirect($V)
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
             return flask.redirect($V)
         - pattern: |
             $V = flask.request.$W[$X]
@@ -21,11 +25,19 @@ rules:
         - pattern: |
             $V = flask.request.$W[$X]
             ...
+            $Z = flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
             return flask.redirect($V)        
         - pattern: |
             $V = flask.request.$W($X)
             ...
             flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            $Z = flask.redirect($V)        
         - pattern: |
             $V = flask.request.$W($X)
             ...
@@ -34,6 +46,10 @@ rules:
             $V = flask.request.$W
             ...
             flask.redirect($V)        
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            $Z = flask.redirect($V)        
         - pattern: |
             $V = flask.request.$W
             ...
