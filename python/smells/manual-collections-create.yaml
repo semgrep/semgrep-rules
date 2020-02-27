@@ -5,7 +5,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     if $KEY not in $DICT:
                         ...
@@ -15,7 +15,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     $DICT.setdefault($KEY, {}).update(...)
     message: "manually creating a defaultdict - use collections.defaultdict(dict)"
@@ -27,7 +27,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     if $KEY not in $DICT:
                         ...
@@ -37,7 +37,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     $DICT.setdefault($KEY, set()).add(...)
     message: "manually creating a defaultdict - use collections.defaultdict(set)"
@@ -49,7 +49,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     if $KEY not in $DICT:
                         ...
@@ -59,7 +59,7 @@ rules:
             - pattern: |
                 $DICT = {}
                 ...
-                for $KEY, $VALUE in $OTHERDICT:
+                for $KEY, $VALUE in $OTHERDICT.items():
                     ...
                     $DICT.setdefault($KEY, []).append(...)
     message: "manually creating a defaultdict - use collections.defaultdict(list)"
@@ -69,7 +69,7 @@ rules:
     pattern: |
         $DICT = {}
         ...
-        for $KEY, $VALUE in $OTHERDICT:
+        for $KEY, $VALUE in $OTHERDICT.items():
             ...
             if $KEY not in $DICT:
                 ...
