@@ -1,0 +1,55 @@
+rules:
+  - id: open-redirect
+    patterns:
+      - pattern-either:
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return django.shortcuts.redirect($V, ...)
+    message: "Data from request is passed to redirect(). This is an open redirect and could be exploited. See https://cwe.mitre.org/data/definitions/601.html"
+    languages: [python]
+    severity: ERROR
