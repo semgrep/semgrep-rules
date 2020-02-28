@@ -12,8 +12,7 @@ rules:
             - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
         - pattern-where-python: |-
             vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL',
-                              "'NONE'", "'OPTIONAL'"
-                              '"NONE"', '"OPTIONAL"']
+                              "'NONE'", "'OPTIONAL'", '"NONE"', '"OPTIONAL"']
       message: "certificate verification explicitly disabled, insecure connections possible"
       languages: [python]
       severity: WARNING
