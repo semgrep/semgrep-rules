@@ -1,9 +1,12 @@
 rules:
   - id: open-redirect
     patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
       - pattern-either:
         - pattern: |
-            $V = flask.request.$W.get($X)
+            $V = request.$W.get($X)
             ...
             django.shortcuts.redirect($V, ...)
         - pattern: |
@@ -15,6 +18,18 @@ rules:
             ...
             return django.shortcuts.redirect($V, ...)
         - pattern: |
+            $V = request.$W.get($X)
+            ...
+            django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
             $V = request.$W[$X]
             ...
             django.shortcuts.redirect($V, ...)
@@ -26,6 +41,18 @@ rules:
             $V = request.$W[$X]
             ...
             return django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return django.http.HttpResponseRedirect($V, ...)
         - pattern: |
             $V = request.$W($X)
             ...
@@ -39,6 +66,18 @@ rules:
             ...
             return django.shortcuts.redirect($V, ...)
         - pattern: |
+            $V = request.$W($X)
+            ...
+            django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
             $V = request.$W
             ...
             django.shortcuts.redirect($V, ...)
@@ -50,6 +89,18 @@ rules:
             $V = request.$W
             ...
             return django.shortcuts.redirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = django.http.HttpResponseRedirect($V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return django.http.HttpResponseRedirect($V, ...)
     message: "Data from request is passed to redirect(). This is an open redirect and could be exploited. See https://cwe.mitre.org/data/definitions/601.html"
     languages: [python]
     severity: ERROR
