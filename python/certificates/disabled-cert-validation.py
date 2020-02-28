@@ -45,10 +45,13 @@ pool2 = ur3.connectionpool.HTTPConnectionPool(bla)
 pool = ur3.connection_from_url('someurl', cert_reqs= ssl.CERT_NONE)
 
 # ruleid:disabled-cert-validation
-pool = ur3.connection_from_url('someurl', cert_reqs= 'CERT_NONE')
+pool = ur3.connection_from_url('someurl', cert_reqs='NONE')
+
+# OK; invalid
+pool = ur3.connection_from_url('someurl', cert_reqs='CERT NONE')
 
 # ruleid:disabled-cert-validation
-pool = ur3.connection_from_url('someurl', cert_reqs=    "CERT_NONE")
+pool = ur3.connection_from_url('someurl', cert_reqs=    "NONE")
 
 # ok
 pool = ur3.connection_from_url('someurl', cert_reqs= 'CERT_REQUIRED')
