@@ -12,8 +12,8 @@ rules:
             - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
         - pattern-where-python: |-
             vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL',
-                              "'NONE'", "'CERT_NONE'", "'ssl.CERT_NONE'", "'ssl.CERT_OPTIONAL'", "'CERT_OPTIONAL'",
-                              '"NONE"', '"CERT_NONE"', '"ssl.CERT_NONE"', '"ssl.CERT_OPTIONAL"', '"CERT_OPTIONAL"']
+                              "'NONE'", "'OPTIONAL'"
+                              '"NONE"', '"OPTIONAL"']
       message: "certificate verification explicitly disabled, insecure connections possible"
       languages: [python]
       severity: WARNING
@@ -28,8 +28,14 @@ rules:
     - id: disabled-cert-validation-requests
       patterns:
         - pattern-either:
-            - pattern: requests.get(..., verify=False, ...)
-            - pattern: requests.post(..., verify=False, ...)
+          - pattern: requests.put(..., verify=False, ...)
+          - pattern: requests.patch(..., verify=False, ...)
+          - pattern: requests.delete(..., verify=False, ...)
+          - pattern: requests.head(..., verify=False, ...)
+          - pattern: requests.options(..., verify=False, ...)
+          - pattern: requests.request(..., verify=False, ...)
+          - pattern: requests.get(..., verify=False, ...)
+          - pattern: requests.post(..., verify=False, ...)
       message: "certificate verification explicitly disabled, insecure connections possible"
       languages: [python]
       severity: WARNING
