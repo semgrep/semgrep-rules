@@ -15,6 +15,12 @@ def index():
     rep = response.set_cookie("hello", "world")
     return rep
 
+@app.route("/some")
+def some():
+    # ruleid:secure-set-cookie
+    rep = response.set_cookie("hello", "world", httponly=True)
+    return rep
+
 @app.route("/admin")
 def admin():
     # ok

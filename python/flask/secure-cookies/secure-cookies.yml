@@ -2,19 +2,73 @@
 rules:
   - id: secure-session-cookies
     patterns:
-      - pattern-not: |
-          $APP = flask.Flask(...)
-          ...
-          $APP.config.update(
-            ...,
-            SESSION_COOKIE_SECURE=True,
-            SESSION_COOKIE_HTTPONLY=True,
-            SESSION_COOKIE_SAMESITE="...",
-            ...
-          )
-      - pattern: |
-          $APP = flask.Flask(...)
-          ...
+      - pattern-either:
+          - patterns:
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config.update(
+                  ...,
+                  SESSION_COOKIE_SECURE=$A,
+                  SESSION_COOKIE_HTTPONLY=$B,
+                  SESSION_COOKIE_SAMESITE=$C,
+                  ...
+                )
+            - pattern: |
+                $APP = flask.Flask(...)
+                ...
+          - patterns:
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+            - pattern-not: |
+                $APP = flask.Flask(...)
+                ...
+                $APP.config["SESSION_COOKIE_SAMESITE"] = $C
+                ...
+                $APP.config["SESSION_COOKIE_HTTPONLY"] = $B
+                ...
+                $APP.config["SESSION_COOKIE_SECURE"] = $A
+            - pattern: |
+                $APP = flask.Flask(...)
+                ...
     message: "Session cookies should be protected with the Secure, HttpOnly, and SameSite attributes. Set these attributes on your session cookies by setting SESSION_COOKIE_SECURE=True, SESSION_COOKIE_HTTPONLY=True, and SESSION_COOKIE_SAMESITE='Lax|Strict' in your application config."
     languages: [python]
     severity: WARNING
