@@ -1,0 +1,61 @@
+rules:
+  - id: dangerous-template-string
+    patterns:
+      - pattern-either:
+        - pattern: |
+            $V = "...".format(...)
+            ...
+            $T = flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "...".format(...)
+            ...
+            return flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "...".format(...)
+            ...
+            return flask.render_template_string($V, ...), $MORE
+        - pattern: |
+            $V = "..." % $S
+            ...
+            $T = flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "..." % $S
+            ...
+            return flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "..." % $S
+            ...
+            return flask.render_template_string($V, ...), $MORE
+        - pattern: |
+            $V = "..."
+            ...
+            $V += $O
+            ...
+            $T = flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "..."
+            ...
+            $V += $O
+            ...
+            return flask.render_template_string($V, ...)
+        - pattern: |
+            $V = "..."
+            ...
+            $V += $O
+            ...
+            return flask.render_template_string($V, ...), $MORE
+        - pattern: |
+            $V = f"...{$X}..."
+            ...
+            $T = flask.render_template_string($V, ...)
+        - pattern: |
+            $V = f"...{$X}..."
+            ...
+            return flask.render_template_string($V, ...)
+        - pattern: |
+            $V = f"...{$X}..."
+            ...
+            return flask.render_template_string($V, ...), $CODE
+    message: "Found a template created with string formatting. This is susceptible to server-side template injection and cross-site scripting attacks."
+    languages: [python]
+    severity: ERROR

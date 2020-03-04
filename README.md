@@ -6,10 +6,10 @@ This is an repository containing rules written for [sgrep](https://sgrep.dev), o
 
 ## Contributing
 
-| sgrep | test status          |
-| ------- | ------------------ |
-| `latest`   | [![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep) |
-| `develop`  | [![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-develop/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-develop) |
+| branch | using sgrep docker image | test status          |
+| ------------ | ------------------------ | -------------------- |
+| `master` | `returntocorp/sgrep:latest`   | [![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep/badge.svg?branch=master)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep) |
+| `develop` | `returntocorp/sgrep:develop`  | [![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-develop/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-develop) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
@@ -19,7 +19,7 @@ If you want run these rules rather than write them, check out the easy-to-use [b
 
 ## Help
 
-Contact the team at [sgrep@r2c.dev](mailto:sgrep@r2c.dev) for help.
+Join slack for the fastest answers to your questions! Or contact the team at [sgrep@r2c.dev](mailto:sgrep@r2c.dev).
 
 ## Testing Rules
 
