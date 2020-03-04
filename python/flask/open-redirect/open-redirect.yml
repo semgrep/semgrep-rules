@@ -1,0 +1,59 @@
+rules:
+  - id: open-redirect
+    patterns:
+      - pattern-inside: |
+          @$APP.route(...)
+          def $X():
+            ...
+      - pattern-either:
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            $Z = flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            return flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            $Z = flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            return flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            $Z = flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            return flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            $Z = flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            return flask.redirect($V, ...)
+    message: "Data from request is passed to redirect(). This is an open redirect and could be exploited. See https://cwe.mitre.org/data/definitions/601.html"
+    languages: [python]
+    severity: ERROR
