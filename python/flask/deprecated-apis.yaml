@@ -1,0 +1,41 @@
+rules:
+  - id: flask-deprecated-apis
+    patterns:
+      - pattern-either:
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.open_session(...)
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.save_session(...)
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.make_null_session(...)
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.init_jinja_globals(...)
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.request_globals_class(...)
+        - pattern: |
+              $F = Flask(...)
+              ...
+              $F.static_path(...)
+        - pattern: app.open_session(...)
+        - pattern: app.save_session(...)
+        - pattern: app.make_null_session(...)
+        - pattern: app.init_jinja_globals(...)
+        - pattern: app.request_globals_class(...)
+        - pattern: app.static_path(...)
+        - pattern: app.config.from_json(...)
+        - pattern: flask.json_available
+        - pattern: flask.request.module
+        - pattern: flask.testing.make_test_environ_builder(...)
+    message: "deprecated Flask API"
+    languages: [python]
+    severity: WARNING
