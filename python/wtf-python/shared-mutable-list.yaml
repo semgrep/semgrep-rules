@@ -1,0 +1,11 @@
+rules:
+  - id: shared-mutable-list
+    pattern: |
+        class $C:
+          ...
+          def $A(..., $D=[], ...):
+            ...
+            self.$E = $D
+    message: "Multiple instances of class $C potentially share the list self.$E"
+    languages: [python]
+    severity: ERROR
