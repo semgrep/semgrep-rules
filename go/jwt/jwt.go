@@ -1,14 +1,19 @@
 // https://www.sohamkamani.com/blog/golang/2019-01-01-jwt-authentication/
 package main
-import "fmt"
 
 import (
-	//...
-	// import the jwt-go library
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
-	//...
 )
 
+//...
+// import the jwt-go library
+
+//...
 
 var users = map[string]string{
 	"user1": "password1",
@@ -32,10 +37,10 @@ type Claims struct {
 func Signin(w http.ResponseWriter, r *http.Request) {
 
 	// Create the JWT key used to create the signature
-	// ruleid:hardcoded-jwt-key
+	// ruleid:hardcoded-jwt-key-intermediate
 	var jwtKey = []byte("my_secret_key")
-	//var x = "foo"
-/*
+	var x = "foo"
+
 	var creds Credentials
 	// Get the JSON body and decode into credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
@@ -66,7 +71,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expirationTime.Unix(),
 		},
-	} */
+	}
 
 	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -88,8 +93,8 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 
 	var jwtKey = []byte("my_secret_key")
 	fmt.Println(1)
-    fmt.Println(2)
-    fmt.Println(3)
+	fmt.Println(2)
+	fmt.Println(3)
 	var jwtKey = []byte("my_secret_key")
 	fmt.Println(4)
 }
