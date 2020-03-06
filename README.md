@@ -23,7 +23,7 @@ Join slack for the fastest answers to your questions! Or contact the team at [sg
 
 ## Testing Rules
 
-A testing system is available which can be used to check the rules against example source code files.
+A testing system is available which can be used to check the rules against example source code files. It requires `sgrep` and `sgrep-lint` from [sgrep](https://sgrep.dev)
 
 If you wrote a rule in a yaml named `eqeq-bad.yaml` with a rule id named `my-eqeq-bad`, you could put a file in the same directory named eqeq-bad.py (it just needs to have the same name except for the extension as eqeq-bad.yaml). Then:
 

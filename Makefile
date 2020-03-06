@@ -4,4 +4,4 @@ test:
 	sgrep-lint --validate --config=./javascript .
 	sgrep-lint --validate --config=./java .
 	sgrep-lint --validate --config=./go .
-	./test.py --strict --ignore-todo .
+	sgrep-lint --test --strict --test-ignore-todo --dangerously-allow-arbitrary-code-execution-from-rules .
