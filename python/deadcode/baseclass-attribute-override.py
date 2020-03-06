@@ -1,5 +1,5 @@
 
-# ruleid: baseclass-attribute-override
+# todoruleid: baseclass-attribute-override
 class A:
     def method1(self, args):
         pass
