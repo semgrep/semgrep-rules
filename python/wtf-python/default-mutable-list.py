@@ -5,13 +5,13 @@ def append_func1(default=[]):
     default.append(5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def append_func2(default=[]):
     for x in range(10):
         default.append(x)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def append_func3(default=[]):
     x = default
     x.append(5)
@@ -22,7 +22,7 @@ def append_func4(x=1, default=[]):
     default.append(5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def append_func5(default=[]):
     if not default:
         default.append(1)
@@ -33,7 +33,7 @@ def append_func6(default=[], x="string"):
     default.append(5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def append_func7(default=[]):
     if True:
         default = list(default)
@@ -41,7 +41,7 @@ def append_func7(default=[]):
         default.append(1)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def append_func8(default=[]):
     while True:
         default.append(1)
@@ -53,13 +53,13 @@ def extend_func1(default=[]):
     default.extend([5])
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def extend_func2(default=[]):
     for x in range(10):
         default.extend([x])
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def extend_func3(default=[]):
     x = default
     x.extend([5])
@@ -70,7 +70,7 @@ def extend_func4(x=1, default=[]):
     default.extend([5])
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def extend_func5(default=[]):
     if not default:
         default.extend([1])
@@ -81,7 +81,7 @@ def extend_func6(default=[], x="string"):
     default.extend([5])
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def extend_func7(default=[]):
     if True:
         default = list(default)
@@ -89,7 +89,7 @@ def extend_func7(default=[]):
         default.extend([1])
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def extend_func8(default=[]):
     while True:
         default.extend([1])
@@ -101,13 +101,13 @@ def insert_func1(default=[]):
     default.insert(0, 5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def insert_func2(default=[]):
     for x in range(10):
         default.insert(0, x)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def insert_func3(default=[]):
     x = default
     x.insert(0, 5)
@@ -118,7 +118,7 @@ def insert_func4(x=1, default=[]):
     default.insert(0, 5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def insert_func5(default=[]):
     if not default:
         default.insert(0, 1)
@@ -129,7 +129,7 @@ def insert_func6(default=[], x="string"):
     default.insert(0, 5)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def insert_func7(default=[]):
     if True:
         default = list(default)
@@ -137,7 +137,7 @@ def insert_func7(default=[]):
         default.insert(0, 1)
 
 
-# ruleid: default-mutable-list
+# todoruleid: default-mutable-list
 def insert_func8(default=[]):
     while True:
         default.insert(0, 1)
