@@ -197,6 +197,6 @@ rules:
                 def $F(..., $D=[], ...):
                   ...
                   $D.insert(...)
-    message: "Function $F mutates default list $D"
+    message: "Function $F mutates default list $D. Instances of default function arguments in Python are shared between function calls.  Mutating a default function argument changes the result for all function consumers. This will most likely cause unexpected results, or lead to security vulnerabilities whereby one function consumer can either view or modify the data of another function consumer."
     languages: [python]
     severity: ERROR
