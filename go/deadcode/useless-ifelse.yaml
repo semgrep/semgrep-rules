@@ -2,21 +2,23 @@ rules:
   - id: useless-if-conditional
     patterns:
       - pattern-either:
-          - pattern: |
-              if $X:
+          - pattern: |-
+              if ($X) {
                   ...
-              elif $X:
+              } else if ($X) {
                   ...
+              }
     message: "if block checks for the same condition on both branches (`$X`)"
-    languages: [python]
+    languages: [go]
     severity: WARNING
   - id: useless-if-body
     patterns:
-        - pattern: |
-            if $X:
+        - pattern: |-
+            if ($X) {
                 $S
-            else:
+            } else {
                 $S
+            }
     message: "useless if statment; both blocks have the same body"
-    languages: [python]
+    languages: [go]
     severity: WARNING
