@@ -30,7 +30,7 @@ elif d:
     print('this is d')
 
 
-# don't report on cases like this 
+# don't report on cases like this
 if a:
     print('this is a')
 elif b:
