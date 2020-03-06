@@ -10,7 +10,7 @@ if hasattr(os, 'pwrite'):
 
 if hasattr(os, 'pwritev'):
     # OK
-    os.pwritev('a')    
+    os.pwritev('a')
 
 
 # ruleid:python37-compatibility-os2-ok2

@@ -2,11 +2,10 @@ rules:
     - id: return-in-init
       patterns:
         - pattern-inside: |
-            class A(...): 
+            class A(...):
                 ...
-        - pattern-inside: |
-            def __init__(...):
-                ...
+                def __init__(...):
+                    ...
         - pattern: return ...
       message: "`return` should never appear inside a class __init__ function"
       languages: [python]
@@ -14,11 +13,10 @@ rules:
     - id: yield-in-init
       patterns:
         - pattern-inside: |
-            class A(...): 
+            class A(...):
                 ...
-        - pattern-inside: |
-            def __init__(...):
-                ...
+                def __init__(...):
+                    ...
         - pattern: yield ...
       message: "`yield` should never appear inside a class __init__ function"
       languages: [python]

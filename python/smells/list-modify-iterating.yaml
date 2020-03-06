@@ -1,0 +1,14 @@
+rules:
+  - id: list-pop-while-iterate
+    patterns:
+      - pattern-inside: |
+          for $ELEMENT in $LIST:
+              ...
+      - pattern-either:
+          - pattern: $LIST.pop(...)
+          - pattern: $LIST.push(...)
+          - pattern: $LIST.append(...)
+          - pattern: $LIST.extend(...)
+    message: "It appears that `$LIST` is a list that is being modified while in a for loop. This is usually a bad idea"
+    languages: [python]
+    severity: WARNING

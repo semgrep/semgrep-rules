@@ -1,7 +1,7 @@
 rules:
   - id: javascript-alert
-    patterns: 
-        - pattern-either: 
+    patterns:
+        - pattern-either:
           - pattern: alert()
           - pattern: alert($X)
     message: "found alert() call; should this be in production code?"
@@ -18,12 +18,11 @@ rules:
     languages: [js]
     severity: WARNING
   - id: javascript-prompt
-    patterns: 
-      - pattern-either: 
+    patterns:
+      - pattern-either:
         - pattern: prompt()
         - pattern: prompt($X)
         - pattern: prompt($X, $Y)
     message: "found prompt() call; should this be in production code?"
     languages: [js]
     severity: WARNING
-               
