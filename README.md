@@ -8,8 +8,8 @@ This is an repository containing rules written for [sgrep](https://sgrep.dev), o
 
 | branch | using sgrep docker image | test status          |
 | ------------ | ------------------------ | -------------------- |
-| `master` | `returntocorp/sgrep:latest`   | [![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep/badge.svg?branch=master)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep) |
-| `develop` | `returntocorp/sgrep:develop`  | [![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-develop/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-develop) |
+| `master` | `returntocorp/sgrep:latest`   | [![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep/badge.svg?branch=master)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep+branch%3Amaster) |
+| `develop` | `returntocorp/sgrep:develop`  | [![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-develop/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-develop+branch%3Adevelop) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
