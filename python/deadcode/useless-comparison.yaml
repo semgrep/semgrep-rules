@@ -8,9 +8,13 @@ rules:
       - pattern: |
           if "..." or ...:
               ...
-      - pattern: |
-          if "...":
+      - patterns:
+        - pattern-not: |
+            if $X in "...":
               ...
+        - pattern: |
+            if "...":
+                ...
     message: "don't use strings as booleans"
     languages: [python]
     severity: ERROR

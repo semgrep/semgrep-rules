@@ -2,10 +2,18 @@ class Bar {
     void main() {
         boolean myBoolean;
 
-        //myBoolean == myBoolean;
-
-        // ruleid:assignment-comparison
+        // todook
         if (myBoolean = true) {
+            continue;
+        }
+
+        // ruleid:hardcoded-conditional
+        if (true) {
+            continue;
+        }
+
+        // ruleid:hardcoded-conditional
+        if (true && false) {
             continue;
         }
 
@@ -14,12 +22,12 @@ class Bar {
 
         }
 
-        // ruleid:eqeq-is-bad
+        // ok
         if (myBoolean == myBoolean) {
             continue;
         }
 
-        // ruleid:eqeq-is-bad
+        // ok
         if (myBoolean != myBoolean) {
             continue;
         }

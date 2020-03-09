@@ -19,11 +19,3 @@ rules:
     message: "useless comparison operation `$X == $X` or `$X != $X`"
     languages: [java]
     severity: ERROR
-  - id: hardcoded-eq-true-or-false
-    patterns:
-      - pattern-either:
-          - pattern: if (true) { ... }
-          - pattern: if (false) { ... }
-    message: "useless if statement, always the same behavior"
-    languages: [java]
-    severity: ERROR
