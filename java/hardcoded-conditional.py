@@ -2,7 +2,7 @@ class Bar {
     void main() {
         boolean myBoolean;
 
-        // ok
+        // todook
         if (myBoolean = true) {
             continue;
         }
