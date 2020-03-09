@@ -52,7 +52,7 @@ def main_d():
 
 
 def main_e():
-    # totoruleid:tempfile-without-flush
+    # ruleid:tempfile-without-flush
     fout = tempfile.NamedTemporaryFile('w')
     debug_print(astr)
     fout.write(astr)

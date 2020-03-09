@@ -14,7 +14,7 @@ class Bar {
             continue;
         }
 
-        // todoruleid:hardcoded-eq-true-or-false
+        // ruleid:hardcoded-eq-true-or-false
         if (true && false) {
             continue;
         }
