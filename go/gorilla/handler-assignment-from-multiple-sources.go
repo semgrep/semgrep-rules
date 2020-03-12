@@ -21,8 +21,8 @@ func RetrieveUser(user_id int) User {
 var store = sessions.NewCookieStore([]byte("blah-blah-blah"))
 
 func MyHandler(w http.ResponseWriter, r *http.Request) {
-    // ruleid: handler-assignment-from-multiple-sources
     session, err := store.Get(r, "blah-session")
+    // ruleid: handler-assignment-from-multiple-sources
     user_id := session.Values["user_id"]
 
     if !ValidateUser(user_id) {
