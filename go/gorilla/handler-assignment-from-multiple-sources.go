@@ -8,7 +8,7 @@ type User struct {
     user_id int
     account_id string
 }
-    
+
 
 func ValidateUser(user_id int) bool {
     return true
@@ -53,7 +53,7 @@ func MyHandlerExplicit(w http.ResponseWriter, r *http.Request) {
 }
 
 func augment(user_id int, augment_string string) int {
-    return user_id 
+    return user_id
 }
 
 func MyHandlerOK(w http.ResponseWriter, r *http.Request) {

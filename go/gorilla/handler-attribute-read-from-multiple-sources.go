@@ -8,7 +8,7 @@ type User struct {
     user_id int
     account_id string
 }
-    
+
 
 func ValidateUser(user_id int) bool {
     return true
