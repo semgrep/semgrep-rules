@@ -5,7 +5,7 @@ def assign_func1(default={}):
     default["potato"] = 5
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def assign_func2(default={}):
     for x in range(10):
         default[x] = 1
@@ -22,7 +22,7 @@ def assign_func4(x=1, default={}):
     default["1"] = 1
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def assign_func5(default={}):
     if not default:
         default["1"] = "test"
@@ -41,7 +41,7 @@ def assign_func7(default={}):
         default[1] = 21
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def assign_func8(default={}):
     while True:
         default[1] = 4
@@ -53,7 +53,7 @@ def update_func1(default={}):
     default.update({1: 2})
 
 
-# rtodouleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def update_func2(default={}):
     for x in range(10):
         default.update({1: 2})
@@ -70,7 +70,7 @@ def update_func4(x=1, default={}):
     default.update({1: 2})
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def update_func5(default={}):
     if not default:
         default.update({1: 2})
@@ -89,7 +89,7 @@ def update_func7(default={}):
         default.update({1: 2})
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def update_func8(default={}):
     while True:
         default.update({1: 2})
@@ -101,7 +101,7 @@ def setdefault_func1(default={}):
     default.setdefault(1, 2)
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def setdefault_func2(default={}):
     for x in range(10):
         default.setdefault(1, 2)
@@ -118,7 +118,7 @@ def setdefault_func4(x=1, default={}):
     default.setdefault(1, 2)
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def setdefault_func5(default={}):
     if not default:
         default.setdefault(1, 2)
@@ -137,7 +137,7 @@ def setdefault_func7(default={}):
         default.setdefault(1, 2)
 
 
-# todoruleid: default-mutable-dict
+# ruleid: default-mutable-dict
 def setdefault_func8(default={}):
     while True:
         default.setdefault(1, 2)
