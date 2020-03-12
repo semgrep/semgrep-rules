@@ -5,7 +5,7 @@ def append_func1(default=[]):
     default.append(5)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def append_func2(default=[]):
     for x in range(10):
         default.append(x)
@@ -22,7 +22,7 @@ def append_func4(x=1, default=[]):
     default.append(5)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def append_func5(default=[]):
     if not default:
         default.append(1)
@@ -41,7 +41,7 @@ def append_func7(default=[]):
         default.append(1)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def append_func8(default=[]):
     while True:
         default.append(1)
@@ -53,7 +53,7 @@ def extend_func1(default=[]):
     default.extend([5])
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def extend_func2(default=[]):
     for x in range(10):
         default.extend([x])
@@ -70,7 +70,7 @@ def extend_func4(x=1, default=[]):
     default.extend([5])
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def extend_func5(default=[]):
     if not default:
         default.extend([1])
@@ -89,7 +89,7 @@ def extend_func7(default=[]):
         default.extend([1])
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def extend_func8(default=[]):
     while True:
         default.extend([1])
@@ -101,7 +101,7 @@ def insert_func1(default=[]):
     default.insert(0, 5)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def insert_func2(default=[]):
     for x in range(10):
         default.insert(0, x)
@@ -118,7 +118,7 @@ def insert_func4(x=1, default=[]):
     default.insert(0, 5)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def insert_func5(default=[]):
     if not default:
         default.insert(0, 1)
@@ -137,7 +137,7 @@ def insert_func7(default=[]):
         default.insert(0, 1)
 
 
-# todoruleid: default-mutable-list
+# ruleid: default-mutable-list
 def insert_func8(default=[]):
     while True:
         default.insert(0, 1)
