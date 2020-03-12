@@ -16,7 +16,15 @@ rules:
       - pattern-not: |
           $VAR = $X
           ...
-          $VAR = $Z(..., $VAR, ...)          
+          $VAR = $X
+      - pattern-not: |
+          $VAR = $X
+          ...
+          $VAR = $Z(..., $VAR, ...)
+      - pattern-not: |
+          $VAR = $X
+          ...
+          $VAR = $Z($W(..., $VAR, ...))
       - pattern-not: |
           $VAR = $X
           ...
