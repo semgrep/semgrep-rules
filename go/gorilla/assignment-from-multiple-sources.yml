@@ -1,0 +1,27 @@
+rules:
+  - id: assignment-from-multiple-sources
+    patterns:
+      - pattern-inside: |
+          func $HANDLER(..., $R *http.Request, ...) {
+            ...
+          }
+      - pattern: |
+          $VAR = $Y
+          ...
+          $VAR = $X
+    message: "Variable $VAR is assigned from two different sources: '$Y' and '$X'. Make sure this is intended, as this could cause logic bugs if they are treated as they are the same object."
+    languages: [go]
+    severity: WARNING 
+  - id: assignment-from-multiple-sources-no-walrus
+    patterns:
+      - pattern-inside: |
+          func $HANDLER(..., $R *http.Request, ...) {
+            ...
+          }
+      - pattern: |
+          var $VAR $TYPE = $Y
+          ...
+          $VAR = $X
+    message: "Variable $VAR is assigned from two different sources: '$Y' and '$X'. Make sure this is intended, as this could cause logic bugs if they are treated as they are the same object."
+    languages: [go]
+    severity: WARNING 
