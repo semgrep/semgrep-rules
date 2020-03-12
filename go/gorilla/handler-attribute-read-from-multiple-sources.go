@@ -21,7 +21,7 @@ func RetrieveUser(user_id int) User {
 var store = sessions.NewCookieStore([]byte("blah-blah-blah"))
 
 func MyHandler(w http.ResponseWriter, r *http.Request) {
-    // ruleid: attribute-read-from-multiple-sources
+    // ruleid: handler-attribute-read-from-multiple-sources
     session, err := store.Get(r, "blah-session")
     user_id := session.user_id
 
@@ -36,8 +36,8 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
     user_obj.save()
 }
 
-func MyHandlerNoWalus(w http.ResponseWriter, r *http.Request) {
-    // ruleid: attribute-read-from-multiple-sources-dict
+func MyHandlerDict(w http.ResponseWriter, r *http.Request) {
+    // ruleid: handler-attribute-read-from-multiple-sources-dict
     session, err := store.Get(r, "blah-session")
     user_id := session.Values["user_id"]
 

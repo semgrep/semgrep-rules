@@ -21,7 +21,7 @@ func RetrieveUser(user_id int) User {
 var store = sessions.NewCookieStore([]byte("blah-blah-blah"))
 
 func MyHandler(w http.ResponseWriter, r *http.Request) {
-    // ruleid: assignment-from-multiple-sources
+    // ruleid: handler-assignment-from-multiple-sources
     session, err := store.Get(r, "blah-session")
     user_id := session.Values["user_id"]
 
@@ -36,9 +36,9 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
     user_obj.save()
 }
 
-func MyHandlerNoWalus(w http.ResponseWriter, r *http.Request) {
-    // ruleid: assignment-from-multiple-sources
+func MyHandlerExplicit(w http.ResponseWriter, r *http.Request) {
     session, err := store.Get(r, "blah-session")
+    // todoruleid: handler-assignment-from-multiple-sources
     var user_id int = session.Values["user_id"].(int)
 
     if !ValidateUser(user_id) {
@@ -59,7 +59,7 @@ func augment(user_id int, augment_string string) int {
 func MyHandlerOK(w http.ResponseWriter, r *http.Request) {
     // ok
     session, err := store.Get(r, "blah-session")
-    user_id := session.Values["user_id"].(int)
+    user_id := session.Values["user_id"]
 
     if !ValidateUser(user_id) {
         http.Error(w, "Error", http.StatusInternalServerError)
@@ -86,6 +86,7 @@ func (sc *http.serverConn) runHandler(rw *http.responseWriter, req *http.Request
 			// Same as net/http:
 			if e != nil && e != http.ErrAbortHandler {
 				const size = 64 << 10
+                                // ok
 				buf := make([]byte, size)
 				buf = buf[:runtime.Stack(buf, false)]
 				sc.logf("http2: panic serving %v: %v\n%s", sc.conn.RemoteAddr(), e, buf)
