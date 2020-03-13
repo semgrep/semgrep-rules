@@ -11,7 +11,7 @@ rules:
           $B = $Y.$ATT
     message: "Attribute $ATT is read from two different sources: '$X.$ATT' and '$Y.$ATT'. Make sure this is intended, as this could cause logic bugs if they are treated as if they are the same object."
     languages: [go]
-    severity: WARNING 
+    severity: WARNING
   - id: handler-attribute-read-from-multiple-sources-dict
     patterns:
       - pattern-inside: |
@@ -25,4 +25,4 @@ rules:
       - pattern-where-python: "vars['$KEY'].strip('\"') == vars['$ATT']"
     message: "Attribute $ATT is read from two different sources: '$X[$KEY]' and '$Y.$ATT'. Make sure this is intended, as this could cause logic bugs if they are treated as if they are the same object."
     languages: [go]
-    severity: WARNING 
+    severity: WARNING
