@@ -58,8 +58,8 @@ func dbQueryRow(r *http.Request) {
 
 func dbQueryRowContext(r *http.Request) {
 	ctx := context.Background()
-	// ruleid : string-formatted-query
 	customerId := r.URL.Query().Get("id")
+	// ruleid : string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = " + customerId
 
 	row, _ := db.QueryRowContext(ctx, query)
@@ -121,8 +121,8 @@ func dbQueryRowFmt(r *http.Request) {
 
 func dbQueryRowContextFmt(r *http.Request) {
 	ctx := context.Background()
-	// ruleid: string-formatted-query
 	customerId := r.URL.Query().Get("id")
+	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
     query = fmt.Printf(query, customerId)
 
