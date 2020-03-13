@@ -49,7 +49,7 @@ func dbQueryContext(r *http.Request) {
 
 func dbQueryRow(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
-	// ruleid : string-formatted-query
+	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = " + customerId
 
 	row, _ := db.QueryRow(query)
@@ -59,7 +59,7 @@ func dbQueryRow(r *http.Request) {
 func dbQueryRowContext(r *http.Request) {
 	ctx := context.Background()
 	customerId := r.URL.Query().Get("id")
-	// ruleid : string-formatted-query
+	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = " + customerId
 
 	row, _ := db.QueryRowContext(ctx, query)
