@@ -1,3 +1,4 @@
+// ruleid: hardcoded-jwt-secret
 const $jwt = require('jsonwebtoken');
 
 const cert = 'hardcoded-secret';
