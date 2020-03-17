@@ -5,5 +5,14 @@ def func1():
 
 
 def func2():
+    # ok
     fd = open('bar')
     fd.close()
+
+def func3():
+    # ok
+    fd = open('baz')
+    try:
+        pass
+    finally:
+        fd.close()
