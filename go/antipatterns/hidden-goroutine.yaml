@@ -1,11 +1,19 @@
 rules:
   - id: hidden-goroutine
-    pattern: |
-      func $FUNC(...) {
-        go func(...) {
-          ...
-        }(...)
-      }
+    patterns:
+      - pattern-not: |
+          func $FUNC(...) {
+            go func() {
+              ...
+            }(...)
+            $MORE
+          }
+      - pattern: |
+          func $FUNC(...) {
+            go func() {
+              ...
+            }(...)
+          }
     message: |
       Detected a hidden goroutine. Function invocations are expected to synchronous,
       and this function will execute asynchronously because all it does is call a
