@@ -4,6 +4,12 @@ rules:
         - pattern-not: |
             $X = $Y;
             $X = $X.$Z(...);
+        - pattern-not: |
+            $X = $Y;
+            $X = $Z + $X;
+        - pattern-not: |
+            $X = $Y;
+            $X = $X + $Z;
         - pattern: |
             $X = $Y;
             $X = $Z;

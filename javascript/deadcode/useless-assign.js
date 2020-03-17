@@ -14,3 +14,7 @@ console.log(y);
 z = [1, 2];
 z = z.map(e => e * 2);
 console.log(z);
+
+// ok
+a = "Hi ";
+a += "Mom";
