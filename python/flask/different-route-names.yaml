@@ -29,11 +29,11 @@ rules:
       - pattern-where-python: |
           set(
               [
-                  part.lstrip("<").rstrip(">")
-                  for part in vars["$PATH"].replace('"', "").split("/")
+                  part.split(":")[-1].lstrip("<").rstrip(">")
+                  for part in vars["$PATH"].replace('"', "").replace("'", "").split("/")
                   if part.startswith("<") and part.endswith(">")
               ]
           ) != set([v for k, v in vars.items() if k.startswith("$A")])
-    message: The view function arguments to `$R` don't match the path defined in @app.route($PATH)
+    message: The view function arguments `$PATH` to `$R` don't match the path defined in @app.route($PATH)
     languages: [python]
     severity: WARNING
