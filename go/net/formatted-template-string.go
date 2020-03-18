@@ -45,6 +45,7 @@ func Formatted(r *http.Request) template.HTML {
 
 func FormattedInline(r *http.Request) template.HTML {
     customerId := r.URL.Query().Get("id")
+    // ruleid: formatted-template-string
     return template.HTML(fmt.Sprintf("<html><body><h1>%s</h1></body></html>", customerId))
 }
 
