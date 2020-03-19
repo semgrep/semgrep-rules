@@ -1,6 +1,7 @@
 rules:
   - id: formatted-template-string
     patterns:
+      - pattern-not: template.HTML("..." + "...")
       - pattern-either:
           - pattern: template.HTML($T + $X, ...)
           - pattern: template.HTML(fmt.$P("...", ...), ...)
