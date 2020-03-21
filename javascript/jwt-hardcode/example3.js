@@ -1,3 +1,4 @@
+// ruleid: hardcoded-jwt-secret
 const jwt = require('jsonwebtoken')
 
 const jwtSign = (payload = { id: 1 }) =>

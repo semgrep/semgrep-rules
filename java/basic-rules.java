@@ -24,5 +24,10 @@ class Bar {
             continue;
         }
 
+        float someFloat;
+        // ruleid:eqeq-is-bad
+        if (someFloat != someFloat) {
+            continue;
+        }
     }
 }

@@ -29,6 +29,55 @@ rules:
             $F = tempfile.SpooledTemporaryFile(...)
             ...
             $F.close()
+        - pattern-not-inside: |
+            $F = open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = io.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tarfile.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = ZipFile.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.TemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.NamedTemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.SpooledTemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
         - pattern-either:
             - pattern: $F = open(...)
             - pattern: $F = io.open(...)

@@ -16,6 +16,6 @@ rules:
           - pattern: $X == $X
           - pattern: $X != $X
       - pattern-not: 1 == 1
-    message: "useless comparison operation `$X == $X` or `$X != $X`"
+    message: "`$X == $X` or `$X != $X` is a useless comparison unless the value compared is a float or double. To test if `$X` is not-a-number, use `Double.isNaN($X)`."
     languages: [java]
     severity: ERROR
