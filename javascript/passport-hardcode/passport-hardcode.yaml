@@ -1,0 +1,77 @@
+rules:
+- id: hardcoded-passport-secret
+  patterns:
+    - pattern-either:
+      # passport-jwt
+      - pattern: |
+          var $F = require('passport-jwt').Strategy;
+          ...
+          new $F({secretOrKey: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-jwt').Strategy;
+          ...
+          var $X = new $F({secretOrKey: "..."}, ...);
+      # passport-facebook
+      - pattern: |
+          var $F = require('passport-facebook').Strategy;
+          ...
+          new $F({clientSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-facebook').Strategy;
+          ...
+          var $X = new $F({clientSecret: "..."}, ...);
+      # passport-google-oauth2
+      - pattern: |
+          var $F = require('passport-google-oauth2').Strategy;
+          ...
+          new $F({clientSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-google-oauth2').Strategy;
+          ...
+          var $X = new $F({clientSecret: "..."}, ...);
+      # passport-oauth2
+      - pattern: |
+          var $F = require('passport-oauth2').Strategy;
+          ...
+          new $F({clientSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-oauth2').Strategy;
+          ...
+          var $X = new $F({clientSecret: "..."}, ...);
+      # passport-twitter
+      - pattern: |
+          var $F = require('passport-twitter').Strategy;
+          ...
+          new $F({consumerSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-twitter').Strategy;
+          ...
+          var $X = new $F({consumerSecret: "..."}, ...);
+      # passport-google-oauth1
+      - pattern: |
+          var $F = require('passport-google-oauth1').Strategy;
+          ...
+          new $F({consumerSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-google-oauth1').Strategy;
+          ...
+          var $X = new $F({consumerSecret: "..."}, ...);
+      # passport-oauth1
+      - pattern: |
+          var $F = require("passport-oauth1").Strategy;
+          ...
+          new $F({consumerSecret: "..."}, ...);
+      - pattern: |
+          var $F = require("passport-oauth1").Strategy;
+          ...
+          var $X = new $F({consumerSecret: "..."}, ...);
+      # passport-auth0
+      - pattern: |
+          var $F = require('passport-auth0');
+          ...
+          new $F({clientSecret: "..."}, ...);
+      - pattern: |
+          var $F = require('passport-auth0');
+          ...
+          var $X = new $F({clientSecret: "..."}, ...);
+  message: "hardcoded secret value in passport strategy"
