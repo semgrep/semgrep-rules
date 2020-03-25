@@ -1,0 +1,50 @@
+rules:
+  - id: user-eval
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+          - pattern: eval(..., request.$W.get(...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $A = eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return eval(..., $V, ...)
+          - pattern: eval(..., request.$W(...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return eval(..., $V, ...)
+          - pattern: eval(..., request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = eval(..., $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return eval(..., $V, ...)
+    message: |
+      Found user data in a call to 'eval'. This is extremely dangerous.
+    languages: [python]
+    severity: WARNING
