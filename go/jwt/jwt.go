@@ -37,7 +37,7 @@ type Claims struct {
 func Signin(w http.ResponseWriter, r *http.Request) {
 
 	// Create the JWT key used to create the signature
-	// ruleid:hardcoded-jwt-key-intermediate
+	// ruleid:hardcoded-jwt-key
 	var jwtKey = []byte("my_secret_key")
 	var x = "foo"
 
