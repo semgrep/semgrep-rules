@@ -38,14 +38,14 @@ def get_users(request):
 ##### raw() True Negatives #########
 def get_user_age(request):
   user_name = request.get('user_name')
-  # django queryset is good 
+  # django queryset is good
   user_age = Person.objects.filter(user_name=user_name).first()
   html = "<html><body>User Age %s.</body></html>" % user_age
   return HttpResponse(html)
 
 def get_users(request):
   client_id = request.headers.get('client_id')
-  # using param list is ok 
+  # using param list is ok
   users = Person.objects.raw('SELECT * FROM myapp_person where client_id = %s', (client_id,))
   html = "<html><body>Users %s.</body></html>" % users
   return HttpResponse(html)

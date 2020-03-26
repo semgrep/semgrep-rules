@@ -34,7 +34,7 @@ def get_users(request):
 ##### raw() True Negatives #########
 def get_users(request):
   client_id = request.headers.get('client_id')
-  # using param list is ok 
+  # using param list is ok
   users = RawSQL('SELECT * FROM myapp_person where client_id = %s', (client_id,))
   html = "<html><body>Users %s.</body></html>" % users
   return HttpResponse(html)
