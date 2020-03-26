@@ -21,6 +21,7 @@ from ..tokens import (
 from .rest_permissions import UnbannedAnonOnly, UnbannedOnly
 
 User = auth.get_user_model()
+BaseUserManager = User.__class__
 
 class PasswordChangeFailed(Exception):
     pass
@@ -64,3 +65,17 @@ def change_forgotten_password(request, pk, token):
         return Response({"detail": e.messages[0]}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"username": user.username})
+
+class UserManager(BaseUserManager):
+    # ruleid: use-none-for-password-default
+    def create_user(self, email, password=""):
+        """
+        Creates and saves a Poster with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(email=self.normalize_email(email))
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
