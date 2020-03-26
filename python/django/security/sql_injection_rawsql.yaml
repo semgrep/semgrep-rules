@@ -1,0 +1,109 @@
+rules:
+  - id: sql-injection-using-rawsql
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return django.db.models.expressions.RawSQL($S.format($V), ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = django.db.models.expressions.RawSQL($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return django.db.models.expressions.RawSQL($S % $V, ...)
+    message: |
+      Data from request is passed to RawSQL(). 
+      This is a SQL injection and could be exploited. 
+      See https://cwe.mitre.org/data/definitions/89.html"
+    languages: [python]
+    severity: ERROR

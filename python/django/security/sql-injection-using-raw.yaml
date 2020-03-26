@@ -1,0 +1,111 @@
+rules:
+  - id: sql-injection-using-raw
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+        # match when `format` is used
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = $MODEL.objects.raw($S.format($V), ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return $MODEL.objects.raw($S.format($V), ...)
+        # match when `%` is used
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $Z = $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            return $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $Z = $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            return $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $Z = $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            return $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $Z = $MODEL.objects.raw($S % $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            return $MODEL.objects.raw($S % $V, ...)
+    message: |
+      Data from request is passed to raw(). 
+      This is a SQL injection and could be exploited. 
+      See https://cwe.mitre.org/data/definitions/89.html"
+    languages: [python]
+    severity: ERROR
