@@ -12,6 +12,11 @@ from tests import example_user
 from models import UserProfile
 from backend import EmailAuthBackend
 
+from somewhere import BaseBackend
+from django.contrib.auth import get_user_model
+
+UserModel = get_user_model()
+
 def test_email_auth_backend_empty_password(user_profile: UserProfile) -> None:
 	user_profile = example_user('hamlet')
 	password = "testpassword"
