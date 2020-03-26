@@ -5,6 +5,7 @@ rules:
           def $F(...):
             ...
       - pattern-either:
+        # match when `format` is used
         - pattern: |
             $V = request.$W.get($X)
             ...
@@ -53,6 +54,7 @@ rules:
             $V = request.$W
             ...
             return django.db.models.expressions.RawSQL($S.format($V), ...)
+        # match when `%` is used
         - pattern: |
             $V = request.$W.get($X)
             ...

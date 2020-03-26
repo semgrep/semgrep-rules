@@ -58,51 +58,51 @@ rules:
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $MODEL.objects.raw($S % $V), ...)
+            $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $Z = $MODEL.objects.raw($S.format($V), ...)
+            $Z = $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W.get($X)
             ...
-            return $MODEL.objects.raw($S.format($V), ...)
+            return $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $MODEL.objects.raw($S.format($V), ...)
+            $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $Z = $MODEL.objects.raw($S.format($V), ...)
+            $Z = $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            return $MODEL.objects.raw($S.format($V), ...)
+            return $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $MODEL.objects.raw($S.format($V), ...)
+            $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $Z = $MODEL.objects.raw($S.format($V), ...)
+            $Z = $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            return $MODEL.objects.raw($S.format($V), ...)
+            return $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W
             ...
-            $MODEL.objects.raw($S.format($V), ...)
+            $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W
             ...
-            $Z = $MODEL.objects.raw($S.format($V), ...)
+            $Z = $MODEL.objects.raw($S % $V, ...)
         - pattern: |
             $V = request.$W
             ...
-            return $MODEL.objects.raw($S.format($V), ...)
+            return $MODEL.objects.raw($S % $V, ...)
     message: |
       Data from request is passed to raw(). 
       This is a SQL injection and could be exploited. 
