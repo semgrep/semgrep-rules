@@ -1,68 +1,187 @@
-# module imports used as described in https://github.com/returntocorp/sgrep/issues/285
 rules:
   - id: hardcoded-jwt-secret
     patterns:
       - pattern-either:
+          # jsonwebtoken
           - pattern: |
-              $JWT = require("jsonwebtoken");
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $T = $JWT.sign($P, "...", ...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $T = $JWT.verify($P, "...", ...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
               ...
               $JWT.sign($P, "...", ...);
           - pattern: |
-              $JWT = require("jsonwebtoken");
+              var $JWT = require("jsonwebtoken");
               ...
               $JWT.verify($P, "...", ...);
           - pattern: |
-              $JWT = require("jsonwebtoken");
+              var $JWT = require("jsonwebtoken");
               ...
-              $SECRET = "...";
+              var $SECRET = "...";
+              ...
+              var $T = $JWT.sign($P, $SECRET, ...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $SECRET = "...";
+              ...
+              var $T = $JWT.verify($P, $SECRET, ...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $SECRET = "...";
               ...
               $JWT.sign($P, $SECRET, ...);
           - pattern: |
-              $JWT = require("jsonwebtoken");
+              var $JWT = require("jsonwebtoken");
               ...
-              $SECRET = "...";
+              var $SECRET = "...";
               ...
               $JWT.verify($P, $SECRET, ...);
+          # jose
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $JOSE.JWT.sign($P, "...", ...);
+              var { JWT } = $JOSE;
+              ...
+              JWT.verify($P, "...", ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $JOSE.JWT.verify($P, "...", ...);
+              var { JWT } = $JOSE;
+              ...
+              var $T = JWT.sign($P, "...", ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $JOSE.JWT.sign($P, $JOSE.JWK.asKey("..."), ...);
+              var { JWT } = $JOSE;
+              ...
+              var $T = JWT.verify($P, "...", ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $JOSE.JWT.verify($P, $JOSE.JWK.asKey("..."), ...);
+              var { JWK, JWT } = $JOSE;
+              ...
+              JWT.verify($P, JWK.asKey("..."), ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $SECRET = "...";
+              var { JWK, JWT } = $JOSE;
               ...
-              $JOSE.JWT.sign($P, $SECRET, ...);
+              var $KEY = JWK.asKey("...");
+              ...
+              JWT.verify($P, $KEY, ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $SECRET = "...";
+              var { JWK, JWT } = $JOSE;
               ...
-              $JOSE.JWT.verify($P, $SECRET, ...);
+              var $T = JWT.sign($P, JWK.asKey("..."), ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $SECRET = "...";
+              var { JWK, JWT } = $JOSE;
               ...
-              $JOSE.JWT.sign($P, $JOSE.JWK.asKey($SECRET), ...);
+              var $T = JWT.verify($P, JWK.asKey("..."), ...);
           - pattern: |
-              $JOSE = require("jose");
+              var $JOSE = require("jose");
               ...
-              $SECRET = "...";
+              var { JWK, JWT } = $JOSE;
               ...
-              $JOSE.JWT.verify($P, $JOSE.JWK.asKey($SECRET), ...);
+              var $KEY = JWK.asKey("...");
+              ...
+              var $T = JWT.sign($P, $KEY, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $KEY = JWK.asKey("...");
+              ...
+              var $T = JWT.verify($P, $KEY, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              JWT.verify($P, $SECRET, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $T = JWT.sign($P, $SECRET, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $T = JWT.verify($P, $SECRET, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              JWT.verify($P, JWK.asKey($SECRET), ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $KEY = JWK.asKey($SECRET);
+              ...
+              JWT.verify($P, $KEY, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $T = JWT.sign($P, JWK.asKey($SECRET), ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $KEY = JWK.asKey($SECRET);
+              ...
+              var $T = JWT.sign($P, $KEY, ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $T = JWT.verify($P, JWK.asKey($SECRET), ...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $SECRET = "...";
+              ...
+              var $KEY = JWK.asKey($SECRET);
+              ...
+              var $T = JWT.verify($P, $KEY, ...);
     message: "hardcoded jwt secret"
     languages: [javascript]
     severity: ERROR
