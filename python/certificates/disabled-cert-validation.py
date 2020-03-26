@@ -21,7 +21,7 @@ with socket.create_connection((hostname, 443)) as sock:
 
 with socket.create_connection((hostname, 443)) as sock:
     # won't work because of how we are using python to filter
-    # todoruleid:disabled-cert-validation
+    # ruleid:disabled-cert-validation
     with context.wrap_socket(sock, server_hostname=hostname, cert_reqs = sss.CERT_NONE) as ssock:
         print(ssock.version())
 
