@@ -40,9 +40,9 @@ rules:
             ...
             $MODEL.objects.extra(..., where=[$S % $V], ...)
     message: |
-      Data from request is passed to RawSQL(). 
+      Data from request is passed to RawSQL().
       This is a SQL injection and could be exploited.
-      See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#$MODEL.objects.extra to learn how to mitigate. 
+      See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#$MODEL.objects.extra to learn how to mitigate.
       See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
     languages: [python]
     severity: ERROR
