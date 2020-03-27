@@ -1,0 +1,133 @@
+rules:
+  - id: user-eval-format-string
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+          - pattern: eval(..., $STR % request.$W.get(...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              return eval(..., $S, ...)
+          - pattern: eval(..., "..." % request.$W(...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              return eval(..., $S, ...)
+          - pattern: eval(..., $STR % request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              return eval(..., $S, ...)
+          - pattern: eval(..., $STR.format(..., request.$W.get(...), ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return eval(..., $S, ...)
+          - pattern: eval(..., $STR.format(..., request.$W(...), ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return eval(..., $S, ...)
+          - pattern: eval(..., $STR.format(..., request.$W[...], ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return eval(..., $S, ...)
+    message: |
+      Found user data in a call to 'eval'. This is extremely dangerous.
+    languages: [python]
+    severity: WARNING

@@ -1,0 +1,133 @@
+rules:
+  - id: user-exec-format-string
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+          - pattern: exec(..., $STR % request.$W.get(...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR % $V
+              ...
+              return exec(..., $S, ...)
+          - pattern: exec(..., "..." % request.$W(...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR % $V
+              ...
+              return exec(..., $S, ...)
+          - pattern: exec(..., $STR % request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR % $V
+              ...
+              return exec(..., $S, ...)
+          - pattern: exec(..., $STR.format(..., request.$W.get(...), ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return exec(..., $S, ...)
+          - pattern: exec(..., $STR.format(..., request.$W(...), ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return exec(..., $S, ...)
+          - pattern: exec(..., $STR.format(..., request.$W[...], ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = $STR.format(..., $V, ...)
+              ...
+              return exec(..., $S, ...)
+    message: |
+      Found user data in a call to 'exec'. This is extremely dangerous.
+    languages: [python]
+    severity: WARNING
