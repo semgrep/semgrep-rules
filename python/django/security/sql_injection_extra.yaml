@@ -9,19 +9,19 @@ rules:
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $MODEL.objects.extra(..., where=[$S.format($V)], ...)
+            $MODEL.objects.extra(..., where=[$S.format(..., $V, ...)], ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $MODEL.objects.extra(..., where=[$S.format($V)], ...)
+            $MODEL.objects.extra(..., where=[$S.format(..., $V, ...)], ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $MODEL.objects.extra(..., where=[$S.format($V)], ...)
+            $MODEL.objects.extra(..., where=[$S.format(..., $V, ...)], ...)
         - pattern: |
             $V = request.$W
             ...
-            $MODEL.objects.extra(..., where=[$S.format($V)], ...)
+            $MODEL.objects.extra(..., where=[$S.format(..., $V, ...)], ...)
         # match when `%` is used
         - pattern: |
             $V = request.$W.get($X)
