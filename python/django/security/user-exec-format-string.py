@@ -10,11 +10,11 @@ def unsafe(request):
     exec(code)
 
 def unsafe_inline(request):
-    # ruleid: user-exec
+    # ruleid: user-exec-format-string
     exec("print(%s)" % request.GET.get('message'))
 
 def unsafe_dict(request):
-    # ruleid: user-exec
+    # ruleid: user-exec-format-string
     exec("print(%s)" % request.POST['message'])
 
 def safe(request):
@@ -34,11 +34,11 @@ def fmt_unsafe(request):
     exec(code)
 
 def fmt_unsafe_inline(request):
-    # ruleid: user-exec
+    # ruleid: user-exec-format-string
     exec("print({})".format(request.GET.get('message')))
 
 def fmt_unsafe_dict(request):
-    # ruleid: user-exec
+    # ruleid: user-exec-format-string
     exec("print({}, {})".format(request.POST['message'], "pwned"))
 
 def fmt_safe(request):
