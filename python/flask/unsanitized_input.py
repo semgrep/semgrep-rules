@@ -18,7 +18,7 @@ def test2():
     x = request.args.get("x")
     y = some_safe_operation_on(x)
     return make_response("found {}".format(y))
- 
+
 
 def test3():
     # ruleid: response_contains_unsanitized_input
