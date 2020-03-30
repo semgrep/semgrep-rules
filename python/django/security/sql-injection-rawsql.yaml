@@ -39,6 +39,39 @@ rules:
             $V = request.$W
             ...
             django.db.models.expressions.RawSQL($S % $V, ...)
+        # match when f-string is used
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            django.db.models.expressions.RawSQL(f"...{$V}", ...)
     message: |
       Data from request is passed to RawSQL().
       This is a SQL injection and could be exploited.

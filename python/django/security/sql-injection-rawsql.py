@@ -31,6 +31,13 @@ def get_users(request):
   html = "<html><body>Users %s.</body></html>" % users
   return HttpResponse(html)
 
+def get_users(request):
+  # ruleid: sql-injection-using-rawsql
+  client_id = request.headers.get('client_id')
+  users = RawSQL(f'SELECT * FROM myapp_person where client_id = {client_id}')
+  html = "<html><body>Users %s.</body></html>" % users
+  return HttpResponse(html)
+
 ##### raw() True Negatives #########
 def get_users(request):
   client_id = request.headers.get('client_id')

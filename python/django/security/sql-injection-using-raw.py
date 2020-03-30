@@ -35,6 +35,13 @@ def get_users(request):
   html = "<html><body>Users %s.</body></html>" % users
   return HttpResponse(html)
 
+def get_users(request):
+  # ruleid: sql-injection-using-raw
+  client_id = request.headers.get('client_id')
+  users = Person.objects.raw(f'SELECT * FROM myapp_person where client_id = {client_id}')
+  html = "<html><body>Users %s.</body></html>" % users
+  return HttpResponse(html)
+
 ##### raw() True Negatives #########
 def get_user_age(request):
   user_name = request.get('user_name')
