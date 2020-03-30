@@ -1,6 +1,13 @@
 from django.db import connection
 
 ##### True Positives #########
+def fetch_name_0(request):
+  with connection.cursor() as cursor:
+      # ruleid: sql-injection-db-cursor-execute
+      cursor.execute(f"SELECT foo FROM bar WHERE baz = {request.data.get('baz')}")
+      row = cursor.fetchone()
+  return row
+
 def fetch_name_1(request):
   # ruleid: sql-injection-db-cursor-execute
   baz = request.data.get("baz") 
@@ -13,7 +20,6 @@ def fetch_name_1(request):
 def fetch_name_2(request):
   # ruleid: sql-injection-db-cursor-execute
   baz = request.data.get("baz") 
-  baz = request.data.get("baz") 
   with connection.cursor() as cursor:
       cursor.execute("SELECT foo FROM bar WHERE baz = %s" % baz)
       row = cursor.fetchone()
@@ -21,7 +27,6 @@ def fetch_name_2(request):
 
 def fetch_name_3(request):
   # ruleid: sql-injection-db-cursor-execute
-  baz = request.data.get("baz") 
   baz = request.data.get("baz") 
   with connection.cursor() as cursor:
       cursor.execute("SELECT foo FROM bar WHERE baz = %s".format(baz))

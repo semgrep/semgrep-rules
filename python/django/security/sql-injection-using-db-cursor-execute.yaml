@@ -5,6 +5,15 @@ rules:
           def $F(...):
             ...
       - pattern-either:
+        # match when direct flow
+        - pattern: |
+            $CURSOR.execute($S.format(request.$W.get($X)), ...)
+        - pattern: |
+            $CURSOR.execute($S.format(request.$W[$X]), ...)
+        - pattern: |
+            $CURSOR.execute($S.format(request.$W($X)), ...)
+        - pattern: |
+            $CURSOR.execute($S.format(request.$W), ...)
         # match when `format` is used
         - pattern: |
             $V = request.$W.get($X)
