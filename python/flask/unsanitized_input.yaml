@@ -2,38 +2,38 @@ rules:
   - id: response_contains_unsanitized_input
     patterns:
       - pattern-either:
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            return flask.make_response("...".format($X))
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            $R = flask.make_response("...".format($X))
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            return flask.make_response(f"...{$X}...")
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            $R = flask.make_response(f"...{$X}...")
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            return flask.make_response(f"...{$X}")
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            $R = flask.make_response(f"...{$X}")
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            return flask.make_response(f"{$X}...")
-        - pattern: |
-            $X = request.args.get(...)
-            ...
-            $R = flask.make_response(f"{$X}...")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              return flask.make_response("...".format($X))
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              $R = flask.make_response("...".format($X))
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              return flask.make_response(f"...{$X}...")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              $R = flask.make_response(f"...{$X}...")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              return flask.make_response(f"...{$X}")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              $R = flask.make_response(f"...{$X}")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              return flask.make_response(f"{$X}...")
+          - pattern: |
+              $X = request.args.get(...)
+              ...
+              $R = flask.make_response(f"{$X}...")
     message: Flask response reflects unsanitized user input.
     languages: [python]
     severity: WARNING
