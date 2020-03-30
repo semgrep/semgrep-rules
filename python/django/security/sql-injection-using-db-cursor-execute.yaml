@@ -5,7 +5,7 @@ rules:
           def $F(...):
             ...
       - pattern-either:
-        # match when direct flow
+        # match when direct flow format func
         - pattern: |
             $CURSOR.execute($S.format(request.$W.get($X)), ...)
         - pattern: |
@@ -14,6 +14,24 @@ rules:
             $CURSOR.execute($S.format(request.$W($X)), ...)
         - pattern: |
             $CURSOR.execute($S.format(request.$W), ...)
+        # match when direct flow f-string
+        - pattern: |
+            $CURSOR.execute(f"...{request.$W.get($X)}", ...)
+        - pattern: |
+            $CURSOR.execute(f"...{request.$W[$X]}", ...)
+        - pattern: |
+            $CURSOR.execute(f"...{request.$W($X)}", ...)
+        - pattern: |
+            $CURSOR.execute(f"...{request.$W}", ...)
+        # match when direct flow % formating
+        - pattern: |
+            $CURSOR.execute($S % request.$W.get($X), ...)
+        - pattern: |
+            $CURSOR.execute($S % request.$W[$X], ...)
+        - pattern: |
+            $CURSOR.execute($S % request.$W($X), ...)
+        - pattern: |
+            $CURSOR.execute($S % request.$W, ...)
         # match when `format` is used
         - pattern: |
             $V = request.$W.get($X)
@@ -52,35 +70,35 @@ rules:
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $CURSOR.execute(f"...$V", ...)
+            $CURSOR.execute(f"...{$V}", ...)
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $CURSOR.execute(f"...$V...", ...)
+            $CURSOR.execute(f"...{$V}...", ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $CURSOR.execute(f"...$V", ...)
+            $CURSOR.execute(f"...{$V}", ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $CURSOR.execute(f"...$V...", ...)
+            $CURSOR.execute(f"...{$V}...", ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $CURSOR.execute(f"...$V", ...)
+            $CURSOR.execute(f"...{$V}", ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $CURSOR.execute(f"...$V...", ...)
+            $CURSOR.execute(f"...{$V}...", ...)
         - pattern: |
             $V = request.$W
             ...
-            $CURSOR.execute(f"...$V", ...)
+            $CURSOR.execute(f"...{$V}", ...)
         - pattern: |
             $V = request.$W
             ...
-            $CURSOR.execute(f"...$V...", ...)
+            $CURSOR.execute(f"...{$V}...", ...)
     message: |
       Data from request is passed to execute().
       This is a SQL injection and could be exploited.
