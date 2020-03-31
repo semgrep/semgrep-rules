@@ -1,3 +1,4 @@
+
 # ruleid: baseclass-attribute-override
 class A:
     def method1(self, args):
