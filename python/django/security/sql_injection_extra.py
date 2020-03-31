@@ -27,6 +27,14 @@ def get_user_age(request):
   html = "<html><body>User Age %s.</body></html>" % user_age
   return HttpResponse(html)
 
+def get_user_age(request):
+  # ruleid: sql-injection-using-extra-where
+  path = request.path
+  user_age = Person.objects.extra(where=[f"path ={path}"])
+  html = "<html><body>User Age %s.</body></html>" % user_age
+  return HttpResponse(html)
+
+
 ##### extra() True Negative #########
 def get_user_age(request):
   # no dataflow
