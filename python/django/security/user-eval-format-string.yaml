@@ -13,6 +13,14 @@ rules:
           - pattern: |
               $V = request.$W.get(...)
               ...
+              $A = eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
               $S = $STR % $V
               ...
               eval(..., $S, ...)
@@ -32,6 +40,18 @@ rules:
           - pattern: |
               $V = request.$W(...)
               ...
+              eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
               $S = $STR % $V
               ...
               eval(..., $S, ...)
@@ -48,6 +68,18 @@ rules:
               ...
               return eval(..., $S, ...)
           - pattern: eval(..., $STR % request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = eval(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return eval(..., $STR % $V, ...)
           - pattern: |
               $V = request.$W[...]
               ...
@@ -74,6 +106,14 @@ rules:
           - pattern: |
               $V = request.$W.get(...)
               ...
+              $A = eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
               $S = $STR.format(..., $V, ...)
               ...
               eval(..., $S, ...)
@@ -90,6 +130,18 @@ rules:
               ...
               return eval(..., $S, ...)
           - pattern: eval(..., $STR.format(..., request.$W(...), ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return eval(..., $STR.format(..., $V, ...), ...)
           - pattern: |
               $V = request.$W(...)
               ...
@@ -112,6 +164,18 @@ rules:
           - pattern: |
               $V = request.$W[...]
               ...
+              eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return eval(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
               $S = $STR.format(..., $V, ...)
               ...
               eval(..., $S, ...)
@@ -127,7 +191,99 @@ rules:
               $S = $STR.format(..., $V, ...)
               ...
               return eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $A = eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              return eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              return eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return eval(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = eval(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              return eval(..., $S, ...)
     message: |
-      Found user data in a call to 'eval'. This is extremely dangerous.
+      Found user data in a call to 'eval'. This is extremely dangerous because
+      it can enable an attacker to execute remote code. See
+      https://owasp.org/www-community/attacks/Code_Injection for more information.
     languages: [python]
     severity: WARNING

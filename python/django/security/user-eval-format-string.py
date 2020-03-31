@@ -47,3 +47,28 @@ def fmt_safe(request):
     print('hello')
     """
     eval(dedent(code))
+
+def fstr_unsafe(request):
+    # ruleid: user-eval-format-string
+    message = request.POST.get('message')
+    print("do stuff here")
+    code = f"""
+    print({message})
+    """
+    eval(code)
+
+def fstr_unsafe_inline(request):
+    # todoruleid: user-eval-format-string
+    eval(f"print({request.GET.get('message')})")
+
+def fstr_unsafe_dict(request):
+    # todoruleid: user-eval-format-string
+    eval(f"print({request.POST['message']})")
+
+def fstr_safe(request):
+    var = "hello"
+    # ok
+    code = f"""
+    print('{var}')
+    """
+    eval(dedent(code))

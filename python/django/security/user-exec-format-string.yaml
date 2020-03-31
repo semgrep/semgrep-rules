@@ -13,6 +13,14 @@ rules:
           - pattern: |
               $V = request.$W.get(...)
               ...
+              $A = exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
               $S = $STR % $V
               ...
               exec(..., $S, ...)
@@ -32,6 +40,18 @@ rules:
           - pattern: |
               $V = request.$W(...)
               ...
+              exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
               $S = $STR % $V
               ...
               exec(..., $S, ...)
@@ -48,6 +68,18 @@ rules:
               ...
               return exec(..., $S, ...)
           - pattern: exec(..., $STR % request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = exec(..., $STR % $V, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return exec(..., $STR % $V, ...)
           - pattern: |
               $V = request.$W[...]
               ...
@@ -74,6 +106,14 @@ rules:
           - pattern: |
               $V = request.$W.get(...)
               ...
+              $A = exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
               $S = $STR.format(..., $V, ...)
               ...
               exec(..., $S, ...)
@@ -90,6 +130,18 @@ rules:
               ...
               return exec(..., $S, ...)
           - pattern: exec(..., $STR.format(..., request.$W(...), ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return exec(..., $STR.format(..., $V, ...), ...)
           - pattern: |
               $V = request.$W(...)
               ...
@@ -112,6 +164,18 @@ rules:
           - pattern: |
               $V = request.$W[...]
               ...
+              exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return exec(..., $STR.format(..., $V, ...), ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
               $S = $STR.format(..., $V, ...)
               ...
               exec(..., $S, ...)
@@ -127,7 +191,99 @@ rules:
               $S = $STR.format(..., $V, ...)
               ...
               return exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $A = exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              return exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              return exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $A = exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              return exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              $S = f"...{$V}..."
+              ...
+              return exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $A = exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              return exec(..., f"...{$V}...", ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              $A = exec(..., $S, ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              $S = f"...{$V}..."
+              ...
+              return exec(..., $S, ...)
     message: |
-      Found user data in a call to 'exec'. This is extremely dangerous.
+      Found user data in a call to 'exec'. This is extremely dangerous because
+      it can enable an attacker to execute remote code. See
+      https://owasp.org/www-community/attacks/Code_Injection for more information.
     languages: [python]
     severity: WARNING
