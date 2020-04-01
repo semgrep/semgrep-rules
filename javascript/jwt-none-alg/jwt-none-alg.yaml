@@ -1,0 +1,39 @@
+rules:
+  - id: jwt-none-alg
+    patterns:
+      - pattern-either:
+          # jsonwebtoken
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+          # jose
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $T = JWT.verify($P, JWK.None,...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              $T = JWT.verify($P, JWK.None,...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              JWT.verify($P, JWK.None,...);
+    message: "None algorithm allowed for JWT token"
+    languages: [javascript]
+    severity: ERROR
