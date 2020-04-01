@@ -1,0 +1,121 @@
+rules:
+  - id: path-traversal
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-not: |
+          ...
+          os.path.abspath(...)
+          ...
+      - pattern-not: |
+          ...
+          os.path.realpath(...)
+          ...
+      - pattern-either:
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $P = os.path.join(..., $V)
+            ...
+            open($P, ...)
+            ...
+            return django.http.HttpResponse(...)
+        # # match when direct flow format func
+        # - pattern: |
+        #     os.path.join($S.format(request.$W.get($X)), ...)
+        # - pattern: |
+        #     os.path.join($S.format(request.$W[$X]), ...)
+        # - pattern: |
+        #     os.path.join($S.format(request.$W($X)), ...)
+        # - pattern: |
+        #     os.path.join($S.format(request.$W), ...)
+        # # match when direct flow f-string
+        # - pattern: |
+        #     os.path.join(f"...{request.$W.get($X)}", ...)
+        # - pattern: |
+        #     os.path.join(f"...{request.$W[$X]}", ...)
+        # - pattern: |
+        #     os.path.join(f"...{request.$W($X)}", ...)
+        # - pattern: |
+        #     os.path.join(f"...{request.$W}", ...)
+        # # match when direct flow % formating
+        # - pattern: |
+        #     os.path.join($S % request.$W.get($X), ...)
+        # - pattern: |
+        #     os.path.join($S % request.$W[$X], ...)
+        # - pattern: |
+        #     os.path.join($S % request.$W($X), ...)
+        # - pattern: |
+        #     os.path.join($S % request.$W, ...)
+        # # match when `format` is used
+        # # match when `format` is used
+        # - pattern: |
+        #     $V = request.$W.get($X)
+        #     ...
+        #     os.path.join($S.format($V), ...)
+        # - pattern: |
+        #     $V = request.$W[$X]
+        #     ...
+        #     os.path.join($S.format($V), ...)
+        # - pattern: |
+        #     $V = request.$W($X)
+        #     ...
+        #     os.path.join($S.format($V), ...)
+        # - pattern: |
+        #     $V = request.$W
+        #     ...
+        #     os.path.join($S.format($V), ...)
+        # # match when `%` is used
+        # - pattern: |
+        #     $V = request.$W.get($X)
+        #     ...
+        #     os.path.join($S % $V, ...)
+        # - pattern: |
+        #     $V = request.$W[$X]
+        #     ...
+        #     os.path.join($S % $V, ...)
+        # - pattern: |
+        #     $V = request.$W($X)
+        #     ...
+        #     os.path.join($S % $V, ...)
+        # - pattern: |
+        #     $V = request.$W
+        #     ...
+        #     os.path.join($S % $V, ...)
+        # # match when f-string is used
+        # - pattern: |
+        #     $V = request.$W.get($X)
+        #     ...
+        #     os.path.join(f"...{$V}...", ...)
+        # - pattern: |
+        #     $V = request.$W.get($X)
+        #     ...
+        #     os.path.join(f"...{$V}", ...)
+        # - pattern: |
+        #     $V = request.$W[$X]
+        #     ...
+        #     os.path.join(f"...{$V}...", ...)
+        # - pattern: |
+        #     $V = request.$W[$X]
+        #     ...
+        #     os.path.join(f"...{$V}", ...)
+        # - pattern: |
+        #     $V = request.$W($X)
+        #     ...
+        #     os.path.join(f"...{$V}...", ...)
+        # - pattern: |
+        #     $V = request.$W($X)
+        #     ...
+        #     os.path.join(f"...{$V}", ...)
+        # - pattern: |
+        #     $V = request.$W
+        #     ...
+        #     os.path.join(f"...{$V}...", ...)
+        # - pattern: |
+        #     $V = request.$W
+        #     ...
+        #     os.path.join(f"...{$V}", ...)
+    message: ""
+    languages: [python]
+    severity: WARNING
