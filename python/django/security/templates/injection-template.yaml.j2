@@ -104,7 +104,7 @@ rules:
             ...
             return {{ sink }}(f"...{$DATA}...", ...)
     message: |
-      {{ message }}
+      {{ message | indent(width=8) }}
     languages: [python]
     severity: ERROR
   - id: {{ id }}
@@ -212,6 +212,6 @@ rules:
               ...
               return {{ sink }}(f"...{$DATA}...", ...)
     message: |
-      {{ message }}
+      {{ message | indent(width=8)  }}
     languages: [python]
     severity: ERROR
