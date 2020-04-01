@@ -1,0 +1,217 @@
+rules:
+  - id: ssrf-injection-requests
+    patterns:
+      - pattern-inside: |
+          import django.http.HttpResponse
+          ...
+          def $F(...):
+             ...
+      - pattern-either:
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            $RES = requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            $RES = requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            $RES = requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $RES = requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get($X)
+            ...
+            return requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[$X]
+            ...
+            return requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W($X)
+            ...
+            return requests.$METHOD(f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(f"...{$DATA}...", ...)
+    message: |
+      Data from request object is passed to a new server-side request. This could lead to a server-side request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against a whitelist, do not forward the response to the user, and ensure proper authentication and transport-layer security in the proxied request. See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery to learn more about SSRF vulnerabilities.
+    languages: [python]
+    severity: ERROR
+  - id: ssrf-injection-requests
+    patterns:
+      - pattern-inside: |
+          import django.shortcuts.render
+          ...
+          def $F(...):
+             ...
+      - pattern-either:
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              $RES = requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              return requests.$METHOD($A.$C(..., $DATA, ...), ...)
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              $RES = requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              $RES = requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              $RES = requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              $RES = requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W.get($X)
+              ...
+              return requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W[$X]
+              ...
+              return requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W($X)
+              ...
+              return requests.$METHOD(f"...{$DATA}...", ...)
+          - pattern: |
+              $DATA = request.$W
+              ...
+              return requests.$METHOD(f"...{$DATA}...", ...)
+    message: |
+      Data from request object is passed to a new server-side request. This could lead to a server-side request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against a whitelist, do not forward the response to the user, and ensure proper authentication and transport-layer security in the proxied request. See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery to learn more about SSRF vulnerabilities.
+    languages: [python]
+    severity: ERROR
