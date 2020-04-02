@@ -19,7 +19,7 @@ def save_scrawl_file(request, filename):
 def save_file(request):
     # ok
     user = User.objects.get(username=request.session.get('user'))
-    content = request.POST.get("file-contents", "")
+    content = "user logged in at {}".format(time.time())
     f = open("{}-{}".format(user, time.time()), 'wb')
     f.write(content)
     f.close()
