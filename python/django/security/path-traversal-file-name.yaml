@@ -1,0 +1,57 @@
+rules:
+  - id: path-traversal
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-not: |
+          ...
+          os.path.realpath(...)
+          ...
+      - pattern-not: |
+          ...
+          os.path.abspath(...)
+          ...
+      - pattern-either:
+        # match % use cases
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $FILE % ($V)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $FILE % ($V)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $FILE % ($V)
+        - pattern: |
+            $V = request.$W
+            ...
+            $FILE % ($V)
+        # match format use cases
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $FILE.format(..., $V, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $FILE.format(..., $V, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $FILE.format(..., $V, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $FILE.format(..., $V, ...)
+        - pattern-where-python: |
+            'log' in vars['$FILE'] or 'zip' in vars['$FILE'] or 'txt' in vars['$FILE'] or 'csv' in vars['$FILE']
+    message: |
+      Data from request is passed to a log file name `$FILE`.
+      This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
+      To mitigate, consider using os.path.abspath or os.path.realpath or Path library.
+    languages: [python]
+    severity: WARNING
