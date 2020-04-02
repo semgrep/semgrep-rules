@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 
 def search_certificates(request):
-    # ruleid: reflected-data-httpresponse
+    # ruleid: reflected-data-httpresponsebadrequest
     user_filter = request.GET.get("user", "")
     if not user_filter:
         msg = _("user is not given.")
