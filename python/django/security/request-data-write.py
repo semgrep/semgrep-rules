@@ -4,6 +4,7 @@ from . import settings as USettings
 def save_scrawl_file(request, filename):
     import base64
     try:
+        # ruleid: request-data-write
         content = request.POST.get(USettings.UEditorUploadSettings.get("scrawlFieldName", "upfile"))
         f = open(filename, 'wb')
         f.write(base64.decodestring(content))
