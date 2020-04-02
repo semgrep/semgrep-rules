@@ -23,7 +23,7 @@ def test_bad_3():
     from django.shortcuts import render
 
     def send_to_redis(request):
-        # todoruleid: ssrf-injection-requests
+        # ruleid: ssrf-injection-requests
         bucket = request.GET.get("bucket")
         inner_response = get(f"http://my.redis.foo/{bucket}", data=3)
         return render({"response_code": inner_response.status_code})
