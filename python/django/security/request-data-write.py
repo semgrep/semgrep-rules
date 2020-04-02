@@ -1,3 +1,5 @@
+import time
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from . import settings as USettings
 
@@ -13,3 +15,11 @@ def save_scrawl_file(request, filename):
     except Exception as e:
         state = u"写入图片文件错误:%s" % e
     return state
+
+def save_file(request):
+    # ok
+    user = User.objects.get(username=request.session.get('user'))
+    content = request.POST.get("file-contents", "")
+    f = open("{}-{}".format(user, time.time()), 'wb')
+    f.write(content)
+    f.close()
