@@ -54,10 +54,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -68,7 +65,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -79,7 +75,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -90,7 +85,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -101,10 +95,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -115,7 +106,6 @@ rules:
             $INTERM = $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -126,7 +116,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -137,7 +126,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -148,12 +136,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
-
-
         - pattern: django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -164,7 +147,6 @@ rules:
             $INTERM = $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -175,7 +157,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -186,7 +167,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -197,10 +177,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -211,7 +188,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -222,7 +198,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -233,7 +208,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -244,10 +218,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -258,7 +229,6 @@ rules:
             $INTERM = $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -269,7 +239,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -280,7 +249,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -291,12 +259,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
-
-
         - pattern: django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -307,7 +270,6 @@ rules:
             $INTERM = $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -318,7 +280,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -329,7 +290,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -340,10 +300,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -354,7 +311,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -365,7 +321,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -376,7 +331,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -387,10 +341,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -401,7 +352,6 @@ rules:
             $INTERM = $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -412,7 +362,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -423,7 +372,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -434,12 +382,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
-
-
         - pattern: django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -450,7 +393,6 @@ rules:
             $INTERM = $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -461,7 +403,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -472,7 +413,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -483,10 +423,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -497,7 +434,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -508,7 +444,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -519,7 +454,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -530,10 +464,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
         - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -544,7 +475,6 @@ rules:
             $INTERM = $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -555,7 +485,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -566,7 +495,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -577,6 +505,3 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-
-
-
