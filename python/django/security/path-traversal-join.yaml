@@ -16,25 +16,25 @@ rules:
         - pattern: |
             $V = request.$W.get($X)
             ...
-            $P = os.path.join(..., $V)
+            $P = os.path.join(..., $V, ...)
             ...
             open($P, ...)
         - pattern: |
             $V = request.$W($X)
             ...
-            $P = os.path.join(..., $V)
+            $P = os.path.join(..., $V, ...)
             ...
             open($P, ...)
         - pattern: |
             $V = request.$W[$X]
             ...
-            $P = os.path.join(..., $V)
+            $P = os.path.join(..., $V, ...)
             ...
             open($P, ...)
         - pattern: |
             $V = request.$W
             ...
-            $P = os.path.join(..., $V)
+            $P = os.path.join(..., $V, ...)
             ...
             open($P, ...)
     message: |
