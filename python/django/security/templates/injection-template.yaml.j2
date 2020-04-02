@@ -1,217 +1,27 @@
 rules:
-  - id: {{ id }}
+  - id: {{ check_id }}
+    message: {{ message }}
+    languages: [python]
+    severity: WARNING
     patterns:
       - pattern-inside: |
-          import django.http.HttpResponse
-          ...
-          def $F(...):
-             ...
+          def $FUNC(...):
+            ...
       - pattern-either:
+{% for data_pattern in request_data_patterns %}
+  {% for left_pattern in left_patterns %} 
+        - pattern: {{ left_pattern }}{{ sink }}(..., {{ data_pattern }}, ...)
+    {% for format_pattern in format_patterns %}
         - pattern: |
-            $DATA = request.$W.get($X)
+            $DATA = {{ data_pattern }}
             ...
-            {{ sink }}($A.$C(..., $DATA, ...), ...)
+            {{ left_pattern }}{{ sink }}(..., {{ format_pattern }}, ...)
         - pattern: |
-            $DATA = request.$W[$X]
+            $DATA = {{ data_pattern }}
             ...
-            {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W($X)
+            $INTERM = {{ format_pattern }}
             ...
-            {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get($X)
-            ...
-            $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[$X]
-            ...
-            $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W($X)
-            ...
-            $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get($X)
-            ...
-            return {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[$X]
-            ...
-            return {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W($X)
-            ...
-            return {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return {{ sink }}($A.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get($X)
-            ...
-            {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[$X]
-            ...
-            {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W($X)
-            ...
-            {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get($X)
-            ...
-            $RES = {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[$X]
-            ...
-            $RES = {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W($X)
-            ...
-            $RES = {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $RES = {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get($X)
-            ...
-            return {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[$X]
-            ...
-            return {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W($X)
-            ...
-            return {{ sink }}(f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return {{ sink }}(f"...{$DATA}...", ...)
-    message: |
-      {{ message | indent(width=8) }}
-    languages: [python]
-    severity: ERROR
-  - id: {{ id }}
-    patterns:
-      - pattern-inside: |
-          import django.shortcuts.render
-          ...
-          def $F(...):
-             ...
-      - pattern-either:
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              $RES = {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              return {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              return {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              return {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              return {{ sink }}($A.$C(..., $DATA, ...), ...)
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              $RES = {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              $RES = {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              $RES = {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              $RES = {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W.get($X)
-              ...
-              return {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W[$X]
-              ...
-              return {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W($X)
-              ...
-              return {{ sink }}(f"...{$DATA}...", ...)
-          - pattern: |
-              $DATA = request.$W
-              ...
-              return {{ sink }}(f"...{$DATA}...", ...)
-    message: |
-      {{ message | indent(width=8)  }}
-    languages: [python]
-    severity: ERROR
+            {{ left_pattern }}{{ sink }}(..., $INTERM, ...)
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
