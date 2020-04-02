@@ -5,10 +5,7 @@ rules:
     severity: WARNING
     patterns:
       - pattern-either:
-
-
         - pattern: $F.write(..., request.$W.get(...), ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -19,7 +16,6 @@ rules:
             $INTERM = $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -30,7 +26,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -41,7 +36,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -52,10 +46,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $F.write(..., $INTERM, ...)
-
-
         - pattern: $A = $F.write(..., request.$W.get(...), ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -66,7 +57,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -77,7 +67,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -88,7 +77,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -99,10 +87,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = $F.write(..., $INTERM, ...)
-
-
         - pattern: return $F.write(..., request.$W.get(...), ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -113,7 +98,6 @@ rules:
             $INTERM = $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -124,7 +108,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -135,7 +118,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -146,12 +128,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return $F.write(..., $INTERM, ...)
-
-
-
-
         - pattern: $F.write(..., request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -162,7 +139,6 @@ rules:
             $INTERM = $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -173,7 +149,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -184,7 +159,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -195,10 +169,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $F.write(..., $INTERM, ...)
-
-
         - pattern: $A = $F.write(..., request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -209,7 +180,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -220,7 +190,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -231,7 +200,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -242,10 +210,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = $F.write(..., $INTERM, ...)
-
-
         - pattern: return $F.write(..., request.$W(...), ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -256,7 +221,6 @@ rules:
             $INTERM = $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -267,7 +231,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -278,7 +241,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -289,12 +251,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return $F.write(..., $INTERM, ...)
-
-
-
-
         - pattern: $F.write(..., request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -305,7 +262,6 @@ rules:
             $INTERM = $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -316,7 +272,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -327,7 +282,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -338,10 +292,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $F.write(..., $INTERM, ...)
-
-
         - pattern: $A = $F.write(..., request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -352,7 +303,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -363,7 +313,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -374,7 +323,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -385,10 +333,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = $F.write(..., $INTERM, ...)
-
-
         - pattern: return $F.write(..., request.$W[...], ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -399,7 +344,6 @@ rules:
             $INTERM = $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -410,7 +354,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -421,7 +364,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -432,12 +374,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return $F.write(..., $INTERM, ...)
-
-
-
-
         - pattern: $F.write(..., request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -448,7 +385,6 @@ rules:
             $INTERM = $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -459,7 +395,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -470,7 +405,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -481,10 +415,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $F.write(..., $INTERM, ...)
-
-
         - pattern: $A = $F.write(..., request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -495,7 +426,6 @@ rules:
             $INTERM = $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -506,7 +436,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -517,7 +446,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             $A = $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -528,10 +456,7 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             $A = $F.write(..., $INTERM, ...)
-
-
         - pattern: return $F.write(..., request.$W, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -542,7 +467,6 @@ rules:
             $INTERM = $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -553,7 +477,6 @@ rules:
             $INTERM = $B.$C(..., $DATA, ...)
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -564,7 +487,6 @@ rules:
             $INTERM = $STR % $DATA
             ...
             return $F.write(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
@@ -575,6 +497,3 @@ rules:
             $INTERM = f"...{$DATA}..."
             ...
             return $F.write(..., $INTERM, ...)
-
-
-
