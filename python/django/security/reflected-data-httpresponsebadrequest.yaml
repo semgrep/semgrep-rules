@@ -22,11 +22,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -73,11 +73,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -124,11 +124,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -175,11 +175,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -226,11 +226,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -277,11 +277,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -328,11 +328,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -379,11 +379,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -430,11 +430,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -481,11 +481,11 @@ rules:
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -532,11 +532,11 @@ rules:
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
@@ -583,11 +583,11 @@ rules:
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., $B.$C(..., $DATA, ...), ...)
+            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
         - pattern: |
