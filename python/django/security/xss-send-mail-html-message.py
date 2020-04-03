@@ -27,27 +27,14 @@ def notify_users_about_challenge(request):
 
             sender = settings.EMAIL_SENDER
 
-
-
-            try:
-                send_mail(
-                    subject,
-                    body,
-                    sender,
-                    [settings.EMAIL],
-                    bcc=users,
-                    html_message=body_html
-                )
-                return render(
-                    request,
-                    "notification_email_conformation.html",
-                    {"message": "All the emails are sent successfully!"},
-                )
-            except SMTPException:
-                logger.exception(traceback.format_exc())
-                return render(
-                    request, "notification_email_data.html", {"errors": 1}
-                )
+            send_mail(
+                subject,
+                body,
+                sender,
+                [settings.EMAIL],
+                bcc=users,
+                html_message=body_html
+            )
         else:
             return render(request, "error404.html")
     else:
@@ -58,21 +45,10 @@ def send_an_email(request):
     # ok
     body= request.POST.get("body")
 
-    try:
-        sender = "blah@blah.com"
-        send_mail(
-            subject,
-            body,
-            sender,
-            [settings.EMAIL],
-        )
-        return render(
-            request,
-            "notification_email_conformation.html",
-            {"message": "All the emails are sent successfully!"},
-        )
-    except SMTPException:
-        logger.exception(traceback.format_exc())
-        return render(
-            request, "notification_email_data.html", {"errors": 1}
-        )
+    sender = "blah@blah.com"
+    send_mail(
+        subject,
+        body,
+        sender,
+        [settings.EMAIL],
+    )
