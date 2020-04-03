@@ -34,7 +34,7 @@ if __name__ == "__main__":
     )
     format_patterns = (
         "$DATA",
-        "$B.$C(..., $DATA, ...)",
+        "$STR.format(..., $DATA, ...)",
         "$STR % $DATA",
         "f\"...{$DATA}...\"",
         "$STR + $DATA",
