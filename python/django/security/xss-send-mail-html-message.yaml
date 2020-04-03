@@ -1,6 +1,9 @@
 rules:
   - id: xss-send-mail-html-message
-    message:
+    message: |
+      Found request data in 'send_mail(...)' that uses 'html_message'.
+      This is dangerous because HTML emails are susceptible to XSS.
+      An attacker could inject data into this HTML email, causing XSS.
     languages: [python]
     severity: WARNING
     patterns:
