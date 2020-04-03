@@ -57,4 +57,4 @@ if __name__ == "__main__":
     with open(args.template_file, "r") as fin:
         template_file_contents = fin.read()
     t = Template(template_file_contents)
-    print(t.render(context))
+    print(t.render(context)+"\n")
