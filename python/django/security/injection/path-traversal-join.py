@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import os
 
 def foo_1(request):
-  # ruleid: path-traversal
+  # ruleid: path-traversal-join
   param = request.GET.get('param')
   file_path = os.path.join("MY_SECRET", param)
   f = open(file_path, 'r')
