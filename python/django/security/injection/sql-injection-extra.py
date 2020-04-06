@@ -14,7 +14,7 @@ def get_user_age(request):
   return HttpResponse(html)
 
 def get_user_age(request):
-  # todoruleid: sql-injection-using-extra-where
+  # ruleid: sql-injection-using-extra-where
   user_name = request.data.get('user_name')
   user_age = Person.objects.extra(where=["name = %s" % user_name, "id not NULL"])
   html = "<html><body>User Age %s.</body></html>" % user_age
