@@ -34,3 +34,7 @@ def previewNode(request, uid):
         return genericApiException(e, engines[uid])
     finally:
         engines[uid].stoppable = False
+
+def inline_test(request):
+    # ruleid: reflected-data-httpresponse
+    return HttpResponse("Received {}".format(request.POST.get('message')))
