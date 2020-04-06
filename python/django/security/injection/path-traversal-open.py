@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 
 def unsafe(request):
-    # ruleid: user-open
+    # ruleid: path-traversal-open
     filename = request.POST.get('filename')
     contents = request.POST.get('contents')
     print("something")
@@ -10,19 +10,19 @@ def unsafe(request):
     f.close()
 
 def unsafe_inline(request):
-    # ruleid: user-open
+    # ruleid: path-traversal-open
     f = open(request.GET.get('filename'))
     f.write(request.POST.get('contents'))
     f.close()
 
 def unsafe_dict(request):
-    # ruleid: user-open
+    # ruleid: path-traversal-open
     f = open(request.POST['filename'])
     f.write("hello")
     f.close()
 
 def unsafe_with(request):
-    # ruleid: user-open
+    # ruleid: path-traversal-open
     filename = request.POST.get("filename")
     with open(filename, 'r') as fin:
         data = fin.read()
@@ -37,7 +37,7 @@ def safe(request):
 
 # Real-world finding
 def download_doc(request):
-    # ruleid: user-open
+    # ruleid: path-traversal-open
     url = request.GET.get("url")
     format_doc = url.split(".")
     if format_doc[-1] == "docx":
