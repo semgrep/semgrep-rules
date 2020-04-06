@@ -8,6 +8,9 @@ rules:
           def $FUNC(...):
             ...
       - pattern-either:
+        - pattern: django.http.HttpResponseBadRequest(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S % request.$W.get(...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., f"...{request.$W.get(...)}...", ...)
         - pattern: django.http.HttpResponseBadRequest(..., request.$W.get(...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
@@ -161,6 +164,9 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S % request.$W(...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., f"...{request.$W(...)}...", ...)
         - pattern: django.http.HttpResponseBadRequest(..., request.$W(...), ...)
         - pattern: |
             $DATA = request.$W(...)
@@ -314,6 +320,9 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S % request.$W[...], ...)
+        - pattern: django.http.HttpResponseBadRequest(..., f"...{request.$W[...]}...", ...)
         - pattern: django.http.HttpResponseBadRequest(..., request.$W[...], ...)
         - pattern: |
             $DATA = request.$W[...]
@@ -467,6 +476,9 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S.format(..., request.$W, ...), ...)
+        - pattern: django.http.HttpResponseBadRequest(..., $S % request.$W, ...)
+        - pattern: django.http.HttpResponseBadRequest(..., f"...{request.$W}...", ...)
         - pattern: django.http.HttpResponseBadRequest(..., request.$W, ...)
         - pattern: |
             $DATA = request.$W
@@ -620,3 +632,4 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+
