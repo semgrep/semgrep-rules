@@ -9,6 +9,9 @@ rules:
             ...
       - pattern-either:
         - pattern: os.system(..., request.$W.get(...), ...)
+        - pattern: os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: os.system(..., $S % request.$W.get(...), ...)
+        - pattern: os.system(..., f"...{request.$W.get(...)}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -22,11 +25,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            os.system(..., $B.$C(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             os.system(..., $INTERM, ...)
         - pattern: |
@@ -60,6 +63,9 @@ rules:
             ...
             os.system(..., $INTERM, ...)
         - pattern: $A = os.system(..., request.$W.get(...), ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W.get(...), ...)
+        - pattern: $A = os.system(..., f"...{request.$W.get(...)}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -73,11 +79,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = os.system(..., $B.$C(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: |
@@ -111,6 +117,9 @@ rules:
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: return os.system(..., request.$W.get(...), ...)
+        - pattern: return os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: return os.system(..., $S % request.$W.get(...), ...)
+        - pattern: return os.system(..., f"...{request.$W.get(...)}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
@@ -124,11 +133,11 @@ rules:
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return os.system(..., $B.$C(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return os.system(..., $INTERM, ...)
         - pattern: |
@@ -162,6 +171,9 @@ rules:
             ...
             return os.system(..., $INTERM, ...)
         - pattern: os.system(..., request.$W(...), ...)
+        - pattern: os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: os.system(..., $S % request.$W(...), ...)
+        - pattern: os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -175,11 +187,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            os.system(..., $B.$C(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             os.system(..., $INTERM, ...)
         - pattern: |
@@ -213,6 +225,9 @@ rules:
             ...
             os.system(..., $INTERM, ...)
         - pattern: $A = os.system(..., request.$W(...), ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W(...), ...)
+        - pattern: $A = os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -226,11 +241,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = os.system(..., $B.$C(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: |
@@ -264,6 +279,9 @@ rules:
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: return os.system(..., request.$W(...), ...)
+        - pattern: return os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: return os.system(..., $S % request.$W(...), ...)
+        - pattern: return os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
@@ -277,11 +295,11 @@ rules:
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return os.system(..., $B.$C(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return os.system(..., $INTERM, ...)
         - pattern: |
@@ -315,6 +333,9 @@ rules:
             ...
             return os.system(..., $INTERM, ...)
         - pattern: os.system(..., request.$W[...], ...)
+        - pattern: os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: os.system(..., $S % request.$W[...], ...)
+        - pattern: os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -328,11 +349,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            os.system(..., $B.$C(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             os.system(..., $INTERM, ...)
         - pattern: |
@@ -366,6 +387,9 @@ rules:
             ...
             os.system(..., $INTERM, ...)
         - pattern: $A = os.system(..., request.$W[...], ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W[...], ...)
+        - pattern: $A = os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -379,11 +403,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = os.system(..., $B.$C(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: |
@@ -417,6 +441,9 @@ rules:
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: return os.system(..., request.$W[...], ...)
+        - pattern: return os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: return os.system(..., $S % request.$W[...], ...)
+        - pattern: return os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
@@ -430,11 +457,11 @@ rules:
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return os.system(..., $B.$C(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return os.system(..., $INTERM, ...)
         - pattern: |
@@ -468,6 +495,9 @@ rules:
             ...
             return os.system(..., $INTERM, ...)
         - pattern: os.system(..., request.$W, ...)
+        - pattern: os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: os.system(..., $S % request.$W, ...)
+        - pattern: os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
@@ -481,11 +511,11 @@ rules:
         - pattern: |
             $DATA = request.$W
             ...
-            os.system(..., $B.$C(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             os.system(..., $INTERM, ...)
         - pattern: |
@@ -519,6 +549,9 @@ rules:
             ...
             os.system(..., $INTERM, ...)
         - pattern: $A = os.system(..., request.$W, ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W, ...)
+        - pattern: $A = os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
@@ -529,15 +562,14 @@ rules:
             $INTERM = $DATA
             ...
             $A = os.system(..., $INTERM, ...)
-
         - pattern: |
             $DATA = request.$W
             ...
-            $A = os.system(..., $B.$C(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: |
@@ -571,6 +603,9 @@ rules:
             ...
             $A = os.system(..., $INTERM, ...)
         - pattern: return os.system(..., request.$W, ...)
+        - pattern: return os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: return os.system(..., $S % request.$W, ...)
+        - pattern: return os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
@@ -584,11 +619,11 @@ rules:
         - pattern: |
             $DATA = request.$W
             ...
-            return os.system(..., $B.$C(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $INTERM = $B.$C(..., $DATA, ...)
+            $INTERM = $STR.format(..., $DATA, ...)
             ...
             return os.system(..., $INTERM, ...)
         - pattern: |
@@ -621,3 +656,4 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return os.system(..., $INTERM, ...)
+
