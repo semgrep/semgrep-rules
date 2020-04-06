@@ -11,6 +11,9 @@ rules:
 {%- for data_pattern in request_data_patterns %}
   {%- for left_pattern in left_patterns %}
         - pattern: {{ left_pattern }}{{ sink }}(..., {{ data_pattern }}, ...)
+        - pattern: {{ left_pattern }}{{ sink }}(..., $S.format(..., {{ data_pattern }}, ...), ...)
+        - pattern: {{ left_pattern }}{{ sink }}(..., $S % {{ data_pattern }}, ...)
+        - pattern: {{ left_pattern }}{{ sink }}(..., f"...{{ '{' }}{{ data_pattern }}{{ '}' }}...", ...)
     {%- for format_pattern in format_patterns %}
         - pattern: |
             $DATA = {{ data_pattern }}
