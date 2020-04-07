@@ -47,3 +47,28 @@ def fmt_safe(request):
     print('hello')
     """
     exec(dedent(code))
+
+def code_execution(request):
+    data = ''
+    msg = ''
+    first_name = ''
+    if request.method == 'POST':
+
+        # Clear out a previous success to reset the exercise
+        try:
+            os.unlink('p0wned.txt')
+        except:
+            pass
+
+        # ruleid: user-exec-format-string
+        first_name = request.POST.get('first_name', '')
+
+        try:    # Try it the Python 3 way...
+            exec(base64.decodestring(bytes(first_name, 'ascii')))
+        except TypeError:
+            try:    # Try it the Python 2 way...
+                exec(base64.decodestring(first_name))
+            except:
+                pass
+        except:
+            pass
