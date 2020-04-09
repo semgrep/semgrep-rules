@@ -32,8 +32,8 @@ func main4() {
 	fmt.Println("Doing something with: ", username, cpassword)
 }
 
-// ruleid: hardcoded-credentials
 const (
+	// ruleid: hardcoded-credentials
 	ATNStateTokenStart = "f62e5bcda4fae4f82370da0c6f20697b8f8447ef"
 )
 
