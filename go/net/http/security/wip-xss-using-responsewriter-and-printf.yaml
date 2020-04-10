@@ -23,7 +23,7 @@ rules:
 
       '
   - pattern-either:
-    - pattern: '$PARAMS = r.URL.Query()
+    - pattern: '$PARAMS = $R.URL.Query()
 
         ...
 
@@ -38,7 +38,7 @@ rules:
         $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
 
         '
-    - pattern: '$PARAMS = r.URL.Query()
+    - pattern: '$PARAMS = $R.URL.Query()
 
         ...
 
@@ -53,7 +53,7 @@ rules:
         $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
 
         '
-    - pattern: '$DATA, $ERR := r.URL.Query()[...]
+    - pattern: '$DATA, $ERR := $R.URL.Query()[...]
 
         ...
 
@@ -64,7 +64,7 @@ rules:
         $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
 
         '
-    - pattern: '$DATA, $ERR := r.URL.Query()[...]
+    - pattern: '$DATA, $ERR := $R.URL.Query()[...]
 
         ...
 
@@ -75,7 +75,7 @@ rules:
         $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
 
         '
-    - pattern: '$PARAMS = r.URL.Query()
+    - pattern: '$PARAMS = $R.URL.Query()
 
         ...
 
