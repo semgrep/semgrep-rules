@@ -16,8 +16,10 @@ func getMovieQuote() map[string]string {
 }
 
 func indexPage(w http.ResponseWriter, r *http.Request) {
-    const tme = `<html>`
+    	// ok
+	const tme = `<html>`
 
+	// ok
 	const template = `
 	<html>
 	<body>
@@ -34,10 +36,12 @@ func indexPage(w http.ResponseWriter, r *http.Request) {
 	year := quote["year"]
 
 	w.WriteHeader(http.StatusAccepted)
+	// ok
 	w.Write([]byte(fmt.Sprintf(template, quoteText, movie, year)))
 }
 
 func errorPage(w http.ResponseWriter, r *http.Request) {
+	// ruleid: wip-xss-using-responsewriter-and-printf
 	params := r.URL.Query()
 	urls, ok := params["url"]
 	if !ok {
@@ -46,7 +50,7 @@ func errorPage(w http.ResponseWriter, r *http.Request) {
 	}
 	url := urls[0]
 
-    const template = `
+    	const template = `
 	<html>
 	<body>
 	  <h1>error; page not found. <a href="%s">go back</a></h1>
