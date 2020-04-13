@@ -6,15 +6,15 @@ rules:
           - pattern: |
               var $JWT = require("jsonwebtoken");
               ...
-              var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+              var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
           - pattern: |
               var $JWT = require("jsonwebtoken");
               ...
-              $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+              $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
           - pattern: |
               var $JWT = require("jsonwebtoken");
               ...
-              $JWT.verify($P, $X, {algorithms:[...,'none',...]});
+              $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
           # jose
           - pattern: |
               var $JOSE = require("jose");
