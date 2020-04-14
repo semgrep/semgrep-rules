@@ -5,11 +5,11 @@ rules:
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        new $F({{{ params[passport] }}: "..."}, ...);
+        new $F({{ '{' }}{{ params[passport] }}: "..."}, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        var $X = new $F({{{ params[passport] }}: "..."}, ...);
+        var $X = new $F({{ '{' }}{{ params[passport] }}: "..."}, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
@@ -29,13 +29,13 @@ rules:
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        var $P = {{{ params[passport] }}: "..."};
+        var $P = {{ '{' }}{{ params[passport] }}: "..."};
         ...
         new $F($P, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        var $P = {{{ params[passport] }}: "..."};
+        var $P = {{ '{' }}{{ params[passport] }}: "..."};
         ...
         var $X = new $F($P, ...);
     - pattern: |
@@ -43,13 +43,13 @@ rules:
         ...
         var $S = "...";
         ...
-        var $X = new $F({{{ params[passport] }}: $S}, ...);
+        var $X = new $F({{ '{' }}{{ params[passport] }}: $S}, ...);
     - pattern:  |
         var $F = require("{{ passport }}").Strategy;
         ...
         var $S = "...";
         ...
-        new $F({{{ params[passport] }}: $S}, ...);
+        new $F({{ '{' }}{{ params[passport] }}: $S}, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
@@ -75,7 +75,7 @@ rules:
         ...
         var $S = "...";
         ...
-        var $P = {{{ params[passport] }}: $S};
+        var $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         new $F($P, ...);
     - pattern: |
@@ -83,7 +83,7 @@ rules:
         ...
         var $S = "...";
         ...
-        var $P = {{{ params[passport] }}: $S};
+        var $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         var $X = new $F($P, ...);
     - pattern: |
@@ -105,13 +105,13 @@ rules:
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        $P = {{{ params[passport] }}: "..."};
+        $P = {{ '{' }}{{ params[passport] }}: "..."};
         ...
         new $F($P, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
-        $P = {{{ params[passport] }}: "..."};
+        $P = {{ '{' }}{{ params[passport] }}: "..."};
         ...
         var $X = new $F($P, ...);
     - pattern: |
@@ -119,13 +119,13 @@ rules:
         ...
         $S = "...";
         ...
-        var $X = new $F({{{ params[passport] }}: $S}, ...);
+        var $X = new $F({{ '{' }}{{ params[passport] }}: $S}, ...);
     - pattern:  |
         var $F = require("{{ passport }}").Strategy;
         ...
         $S = "...";
         ...
-        new $F({{{ params[passport] }}: $S}, ...);
+        new $F({{ '{' }}{{ params[passport] }}: $S}, ...);
     - pattern: |
         var $F = require("{{ passport }}").Strategy;
         ...
@@ -151,7 +151,7 @@ rules:
         ...
         $S = "...";
         ...
-        var $P = {{{ params[passport] }}: $S};
+        var $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         new $F($P, ...);
     - pattern: |
@@ -159,7 +159,7 @@ rules:
         ...
         $S = "...";
         ...
-        var $P = {{{ params[passport] }}: $S};
+        var $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         var $X = new $F($P, ...);
     - pattern: |
@@ -187,7 +187,7 @@ rules:
         ...
         $S = "...";
         ...
-        $P = {{{ params[passport] }}: $S};
+        $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         new $F($P, ...);
     - pattern: |
@@ -195,7 +195,7 @@ rules:
         ...
         $S = "...";
         ...
-        $P = {{{ params[passport] }}: $S};
+        $P = {{ '{' }}{{ params[passport] }}: $S};
         ...
         var $X = new $F($P, ...);
 {%- endfor -%}
