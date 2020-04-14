@@ -1,3 +1,4 @@
+// ruleid:useless-assignment
 var x = 1;
 
 // ruleid:useless-assignment
