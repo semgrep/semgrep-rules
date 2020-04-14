@@ -1,5 +1,11 @@
 rules:
 - id: {{ check_id }}
+  message: |
+    Hardcoded secret used for Passport Strategy.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables: process.env.SECRET)
+  languages: [javascript]
+  severity: ERROR
   pattern-either:
 {%- for passport in passports %}
     - pattern: |
@@ -199,9 +205,3 @@ rules:
         ...
         var $X = new $F($P, ...);
 {%- endfor -%}
-  message: |
-    Hardcoded secret used for Passport Strategy.
-    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables: process.env.SECRET)
-  languages: [javascript]
-  severity: ERROR
