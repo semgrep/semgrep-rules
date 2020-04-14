@@ -1,6 +1,7 @@
 var FACEBOOK_APP_ID     = require('../../../config').fbAppID;
 var URLcallback         = require('../../../config').URL;
 var passport            = require('passport');
+// ruleid: hardcoded-passport-secret
 var FacebookStrategy    = require('passport-facebook').Strategy;
 var FACEBOOK_APP_SECRET = "HARDCODED-SECRET";
 

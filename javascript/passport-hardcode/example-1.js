@@ -1,5 +1,5 @@
 'use strict';
-
+// ruleid: hardcoded-passport-secret
 const FacebookStrategy = require('passport-facebook');
 
 exports.init = function(passport, router, config) {

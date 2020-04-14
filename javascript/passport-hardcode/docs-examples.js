@@ -1,6 +1,6 @@
 var passport = require('passport');
 
-// http://www.passportjs.org/packages/passport-jwt/
+// ruleid: hardcoded-passport-secret
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 
@@ -23,7 +23,7 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     });
 }));
 
-// passport-facebook
+// ruleid: hardcoded-passport-secret
 var FacebookStrategy = require('passport-facebook').Strategy
 
 passport.use(new FacebookStrategy({
@@ -38,7 +38,7 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-// passport-google-oauth2
+// ruleid: hardcoded-passport-secret
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 passport.use(new GoogleStrategy({
@@ -54,7 +54,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// passport-twitter
+// ruleid: hardcoded-passport-secret
 var TwitterStrategy = require( 'passport-twitter' ).Strategy;
 
 passport.use(new TwitterStrategy({
@@ -69,7 +69,7 @@ passport.use(new TwitterStrategy({
   }
 ));
 
-// passport-google-oauth1
+// ruleid: hardcoded-passport-secret
 var GoogleStrategy = require( 'passport-google-oauth1' ).Strategy;
 
 passport.use(new GoogleStrategy({
@@ -84,7 +84,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// passport-auth0
+// ruleid: hardcoded-passport-secret
 var Auth0Strategy = require('passport-auth0');
 
 var strategy = new Auth0Strategy({
@@ -100,7 +100,7 @@ var strategy = new Auth0Strategy({
 
 passport.use(strategy);
 
-// passport-oauth1
+// ruleid: hardcoded-passport-secret
 var OAuth1Strategy = require('passport-oauth1').Strategy;
 
 passport.use(new OAuth1Strategy({
@@ -119,7 +119,7 @@ passport.use(new OAuth1Strategy({
   }
 ));
 
-// passport-oauth2
+// ruleid: hardcoded-passport-secret
 var OAuth2Strategy = require('passport-oauth2').Strategy;
 
 passport.use(new OAuth2Strategy({
