@@ -1,4 +1,5 @@
 "use strict";
+
 // ruleid: hardcoded-jwt-secret
 const jwt = require('jsonwebtoken');
 const Promise = require("bluebird");
