@@ -1,5 +1,8 @@
 rules:
   - id: jwt-none-alg
+    message: "None algorithm allowed for JWT token"
+    languages: [javascript]
+    severity: ERROR
     patterns:
       - pattern-either:
           # jsonwebtoken
@@ -34,6 +37,3 @@ rules:
               var { JWK, JWT } = $JOSE;
               ...
               JWT.verify($P, JWK.None,...);
-    message: "None algorithm allowed for JWT token"
-    languages: [javascript]
-    severity: ERROR
