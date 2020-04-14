@@ -2,8 +2,8 @@
 const config = require('./app.config');
 const privateMethods = {
     initialize(USER) {
-        const router = require('express').Router(),
         // ruleid: hardcoded-jwt-secret
+        const router = require('express').Router(),
         jwt = require('jsonwebtoken');
         if (config) {
             router.route('/register').post((req, res) => {
