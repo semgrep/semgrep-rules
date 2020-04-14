@@ -182,6 +182,9 @@ rules:
               var $KEY = JWK.asKey($SECRET);
               ...
               var $T = JWT.verify($P, $KEY, ...);
-    message: "hardcoded jwt secret"
+    message: |
+      Hardcoded JWT secret or private key is used.
+      This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+      Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables: process.env.SECRET)
     languages: [javascript]
     severity: ERROR
