@@ -5,5 +5,11 @@ rules:
     severity: WARNING
     patterns:
       - pattern-either:
-          - pattern: math.rand.Int()
-          - pattern: math.rand.Read(...)
+          - pattern: |
+              import "math/rand"
+              ...
+              math.rand.Int()
+          - pattern: |
+              import "math/rand"
+              ...
+              math.rand.Read(...)
