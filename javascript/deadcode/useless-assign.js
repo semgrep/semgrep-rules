@@ -6,6 +6,7 @@ x = 2;
 x = 3;
 console.log(x);
 
+
 // ok
 y = [1, 2];
 y = y.map(function(e) { return e * 2; });
