@@ -635,4 +635,46 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return $CURSOR.execute(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $CURSOR.execute($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $CURSOR.execute($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $CURSOR.execute($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $CURSOR.execute($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $CURSOR.execute($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $CURSOR.execute($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $CURSOR.execute($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $CURSOR.execute($INTERM, ...)
+
+
 
