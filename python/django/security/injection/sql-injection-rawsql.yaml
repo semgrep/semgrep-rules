@@ -635,4 +635,43 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            django.db.models.expressions.RawSQL($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            django.db.models.expressions.RawSQL($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            django.db.models.expressions.RawSQL($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            django.db.models.expressions.RawSQL($INTERM, ...)

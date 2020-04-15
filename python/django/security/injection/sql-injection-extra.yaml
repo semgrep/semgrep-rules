@@ -635,4 +635,43 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
-
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
