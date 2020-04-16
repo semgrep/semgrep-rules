@@ -10,7 +10,7 @@ function verifyJwt() {
 	jwt.verify('token-here', secret, { algorithms: ['RS256', 'none'] }, function(err, payload) {
 		console.log(payload);
 	});
-}	
+}
 
 // ok
 const jwt = require("jsonwebtoken");
