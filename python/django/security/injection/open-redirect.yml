@@ -1,11 +1,19 @@
 rules:
   - id: open-redirect
-    message: Data from request is passed to redirect(). This is an open redirect and could be exploited. See https://cwe.mitre.org/data/definitions/601.html for more information.
+    message: |
+      Data from request ($DATA) is passed to redirect(). This is an open redirect and could be exploited.
+      Ensure you are redirecting to safe URLs by using django.utils.http.is_safe_url().
+      See https://cwe.mitre.org/data/definitions/601.html for more information.
     languages: [python]
     severity: WARNING
     patterns:
       - pattern-inside: |
           def $FUNC(...):
+            ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+            ...
+            django.utils.http.is_safe_url(...)
             ...
       - pattern-either:
         - pattern: django.shortcuts.redirect(..., request.$W.get(...), ...)
@@ -1304,4 +1312,5 @@ rules:
             $INTERM = $STR + $DATA
             ...
             return django.http.HttpResponseRedirect(..., $INTERM, ...)
-
+      - pattern-where-python: |
+          vars['$W'] not in {"get_full_path"}
