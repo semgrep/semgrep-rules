@@ -29,3 +29,13 @@ def url_validation(request):
         next = "/index"
     response = HttpResponseRedirect(next) if next else HttpResponse(status=204)
     return response
+
+def url_validation2(request):
+    # ok
+    next = request.POST.get('next', request.GET.get('next'))
+    ok = is_safe_url(url=next, allowed_hosts=request.get_host())
+    if ok:
+        response = HttpResponseRedirect(next) if next else HttpResponse(status=204)
+    else:
+        response = HttpResponseRedirect("index")
+    return response
