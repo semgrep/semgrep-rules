@@ -38,7 +38,7 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
 
 func MyHandlerExplicit(w http.ResponseWriter, r *http.Request) {
     session, err := store.Get(r, "blah-session")
-    // todoruleid: handler-assignment-from-multiple-sources
+    // ruleid: handler-assignment-from-multiple-sources
     var user_id int = session.Values["user_id"].(int)
 
     if !ValidateUser(user_id) {

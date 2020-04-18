@@ -1,6 +1,13 @@
 rules:
   - id: django-secure-set-cookie
     patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import django.http.HttpResponse
+            ...
+        - pattern-inside: |
+            import django.shortcuts.render
+            ...
       # Exclude vendored i18n code
       - pattern-not-inside: |
           LANGUAGE_QUERY_PARAMETER = 'language'

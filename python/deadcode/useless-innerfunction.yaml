@@ -4,16 +4,16 @@ rules:
       - pattern-not-inside: |
           def $F(...):
               ...
-              def $F2(...):
+              def $FF(...):
                  ...
               ...
-              $F2
+              $FF
       - pattern: |
           def $F(...):
               ...
-              def $F2(...):
+              def $FF(...):
                  ...
               ...
-    message: "function `$F2` is defined inside a function but never used"
+    message: "function `$FF` is defined inside a function but never used"
     languages: [python]
     severity: ERROR
