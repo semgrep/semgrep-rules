@@ -1,0 +1,45 @@
+rules:
+  - id: path-traversal
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-not: |
+          ...
+          os.path.abspath(...)
+          ...
+      - pattern-not: |
+          ...
+          os.path.realpath(...)
+          ...
+      - pattern-either:
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $P = os.path.join(..., $V, ...)
+            ...
+            open($P, ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $P = os.path.join(..., $V, ...)
+            ...
+            open($P, ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $P = os.path.join(..., $V, ...)
+            ...
+            open($P, ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $P = os.path.join(..., $V, ...)
+            ...
+            open($P, ...)
+    message: |
+      Data from request is passed to os.path.join() and to open().
+      This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
+      To mitigate, consider using os.path.abspath or os.path.realpath or Path library.
+    languages: [python]
+    severity: WARNING
