@@ -1,0 +1,22 @@
+rules:
+  - id: {{ check_id }}
+    message: {{ message }}
+    languages: [python]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - pattern-either:
+{%- for data_pattern in request_data_patterns %}
+  {%- for left_pattern in left_patterns %}
+    {%- for format_pattern in format_patterns %}
+        - pattern: |
+            $DATA = {{ data_pattern }}
+            ...
+            $INTERM = {{ format_pattern }}
+            ...
+            {{ left_pattern }}$INTERM(...)
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endfor -%}
