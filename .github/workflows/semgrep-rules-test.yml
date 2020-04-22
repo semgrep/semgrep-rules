@@ -1,20 +1,20 @@
-name: sgrep-develop
+name: semgrep
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [master]
   push:
-    branches: [develop]
+    branches: [master]
 
 jobs:
-  test-develop:
+  self_test:
     runs-on: ubuntu-latest
-    name: test-develop
+    name: test
     steps:
       - uses: actions/checkout@v2
       - name: test
         id: test
-        uses: returntocorp/sgrep-rules-test-action-develop@master
+        uses: returntocorp/semgrep-rules-test-action@master
       - uses: actions/upload-artifact@v1
         if: always()
         with:
