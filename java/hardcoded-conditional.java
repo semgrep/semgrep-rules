@@ -2,7 +2,7 @@ class Bar {
     void main() {
         boolean myBoolean;
 
-        // todook
+        // ruleid:hardcoded-conditional
         if (myBoolean = true) {
             continue;
         }

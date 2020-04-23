@@ -39,6 +39,39 @@ rules:
             $V = request.$W
             ...
             $MODEL.objects.raw($S % $V, ...)
+        # match when f-string is used
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $MODEL.objects.raw(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $MODEL.objects.raw(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $MODEL.objects.raw(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $MODEL.objects.raw(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $MODEL.objects.raw(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $MODEL.objects.raw(f"...{$V}", ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $MODEL.objects.raw(f"...{$V}...", ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $MODEL.objects.raw(f"...{$V}", ...)
     message: |
       Data from request is passed to raw().
       This is a SQL injection and could be exploited.

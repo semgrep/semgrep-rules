@@ -1,0 +1,54 @@
+rules:
+- id: extends-custom-expression
+  languages:
+  - python
+  message: 'Found extension of custom expression: $CLASS'
+  patterns:
+  - pattern-either:
+    - pattern: "class $CLASS(..., django.db.models.Func, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Func, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Expression, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Expression, ...):\n\
+        \  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Value, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Value, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.DurationValue, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.DurationValue, ...):\n\
+        \  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.RawSQL, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.RawSQL, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Star, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Star, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Random, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Random, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Col, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Col, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Ref, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Ref, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.ExpressionList, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.ExpressionList, ...):\n\
+        \  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.ExpressionWrapper, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.ExpressionWrapper,\
+        \ ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.When, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.When, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Case, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Case, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Subquery, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Subquery, ...):\n \
+        \ ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Exists, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Exists, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.Window, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.Window, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.WindowFrame, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.WindowFrame, ...):\n\
+        \  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.RowRange, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.RowRange, ...):\n \
+        \ ...\n"
+    - pattern: "class $CLASS(..., django.db.models.ValueRange, ...):\n  ...\n"
+    - pattern: "class $CLASS(..., django.db.models.expressions.ValueRange, ...):\n\
+        \  ...\n"
+  severity: WARNING

@@ -39,6 +39,23 @@ rules:
             $V = request.$W
             ...
             $MODEL.objects.extra(..., where=[$S % $V], ...)
+        # match when f-string is used
+        - pattern: |
+            $V = request.$W.get($X)
+            ...
+            $MODEL.objects.extra(..., where=[f"...{$V}"], ...)
+        - pattern: |
+            $V = request.$W[$X]
+            ...
+            $MODEL.objects.extra(..., where=[f"...{$V}"], ...)
+        - pattern: |
+            $V = request.$W($X)
+            ...
+            $MODEL.objects.extra(..., where=[f"...{$V}"], ...)
+        - pattern: |
+            $V = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[f"...{$V}"], ...)
     message: |
       Data from request is passed to extra().
       This is a SQL injection and could be exploited.
