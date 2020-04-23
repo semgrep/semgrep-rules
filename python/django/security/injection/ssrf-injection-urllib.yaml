@@ -1,6 +1,6 @@
 rules:
-  - id: reflected-data-httpresponse
-    message: Found request data reflected into HttpResponse. This could be vulnerable to XSS. Ensure the request data is properly escaped or sanitzed.
+  - id: ssrf-injection-urllib
+    message: Data from request object is passed to a new server-side request. This could lead to a server-side request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against a whitelist, do not forward the response to the user, and ensure proper authentication and transport-layer security in the proxied request. See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery to learn more about SSRF vulnerabilities.
     languages: [python]
     severity: WARNING
     patterns:
@@ -8,615 +8,628 @@ rules:
           def $FUNC(...):
             ...
       - pattern-either:
-        - pattern: django.http.HttpResponse(..., request.$W.get(...), ...)
+        - pattern: urllib.request.urlopen(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: urllib.request.urlopen(..., $S % request.$W.get(...), ...)
+        - pattern: urllib.request.urlopen(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: urllib.request.urlopen(..., request.$W.get(...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            django.http.HttpResponse(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.http.HttpResponse(..., $DATA, ...)
+            urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponse(..., $STR % $DATA, ...)
+            urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponse(..., $STR + $DATA, ...)
+            urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponse(..., request.$W.get(...), ...)
+            urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: $A = urllib.request.urlopen(..., request.$W.get(...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponse(..., $DATA, ...)
+            $A = urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            $A = urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponse(..., $STR % $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            $A = urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponse(..., $STR + $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: django.http.HttpResponse(..., request.$W(...), ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: return urllib.request.urlopen(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return urllib.request.urlopen(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return urllib.request.urlopen(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return urllib.request.urlopen(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return urllib.request.urlopen(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: urllib.request.urlopen(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: urllib.request.urlopen(..., $S % request.$W(...), ...)
+        - pattern: urllib.request.urlopen(..., f"...{request.$W(...)}...", ...)
+        - pattern: urllib.request.urlopen(..., request.$W(...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponse(..., $DATA, ...)
+            urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
+            urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
+            urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W(...), ...)
+            urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: $A = urllib.request.urlopen(..., request.$W(...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponse(..., $DATA, ...)
+            $A = urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            $A = urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponse(..., $STR % $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            $A = urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponse(..., $STR + $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponse(..., request.$W(...), ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: return urllib.request.urlopen(..., request.$W(...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponse(..., $DATA, ...)
+            return urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            return urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponse(..., $STR % $DATA, ...)
+            return urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            return urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponse(..., $STR + $DATA, ...)
+            return urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: django.http.HttpResponse(..., request.$W[...], ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: urllib.request.urlopen(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: urllib.request.urlopen(..., $S % request.$W[...], ...)
+        - pattern: urllib.request.urlopen(..., f"...{request.$W[...]}...", ...)
+        - pattern: urllib.request.urlopen(..., request.$W[...], ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponse(..., $DATA, ...)
+            urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
+            urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
+            urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W[...], ...)
+            urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: $A = urllib.request.urlopen(..., request.$W[...], ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponse(..., $DATA, ...)
+            $A = urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            $A = urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponse(..., $STR % $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            $A = urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponse(..., $STR + $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponse(..., request.$W[...], ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: return urllib.request.urlopen(..., request.$W[...], ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponse(..., $DATA, ...)
+            return urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            return urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponse(..., $STR % $DATA, ...)
+            return urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            return urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponse(..., $STR + $DATA, ...)
+            return urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: django.http.HttpResponse(..., request.$W, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: urllib.request.urlopen(..., $S.format(..., request.$W, ...), ...)
+        - pattern: urllib.request.urlopen(..., $S % request.$W, ...)
+        - pattern: urllib.request.urlopen(..., f"...{request.$W}...", ...)
+        - pattern: urllib.request.urlopen(..., request.$W, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponse(..., $DATA, ...)
+            urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
+            urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
+            urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W, ...)
+            urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: $A = urllib.request.urlopen(..., request.$W, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponse(..., $DATA, ...)
+            $A = urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            $A = urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponse(..., $STR % $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            $A = urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponse(..., $STR + $DATA, ...)
+            $A = urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponse(..., request.$W, ...)
+            $A = urllib.request.urlopen(..., $INTERM, ...)
+        - pattern: return urllib.request.urlopen(..., request.$W, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponse(..., $DATA, ...)
+            return urllib.request.urlopen(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+            return urllib.request.urlopen(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponse(..., $STR % $DATA, ...)
+            return urllib.request.urlopen(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponse(..., f"...{$DATA}...", ...)
+            return urllib.request.urlopen(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponse(..., $STR + $DATA, ...)
+            return urllib.request.urlopen(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponse(..., $INTERM, ...)
+            return urllib.request.urlopen(..., $INTERM, ...)
+

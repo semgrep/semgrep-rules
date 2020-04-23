@@ -1,6 +1,6 @@
 rules:
-  - id: reflected-data-httpresponsebadrequest
-    message: Found request data reflected into HttpResponseBadRequest. This could be vulnerable to XSS. Ensure the request data is properly escaped or sanitzed.
+  - id: command-injection-os-system
+    message: Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection for more information.
     languages: [python]
     severity: WARNING
     patterns:
@@ -8,615 +8,652 @@ rules:
           def $FUNC(...):
             ...
       - pattern-either:
-        - pattern: django.http.HttpResponseBadRequest(..., request.$W.get(...), ...)
+        - pattern: os.system(..., request.$W.get(...), ...)
+        - pattern: os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: os.system(..., $S % request.$W.get(...), ...)
+        - pattern: os.system(..., f"...{request.$W.get(...)}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            django.http.HttpResponseBadRequest(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponseBadRequest(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.http.HttpResponseBadRequest(..., $DATA, ...)
+            os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponseBadRequest(..., request.$W.get(...), ...)
+            os.system(..., $INTERM, ...)
+        - pattern: $A = os.system(..., request.$W.get(...), ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W.get(...), ...)
+        - pattern: $A = os.system(..., f"...{request.$W.get(...)}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $DATA, ...)
+            $A = os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            $A = os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            $A = os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            $A = os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W.get(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: django.http.HttpResponseBadRequest(..., request.$W(...), ...)
+            $A = os.system(..., $INTERM, ...)
+        - pattern: return os.system(..., request.$W.get(...), ...)
+        - pattern: return os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: return os.system(..., $S % request.$W.get(...), ...)
+        - pattern: return os.system(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return os.system(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return os.system(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return os.system(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return os.system(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return os.system(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return os.system(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return os.system(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return os.system(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return os.system(..., $INTERM, ...)
+        - pattern: os.system(..., request.$W(...), ...)
+        - pattern: os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: os.system(..., $S % request.$W(...), ...)
+        - pattern: os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., $DATA, ...)
+            os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponseBadRequest(..., request.$W(...), ...)
+            os.system(..., $INTERM, ...)
+        - pattern: $A = os.system(..., request.$W(...), ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W(...), ...)
+        - pattern: $A = os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $DATA, ...)
+            $A = os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            $A = os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            $A = os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            $A = os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponseBadRequest(..., request.$W(...), ...)
+            $A = os.system(..., $INTERM, ...)
+        - pattern: return os.system(..., request.$W(...), ...)
+        - pattern: return os.system(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: return os.system(..., $S % request.$W(...), ...)
+        - pattern: return os.system(..., f"...{request.$W(...)}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $DATA, ...)
+            return os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            return os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            return os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
-            return django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            return os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W(...)
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: django.http.HttpResponseBadRequest(..., request.$W[...], ...)
+            return os.system(..., $INTERM, ...)
+        - pattern: os.system(..., request.$W[...], ...)
+        - pattern: os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: os.system(..., $S % request.$W[...], ...)
+        - pattern: os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., $DATA, ...)
+            os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponseBadRequest(..., request.$W[...], ...)
+            os.system(..., $INTERM, ...)
+        - pattern: $A = os.system(..., request.$W[...], ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W[...], ...)
+        - pattern: $A = os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., $DATA, ...)
+            $A = os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            $A = os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            $A = os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            $A = os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponseBadRequest(..., request.$W[...], ...)
+            $A = os.system(..., $INTERM, ...)
+        - pattern: return os.system(..., request.$W[...], ...)
+        - pattern: return os.system(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: return os.system(..., $S % request.$W[...], ...)
+        - pattern: return os.system(..., f"...{request.$W[...]}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., $DATA, ...)
+            return os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            return os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            return os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
-            return django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            return os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W[...]
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: django.http.HttpResponseBadRequest(..., request.$W, ...)
+            return os.system(..., $INTERM, ...)
+        - pattern: os.system(..., request.$W, ...)
+        - pattern: os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: os.system(..., $S % request.$W, ...)
+        - pattern: os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., $DATA, ...)
+            os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponseBadRequest(..., request.$W, ...)
+            os.system(..., $INTERM, ...)
+        - pattern: $A = os.system(..., request.$W, ...)
+        - pattern: $A = os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: $A = os.system(..., $S % request.$W, ...)
+        - pattern: $A = os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., $DATA, ...)
+            $A = os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            $A = os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            $A = os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            $A = os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            $A = django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            $A = os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            $A = django.http.HttpResponseBadRequest(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponseBadRequest(..., request.$W, ...)
+            $A = os.system(..., $INTERM, ...)
+        - pattern: return os.system(..., request.$W, ...)
+        - pattern: return os.system(..., $S.format(..., request.$W, ...), ...)
+        - pattern: return os.system(..., $S % request.$W, ...)
+        - pattern: return os.system(..., f"...{request.$W}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., $DATA, ...)
+            return os.system(..., $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., $STR.format(..., $DATA, ...), ...)
+            return os.system(..., $STR.format(..., $DATA, ...), ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR.format(..., $DATA, ...)
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., $STR % $DATA, ...)
+            return os.system(..., $STR % $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR % $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., f"...{$DATA}...", ...)
+            return os.system(..., f"...{$DATA}...", ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = f"...{$DATA}..."
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
         - pattern: |
             $DATA = request.$W
             ...
-            return django.http.HttpResponseBadRequest(..., $STR + $DATA, ...)
+            return os.system(..., $STR + $DATA, ...)
         - pattern: |
             $DATA = request.$W
             ...
             $INTERM = $STR + $DATA
             ...
-            return django.http.HttpResponseBadRequest(..., $INTERM, ...)
+            return os.system(..., $INTERM, ...)
+

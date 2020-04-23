@@ -1,0 +1,677 @@
+rules:
+  - id: sql-injection-using-extra-where
+    message: Data from request is passed to extra().
+      This is a SQL injection and could be exploited.
+      See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#.objects.extra to learn how to mitigate.
+      See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+    languages: [python]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - pattern-either:
+        - pattern: $MODEL.objects.extra(..., where=[..., $S.format(..., request.$W.get(...), ...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S % request.$W.get(...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., f"...{request.$W.get(...)}...", ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., request.$W.get(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $A = $MODEL.objects.extra(..., where=[..., request.$W.get(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: return $MODEL.objects.extra(..., where=[..., request.$W.get(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S.format(..., request.$W(...), ...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S % request.$W(...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., f"...{request.$W(...)}...", ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., request.$W(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $A = $MODEL.objects.extra(..., where=[..., request.$W(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: return $MODEL.objects.extra(..., where=[..., request.$W(...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S.format(..., request.$W[...], ...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S % request.$W[...], ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., f"...{request.$W[...]}...", ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., request.$W[...], ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $A = $MODEL.objects.extra(..., where=[..., request.$W[...], ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: return $MODEL.objects.extra(..., where=[..., request.$W[...], ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S.format(..., request.$W, ...), ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., $S % request.$W, ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., f"...{request.$W}...", ...], ...)
+        - pattern: $MODEL.objects.extra(..., where=[..., request.$W, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: $A = $MODEL.objects.extra(..., where=[..., request.$W, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: return $MODEL.objects.extra(..., where=[..., request.$W, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.extra(..., where=[..., $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR.format(..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR % $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.extra(..., where=[..., f"...{$DATA}...", ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.extra(..., where=[..., $STR + $DATA, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.extra(..., where=[..., $STR % (..., $DATA, ...), ...], ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)

@@ -1,7 +1,7 @@
 
 def post1(request, format=None):
   try:
-      # ruleid: path-traversal
+      # ruleid: path-traversal-file-name
       app_log_path = request.data['app_log_path']
       host = request.data['host']
       connect = connect_init(host)
@@ -18,7 +18,7 @@ def post1(request, format=None):
 
 def post2(request, format=None):
   try:
-      # ruleid: path-traversal
+      # ruleid: path-traversal-file-name
       app_log_path = request.data['app_log_path']
       host = request.data['host']
       connect = connect_init(host)
