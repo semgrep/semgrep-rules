@@ -24,7 +24,7 @@ def fine(request):
 
 def url_validation(request):
     # this will fire for now until we can filter out is_safe_url
-    # todoruleid: open-redirect
+    # ruleid: open-redirect
     next = request.POST.get('next', request.GET.get('next'))
     if (next or not request.is_ajax()) and not is_safe_url(url=next, allowed_hosts=request.get_host()):
         next = "/index"
