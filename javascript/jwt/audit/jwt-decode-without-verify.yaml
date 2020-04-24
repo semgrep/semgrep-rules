@@ -1,0 +1,30 @@
+rules:
+- id: jwt-decode-without-verify
+  patterns:
+    - pattern-either:
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            $JWT.decode(...);
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            return $JWT.decode(...);
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            if(<... $JWT.decode(...) ...>) {
+                ...
+            }
+    - pattern-not-inside: |
+        ...
+        $JWT.verify(...);
+    - pattern-not-inside: |
+        ...
+        return $JWT.verify(...);
+    - pattern-not-inside: |
+        ...
+        if(<... $JWT.verify(...) ...>) {
+            ...
+        }
+  message: jwt decode without verify
