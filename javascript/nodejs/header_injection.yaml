@@ -1,0 +1,65 @@
+# Needs QA
+rules:
+  - id: generic_header_injection
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $RES.set(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              $RES.set(..., "..." + $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              $RES.set(..., $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              $RES.set(..., "..." + $REQ.$QUERY.$VAR + "...", ...)
+        # Reduce False positives set() is very common
+        #   - pattern: |
+        #       $RES.set(..., $REQ.$QUERY, ...)
+        #   - pattern: |
+        #       $RES.set(..., "..." + $REQ.$QUERY, ...)
+        #   - pattern: |
+        #       $RES.set(..., $REQ.$QUERY + "...", ...)
+        #   - pattern: |
+        #       $RES.set(..., "..." + $REQ.$QUERY + "...", ...)
+        #  - pattern: |
+        #      $RES.set(..., { $X: $REQ.$VAR }, ...);
+          - pattern: |
+              $RES.set(..., { $X: "..." + $REQ.$VAR, }, ...)
+          - pattern: |
+              $RES.set(..., { $X: $REQ.$VAR + "..."}, ...)
+          - pattern: |
+              $RES.set(..., { $X: "..." + $REQ.$VAR + "..."}, ...)
+          - pattern: |
+              $RES.set(..., { $X: $REQ.$QUERY.$FOO }, ...);
+          - pattern: |
+              $RES.set(..., { $X: "..." + $REQ.$QUERY.$FOO, }, ...)
+          - pattern: |
+              $RES.set(..., { $X: $REQ.$QUERY.$FOO + "..."}, ...)
+          - pattern: |
+              $RES.set(..., { $X: "..." + $REQ.$QUERY.$FOO + "..."}, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: $REQ.$VAR }, ...);
+          - pattern: |
+              $RES.writeHead(..., { $X: "..." + $REQ.$VAR, }, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: $REQ.$VAR + "..."}, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: "..." + $REQ.$VAR + "..."}, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: $REQ.$QUERY.$FOO }, ...);
+          - pattern: |
+              $RES.writeHead(..., { $X: "..." + $REQ.$QUERY.$FOO, }, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: $REQ.$QUERY.$FOO + "..."}, ...)
+          - pattern: |
+              $RES.writeHead(..., { $X: "..." + $REQ.$QUERY.$FOO + "..."}, ...)
+    message: >-
+      Untrusted user input in response header will result in HTTP Header
+      Injection or Response Splitting Attacks.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-644: Improper Neutralization of HTTP Headers for Scripting Syntax'

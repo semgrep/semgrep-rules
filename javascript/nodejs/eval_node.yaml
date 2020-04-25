@@ -1,0 +1,113 @@
+rules:
+  - id: eval_nodejs
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              new Function(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              new Function(..., "..." + $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              new Function(..., $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              new Function(..., "..." + $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              new Function(..., $REQ.$QUERY, ...)
+          - pattern: |
+              new Function(..., "..." + $REQ.$QUERY, ...)
+          - pattern: |
+              new Function(..., $REQ.$QUERY + "...", ...);
+          - pattern: |
+              new Function(..., "..." + $REQ.$QUERY + "...", ...)
+          - pattern: |
+              eval(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              eval(..., "..." + $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              eval(..., $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              eval(..., "..." + $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              eval(..., $REQ.$QUERY, ...)
+          - pattern: |
+              eval(..., "..." + $REQ.$QUERY, ...)
+          - pattern: |
+              eval(..., $REQ.$QUERY + "...", ...);
+          - pattern: |
+              eval(..., "..." + $REQ.$QUERY + "...", ...)
+          - pattern: |
+              setTimeout(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              setTimeout(..., "..." + $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              setTimeout(..., $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              setTimeout(..., "..." + $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              setTimeout(..., $REQ.$QUERY, ...)
+          - pattern: |
+              setTimeout(..., "..." + $REQ.$QUERY, ...)
+          - pattern: |
+              setTimeout(..., $REQ.$QUERY + "...", ...);
+          - pattern: |
+              setTimeout(..., "..." + $REQ.$QUERY + "...", ...)
+          - pattern: |
+              setInterval(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              setInterval(..., "..." + $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              $EXEC.setInterval(..., $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              setInterval(..., "..." + $REQ.$QUERY.$VAR + "...", ...)
+          - pattern: |
+              setInterval(..., $REQ.$QUERY, ...)
+          - pattern: |
+              setInterval(..., "..." + $REQ.$QUERY, ...)
+          - pattern: |
+              setInterval(..., $REQ.$QUERY + "...", ...)
+          - pattern: |
+              setInterval(..., "..." + $REQ.$QUERY + "...", ...)
+    message: >-
+      User controlled data in eval() or similar functions may result in Server
+      Side Injection or Remote Code Injection
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-95: Improper Neutralization of Directives in Dynamically Evaluated
+        Code ('Eval Injection')
+  - id: eval_warning
+    patterns:
+      - pattern-not-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-not:
+          eval("...")
+      - pattern-not:
+          setTimeout("...",  ...)
+      - pattern-not:
+          setInterval("...",  ...)
+      - pattern-not:
+          new Function(..., "...")
+      - pattern-either:
+          - pattern: |
+              eval(..., $X, ...)
+          - pattern: |
+              setTimeout(..., $X, ...)
+          - pattern: |
+              setInterval(..., $X, ...)
+          - pattern: |
+              new Function(..., $X, ...)
+    message: >-
+      User controlled data in eval() or similar functions may result in Server
+      Side Injection or Remote Code Injection
+    languages:
+      - js
+    severity: WARNING
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-95: Improper Neutralization of Directives in Dynamically Evaluated
+        Code ('Eval Injection')

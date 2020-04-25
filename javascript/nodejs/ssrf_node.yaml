@@ -1,0 +1,55 @@
+rules:
+  - id: node_ssrf
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
+      - pattern-either:
+          - pattern: |
+              needle.get($REQ.$VAR, ...)
+          - pattern: |
+              needle.get($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              axios.get($REQ.$VAR, ...)
+          - pattern: |
+              axios.get($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              $PKG.post($REQ.$VAR, ...)
+          - pattern: |
+              $PKG.post($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              $PKG.put($REQ.$VAR, ...)
+          - pattern: |
+              $PKG.put($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              needle("=~/[get|post|put|GET|POST|PUT]+/", $REQ.$VAR.$FOO, ...)
+          - pattern: |
+              needle("=~/[get|post|put|GET|POST|PUT]+/", $REQ.$VAR, ...)
+          - pattern: |
+              request($REQ.$VAR, ...)
+          - pattern: |
+              request($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              $URLLIB.request($REQ.$VAR, ...)
+          - pattern: |
+              $URLLIB.request($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              getJSON($REQ.$VAR, ...)
+          - pattern: |
+              getJSON($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              getBuffer($REQ.$VAR, ...)
+          - pattern: |
+              getBuffer($REQ.$VAR.$FOO, ...)
+          - pattern: |
+              fetch($REQ.$VAR, ...)
+          - pattern: |
+              fetch($REQ.$VAR.$FOO, ...)
+    message: >-
+      User controlled URL in http client libraries can result in Server Side
+      Request Forgery (SSRF).
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'

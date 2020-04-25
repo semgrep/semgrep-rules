@@ -1,0 +1,73 @@
+# Need QA + sgrep bug fix + false positive in generic_2
+rules:
+  - id: header_xss_lusca
+    patterns:
+      - pattern-inside: |
+          var $X = require('lusca');
+          ...
+      - pattern-either:
+          - pattern: |
+              $X.xssProtection(false)
+          - pattern: |
+              $X({ xssProtection: false})
+    message: >-
+      X-XSS-Protection header is set to 0. This will disable the browser's XSS
+      Filter.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: header_xss_generic
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+          - pattern: |
+              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+          - pattern: >
+              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : 0 },
+              ...)
+          - pattern: >
+              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/": 0
+              }, ...);
+    message: >-
+      X-XSS-Protection header is set to 0. This will disable the browser's XSS
+      Filter.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: header_xss_generic_2
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {
+              ...
+              var $VAL = 0;
+              ...
+           });
+      - pattern-either:
+          - pattern: |
+              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...)
+          - pattern: |
+              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...)
+          - pattern: >
+              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : $VAL
+              }, ...)
+          - pattern: >
+              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/":
+              $VAL }, ...)
+    message: >-
+      X-XSS-Protection header is set to 0. This will disable the browser's XSS
+      Filter.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'

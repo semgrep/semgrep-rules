@@ -1,0 +1,108 @@
+# Need QA + Bug Fix https://github.com/returntocorp/sgrep/issues/512
+rules:
+  - id: express_open_redirect
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY)
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY["..."])
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY("..."))
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY + "...")
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY["..."] + "...")
+          - pattern: |
+              $X.redirect(..., $REQ.$QUERY("...") + "...")
+          - pattern: |
+              $X.redirect(..., "=~/^\//"+ $REQ.$QUERY)
+          - pattern: |
+              $X.redirect(..., "=~/^\//" + $REQ.$QUERY["..."])
+          - pattern: |
+              $X.redirect(..., "=~/^\//" + $REQ.$QUERY("..."))
+          - pattern: |
+              $X.redirect(..., "=~/^\//" + $REQ.$QUERY + "...")
+          - pattern: |
+              $X.redirect(...,"=~/^\//" + $REQ.$QUERY["..."] + "...")
+          - pattern: |
+              $X.redirect(..., "=~/^\//" + $REQ.$QUERY("...") + "...")
+          - pattern: |
+              $X.redirect(..., "=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY)
+          - pattern: |
+              $X.redirect(...,"=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY["..."])
+          - pattern: |
+              $X.redirect(..., "=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY("..."))
+          - pattern: |
+              $X.redirect(..., "=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY + "...")
+          - pattern: >
+              $X.redirect(...,"=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY["..."] +
+              "...")
+          - pattern: >
+              $X.redirect(..., "=~/^\([a-zA-Z0-9]+\)/" + $REQ.$QUERY("...") +
+              "...")
+    message: >-
+      Untrusted user input in redirect() can result in Open Redirect
+      vulnerability.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-601: URL Redirection to Untrusted Site ('Open Redirect')
+  - id: express_open_redirect2
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES) { ... })
+      - pattern-either:
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", $REQ.$VAR, ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", $REQ.$VAR + "...", ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", "..." + $REQ.$VAR + "...", ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", "..." + $REQ.$VAR, ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", $REQ.$VAR.$FOO, ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", $REQ.$VAR.$FOO + "...", ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", "..." + $REQ.$VAR.$FOO + "...", ...)
+          - pattern: |
+              $RES.header(..., "=~/[Ll]+ocation/", "..." + $REQ.$VAR.$FOO, ...)
+          - pattern: |
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": $REQ.$VAR }, ...);
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": "..." + $REQ.$VAR, },
+              ...)
+          - pattern: |
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": $REQ.$VAR + "..."}, ...)
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": "..." + $REQ.$VAR +
+              "..."}, ...)
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": $REQ.$QUERY.$FOO },
+              ...);
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": "..." +
+              $REQ.$QUERY.$FOO, }, ...)
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": $REQ.$QUERY.$FOO +
+              "..."}, ...)
+          - pattern: >
+              $RES.writeHead(..., { "=~/[Ll]+ocation/": "..." + $REQ.$QUERY.$FOO
+              + "..."}, ...)
+    message: >-
+      Untrusted user input in response header('Location') can result in Open
+      Redirect vulnerability.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-601: URL Redirection to Untrusted Site ('Open Redirect')

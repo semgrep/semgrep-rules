@@ -1,0 +1,91 @@
+rules:
+  - id: express_xss
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {
+              ...
+          });
+      - pattern-either:
+          - pattern: |
+              var $LOCALVAR = $REQ.$QUERY;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = $REQ.$QUERY;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = $REQ.$QUERY.$VAR;
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = $REQ.$QUERY;
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = "..." + $REQ.$QUERY;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY.$VAR;
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY;
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = $REQ.$QUERY + "..." ;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  $REQ.$QUERY + "...";
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  $REQ.$QUERY.$VAR + "...";
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  $REQ.$QUERY + "...";
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR = "..." + $REQ.$QUERY + "..." ;
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY + "...";
+              ...
+              $RES.write("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY.$VAR + "...";
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              var $LOCALVAR =  "..." + $REQ.$QUERY + "...";
+              ...
+              $RES.send("..." + $LOCALVAR, ...);
+          - pattern: |
+              $RES.send(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              $RES.send(..., $REQ.$QUERY, ...)
+          - pattern: |
+              $RES.write(..., $REQ.$QUERY.$VAR, ...)
+          - pattern: |
+              $RES.write(..., $REQ.$QUERY, ...)
+    message: >-
+      Untrusted User Input in Response will result in Reflected Cross Site
+      Scripting Vulnerability.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-79: Improper Neutralization of Input During Web Page Generation
+        ('Cross-site Scripting')

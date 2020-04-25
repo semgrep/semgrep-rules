@@ -1,0 +1,88 @@
+# Need QA + sgrep bug fix
+rules:
+  - id: generic_cors
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $APP.options('*', cors())
+    message: >-
+      Access-Control-Allow-Origin response header is set to "*". This will
+      disable CORS Same Origin Policy restrictions.
+    languages:
+      - js
+    severity: WARNING
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: express_cors
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              app.options('*', cors())
+          - pattern: >
+              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              '*', ...)
+          - pattern: >
+              $RES.set(..., {
+              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
+              '*' }, ...)
+          - pattern: >
+              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              '*', ...)
+          - pattern: >
+              $RES.writeHead(...,
+              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
+              '*' }, ...);
+    message: >-
+      Access-Control-Allow-Origin response header is set to "*". This will
+      disable CORS Same Origin Policy restrictions.
+    languages:
+      - js
+    severity: WARNING
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: express_cors_2
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {
+              ...
+           });
+      - pattern-either:
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $VAL, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.set(..., {
+              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
+              $VAL }, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $VAL, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.writeHead(...,
+              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
+              $VAL }, ...);
+    message: >-
+      Access-Control-Allow-Origin response header is set to "*". This will
+      disable CORS Same Origin Policy restrictions.
+    languages:
+      - js
+    severity: WARNING
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
