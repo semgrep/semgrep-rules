@@ -16,6 +16,22 @@ rules:
             if(<... $JWT.decode(...) ...>) {
                 ...
             }
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            return {$P: $JWT.decode(...)};
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            $X = {$P: $JWT.decode(...)};
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            $FUNC({$P: $JWT.decode(...)});
+        - pattern: |
+            var $JWT = require('jsonwebtoken');
+            ...
+            return $FUNC({$P: $JWT.decode(...)});
     - pattern-not-inside: |
         ...
         $JWT.verify(...);
@@ -27,4 +43,16 @@ rules:
         if(<... $JWT.verify(...) ...>) {
             ...
         }
+    - pattern-not-inside: |
+        ...
+        return {$P: $JWT.verify(...)};
+    - pattern-not-inside: |
+        ...
+        $X = {$P: $JWT.verify(...)};
+    - pattern-not-inside: |
+        ...
+        $FUNC({$P: $JWT.verify(...)});
+    - pattern-not-inside: |
+        ...
+        return $FUNC({$P: $JWT.verify(...)});
   message: jwt decode without verify
