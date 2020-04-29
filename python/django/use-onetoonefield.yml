@@ -1,0 +1,12 @@
+rules:
+  - id: use-onetoonefield
+    patterns:
+      - pattern-inside: |
+          class $M(...):
+            ...
+      - pattern: $F = django.db.models.ForeignKey(..., unique=True, ...)
+    message: |
+      Use 'django.db.models.OneToOneField' instead of 'ForeignKey' with unique=True.
+      'OneToOneField' is used to create one-to-one relationships.
+    languages: [python]
+    severity: WARNING

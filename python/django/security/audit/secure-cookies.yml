@@ -1,0 +1,36 @@
+rules:
+  - id: django-secure-set-cookie
+    patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import django.http.HttpResponse
+            ...
+        - pattern-inside: |
+            import django.shortcuts.render
+            ...
+      # Exclude vendored i18n code
+      - pattern-not-inside: |
+          LANGUAGE_QUERY_PARAMETER = 'language'
+          ...
+          def set_language(request):
+              ...
+      # Exclude vendored contrib/messages/storage/cookie.py
+      - pattern-not-inside: |
+          class CookieStorage(django.contrib.messages.storage.base.BaseStorage):
+              ...
+      # Exclude cookies handled by vendored middleware
+      - pattern-not: response.set_cookie(django.conf.settings.SESSION_COOKIE_NAME, ...)
+      - pattern-not: response.set_cookie(django.conf.settings.CSRF_COOKIE_NAME, ...)
+      - pattern-not: response.set_cookie(django.conf.settings.LANGUAGE_COOKIE_NAME, ...)
+      - pattern-not: response.set_cookie(rest_framework_jwt.settings.api_settings.JWT_AUTH_COOKIE, ...)
+      - pattern-not: response.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
+      - pattern-not: response.set_cookie(..., **$A)
+      - pattern: response.set_cookie(...)
+    message: |
+      Django cookies should be handled securely by setting secure=True, httponly=True, and samesite='Lax' in
+      response.set_cookie(...). If your situation calls for different settings, explicitly disable the setting.
+      If you want to send the cookie over http, set secure=False.  If you want to let client-side JavaScript
+      read the cookie, set httponly=False. If you want to attach cookies to requests for external sites,
+      set samesite=None.
+    languages: [python]
+    severity: WARNING

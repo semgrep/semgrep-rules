@@ -1,4 +1,7 @@
 test:
-	sgrep-lint --validate --config=./python .
-	sgrep-lint --validate --config=./c .
-	./test.py --strict --ignore-todo .
+	semgrep --validate --config=./python .
+	semgrep --validate --config=./c .
+	semgrep --validate --config=./javascript .
+	semgrep --validate --config=./java .
+	semgrep --validate --config=./go .
+	semgrep --test --strict --test-ignore-todo --dangerously-allow-arbitrary-code-execution-from-rules .

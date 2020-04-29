@@ -1,0 +1,91 @@
+rules:
+  - id: open-never-closed
+    patterns:
+        - pattern-not-inside: |
+            $F = open(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = io.open(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = tarfile.open(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = ZipFile.open(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.TemporaryFile(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.NamedTemporaryFile(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.SpooledTemporaryFile(...)
+            ...
+            $F.close()
+        - pattern-not-inside: |
+            $F = open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = io.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tarfile.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = ZipFile.open(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.TemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.NamedTemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-not-inside: |
+            $F = tempfile.SpooledTemporaryFile(...)
+            ...
+            try:
+                ...
+            finally:
+                $F.close()
+        - pattern-either:
+            - pattern: $F = open(...)
+            - pattern: $F = io.open(...)
+            - pattern: $F = tarfile.open(...)
+            - pattern: $F = ZipFile.open(...)
+            - pattern: $F = tempfile.TemporaryFile(...)
+            - pattern: $F = tempfile.NamedTemporaryFile(...)
+            - pattern: $F = tempfile.SpooledTemporaryFile(...)
+    message: "file object opened without corresponding close"
+    languages: [python]
+    severity: ERROR

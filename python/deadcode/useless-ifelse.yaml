@@ -12,24 +12,11 @@ rules:
     severity: WARNING
   - id: useless-if-body
     patterns:
-      - pattern-either:
-          - pattern: |
-              if $X:
-                  $S
-              elif $Y:
-                  $S
-          - pattern: |
-              if $X:
-                  $S
-              else:
-                  $S
-          - pattern: |
-              if $X:
-                  $S
-              elif $Z:
-                ...
-              elif $Y:
-                 $S
+        - pattern: |
+            if $X:
+                $S
+            else:
+                $S
     message: "useless if statment; both blocks have the same body"
     languages: [python]
     severity: WARNING

@@ -1,0 +1,61 @@
+rules:
+  - id: formatted-template-string
+    patterns:
+      - pattern-not: template.HTML("..." + "...")
+      - pattern-either:
+          - pattern: template.HTML($T + $X, ...)
+          - pattern: template.HTML(fmt.$P("...", ...), ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $T = $FXN(..., $T, ...)
+              ...
+              $A = template.HTML($T, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $T = $FXN(..., $T, ...)
+              ...
+              return template.HTML($T, ...)
+          - pattern: |
+              $T = $X + $Y
+              ...
+              $A = template.HTML($T, ...)
+          - pattern: |
+              $T = fmt.$P("...", ...)
+              ...
+              $A = template.HTML($T, ...)
+          - pattern: |
+              $T, $ERR = fmt.$P("...", ...)
+              ...
+              $A = template.HTML($T, ...)
+          - pattern: |
+              $T = fmt.$P("...", ...)
+              ...
+              return template.HTML($T, ...)
+          - pattern: |
+              $T, $ERR = fmt.$P("...", ...)
+              ...
+              return template.HTML($T, ...)
+          - pattern: |
+              $T = $X + $Y
+              ...
+              return template.HTML($T, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $OTHER, $ERR = fmt.$P(..., $T, ...)
+              ...
+              $A = template.HTML($OTHER, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $OTHER, $ERR = fmt.$P(..., $T, ...)
+              ...
+              return template.HTML($OTHER, ...)
+    message: |
+      Found a formatted template string passed to 'template.HTML()'.
+      'template.HTML()' does not escape contents. Be absolutely sure
+      there is no user-controlled data in this template.
+    languages: [go]
+    severity: WARNING

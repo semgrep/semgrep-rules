@@ -1,0 +1,20 @@
+rules:
+  - id: pprof-debug-exposure
+    message:
+      Profiling endpoint is automatically exposed on /debug/pprof.
+      Just use `import "net/http/pprof"` instead.
+      See https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
+      for more information and mitigation.
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          import _ "net/http/pprof"
+          ...
+          func $FOO(...) {
+              ...
+              http.ListenAndServe($HOST, ...)
+              ...
+          }
+      - pattern-where-python: |
+          "localhost" not in vars['$HOST']

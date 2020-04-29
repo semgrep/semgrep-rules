@@ -1,23 +1,32 @@
-d = {}
-z = {}
-a = {}
-for i in xrange(100):
-    # ruleid: useless-assignment-keyed
-    d[i] = z[i]
-    d[i] = z[i]
-    d[i+1] = z[i]
-
-    for i in xrange(100):
-        # todoruleid: useless-assignment-keyed
-        da[i*1][j] = z[i]
-        da[i*1][j] = z[i]
-        da[i*4] = z[i]
-
-# todoruleid: useless-assignment
+# ruleid: useless-assignment
 x = 5
 x = 5
 
-x = y
-x = y()
+def foo():
+    pass
+
+# ruleid: useless-assignment
+x = 5
+x = 6
+
+def foobar():
+    pass
+
+# this should be ok, or at least a different rule id, since xz might be global and used in y()
+xz = y
+xz = y()
 
 y() = y()
+
+# todo, this should be ok
+# ruleid: useless-assignment
+x1 = 1
+x1 = x1 + 1
+
+# OK
+z = '1'
+z = z.rstrip('1')
+
+# OK
+aa = 'hi'
+aa = some_func(aa)
