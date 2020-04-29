@@ -8,8 +8,8 @@ This is an repository containing rules written for [sgrep](https://sgrep.dev), o
 
 | sgrep | test status          |
 | ------- | ------------------ |
-| `latest`   | [![sgrep-rules-test](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-rules-test+branch%3Amaster) |
-| `develop`  | [![sgrep-rules-test-develop](https://github.com/returntocorp/sgrep-rules/workflows/sgrep-rules-test-develop/badge.svg)](https://github.com/returntocorp/sgrep-rules/actions?query=workflow%3Asgrep-rules-test-develop+branch%3Amaster) |
+| `latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-rules-test/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-rules-test+branch%3Amaster) |
+| `develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-rules-test-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%semgrep-rules-test-develop+branch%3Adevelop) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
