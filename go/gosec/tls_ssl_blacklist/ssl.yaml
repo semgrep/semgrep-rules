@@ -1,0 +1,13 @@
+rules:
+  - id: do-not-use-ssl-v3
+    message:
+      SSLv3 is known to be broken. Use it with caution.
+      https://www.us-cert.gov/ncas/alerts/TA14-290A
+      for more information and mitigation.
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          tls.Config{..., MinVersion: $MINV, ...}
+      - pattern-where-python: |
+          'VersionSSL30' in vars['$MINV']
