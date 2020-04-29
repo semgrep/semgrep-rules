@@ -8,12 +8,11 @@ rules:
       owasp: 'A9: Using Components with Known Vulnerabilities'
       cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
       source_rule_url: https://github.com/securego/gosec#available-rules
-    patterns:
-      - pattern-either:
-        - pattern: |
-            md5.New()
-        - pattern: |
-            md5.Sum(...)
+    pattern-either:
+      - pattern: |
+          md5.New()
+      - pattern: |
+          md5.Sum(...)
   - id: use_of_sha1
     message:
       Use of weak cryptographic primitive SHA1
@@ -23,12 +22,11 @@ rules:
       owasp: 'A9: Using Components with Known Vulnerabilities'
       cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
       source_rule_url: https://github.com/securego/gosec#available-rules
-    patterns:
-      - pattern-either:
-        - pattern: |
-            sha1.New()
-        - pattern: |
-            sha1.Sum(...)
+    pattern-either:
+      - pattern: |
+          sha1.New()
+      - pattern: |
+          sha1.Sum(...)
   - id: use_of_DES
     message:
       Use of weak cryptographic primitive DES
@@ -38,12 +36,11 @@ rules:
       owasp: 'A9: Using Components with Known Vulnerabilities'
       cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
       source_rule_url: https://github.com/securego/gosec#available-rules
-    patterns:
-      - pattern-either:
-        - pattern: |
-            des.NewTripleDESCipher(...)
-        - pattern: |
-            des.NewCipher(...)
+    pattern-either:
+      - pattern: |
+          des.NewTripleDESCipher(...)
+      - pattern: |
+          des.NewCipher(...)
   - id: use_of_rc4
     message:
       Use of weak cryptographic primitive rc4
@@ -53,7 +50,5 @@ rules:
       owasp: 'A9: Using Components with Known Vulnerabilities'
       cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
       source_rule_url: https://github.com/securego/gosec#available-rules
-    patterns:
-      - pattern-either:
-        - pattern: |
-            rc4.NewCipher(...)
+    pattern: |
+      rc4.NewCipher(...)
