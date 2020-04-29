@@ -22,11 +22,11 @@ func main() {
 		}
 	}()
 
-	// ruleid: use_of_md5
+	// ruleid: use-of-md5
 	h := md5.New()
 	if _, err := io.Copy(h, f); err != nil {
 		log.Fatal(err)
 	}
-	// ruleid: use_of_md5
+	// ruleid: use-of-md5
 	fmt.Printf("%x", h.Sum(nil))
 }

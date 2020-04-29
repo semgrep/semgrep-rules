@@ -14,11 +14,11 @@ func main() {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	// ruleid: use_of_sha1
+	// ruleid: use-of-sha1
 	h := sha1.New()
 	if _, err := io.Copy(h, f); err != nil {
 		log.Fatal(err)
 	}
-	// ruleid: use_of_sha1
+	// ruleid: use-of-sha1
 	fmt.Printf("%x", h.Sum(nil))
 }
