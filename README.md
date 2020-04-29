@@ -46,3 +46,4 @@ x != x
 If you fork this repo or create your own, you can add a special [semgrep-rules-test](https://github.com/marketplace/actions/semgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of semgrep.
 
 See ours [here](.github/workflows/semgrep-rules-test.yml)
+
