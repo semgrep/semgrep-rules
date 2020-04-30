@@ -1,13 +1,15 @@
 rules:
   - id: do-not-use-ssl-v3
     message:
-      SSLv3 is known to be broken. Use it with caution.
-      https://www.us-cert.gov/ncas/alerts/TA14-290A
-      for more information and mitigation.
+      SSLv3 is known to be broken. Use it with caution. Starting with go1.14,
+      SSLv3 will be removed https://golang.org/doc/go1.14#crypto/tls.
+      https://www.us-cert.gov/ncas/alerts/TA14-290A for more information and mitigation.
+    metadata:
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      source_rule_url: https://github.com/securego/gosec/blob/master/rules/tls_config.go
     languages: [go]
     severity: WARNING
     patterns:
       - pattern: |
-          tls.Config{..., MinVersion: $MINV, ...}
-      - pattern-where-python: |
-          'VersionSSL30' in vars['$MINV']
+          tls.Config{..., MinVersion: $TLS.VersionSSL30, ...}
