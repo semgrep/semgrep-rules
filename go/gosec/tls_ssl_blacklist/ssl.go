@@ -37,7 +37,7 @@ func main() {
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter: w,
-				// ruleid: do-not-use-ssl-v3
+				// ruleid: ssl-v3-is-insecure
 				MinVersion:         tls.VersionSSL30,
 				Rand:               zeroSource{}, // for reproducible output; don't do this.
 				InsecureSkipVerify: true,         // test server certificate is not trusted.
