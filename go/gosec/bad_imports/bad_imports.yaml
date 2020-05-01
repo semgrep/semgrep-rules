@@ -1,0 +1,27 @@
+rules:
+  - id: insecure-module-used
+    message: Insecure module used.
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      source_rule_url: https://github.com/securego/gosec
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              import "crypto/md5"
+              ...
+              md5.$FUNC(...)
+          - pattern: |
+              import "crypto/des"
+              ...
+              des.$FUNC(...)
+          - pattern: |
+              import "crypto/sha1"
+              ...
+              sha1.$FUNC(...)
+          - pattern: |
+              import "net/http/cgi"
+              ...
+              cgi.$FUNC(...)
