@@ -4,15 +4,15 @@
 if "detached HEAD" or "master" in expected:
   pass
 
-# todoruleid:useless-comparison
+# ruleid:useless-comparison
 if ("detached HEAD" or "master" in expected):
   pass
 
-# todoruleid:useless-comparison
+# ruleid:useless-comparison
 if ("detached HEAD" and ("master" in expected)):
   pass
 
-# OK
+# todook
 if ("detached HEAD" in expected) and ("master" in expected):
   pass
 
@@ -20,6 +20,6 @@ if ("detached HEAD" in expected) and ("master" in expected):
 if "":
   pass
 
-# ok
+# todook
 if some_id == "foobar":
      pass

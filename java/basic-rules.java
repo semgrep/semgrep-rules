@@ -9,16 +9,6 @@ class Bar {
             continue;
         }
 
-        // ruleid:hardcoded-eq-true-or-false
-        if (true) {
-            continue;
-        }
-
-        // todoruleid:hardcoded-eq-true-or-false
-        if (true && false) {
-            continue;
-        }
-
         // ok
         if (myBoolean) {
 
@@ -34,5 +24,10 @@ class Bar {
             continue;
         }
 
+        float someFloat;
+        // ruleid:eqeq-is-bad
+        if (someFloat != someFloat) {
+            continue;
+        }
     }
 }

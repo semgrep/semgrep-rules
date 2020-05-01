@@ -1,0 +1,39 @@
+rules:
+  - id: flask-view-func-match-route-params
+    patterns:
+      - pattern-either:
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A):
+                  ...
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A, $AA):
+                  ...
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A, $AA, $AAA):
+                  ...
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A, $AA, $AAA, $AAAA):
+                  ...
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A, $AA, $AAA, $AAAA):
+                  ...
+          - pattern: |
+              @app.route($PATH, ...)
+              def $R($A, $AA, $AAA, $AAAA, $AAAAA):
+                  ...
+      - pattern-where-python: |
+          set(
+              [
+                  part.split(":")[-1].lstrip("<").rstrip(">")
+                  for part in vars["$PATH"].replace('"', "").replace("'", "").split("/")
+                  if part.startswith("<") and part.endswith(">")
+              ]
+          ) != set([v for k, v in vars.items() if k.startswith("$A")])
+    message: The view function arguments `$PATH` to `$R` don't match the path defined in @app.route($PATH)
+    languages: [python]
+    severity: WARNING

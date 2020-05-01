@@ -1,19 +1,32 @@
 l  = list(range(100))
+# ruleid:list-pop-while-iterate
 for i in l:
     print(i),
-    # ruleid:list-pop-while-iterate
     print(l.pop(0))
-    # ruleid:list-pop-while-iterate
     x = l.pop(0)
     print(x)
 
 a = [1, 2, 3, 4]
+# ruleid:list-pop-while-iterate
 for i in a:
     print(i)
-    # ruleid:list-pop-while-iterate
     a.pop(0)
 
-for i in a:
+b = [1, 2, 3, 4]
+# ruleid:list-pop-while-iterate
+for i in b:
     print(i)
-    # ruleid:list-pop-while-iterate
-    a.append(0)
+    b.append(0)
+
+c = []
+# ok
+for i in range(5):
+    print(i)
+    c.append(i)
+
+d = []
+e = [1, 2, 3, 4]
+# ok
+for i in e:
+    print(i)
+    d.append(i)

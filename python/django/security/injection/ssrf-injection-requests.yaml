@@ -1,0 +1,634 @@
+rules:
+  - id: ssrf-injection-requests
+    message: Data from request object is passed to a new server-side request. This could lead to a server-side request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against a whitelist, do not forward the response to the user, and ensure proper authentication and transport-layer security in the proxied request. See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery to learn more about SSRF vulnerabilities.
+    languages: [python]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - pattern-either:
+        - pattern: requests.$METHOD(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: requests.$METHOD(..., $S % request.$W.get(...), ...)
+        - pattern: requests.$METHOD(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: requests.$METHOD(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: $A = requests.$METHOD(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: return requests.$METHOD(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: requests.$METHOD(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: requests.$METHOD(..., $S % request.$W(...), ...)
+        - pattern: requests.$METHOD(..., f"...{request.$W(...)}...", ...)
+        - pattern: requests.$METHOD(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: $A = requests.$METHOD(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: return requests.$METHOD(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: requests.$METHOD(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: requests.$METHOD(..., $S % request.$W[...], ...)
+        - pattern: requests.$METHOD(..., f"...{request.$W[...]}...", ...)
+        - pattern: requests.$METHOD(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: $A = requests.$METHOD(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: return requests.$METHOD(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: requests.$METHOD(..., $S.format(..., request.$W, ...), ...)
+        - pattern: requests.$METHOD(..., $S % request.$W, ...)
+        - pattern: requests.$METHOD(..., f"...{request.$W}...", ...)
+        - pattern: requests.$METHOD(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            requests.$METHOD(..., $INTERM, ...)
+        - pattern: $A = requests.$METHOD(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = requests.$METHOD(..., $INTERM, ...)
+        - pattern: return requests.$METHOD(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return requests.$METHOD(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return requests.$METHOD(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return requests.$METHOD(..., $INTERM, ...)

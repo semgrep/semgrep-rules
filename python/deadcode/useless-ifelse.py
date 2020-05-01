@@ -12,14 +12,14 @@ if a:
 else:
     print('1')
 
-# ruleid: useless-if-body
+# a and b are different cases -- ok
 if a:
     print('1')
 elif b:
     print('1')
 
 
-# todoruleid: useless-if-body
+# don't report on cases like this
 if a:
     print('this is a')
 elif b:
@@ -30,9 +30,9 @@ elif d:
     print('this is d')
 
 
+# don't report on cases like this
 if a:
     print('this is a')
-# ruleid: useless-if-body
 elif b:
     print('this is b')
 elif c:
