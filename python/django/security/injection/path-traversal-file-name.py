@@ -1,3 +1,5 @@
+import logging
+import subprocess
 
 def post1(request, format=None):
   try:
@@ -50,3 +52,11 @@ def post3(request, format=None):
       http_status = OK
   except:
       print("foo")
+
+def post4(request, format=None):
+    # ok
+    filename = request.GET.get('filename')
+    host = request.data['host']
+    commands = "find %s -name ." % (filename)
+    result = subprocess.check_output(commands)
+    logging.info("{} ran command: {}".format(host, commands))
