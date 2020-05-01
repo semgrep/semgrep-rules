@@ -1,0 +1,11 @@
+rules:
+- id: no-null-cipher
+  pattern: $TYPE $CIPHER = new NullCipher(...);
+  message: |
+    Inspired by https://find-sec-bugs.github.io/bugs.htm#NULL_CIPHER.
+    NullCipher was detected. This will not encrypt anything;
+    the cipher text will be the same as the plain text. Use
+    a valid, secure cipher: Cipher.getInstance("AES/CBC/PKCS7PADDING").
+  severity: WARNING
+  languages:
+  - java
