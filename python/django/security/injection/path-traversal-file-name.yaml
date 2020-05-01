@@ -47,8 +47,8 @@ rules:
             $V = request.$W
             ...
             $FILE.format(..., $V, ...)
-        - pattern-where-python: |
-            vars.get('$FILE', '').split('.')[-1] in ['log', 'zip','txt', 'csv']
+      - pattern-where-python: |
+          vars.get('$FILE', '').replace('"', '').replace('\'', '').split('.')[-1] in ['log', 'zip', 'txt', 'csv', 'xml', 'html']
     message: |
       Data from request is passed to a file name `$FILE`.
       This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
