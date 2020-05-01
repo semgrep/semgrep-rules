@@ -1,11 +1,12 @@
 rules:
-  - id: unchecked-subprocess-call
+  - id: r2c.python.smells.unchecked-returns.unchecked-subprocess-call
     patterns:
-      - pattern-not-inside: |
-          $S = subprocess.call(...)
-      - pattern-not-inside: |
-          subprocess.call(...) == $X
-      - pattern: subprocess.call(...)
-    message: "Not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call()?"
+    - pattern-not-inside: $S = subprocess.call(...)
+    - pattern-not-inside: subprocess.call(...) == $X
+    - pattern: subprocess.call(...)
+    fix: subprocess.check_call(...)
+    message: Not checking the return value of this subprocess call; if it fails no exception
+      will be raised. Consider subprocess.check_call() instead
     languages: [python]
     severity: WARNING
+  
