@@ -1,0 +1,8 @@
+rules:
+- id: defaulthttpclient-is-deprecated
+  message: |
+    Inspired by https://find-sec-bugs.github.io/bugs.htm#DEFAULT_HTTP_CLIENT
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern: new DefaultHttpClient(...);
