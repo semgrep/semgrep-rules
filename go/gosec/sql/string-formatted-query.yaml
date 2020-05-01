@@ -1,5 +1,12 @@
 rules:
   - id: string-formatted-query
+    languages: ["go"]
+    message: "String-formatted SQL query detected. This could lead to SQL injection if the string is not sanitized properly."
+    severity: ERROR
+    metadata:
+        owasp: 'A2: Injection'
+        cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')'
+        source_rule_url: https://github.com/securego/gosec
     patterns:
       - pattern-either:
           - pattern: $OBJ.Exec("..." + $X)
@@ -110,6 +117,3 @@ rules:
               $QUERY = "..." + $X
               ...
               $OBJ.QueryRowContext($CTX, $QUERY, ...)
-    languages: ["go"]
-    message: "String-formatted SQL query detected. This could lead to SQL injection if the string is not sanitized properly."
-    severity: ERROR
