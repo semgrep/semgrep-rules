@@ -1,0 +1,14 @@
+rules:
+  - id: avoid-using-unsafe-pkg
+    message:
+      Package `unsafe` contains operations that step around the type safety of Go programs.
+      Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines.
+    metadata:
+      cwe: 'CWE-242: Use of Inherently Dangerous Function'
+      source_rule_url: https://github.com/securego/gosec
+    languages: [go]
+    severity: WARNING
+    pattern: |
+      import "unsafe"
+      ...
+      unsafe.$FUNC(...)
