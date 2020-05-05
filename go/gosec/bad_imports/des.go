@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	// ruleid: insecure-module-used
 	block, err := des.NewCipher([]byte("sekritz"))
 	if err != nil {
 		panic(err)
