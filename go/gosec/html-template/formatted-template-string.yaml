@@ -1,5 +1,11 @@
 rules:
   - id: formatted-template-string
+    message: |
+      Found a formatted template string passed to 'template.HTML()'.
+      'template.HTML()' does not escape contents. Be absolutely sure
+      there is no user-controlled data in this template.
+    languages: [go]
+    severity: WARNING
     patterns:
       - pattern-not: template.HTML("..." + "...")
       - pattern-either:
@@ -53,9 +59,3 @@ rules:
               $OTHER, $ERR = fmt.$P(..., $T, ...)
               ...
               return template.HTML($OTHER, ...)
-    message: |
-      Found a formatted template string passed to 'template.HTML()'.
-      'template.HTML()' does not escape contents. Be absolutely sure
-      there is no user-controlled data in this template.
-    languages: [go]
-    severity: WARNING
