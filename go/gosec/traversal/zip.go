@@ -8,6 +8,7 @@ import (
 )
 
 func unzip(archive, target string) error {
+	// ruleid: path-traversal-inside-zip-extraction
 	reader, err := zip.OpenReader(archive)
 	if err != nil {
 		return err
