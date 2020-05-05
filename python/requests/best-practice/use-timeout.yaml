@@ -3,7 +3,10 @@ rules:
   patterns:
   - pattern-not: requests.$W(..., timeout=$N, ...)
   - pattern: requests.$W(...)
-  message: Found a template created with string formatting. This is susceptible to
-    server-side template injection and cross-site scripting attacks.
+  message: |
+    'requests' calls default to waiting until the connection is closed.
+    This means a 'requests' call without a timeout will hang the program
+    if a response is never received. Consider setting a timeout for all 
+    'requests'.
   languages: [python]
   severity: ERROR
