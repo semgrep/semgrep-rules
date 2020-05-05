@@ -1,6 +1,9 @@
 rules:
 - id: use-timeout
   patterns:
+  - pattern-not: requests.Session(...)
+  - pattern-not: requests.session(...)
+  - pattern-not: requests.append(...)
   - pattern-not: requests.$W(..., timeout=$N, ...)
   - pattern: requests.$W(...)
   message: |
