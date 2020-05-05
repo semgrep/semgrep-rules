@@ -10,18 +10,12 @@ rules:
     patterns:
       - pattern-either:
           - pattern: |
-              import "crypto/md5"
-              ...
               md5.$FUNC(...)
           - pattern: |
-              import "crypto/des"
-              ...
               des.$FUNC(...)
           - pattern: |
-              import "crypto/sha1"
-              ...
               sha1.$FUNC(...)
           - pattern: |
-              import "net/http/cgi"
-              ...
+              rc4.$FUNC(...)
+          - pattern: |
               cgi.$FUNC(...)
