@@ -1,11 +1,15 @@
 rules:
 - id: use-timeout
   patterns:
-  - pattern-not: requests.Session(...)
-  - pattern-not: requests.session(...)
-  - pattern-not: requests.append(...)
   - pattern-not: requests.$W(..., timeout=$N, ...)
-  - pattern: requests.$W(...)
+  - pattern-either:
+    - pattern: requests.request(...)
+    - pattern: requests.get(...)
+    - pattern: requests.post(...)
+    - pattern: requests.put(...)
+    - pattern: requests.delete(...)
+    - pattern: requests.head(...)
+    - pattern: requests.patch(...)
   message: |
     'requests' calls default to waiting until the connection is closed.
     This means a 'requests' call without a timeout will hang the program
