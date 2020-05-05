@@ -25,6 +25,11 @@ class Cls {
         // ok
         SSLContext ctx = SSLContext.getInstance("TLS1.2");
     }
+    
+    public void test5() {
+        // ok
+        SSLContext ctx = SSLContext.getInstance("TLS1.3");
+    }
 
     public String getSslContext() {
         return "Anything";
