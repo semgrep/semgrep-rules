@@ -1,0 +1,24 @@
+rules:
+  - id: interter-overflow-int16
+    message:
+      Potential Integer overflow made by strconv.Atoi result conversion to int16
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          $F, $ERR := strconv.Atoi($NUM)
+          ...
+          int16($F)
+      - pattern-where-python: "int(vars['$NUM'].replace('\"', '')) > 32767 or int(vars['$NUM'].replace('\"', '')) < -32768"
+  - id: interter-overflow-int32
+    message:
+      Potential Integer overflow made by strconv.Atoi result conversion to int32
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          $F, $ERR := strconv.Atoi($NUM)
+          ...
+          int32($F)
+      - pattern-where-python: |-
+          int(vars['$NUM'].replace('"', '')) > 2147483647 or int(vars['$NUM'].replace('"', '')) < -2147483648
