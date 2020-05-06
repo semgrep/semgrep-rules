@@ -1,5 +1,5 @@
 
-# ruleid:eqeq-is-bad
+# ruleid:useless-eqeq
 x == x
 
 def __eq__(self, other):
@@ -21,5 +21,5 @@ assert x == x, "of course"
 assertTrue(x ==x)
 assertFalse(x == x)
 
-# ruleid:eqeq-is-bad
+# ruleid:useless-eqeq
 print(x != x)
