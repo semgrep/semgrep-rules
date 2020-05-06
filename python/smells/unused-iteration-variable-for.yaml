@@ -1,0 +1,18 @@
+rules:
+- id: unusued-iteration-variable-for
+  patterns:
+  - pattern-not: |
+      for $X in $ANY:
+        ...
+        <...$X...>
+  - pattern-not: |
+      for _ in $ANY:
+        ...
+  - pattern: |
+      for $X in $ANY:
+        ...
+  message: Unused loop variable `$X`. Did you forget to use `$X` inside the loop?
+    If this is intentional, use `for _ in $ANY`.
+  severity: WARNING
+  languages:
+  - python
