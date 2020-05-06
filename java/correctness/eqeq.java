@@ -4,28 +4,18 @@ class Bar {
 
         //myBoolean == myBoolean;
 
-        // ruleid:assignment-comparison
-        if (myBoolean = true) {
-            continue;
-        }
-
-        // ok
-        if (myBoolean) {
-
-        }
-
-        // ruleid:eqeq-is-bad
+        // ruleid:eqeq
         if (myBoolean == myBoolean) {
             continue;
         }
 
-        // ruleid:eqeq-is-bad
+        // ruleid:eqeq
         if (myBoolean != myBoolean) {
             continue;
         }
 
         float someFloat;
-        // ruleid:eqeq-is-bad
+        // ruleid:eqeq
         if (someFloat != someFloat) {
             continue;
         }
