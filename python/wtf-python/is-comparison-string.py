@@ -19,6 +19,10 @@ if x is False:
 # ruleid: string-is-comparison
 if x is 'hello there':
   pass
+  
+# ruleid: string-is-comparison
+if "hello there" is x:
+  pass
 
 # OK; technically implementation-defined I think, but maybe not worth warning about
 if x is '':
