@@ -1,0 +1,39 @@
+rules:
+- id: spring-path-traversal
+  metadata:
+  - cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path\
+      \ Traversal')"
+  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN
+  - owasp: https://www.owasp.org/index.php/Path_Traversal
+  message: |
+    Detected a potential path traversal inside $FUNC. A malicious actor
+    could control the location of this file, to include going backwards
+    in the directory with '../'. To address this, ensure that user-controlled
+    variables in file paths are sanitized. You may aslso consider using a utility
+    method such as org.apache.commons.io.FilenameUtils.getName(...) to only
+    retrieve the file name from the path.
+  patterns:
+  - pattern-inside: |
+      $RETURNTYPE $FUNC (..., HttpServletRequest $REQ, ...) {
+        ...
+      }
+  - pattern-either:
+    - pattern: |
+        $VAR = ($TYPE)$REQ.getParameter(...);
+        ...
+        new File(..., $VAR, ...);
+    - pattern: |
+        $VAR = $REQ.getParameter(...);
+        ...
+        new File(..., $VAR, ...);
+    - pattern: |
+        $VAR = ($TYPE)$REQ.getParameter(...);
+        ...
+        new File(..., $VAR, ...);
+    - pattern: |
+        $VAR = $REQ.getParameter(...);
+        ...
+        new File(..., $VAR, ...);
+  severity: WARNING
+  languages:
+  - java
