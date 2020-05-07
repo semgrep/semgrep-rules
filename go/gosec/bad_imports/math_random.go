@@ -14,7 +14,7 @@ func main() {
 
 func main0() {
 	// pending https://github.com/returntocorp/semgrep/issues/411
-	// todoruleid: math-random-used
+	// todo: math-random-used
 	bad, _ := mrand.Read(nil)
 	println(bad)
 }
@@ -27,7 +27,7 @@ func main1() {
 
 func main2() {
 	// pending https://github.com/returntocorp/semgrep/issues/411
-	// todoruleid: math-random-used
+	// todo: math-random-used
 	bad := mrand.Int()
 	println(bad)
 }
