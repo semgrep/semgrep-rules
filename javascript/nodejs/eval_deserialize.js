@@ -11,6 +11,7 @@ app.use(cookieParser())
 app.get('/', function (req, res) {
     if (req.cookies.profile) {
         var str = new Buffer(req.cookies.profile, 'base64').toString();
+        // ruleid:node_deserialize
         var obj = serialize.unserialize(str);
         // ruleid: node_deserialize
         serialize2.deserialize(str);
