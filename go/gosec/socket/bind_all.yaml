@@ -1,0 +1,20 @@
+rules:
+  - id: avoid-bind-to-all-interfaces
+    message: 
+      Listening on 0.0.0.0 or empty string 
+      could unexpectedly expose the server publicly 
+      as it binds to all available interfaces
+    languages: [go]
+    severity: WARNING
+    metadata:
+      cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+      source_rule_url: https://github.com/securego/gosec
+    pattern-either:
+      - pattern:
+          tls.Listen($NETWORK, "=~/0.0.0.0:.*$/", ...)
+      - pattern:
+          net.Listen($NETWORK, "=~/0.0.0.0:.*$/", ...)
+      - pattern:
+          tls.Listen($NETWORK, "=~/:.*$/", ...)
+      - pattern:
+          net.Listen($NETWORK, "=~/:.*$/", ...)
