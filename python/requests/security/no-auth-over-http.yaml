@@ -1,0 +1,16 @@
+rules:
+- id: no-auth-over-http
+  patterns:
+  - pattern-either:
+    - pattern: requests.$W("=~/http:\/\/.*/", ..., auth=$X, ...)
+    - pattern: |
+        $URL = "=~/http:\/\/.../"
+        ...
+        requests.$W($URL, ..., auth=$X, ...)
+  message: |
+    Authentication detected over HTTP. HTTP does not provide any
+    encryption or protection for these authentication credentials.
+    This may expose these credentials to unauthhorized parties.
+    Use 'https://' instead.
+  languages: [python]
+  severity: ERROR
