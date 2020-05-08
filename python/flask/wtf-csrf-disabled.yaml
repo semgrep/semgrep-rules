@@ -1,0 +1,10 @@
+rules:
+- id: flask-wtf-csrf-disabled
+  patterns:
+  - pattern: |
+      $APP.config['WTF_CSRF_ENABLED'] = False
+  message: |
+    `$APP.config['WTF_CSRF_ENABLED'] = False` is probably not what you want in production because it disables https://flask-wtf.readthedocs.io/en/stable/csrf.html CSRF protection
+  severity: WARNING
+  languages:
+  - python
