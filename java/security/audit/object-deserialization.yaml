@@ -1,0 +1,13 @@
+rules:
+- id: object-deserialization
+  metadata:
+  - cwe: 'CWE-502: Deserialization of Untrusted Data'
+  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#OBJECT_DESERIALIZATION
+  - owasp: https://www.owasp.org/index.php/Deserialization_of_untrusted_data
+  message: |
+    bla
+  patterns:
+  - pattern: new ObjectInputStream(...);
+  severity: WARNING
+  languages:
+  - java
