@@ -1,0 +1,54 @@
+rules:
+- id: permissive-cors
+  message: |
+    https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
+    Permissive CORS policy will allow a malicious application to communicate with the victim application in an inappropriate way, leading to spoofing, data theft, relay and other attacks.
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+    - pattern: |
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.addHeader("Access-Control-Allow-Origin", "*");
+    - pattern: |
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.setHeader("Access-Control-Allow-Origin", "*");
+    - pattern: |
+        ServerHttpResponse $RES = ...;
+        ...
+        $RES.getHeaders().add("Access-Control-Allow-Origin", "*");
+    - pattern: |
+        HttpHeaders $HEADERS = ...;
+        ...
+        $HEADERS.set("Access-Control-Allow-Origin", "*");
+    - pattern: |
+        ServerWebExchange $SWE = ...;
+        ...
+        $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+    - pattern: |
+        $X $METHOD(...,HttpServletResponse $RES,...) {
+          ...
+          $RES.addHeader("Access-Control-Allow-Origin", "*");
+          ...
+        }
+    - pattern: |
+        $X $METHOD(...,HttpServletResponse $RES,...) {
+          ...
+          $RES.setHeader("Access-Control-Allow-Origin", "*");
+          ...
+        }
+    - pattern: |
+        $X $METHOD(...,ServerHttpResponse $RES,...) {
+          ...
+          $RES.getHeaders().add("Access-Control-Allow-Origin", "*");
+          ...
+        }
+    - pattern: |
+        $X $METHOD(...,ServerWebExchange $SWE,...) {
+          ...
+          $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+          ...
+        }
+    - pattern: ResponseEntity.$RES().header("Access-Control-Allow-Origin", "*")
+    - pattern: ServerResponse.$RES().header("Access-Control-Allow-Origin", "*")
