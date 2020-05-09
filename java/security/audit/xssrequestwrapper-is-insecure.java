@@ -2,6 +2,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+// ruleid:xssrequestwrapper-is-insecure
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     private static Pattern[] patterns = new Pattern[]{
@@ -136,6 +137,7 @@ public class OtherWrapper extends HttpServletRequestWrapper {
             value = scriptPattern.matcher(value).replaceAll("");
  
             // Remove any lonesome </script> tag
+            // ruleid:xssrequestwrapper-is-insecure
             scriptPattern = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
             value = scriptPattern.matcher(value).replaceAll("");
  
