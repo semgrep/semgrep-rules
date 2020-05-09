@@ -1,11 +1,11 @@
 package main
 
+// ruleid: pprof-debug-exposure
 import (
 	"fmt"
 	"log"
 	"net/http"
 
-	// ruleid: pprof-debug-exposure
 	_ "net/http/pprof"
 )
 
