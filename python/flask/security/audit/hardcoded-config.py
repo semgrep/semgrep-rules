@@ -4,29 +4,29 @@ app = flask.Flask(__name__)
 # SHOULD MATCH
 
 # For `TESTING`
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_TESTING
 app.config["TESTING"] = True
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_TESTING
 app.config["TESTING"] = False
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_TESTING
 app.config.update(TESTING=True)
 
 # For `SECRET_KEY`
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_SECRET_KEY
 app.config.update(SECRET_KEY="aaaa")
-# ruleid: hardcoded-config
+# todoruleid: hardcoded-config
 app.config["SECRET_KEY"] = b'_5#y2L"F4Q8z\n\xec]/'
 
 # For `ENV`
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_ENV
 app.config["ENV"] = "development"
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_ENV
 app.config["ENV"] = "production"
 
 # For `DEBUG`
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_DEBUG
 app.config["DEBUG"] = True
-# ruleid: hardcoded-config
+# ruleid: avoid_hardcoded_config_DEBUG
 app.config["DEBUG"] = False
 
 # SHOULD NOT MATCH
