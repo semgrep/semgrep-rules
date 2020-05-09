@@ -1,0 +1,16 @@
+rules:
+- id: avoid-implementing-custom-digests
+  metadata:
+  - cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CUSTOM_MESSAGE_DIGEST
+  message: |
+    Cryptographic algorithms are notoriously difficult to get right. By implementing
+    a custom message digest, you risk introducing security issues into your program.
+    Use one of the many sound message digests already available to you:
+    MessageDigest sha256Digest = MessageDigest.getInstance("SHA256");
+  severity: WARNING
+  languages: [java]
+  pattern: |-
+    class $CLASS extends MessageDigest {
+      ...
+    }
