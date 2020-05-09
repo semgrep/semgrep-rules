@@ -1,5 +1,5 @@
 rules:
-- id: multiprocessing.recv
+- id: multiprocessing-recv
   languages:
   - python
   message: "The Connection.recv() method automatically unpickles the data it receives,
@@ -10,4 +10,8 @@ rules:
   pattern-either:
   - pattern: multiprocessing.connection.Connection.recv(...)
   - pattern: multiprocessing.connection.Client.recv(...)
+  - pattern: |
+      $C = multiprocessing.connection.Client(...)
+      ...
+      $C.recv(...)
   severity: WARNING
