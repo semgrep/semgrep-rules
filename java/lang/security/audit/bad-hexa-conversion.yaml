@@ -1,0 +1,16 @@
+rules:
+- id: bad-hexa-conversion
+  message: |
+    https://find-sec-bugs.github.io/bugs.htm#BAD_HEXA_CONVERSION
+    This mistake weakens the hash value computed since it introduces more collisions.
+  severity: WARNING
+  languages: [java]
+  pattern: |
+    $X $METHOD(...) {
+      ...
+      MessageDigest $MD = ...;
+      ...
+      $MD.digest(...);
+      ...
+      Integer.toHexString(...);
+    }
