@@ -1,0 +1,21 @@
+rules:
+  - id: useless-eqeq
+    patterns:
+      - pattern-not-inside: |
+          def __eq__(...):
+              ...
+      - pattern-not-inside: |
+          def __cmp__(...):
+              ...
+      - pattern-not-inside: assert(...)
+      - pattern-not-inside: assert ...
+      - pattern-not-inside: assert ..., ...
+      - pattern-not-inside: assertTrue(...)
+      - pattern-not-inside: assertFalse(...)
+      - pattern-either:
+          - pattern: $X == $X
+          - pattern: $X != $X
+      - pattern-not: 1 == 1
+    message: "useless comparison operation `$X == $X` or `$X != $X`; if testing for floating point NaN, use `math.isnan($X)`, or `cmath.isnan($X)` if the number is complex."
+    languages: [python]
+    severity: ERROR
