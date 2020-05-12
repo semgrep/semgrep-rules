@@ -1,0 +1,24 @@
+rules:
+- id: insecure-trust-manager
+  metadata:
+    cwe: 'CWE-295: Improper Certificate Validation'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_TRUST_MANAGER
+  message: |
+    Detected empty trust manager implementations. This is dangerous because it accepts any
+    certificate, enabling man-in-the-middle attacks. Consider using a KeyStore
+    and TrustManagerFactory isntead.
+    See https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
+    for more information.
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-inside: |
+      class $CLASS implements X509TrustManager {
+        ...
+      }
+  - pattern-not: public void checkClientTrusted(...) { $SOMETHING; }
+  - pattern-not: public void checkServerTrusted(...) { $SOMETHING; }
+  - pattern-either:
+    - pattern: public void checkClientTrusted(...) {}
+    - pattern: public void checkServerTrusted(...) {}
+    - pattern: public X509Certificate[] getAcceptedIssuers(...) { return null; }
