@@ -1,0 +1,51 @@
+rules:
+  - id: generic_path_traversal
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $X.createReadStream(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $X.createReadStream(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              $X.readFile(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $X.readFile(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              $X.readFileSync(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $X.readFileSync(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $X.createReadStream(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $X.createReadStream(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $X.readFile(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $X.readFile(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $X.readFileSync(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $X.readFileSync(..., <... $INP ...>, ...);
+    message: >-
+      Untrusted user input in readFile()/readFileSync() can endup in Directory
+      Traversal Attacks.
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: 'CWE-23: Relative Path Traversal'
