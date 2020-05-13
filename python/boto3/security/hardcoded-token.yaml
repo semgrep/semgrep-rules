@@ -18,5 +18,11 @@ rules:
     Hardcoded AWS access token detected. Use environment variables 
     to access tokens (e.g., os.environ.get(...)) or use non version-controlled 
     configuration files.
+  metadata:
+    cwe: "CWE-798: Use of Hard-coded Credentials"
+    source-rule-url: https://pypi.org/project/flake8-boto3/
+    references:
+    - https://bento.dev/checks/boto3/hardcoded-access-token/
+    - https://aws.amazon.com/blogs/security/what-to-do-if-you-inadvertently-expose-an-aws-access-key/
   languages: [python]
   severity: WARNING

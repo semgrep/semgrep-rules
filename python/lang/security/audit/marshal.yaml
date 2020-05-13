@@ -5,6 +5,10 @@ rules:
   message: 'The marshal module is not intended to be secure against erroneous or maliciously
     constructed data. Never unmarshal data received from an untrusted or unauthenticated
     source. See more details: https://docs.python.org/3/library/marshal.html?highlight=security'
+  metadata:
+    cwe: "CWE-502: Deserialization of Untrusted Data"
+    references:
+    - https://docs.python.org/3/library/marshal.html?highlight=security
   pattern-either:
   - pattern: marshal.dump(...)
   - pattern: marshal.dumps(...)

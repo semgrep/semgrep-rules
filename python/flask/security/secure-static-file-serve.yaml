@@ -11,5 +11,8 @@ rules:
       - pattern-either:
         - pattern: flask.send_file(filename, ...)
     message: Looks like `filename` could flow to `flask.send_file()` function. Make sure to properly sanitize filename or use `flask.send_from_directory`
+    metadata:
+      cwe: "CWE-73: External Control of File Name or Path"
+      owasp: "A1: Injection"
     languages: [python]
     severity: WARNING

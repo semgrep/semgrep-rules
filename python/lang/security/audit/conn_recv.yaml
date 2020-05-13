@@ -7,6 +7,10 @@ rules:
     Therefore, unless the connection object was produced using Pipe() you should only
     use the recv() and send() methods after performing some sort of authentication.
     See more dettails: https://docs.python.org/3/library/multiprocessing.html?highlight=security#multiprocessing.connection.Connection"
+  metadata:
+    cwe: "CWE-502: Deserialization of Untrusted Data"
+    references:
+    - https://docs.python.org/3/library/multiprocessing.html?highlight=security#multiprocessing.connection.Connection
   pattern-either:
   - pattern: multiprocessing.connection.Connection.recv(...)
   - pattern: multiprocessing.connection.Client.recv(...)

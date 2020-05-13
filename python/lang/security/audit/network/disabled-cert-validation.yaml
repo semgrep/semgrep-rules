@@ -14,6 +14,8 @@ rules:
             vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL',
                               "'NONE'", "'OPTIONAL'", '"NONE"', '"OPTIONAL"']
       message: "certificate verification explicitly disabled, insecure connections possible"
+      metadata:
+        cwe: "CWE-295: Improper Certificate Validation"
       languages: [python]
       severity: WARNING
     - id: http-not-https-connection
@@ -22,6 +24,8 @@ rules:
             - pattern: urllib3.HTTPConnectionPool(...)
             - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
       message: "suggest HTTPS over HTTP connection"
+      metadata:
+        cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       languages: [python]
       severity: WARNING
     - id: disabled-cert-validation-requests
@@ -36,5 +40,7 @@ rules:
           - pattern: requests.get(..., verify=False, ...)
           - pattern: requests.post(..., verify=False, ...)
       message: "certificate verification explicitly disabled, insecure connections possible"
+      metadata:
+        cwe: "CWE-295: Improper Certificate Validation"
       languages: [python]
       severity: WARNING

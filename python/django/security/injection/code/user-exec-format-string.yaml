@@ -1,5 +1,9 @@
 rules:
   - id: user-exec-format-string
+    message: |
+      Found user data in a call to 'exec'. This is extremely dangerous because
+      it can enable an attacker to execute remote code. See
+      https://owasp.org/www-community/attacks/Code_Injection for more information.
     patterns:
       - pattern-inside: |
           def $F(...):
@@ -529,9 +533,5 @@ rules:
                 $INTERM = base64.decodestring(bytes($DATA, ...), ...)
                 ...
                 return exec(..., $INTERM, ...)
-    message: |
-      Found user data in a call to 'exec'. This is extremely dangerous because
-      it can enable an attacker to execute remote code. See
-      https://owasp.org/www-community/attacks/Code_Injection for more information.
     languages: [python]
     severity: WARNING
