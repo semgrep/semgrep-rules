@@ -1,5 +1,13 @@
 rules:
   - id: path-join-resolve-traversal
+    message: |
+      Possible writing outside of the destination,
+      make sure that the target path is nested in the intended destination
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A1: Injection"
+      references:
+      - https://owasp.org/www-community/attacks/Path_Traversal
     patterns:
       - pattern-either:
           - pattern: |
@@ -174,12 +182,5 @@ rules:
       - pattern-not-inside: |
           ...
           if (<... $R.startsWith(...) ...>) {...}
-    message: |
-      Possible writing outside of the destination,
-      make sure that the target path is nested in the intended destination
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      references:
-      - https://owasp.org/www-community/attacks/Path_Traversal
     languages: [javascript]
     severity: ERROR
