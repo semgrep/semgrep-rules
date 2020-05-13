@@ -16,6 +16,14 @@ rules:
   - pattern-either:
     - pattern: $JDBC.queryForObject($STR + $VAR, ...);
     - pattern: $JDBC.queryForObject(String.format(...), ...);
+    - pattern: |
+        String $Q = $STR + $VAR;
+        ...
+        $JDBC.queryForObject($Q, ...);
+    - pattern: |
+        String $Q = String.format(...);
+        ...
+        $JDBC.queryForObject($Q, ...);
   severity: WARNING
   languages:
   - java
