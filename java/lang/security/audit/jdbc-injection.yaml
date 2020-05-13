@@ -1,0 +1,11 @@
+rules:
+- id: jdbc-injection
+  message: Possible JDBC injection detected
+  patterns:
+  - pattern: |-
+      $JDBC = new JdbcTemplate();
+      ...
+      $JDBC.queryForObject("..." + $VAR + "...", ...);
+  severity: WARNING
+  languages:
+  - java
