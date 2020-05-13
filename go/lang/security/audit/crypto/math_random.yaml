@@ -1,5 +1,7 @@
 rules:
   - id: math-random-used
+    metadata:
+    - cwe: "CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)"
     message: Do not use math.rand. Use `crypto/rand` instead.
     languages: [go]
     severity: WARNING

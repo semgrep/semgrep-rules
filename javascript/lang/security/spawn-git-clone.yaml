@@ -4,6 +4,9 @@ rules:
     Git allows shell commands to be specified in ext URLs for remote repositories.
     For example, git clone 'ext::sh -c whoami% >&2' will execute the whoami command to try to connect to a remote repository.
     Make sure that the URL is not controlled by the third party.
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: "A1: Injection"
   languages: [javascript]
   severity: ERROR
   patterns:

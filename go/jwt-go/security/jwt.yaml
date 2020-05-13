@@ -1,5 +1,8 @@
 rules:
     - id: hardcoded-jwt-key
+      metadata:
+      - cwe: "CWE-798: Use of Hard-coded Credentials"
+      - owasp: "A2: Broken Authentication"
       pattern: |-
         var $X = []byte("...")
         ...
