@@ -1,8 +1,9 @@
 rules:
 - id: spring-cookie-missing-secure-flag
   metadata:
-  - cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
-  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#INSECURE_COOKIE
+    cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    owasp: "A3: Sensitive Data Exposure"
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#INSECURE_COOKIE
   message: |
     A cookie was detected without setting the 'secure' flag. The 'secure' flag
     for cookies prevents the client from transmitting the cookie over insecure
