@@ -1,6 +1,13 @@
 rules:
   - id: request-data-write
-    message: Found request data in '.write(...)'.
+    message: |
+      Found request data in '.write(...)'. This could be dangerous if a malicious
+      actor is able to control data into sensitive files. For example, a malicious
+      actor could force rolling of critical log files, or cause a denial-of-service
+      by using up available disk space. Ensure content is validated.
+    metadata:
+      cwe: "CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')"
+      owasp: "A1: Injection"
     languages: [python]
     severity: WARNING
     patterns:
