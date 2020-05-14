@@ -1,0 +1,28 @@
+rules:
+  - id: node_tls_reject
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $X.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+          - pattern: |
+              $X.env['NODE_TLS_REJECT_UNAUTHORIZED']= '0'
+    message: >-
+      Setting 'NODE_TLS_REJECT_UNAUTHORIZED' to 0 will allow node server to
+      accept self signed certificates and is not an secure behaviour.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-295: Improper Certificate Validation'
+  - id: node_curl_ssl_verify_disable
+    patterns:
+      - pattern: |
+          $X(..., {SSL_VERIFYPEER : 0}, ...)
+    message: SSL Certificate verification for node-curl is disabled.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-599: Missing Validation of OpenSSL Certificate'

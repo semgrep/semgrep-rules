@@ -1,0 +1,51 @@
+rules:
+  - id: node_logic_bypass
+    patterns:
+      - pattern-inside: |
+          app.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              $REQ.$FOO.$BAR !== $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO.$BAR === $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO.$BAR >= $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO.$BAR <= $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO.$BAR < $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO.$BAR > $REQ.$ZOO.$ZAR
+          - pattern: |
+              $REQ.$FOO['...'] !== $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO['...'] === $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO['...'] >= $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO['...'] <= $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO['...'] < $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO['...'] > $REQ.$ZOO['...']
+          - pattern: |
+              $REQ.$FOO('...') !== $REQ.$ZOO('...')
+          - pattern: |
+              $REQ.$FOO('...') === $REQ.$ZOO('...')
+          - pattern: |
+              $REQ.$FOO('...') >= $REQ.$ZOO('...')
+          - pattern: |
+              $REQ.$FOO('...') <= $REQ.$ZOO('...')
+          - pattern: |
+              $REQ.$FOO('...') < $REQ.$ZOO('...')
+          - pattern: |
+              $REQ.$FOO('...') > $REQ.$ZOO('...')
+    message: >-
+      User controlled data is used for application business logic decision
+      making. This expose protected data or functionality.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: 'CWE-807: Reliance on Untrusted Inputs in a Security Decision'

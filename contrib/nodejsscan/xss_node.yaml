@@ -1,0 +1,67 @@
+rules:
+  - id: express_xss
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {
+              ...
+          });
+      - pattern-either:
+          - pattern: |
+              $RES.write(..., <... $REQ.$QUERY ...>, ...);
+          - pattern: |
+              $RES.write(..., <... $REQ.$QUERY.$FOO ...>, ...);
+          - pattern: |
+              $RES.send(..., <... $REQ.$QUERY ...>, ...);
+          - pattern: |
+              $RES.send(..., <... $REQ.$QUERY.$FOO ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY ...>;
+              ...
+              $RES.write(..., <... $LOCALVAR ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
+              ...
+              $RES.write(..., <... $LOCALVAR ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $RES.send(..., <... $LOCALVAR ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY ...>;
+              ...
+              $RES.send(..., <... $LOCALVAR ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY ...>;
+              ...
+              var $OUT = <... $LOCALVAR ...>;
+              ...
+              $RES.write(..., <... $OUT ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
+              ...
+              var $OUT = <... $LOCALVAR ...>;
+              ...
+              $RES.write(..., <... $OUT ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              var $OUT = <... $LOCALVAR ...>;
+              ...
+              $RES.send(..., <... $OUT ...>, ...);
+          - pattern: |
+              var $LOCALVAR = <... $REQ.$QUERY ...>;
+              ...
+              var $OUT = <... $LOCALVAR ...>;
+              ...
+              $RES.send(..., <... $OUT ...>, ...);
+    message: >-
+      Untrusted User Input in Response will result in Reflected Cross Site
+      Scripting Vulnerability.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-79: Improper Neutralization of Input During Web Page Generation
+        ('Cross-site Scripting')

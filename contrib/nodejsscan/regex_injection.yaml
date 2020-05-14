@@ -1,0 +1,63 @@
+rules:
+  - id: regex_injection_dos
+    patterns:
+      - pattern-inside: |
+          app.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              var $INP = <... $REQ.$PARAM ...>;
+              ...
+              var $RE = new RegExp(<... $INP ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM.$BAR ...>;
+              ...
+              var $RE = new RegExp(<... $INP ...>);
+          - pattern: |
+              new RegExp(<... $REQ.$PARAM ...>);
+          - pattern: |
+              new RegExp(<... $REQ.$PARAM.$BAR ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM ...>;
+              ...
+              var $RE = $STR.search(<... $INP ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM.$FOO ...>;
+              ...
+              var $RE = $STR.search(<... $INP ...>);
+          - pattern: |
+              $STR.search(<... $REQ.$PARAM ...>);
+          - pattern: |
+              $STR.search(<... $REQ.$PARAM.$BAR ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM ...>;
+              ...
+              var $RE = $STR.match(<... $INP ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM.$FOO ...>;
+              ...
+              var $RE = $STR.match(<... $INP ...>);
+          - pattern: |
+              $STR.match(<... $REQ.$PARAM ...>);
+          - pattern: |
+              $STR.match(<... $REQ.$PARAM.$BAR ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM ...>;
+              ...
+              var $RE = $STR.split(<... $INP ...>);
+          - pattern: |
+              var $INP = <... $REQ.$PARAM.$FOO ...>;
+              ...
+              var $RE = $STR.split(<... $INP ...>);
+          - pattern: |
+              $STR.split(<... $REQ.$PARAM ...>);
+          - pattern: |
+              $STR.split(<... $REQ.$PARAM.$BAR ...>); 
+    message: >-
+      User controlled data in RegExp() can make the application vulnerable to
+      layer 7 DoS.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-400: Uncontrolled Resource Consumption'
