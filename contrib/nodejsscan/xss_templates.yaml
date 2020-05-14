@@ -1,0 +1,34 @@
+rules:
+  - id: handlebars_safestring
+    pattern-either:
+      - pattern: $X.SafeString(...)
+      - pattern: new Handlebars.SafeString(...)
+    message: >-
+      Handlebars SafeString will not escape the data passed through it.
+      Untrusted user input passing through SafeString can cause XSS.
+    languages:
+      - javascript
+    severity: ERROR
+  - id: handlebars_noescape
+    patterns:
+      - pattern: |
+          $X.compile(..., {noEscape: true}, ...)
+    message: >-
+      Disabling Escaping in Handlebars is not a secure behaviour. This can
+      introduce XSS vulnerabilties.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-80: Improper Neutralization of Script-Related HTML Tags in a Web
+        Page (Basic XSS)
+  - id: squirrelly_autoescape
+    pattern: $X.autoEscaping(false)
+    message: >-
+      Handlebars SafeString will not escape the data passed through it.
+      Untrusted user input passing through SafeString can cause XSS.
+    languages:
+      - javascript
+    severity: ERROR

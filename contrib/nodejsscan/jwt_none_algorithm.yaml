@@ -1,0 +1,45 @@
+# Rule from : https://github.com/returntocorp/semgrep-rules/blob/develop/javascript/jwt-none-alg/jwt-none-alg.yaml
+# https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/#Meet-the--None--Algorithm
+rules:
+  - id: node_jwt_none_algorithm
+    patterns:
+      - pattern-either:
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+          - pattern: |
+              var $JWT = require("jsonwebtoken");
+              ...
+              $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              var $T = JWT.verify($P, JWK.None,...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              $T = JWT.verify($P, JWK.None,...);
+          - pattern: |
+              var $JOSE = require("jose");
+              ...
+              var { JWK, JWT } = $JOSE;
+              ...
+              JWT.verify($P, JWK.None,...);
+    message: >-
+      Algorithm is set to none for JWT token. This can nullify the integrity of
+      JWT signature.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'

@@ -1,0 +1,44 @@
+rules:
+  - id: generic_os_command_exec
+    patterns:
+      - pattern-inside: |
+          var $EXEC = require('child_process');
+          ...
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              $EXEC.exec(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $EXEC.exec(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              $EXEC.execSync(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $EXEC.execSync(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $EXEC.exec(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $EXEC.exec(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $EXEC.execSync(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $EXEC.execSync(..., <... $INP ...>, ...);
+    message: >-
+      User controlled data in 'child_process.exec()' can result in Remote OS
+      Command Execution.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-78: Improper Neutralization of Special Elements used in an OS
+        Command ('OS Command Injection')

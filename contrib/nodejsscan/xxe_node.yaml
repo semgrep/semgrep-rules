@@ -1,0 +1,51 @@
+rules:
+  - id: node_xxe
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: >
+              $LIBXML.parseXmlString(..., <... $REQ.$QUERY.$VAR.$FILE ...>, ...)
+          - pattern: >
+              $LIBXML.parseXmlString(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: >
+              $LIBXML.parseXmlString(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: >
+              $LIBXML.parseXml(..., <... $REQ.$QUERY.$VAR.$FILE ...>, ...)
+          - pattern: >
+              $LIBXML.parseXml(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              $LIBXML.parseXml(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              var $PARSER = new libxmljs.SaxParser();
+              ...
+              $PARSER.parseString(..., <... $REQ.$QUERY ...>, ...);
+          - pattern: |
+              var $PARSER = new libxmljs.SaxParser();
+              ...
+              $PARSER.parseString(..., <... $REQ.$QUERY.$FOO ...>, ...);
+          - pattern: |
+              var $PARSER = new libxmljs.SaxParser();
+              ...
+              $PARSER.parseString(..., <... $REQ.$QUERY.$FOO.$FILE ...>, ...);
+          - pattern: |
+              var $PARSER = new libxmljs.SaxPushParser();
+              ...
+              $PARSER.push(..., <... $REQ.$QUERY ...>, ...);
+          - pattern: |
+              var $PARSER = new libxmljs.SaxPushParser();
+              ...
+              $PARSER.push(..., <... $REQ.$QUERY.$FOO ...> , ...);
+          - pattern: |
+              var $PARSER = new libxmljs.SaxPushParser();
+              ...
+              $PARSER.push(..., <... $REQ.$QUERY.$FOO.$FILE ...> , ...);
+    message: >-
+      User controlled data in XML parsers can result in XML External or
+      Internal Entity (XXE) Processing vulnerabilities
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A4: XML External Entities (XXE)'
+      cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
