@@ -121,6 +121,10 @@ rules:
       - pattern-inside: |
           var $X = require('tar-stream');
           ...
+      - pattern-not-inside: |
+          $Y.pipe($UNZIP.Parse(...)).on('entry', function $FUNC(...) {
+              ...
+          }, ...);
       - pattern-inside: |
           $EXTRACT.on('entry', function $FUNC(...) {
             ...
