@@ -1,4 +1,7 @@
 import logging
+import yaml
+import os
+import json
 import sys
 
 from collections import defaultdict
@@ -30,6 +33,15 @@ def get_lang(path: str) -> str:
             return lang
     return ""
 
+def get_framework(path: str) -> str:
+    # get the dir name immediately under the language
+    for lang in LANGS:
+        if lang in path:
+            s = path.split(os.path.sep)
+            logger.debug(f"Split path={s}")
+            return s[s.index(lang)+1]
+    return ""
+
 def is_security(path: str) -> bool:
     return "security" in path
 
@@ -46,13 +58,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    import yaml
-    import os
-
     owasp_matrix = defaultdict(list)
     cwe_matrix = defaultdict(list)
     owasp_by_lang_matrix = defaultdict(lambda: defaultdict(list))
     cwe_by_lang_matrix = defaultdict(lambda: defaultdict(list))
+    owasp_by_framework_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+    cwe_by_framework_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     for dirpath, dirnames, filenames in os.walk(args.directory):
         for filename in filenames:
             path = os.path.join(dirpath, filename)
@@ -65,19 +76,27 @@ if __name__ == "__main__":
                 rules = yaml.safe_load(fin)
                 for rule in rules.get('rules', []):
                     lang = get_lang(path)
+                    framework = get_framework(path)
                     cwe = get_cwe(rule)
                     owasp = get_owasp(rule)
                     owasp_matrix[owasp].append((path, rule))
                     cwe_matrix[cwe].append((path, rule))
                     owasp_by_lang_matrix[owasp][lang].append((path, rule))
                     cwe_by_lang_matrix[cwe][lang].append((path, rule))
-    import json
+                    owasp_by_framework_matrix[owasp][lang][framework].append((path, rule))
+                    cwe_by_framework_matrix[cwe][lang][framework].append((path, rule))
 
     print(json.dumps({
-        "owasp": {k: len(v) for k, v in sorted(owasp_matrix.items())},
-        "cwe": {k: len(v) for k, v in sorted(cwe_matrix.items())},
-        "owasp_by_language": {k: {k2: len(v) for k2, v in owasp_by_lang_matrix[k].items()} for k in sorted(owasp_by_lang_matrix)},
-        "cwe_by_language": {k: {k2: len(v) for k2, v in cwe_by_lang_matrix[k].items()} for k in sorted(cwe_by_lang_matrix)},
-        "rules_with_no_owasp": [t[0] for t in owasp_matrix[""]],
-        "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
+        "owasp": {
+            "totals": {owasp: len(v) for owasp, v in sorted(owasp_matrix.items())},
+            #"per_language": {owasp: {lang: len(v) for lang, v in owasp_by_lang_matrix[owasp].items()} for owasp in sorted(owasp_by_lang_matrix)},
+            "per_framework": {owasp: {lang: {frm: len(v) for frm, v in owasp_by_framework_matrix[owasp][lang].items()} for lang in sorted(owasp_by_framework_matrix[owasp])} for owasp in sorted(owasp_by_framework_matrix)},
+            "rules_with_no_owasp": [t[0] for t in owasp_matrix[""]],
+        },
+        "cwe": {
+            "totals": {cwe: len(v) for k, v in sorted(cwe_matrix.items())},
+            #"per_language": {cwe: {lang: len(v) for lang, v in cwe_by_lang_matrix[cwe].items()} for cwe in sorted(cwe_by_lang_matrix)},
+            "per_framework": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_framework_matrix[cwe][lang].items()} for lang in sorted(cwe_by_framework_matrix[cwe])} for cwe in sorted(cwe_by_framework_matrix)},
+            "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
+        }
     }))
