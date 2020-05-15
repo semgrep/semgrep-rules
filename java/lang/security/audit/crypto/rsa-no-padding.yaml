@@ -1,0 +1,12 @@
+rules:
+- id: rsa-no-padding
+  metadata:
+    cwe: "CWE-326: Inadequate Encryption Strength"
+    owasp: "A3: Sensitve Data Exposure"
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#RSA_NO_PADDING
+    references: https://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/
+  message: |
+    Using RSA without OAEP mode weakens the encryption.
+  severity: WARNING
+  languages: [java]
+  pattern: $CIPHER.getInstance("RSA/NONE/NoPadding")
