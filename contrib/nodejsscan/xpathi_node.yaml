@@ -1,4 +1,3 @@
-# TODO support multiple var in parse, may be fixed by semgrep upstream
 rules:
   - id: node_xpath_injection
     patterns:
@@ -6,29 +5,17 @@ rules:
           $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
       - pattern-either:
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$QUERY.$VAR, ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ.$QUERY.$VAR ...>, ...)
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM, ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ.$PARAM ...>, ...)
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM["..."], ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ.$PARAM["..."] ...>, ...)
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM("..."), ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ.$PARAM("...") ...>, ...)
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ["..."], ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ["..."] ...>, ...)
           - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ("..."), ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$QUERY.$VAR + "...", ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM + "...", ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM["..."] + "...", ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ.$PARAM("...") + "...", ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ["..."] + "...", ...)
-          - pattern: |
-              $XPATH.parse("=~/[\/\/].+/" + $REQ("...") + "...", ...)
+              $XPATH.parse(<... "=~/[\/\/].+/" + $REQ("...") ...>, ...)
     message: >-
       User controlled data in xpath.parse() can result in XPATH injection
       vulnerability.
