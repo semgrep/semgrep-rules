@@ -1,0 +1,21 @@
+rules:
+  - id: ldap-entry-poisoning
+    metadata:
+      cwe: 'A1: Injection'
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ENTRY_POISONING
+      references: 
+      - https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf
+      - https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html
+    message: |
+      for more information.
+    severity: WARNING
+    pattern-either:
+      # SearchControls(int scope, long countlim, int timelim, String[] attrs, boolean retobj, boolean deref)
+      - pattern: |
+          new SearchControls($S, $CL, $TL, $AT, true, $DEREF)
+      - pattern: |
+          SearchControls $VAR = new SearchControls();
+          ...
+          $VAR.setReturningObjFlag(true);
+    languages:
+    - java
