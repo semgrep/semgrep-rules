@@ -1,8 +1,11 @@
 rules:
 - id: ldap-injection
   message: |
-    https://find-sec-bugs.github.io/bugs.htm#LDAP_INJECTION
     All inputs passed to an LDAP query need to be passed in safely.
+  metadata:
+    cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+    owasp: "A1: Injection"
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_INJECTION
   severity: WARNING
   languages: [java]
   patterns:
