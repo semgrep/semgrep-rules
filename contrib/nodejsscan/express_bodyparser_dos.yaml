@@ -1,0 +1,19 @@
+rules:
+  - id: express_bodyparser
+    patterns:
+      - pattern-inside:
+          var $APP = express();
+          ...
+      - pattern-inside: |
+          $APP.use(...);
+      - pattern:
+          $X.bodyParser(...)
+    message: >-
+      POST Request to Express Body Parser 'bodyParser()' can create Temporary
+      files and consume space.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-400: Uncontrolled Resource Consumption'

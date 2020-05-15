@@ -6,5 +6,11 @@ rules:
         - pattern: $X.objects.$FUNC(...).$FILTER(...).extra(...)
         - pattern: $X.objects.$FUNC(...).$FILTER(...).$UPDATE(...).extra(...)
     message: "This is a last resort. You should be careful when using QuerySet.extra due to SQLi https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra"
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp: "A1: Injection"
+      references:
+      - https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra
+      - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
     languages: [python]
     severity: ERROR

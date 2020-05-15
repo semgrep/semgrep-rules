@@ -1,0 +1,72 @@
+rules:
+  - id: node_md5
+    patterns:
+      - pattern: |
+          $X.createHash("md5")
+    message: >-
+      MD5 is a a weak hash which is known to have collision. Use a strong
+      hashing function.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+  - id: node_sha1
+    patterns:
+      - pattern: |
+          $X.createHash("sha1")
+    message: >-
+      SHA1 is a a weak hash which is known to have collision. Use a strong
+      hashing function.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+  - id: node_aes_ecb
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $X.createCipheriv("=~/aes-\([0-9]+\)-ecb/", ...)
+          - pattern: |
+              $X.createDecipheriv("=~/aes-\([0-9]+\)-ecb/", ...)
+    message: >-
+      AES with ECB mode is deterministic in nature and not suitable for
+      encrypting large amount of repetitive data.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+  - id: node_weak_crypto
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $X.createCipher('des', ...)
+    message: >-
+      A weak or broken cryptographic algorithm was identified. Using these
+      functions will introduce vulnerabilities or downgrade the security of your application.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+  - id: node_insecure_random_generator
+    patterns:
+      - pattern-either:
+        - pattern: |
+            $X.pseudoRandomBytes(...)
+        - pattern: |
+            Math.random(...)
+    message: >-
+      crypto.pseudoRandomBytes()/Math.random() is a cryptographically weak random number generator.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'

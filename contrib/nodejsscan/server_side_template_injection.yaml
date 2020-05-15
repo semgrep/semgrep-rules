@@ -1,0 +1,74 @@
+rules:
+  - id: server_side_template_injection
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              var $HB =  require('handlebars');
+              ...
+          - pattern-inside: |
+              var $HB = require('pug');
+              ...
+          - pattern-inside: |
+              var $HB = require('hamljs');
+              ...
+          - pattern-inside: |
+              var $HB = require('ejs');
+              ...
+          - pattern-inside: |
+              var $HB = require('squirrelly');
+              ...
+          - pattern-inside: |
+              var $HB = require('eta');
+              ...
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
+      - pattern-either:
+          - pattern: |
+              $HB.compile(..., <... $REQ.$FOO ...>, ...)
+          - pattern: |
+              $HB.compile(..., <... $REQ.$FOO.$BAR ...>, ...)
+          - pattern: |
+              var $X = <... $REQ.$FOO ...>;
+              ...
+              $HB.compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = <... $REQ.$FOO.$BAR ...>;
+              ...
+              $HB.compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
+              ...
+              $HB.compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
+              ...
+              $HB.compile(..., <... $X ...>, ...);
+          - pattern: |
+              $HB.Compile(..., <... $REQ.$FOO ...>, ...)
+          - pattern: |
+              $HB.Compile(..., <... $REQ.$FOO.$BAR ...>, ...)
+          - pattern: |
+              var $X = <... $REQ.$FOO ...>;
+              ...
+              $HB.Compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = <... $REQ.$FOO.$BAR ...>;
+              ...
+              $HB.Compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
+              ...
+              $HB.Compile(..., <... $X ...>, ...);
+          - pattern: |
+              var $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
+              ...
+              $HB.Compile(..., <... $X ...>, ...);
+    message: >-
+      Untrusted user input in templating engine's compile() function can result
+      in Remote Code Execution via server side template injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: CWE-94 Improper Control of Generation of Code ('Code Injection')
