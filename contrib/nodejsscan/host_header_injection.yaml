@@ -1,0 +1,51 @@
+rules:
+  - id: host_header_injection
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              var $X = <... "=~/.*http[s]*:///" + $REQ.host ...>;
+          - pattern: |
+              var $X = <... "=~/.*http[s]*:///" + $REQ["host"] ...>;
+          - pattern: |
+              var $X = <... "=~/.*http[s]*:///" + $REQ("host") ...>;
+          - pattern: |
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $REQ.host ...>};
+          - pattern: |
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $REQ["host"] ...>};
+          - pattern: |
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $REQ("host") ...>};
+          - pattern: |
+              var $Z = $REQ.host;
+              ...
+              var $X = <... "=~/.*http[s]*:///" + $Z ...>;
+          - pattern: |
+              var $Z = $REQ["host"];
+              ...
+              var $X = <... "=~/.*http[s]*:///" + $Z ...>;
+          - pattern: |
+              var $Z = $REQ("host");
+              ...
+              var $X = <... "=~/.*http[s]*:///" + $Z ...>;
+          - pattern: |
+              var $Z = $REQ.host;
+              ...
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $REQ.host ...>};
+          - pattern: |
+              var $Z = $REQ["host"];
+              ...
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $Z ...>};
+          - pattern: |
+              var $Z = $REQ("host");
+              ...
+              var $X = { $Y: <... "=~/.*http[s]*:///" + $REQ("host") ...>};
+    message: >-
+      Using untrusted Host header for generating dynamic URLs can result in web
+      cache and or password reset poisoning.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-20: Improper Input Validation'
