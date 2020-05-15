@@ -1,0 +1,71 @@
+# Need QA + sgrep bug fix + false positive in generic_2 and {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/": '*' } not working
+rules:
+  - id: generic_cors
+    patterns:
+      - pattern: |
+          $APP.options('*', cors(...))
+    message: >-
+      Access-Control-Allow-Origin response header is set to "*". This will
+      disable CORS Same Origin Policy restrictions.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-346: Origin Validation Error'
+  - id: express_cors
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $APP.options('*', cors(...))
+          - pattern: >
+              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              '*', ...)
+          - pattern: >
+              $RES.set(..., {
+              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
+              '*' }, ...)
+          - pattern: >
+              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              '*', ...)
+          - pattern: >
+              $RES.writeHead(...,
+              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
+              '*' }, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $VAL, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.set(..., {
+              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
+              $VAL }, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $VAL, ...);
+          - pattern: >
+              ...
+              var $VAL = '*';
+              ...
+              $RES.writeHead(...,
+              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
+              $VAL }, ...);
+    message: >-
+      Access-Control-Allow-Origin response header is set to "*". This will
+      disable CORS Same Origin Policy restrictions.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-346: Origin Validation Error'

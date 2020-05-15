@@ -1,0 +1,47 @@
+rules:
+  - id: node_error_disclosure
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              var $ERR = $ERROR.stack;
+              ...
+              $RES.end($ERR);
+          - pattern: |
+              var $ERR = $ERROR.stack;
+              ...
+              $RES.send($ERR);
+          - pattern: |
+              $RES.end($ERR.stack)
+          - pattern: |
+              $RES.send($ERR.stack)
+    message: >-
+      Error messages with stack traces can expose sensitive information about
+      the application.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A3: Sensitive Data Exposure'
+      cwe: 'CWE-209: Generation of Error Message Containing Sensitive Information'
+  - id: generic_error_disclosure
+    patterns:
+      - pattern-either:
+          - pattern: |
+              console.trace(...)
+          - pattern: |
+              try {
+                  ...
+              } catch($ERR){
+                  console.error(<... $ERR ...>, ...);
+              }
+    message: >-
+      Error messages with stack traces may expose sensitive information about
+      the application.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: 'A3: Sensitive Data Exposure'
+      cwe: 'CWE-209: Generation of Error Message Containing Sensitive Information'

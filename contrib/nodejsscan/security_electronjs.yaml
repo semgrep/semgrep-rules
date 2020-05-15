@@ -1,0 +1,99 @@
+rules:
+  - id: electron_disable_websecurity
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {webSecurity: false}});
+          - pattern: |
+              var $X = {webPreferences: {webSecurity: false}};
+    message: >-
+      Disabling webSecurity will disable the same-origin policy and allows the
+      execution of insecure code from any domain.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-346: Origin Validation Error'
+  - id: electron_allow_http
+    patterns:
+      - pattern-either:
+          - pattern: >
+              new BrowserWindow({webPreferences: {allowRunningInsecureContent:
+              true}});
+          - pattern: |
+              var $X = {webPreferences: {allowRunningInsecureContent: true}};
+    message: >-
+      Application can load content over HTTP and that makes the app vulnerable
+      to Man in the middle attacks.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+  - id: electron_blink_integration
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {enableBlinkFeatures: '...'}});
+          - pattern: |
+              var $X = {webPreferences: {enableBlinkFeatures: '...'}};
+    message: >-
+      Blink's expirimental features are enabled in this application. Some of the
+      features may affect the security of the application.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-272: Least Privilege Violation'
+  - id: electron_nodejs_integration
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {nodeIntegration: true}});
+          - pattern: |
+              var $X = {webPreferences: {nodeIntegration: true}};
+    message: >-
+      Node integration exposes node.js APIs to the electron app and this can
+      introduce remote code execution vulnerabilities to the application if the
+      app is vulnerable to Cross Site Scripting (XSS).
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-272: Least Privilege Violation'
+  - id: electron_context_isolation
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {contextIsolation: false}});
+          - pattern: |
+              var $X = {webPreferences: {contextIsolation: false}};
+    message: >-
+      Disabling context isolation can introduce Prototype Pollution
+      vulnerabilities.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: electron_experimental_features
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {experimentalFeatures: true}});
+          - pattern: |
+              var $X = {webPreferences: {experimentalFeatures: true}};
+    message: >-
+      Experimental features are not expected to be in production ready
+      applications.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: A6 - Security Misconfiguration
+      cwe: 'CWE-272: Least Privilege Violation'

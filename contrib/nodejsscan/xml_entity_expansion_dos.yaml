@@ -1,0 +1,27 @@
+rules:
+  - id: node_entity_expansion
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              var $PARSER = new expat.Parser();
+              ...
+              $PARSER.write(..., <... $REQ.$QUERY ...>, ...);
+          - pattern: |
+              var $PARSER = new expat.Parser();
+              ...
+              $PARSER.write(..., <... $REQ.$QUERY.$FOO ...>, ...);
+          - pattern: |
+              var $PARSER = new expat.Parser();
+              ...
+              $PARSER.write(..., <... $REQ.$QUERY.$FOO.$FILE ...>, ...);
+    message: >-
+      User controlled data in XML Parsers can result in
+      XML Internal Entity Processing vulnerabilities like in DoS.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A4: XML External Entities (XXE)'
+      cwe: "CWE-776: Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')"
