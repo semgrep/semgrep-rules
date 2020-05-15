@@ -1,0 +1,17 @@
+rules:
+  - id: ecb-cipher
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A3: Sensitive Data Exposure"
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#ECB_MODE
+    message: |
+      Cipher in ECB mode is detected. CB mode produces the same output for the same input each time
+      which allows an attacker to intercept and replay the data.
+    severity: WARNING
+    languages:
+    - java
+    patterns:
+      - pattern: |
+          Cipher $VAR = $CIPHER.getInstance($MODE);
+      - pattern-where-python: |
+          "ECB" in vars['$MODE']
