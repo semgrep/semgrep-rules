@@ -1,0 +1,158 @@
+rules:
+  - id: zip_path_overwrite
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              var $X = require('unzip');
+              ...
+          - pattern-inside: |
+              var $X = require('unzipper');
+              ...
+      - pattern-inside: |
+          $Y.pipe($UNZIP.Parse(...)).on('entry', function $FUNC(...) {
+              ...
+          }, ...);
+      - pattern-not: |
+          var $X = $FILENAME.indexOf(...);
+      - pattern-not: >
+          $FUNC.pipe($FS.createWriteStream($PATH.join(...,
+          $PATH.basename($FILENAME, ...))));
+      - pattern-not: >
+          $FUNC.pipe($FS.writeFile($PATH.join(..., $PATH.basename($FILENAME,
+          ...))));
+      - pattern-not: >
+          $FUNC.pipe($FS.writeFileSync($PATH.join(..., $PATH.basename($FILENAME,
+          ...))));
+      - pattern-either:
+          - pattern: |
+              $FUNC.pipe($FS.createWriteStream($FIL, ...));
+          - pattern: |
+              $FUNC.pipe($FS.writeFile($FIL, ...));
+          - pattern: |
+              $FUNC.pipe($FS.writeFileSync($FIL, ...));
+    message: >-
+      Insecure ZIP archive extraction can result in arbitrary path over write
+      and can result in code injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: >-
+        CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+        ('Path Traversal')
+  - id: zip_path_overwrite2
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              var $X = require('unzip');
+              ...
+          - pattern-inside: |
+              var $X = require('unzipper');
+              ...
+      - pattern-inside: |
+          $UNZIP.Parse(...).on('entry', function $FUNC($ENTRY) {
+              ...
+          }, ...);
+      - pattern-not: |
+          if ($FILENAME.indexOf('..'));
+      - pattern-not: >
+          $FS.createWriteStream($PATH.join(..., $PATH.basename($FILENAME,
+          ...)));
+      - pattern-not: |
+          $FS.writeFile($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-not: |
+          $FS.writeFileSync($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-either:
+          - pattern: |
+              $FS.createWriteStream($FIL, ...);
+          - pattern: |
+              $FS.writeFile($FIL, ...);
+          - pattern: |
+              $FS.writeFileSync($FIL, ...);
+    message: >-
+      Insecure ZIP archive extraction can result in arbitrary path over write
+      and can result in code injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: >-
+        CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+        ('Path Traversal')
+  - id: admzip_path_overwrite
+    patterns:
+      - pattern-inside: |
+          var $X = require('adm-zip');
+          ...
+      - pattern-not: |
+          if ($FILENAME.indexOf('..'));
+      - pattern-not: >
+          $FS.createWriteStream($PATH.join(..., $PATH.basename($FILENAME,
+          ...)));
+      - pattern-not: |
+          $FS.writeFile($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-not: |
+          $FS.writeFileSync($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-either:
+          - pattern: >-
+              $ZIPENTZ.forEach(function $FUNC($ENTRY, ...) {
+              $FS.createWriteStream(...); }, ...);
+          - pattern: >-
+              $ZIPENTZ.forEach(function $FUNC($ENTRY, ...) { $FS.writeFile(...);
+              }, ...);
+          - pattern: >-
+              $ZIPENTZ.forEach(function $FUNC($ENTRY, ...) {
+              $FS.writeFileSync(...); }, ...);
+    message: >-
+      Insecure ZIP archive extraction using adm-zip can result in arbitrary path
+      over write and can result in code injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: >-
+        CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+        ('Path Traversal')
+  - id: tar_path_overwrite
+    patterns:
+      - pattern-inside: |
+          var $X = require('tar-stream');
+          ...
+      - pattern-not-inside: |
+          $Y.pipe($UNZIP.Parse(...)).on('entry', function $FUNC(...) {
+              ...
+          }, ...);
+      - pattern-inside: |
+          $EXTRACT.on('entry', function $FUNC(...) {
+            ...
+          }, ...);
+      - pattern-not: |
+          if ($FILENAME.indexOf('..'));
+      - pattern-not: >
+          $FS.createWriteStream($PATH.join(..., $PATH.basename($FILENAME,
+          ...)));
+      - pattern-not: |
+          $FS.writeFile($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-not: |
+          $FS.writeFileSync($PATH.join(..., $PATH.basename($FILENAME, ...)));
+      - pattern-either:
+          - pattern: |
+              $FS.createWriteStream($FIL, ...);
+          - pattern: |
+              $FS.writeFile($FIL, ...);
+          - pattern: |
+              $FS.writeFileSync($FIL, ...);
+    message: >-
+      Insecure TAR archive extraction can result in arbitrary path over write
+      and can result in code injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A5: Broken Access Control'
+      cwe: >-
+        CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+        ('Path Traversal')

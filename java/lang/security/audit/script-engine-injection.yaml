@@ -1,0 +1,50 @@
+rules:
+- id: script-engine-injection
+  message: |
+    Potential code injection when using Script Engine.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: "A1: Injection"
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SCRIPT_ENGINE_INJECTION
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          ScriptEngine $SE;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          ScriptEngine $SE = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          ScriptEngine $SE = ...;
+          ...
+        }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        $SE.eval(...);
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        $SE.eval("...");
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        String $S = "...";
+        ...
+        $SE.eval($S);
+        ...
+      }

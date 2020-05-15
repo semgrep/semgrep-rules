@@ -1,0 +1,95 @@
+rules:
+  - id: node_nosqli_js_injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $OBJ.$FUNC({$where: <... $REQ.$FOO.$BAR ...>}, ...);
+          - pattern: |
+              $OBJ.$FUNC({$where: <... $REQ.$QUERY ...>}, ...);
+          - pattern: |
+              var $NSQL = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
+          - pattern: |
+              var $NSQL = <... $REQ.$QUERY ...>;
+              ...
+              $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
+          - pattern: |
+              var $INP = $REQ.$FOO.$BAR;
+              ...
+              var $QRY = {$where: <... $INP ...>};
+              ...
+              $OBJ.$FUNC(<... $QRY ...>, ...);
+          - pattern: |
+              var $INP = $REQ.$FOO;
+              ...
+              var $QRY = {$where: <... $INP ...>};
+              ...
+              $OBJ.$FUNC(<... $QRY ...>, ...);
+          - pattern: |
+              var $INP = $REQ.$FOO;
+              ...
+              var $QRY = {$where: ...};
+              ...
+              $QRY["$where"] = <... $INP ...>;
+              ...
+              $OBJ.$FUNC(<... $QRY ...>, ...);
+          - pattern: |
+              var $INP = $REQ.$FOO.$BAR;
+              ...
+              var $QRY = {$where: ...};
+              ...
+              $QRY["$where"] = <... $INP ...>;
+              ...
+              $OBJ.$FUNC(<... $QRY ...>, ...);
+    message: >-
+      Untrusted user input in MongoDB $where operator can result in NoSQL
+      JavaScript Injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+  - id: node_nosqli_injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $OBJ.findOne({$KEY : <... $REQ.$FOO.$BAR ...> }, ...);
+          - pattern: |
+              $OBJ.findOne({$KEY: <... $REQ.$FOO ...> }, ...);
+          - pattern: |
+              var $INP = <... $REQ.$FOO.$BAR ...>;
+              ...
+              $OBJ.findOne({$KEY : <... $INP ...> }, ...);
+          - pattern: |
+              var $INP = <... $REQ.$FOO ...>;
+              ...
+              $OBJ.findOne({$KEY: <... $INP ...> }, ...);
+          - pattern: |
+              var $QUERY = {$KEY: <... $REQ.$FOO.$BAR ...>};
+              ...
+              $OBJ.findOne($QUERY, ...);
+          - pattern: |
+              var $QUERY = {$KEY: <... $REQ.$FOO ...>};
+              ...
+              $OBJ.findOne($QUERY, ...);
+          - pattern: |
+              var $INP = <... $REQ.$FOO.$BAR ...>;
+              ...
+              var $QUERY = {$KEY : <... $INP ...> };
+              ...
+              $OBJ.findOne(<... $QUERY  ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$FOO ...>;
+              ...
+              var $QUERY = {$KEY : <... $INP ...> };
+              ...
+              $OBJ.findOne(<... $QUERY  ...>, ...);
+    message: Untrusted user input in findOne() function can result in NoSQL Injection.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'

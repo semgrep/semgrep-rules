@@ -1,0 +1,55 @@
+rules:
+  - id: express_open_redirect
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $X.redirect(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              $X.redirect(..., <... $REQ.$QUERY.$FOO ...>, ...)
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              $X.redirect(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$FOO ...>;
+              ...
+              $X.redirect(..., <... $INP ...>, ...);
+    message: >-
+      Untrusted user input in redirect() can result in Open Redirect
+      vulnerability.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-601: URL Redirection to Untrusted Site ('Open Redirect')
+  - id: express_open_redirect2
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES) { ... })
+      - pattern-either:
+        - pattern: |
+            $RES.header(..., "=~/[Ll]+ocation/", <... $REQ.$VAR ...>, ...)
+        - pattern: |
+            $RES.header(..., "=~/[Ll]+ocation/", <... $REQ.$VAR.$VARR ...>, ...)
+        - pattern: |
+            $RES.writeHead(..., "=~/[Ll]+ocation/", <... $REQ.$VAR ...>, ...)
+        - pattern: |
+            $RES.writeHead(..., "=~/[Ll]+ocation/", <... $REQ.$VAR.$VARR ...>, ...)
+        - pattern: |
+            $RES.writeHead(..., {"=~/[Ll]+ocation/": <... $REQ.$VAR ...> }, ...)
+        - pattern: |
+            $RES.writeHead(..., {"=~/[Ll]+ocation/": <... $REQ.$VAR.$VARR ...> }, ...)
+    message: >-
+      Untrusted user input in response header('Location') can result in Open
+      Redirect vulnerability.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-601: URL Redirection to Untrusted Site ('Open Redirect')

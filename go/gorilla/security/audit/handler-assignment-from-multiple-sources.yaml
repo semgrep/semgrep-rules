@@ -1,5 +1,9 @@
 rules:
   - id: handler-assignment-from-multiple-sources
+    metadata:
+      cwe: "CWE-289: Authentication Bypass by Alternate Name"
+      owasp: "A2: Broken Authentication"
+      owaspapi: "API1: Broken Object Level Authorization"
     patterns:
       - pattern-inside: |
           func $HANDLER(..., $R *http.Request, ...) {
