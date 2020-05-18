@@ -1,0 +1,17 @@
+rules:
+- id: des-is-deprecated
+  message: |
+    DES is considered deprecated. AES is the recommended cipher.
+    Upgrade to use AES.
+    See https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard for more information.
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#DES_USAGE
+    references:
+    - https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard
+  severity: WARNING
+  pattern: $CIPHER.getInstance("=~/DES.*/");
+  fix: $CIPHER.getInstance("AES/GCM/NoPadding");
+  languages:
+  - java
