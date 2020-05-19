@@ -9,6 +9,7 @@ class Exploit(object):
 
 # Attacker serializes the exploit
 def serialize_exploit():
+  # ruleid: avoid-pickle
   shellcode = _pickle.dumps(Exploit())
   return shellcode
 
