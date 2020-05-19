@@ -255,7 +255,7 @@ func (ht *HTTPTrace) WithTrace(req *http.Request) *http.Request {
 
 /*
  * Test case reference
- * cf.
+ * cf. https://github.com/mehrdadrad/mylg//blob/616fd5309bb143d3f52ef866b2ffe12135f0dd4e/http/ping/ping.go
  */
 
  // Ping tries to ping a web server through http
