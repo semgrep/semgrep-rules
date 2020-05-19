@@ -1,0 +1,10 @@
+rules:
+- id: string concatenation in list
+  patterns:
+  - pattern: |
+      ["..." "...", ...]
+  message: |
+    Python will implicitly concatenate strings, but inside a List, this is rarely what you want.
+  severity: WARNING
+  languages:
+  - python
