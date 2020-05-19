@@ -1,7 +1,7 @@
-# ruleid:string concatenation in list
+# ruleid:string-concat-in-list
 bad = ["123" "456" "789"]
 
-# ruleid:string concatenation in list
+# ruleid:string-concat-in-list
 bad = [
     "abc"
     "cde"
