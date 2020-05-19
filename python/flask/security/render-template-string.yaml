@@ -5,11 +5,7 @@ rules:
         - pattern: |
             $V = "...".format(...)
             ...
-            $T = flask.render_template_string($V, ...)
-        - pattern: |
-            $V = "...".format(...)
-            ...
-            return flask.render_template_string($V, ...)
+            flask.render_template_string($V, ...)
         - pattern: |
             $V = "...".format(...)
             ...
@@ -17,11 +13,7 @@ rules:
         - pattern: |
             $V = "..." % $S
             ...
-            $T = flask.render_template_string($V, ...)
-        - pattern: |
-            $V = "..." % $S
-            ...
-            return flask.render_template_string($V, ...)
+            flask.render_template_string($V, ...)
         - pattern: |
             $V = "..." % $S
             ...
@@ -31,13 +23,7 @@ rules:
             ...
             $V += $O
             ...
-            $T = flask.render_template_string($V, ...)
-        - pattern: |
-            $V = "..."
-            ...
-            $V += $O
-            ...
-            return flask.render_template_string($V, ...)
+            flask.render_template_string($V, ...)
         - pattern: |
             $V = "..."
             ...
@@ -47,11 +33,7 @@ rules:
         - pattern: |
             $V = f"...{$X}..."
             ...
-            $T = flask.render_template_string($V, ...)
-        - pattern: |
-            $V = f"...{$X}..."
-            ...
-            return flask.render_template_string($V, ...)
+            flask.render_template_string($V, ...)
         - pattern: |
             $V = f"...{$X}..."
             ...
