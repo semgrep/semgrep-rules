@@ -1,0 +1,86 @@
+rules:
+- id: spel-injection
+  message: |
+    A Spring expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation. 
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: "A1: Injection"
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPEL_INJECTION
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          ExpressionParser $PARSER;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          ExpressionParser $PARSER = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          ExpressionParser $PARSER = ...;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          SpelExpressionParser $PARSER;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          SpelExpressionParser $PARSER = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          SpelExpressionParser $PARSER = ...;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          TemplateAwareExpressionParser $PARSER;
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+          TemplateAwareExpressionParser $PARSER = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          TemplateAwareExpressionParser $PARSER = ...;
+          ...
+        }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        $PARSER.parseExpression(...);
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        $PARSER.parseExpression("...");
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        String $S = "...";
+        ...
+        $PARSER.parseExpression($S);
+        ...
+      }

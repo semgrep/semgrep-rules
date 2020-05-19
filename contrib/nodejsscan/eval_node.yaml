@@ -1,0 +1,65 @@
+rules:
+  - id: eval_nodejs
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+      - pattern-either:
+          - pattern: |
+              new Function(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              new Function(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              eval(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              eval(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              setTimeout(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              setTimeout(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              setInterval(..., <... $REQ.$QUERY.$VAR ...>, ...)
+          - pattern: |
+              setInterval(..., <... $REQ.$QUERY ...>, ...)
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              new Function(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              new Function(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              eval(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              eval(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              setTimeout(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              setTimeout(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY.$VAR ...>;
+              ...
+              setInterval(..., <... $INP ...>, ...);
+          - pattern: |
+              var $INP = <... $REQ.$QUERY ...>;
+              ...
+              setInterval(..., <... $INP ...>, ...);
+    message: >-
+      User controlled data in eval() or similar functions may result in Server
+      Side Injection or Remote Code Injection
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: >-
+        CWE-95: Improper Neutralization of Directives in Dynamically Evaluated
+        Code ('Eval Injection')

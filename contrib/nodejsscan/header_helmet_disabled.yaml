@@ -1,0 +1,36 @@
+rules:
+  - id: helmet_feature_disabled
+    patterns:
+      - pattern-either:
+          - pattern: |
+                $HELMET(..., {frameguard: false}, ...)
+          - pattern: |
+                $HELMET(..., {contentSecurityPolicy: false}, ...)
+          - pattern: |
+                $HELMET(..., {permittedCrossDomainPolicies: false}, ...)
+          - pattern: |
+                $HELMET(..., {dnsPrefetchControl: false}, ...)
+          - pattern: |
+                $HELMET(..., {expectCt: false}, ...)
+          - pattern: |
+                $HELMET(..., {featurePolicy: false}, ...)
+          - pattern: |
+                $HELMET(..., {hsts: false}, ...)
+          - pattern: |
+                $HELMET(..., {ieNoOpen: false}, ...)
+          - pattern: |
+                $HELMET(..., {noSniff: false}, ...)
+          - pattern: |
+                $HELMET(..., {hidePoweredBy: false}, ...)
+          - pattern: |
+                $HELMET(..., {referrerPolicy: false}, ...)
+          - pattern: |
+                $HELMET(..., {xssFilter: false}, ...)
+    message: >-
+      One or more Security Response header is explicitly disabled in Helmet.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+        owasp: 'A6: Security Misconfiguration'
+        cwe: 'CWE-693: Protection Mechanism Failure'

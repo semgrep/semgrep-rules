@@ -1,0 +1,35 @@
+rules:
+  - id: open-redirect
+    patterns:
+      - pattern-inside: |
+          @$APP.route(...)
+          def $X():
+            ...
+      - pattern-either:
+        - pattern: |
+            $V = flask.request.$W.get($X)
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W[$X]
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W($X)
+            ...
+            flask.redirect($V, ...)
+        - pattern: |
+            $V = flask.request.$W
+            ...
+            flask.redirect($V, ...)
+    message: |
+        Data from request is passed to redirect().
+        This is an open redirect and could be exploited.
+        See https://cwe.mitre.org/data/definitions/601.html
+    metadata:
+        cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+        owasp: "A1: Injection"
+        references:
+        - https://flask-login.readthedocs.io/en/latest/#login-example
+    languages: [python]
+    severity: ERROR

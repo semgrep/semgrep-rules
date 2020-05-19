@@ -1,0 +1,17 @@
+rules:
+  - id: raise-not-base-exception
+    patterns:
+      - pattern-either:
+          - pattern: raise "..."
+          # TODO - literal support
+          #- pattern: |
+          #    raise $X: int
+          #- pattern: |
+          #    raise $X: float
+          # TODO, the second pattern requires semgrep typing support
+          - pattern: |
+              $X: BaseException
+              raise $X(...)
+    message: "In Python3, a runtime `TypeError` will be thrown if you attempt to raise an object or class which does not inherit from `BaseException`"
+    languages: [python]
+    severity: ERROR

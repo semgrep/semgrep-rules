@@ -1,0 +1,1322 @@
+rules:
+  - id: open-redirect
+    message: |
+      Data from request ($DATA) is passed to redirect(). This is an open redirect and could be exploited.
+      Ensure you are redirecting to safe URLs by using django.utils.http.is_safe_url().
+      See https://cwe.mitre.org/data/definitions/601.html for more information.
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A1: Injection"
+      references:
+      - https://www.djm.org.uk/posts/djangos-little-protections-word-redirect-dangers/
+      - https://github.com/django/django/blob/d1b7bd030b1db111e1a3505b1fc029ab964382cc/django/utils/http.py#L231
+    languages: [python]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+            ...
+            django.utils.http.is_safe_url(...)
+            ...
+      - pattern-either:
+        - pattern: django.shortcuts.redirect(..., request.$W.get(...), ...)
+        - pattern: django.shortcuts.redirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: django.shortcuts.redirect(..., $S % request.$W.get(...), ...)
+        - pattern: django.shortcuts.redirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: $A = django.shortcuts.redirect(..., request.$W.get(...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S % request.$W.get(...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: return django.shortcuts.redirect(..., request.$W.get(...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S % request.$W.get(...), ...)
+        - pattern: return django.shortcuts.redirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: django.shortcuts.redirect(..., request.$W(...), ...)
+        - pattern: django.shortcuts.redirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: django.shortcuts.redirect(..., $S % request.$W(...), ...)
+        - pattern: django.shortcuts.redirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: $A = django.shortcuts.redirect(..., request.$W(...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S % request.$W(...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: return django.shortcuts.redirect(..., request.$W(...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S % request.$W(...), ...)
+        - pattern: return django.shortcuts.redirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: django.shortcuts.redirect(..., request.$W[...], ...)
+        - pattern: django.shortcuts.redirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: django.shortcuts.redirect(..., $S % request.$W[...], ...)
+        - pattern: django.shortcuts.redirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: $A = django.shortcuts.redirect(..., request.$W[...], ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S % request.$W[...], ...)
+        - pattern: $A = django.shortcuts.redirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: return django.shortcuts.redirect(..., request.$W[...], ...)
+        - pattern: return django.shortcuts.redirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S % request.$W[...], ...)
+        - pattern: return django.shortcuts.redirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: django.shortcuts.redirect(..., request.$W, ...)
+        - pattern: django.shortcuts.redirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: django.shortcuts.redirect(..., $S % request.$W, ...)
+        - pattern: django.shortcuts.redirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: $A = django.shortcuts.redirect(..., request.$W, ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: $A = django.shortcuts.redirect(..., $S % request.$W, ...)
+        - pattern: $A = django.shortcuts.redirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: return django.shortcuts.redirect(..., request.$W, ...)
+        - pattern: return django.shortcuts.redirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: return django.shortcuts.redirect(..., $S % request.$W, ...)
+        - pattern: return django.shortcuts.redirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.shortcuts.redirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.shortcuts.redirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.shortcuts.redirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.shortcuts.redirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.shortcuts.redirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.shortcuts.redirect(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseRedirect(..., request.$W.get(...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S % request.$W.get(...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., request.$W.get(...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S % request.$W.get(...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., request.$W.get(...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W.get(...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseRedirect(..., request.$W(...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S % request.$W(...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., request.$W(...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S % request.$W(...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., request.$W(...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W(...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W(...)}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseRedirect(..., request.$W[...], ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S % request.$W[...], ...)
+        - pattern: django.http.HttpResponseRedirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., request.$W[...], ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S % request.$W[...], ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., request.$W[...], ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W[...], ...)
+        - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W[...]}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: django.http.HttpResponseRedirect(..., request.$W, ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: django.http.HttpResponseRedirect(..., $S % request.$W, ...)
+        - pattern: django.http.HttpResponseRedirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., request.$W, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., $S % request.$W, ...)
+        - pattern: $A = django.http.HttpResponseRedirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., request.$W, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S.format(..., request.$W, ...), ...)
+        - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W, ...)
+        - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.http.HttpResponseRedirect(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.http.HttpResponseRedirect(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.http.HttpResponseRedirect(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.http.HttpResponseRedirect(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return django.http.HttpResponseRedirect(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return django.http.HttpResponseRedirect(..., $INTERM, ...)
+      - pattern-where-python: |
+          vars['$W'] not in {"get_full_path"}

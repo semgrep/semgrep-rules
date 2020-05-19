@@ -1,0 +1,66 @@
+rules:
+  - id: unescaped-data-in-url
+    message: | 
+      Found a formatted template string passed to 'template.URL()'.
+      'template.URL()' does not escape contents. Be absolutely sure
+      there is no user-controlled data in this template.
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A1: Injection"
+      references:
+      - https://golang.org/pkg/html/template/#URL
+    languages: [go]
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: template.URL($T + $X, ...)
+          - pattern: template.URL(fmt.$P("...", ...), ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $T = $FXN(..., $T, ...)
+              ...
+              $A = template.URL($T, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $T = $FXN(..., $T, ...)
+              ...
+              return template.URL($T, ...)
+          - pattern: |
+              $T = $X + $Y
+              ...
+              $A = template.URL($T, ...)
+          - pattern: |
+              $T = fmt.$P("...", ...)
+              ...
+              $A = template.URL($T, ...)
+          - pattern: |
+              $T, $ERR = fmt.$P("...", ...)
+              ...
+              $A = template.URL($T, ...)
+          - pattern: |
+              $T = fmt.$P("...", ...)
+              ...
+              return template.URL($T, ...)
+          - pattern: |
+              $T, $ERR = fmt.$P("...", ...)
+              ...
+              return template.URL($T, ...)
+          - pattern: |
+              $T = $X + $Y
+              ...
+              return template.URL($T, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $OTHER, $ERR = fmt.$P(..., $T, ...)
+              ...
+              $A = template.URL($OTHER, ...)
+          - pattern: |
+              $T = "..."
+              ...
+              $OTHER, $ERR = fmt.$P(..., $T, ...)
+              ...
+              return template.URL($OTHER, ...)
+

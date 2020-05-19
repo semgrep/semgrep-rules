@@ -1,0 +1,73 @@
+# Rule is from https://github.com/returntocorp/semgrep-rules/blob/develop/javascript/jwt-hardcode/jwt-hardcode.yaml
+# module imports used as described in https://github.com/returntocorp/semgrep/issues/285
+rules:
+  - id: hardcoded_jwt_secret
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $JWT = require("jsonwebtoken");
+              ...
+              $JWT.sign($P, "...", ...);
+          - pattern: |
+              $JWT = require("jsonwebtoken");
+              ...
+              $JWT.verify($P, "...", ...);
+          - pattern: |
+              $JWT = require("jsonwebtoken");
+              ...
+              $SECRET = "...";
+              ...
+              $JWT.sign($P, $SECRET, ...);
+          - pattern: |
+              $JWT = require("jsonwebtoken");
+              ...
+              $SECRET = "...";
+              ...
+              $JWT.verify($P, $SECRET, ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $JOSE.JWT.sign($P, "...", ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $JOSE.JWT.verify($P, "...", ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $JOSE.JWT.sign($P, $JOSE.JWK.asKey("..."), ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $JOSE.JWT.verify($P, $JOSE.JWK.asKey("..."), ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $SECRET = "...";
+              ...
+              $JOSE.JWT.sign($P, $SECRET, ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $SECRET = "...";
+              ...
+              $JOSE.JWT.verify($P, $SECRET, ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $SECRET = "...";
+              ...
+              $JOSE.JWT.sign($P, $JOSE.JWK.asKey($SECRET), ...);
+          - pattern: |
+              $JOSE = require("jose");
+              ...
+              $SECRET = "...";
+              ...
+              $JOSE.JWT.verify($P, $JOSE.JWK.asKey($SECRET), ...);
+    message: Hardcoded JWT secret was found
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A3: Sensitive Data Exposure'
+      cwe: 'CWE-798: Use of Hard-coded Credentials'

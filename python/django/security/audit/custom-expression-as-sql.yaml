@@ -1,0 +1,16 @@
+rules:
+- id: custom-expression-as-sql
+  languages:
+  - python
+  message: "Detected a Custom Expression ''$EXPRESSION'' calling ''as_sql(...).''
+    Ensure no user input enters this function because it is susceptible to SQL injection.
+    See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.Func.as_sql
+    for more information."
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: "A1: Injection"
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.Func.as_sql
+    - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
+  pattern: $EXPRESSION.as_sql(...)
+  severity: WARNING

@@ -6,10 +6,10 @@ This is an repository containing rules written for [semgrep](https://semgrep.dev
 
 ## Contributing
 
-| semgrep | test status          |
-| ------- | ------------------ |
-| `latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep+branch%3Amaster) |
-| `develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%semgrep-develop+branch%3Adevelop) |
+| branch | using semgrep docker image | test status          |
+| ------------ | ------------------------ | -------------------- |
+| `master` | `returntocorp/semgrep:latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep/badge.svg?branch=master)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep+branch%3Amaster) |
+| `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
@@ -19,11 +19,11 @@ If you want run these rules rather than write them, check out the easy-to-use [b
 
 ## Help
 
-Contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev) for help.
+Join slack for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
 
 ## Testing Rules
 
-A testing system is available which can be used to check the rules against example source code files.
+A testing system is available which can be used to check the rules against example source code files. It requires `semgrep` from [semgrep](https://semgrep.dev)
 
 If you wrote a rule in a yaml named `eqeq-bad.yaml` with a rule id named `my-eqeq-bad`, you could put a file in the same directory named eqeq-bad.py (it just needs to have the same name except for the extension as eqeq-bad.yaml). Then:
 
@@ -45,4 +45,5 @@ x != x
 
 If you fork this repo or create your own, you can add a special [semgrep-rules-test](https://github.com/marketplace/actions/semgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of semgrep.
 
-See ours [here](.github/workflows/semgrep.yml)
+See ours [here](.github/workflows/semgrep-rules-test.yml)
+

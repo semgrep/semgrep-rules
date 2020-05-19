@@ -1,0 +1,44 @@
+rules:
+  - id: formatted-string-bashoperator
+    patterns:
+      - pattern-either:
+          - pattern: |
+              airflow.operators.bash_operator.BashOperator(..., bash_command="..." + $CONCAT, ...)
+          - pattern: |
+              airflow.operators.bash_operator.BashOperator(..., bash_command="...".format(...), ...)
+          - pattern: |
+              airflow.operators.bash_operator.BashOperator(..., bash_command=f"...", ...)
+          - pattern: |
+              airflow.operators.bash_operator.BashOperator(..., bash_command="..." % $PARAMS, ...)
+          - pattern: |
+              $CMD = "..." % $PARAMS
+              ...
+              airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
+          - pattern: |
+              $CMD = $STR.format(...)
+              ...
+              airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
+          - pattern: |
+              $CMD = f"..."
+              ...
+              airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
+          - pattern: |
+              $CMD = "..." + $CONCAT
+              ...
+              airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
+          - pattern: |
+              $CMD = "..."
+              ...
+              $CMD += $CONCAT
+              ...
+              airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
+    message: |
+      Found a formatted string in BashOperator: $CMD.
+      This could be vulnerable to injection.
+      Be extra sure your variables are not controllable by external sources.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp: "A1: Injection"
+    languages: 
+    - python
+    severity: WARNING

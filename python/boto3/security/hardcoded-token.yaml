@@ -1,0 +1,28 @@
+rules:
+- id: hardcoded-token
+  message: |
+    Hardcoded AWS access token detected. Use environment variables 
+    to access tokens (e.g., os.environ.get(...)) or use non version-controlled 
+    configuration files.
+  metadata:
+    cwe: "CWE-798: Use of Hard-coded Credentials"
+    owasp: "A2: Broken Authentication"
+    source-rule-url: https://pypi.org/project/flake8-boto3/
+    references:
+    - https://bento.dev/checks/boto3/hardcoded-access-token/
+    - https://aws.amazon.com/blogs/security/what-to-do-if-you-inadvertently-expose-an-aws-access-key/
+  patterns:
+  - pattern-either:
+    - pattern: $W(..., aws_secret_access_key="=~/[A-Za-z0-9/+=]+/", ...)
+    - pattern: $W(..., aws_access_key_id="=~/^AKI/", ...)
+    - pattern: $W(..., aws_session_token="...", ...)
+    - pattern: |
+        $ACCESSKEY = "=~/^AKI/"
+        ...
+        $W(..., aws_access_key_id=$ACCESSKEY, ...)
+    - pattern: |
+        $SECRETKEY = "=~/[A-Za-z0-9]+/"
+        ...
+        $W(..., aws_secret_access_key=$SECRETKEY, ...)
+  languages: [python]
+  severity: WARNING

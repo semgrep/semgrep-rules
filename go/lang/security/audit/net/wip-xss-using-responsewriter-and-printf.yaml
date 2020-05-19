@@ -1,0 +1,57 @@
+rules:
+- id: wip-xss-using-responsewriter-and-printf
+  patterns:
+  - pattern-inside: |
+      func $FUNC(..., $W http.ResponseWriter, ...) {
+          ...
+      }
+  - pattern-inside: |
+      ...
+      var $T = "..."
+      ...
+      $W.Write([]byte(fmt.$PRINTF($T, ...)), ...)
+  - pattern-either:
+    - pattern: |
+        $PARAMS = r.URL.Query()
+        ...
+        $DATA, $ERR := $PARAMS[...]
+        ...
+        $INTERM = $ANYTHING(..., $DATA, ...)
+        ...
+        $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
+    - pattern: |
+        $PARAMS = r.URL.Query()
+        ...
+        $DATA, $ERR := $PARAMS[...]
+        ...
+        $INTERM = $DATA[...]
+        ...
+        $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
+    - pattern: |
+        $DATA, $ERR := r.URL.Query()[...]
+        ...
+        $INTERM = $DATA[...]
+        ...
+        $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
+    - pattern: |
+        $DATA, $ERR := r.URL.Query()[...]
+        ...
+        $INTERM = $ANYTHING(..., $DATA, ...)
+        ...
+        $W.Write([]byte(fmt.$PRINTF(..., $INTERM, ...)))
+    - pattern: |
+        $PARAMS = r.URL.Query()
+        ...
+        $DATA, $ERR := $PARAMS[...]
+        ...
+        $W.Write([]byte(fmt.$PRINTF(..., $DATA, ...)))
+  message: |
+    Found data going from url query parameters into formatted data written to ResponseWriter.
+    This could be XSS and should not be done. If you must do this, ensure your data is
+    sanitized or escaped.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: "A7: Cross-Site Scripting ('XSS')"
+  severity: WARNING
+  languages:
+  - go

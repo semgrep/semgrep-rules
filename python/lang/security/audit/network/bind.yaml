@@ -1,0 +1,18 @@
+rules:
+  - id: avoid-bind-to-all-interfaces
+    patterns:
+    - pattern-either:
+        - pattern: |
+            $S = socket.socket(...)
+            ...
+            $S.bind(("0.0.0.0", ...))
+        - pattern: |
+            $S = socket.socket(...)
+            ...
+            $S.bind(("", ...))
+    message: "Running `socket.bind` to 0.0.0.0 or empty string could unexpectedly expose the server publicly as it binds to all available interfaces"
+    metadata:
+      cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+      owasp: "A6: Security Misconfiguration"
+    languages: [python]
+    severity: WARNING

@@ -1,0 +1,14 @@
+rules:
+    - id: hardcoded-jwt-key
+      metadata:
+        cwe: "CWE-798: Use of Hard-coded Credentials"
+        owasp: "A2: Broken Authentication"
+      pattern: |-
+        var $X = []byte("...")
+        ...
+        $TOKEN := jwt.NewWithClaims(...)
+        ...
+        $Y := $TOKEN.SignedString($X)
+      message: "JWT token is hardcoded"
+      languages: [go]
+      severity: WARNING

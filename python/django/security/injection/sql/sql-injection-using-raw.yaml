@@ -1,0 +1,682 @@
+rules:
+  - id: sql-injection-using-raw
+    message: Data from request is passed to raw().
+      This is a SQL injection and could be exploited.
+      See https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection to learn how to mitigate.
+      See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp: "A1: Injection"
+      references:
+      - https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
+    languages: [python]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          def $FUNC(...):
+            ...
+      - pattern-either:
+        - pattern: $MODEL.objects.raw(..., $S.format(..., request.$W.get(...), ...), ...)
+        - pattern: $MODEL.objects.raw(..., $S % request.$W.get(...), ...)
+        - pattern: $MODEL.objects.raw(..., f"...{request.$W.get(...)}...", ...)
+        - pattern: $MODEL.objects.raw(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $A = $MODEL.objects.raw(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: return $MODEL.objects.raw(..., request.$W.get(...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            return $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $MODEL.objects.raw(..., $S.format(..., request.$W(...), ...), ...)
+        - pattern: $MODEL.objects.raw(..., $S % request.$W(...), ...)
+        - pattern: $MODEL.objects.raw(..., f"...{request.$W(...)}...", ...)
+        - pattern: $MODEL.objects.raw(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $A = $MODEL.objects.raw(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $A = $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: return $MODEL.objects.raw(..., request.$W(...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            return $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $MODEL.objects.raw(..., $S.format(..., request.$W[...], ...), ...)
+        - pattern: $MODEL.objects.raw(..., $S % request.$W[...], ...)
+        - pattern: $MODEL.objects.raw(..., f"...{request.$W[...]}...", ...)
+        - pattern: $MODEL.objects.raw(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $A = $MODEL.objects.raw(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $A = $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: return $MODEL.objects.raw(..., request.$W[...], ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            return $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $MODEL.objects.raw(..., $S.format(..., request.$W, ...), ...)
+        - pattern: $MODEL.objects.raw(..., $S % request.$W, ...)
+        - pattern: $MODEL.objects.raw(..., f"...{request.$W}...", ...)
+        - pattern: $MODEL.objects.raw(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: $A = $MODEL.objects.raw(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $A = $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            $A = $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: return $MODEL.objects.raw(..., request.$W, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.raw(..., $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.raw(..., $STR.format(..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR.format(..., $DATA, ...)
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.raw(..., $STR % $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.raw(..., f"...{$DATA}...", ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = f"...{$DATA}..."
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            return $MODEL.objects.raw(..., $STR + $DATA, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR + $DATA
+            ...
+            return $MODEL.objects.raw(..., $INTERM, ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $MODEL.objects.raw($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $MODEL.objects.raw($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $MODEL.objects.raw($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $MODEL.objects.raw($STR % (..., $DATA, ...), ...)
+        - pattern: |
+            $DATA = request.$W.get(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.raw($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W(...)
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.raw($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W[...]
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.raw($INTERM, ...)
+        - pattern: |
+            $DATA = request.$W
+            ...
+            $INTERM = $STR % (..., $DATA, ...)
+            ...
+            $MODEL.objects.raw($INTERM, ...)

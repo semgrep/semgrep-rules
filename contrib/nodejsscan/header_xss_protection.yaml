@@ -1,0 +1,65 @@
+#Semgrep bug overmatching https://github.com/returntocorp/semgrep/issues/513
+rules:
+  - id: header_xss_lusca
+    patterns:
+      - pattern-inside: |
+          var $X = require('lusca');
+          ...
+      - pattern-not: |
+          $X.use(helmet())
+      - pattern-either:
+          - pattern: |
+              $X.xssProtection(false)
+          - pattern: |
+              $X({ xssProtection: false})
+    message: >-
+      X-XSS-Protection header is set to 0. This will disable the browser's XSS
+      Filter.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
+  - id: header_xss_generic
+    patterns:
+      - pattern-inside: |
+          $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      - pattern-either:
+          - pattern: |
+              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+          - pattern: |
+              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+          - pattern: >
+              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : 0 },
+              ...)
+          - pattern: >
+              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/": 0
+              }, ...);
+          - pattern: |
+              var $VAL = 0;
+              ...
+              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
+          - pattern: |
+              var $VAL = 0;
+              ...
+              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
+          - pattern: >
+              var $VAL = 0;
+              ...
+              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : $VAL
+              }, ...);
+          - pattern: >
+              var $VAL = 0;
+              ...
+              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/":
+              $VAL }, ...);
+    message: >-
+      X-XSS-Protection header is set to 0. This will disable the browser's XSS
+      Filter.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: 'CWE-693: Protection Mechanism Failure'
