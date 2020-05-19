@@ -16,8 +16,8 @@ public class Cls extends HttpServlet
 
     // cf. https://find-sec-bugs.github.io/bugs.htm#TDES_USAGE
 	protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // ruleid: desede-is-deprecated
-        Cipher c = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+        // ruleid: des-is-deprecated
+        Cipher c = Cipher.getInstance("DES/ECB/PKCS5Padding");
         c.init(Cipher.ENCRYPT_MODE, k, iv);
         byte[] cipherText = c.doFinal(plainText);
     }

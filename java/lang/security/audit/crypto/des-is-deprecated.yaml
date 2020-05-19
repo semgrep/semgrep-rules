@@ -11,7 +11,7 @@ rules:
     references:
     - https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard
   severity: WARNING
-  pattern: $CIPHER.getInstance("=~/DES.*/");
+  pattern: $CIPHER.getInstance("=~/DES/.*/");
   fix: $CIPHER.getInstance("AES/GCM/NoPadding");
   languages:
   - java
