@@ -1,5 +1,5 @@
 rules:
-- id: python.sqlalchemy.correctness.bad-operator-in-filter
+- id: bad-operator-in-filter
   languages: [python]
   message: |
     Only comparison operators should be used inside SQLAlchemy filter expressions. Use `==` instead of `is`,
@@ -14,7 +14,7 @@ rules:
           ...
           $MODEL.query
   - pattern-inside: |
-      $TARGET.filter(...) 
+      $TARGET.filter(...)
   - pattern-either:
     - pattern: not $A
     - pattern: $A is $B
