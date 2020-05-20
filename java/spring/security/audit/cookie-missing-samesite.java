@@ -17,7 +17,6 @@ public class CookieController {
     public void setSecureHttponlyCookie(@RequestParam String value, HttpServletResponse response) {
         // ruleid:cookie-missing-samesite
         Cookie cookie = new Cookie("cookie", value);
-        // ok
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
