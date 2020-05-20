@@ -1,0 +1,23 @@
+rules:
+  - id: avoid-insecure-deserialization
+    metadata:
+      owasp: "A8: Insecure Deserialization"
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      references: https://docs.python.org/3/library/pickle.html
+    message: 
+      Avoid using insecure deserialization library, backed by `pickle` 
+      which is known to lead to remote code execution vulnerabilities.
+    languages: 
+    - python
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          @app.route(...)
+          def $X(...):
+            ...
+      - pattern-either:
+        - pattern: pickle.$FUNC(...)
+        - pattern: _pickle.$FUNC(...)
+        - pattern: cPickle.$FUNC(...)
+        - pattern: dill.$FUNC(...)
+        - pattern: shelve.$FUNC(...)
