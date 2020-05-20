@@ -13,41 +13,44 @@ handler = logging.StreamHandler(stream=sys.stderr)
 handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 logger.addHandler(handler)
 
-LANGS = (
+LANGS = {
     "python",
     "javascript",
     "java",
     "go",
-)
+}
 
 
 def get_owasp(rule: Dict[str, Any]) -> str:
     return rule.get("metadata", {}).get("owasp", "")
 
 def get_cwe(rule: Dict[str, Any]) -> str:
-    return rule.get("metadata", {}).get("cwe", "")
+    try:
+        return rule.get("metadata", {}).get("cwe", "")
+    except:
+        return list(filter(lambda d: "cwe" in d.keys(), rule.get('metadata')))[0].get('cwe')
 
-def get_lang(path: str) -> str:
-    for lang in LANGS:
-        if lang in path:
-            return lang
-    return ""
+def get_lang(rule: Dict[str, Any]) -> str:
+    return list(LANGS.intersection(set(rule.get('languages', []))))[0]
 
-def get_framework(path: str) -> str:
+def get_framework(path: str, rule: Dict[str, Any]) -> str:
     # get the dir name immediately under the language
-    for lang in LANGS:
-        if lang in path:
-            s = path.split(os.path.sep)
-            logger.debug(f"Split path={s}")
-            return s[s.index(lang)+1]
-    return ""
+    lang = get_lang(rule)
+    s = path.split(os.path.sep)
+    logger.debug(f"Split path={s}")
+    if 'contrib' in path:
+        return s[s.index('contrib')+1]
+    return s[s.index(lang)+1]
 
 def is_security(path: str) -> bool:
     return "security" in path
 
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
-    return "yaml" in ext 
+    return "yaml" in ext
+
+def normalize_owasp(owasp: str) -> str:
+    return owasp.replace(" -", ":").replace("\'", "")
 
 if __name__ == "__main__":
     import argparse
@@ -75,10 +78,10 @@ if __name__ == "__main__":
             with open(path, 'r') as fin:
                 rules = yaml.safe_load(fin)
                 for rule in rules.get('rules', []):
-                    lang = get_lang(path)
-                    framework = get_framework(path)
+                    framework = get_framework(path, rule)
+                    lang = get_lang(rule)
                     cwe = get_cwe(rule)
-                    owasp = get_owasp(rule)
+                    owasp = normalize_owasp(get_owasp(rule))
                     owasp_matrix[owasp].append((path, rule))
                     cwe_matrix[cwe].append((path, rule))
                     owasp_by_lang_matrix[owasp][lang].append((path, rule))
