@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import logging
 import yaml
 import os
@@ -13,25 +15,42 @@ handler = logging.StreamHandler(stream=sys.stderr)
 handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 logger.addHandler(handler)
 
-LANGS = {
-    "python",
-    "javascript",
-    "java",
-    "go",
-}
+class ArchList(list):
+    """
+    A list with a .get method that works like dict.get.
+    It's also very ancient and has dark magical powers.
+    To defeat it you must locate and destroy its phylactery.
+    :3
+    """
+
+    def get(self, index: int, default=None) -> Any:
+        try:
+            return super(ArchList, self).__getitem__(index)
+        except IndexError:
+            logger.warning(f"Could not get index {index} in list {self}")
+            return default
 
 
 def get_owasp(rule: Dict[str, Any]) -> str:
-    return rule.get("metadata", {}).get("owasp", "")
+    try:
+        return rule.get("metadata", {}).get("owasp", "")
+    except AttributeError:
+        return ArchList(filter(lambda d: "owasp" in d.keys(), rule.get('metadata'))).get(0, {}).get('owasp', "")
+    except Exception:
+        logger.warning(f"Could not get owasp for rule {rule.get('id', '')}")
+        return ""
 
 def get_cwe(rule: Dict[str, Any]) -> str:
     try:
         return rule.get("metadata", {}).get("cwe", "")
-    except:
-        return list(filter(lambda d: "cwe" in d.keys(), rule.get('metadata')))[0].get('cwe')
+    except AttributeError:
+        return ArchList(filter(lambda d: "cwe" in d.keys(), rule.get('metadata'))).get(0, {}).get('cwe', "")
+    except Exception:
+        logger.warning(f"Could not get cwe for rule {rule.get('id', '')}")
+        return ""
 
 def get_lang(rule: Dict[str, Any]) -> str:
-    return list(LANGS.intersection(set(rule.get('languages', []))))[0]
+    return ArchList(rule.get('languages', [])).get(0, "")
 
 def get_framework(path: str, rule: Dict[str, Any]) -> str:
     # get the dir name immediately under the language
@@ -92,13 +111,11 @@ if __name__ == "__main__":
     print(json.dumps({
         "owasp": {
             "totals": {owasp: len(v) for owasp, v in sorted(owasp_matrix.items())},
-            #"per_language": {owasp: {lang: len(v) for lang, v in owasp_by_lang_matrix[owasp].items()} for owasp in sorted(owasp_by_lang_matrix)},
             "per_framework": {owasp: {lang: {frm: len(v) for frm, v in owasp_by_framework_matrix[owasp][lang].items()} for lang in sorted(owasp_by_framework_matrix[owasp])} for owasp in sorted(owasp_by_framework_matrix)},
             "rules_with_no_owasp": [t[0] for t in owasp_matrix[""]],
         },
         "cwe": {
             "totals": {cwe: len(v) for k, v in sorted(cwe_matrix.items())},
-            #"per_language": {cwe: {lang: len(v) for lang, v in cwe_by_lang_matrix[cwe].items()} for cwe in sorted(cwe_by_lang_matrix)},
             "per_framework": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_framework_matrix[cwe][lang].items()} for lang in sorted(cwe_by_framework_matrix[cwe])} for cwe in sorted(cwe_by_framework_matrix)},
             "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
         }
