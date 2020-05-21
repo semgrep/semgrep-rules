@@ -4,6 +4,14 @@
 
 This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the main semgrep documentation for details on semgrep and the syntax for the yaml files in this repository.
 
+## Security Coverage
+
+`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
+
+<p align="center">
+    <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
+</p>
+
 ## Contributing
 
 | branch | using semgrep docker image | test status          |
