@@ -13,6 +13,23 @@ This is an repository containing rules written for [semgrep](https://semgrep.dev
 
 We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
+### Rule Namespacing
+
+The namespacing format for contributing rules is `<language>.<framework>.<category>.$MORE`. If a `framework` isn't applicable, use `lang` instead.
+
+`category` is one of:
+- security
+- correctness
+- best-practice
+- maintainability
+- performance
+
+If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), it is recommended to append `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
+
+<p align="center">
+    <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
+</p>
+
 ## Running Rules in CI/Pre-Commit/Developer Workflow
 
 If you want run these rules rather than write them, check out the easy-to-use [bento.dev](https://bento.dev)
