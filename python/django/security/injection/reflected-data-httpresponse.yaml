@@ -219,13 +219,6 @@ rules:
         $DATA = request.$W
         ...
         django.http.HttpResponse(..., f"...{$DATA}...", ...)
-    - pattern: $A = django.http.HttpResponse(..., request.$W, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = $STR + $DATA
-        ...
-        $A = django.http.HttpResponse(..., $INTERM, ...)
     - pattern: return django.http.HttpResponse(..., request.$W, ...)
     - pattern: |
         $DATA = request.$W
