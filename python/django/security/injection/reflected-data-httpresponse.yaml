@@ -1,251 +1,245 @@
 rules:
-  - id: reflected-data-httpresponse
-    message: Found request data reflected into HttpResponse. This could be vulnerable to XSS. Ensure the request data is properly escaped or sanitzed.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-      - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-      - pattern-either:
-        - pattern: django.http.HttpResponse(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: django.http.HttpResponse(..., $S % request.$W.get(...), ...)
-        - pattern: django.http.HttpResponse(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: django.http.HttpResponse(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W.get(...), ...)
-        - pattern: return django.http.HttpResponse(..., request.$W.get(...), ...)
-        - pattern: django.http.HttpResponse(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: django.http.HttpResponse(..., $S % request.$W(...), ...)
-        - pattern: django.http.HttpResponse(..., f"...{request.$W(...)}...", ...)
-        - pattern: django.http.HttpResponse(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.HttpResponse(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W(...), ...)
-        - pattern: return django.http.HttpResponse(..., request.$W(...), ...)
-        - pattern: django.http.HttpResponse(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: django.http.HttpResponse(..., $S % request.$W[...], ...)
-        - pattern: django.http.HttpResponse(..., f"...{request.$W[...]}...", ...)
-        - pattern: django.http.HttpResponse(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.HttpResponse(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W[...], ...)
-        - pattern: return django.http.HttpResponse(..., request.$W[...], ...)
-        - pattern: django.http.HttpResponse(..., $S.format(..., request.$W, ...), ...)
-        - pattern: django.http.HttpResponse(..., $S % request.$W, ...)
-        - pattern: django.http.HttpResponse(..., f"...{request.$W}...", ...)
-        - pattern: django.http.HttpResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.HttpResponse(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.HttpResponse(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.HttpResponse(..., f"...{$DATA}...", ...)
-        - pattern: $A = django.http.HttpResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: return django.http.HttpResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.HttpResponse(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.http.HttpResponse(..., $INTERM, ...)
+- id: reflected-data-httpresponse
+  message: Found request data reflected into HttpResponse. This could be vulnerable to XSS. Ensure the request data is properly escaped or sanitzed.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: "A7: Cross-Site Scripting (XSS)"
+    references:
+    - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: django.http.HttpResponse(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: django.http.HttpResponse(..., $S % request.$W.get(...), ...)
+    - pattern: django.http.HttpResponse(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: django.http.HttpResponse(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.HttpResponse(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.HttpResponse(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.HttpResponse(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.HttpResponse(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.HttpResponse(..., request.$W.get(...), ...)
+    - pattern: return django.http.HttpResponse(..., request.$W.get(...), ...)
+    - pattern: django.http.HttpResponse(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: django.http.HttpResponse(..., $S % request.$W(...), ...)
+    - pattern: django.http.HttpResponse(..., f"...{request.$W(...)}...", ...)
+    - pattern: django.http.HttpResponse(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.HttpResponse(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.HttpResponse(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.HttpResponse(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.HttpResponse(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.HttpResponse(..., request.$W(...), ...)
+    - pattern: return django.http.HttpResponse(..., request.$W(...), ...)
+    - pattern: django.http.HttpResponse(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: django.http.HttpResponse(..., $S % request.$W[...], ...)
+    - pattern: django.http.HttpResponse(..., f"...{request.$W[...]}...", ...)
+    - pattern: django.http.HttpResponse(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.HttpResponse(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.HttpResponse(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.HttpResponse(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.HttpResponse(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.HttpResponse(..., request.$W[...], ...)
+    - pattern: return django.http.HttpResponse(..., request.$W[...], ...)
+    - pattern: django.http.HttpResponse(..., $S.format(..., request.$W, ...), ...)
+    - pattern: django.http.HttpResponse(..., $S % request.$W, ...)
+    - pattern: django.http.HttpResponse(..., f"...{request.$W}...", ...)
+    - pattern: django.http.HttpResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.HttpResponse(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.HttpResponse(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.HttpResponse(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.HttpResponse(..., f"...{$DATA}...", ...)
+    - pattern: $A = django.http.HttpResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        $A = django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: return django.http.HttpResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.HttpResponse(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.http.HttpResponse(..., $INTERM, ...)
