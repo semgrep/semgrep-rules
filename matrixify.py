@@ -27,7 +27,6 @@ class ArchList(list):
         try:
             return super(ArchList, self).__getitem__(index)
         except IndexError:
-            logger.warning(f"Could not get index {index} in list {self}")
             return default
 
 
