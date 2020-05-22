@@ -1,506 +1,506 @@
 rules:
-  - id: request-data-write
-    message: |
-      Found request data in '.write(...)'. This could be dangerous if a malicious
-      actor is able to control data into sensitive files. For example, a malicious
-      actor could force rolling of critical log files, or cause a denial-of-service
-      by using up available disk space. Ensure content is validated.
-    metadata:
-      cwe: "CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')"
-      owasp: "A1: Injection"
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-either:
-        - pattern: $F.write(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: $A = $F.write(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: return $F.write(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: $F.write(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: $A = $F.write(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: return $F.write(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: $F.write(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: $A = $F.write(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: return $F.write(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: $F.write(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $F.write(..., $INTERM, ...)
-        - pattern: $A = $F.write(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $F.write(..., $INTERM, ...)
-        - pattern: return $F.write(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $F.write(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $F.write(..., $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $F.write(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $F.write(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $F.write(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $F.write(..., $INTERM, ...)
+- id: request-data-write
+  message: |
+    Found request data in '.write(...)'. This could be dangerous if a malicious
+    actor is able to control data into sensitive files. For example, a malicious
+    actor could force rolling of critical log files, or cause a denial-of-service
+    by using up available disk space. Ensure content is validated.
+  metadata:
+    cwe: "CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')"
+    owasp: 'A1: Injection'
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: $F.write(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: $A = $F.write(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $A = $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $A = $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $A = $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: return $F.write(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        return $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        return $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        return $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        return $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: $F.write(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: $A = $F.write(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $A = $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $A = $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $A = $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: return $F.write(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        return $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        return $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        return $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        return $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: $F.write(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: $A = $F.write(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $A = $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $A = $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $A = $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: return $F.write(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        return $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        return $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        return $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        return $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: $F.write(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $F.write(..., $INTERM, ...)
+    - pattern: $A = $F.write(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $A = $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $A = $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $A = $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $A = $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $A = $F.write(..., $INTERM, ...)
+    - pattern: return $F.write(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        return $F.write(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        return $F.write(..., $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        return $F.write(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        return $F.write(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        return $F.write(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        return $F.write(..., $INTERM, ...)

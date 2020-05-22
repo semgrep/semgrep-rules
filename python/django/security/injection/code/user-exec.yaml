@@ -1,55 +1,55 @@
 rules:
-  - id: user-exec
-    message: |
-      Found user data in a call to 'exec'. This is extremely dangerous because
-      it can enable an attacker to execute remote code. See
-      https://owasp.org/www-community/attacks/Code_Injection for more information.
-    metadata:
-      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-      owasp: "A1: Injection"
-    patterns:
-      - pattern-inside: |
-          def $F(...):
-            ...
-      - pattern-either:
-          - pattern: exec(..., request.$W.get(...), ...)
-          - pattern: |
-              $V = request.$W.get(...)
-              ...
-              exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W.get(...)
-              ...
-              $A = exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W.get(...)
-              ...
-              return exec(..., $V, ...)
-          - pattern: exec(..., request.$W(...), ...)
-          - pattern: |
-              $V = request.$W(...)
-              ...
-              exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W(...)
-              ...
-              $A = exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W(...)
-              ...
-              return exec(..., $V, ...)
-          - pattern: exec(..., request.$W[...], ...)
-          - pattern: |
-              $V = request.$W[...]
-              ...
-              exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W[...]
-              ...
-              $A = exec(..., $V, ...)
-          - pattern: |
-              $V = request.$W[...]
-              ...
-              return exec(..., $V, ...)
-    languages: [python]
-    severity: WARNING
+- id: user-exec
+  message: |
+    Found user data in a call to 'exec'. This is extremely dangerous because
+    it can enable an attacker to execute remote code. See
+    https://owasp.org/www-community/attacks/Code_Injection for more information.
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'
+  patterns:
+  - pattern-inside: |
+      def $F(...):
+        ...
+  - pattern-either:
+    - pattern: exec(..., request.$W.get(...), ...)
+    - pattern: |
+        $V = request.$W.get(...)
+        ...
+        exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W.get(...)
+        ...
+        $A = exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W.get(...)
+        ...
+        return exec(..., $V, ...)
+    - pattern: exec(..., request.$W(...), ...)
+    - pattern: |
+        $V = request.$W(...)
+        ...
+        exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W(...)
+        ...
+        $A = exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W(...)
+        ...
+        return exec(..., $V, ...)
+    - pattern: exec(..., request.$W[...], ...)
+    - pattern: |
+        $V = request.$W[...]
+        ...
+        exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W[...]
+        ...
+        $A = exec(..., $V, ...)
+    - pattern: |
+        $V = request.$W[...]
+        ...
+        return exec(..., $V, ...)
+  languages: [python]
+  severity: WARNING

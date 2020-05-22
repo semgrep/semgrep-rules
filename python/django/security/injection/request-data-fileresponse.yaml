@@ -1,147 +1,148 @@
 rules:
-  - id: request-data-fileresponse
-    message: Found request data opening a file into FileResponse. This is dangerous because an attacker could specify an arbitrary file to read, leaking data. Be sure to validate or sanitize the filename before using it in FileResponse.
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      owasp: "A1: Injection"
-      references:
-      - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-      - pattern-either:
-        - pattern: django.http.FileResponse(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            django.http.FileResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.FileResponse(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            $A = django.http.FileResponse(..., $INTERM, ...)
-        - pattern: return django.http.FileResponse(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            return django.http.FileResponse(..., $INTERM, ...)
-        - pattern: django.http.FileResponse(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            django.http.FileResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.FileResponse(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            $A = django.http.FileResponse(..., $INTERM, ...)
-        - pattern: return django.http.FileResponse(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            return django.http.FileResponse(..., $INTERM, ...)
-        - pattern: django.http.FileResponse(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            django.http.FileResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.FileResponse(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            $A = django.http.FileResponse(..., $INTERM, ...)
-        - pattern: return django.http.FileResponse(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            return django.http.FileResponse(..., $INTERM, ...)
-        - pattern: django.http.FileResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            django.http.FileResponse(..., $INTERM, ...)
-        - pattern: $A = django.http.FileResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            $A = django.http.FileResponse(..., $INTERM, ...)
-        - pattern: return django.http.FileResponse(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.http.FileResponse(..., open($DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = open($DATA, ...)
-            ...
-            return django.http.FileResponse(..., $INTERM, ...)
+- id: request-data-fileresponse
+  message: Found request data opening a file into FileResponse. This is dangerous because an attacker could specify an arbitrary
+    file to read, leaking data. Be sure to validate or sanitize the filename before using it in FileResponse.
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp: 'A1: Injection'
+    references:
+    - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: django.http.FileResponse(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        django.http.FileResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.FileResponse(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $A = django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        $A = django.http.FileResponse(..., $INTERM, ...)
+    - pattern: return django.http.FileResponse(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        return django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        return django.http.FileResponse(..., $INTERM, ...)
+    - pattern: django.http.FileResponse(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        django.http.FileResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.FileResponse(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $A = django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        $A = django.http.FileResponse(..., $INTERM, ...)
+    - pattern: return django.http.FileResponse(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        return django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        return django.http.FileResponse(..., $INTERM, ...)
+    - pattern: django.http.FileResponse(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        django.http.FileResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.FileResponse(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $A = django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        $A = django.http.FileResponse(..., $INTERM, ...)
+    - pattern: return django.http.FileResponse(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        return django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        return django.http.FileResponse(..., $INTERM, ...)
+    - pattern: django.http.FileResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        django.http.FileResponse(..., $INTERM, ...)
+    - pattern: $A = django.http.FileResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $A = django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        $A = django.http.FileResponse(..., $INTERM, ...)
+    - pattern: return django.http.FileResponse(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        return django.http.FileResponse(..., open($DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = open($DATA, ...)
+        ...
+        return django.http.FileResponse(..., $INTERM, ...)
