@@ -1,52 +1,45 @@
 rules:
-  - id: avoid-pickle 
-    metadata:
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      references: https://docs.python.org/3/library/pickle.html
-    languages:
-    - python
-    message:
-      Avoid using `pickle` library which is known to lead to remote code execution vulnerabilities.
-    severity: WARNING
-    pattern-either:
-      - pattern: pickle.$FUNC(...)
-      - pattern: _pickle.$FUNC(...)
-  - id: avoid-cPickle 
-    metadata:
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      references: https://docs.python.org/3/library/pickle.html
-    languages:
-    - python
-    message: 
-      Avoid using `cPickle` library as it is backed by `pickle` 
-      which is known to lead to remote code execution vulnerabilities.
-    severity: WARNING
-    pattern: cPickle.$FUNC(...)
-  - id: avoid-dill 
-    metadata:
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      references: https://docs.python.org/3/library/pickle.html
-    languages:
-    - python
-    message:
-      Avoid using `dill` library as it is backed by `pickle` 
-      which is known to lead to remote code execution vulnerabilities.
-    severity: WARNING
-    pattern-either:
-      - pattern: dill.$FUNC(...)
-  - id: avoid-shelve
-    metadata:
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      references: https://docs.python.org/3/library/pickle.html
-    languages:
-    - python
-    message: 
-      Avoid using `shelve` library as it is backed by `pickle` 
-      which is known to lead to remote code execution vulnerabilities.
-    severity: WARNING
-    pattern-either:
-      - pattern: shelve.$FUNC(...)
+- id: avoid-pickle
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references: https://docs.python.org/3/library/pickle.html
+  languages:
+  - python
+  message: Avoid using `pickle` library which is known to lead to remote code execution vulnerabilities.
+  severity: WARNING
+  pattern-either:
+  - pattern: pickle.$FUNC(...)
+  - pattern: _pickle.$FUNC(...)
+- id: avoid-cPickle
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references: https://docs.python.org/3/library/pickle.html
+  languages:
+  - python
+  message: Avoid using `cPickle` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  severity: WARNING
+  pattern: cPickle.$FUNC(...)
+- id: avoid-dill
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references: https://docs.python.org/3/library/pickle.html
+  languages:
+  - python
+  message: Avoid using `dill` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  severity: WARNING
+  pattern-either:
+  - pattern: dill.$FUNC(...)
+- id: avoid-shelve
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references: https://docs.python.org/3/library/pickle.html
+  languages:
+  - python
+  message: Avoid using `shelve` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  severity: WARNING
+  pattern-either:
+  - pattern: shelve.$FUNC(...)

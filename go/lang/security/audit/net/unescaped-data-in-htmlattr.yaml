@@ -1,66 +1,66 @@
 rules:
-  - id: unescaped-data-in-htmlattr
-    message: | 
-      Found a formatted template string passed to 'template.HTMLAttr()'.
-      'template.HTMLAttr()' does not escape contents. Be absolutely sure
-      there is no user-controlled data in this template.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A1: Injection"
-      references:
-      - https://golang.org/pkg/html/template/#HTMLAttr
-    languages: [go]
-    severity: WARNING
-    patterns:
-      - pattern-either:
-          - pattern: template.HTMLAttr($T + $X, ...)
-          - pattern: template.HTMLAttr(fmt.$P("...", ...), ...)
-          - pattern: |
-              $T = "..."
-              ...
-              $T = $FXN(..., $T, ...)
-              ...
-              $A = template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = "..."
-              ...
-              $T = $FXN(..., $T, ...)
-              ...
-              return template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = $X + $Y
-              ...
-              $A = template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = fmt.$P("...", ...)
-              ...
-              $A = template.HTMLAttr($T, ...)
-          - pattern: |
-              $T, $ERR = fmt.$P("...", ...)
-              ...
-              $A = template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = fmt.$P("...", ...)
-              ...
-              return template.HTMLAttr($T, ...)
-          - pattern: |
-              $T, $ERR = fmt.$P("...", ...)
-              ...
-              return template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = $X + $Y
-              ...
-              return template.HTMLAttr($T, ...)
-          - pattern: |
-              $T = "..."
-              ...
-              $OTHER, $ERR = fmt.$P(..., $T, ...)
-              ...
-              $A = template.HTMLAttr($OTHER, ...)
-          - pattern: |
-              $T = "..."
-              ...
-              $OTHER, $ERR = fmt.$P(..., $T, ...)
-              ...
-              return template.HTMLAttr($OTHER, ...)
+- id: unescaped-data-in-htmlattr
+  message: |
+    Found a formatted template string passed to 'template.HTMLAttr()'.
+    'template.HTMLAttr()' does not escape contents. Be absolutely sure
+    there is no user-controlled data in this template.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A1: Injection'
+    references:
+    - https://golang.org/pkg/html/template/#HTMLAttr
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: template.HTMLAttr($T + $X, ...)
+    - pattern: template.HTMLAttr(fmt.$P("...", ...), ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $T = $FXN(..., $T, ...)
+        ...
+        $A = template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $T = $FXN(..., $T, ...)
+        ...
+        return template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = $X + $Y
+        ...
+        $A = template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = fmt.$P("...", ...)
+        ...
+        $A = template.HTMLAttr($T, ...)
+    - pattern: |
+        $T, $ERR = fmt.$P("...", ...)
+        ...
+        $A = template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = fmt.$P("...", ...)
+        ...
+        return template.HTMLAttr($T, ...)
+    - pattern: |
+        $T, $ERR = fmt.$P("...", ...)
+        ...
+        return template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = $X + $Y
+        ...
+        return template.HTMLAttr($T, ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $OTHER, $ERR = fmt.$P(..., $T, ...)
+        ...
+        $A = template.HTMLAttr($OTHER, ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $OTHER, $ERR = fmt.$P(..., $T, ...)
+        ...
+        return template.HTMLAttr($OTHER, ...)
 

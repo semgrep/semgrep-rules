@@ -12,7 +12,7 @@ rules:
     references:
     - https://capec.mitre.org/data/definitions/463.html
   severity: WARNING
-  patterns: 
+  patterns:
   - pattern: $CIPHER.getInstance($MODE);
   - pattern-where-python: |
       "CBC" in vars['$MODE']

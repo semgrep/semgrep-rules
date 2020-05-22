@@ -1,18 +1,18 @@
 rules:
-    - id: useless-assignment
-      patterns:
-        - pattern-not: |
-            $X = $Y;
-            $X = $X.$Z(...);
-        - pattern-not: |
-            $X = $Y;
-            $X = $Z + $X;
-        - pattern-not: |
-            $X = $Y;
-            $X = $X + $Z;
-        - pattern: |
-            $X = $Y;
-            $X = $Z;
-      message: "`$X` is assigned twice; the first assignment is useless"
-      languages: [javascript]
-      severity: WARNING
+- id: useless-assignment
+  patterns:
+  - pattern-not: |
+      $X = $Y;
+      $X = $X.$Z(...);
+  - pattern-not: |
+      $X = $Y;
+      $X = $Z + $X;
+  - pattern-not: |
+      $X = $Y;
+      $X = $X + $Z;
+  - pattern: |
+      $X = $Y;
+      $X = $Z;
+  message: '`$X` is assigned twice; the first assignment is useless'
+  languages: [javascript]
+  severity: WARNING

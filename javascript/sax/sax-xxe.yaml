@@ -6,13 +6,13 @@ rules:
     owasp: 'A4: XML External Entities (XXE)'
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
   severity: WARNING
-  languages: [javascript] 
+  languages: [javascript]
   pattern-either:
-    - pattern: |
-        require('sax');
-        ...
-        $PARSER.ondoctype = ...;
-    - pattern: |
-        require('sax');
-        ...
-        $PARSER.on('doctype',...);
+  - pattern: |
+      require('sax');
+      ...
+      $PARSER.ondoctype = ...;
+  - pattern: |-
+      require('sax');
+      ...
+      $PARSER.on('doctype',...);
