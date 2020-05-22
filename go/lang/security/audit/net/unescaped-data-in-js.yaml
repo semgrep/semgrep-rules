@@ -20,47 +20,23 @@ rules:
         ...
         $T = $FXN(..., $T, ...)
         ...
-        $A = template.JS($T, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $T = $FXN(..., $T, ...)
-        ...
-        return template.JS($T, ...)
-    - pattern: |
-        $T = $X + $Y
-        ...
-        $A = template.JS($T, ...)
+        template.JS($T, ...)
     - pattern: |
         $T = fmt.$P("...", ...)
         ...
-        $A = template.JS($T, ...)
+        template.JS($T, ...)
     - pattern: |
         $T, $ERR = fmt.$P("...", ...)
         ...
-        $A = template.JS($T, ...)
-    - pattern: |
-        $T = fmt.$P("...", ...)
-        ...
-        return template.JS($T, ...)
-    - pattern: |
-        $T, $ERR = fmt.$P("...", ...)
-        ...
-        return template.JS($T, ...)
+        template.JS($T, ...)
     - pattern: |
         $T = $X + $Y
         ...
-        return template.JS($T, ...)
+        template.JS($T, ...)
     - pattern: |
         $T = "..."
         ...
         $OTHER, $ERR = fmt.$P(..., $T, ...)
         ...
-        $A = template.JS($OTHER, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $OTHER, $ERR = fmt.$P(..., $T, ...)
-        ...
-        return template.JS($OTHER, ...)
+        template.JS($OTHER, ...)
 

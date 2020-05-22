@@ -8,11 +8,7 @@ rules:
     - pattern: |
         $Y = json.dumps(...)
         ...
-        return django.http.HttpResponse($Y, ...)
-    - pattern: |
-        $Y = json.dumps(...)
-        ...
-        $Z = django.http.HttpResponse($Y, ...)
+        django.http.HttpResponse($Y, ...)
   message: Use JsonResponse instead
   languages: [python]
   severity: ERROR

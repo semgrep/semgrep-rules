@@ -26,27 +26,7 @@ rules:
         ...
         django.http.FileResponse(..., $INTERM, ...)
     - pattern: $A = django.http.FileResponse(..., request.$W.get(...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $A = django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        $A = django.http.FileResponse(..., $INTERM, ...)
     - pattern: return django.http.FileResponse(..., request.$W.get(...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        return django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        return django.http.FileResponse(..., $INTERM, ...)
     - pattern: django.http.FileResponse(..., request.$W(...), ...)
     - pattern: |
         $DATA = request.$W(...)
@@ -59,27 +39,7 @@ rules:
         ...
         django.http.FileResponse(..., $INTERM, ...)
     - pattern: $A = django.http.FileResponse(..., request.$W(...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $A = django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        $A = django.http.FileResponse(..., $INTERM, ...)
     - pattern: return django.http.FileResponse(..., request.$W(...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        return django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        return django.http.FileResponse(..., $INTERM, ...)
     - pattern: django.http.FileResponse(..., request.$W[...], ...)
     - pattern: |
         $DATA = request.$W[...]
@@ -92,27 +52,7 @@ rules:
         ...
         django.http.FileResponse(..., $INTERM, ...)
     - pattern: $A = django.http.FileResponse(..., request.$W[...], ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $A = django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        $A = django.http.FileResponse(..., $INTERM, ...)
     - pattern: return django.http.FileResponse(..., request.$W[...], ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        return django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        return django.http.FileResponse(..., $INTERM, ...)
     - pattern: django.http.FileResponse(..., request.$W, ...)
     - pattern: |
         $DATA = request.$W
@@ -125,24 +65,4 @@ rules:
         ...
         django.http.FileResponse(..., $INTERM, ...)
     - pattern: $A = django.http.FileResponse(..., request.$W, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $A = django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        $A = django.http.FileResponse(..., $INTERM, ...)
     - pattern: return django.http.FileResponse(..., request.$W, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        return django.http.FileResponse(..., open($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = open($DATA, ...)
-        ...
-        return django.http.FileResponse(..., $INTERM, ...)
