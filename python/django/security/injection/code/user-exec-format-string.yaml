@@ -20,29 +20,9 @@ rules:
     - pattern: |
         $V = request.$W.get(...)
         ...
-        $A = exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        return exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
         $S = $STR % $V
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = $STR % $V
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = $STR % $V
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., "..." % request.$W(...), ...)
     - pattern: |
         $V = request.$W(...)
@@ -51,29 +31,9 @@ rules:
     - pattern: |
         $V = request.$W(...)
         ...
-        $A = exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        return exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
         $S = $STR % $V
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = $STR % $V
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = $STR % $V
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., $STR % request.$W[...], ...)
     - pattern: |
         $V = request.$W[...]
@@ -82,29 +42,9 @@ rules:
     - pattern: |
         $V = request.$W[...]
         ...
-        $A = exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        return exec(..., $STR % $V, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
         $S = $STR % $V
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = $STR % $V
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = $STR % $V
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., $STR.format(..., request.$W.get(...), ...), ...)
     - pattern: |
         $V = request.$W.get(...)
@@ -113,29 +53,9 @@ rules:
     - pattern: |
         $V = request.$W.get(...)
         ...
-        $A = exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        return exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
         $S = $STR.format(..., $V, ...)
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., $STR.format(..., request.$W(...), ...), ...)
     - pattern: |
         $V = request.$W(...)
@@ -144,29 +64,9 @@ rules:
     - pattern: |
         $V = request.$W(...)
         ...
-        $A = exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        return exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
         $S = $STR.format(..., $V, ...)
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., $STR.format(..., request.$W[...], ...), ...)
     - pattern: |
         $V = request.$W[...]
@@ -175,29 +75,9 @@ rules:
     - pattern: |
         $V = request.$W[...]
         ...
-        $A = exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        return exec(..., $STR.format(..., $V, ...), ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
         $S = $STR.format(..., $V, ...)
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = $STR.format(..., $V, ...)
-        ...
-        return exec(..., $S, ...)
     - pattern: |
         $V = request.$W.get(...)
         ...
@@ -205,29 +85,9 @@ rules:
     - pattern: |
         $V = request.$W.get(...)
         ...
-        $A = exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        return exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
         $S = f"...{$V}..."
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = f"...{$V}..."
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $S = f"...{$V}..."
-        ...
-        return exec(..., $S, ...)
     - pattern: |
         $V = request.$W(...)
         ...
@@ -235,29 +95,9 @@ rules:
     - pattern: |
         $V = request.$W(...)
         ...
-        $A = exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        return exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
         $S = f"...{$V}..."
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = f"...{$V}..."
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $S = f"...{$V}..."
-        ...
-        return exec(..., $S, ...)
     - pattern: |
         $V = request.$W[...]
         ...
@@ -265,29 +105,9 @@ rules:
     - pattern: |
         $V = request.$W[...]
         ...
-        $A = exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        return exec(..., f"...{$V}...", ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
         $S = f"...{$V}..."
         ...
         exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = f"...{$V}..."
-        ...
-        $A = exec(..., $S, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $S = f"...{$V}..."
-        ...
-        return exec(..., $S, ...)
     - pattern: exec(..., base64.decodestring($S.format(..., request.$W.get(...), ...), ...), ...)
     - pattern: exec(..., base64.decodestring($S % request.$W.get(...), ...), ...)
     - pattern: exec(..., base64.decodestring(f"...{request.$W.get(...)}...", ...), ...)
@@ -317,46 +137,6 @@ rules:
         ...
         exec(..., $INTERM, ...)
     - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $A = exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $A = exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        return exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        return exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W.get(...)
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
         $DATA = request.$W(...)
         ...
         exec(..., base64.decodestring($DATA, ...), ...)
@@ -376,46 +156,6 @@ rules:
         $INTERM = base64.decodestring(bytes($DATA, ...), ...)
         ...
         exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $A = exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $A = exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        return exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        return exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W(...)
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        return exec(..., $INTERM, ...)
     - pattern: |
         $DATA = request.$W[...]
         ...
@@ -437,46 +177,6 @@ rules:
         ...
         exec(..., $INTERM, ...)
     - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $A = exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $A = exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        return exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        return exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W[...]
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
         $DATA = request.$W
         ...
         exec(..., base64.decodestring($DATA, ...), ...)
@@ -496,45 +196,5 @@ rules:
         $INTERM = base64.decodestring(bytes($DATA, ...), ...)
         ...
         exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $A = exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $A = exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        $A = exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        return exec(..., base64.decodestring($DATA, ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = base64.decodestring($DATA, ...)
-        ...
-        return exec(..., $INTERM, ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        return exec(..., base64.decodestring(bytes($DATA, ...), ...), ...)
-    - pattern: |
-        $DATA = request.$W
-        ...
-        $INTERM = base64.decodestring(bytes($DATA, ...), ...)
-        ...
-        return exec(..., $INTERM, ...)
   languages: [python]
   severity: WARNING

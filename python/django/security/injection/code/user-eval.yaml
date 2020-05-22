@@ -19,39 +19,15 @@ rules:
         $V = request.$W.get(...)
         ...
         eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        $A = eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        return eval(..., $V, ...)
     - pattern: eval(..., request.$W(...), ...)
     - pattern: |
         $V = request.$W(...)
         ...
         eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        $A = eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        return eval(..., $V, ...)
     - pattern: eval(..., request.$W[...], ...)
     - pattern: |
         $V = request.$W[...]
         ...
         eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        $A = eval(..., $V, ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        return eval(..., $V, ...)
   languages: [python]
   severity: WARNING

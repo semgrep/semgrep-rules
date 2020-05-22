@@ -21,46 +21,22 @@ rules:
         ...
         $T = $FXN(..., $T, ...)
         ...
-        $A = template.HTML($T, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $T = $FXN(..., $T, ...)
-        ...
-        return template.HTML($T, ...)
-    - pattern: |
-        $T = $X + $Y
-        ...
-        $A = template.HTML($T, ...)
+        template.HTML($T, ...)
     - pattern: |
         $T = fmt.$P("...", ...)
         ...
-        $A = template.HTML($T, ...)
+        template.HTML($T, ...)
     - pattern: |
         $T, $ERR = fmt.$P("...", ...)
         ...
-        $A = template.HTML($T, ...)
-    - pattern: |
-        $T = fmt.$P("...", ...)
-        ...
-        return template.HTML($T, ...)
-    - pattern: |
-        $T, $ERR = fmt.$P("...", ...)
-        ...
-        return template.HTML($T, ...)
+        template.HTML($T, ...)
     - pattern: |
         $T = $X + $Y
         ...
-        return template.HTML($T, ...)
+        template.HTML($T, ...)
     - pattern: |
         $T = "..."
         ...
         $OTHER, $ERR = fmt.$P(..., $T, ...)
         ...
-        $A = template.HTML($OTHER, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $OTHER, $ERR = fmt.$P(..., $T, ...)
-        ...
-        return template.HTML($OTHER, ...)
+        template.HTML($OTHER, ...)
