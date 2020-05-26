@@ -1,682 +1,280 @@
 rules:
-  - id: sql-injection-db-cursor-execute
-    message: Data from request is passed to execute().
-      This is a SQL injection and could be exploited.
-      See https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection to learn how to mitigate.
-      See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
-    metadata:
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-      owasp: "A1: Injection"
-      references:
-      - https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-      - pattern-either:
-        - pattern: $CURSOR.execute(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: $CURSOR.execute(..., $S % request.$W.get(...), ...)
-        - pattern: $CURSOR.execute(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: $CURSOR.execute(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $A = $CURSOR.execute(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: return $CURSOR.execute(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $CURSOR.execute(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: $CURSOR.execute(..., $S % request.$W(...), ...)
-        - pattern: $CURSOR.execute(..., f"...{request.$W(...)}...", ...)
-        - pattern: $CURSOR.execute(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $A = $CURSOR.execute(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: return $CURSOR.execute(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $CURSOR.execute(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: $CURSOR.execute(..., $S % request.$W[...], ...)
-        - pattern: $CURSOR.execute(..., f"...{request.$W[...]}...", ...)
-        - pattern: $CURSOR.execute(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $A = $CURSOR.execute(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: return $CURSOR.execute(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $CURSOR.execute(..., $S.format(..., request.$W, ...), ...)
-        - pattern: $CURSOR.execute(..., $S % request.$W, ...)
-        - pattern: $CURSOR.execute(..., f"...{request.$W}...", ...)
-        - pattern: $CURSOR.execute(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $CURSOR.execute(..., $INTERM, ...)
-        - pattern: $A = $CURSOR.execute(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = $CURSOR.execute(..., $INTERM, ...)
-        - pattern: return $CURSOR.execute(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $CURSOR.execute(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $CURSOR.execute(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $CURSOR.execute(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return $CURSOR.execute(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return $CURSOR.execute(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $CURSOR.execute($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $CURSOR.execute($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $CURSOR.execute($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $CURSOR.execute($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            $CURSOR.execute($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            $CURSOR.execute($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            $CURSOR.execute($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            $CURSOR.execute($INTERM, ...)
+- id: sql-injection-db-cursor-execute
+  message: Data from request is passed to execute(). This is a SQL injection and could be exploited. See https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
+    to learn how to mitigate. See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: $CURSOR.execute(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: $CURSOR.execute(..., $S % request.$W.get(...), ...)
+    - pattern: $CURSOR.execute(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: $CURSOR.execute(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: $A = $CURSOR.execute(..., request.$W.get(...), ...)
+    - pattern: return $CURSOR.execute(..., request.$W.get(...), ...)
+    - pattern: $CURSOR.execute(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: $CURSOR.execute(..., $S % request.$W(...), ...)
+    - pattern: $CURSOR.execute(..., f"...{request.$W(...)}...", ...)
+    - pattern: $CURSOR.execute(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: $A = $CURSOR.execute(..., request.$W(...), ...)
+    - pattern: return $CURSOR.execute(..., request.$W(...), ...)
+    - pattern: $CURSOR.execute(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: $CURSOR.execute(..., $S % request.$W[...], ...)
+    - pattern: $CURSOR.execute(..., f"...{request.$W[...]}...", ...)
+    - pattern: $CURSOR.execute(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: $A = $CURSOR.execute(..., request.$W[...], ...)
+    - pattern: return $CURSOR.execute(..., request.$W[...], ...)
+    - pattern: $CURSOR.execute(..., $S.format(..., request.$W, ...), ...)
+    - pattern: $CURSOR.execute(..., $S % request.$W, ...)
+    - pattern: $CURSOR.execute(..., f"...{request.$W}...", ...)
+    - pattern: $CURSOR.execute(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        $CURSOR.execute(..., $INTERM, ...)
+    - pattern: $A = $CURSOR.execute(..., request.$W, ...)
+    - pattern: return $CURSOR.execute(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $CURSOR.execute($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $CURSOR.execute($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $CURSOR.execute($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $CURSOR.execute($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        $CURSOR.execute($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        $CURSOR.execute($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        $CURSOR.execute($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        $CURSOR.execute($INTERM, ...)
