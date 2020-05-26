@@ -1,0 +1,41 @@
+rules:
+- id: unescaped-template-extension
+  message: |
+    Flask does not automatically escape Jinja templates unless they have 
+    .html, .htm, .xml, or .xhtml extensions. This could lead to XSS attacks.
+    Use .html, .htm, .xml, or .xhtml for your template extensions.
+    See https://flask.palletsprojects.com/en/1.1.x/templating/#jinja-setup
+    for more information.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    source-rule-url: https://pypi.org/project/flake8-flask/
+    references:
+    - https://flask.palletsprojects.com/en/1.1.x/templating/#jinja-setup
+    - https://blog.r2c.dev/2020/bento-check-unescaped-template-extensions-in-flask/
+    - https://bento.dev/checks/flask/unescaped-file-extension/
+  patterns:
+  - pattern-not: flask.render_template("=~/.+\.html$/", ...)
+  - pattern-not: flask.render_template("=~/.+\.xml$/", ...)
+  - pattern-not: flask.render_template("=~/.+\.htm$/", ...)
+  - pattern-not: flask.render_template("=~/.+\.xhtml$/", ...)
+  - pattern-not: flask.render_template($X + "=~/\.html$/", ...)
+  - pattern-not: flask.render_template($X + "=~/\.xml$/", ...)
+  - pattern-not: flask.render_template($X + "=~/\.htm$/", ...)
+  - pattern-not: flask.render_template($X + "=~/\.xhtml$/", ...)
+  - pattern-not: flask.render_template("=~/.+\.html$/" % $X, ...)
+  - pattern-not: flask.render_template("=~/.+\.xml$/" % $X, ...)
+  - pattern-not: flask.render_template("=~/.+\.htm$/" % $X, ...)
+  - pattern-not: flask.render_template("=~/.+\.xhtml$/" % $X, ...)
+  - pattern-not: flask.render_template("=~/.+\.html$/".format(...), ...)
+  - pattern-not: flask.render_template("=~/.+\.xml$/".format(...), ...)
+  - pattern-not: flask.render_template("=~/.+\.htm$/".format(...), ...)
+  - pattern-not: flask.render_template("=~/.+\.xhtml$/".format(...), ...)
+  - pattern-not: flask.render_template($TEMPLATE)
+  - pattern-either:
+    - pattern: flask.render_template("...", ...)
+    - pattern: flask.render_template($X + "...", ...)
+    - pattern: flask.render_template("..." % $Y, ...)
+    - pattern: flask.render_template("...".format(...), ...)
+  languages: [python]
+  severity: WARNING

@@ -1,0 +1,230 @@
+rules:
+- id: xss-send-mail-html-message
+  message: |
+    Found request data in 'send_mail(...)' that uses 'html_message'.
+    This is dangerous because HTML emails are susceptible to XSS.
+    An attacker could inject data into this HTML email, causing XSS.
+  metadata:
+    cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://www.damonkohler.com/2008/12/email-injection.html
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: django.core.mail.send_mail(..., html_message=request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.send_mail(..., html_message=f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: $A = django.core.mail.send_mail(..., html_message=request.$W.get(...), ...)
+    - pattern: return django.core.mail.send_mail(..., html_message=request.$W.get(...), ...)
+    - pattern: django.core.mail.send_mail(..., html_message=request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.send_mail(..., html_message=f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.send_mail(..., html_message=$STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: $A = django.core.mail.send_mail(..., html_message=request.$W(...), ...)
+    - pattern: return django.core.mail.send_mail(..., html_message=request.$W(...), ...)
+    - pattern: django.core.mail.send_mail(..., html_message=request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.send_mail(..., html_message=$DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.send_mail(..., html_message=$STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.send_mail(..., html_message=$STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.send_mail(..., html_message=f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.send_mail(..., html_message=$STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: $A = django.core.mail.send_mail(..., html_message=request.$W[...], ...)
+    - pattern: return django.core.mail.send_mail(..., html_message=request.$W[...], ...)
+    - pattern: django.core.mail.send_mail(..., html_message=request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.send_mail(..., html_message=$DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.send_mail(..., html_message=$STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.send_mail(..., html_message=$STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.send_mail(..., html_message=f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.send_mail(..., html_message=$STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.core.mail.send_mail(..., html_message=$INTERM, ...)
+    - pattern: $A = django.core.mail.send_mail(..., html_message=request.$W, ...)
+    - pattern: return django.core.mail.send_mail(..., html_message=request.$W, ...)

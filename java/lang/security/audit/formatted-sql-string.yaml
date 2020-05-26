@@ -1,0 +1,103 @@
+rules:
+- id: formatted-sql-string
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead.
+  patterns:
+  - pattern-either:
+    - pattern: $W.execute($X + $Y, ...);
+    - pattern: |
+        String $SQL = $X + $Y;
+        ...
+        $W.execute($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += $Y;
+        ...
+        $W.execute($SQL, ...);
+    - pattern: $W.execute(String.format($X, ...), ...);
+    - pattern: |
+        String $SQL = String.format($X, ...);
+        ...
+        $W.execute($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += String.format(...);
+        ...
+        $W.execute($SQL, ...);
+    - pattern: $W.executeQuery($X + $Y, ...);
+    - pattern: |
+        String $SQL = $X + $Y;
+        ...
+        $W.executeQuery($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += $Y;
+        ...
+        $W.executeQuery($SQL, ...);
+    - pattern: $W.executeQuery(String.format($X, ...), ...);
+    - pattern: |
+        String $SQL = String.format($X, ...);
+        ...
+        $W.executeQuery($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += String.format(...);
+        ...
+        $W.executeQuery($SQL, ...);
+    - pattern: $W.createQuery($X + $Y, ...);
+    - pattern: |
+        String $SQL = $X + $Y;
+        ...
+        $W.createQuery($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += $Y;
+        ...
+        $W.createQuery($SQL, ...);
+    - pattern: $W.createQuery(String.format($X, ...), ...);
+    - pattern: |
+        String $SQL = String.format($X, ...);
+        ...
+        $W.createQuery($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += String.format(...);
+        ...
+        $W.createQuery($SQL, ...);
+    - pattern: $W.query($X + $Y, ...);
+    - pattern: |
+        String $SQL = $X + $Y;
+        ...
+        $W.query($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += $Y;
+        ...
+        $W.query($SQL, ...);
+    - pattern: $W.query(String.format($X, ...), ...);
+    - pattern: |
+        String $SQL = String.format($X, ...);
+        ...
+        $W.query($SQL, ...);
+    - pattern: |
+        String $SQL = $X;
+        ...
+        $SQL += String.format(...);
+        ...
+        $W.query($SQL, ...);
+  severity: WARNING
+  languages:
+  - java

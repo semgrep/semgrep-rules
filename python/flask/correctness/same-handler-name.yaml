@@ -1,0 +1,14 @@
+rules:
+- id: flask-duplicate-handler-name
+  pattern: |
+    @app.route("...", ...)
+    def $R(...):
+        ...
+    ...
+    @app.route("...", ...)
+    def $R(...):
+        ...
+  message: Looks like `$R` is a flask function handler that registered to two different routes. This will cause a runtime
+    error
+  languages: [python]
+  severity: WARNING

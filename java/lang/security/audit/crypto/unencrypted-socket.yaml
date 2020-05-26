@@ -1,0 +1,14 @@
+rules:
+- id: unencrypted-socket
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNENCRYPTED_SOCKET
+  message: |
+    The communication channel used is not encrypted.
+    The traffic could be read by an attacker intercepting the network traffic. 
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+  - pattern: new ServerSocket(...)
+  - pattern: new Socket(...)

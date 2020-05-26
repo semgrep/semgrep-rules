@@ -1,0 +1,19 @@
+rules:
+- id: use-of-weak-rsa-key
+  message: RSA keys should be at least 2048 bits
+  languages: [go]
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://github.com/securego/gosec/blob/master/rules/rsa.go
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
+  patterns:
+  - pattern-either:
+    - pattern: |
+        rsa.GenerateKey(..., $BITS)
+    - pattern: |
+        rsa.GenerateMultiPrimeKey(..., $BITS)
+  - pattern-where-python: |-
+      int(vars['$BITS']) < 2048

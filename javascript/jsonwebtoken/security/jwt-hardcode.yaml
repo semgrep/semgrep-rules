@@ -1,0 +1,53 @@
+rules:
+- id: hardcoded-jwt-secret
+  message: |
+    Hardcoded JWT secret or private key is used.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables: process.env.SECRET)
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+  patterns:
+  - pattern-either:
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $T = $JWT.sign($P, "...", ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $T = $JWT.verify($P, "...", ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        $JWT.sign($P, "...", ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        $JWT.verify($P, "...", ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $SECRET = "...";
+        ...
+        var $T = $JWT.sign($P, $SECRET, ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $SECRET = "...";
+        ...
+        var $T = $JWT.verify($P, $SECRET, ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $SECRET = "...";
+        ...
+        $JWT.sign($P, $SECRET, ...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $SECRET = "...";
+        ...
+        $JWT.verify($P, $SECRET, ...);
+  languages: [javascript]
+  severity: ERROR

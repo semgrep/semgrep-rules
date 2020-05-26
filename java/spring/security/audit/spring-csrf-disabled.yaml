@@ -1,0 +1,11 @@
+rules:
+- id: spring-csrf-disabled
+  message: |
+    CSRF is disabled for this configuration. This is a security risk.
+  metadata:
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp: 'A6: Security Misconfiguration'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_PROTECTION_DISABLED
+  severity: WARNING
+  languages: [java]
+  pattern: $OBJ.csrf(...).disable(...)

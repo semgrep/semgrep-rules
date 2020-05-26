@@ -1,0 +1,23 @@
+rules:
+- id: jwt-none-alg
+  message: None algorithm allowed for JWT token
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A2: Broken Authentication'
+  languages: [javascript]
+  severity: ERROR
+  patterns:
+  - pattern-either:
+          # jsonwebtoken
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+    - pattern: |
+        var $JWT = require("jsonwebtoken");
+        ...
+        $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+    - pattern: |-
+        var $JWT = require("jsonwebtoken");
+        ...
+        $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);

@@ -1,0 +1,52 @@
+rules:
+- id: dangerous-template-string
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $V = "...".format(...)
+        ...
+        flask.render_template_string($V, ...)
+    - pattern: |
+        $V = "...".format(...)
+        ...
+        return flask.render_template_string($V, ...), $MORE
+    - pattern: |
+        $V = "..." % $S
+        ...
+        flask.render_template_string($V, ...)
+    - pattern: |
+        $V = "..." % $S
+        ...
+        return flask.render_template_string($V, ...), $MORE
+    - pattern: |
+        $V = "..."
+        ...
+        $V += $O
+        ...
+        flask.render_template_string($V, ...)
+    - pattern: |
+        $V = "..."
+        ...
+        $V += $O
+        ...
+        return flask.render_template_string($V, ...), $MORE
+    - pattern: |
+        $V = f"...{$X}..."
+        ...
+        flask.render_template_string($V, ...)
+    - pattern: |
+        $V = f"...{$X}..."
+        ...
+        return flask.render_template_string($V, ...), $CODE
+  message: |
+    Found a template created with string formatting.
+    This is susceptible to server-side template injection
+    and cross-site scripting attacks.
+  metadata:
+    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://nvisium.com/blog/2016/03/09/exploring-ssti-in-flask-jinja2.html
+    - https://pequalsnp-team.github.io/cheatsheet/flask-jinja2-ssti
+  languages: [python]
+  severity: ERROR

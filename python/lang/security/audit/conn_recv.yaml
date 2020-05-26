@@ -1,0 +1,20 @@
+rules:
+- id: multiprocessing-recv
+  languages:
+  - python
+  message: 'The Connection.recv() method automatically unpickles the data it receives, which can be a security risk unless
+    you can trust the process which sent the message. Therefore, unless the connection object was produced using Pipe() you
+    should only use the recv() and send() methods after performing some sort of authentication. See more dettails: https://docs.python.org/3/library/multiprocessing.html?highlight=security#multiprocessing.connection.Connection'
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/multiprocessing.html?highlight=security#multiprocessing.connection.Connection
+  pattern-either:
+  - pattern: multiprocessing.connection.Connection.recv(...)
+  - pattern: multiprocessing.connection.Client.recv(...)
+  - pattern: |
+      $C = multiprocessing.connection.Client(...)
+      ...
+      $C.recv(...)
+  severity: WARNING
