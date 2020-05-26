@@ -1,8 +1,9 @@
 rules:
 - id: anonymous-ldap-bind
   metadata:
-  - cwe: 'CWE-287: Improper Authentication'
-  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ANONYMOUS
+    cwe: 'CWE-287: Improper Authentication'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ANONYMOUS
   message: |
     This permits anonymous users to execute LDAP statements. Consider enforcing
     authentication for LDAP. See https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html

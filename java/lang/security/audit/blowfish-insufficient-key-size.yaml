@@ -1,8 +1,9 @@
 rules:
 - id: blowfish-insufficient-key-size
   metadata:
-  - cwe: 'CWE-326: Inadequate Encryption Strength'
-  - source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE
   message: |
     Using less than 128 bits for Blowfish is considered insecure. Use 128 bits
     or more, or switch to use AES instead.
