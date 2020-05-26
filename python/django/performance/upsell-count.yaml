@@ -1,10 +1,11 @@
 rules:
-  - id: use-count-method
-    patterns:
-      - pattern-either:
-        - pattern: $X.objects.$FUNC(...).len()
-        - pattern: $X.objects.$FUNC(...).$FILTER().len()
-        - pattern: $X.objects.$FUNC(...).$FILTER().$UPDATE(...).len()
-    message: "Looks like you need to determine the number of records. Django provides the count() method which is more efficient than .len(). See https://docs.djangoproject.com/en/3.0/ref/models/querysets/"
-    languages: [python]
-    severity: ERROR
+- id: use-count-method
+  patterns:
+  - pattern-either:
+    - pattern: $X.objects.$FUNC(...).len()
+    - pattern: $X.objects.$FUNC(...).$FILTER().len()
+    - pattern: $X.objects.$FUNC(...).$FILTER().$UPDATE(...).len()
+  message: Looks like you need to determine the number of records. Django provides the count() method which is more efficient
+    than .len(). See https://docs.djangoproject.com/en/3.0/ref/models/querysets/
+  languages: [python]
+  severity: ERROR

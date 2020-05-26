@@ -1,186 +1,186 @@
 rules:
-  - id: path-join-resolve-traversal
-    message: |
-      Possible writing outside of the destination,
-      make sure that the target path is nested in the intended destination
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      owasp: "A1: Injection"
-      references:
-      - https://owasp.org/www-community/attacks/Path_Traversal
-    patterns:
-      - pattern-either:
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $PATH.join(...,$Y,...);
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                var $R = {$SMTH:$PATH.join(...,$Y,...)};
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $R({$SMTH:$PATH.join(...,$Y,...)});
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $PATH.join(...,$Y.$P,...);
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                var $R = {$SMTH:$PATH.join(...,$Y.$P,...)};
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $R({$SMTH:$PATH.join(...,$Y.$P,...)});
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              var $X = ...;
-              ...
-              $PATH.join(...,$X,...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $X = ...;
-              ...
-              $PATH.join(...,$X,...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $PATH.join(...,$X(),...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $PATH.join(...,$X.$P(),...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $PATH.resolve(...,$Y,...);
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                var $R = {$SMTH:$PATH.resolve(...,$Y,...)};
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $R({$SMTH:$PATH.resolve(...,$Y,...)});
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $PATH.resolve(...,$Y.$P,...);
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                var $R = {$SMTH:$PATH.resolve(...,$Y.$P,...)};
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              function $X(...,$Y,...) {
-                ...
-                $R({$SMTH:$PATH.resolve(...,$Y.$P,...)});
-                ...
-              }
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              var $X = ...;
-              ...
-              $PATH.resolve(...,$X,...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $X = ...;
-              ...
-              $PATH.resolve(...,$X,...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $PATH.resolve(...,$X(),...);
-          - pattern: |
-              var $PATH = require('path');
-              ...
-              $PATH.resolve(...,$X.$P(),...);
-      - pattern-not: |
-          var $PATH = require('path');
+- id: path-join-resolve-traversal
+  message: |
+    Possible writing outside of the destination,
+    make sure that the target path is nested in the intended destination
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Path_Traversal
+  patterns:
+  - pattern-either:
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          $X = "...";
+          $PATH.join(...,$Y,...);
           ...
-          $PATH.join(...,$X,...);
-      - pattern-not: |
-          var $PATH = require('path');
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          var $X = "...";
+          var $R = {$SMTH:$PATH.join(...,$Y,...)};
           ...
-          $PATH.join(...,$X,...);
-      - pattern-not: |
-          var $PATH = require('path');
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          $X = "...";
+          $R({$SMTH:$PATH.join(...,$Y,...)});
           ...
-          $PATH.resolve(...,$X,...);
-      - pattern-not: |
-          var $PATH = require('path');
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          var $X = "...";
+          $PATH.join(...,$Y.$P,...);
           ...
-          $PATH.resolve(...,$X,...);
-      - pattern-not-inside: |
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          $R.indexOf(...);
-      - pattern-not-inside: |
+          var $R = {$SMTH:$PATH.join(...,$Y.$P,...)};
           ...
-          if (<... $R.indexOf(...) ...>) {...}
-      - pattern-not-inside: |
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
           ...
-          $R.startsWith(...);
-      - pattern-not-inside: |
+          $R({$SMTH:$PATH.join(...,$Y.$P,...)});
           ...
-          if (<... $R.startsWith(...) ...>) {...}
-    languages: [javascript]
-    severity: ERROR
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        var $X = ...;
+        ...
+        $PATH.join(...,$X,...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $X = ...;
+        ...
+        $PATH.join(...,$X,...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $PATH.join(...,$X(),...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $PATH.join(...,$X.$P(),...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          $PATH.resolve(...,$Y,...);
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          var $R = {$SMTH:$PATH.resolve(...,$Y,...)};
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          $R({$SMTH:$PATH.resolve(...,$Y,...)});
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          $PATH.resolve(...,$Y.$P,...);
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          var $R = {$SMTH:$PATH.resolve(...,$Y.$P,...)};
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        function $X(...,$Y,...) {
+          ...
+          $R({$SMTH:$PATH.resolve(...,$Y.$P,...)});
+          ...
+        }
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        var $X = ...;
+        ...
+        $PATH.resolve(...,$X,...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $X = ...;
+        ...
+        $PATH.resolve(...,$X,...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $PATH.resolve(...,$X(),...);
+    - pattern: |
+        var $PATH = require('path');
+        ...
+        $PATH.resolve(...,$X.$P(),...);
+  - pattern-not: |
+      var $PATH = require('path');
+      ...
+      $X = "...";
+      ...
+      $PATH.join(...,$X,...);
+  - pattern-not: |
+      var $PATH = require('path');
+      ...
+      var $X = "...";
+      ...
+      $PATH.join(...,$X,...);
+  - pattern-not: |
+      var $PATH = require('path');
+      ...
+      $X = "...";
+      ...
+      $PATH.resolve(...,$X,...);
+  - pattern-not: |
+      var $PATH = require('path');
+      ...
+      var $X = "...";
+      ...
+      $PATH.resolve(...,$X,...);
+  - pattern-not-inside: |
+      ...
+      $R.indexOf(...);
+  - pattern-not-inside: |
+      ...
+      if (<... $R.indexOf(...) ...>) {...}
+  - pattern-not-inside: |
+      ...
+      $R.startsWith(...);
+  - pattern-not-inside: |
+      ...
+      if (<... $R.startsWith(...) ...>) {...}
+  languages: [javascript]
+  severity: ERROR

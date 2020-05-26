@@ -1,41 +1,41 @@
 rules:
-  - id: django-compat-2_0-signals-weak
-    pattern: django.dispatch.signals.Signal.disconnect(..., weak=$X, ...)
-    message: The weak argument to django.dispatch.signals.Signal.disconnect() is removed in Django 2.0.
-    languages: [python]
-    severity: WARNING
-  - id: django-compat-2_0-check-aggregate-support
-    pattern: django.db.backends.base.BaseDatabaseOperations.check_aggregate_support(...)
-    message: django.db.backends.base.BaseDatabaseOperations.check_aggregate_support() is removed in Django 2.0.
-    languages: [python]
-    severity: WARNING
-  - id: django-compat-2_0-extra-forms
-    patterns:
-      - pattern-either:
-        - pattern: from django.forms import extras
-        - pattern: from django.forms.extras import $X
-        - pattern: from django.forms import extras as $Y
-        - pattern: from django.forms.extras import $X as $Y
-        - pattern: import django.forms.extras
-        - pattern: import django.forms.extras.$X
-        - pattern: import django.forms.extras as $Y
-        - pattern: import django.forms.extras.$X as $Y
-    message: The django.forms.extras package is removed in Django 2.0.
-    languages: [python]
-    severity: WARNING
-  - id: django-compat-2_0-assignment-tag
-    patterns:
-      - pattern-either:
-          - pattern: $X.assignment_tag(...)
-          - pattern: assignment_tag(...)
-    message: The assignment_tag helper is removed in Django 2.0.
-    languages: [python]
-    severity: WARNING
-  - id: django-compat-2_0-assert-redirects-helper
-    patterns:
-      - pattern-either:
-          - pattern: $X.assertRedirects(..., host=$Y, ...)
-          - pattern: assertRedirects(..., host=$Y, ...)
-    message: The host argument to assertRedirects is removed in Django 2.0.
-    languages: [python]
-    severity: WARNING
+- id: django-compat-2_0-signals-weak
+  pattern: django.dispatch.signals.Signal.disconnect(..., weak=$X, ...)
+  message: The weak argument to django.dispatch.signals.Signal.disconnect() is removed in Django 2.0.
+  languages: [python]
+  severity: WARNING
+- id: django-compat-2_0-check-aggregate-support
+  pattern: django.db.backends.base.BaseDatabaseOperations.check_aggregate_support(...)
+  message: django.db.backends.base.BaseDatabaseOperations.check_aggregate_support() is removed in Django 2.0.
+  languages: [python]
+  severity: WARNING
+- id: django-compat-2_0-extra-forms
+  patterns:
+  - pattern-either:
+    - pattern: from django.forms import extras
+    - pattern: from django.forms.extras import $X
+    - pattern: from django.forms import extras as $Y
+    - pattern: from django.forms.extras import $X as $Y
+    - pattern: import django.forms.extras
+    - pattern: import django.forms.extras.$X
+    - pattern: import django.forms.extras as $Y
+    - pattern: import django.forms.extras.$X as $Y
+  message: The django.forms.extras package is removed in Django 2.0.
+  languages: [python]
+  severity: WARNING
+- id: django-compat-2_0-assignment-tag
+  patterns:
+  - pattern-either:
+    - pattern: $X.assignment_tag(...)
+    - pattern: assignment_tag(...)
+  message: The assignment_tag helper is removed in Django 2.0.
+  languages: [python]
+  severity: WARNING
+- id: django-compat-2_0-assert-redirects-helper
+  patterns:
+  - pattern-either:
+    - pattern: $X.assertRedirects(..., host=$Y, ...)
+    - pattern: assertRedirects(..., host=$Y, ...)
+  message: The host argument to assertRedirects is removed in Django 2.0.
+  languages: [python]
+  severity: WARNING

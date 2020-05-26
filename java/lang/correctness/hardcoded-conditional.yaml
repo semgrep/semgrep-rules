@@ -1,9 +1,9 @@
 rules:
-  - id: hardcoded-conditional
-    patterns:
-      - pattern-either:
-          - pattern: if (<... true ...>) { ... }
-          - pattern: if (<... false ...>) { ... }
-    message: "useless if statement, always the same behavior"
-    languages: [java]
-    severity: ERROR
+- id: hardcoded-conditional
+  patterns:
+  - pattern-either:
+    - pattern: if (<... true ...>) { ... }
+    - pattern: if (<... false ...>) { ... }
+  message: useless if statement, always the same behavior
+  languages: [java]
+  severity: ERROR

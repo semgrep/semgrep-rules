@@ -1,19 +1,18 @@
 rules:
-  - id: use-of-weak-rsa-key
-    message:
-      RSA keys should be at least 2048 bits based on NIST recommendation.
-    languages: [java]
-    severity: WARNING
-    metadata:
-      cwe: 'CWE-326: Inadequate Encryption Strength'
-      owasp: "A3: Sensitive Data Exposure"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#RSA_KEY_SIZE 
-      references:
-      - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
-    patterns:
-      - pattern: |
-          KeyPairGenerator $KEY = $G.getInstance("RSA");
-          ...
-          $KEY.initialize($BITS);
-      - pattern-where-python: |
-            int(vars['$BITS']) < 2048
+- id: use-of-weak-rsa-key
+  message: RSA keys should be at least 2048 bits based on NIST recommendation.
+  languages: [java]
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#RSA_KEY_SIZE
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
+  patterns:
+  - pattern: |
+      KeyPairGenerator $KEY = $G.getInstance("RSA");
+      ...
+      $KEY.initialize($BITS);
+  - pattern-where-python: |-
+      int(vars['$BITS']) < 2048

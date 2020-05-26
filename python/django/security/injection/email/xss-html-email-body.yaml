@@ -1,512 +1,192 @@
 rules:
-  - id: xss-html-email-body
-    message: |
-      Found request data in an EmailMessage that is set to use HTML.
-      This is dangerous because HTML emails are susceptible to XSS.
-      An attacker could inject data into this HTML email, causing XSS.
-    metadata:
-      cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
-      owasp: "A1: Injection"
-      references:
-      - https://www.damonkohler.com/2008/12/email-injection.html
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-            $EMAIL.content_subtype = "html"
-            ...
-      - pattern-either:
-        - pattern: django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $B.$C(..., $DATA, ...)
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+- id: xss-html-email-body
+  message: |
+    Found request data in an EmailMessage that is set to use HTML.
+    This is dangerous because HTML emails are susceptible to XSS.
+    An attacker could inject data into this HTML email, causing XSS.
+  metadata:
+    cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://www.damonkohler.com/2008/12/email-injection.html
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+        $EMAIL.content_subtype = "html"
+        ...
+  - pattern-either:
+    - pattern: django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
+    - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W.get(...), ...)
+    - pattern: django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
+    - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W(...), ...)
+    - pattern: django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.EmailMessage($SUBJ, $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
+    - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W[...], ...)
+    - pattern: django.core.mail.EmailMessage($SUBJ, request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.EmailMessage($SUBJ, $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.EmailMessage($SUBJ, $B.$C(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $B.$C(..., $DATA, ...)
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.EmailMessage($SUBJ, $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.core.mail.EmailMessage($SUBJ, f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.core.mail.EmailMessage($SUBJ, $INTERM, ...)
+    - pattern: $A = django.core.mail.EmailMessage($SUBJ, request.$W, ...)
+    - pattern: return django.core.mail.EmailMessage($SUBJ, request.$W, ...)
