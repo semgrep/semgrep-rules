@@ -60,7 +60,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-    uri = sys.argv[1]
+    uri = args.uri
     if os.path.exists(uri):
         with open(uri, 'r') as fin:
             data = json.load(fin)
