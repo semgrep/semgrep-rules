@@ -1,0 +1,13 @@
+rules:
+- id: grpc-client-insecure-connection
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption
+  message: Found an insecure gRPC connection. This creates a connection without encryption to a gRPC server. A malicious attacker
+    could tamper with the gRPC message, which could compromise the machine.
+  languages:
+  - go
+  severity: ERROR
+  pattern: $GRPC.Dial($ADDR, ..., $GRPC.WithInsecure(...), ...)
