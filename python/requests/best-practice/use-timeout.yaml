@@ -2,6 +2,7 @@ rules:
 - id: use-timeout
   patterns:
   - pattern-not: requests.$W(..., timeout=$N, ...)
+  - pattern-not: requests.$W(..., **$KWARGS)
   - pattern-either:
     - pattern: requests.request(...)
     - pattern: requests.get(...)
