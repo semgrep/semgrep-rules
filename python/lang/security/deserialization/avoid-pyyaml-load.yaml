@@ -11,4 +11,8 @@ rules:
   message: Avoid using `load()` as `PyYAML.load` could be easily exploited.
   fix: yaml.safe_load($FOO)
   severity: WARNING
-  pattern: yaml.load($FOO)
+  patterns:
+  - pattern-not-inside: |
+      yaml = $X
+      ...
+  - pattern: yaml.load($FOO)
