@@ -1,5 +1,5 @@
 function test1() {
-    // ruleid: grpc-nodejs-client-insecure-connection
+    // ruleid: grpc-nodejs-insecure-connection
     var grpc = require('grpc');
 
     var booksProto = grpc.load('books.proto');
@@ -15,7 +15,7 @@ function test1() {
 }
 
 function test2() {
-    // ruleid: grpc-nodejs-client-insecure-connection
+    // ruleid: grpc-nodejs-insecure-connection
     var {credentials, load, Client} = require('grpc');
 
     var creds = someFunc() || credentials.createInsecure();
@@ -30,7 +30,21 @@ function test2() {
     });
 }
 
-function testOk() {
+function test3() {
+    // ruleid: grpc-nodejs-insecure-connection
+    var grpc = require('grpc');
+
+    var booksProto = grpc.load('books.proto');
+
+    var server = new grpc.Server();
+
+    server.addProtoService(booksProto.books.BookService.service, {});
+
+    server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
+    server.start();
+}
+
+function testOk1() {
     // ok
     var {credentials, Client} = require('grpc');
     var channel_creds = credentials.createSsl(root_certs);
