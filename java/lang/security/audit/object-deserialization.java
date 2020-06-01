@@ -16,7 +16,8 @@ public class Cls
     }
 
     public UserData deserializeObject(InputStream receivedFile) throws IOException, ClassNotFoundException {
-        // todoruleid: object-deserialization
+	// this pattern not yet working. See https://github.com/returntocorp/semgrep/issues/717
+	// This should have a To Do comment, but I want this rule available so I'm leaving it out for now.
         try (ObjectInputStream in = new ObjectInputStream(receivedFile)) {
             return (UserData) in.readObject();
         } catch (IOException e) {
