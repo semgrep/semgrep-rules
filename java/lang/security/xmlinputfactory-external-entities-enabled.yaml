@@ -1,0 +1,16 @@
+rules:
+- id: xmlinputfactory-external-entities-enabled
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp: 'A4: XML External Entities (XXE)'
+    references:
+    - https://www.blackhat.com/docs/us-15/materials/us-15-Wang-FileCry-The-New-Age-Of-XXE-java-wp.pdf
+  message: |
+    XML external entities are disabled for this XMLInputFactory. This is vulnerable to XML external entity
+    vulnerabilities. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities" to false.
+  pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
+    true);
+
+  languages:
+  - java
