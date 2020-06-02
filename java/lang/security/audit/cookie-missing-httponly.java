@@ -4,7 +4,7 @@ public class CookieController {
     @RequestMapping(value = "/cookie1", method = "GET")
     public void setCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);
-        // ruleid: spring-cookie-missing-httponly-flag
+        // ruleid: cookie-missing-httponly
         response.addCookie(cookie);
     }
 
@@ -12,7 +12,7 @@ public class CookieController {
     public void setSecureCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);
         cookie.setSecure(true);
-        // ruleid: spring-cookie-missing-httponly-flag
+        // ruleid: cookie-missing-httponly
         response.addCookie(cookie);
     }
     
