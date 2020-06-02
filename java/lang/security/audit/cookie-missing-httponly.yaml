@@ -1,5 +1,5 @@
 rules:
-- id: spring-cookie-missing-httponly-flag
+- id: cookie-missing-httponly-flag
   metadata:
     cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
     owasp: 'A3: Sensitive Data Exposure'
@@ -11,5 +11,9 @@ rules:
   severity: WARNING
   languages: [java]
   patterns:
-  - pattern-not-inside: $COOKIE.setHttpOnly(true); ...
-  - pattern: $RESPONSE.addCookie($COOKIE);
+  - pattern-not-inside: $COOKIE.setValue(""); ...
+  - pattern-either:
+    - pattern: $COOKIE.setHttpOnly(false);
+    - patterns:
+      - pattern-not-inside: $COOKIE.setHttpOnly(...); ...
+      - pattern: $RESPONSE.addCookie($COOKIE);
