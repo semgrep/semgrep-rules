@@ -1,0 +1,22 @@
+rules:
+- id: server-dangerous-class-deserialization
+  severity: WARNING
+  languages:
+  - java
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://mogwailabs.de/blog/2019/03/attacking-java-rmi-services-after-jep-290/
+  message: |
+    Using a non-primitive class with Java RMI may be an insecure deserialization vulnerability. Depending
+    on the underlying implementation. This object could be manipulated by a malicious actor allowing them to 
+    execute code on your system. Instead, use an integer ID to look up your object, or consider alternative
+    serializiation schemes such as JSON.
+  patterns:
+  - pattern: |
+      interface $INTERFACE extends Remote {
+        $RETURNTYPE $METHOD($CLASS $PARAM) throws RemoteException;
+      }
+  - pattern-where-python: |
+      vars['$CLASS'] not in ('int', 'boolean', 'short', 'long', 'byte', 'char', 'float', 'double')

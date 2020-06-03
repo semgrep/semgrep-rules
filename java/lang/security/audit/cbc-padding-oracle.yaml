@@ -1,0 +1,21 @@
+rules:
+- id: cbc-padding-oracle
+  message: |
+    Using CBC with PKCS5Padding is susceptible to padding orcale attacks. A malicious actor
+    could discern the difference between plaintext with valid or invalid padding. Further,
+    CBC mode does not include any integrity checks. See https://find-sec-bugs.github.io/bugs.htm#CIPHER_INTEGRITY.
+    Use 'AES/GCM/NoPadding' instead.
+  metadata:
+    cwe: 'CWE-696: Incorrect Behavior Order'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PADDING_ORACLE
+    references:
+    - https://capec.mitre.org/data/definitions/463.html
+  severity: WARNING
+  patterns:
+  - pattern: $CIPHER.getInstance($MODE);
+  - pattern-where-python: |
+      "CBC" in vars['$MODE']
+  fix: $CIPHER.getInstance("AES/GCM/NoPadding");
+  languages:
+  - java

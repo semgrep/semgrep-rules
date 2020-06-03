@@ -1,658 +1,265 @@
 rules:
-  - id: command-injection-os-system
-    message: Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection for more information.
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-      - pattern-either:
-        - pattern: os.system(..., request.$W.get(...), ...)
-        - pattern: os.system(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: os.system(..., $S % request.$W.get(...), ...)
-        - pattern: os.system(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: $A = os.system(..., request.$W.get(...), ...)
-        - pattern: $A = os.system(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: $A = os.system(..., $S % request.$W.get(...), ...)
-        - pattern: $A = os.system(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: return os.system(..., request.$W.get(...), ...)
-        - pattern: return os.system(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: return os.system(..., $S % request.$W.get(...), ...)
-        - pattern: return os.system(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: os.system(..., request.$W(...), ...)
-        - pattern: os.system(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: os.system(..., $S % request.$W(...), ...)
-        - pattern: os.system(..., f"...{request.$W(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: $A = os.system(..., request.$W(...), ...)
-        - pattern: $A = os.system(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: $A = os.system(..., $S % request.$W(...), ...)
-        - pattern: $A = os.system(..., f"...{request.$W(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: return os.system(..., request.$W(...), ...)
-        - pattern: return os.system(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: return os.system(..., $S % request.$W(...), ...)
-        - pattern: return os.system(..., f"...{request.$W(...)}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: os.system(..., request.$W[...], ...)
-        - pattern: os.system(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: os.system(..., $S % request.$W[...], ...)
-        - pattern: os.system(..., f"...{request.$W[...]}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: $A = os.system(..., request.$W[...], ...)
-        - pattern: $A = os.system(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: $A = os.system(..., $S % request.$W[...], ...)
-        - pattern: $A = os.system(..., f"...{request.$W[...]}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: return os.system(..., request.$W[...], ...)
-        - pattern: return os.system(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: return os.system(..., $S % request.$W[...], ...)
-        - pattern: return os.system(..., f"...{request.$W[...]}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: os.system(..., request.$W, ...)
-        - pattern: os.system(..., $S.format(..., request.$W, ...), ...)
-        - pattern: os.system(..., $S % request.$W, ...)
-        - pattern: os.system(..., f"...{request.$W}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            os.system(..., $INTERM, ...)
-        - pattern: $A = os.system(..., request.$W, ...)
-        - pattern: $A = os.system(..., $S.format(..., request.$W, ...), ...)
-        - pattern: $A = os.system(..., $S % request.$W, ...)
-        - pattern: $A = os.system(..., f"...{request.$W}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = os.system(..., $INTERM, ...)
-        - pattern: return os.system(..., request.$W, ...)
-        - pattern: return os.system(..., $S.format(..., request.$W, ...), ...)
-        - pattern: return os.system(..., $S % request.$W, ...)
-        - pattern: return os.system(..., f"...{request.$W}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return os.system(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return os.system(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return os.system(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return os.system(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return os.system(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return os.system(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return os.system(..., $INTERM, ...)
+- id: command-injection-os-system
+  message: Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this
+    must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection
+    for more information.
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Command_Injection
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: os.system(..., request.$W.get(...), ...)
+    - pattern: os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: os.system(..., $S % request.$W.get(...), ...)
+    - pattern: os.system(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        os.system(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        os.system(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        os.system(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        os.system(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        os.system(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: $A = os.system(..., request.$W.get(...), ...)
+    - pattern: $A = os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: $A = os.system(..., $S % request.$W.get(...), ...)
+    - pattern: $A = os.system(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: return os.system(..., request.$W.get(...), ...)
+    - pattern: return os.system(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: return os.system(..., $S % request.$W.get(...), ...)
+    - pattern: return os.system(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: os.system(..., request.$W(...), ...)
+    - pattern: os.system(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: os.system(..., $S % request.$W(...), ...)
+    - pattern: os.system(..., f"...{request.$W(...)}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        os.system(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        os.system(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        os.system(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        os.system(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        os.system(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: $A = os.system(..., request.$W(...), ...)
+    - pattern: $A = os.system(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: $A = os.system(..., $S % request.$W(...), ...)
+    - pattern: $A = os.system(..., f"...{request.$W(...)}...", ...)
+    - pattern: return os.system(..., request.$W(...), ...)
+    - pattern: return os.system(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: return os.system(..., $S % request.$W(...), ...)
+    - pattern: return os.system(..., f"...{request.$W(...)}...", ...)
+    - pattern: os.system(..., request.$W[...], ...)
+    - pattern: os.system(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: os.system(..., $S % request.$W[...], ...)
+    - pattern: os.system(..., f"...{request.$W[...]}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        os.system(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        os.system(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        os.system(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        os.system(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        os.system(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: $A = os.system(..., request.$W[...], ...)
+    - pattern: $A = os.system(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: $A = os.system(..., $S % request.$W[...], ...)
+    - pattern: $A = os.system(..., f"...{request.$W[...]}...", ...)
+    - pattern: return os.system(..., request.$W[...], ...)
+    - pattern: return os.system(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: return os.system(..., $S % request.$W[...], ...)
+    - pattern: return os.system(..., f"...{request.$W[...]}...", ...)
+    - pattern: os.system(..., request.$W, ...)
+    - pattern: os.system(..., $S.format(..., request.$W, ...), ...)
+    - pattern: os.system(..., $S % request.$W, ...)
+    - pattern: os.system(..., f"...{request.$W}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        os.system(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        os.system(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        os.system(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        os.system(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        os.system(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        os.system(..., $INTERM, ...)
+    - pattern: $A = os.system(..., request.$W, ...)
+    - pattern: $A = os.system(..., $S.format(..., request.$W, ...), ...)
+    - pattern: $A = os.system(..., $S % request.$W, ...)
+    - pattern: $A = os.system(..., f"...{request.$W}...", ...)
+    - pattern: return os.system(..., request.$W, ...)
+    - pattern: return os.system(..., $S.format(..., request.$W, ...), ...)
+    - pattern: return os.system(..., $S % request.$W, ...)
+    - pattern: return os.system(..., f"...{request.$W}...", ...)

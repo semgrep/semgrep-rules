@@ -8,7 +8,7 @@ import (
 
 func main() {
 	//Generate Private Key
-	// ruleid: use_of_weak_rsa_key
+	// ruleid: use-of-weak-rsa-key
 	pvk, err := rsa.GenerateKey(rand.Reader, 1024)
 	if err != nil {
 		fmt.Println(err)

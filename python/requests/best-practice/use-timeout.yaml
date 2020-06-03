@@ -2,6 +2,7 @@ rules:
 - id: use-timeout
   patterns:
   - pattern-not: requests.$W(..., timeout=$N, ...)
+  - pattern-not: requests.$W(..., **$KWARGS)
   - pattern-either:
     - pattern: requests.request(...)
     - pattern: requests.get(...)
@@ -16,4 +17,4 @@ rules:
     if a response is never received. Consider setting a timeout for all 
     'requests'.
   languages: [python]
-  severity: ERROR
+  severity: WARNING

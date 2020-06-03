@@ -1,28 +1,31 @@
 rules:
 - id: xml-decoder
   message: |
-    https://find-sec-bugs.github.io/bugs.htm#XML_DECODER
     XMLDecoder should not be used to parse untrusted data. Deserializing user input can lead to arbitrary code execution.
+  metadata:
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp: 'A4: XML External Entities (XXE)'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XML_DECODER
   severity: WARNING
   languages: [java]
   patterns:
-    - pattern: |
-        $X $METHOD(...) {
-          ...
-          new XMLDecoder(...);
-          ...
-        }
-    - pattern-not: |
-        $X $METHOD(...) {
-          ...
-          new XMLDecoder("...");
-          ...
-        }
-    - pattern-not: |
-        $X $METHOD(...) {
-          ...
-          String $STR = "...";
-          ...
-          new XMLDecoder($STR);
-          ...
-        }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        new XMLDecoder(...);
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        new XMLDecoder("...");
+        ...
+      }
+  - pattern-not: |-
+      $X $METHOD(...) {
+        ...
+        String $STR = "...";
+        ...
+        new XMLDecoder($STR);
+        ...
+      }

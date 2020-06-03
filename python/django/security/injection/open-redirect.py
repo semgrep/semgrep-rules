@@ -18,13 +18,23 @@ def unsafe2(request):
     url = request.POST.get("url")
     return HttpResponseRedirect(url)
 
+def unsafe3(request):
+    # ruleid: open-redirect
+    url = request.POST["url"]
+    return HttpResponseRedirect(url)
+
+def unsafe4(request):
+    # ruleid: open-redirect
+    url = request.get_referrer()  # I made this up, but if it exists don't do this
+    if url:
+        return HttpResponseRedirect(url)
+
 def fine(request):
     # ok
     return HttpResponseRedirect(request.get_full_path())
 
 def url_validation(request):
-    # this will fire for now until we can filter out is_safe_url
-    # ruleid: open-redirect
+    # ok
     next = request.POST.get('next', request.GET.get('next'))
     if (next or not request.is_ajax()) and not is_safe_url(url=next, allowed_hosts=request.get_host()):
         next = "/index"

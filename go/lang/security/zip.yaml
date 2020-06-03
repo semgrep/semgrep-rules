@@ -1,0 +1,18 @@
+rules:
+- id: path-traversal-inside-zip-extraction
+  message: File traversal when extracting zip archive
+  metadata:
+    cwe: |
+      CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')
+    source_rule_url: https://github.com/securego/gosec/issues/205
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern: |-
+      reader, $ERR := zip.OpenReader($ARCHIVE)
+      ...
+      for _, $FILE := range reader.File {
+        ...
+        path := filepath.Join($TARGET, $FILE.Name)
+        ...
+      }

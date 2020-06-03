@@ -1,18 +1,18 @@
 rules:
-  - id: nontext-field-must-set-null-true
-    patterns:
-      - pattern-inside: |
-          class $M(...):
-            ...
-      - pattern-not: $F = django.db.models.CharField(...)
-      - pattern-not: $F = django.db.models.TextField(...)
-      - pattern-not: $F = django.db.models.SlugField(...)
-      - pattern-not: $F = django.db.models.EmailField(...)
-      - pattern-not: $F = django.db.models.UUIDField(...)
-      - pattern-not: $F = $X(..., null=True, blank=True, ...)
-      - pattern: $F = $X(..., blank=True, ...)
-    message: "null=True should be set if blank=True is set on non-text fields."
-    languages: [python]
-    severity: ERROR
+- id: nontext-field-must-set-null-true
+  patterns:
+  - pattern-inside: |
+      class $M(...):
+        ...
+  - pattern-not: $F = django.db.models.CharField(...)
+  - pattern-not: $F = django.db.models.TextField(...)
+  - pattern-not: $F = django.db.models.SlugField(...)
+  - pattern-not: $F = django.db.models.EmailField(...)
+  - pattern-not: $F = django.db.models.UUIDField(...)
+  - pattern-not: $F = $X(..., null=True, blank=True, ...)
+  - pattern: $F = $X(..., blank=True, ...)
+  message: null=True should be set if blank=True is set on non-text fields.
+  languages: [python]
+  severity: ERROR
 
 

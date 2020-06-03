@@ -1,0 +1,21 @@
+rules:
+- id: insecure-smtp-connection
+  metadata:
+    cwe: 'CWE-297: Improper Validation of Certificate with Host Mismatch'
+    owasp: 'A6: Security Misconfiguration'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#INSECURE_SMTP_SSL
+  message: |
+    Insecure SMTP connection detected. This connection will trust any SSL certificate.
+    Enable certificate verification by setting 'email.setSSLCheckServerIdentity(true)'.
+  severity: WARNING
+  patterns:
+  - pattern-not-inside: |
+      $EMAIL.setSSLCheckServerIdentity(true);
+      ...
+  - pattern-inside: |
+      $EMAIL = new SimpleEmail(...);
+      ...
+  - pattern: |-
+      $EMAIL.send(...);
+  languages:
+  - java
