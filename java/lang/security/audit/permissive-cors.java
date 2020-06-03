@@ -16,53 +16,53 @@ public class SuperWebFlet extends HttpServlet {
     public SuperWebFlet() {
         // Auto-generated constructor stub
     }
-	
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-	                     FilterChain chain) throws IOException, ServletException {
+    
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException {
         // ruleid: permissive-cors
-	    HttpServletResponse res = (HttpServletResponse) response;
-	    res.addHeader("Access-Control-Allow-Origin", "*");
-	    chain.doFilter(request, response);
-	}
+        HttpServletResponse res = (HttpServletResponse) response;
+        res.addHeader("Access-Control-Allow-Origin", "*");
+        chain.doFilter(request, response);
+    }
     
     // ruleid: permissive-cors
     @GetMapping({"", "/"})
-	@PreAuthorize("hasPermission('User', 'read')")
-	public List index(HttpServletRequest request, HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
-	    return page.getContent().stream().map((item) -> {
-	        Map<String, Object> ret = new HashMap();
-	        ret.put("createdAt", item.getCreatedAt());
-	        return ret;
-	    }).collect(Collectors.toList());
-	}
+    @PreAuthorize("hasPermission('User', 'read')")
+    public List index(HttpServletRequest request, HttpServletResponse response) {
+        response.addHeader("access-control-allow-origin", "*");
+        return page.getContent().stream().map((item) -> {
+            Map<String, Object> ret = new HashMap();
+            ret.put("createdAt", item.getCreatedAt());
+            return ret;
+        }).collect(Collectors.toList());
+    }
 
     // ruleid: permissive-cors
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-		try {
-		    response.setCharacterEncoding("UTF-8");
-		    response.setContentType("text/html; charset=UTF-8");
-			response.setHeader("Access-Control-Allow-Origin", "*");
-		    boolean ok = "OK".equals(ibookDbStatus);
-		    if (!ok) {
-				response.setStatus(500);
-		    }
-	    }
-		catch (RuntimeException | IOException e) {
-			logger.log(Level.SEVERE, "RQ[HEALT] -> "+e.toString(), e);
-			throw e;
-		}
-	}
+        try {
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html; charset=UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "Null");
+            boolean ok = "OK".equals(ibookDbStatus);
+            if (!ok) {
+                response.setStatus(500);
+            }
+        }
+        catch (RuntimeException | IOException e) {
+            logger.log(Level.SEVERE, "RQ[HEALT] -> "+e.toString(), e);
+            throw e;
+        }
+    }
 
     // ruleid: permissive-cors
     public void setErrorsResponse(Errors errors, HttpStatus responseHttpStatus, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setStatus(responseHttpStatus.value());
         HttpResponseData responseData = getResponseData(errors, request);
         if (responseData != null) {
-            response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("access-control-allow-origin", "*");
             response.getWriter().write(responseData.getBody());
         }
     }
@@ -70,7 +70,7 @@ public class SuperWebFlet extends HttpServlet {
     // ruleid: permissive-cors
     public static void write(HttpServletResponse response, Object o) throws Exception {
         response.setContentType("text/html;charset=utf-8");
-        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Origin", "*.test.com");
         PrintWriter out = response.getWriter();
         out.println(o.toString());
         out.flush();
@@ -107,7 +107,7 @@ public class SuperWebFlet extends HttpServlet {
     public Mono<ServerResponse> useHandler(final ServerRequest request) {
     // ruleid: permissive-cors
      return ServerResponse.ok()
-        .header("Access-Control-Allow-Origin", "*")
+        .header("Access-Control-Allow-Origin", "null")
         .body(Mono.just("Response with header using Handler"),String.class);
     }
 
@@ -116,7 +116,7 @@ public class SuperWebFlet extends HttpServlet {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         exchange.getResponse()
             .getHeaders()
-            .add("Access-Control-Allow-Origin", "*");
+            .add("Access-Control-Allow-Origin", "*.some.domain");
         return chain.filter(exchange);
     }
 

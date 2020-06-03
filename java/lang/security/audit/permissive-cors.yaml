@@ -6,49 +6,51 @@ rules:
   severity: WARNING
   languages: [java]
   pattern-either:
-    - pattern: |
-        HttpServletResponse $RES = ...;
+  - pattern: |
+      HttpServletResponse $RES = ...;
+      ...
+      $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      HttpServletResponse $RES = ...;
+      ...
+      $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      ServerHttpResponse $RES = ...;
+      ...
+      $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      HttpHeaders $HEADERS = ...;
+      ...
+      $HEADERS.set("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      ServerWebExchange $SWE = ...;
+      ...
+      $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.addHeader("Access-Control-Allow-Origin", "*");
-    - pattern: |
-        HttpServletResponse $RES = ...;
+        $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
         ...
-        $RES.setHeader("Access-Control-Allow-Origin", "*");
-    - pattern: |
-        ServerHttpResponse $RES = ...;
+      }
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.getHeaders().add("Access-Control-Allow-Origin", "*");
-    - pattern: |
-        HttpHeaders $HEADERS = ...;
+        $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
         ...
-        $HEADERS.set("Access-Control-Allow-Origin", "*");
-    - pattern: |
-        ServerWebExchange $SWE = ...;
+      }
+  - pattern: |
+      $X $METHOD(...,ServerHttpResponse $RES,...) {
         ...
-        $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
-    - pattern: |
-        $X $METHOD(...,HttpServletResponse $RES,...) {
-          ...
-          $RES.addHeader("Access-Control-Allow-Origin", "*");
-          ...
-        }
-    - pattern: |
-        $X $METHOD(...,HttpServletResponse $RES,...) {
-          ...
-          $RES.setHeader("Access-Control-Allow-Origin", "*");
-          ...
-        }
-    - pattern: |
-        $X $METHOD(...,ServerHttpResponse $RES,...) {
-          ...
-          $RES.getHeaders().add("Access-Control-Allow-Origin", "*");
-          ...
-        }
-    - pattern: |
-        $X $METHOD(...,ServerWebExchange $SWE,...) {
-          ...
-          $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
-          ...
-        }
-    - pattern: ResponseEntity.$RES().header("Access-Control-Allow-Origin", "*")
-    - pattern: ServerResponse.$RES().header("Access-Control-Allow-Origin", "*")
+        $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,ServerWebExchange $SWE,...) {
+        ...
+        $SWE.getResponse().getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: ResponseEntity.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
+      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")
+  - pattern: ServerResponse.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
+      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")
