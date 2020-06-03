@@ -20,6 +20,18 @@ def A():
         print_error('another')
     return B(), C()
 
+def A():
+    def bench():
+        time.sleep(5)
+    
+    benchmark(bench)
+
+
+# TODO: support this case
+#def A():
+#    @benchmark
+#    def bench():
+#        time.sleep(5)    
 
 def create_decorating_metaclass(decorators, prefix='test_'):
     class DecoratingMethodsMetaclass(type):
