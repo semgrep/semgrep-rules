@@ -75,3 +75,11 @@ public class SqlExample2 {
         .collect(Collectors.toList());        
     }
 }
+
+public class tableConcatStatements {
+    public void tableConcat() {
+        // ok
+        stmt.execute("DROP TABLE " + tableName);
+        stmt.execute(String.format("CREATE TABLE %s", tableName));
+    }
+}
