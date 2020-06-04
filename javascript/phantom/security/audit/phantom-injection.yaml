@@ -1,0 +1,29 @@
+rules:
+- id: phantom-injection
+  message: |
+    If unverified user data can reach the `phantom` page methods it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      $PHANTOM = require('phantom');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern-either:
+    - pattern: $PAGE.open($INPUT,...)
+    - pattern: $PAGE.property("content",$INPUT,...)
+    - pattern: $PAGE.setContent($INPUT,...)
+    - pattern: $PAGE.openUrl($INPUT,...)
+    - pattern: $PAGE.evaluateJavaScript($INPUT,...)
+  - pattern-not: $PAGE.open("...",...)
+  - pattern-not: $PAGE.property("content","...",...)
+  - pattern-not: $PAGE.setContent("...",...)
+  - pattern-not: $PAGE.openUrl("...",...)
+  - pattern-not: $PAGE.evaluateJavaScript("...",...)
