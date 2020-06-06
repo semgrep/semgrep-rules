@@ -35,7 +35,9 @@ def other(user_profile: UserProfile) -> None:
 	user_profile = example_user('hamlet')
 	password = "testpassword"
     # ruleid: unvalidated-password
-	user_profile.set_password(password)
+	if django.contrib.auth.password_validation.validate_password(password):
+        user_profile.set_password(password, ...)
+
 	user_profile.save()
 
 	user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
