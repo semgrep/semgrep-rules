@@ -34,8 +34,7 @@ def test_email_auth_backend_empty_password(user_profile: UserProfile) -> None:
 def other(user_profile: UserProfile) -> None:
 	user_profile = example_user('hamlet')
 	password = "testpassword"
-    # ruleid: unvalidated-password
-	if django.contrib.auth.password_validation.validate_password(password):
+        # ruleid: unvalidated-password
         user_profile.set_password(password, ...)
 
 	user_profile.save()
