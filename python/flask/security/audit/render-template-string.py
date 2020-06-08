@@ -12,5 +12,9 @@ def error(e):
     </div>
 {  endblock  }
 '''.format(request.url)
+    # ruleid: render-template-string
     return flask.render_template_string(template), 404
 
+@app.route("/index")
+def index():
+    return flask.render_template("index.html"), 200
