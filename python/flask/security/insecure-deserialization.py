@@ -29,6 +29,11 @@ def index():
         # ruleid:avoid-insecure-deserialization
         return "Hey there! {}!".format(pickle.loads(b64decode(user_obj)))
 
+@app.route("/ok")
+def ok():
+    # ok
+    novellist = pickle.load(open('./novel/list.dat', "rb"))
+
 if __name__ == "__main__":
     # Using host='0.0.0.0' to accept connections from all IPs
     app.run(host='0.0.0.0')
