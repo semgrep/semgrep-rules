@@ -3,19 +3,19 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response("...".format($X))
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"...{$X}...")
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"...{$X}")
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"{$X}...")
   message: |
