@@ -1,0 +1,55 @@
+rules:
+- id: ssrf-requests
+  languages:
+  - python
+  severity: ERROR
+  message: Data from request object is passed to a new server-side request. This could lead to a server-side request forgery
+    (SSRF). To mitigate, ensure that schemes and hosts are validated against a whitelist, do not forward the response to the
+    user, and ensure proper authentication and transport-layer security in the proxied request.
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+      - pattern-either:
+        - pattern: requests.$FUNC(..., <... $ROUTEVAR ...>, ...)
+        - pattern: |
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            requests.$FUNC(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
+        - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
+        - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
+        - pattern: requests.$FUNC(..., <... flask.request.$W ...>, ...)
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W.get(...) ...>
+              ... 
+          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W[...] ...>
+              ... 
+          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W(...) ...>
+              ... 
+          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W ...>
+              ... 
+          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+
