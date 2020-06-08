@@ -7,7 +7,7 @@ def bad():
     
 def ok():
     # ok
-    import xml
+    import defusedxml
     from xml.etree import ElementTree 
     tree = ElementTree.parse('country_data.xml')
     root = tree.getroot()
