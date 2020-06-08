@@ -17,4 +17,5 @@ def error(e):
 
 @app.route("/index")
 def index():
+    # ok
     return flask.render_template("index.html"), 200
