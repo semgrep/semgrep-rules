@@ -22,11 +22,11 @@ def index():
         msg = "Seems like you didn't have a cookie. No worries! I'll set one now!"
         response = make_response(msg)
         user_obj = UserID()
-        # ruleid:avoid-insecure-deserialization
+        # ruleid:insecure-deserialization
         response.set_cookie('uuid', b64encode(pickle.dumps(user_obj)))
         return response
     else:
-        # ruleid:avoid-insecure-deserialization
+        # ruleid:insecure-deserialization
         return "Hey there! {}!".format(pickle.loads(b64decode(user_obj)))
 
 @app.route("/ok")
