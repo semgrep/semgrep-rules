@@ -1,0 +1,54 @@
+rules:
+- id: {{ rule_id }}
+  languages:
+  - python
+  severity: ERROR
+  message: {{ message }}
+  metadata:
+    cwe: "{{ cwe }}"
+    owasp: "{{ owasp }}"
+    references:
+    {% for reference in references -%}
+    - {{ reference }}
+    {%- endfor %}
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+      - pattern-either:
+        - pattern: {{ sink }}(..., <... $ROUTEVAR ...>, ...)
+        - pattern: |
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            {{ sink }}(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: {{ sink }}(..., <... flask.request.$W.get(...) ...>, ...)
+        - pattern: {{ sink }}(..., <... flask.request.$W[...] ...>, ...)
+        - pattern: {{ sink }}(..., <... flask.request.$W(...) ...>, ...)
+        - pattern: {{ sink }}(..., <... flask.request.$W ...>, ...)
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W.get(...) ...>
+              ... 
+          - pattern: {{ sink }}(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W[...] ...>
+              ... 
+          - pattern: {{ sink }}(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W(...) ...>
+              ... 
+          - pattern: {{ sink }}(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W ...>
+              ... 
+          - pattern: {{ sink }}(..., <... $INTERM ...>, ...)
