@@ -1,0 +1,12 @@
+rules:
+- id: render-template-string
+  pattern: flask.render_template_string(...)
+  metadata:
+    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://nvisium.com/blog/2016/03/09/exploring-ssti-in-flask-jinja2.html
+  message: Found a template created with string formatting. This is susceptible to server-side template injection and cross-site
+    scripting attacks.
+  languages: [python]
+  severity: WARNING
