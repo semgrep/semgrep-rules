@@ -1,6 +1,7 @@
 def bad():
     # ruleid: use-defused-xml
     import xml
+    # ruleid: use-defused-xml
     from xml.etree import ElementTree 
     tree = ElementTree.parse('country_data.xml')
     root = tree.getroot()
@@ -8,6 +9,7 @@ def bad():
 def ok():
     # ok
     import defusedxml
-    from xml.etree import ElementTree 
+    # ok
+    from defusedxml.etree import ElementTree 
     tree = ElementTree.parse('country_data.xml')
     root = tree.getroot()
