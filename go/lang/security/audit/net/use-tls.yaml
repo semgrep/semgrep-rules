@@ -1,6 +1,7 @@
 rules:
 - id: use-tls
-  pattern: http.ListenAndServe(...)
+  pattern: http.ListenAndServe($ADDR, $HANDLER)
+  fix: http.ListenAndServeTLS($ADDR, certFile, keyFile, $HANDLER)
   metadata:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     owasp: 'A3: Sensitive Data Exposure'
