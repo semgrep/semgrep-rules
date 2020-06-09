@@ -12,40 +12,40 @@ rules:
     references:
     - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
   pattern-either:
+  - patterns:
+    - pattern-inside: |
+        @$APP.route($ROUTE, ...)
+        def $ROUTE_FUNC(..., $ROUTEVAR, ...):
+          ...
+    - pattern-either:
+      - pattern: requests.$FUNC(..., <... $ROUTEVAR ...>, ...)
+      - pattern: |
+          $INTERM = <... $ROUTEVAR ...>
+          ...
+          requests.$FUNC(..., <... $INTERM ...>, ...)
+  - pattern-either:
+    - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
+    - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
+    - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
+    - pattern: requests.$FUNC(..., <... flask.request.$W ...>, ...)
+  - pattern-either:
     - patterns:
       - pattern-inside: |
-          @$APP.route($ROUTE, ...)
-          def $ROUTE_FUNC(..., $ROUTEVAR, ...):
-            ...
-      - pattern-either:
-        - pattern: requests.$FUNC(..., <... $ROUTEVAR ...>, ...)
-        - pattern: |
-            $INTERM = <... $ROUTEVAR ...>
-            ...
-            requests.$FUNC(..., <... $INTERM ...>, ...)
-    - pattern-either:
-      - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W ...>, ...)
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W.get(...) ...>
-            ...
-        - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W[...] ...>
-            ...
-        - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W(...) ...>
-            ...
-        - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W ...>
-            ...
-        - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+          $INTERM = <... flask.request.$W.get(...) ...>
+          ...
+      - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W[...] ...>
+          ...
+      - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W(...) ...>
+          ...
+      - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W ...>
+          ...
+      - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
