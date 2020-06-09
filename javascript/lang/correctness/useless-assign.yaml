@@ -2,14 +2,14 @@ rules:
 - id: useless-assignment
   patterns:
   - pattern-not: |
-      $A = $B;
-      $A = $A.$C(...);
+      $X = $Y;
+      $X = $X.$METHOD(...);
   - pattern-not: |
-      $D = $E;
-      $D = $F + $D;
+      $X = $Y;
+      $X = $PREPEND + $X;
   - pattern-not: |
-      $H = $I;
-      $H = $H + $J;
+      $X = $Y;
+      $X = $X + $POSTPEND;
   - pattern: |
       $X = $Y;
       $X = $Z;
