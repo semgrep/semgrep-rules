@@ -3,13 +3,13 @@ rules:
   patterns:
   - pattern-not: |
       $X = $Y;
-      $X = $X.$Z(...);
+      $X = $X.$METHOD(...);
   - pattern-not: |
       $X = $Y;
-      $X = $Z + $X;
+      $X = $PREPEND + $X;
   - pattern-not: |
       $X = $Y;
-      $X = $X + $Z;
+      $X = $X + $POSTPEND;
   - pattern: |
       $X = $Y;
       $X = $Z;
