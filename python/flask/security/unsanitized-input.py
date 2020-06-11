@@ -1,13 +1,13 @@
-from flask import make_response
+from flask import make_response, request
 
 def test1():
-    # ruleid: response_contains_unsanitized_input
+    # ruleid: response-contains-unsanitized-input
     x = request.args.get("x")
     return make_response("found {}".format(x))
 
 
 def test1():
-    # ruleid: response_contains_unsanitized_input
+    # ruleid: response-contains-unsanitized-input
     x = request.args.get("x")
     y = make_response("found {}".format(x))
     return y
@@ -21,6 +21,6 @@ def test2():
 
 
 def test3():
-    # ruleid: response_contains_unsanitized_input
+    # ruleid: response-contains-unsanitized-input
     x = request.args.get("x")
     return make_response(f"found {x}")

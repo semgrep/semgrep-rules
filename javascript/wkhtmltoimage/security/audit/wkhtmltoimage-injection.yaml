@@ -1,0 +1,20 @@
+rules:
+- id: wkhtmltoimage-injection
+  message: |
+    If unverified user data can reach the `wkhtmltoimage` it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      $WK = require('wkhtmltoimage');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: $WK.generate($INPUT,...)
+  - pattern-not: $WK.generate("...",...)

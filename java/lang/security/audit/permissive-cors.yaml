@@ -1,0 +1,56 @@
+rules:
+- id: permissive-cors
+  message: |
+    https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
+    Permissive CORS policy will allow a malicious application to communicate with the victim application in an inappropriate way, leading to spoofing, data theft, relay and other attacks.
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+  - pattern: |
+      HttpServletResponse $RES = ...;
+      ...
+      $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      HttpServletResponse $RES = ...;
+      ...
+      $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      ServerHttpResponse $RES = ...;
+      ...
+      $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      HttpHeaders $HEADERS = ...;
+      ...
+      $HEADERS.set("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+  - pattern: |
+      ServerWebExchange $SWE = ...;
+      ...
+      $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,ServerHttpResponse $RES,...) {
+        ...
+        $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,ServerWebExchange $SWE,...) {
+        ...
+        $SWE.getResponse().getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        ...
+      }
+  - pattern: ResponseEntity.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
+      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")
+  - pattern: ServerResponse.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
+      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")

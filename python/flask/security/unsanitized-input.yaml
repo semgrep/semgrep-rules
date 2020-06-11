@@ -1,21 +1,21 @@
 rules:
-- id: response_contains_unsanitized_input
+- id: response-contains-unsanitized-input
   patterns:
   - pattern-either:
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response("...".format($X))
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"...{$X}...")
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"...{$X}")
     - pattern: |
-        $X = request.args.get(...)
+        $X = flask.request.args.get(...)
         ...
         flask.make_response(f"{$X}...")
   message: |

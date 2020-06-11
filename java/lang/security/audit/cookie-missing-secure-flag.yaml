@@ -1,5 +1,5 @@
 rules:
-- id: spring-cookie-missing-secure-flag
+- id: cookie-missing-secure-flag
   metadata:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'
@@ -7,9 +7,13 @@ rules:
   message: |
     A cookie was detected without setting the 'secure' flag. The 'secure' flag
     for cookies prevents the client from transmitting the cookie over insecure
-    channels such as HTTP. Set the 'secure' flag by calling 'cookie.setSecure(true);'
+    channels such as HTTP. Set the 'secure' flag by calling '$COOKIE.setSecure(true);'
   severity: WARNING
   languages: [java]
   patterns:
-  - pattern-not-inside: $COOKIE.setSecure(true); ...
-  - pattern: $RESPONSE.addCookie($COOKIE);
+  - pattern-not-inside: $COOKIE.setValue(""); ...
+  - pattern-either:
+    - pattern: $COOKIE.setSecure(false);
+    - patterns:
+      - pattern-not-inside: $COOKIE.setSecure(...); ...
+      - pattern: $RESPONSE.addCookie($COOKIE);
