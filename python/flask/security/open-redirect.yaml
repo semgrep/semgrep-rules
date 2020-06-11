@@ -5,17 +5,25 @@ rules:
       @$APP.route(...)
       def $X():
         ...
+  - pattern-not-inside: |
+      ...
+      if <... werkzeug.urls.url_parse($V) ...>:
+        ...
   - pattern-either:
+    - pattern: flask.redirect(<... flask.request.$W.get(...) ...>, ...)
+    - pattern: flask.redirect(<... flask.request.$W[...] ...>, ...)
+    - pattern: flask.redirect(<... flask.request.$W(...) ...>, ...)
+    - pattern: flask.redirect(<... flask.request.$W ...>, ...)
     - pattern: |
-        $V = flask.request.$W.get($X)
+        $V = flask.request.$W.get(...)
         ...
         flask.redirect($V, ...)
     - pattern: |
-        $V = flask.request.$W[$X]
+        $V = flask.request.$W[...]
         ...
         flask.redirect($V, ...)
     - pattern: |
-        $V = flask.request.$W($X)
+        $V = flask.request.$W(...)
         ...
         flask.redirect($V, ...)
     - pattern: |

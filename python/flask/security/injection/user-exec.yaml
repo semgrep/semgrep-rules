@@ -1,0 +1,55 @@
+rules:
+- id: exec-injection
+  languages:
+  - python
+  severity: ERROR
+  message: |
+    Found user data in a call to 'exec'. This is extremely dangerous because
+    it can enable an attacker to execute remote code.
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Code_Injection
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+      - pattern-either:
+        - pattern: eval(..., <... $ROUTEVAR ...>, ...)
+        - pattern: |
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            eval(..., <... $INTERM ...>, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: eval(..., <... flask.request.$W.get(...) ...>, ...)
+        - pattern: eval(..., <... flask.request.$W[...] ...>, ...)
+        - pattern: eval(..., <... flask.request.$W(...) ...>, ...)
+        - pattern: eval(..., <... flask.request.$W ...>, ...)
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W.get(...) ...>
+              ... 
+          - pattern: eval(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W[...] ...>
+              ... 
+          - pattern: eval(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W(...) ...>
+              ... 
+          - pattern: eval(..., <... $INTERM ...>, ...)
+        - patterns:
+          - pattern-inside: |
+              $INTERM = <... flask.request.$W ...>
+              ... 
+          - pattern: eval(..., <... $INTERM ...>, ...)
+
