@@ -5,7 +5,7 @@ function test1() {
     const port = 3000
 
     app.get('/', (req, res) => {
-// todoruleid: express-xml2json-xxe
+// ruleid: express-xml2json-xxe
         const xml = req.query.xml
         const content = xml2json.toJson(xml, {coerce: true, object: true});
         res.send(content)
@@ -21,7 +21,7 @@ function test2() {
     const port = 3000
 
     app.get('/', (req, res) => {
-// todoruleid: express-xml2json-xxe
+// ruleid: express-xml2json-xxe
         const content = xml2json.toJson(req.body, {coerce: true, object: true});
         res.send(content)
     })
