@@ -85,7 +85,7 @@ function okTest4(userInput) {
 
 function test5(userInput) {
     const context = vm.createContext({name: userInput})
-    const code = `return 'hello ' + ${userInput}`
+    const code = `return 'hello ' name`
 // ruleid: vm-compilefunction-context-injection
     const fn = vm.compileFunction(code, [], { parsingContext: context })
 }
