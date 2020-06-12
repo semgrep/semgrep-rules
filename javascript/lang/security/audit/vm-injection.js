@@ -111,7 +111,6 @@ function test6(userInput) {
 }
 
 function okTest6(userInput) {
-// ok 
     const script = new vm.Script(`
         function add(a, b) {
           return a + b;
