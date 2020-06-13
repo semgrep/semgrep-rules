@@ -1,11 +1,15 @@
 rules:
-- id: avoid-insecure-deserialization
+- id: insecure-deserialization
   metadata:
     owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
-  message: Avoid using insecure deserialization library, backed by `pickle` which is known to lead to remote code execution
-    vulnerabilities.
+    references:
+    - https://docs.python.org/3/library/pickle.html
+  message: |
+    Detected the use of an insecure deserizliation library in a Flask route. These libraries
+    are prone to code execution vulnerabilities. Ensure user data does not enter this function.
+    To fix this, try to avoid serializing whole objects. Consider instead using a serializer
+    such as JSON.
   languages:
   - python
   severity: ERROR
@@ -14,6 +18,8 @@ rules:
       @app.route(...)
       def $X(...):
         ...
+  - pattern-not: $MODULE.$FUNC("...")
+  - pattern-not: $MODULE.$FUNC(open("...", ...))
   - pattern-either:
     - pattern: pickle.$FUNC(...)
     - pattern: _pickle.$FUNC(...)
