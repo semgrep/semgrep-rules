@@ -1,0 +1,17 @@
+rules:
+- id: jwt-exposed-data
+  message: |
+    The object is passed strictly to jsonwebtoken.sign(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  severity: WARNING
+  metadata:
+    owasp: A3:2017-Sensitive Data Exposure
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      $JWT = require('jsonwebtoken');
+      ...
+  - pattern-inside: function (...,$INPUT,...) {...}
+  - pattern: $JWT.sign($INPUT,...)
