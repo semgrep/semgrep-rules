@@ -13,5 +13,7 @@ rules:
       ...
       $JWT = require('jsonwebtoken');
       ...
-  - pattern-inside: function (...,$INPUT,...) {...}
+  - pattern-either:
+    - pattern-inside: function (...,$INPUT,...) {...}
+    - pattern-inside: function $F(...,$INPUT,...) {...}
   - pattern: $JWT.sign($INPUT,...)
