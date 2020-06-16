@@ -6,18 +6,19 @@ rules:
     source-rule-url: https://github.com/securego/gosec#available-rules
     references:
     - https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
-  message: Profiling endpoint is automatically exposed on /debug/pprof. Just use `import "net/http/pprof"` instead. See https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
+  message: Profiling endpoint is automatically exposed on /debug/pprof. Just use `import
+    "net/http/pprof"` instead. See https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
     for more information and mitigation.
   languages: [go]
   severity: WARNING
   patterns:
-  - pattern: |
+  - pattern-inside: |
       import _ "net/http/pprof"
       ...
-      func $FOO(...) {
-          ...
-          http.ListenAndServe($HOST, ...)
-          ...
+  - pattern-inside: |
+      func $ANY(...) {
+        ...
       }
-  - pattern-where-python: |-
-      "localhost" not in vars['$HOST']
+  - pattern-not: http.ListenAndServe("=~/^localhost.*/", ...)
+  - pattern-not: http.ListenAndServe("=~/^127[.]0[.]0[.]1.*/", ...)
+  - pattern: http.ListenAndServe(...)
