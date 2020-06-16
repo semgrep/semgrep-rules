@@ -11,13 +11,13 @@ rules:
   languages: [go]
   severity: WARNING
   patterns:
-  - pattern: |
+  - pattern-inside: |
       import _ "net/http/pprof"
       ...
-      func $FOO(...) {
-          ...
-          http.ListenAndServe($HOST, ...)
-          ...
+  - pattern-inside: |
+      func $ANY(...) {
+        ...
       }
-  - pattern-where-python: |-
-      "localhost" not in vars['$HOST']
+  - pattern-not: http.ListenAndServe("=~/^localhost.*/", ...)
+  - pattern-not: http.ListenAndServe("=~/^127[.]0[.]0[.]1.*/", ...)
+  - pattern: http.ListenAndServe(...)
