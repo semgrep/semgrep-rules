@@ -1,5 +1,4 @@
 import urllib3 as ur3
-import requests as req
 import ssl as sss
 
 import socket
@@ -38,9 +37,6 @@ proxy = ur3.ProxyManager('http://localhost:3128/', cert_reqs = ssl.CERT_NONE)
 # ruleid:disabled-cert-validation
 pool = ur3.connectionpool.HTTPSConnectionPool(cert_reqs=ssl.CERT_OPTIONAL)
 
-# ruleid:http-not-https-connection
-pool2 = ur3.connectionpool.HTTPConnectionPool(bla)
-
 # ruleid:disabled-cert-validation
 pool = ur3.connection_from_url('someurl', cert_reqs= ssl.CERT_NONE)
 
@@ -63,13 +59,3 @@ pool = ur3.proxy_from_url('someurl', cert_reqs= ssl.CERT_NONE)
 pool = ur3.proxy_from_url('someurl', cert_reqs= ssl.CERT_REQUIED)
 # ok
 pool = ur3.proxy_from_url('someurl', cert_reqs=None)
-
-r = req.get(some_url, stream=True)
-import requests
-r = requests.post(some_url, stream=True)
-
-# ruleid:disabled-cert-validation-requests
-r = req.get(some_url, stream=True, verify=False)
-import requests
-# ruleid:disabled-cert-validation-requests
-r = requests.post(some_url, stream=True, verify=False)
