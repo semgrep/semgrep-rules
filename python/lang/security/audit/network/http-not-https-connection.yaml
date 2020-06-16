@@ -1,0 +1,16 @@
+rules:
+- id: http-not-https-connection
+  patterns:
+  - pattern-either:
+    - pattern: urllib3.HTTPConnectionPool(...)
+    - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
+  message: |
+    Detected HTTPConnectionPool. It is recommended to use
+    HTTPSConnectionPool instead for security.
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://urllib3.readthedocs.io/en/1.2.1/pools.html#urllib3.connectionpool.HTTPSConnectionPool
+  languages: [python]
+  severity: ERROR

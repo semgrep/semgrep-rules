@@ -34,8 +34,10 @@ def test_email_auth_backend_empty_password(user_profile: UserProfile) -> None:
 def other(user_profile: UserProfile) -> None:
 	user_profile = example_user('hamlet')
 	password = "testpassword"
-    # ruleid: unvalidated-password
+	# ruleid: unvalidated-password
 	user_profile.set_password(password)
+
+
 	user_profile.save()
 
 	user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
