@@ -9,14 +9,18 @@ rules:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
   languages: [javascript]
   patterns:
+  - pattern-inside: |
+      ...
+      require('jose');
+      ...
   - pattern-either:
-    - pattern-inside: |
-        ...
-        require('jose');
-        ...
-  - pattern-either:
-    - pattern-inside: function (...,$INPUT,...) {...}
-    - pattern-inside: function $F(...,$INPUT,...) {...}
-  - pattern-either:
-    - pattern: $JOSE.JWT.sign($INPUT,...)
-    - pattern: $JWT.sign($INPUT,...)
+    - patterns:
+      - pattern-inside: function (...,$INPUT,...) {...}
+      - pattern-either:
+        - pattern: $JOSE.JWT.sign($INPUT,...)
+        - pattern: $JWT.sign($INPUT,...)
+    - patterns:
+      - pattern-inside: function $F(...,$INPUT,...) {...}
+      - pattern-either:
+        - pattern: $JOSE.JWT.sign($INPUT,...)
+        - pattern: $JWT.sign($INPUT,...)
