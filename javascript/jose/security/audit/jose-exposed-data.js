@@ -28,7 +28,7 @@ module.exports = {
       titleTemplate: "%s",
       tagline: "blah",
       author: "blah",
-      imageUrl: "https://stuff.n.things.com/static/",
+      imageUrl: "https://stuff-n-things.com/static/",
       description:
         "blah",
       keywords: `blah`,
