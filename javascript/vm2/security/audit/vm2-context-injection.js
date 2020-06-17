@@ -3,7 +3,7 @@
 const fs = require('fs');
 const {VM, NodeVM} = require('vm2');
 
-// vm2-context-injection
+// ruleid:vm2-context-injection
 async function test1(input) {
   code = `
     console.log("Hello world")
@@ -17,7 +17,7 @@ async function test1(input) {
   return new VM({timeout: 40 * 1000, sandbox}).run(code);
 }
 
-// vm2-context-injection
+// ruleid:vm2-context-injection
 function test2(input) {
   const sandbox = {
     setTimeout,
