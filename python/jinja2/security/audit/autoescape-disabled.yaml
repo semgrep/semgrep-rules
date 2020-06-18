@@ -2,8 +2,7 @@ rules:
 - id: autoescape-disabled
   patterns:
   - pattern-not: jinja2.Environment(..., autoescape=True, ...)
-  - pattern-not: jinja2.Environment(..., autoescape=jinja2.select_autoescape(...),
-      ...)
+  - pattern-not: jinja2.Environment(..., autoescape=jinja2.select_autoescape(...), ...)
   - pattern: jinja2.Environment(...)
   message: |
     Detected a Jinja2 environment without autoescaping. Jinja2 does not autoescape by default.
