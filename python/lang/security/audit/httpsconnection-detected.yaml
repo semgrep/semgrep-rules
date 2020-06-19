@@ -1,0 +1,21 @@
+rules:
+- id: httpsconnection-detected
+  patterns:
+  - pattern-either:
+    - pattern: httplib.HTTPSConnection(...)
+    - pattern: http.client.HTTPSConnection(...)
+    - pattern: six.moves.http_client.HTTPSConnection(...)
+  message: |
+    The HTTPSConnection API has changed frequently with minor releases of Python.
+    Ensure you are using the API for your version of Python securely.
+    For example, Python 3 versions prior to 3.4.3 will not verify SSL certificates by default.
+    See https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+    for more information.
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-295: Improper Certificate Validation'
+    references:
+    - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+  severity: WARNING
+  languages:
+  - python
