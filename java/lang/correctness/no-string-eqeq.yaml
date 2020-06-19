@@ -1,0 +1,12 @@
+rules:
+- id: no-string-eqeq
+  languages: [java]
+  equivalences:
+  - equivalence: $X == $Y ==> $Y == $X
+  patterns:
+  - pattern: $X == (String $Y)
+  message: |
+    Strings should not be compared with '=='.
+    This is a reference comparison operator. 
+    Use '.equals()' instead.
+  severity: WARNING
