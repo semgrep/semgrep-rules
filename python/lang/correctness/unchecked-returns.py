@@ -14,8 +14,14 @@ sub.check_call('foo')
 sub.check_call('foo ') == 0
 
 def foo():
-    # ruleid: unchecked-subprocess-call
+    # ok
     return subprocess.call(['ls', '--no'])
     
+def foo():
+    # ruleid: unchecked-subprocess-call
+    subprocess.call(['ls', '--no'])
+    return True
+
+
 def foo2():
     return subprocess.call(['ls', '--no']) == 0
