@@ -5,10 +5,13 @@ from cryptography.hazmat.primitives.ciphers.modes import ECB
 
 
 # Insecure mode
+# ruleid: insecure-cipher-mode-ecb
 mode = ECB(iv)
 
 # Secure cipher and mode
+# ok
 cipher = AES.new(key, blockalgo.MODE_CTR, iv)
 
 # Secure mode
+# ok
 mode = CBC(iv)
