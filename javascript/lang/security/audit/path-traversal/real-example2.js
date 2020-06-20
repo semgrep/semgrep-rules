@@ -4,11 +4,11 @@ module.exports = Extract;
 var Parse = require('./parse');
 var Writer = require('fstream').Writer;
 var util = require('util');
-// ruleid: path-join-resolve-traversal
 var path = require('path');
 
 util.inherits(Extract, Parse);
 
+// ruleid:path-join-resolve-traversal
 function Extract (opts) {
   if (!(this instanceof Extract))
     return new Extract(opts);
