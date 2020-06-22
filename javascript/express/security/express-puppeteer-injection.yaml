@@ -1,0 +1,45 @@
+rules:
+- id: express-puppeteer-injection
+  message: |
+    If unverified user data can reach the `puppeteer` methods it can result in Server-Side Request Forgery vulnerabilities
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  severity: ERROR
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('puppeteer');
+      ...
+  - pattern-inside: |
+      ...
+      require('express');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $PAGE.goto(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.goto(<... $REQ.$BODY ...>,...)
+    - pattern: $PAGE.setContent(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.setContent(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.goto(<... $INPUT ...>,...);
+
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.goto(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);
+    - pattern: |-
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);

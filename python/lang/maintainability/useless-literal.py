@@ -3,9 +3,9 @@ d = dict((1, 'a'), (2, 'b'), (1, 'a'))
 # todoruleid: useless-literal-set
 s = set((1, 'a'), (2, 'b'), (1, 'a'))
 
-# todoruleid: useless-literal-dict
+# ruleid: useless-literal-dict
 d = {1: 'a', 2: 'b', 1: 'a'}
-# todoruleid: useless-literal-dict
+# ruleid: useless-literal-dict
 d = {'a': 1, 'a': 1}
 
 # OK

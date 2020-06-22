@@ -11,39 +11,10 @@ rules:
     - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
     - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
   - pattern-where-python: |-
-      vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL',
-                        "'NONE'", "'OPTIONAL'", '"NONE"', '"OPTIONAL"']
+      vars['$REQS'] in ['NONE', 'CERT_NONE', 'ssl.CERT_NONE', 'ssl.CERT_OPTIONAL', 'CERT_OPTIONAL', "'NONE'", "'OPTIONAL'", '"NONE"', '"OPTIONAL"']
   message: certificate verification explicitly disabled, insecure connections possible
   metadata:
     cwe: 'CWE-295: Improper Certificate Validation'
     owasp: 'A3: Sensitive Data Exposure'
   languages: [python]
-  severity: WARNING
-- id: http-not-https-connection
-  patterns:
-  - pattern-either:
-    - pattern: urllib3.HTTPConnectionPool(...)
-    - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
-  message: suggest HTTPS over HTTP connection
-  metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    owasp: 'A3: Sensitive Data Exposure'
-  languages: [python]
-  severity: WARNING
-- id: disabled-cert-validation-requests
-  patterns:
-  - pattern-either:
-    - pattern: requests.put(..., verify=False, ...)
-    - pattern: requests.patch(..., verify=False, ...)
-    - pattern: requests.delete(..., verify=False, ...)
-    - pattern: requests.head(..., verify=False, ...)
-    - pattern: requests.options(..., verify=False, ...)
-    - pattern: requests.request(..., verify=False, ...)
-    - pattern: requests.get(..., verify=False, ...)
-    - pattern: requests.post(..., verify=False, ...)
-  message: certificate verification explicitly disabled, insecure connections possible
-  metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
-    owasp: 'A3: Sensitive Data Exposure'
-  languages: [python]
-  severity: WARNING
+  severity: ERROR
