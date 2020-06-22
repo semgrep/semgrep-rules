@@ -80,11 +80,13 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO109.md
-  pattern-either:
-  - pattern: yaml.dump(...)
-  - pattern: yaml.dump_all(...)
-  - pattern: yaml.load(...)
-  - pattern: yaml.load_all(...)
+  patterns:
+    - pattern: import yaml
+    - pattern-either:
+      - pattern: yaml.dump(...)
+      - pattern: yaml.dump_all(...)
+      - pattern: yaml.load(...)
+      - pattern: yaml.load_all(...)
 - id: insecure-compile-use
   message: The Python 'compile' function is not secure against maliciously constructed input
   languages: [python]
