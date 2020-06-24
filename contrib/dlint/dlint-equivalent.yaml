@@ -1,0 +1,178 @@
+rules:
+- id: insecure-pickle-use
+  message: The Python 'pickle' module is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO103.md
+  pattern-either:
+  - pattern: pickle.loads(...)
+  - pattern: pickle.load(...)
+  - pattern: pickle.Unpickler(...)
+  - pattern: cPickle.loads(...)
+  - pattern: cPickle.load(...)
+  - pattern: cPickle.Unpickler(...)
+- id: insecure-eval-use
+  message: The Python 'eval' function is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO104.md
+  patterns:
+  - pattern: eval(...)
+  - pattern-not: eval("...")
+- id: insecure-exec-use
+  message: The Python 'exec' function is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO105.md
+  patterns:
+  - pattern: exec(...)
+  - pattern-not: exec("...")
+- id: insecure-os-exec-use
+  message: The Python 'os' execution functions are not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+  pattern-either:
+  - patterns:
+    - pattern: os.popen(...)
+    - pattern-not: os.popen("...")
+  - patterns:
+    - pattern: os.popen2(...)
+    - pattern-not: os.popen2("...")
+  - patterns:
+    - pattern: os.popen3(...)
+    - pattern-not: os.popen3("...")
+  - patterns:
+    - pattern: os.popen4(...)
+    - pattern-not: os.popen4("...")
+  - patterns:
+    - pattern: os.system(...)
+    - pattern-not: os.system("...")
+- id: insecure-os-temp-use
+  message: The Python 'os' tempnam|tmpnam functions are vulnerable to symlink attacks
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+  pattern-either:
+  - pattern: os.tempnam(...)
+  - pattern: os.tmpnam(...)
+- id: insecure-xml-use
+  message: Insecure XML parsing functionality, prefer 'defusedxml'
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+  pattern-either:
+  - pattern: lxml.$ANYTHING
+  - pattern: xml.$ANYTHING
+  - pattern: xmlrpclib.$ANYTHING
+  - pattern-not: xml.sax.saxutils
+  - pattern-not: xml.etree.ElementTree.Element
+  - pattern-not: xml.etree.ElementTree.SubElement
+- id: insecure-yaml-use
+  message: The Python 'yaml' module is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO109.md
+  patterns:
+  - pattern: import yaml
+  - pattern-either:
+    - pattern: yaml.dump(...)
+    - pattern: yaml.dump_all(...)
+    - pattern: yaml.load(...)
+    - pattern: yaml.load_all(...)
+- id: insecure-compile-use
+  message: The Python 'compile' function is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO110.md
+  patterns:
+  - pattern: compile(...)
+  - pattern-not: compile("...")
+- id: insecure-zipfile-use
+  message: The Python 'zipfile' extract|extractall functions are vulnerable to arbitrary file overwrites
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO112.md
+  pattern-either:
+  - pattern: |
+      $ZF = zipfile.ZipFile(...)
+      ...
+      $ZF.extract(...)
+  - pattern: |
+      $ZF = zipfile.ZipFile(...)
+      ...
+      $ZF.extractall(...)
+- id: insecure-tarfile-use
+  message: The Python 'tarfile' extract|extractall functions are vulnerable to arbitrary file overwrites
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO115.md
+  pattern-either:
+  - pattern: |
+      $TF = tarfile.TarFile(...)
+      ...
+      $TF.extract(...)
+  - pattern: |
+      $TF = tarfile.TarFile(...)
+      ...
+      $TF.extractall(...)
+- id: insecure-subprocess-use
+  message: The Python 'subprocess' module called with 'shell=True' may allow for shell injection
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO116.md
+  pattern-either:
+  - patterns:
+    - pattern: subprocess.call(..., shell=True, ...)
+    - pattern: subprocess.call('...', ..., shell=True, ...)
+  - patterns:
+    - pattern: subprocess.check_call(..., shell=True, ...)
+    - pattern: subprocess.check_call('...', ..., shell=True, ...)
+  - patterns:
+    - pattern: subprocess.check_output(..., shell=True, ...)
+    - pattern: subprocess.check_output('...', ..., shell=True, ...)
+  - patterns:
+    - pattern: subprocess.Popen(..., shell=True, ...)
+    - pattern: subprocess.Popen('...', ..., shell=True, ...)
+  - patterns:
+    - pattern: subprocess.run(..., shell=True, ...)
+    - pattern: subprocess.run('...', ..., shell=True, ...)
+- id: insecure-dl-use
+  message: The Python 'dl' module may cause segmentation faults or other incorrect behavior
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO117.md
+  pattern: dl.$ANYTHING
+- id: insecure-gl-use
+  message: The Python 'gl' module may cause core dumps or other unsafe behavior
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO118.md
+  pattern: gl.$ANYTHING
+- id: insecure-shelve-use
+  message: The Python 'shelve' module is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO119.md
+  pattern: shelve.$ANYTHING
+- id: insecure-marshal-use
+  message: The Python 'marshal' module is not secure against maliciously constructed input
+  languages: [python]
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO120.md
+  pattern: marshal.$ANYTHING
