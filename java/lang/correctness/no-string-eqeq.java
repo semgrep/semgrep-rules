@@ -6,5 +6,9 @@ public class Example {
         if (b == 2) return -1;
         // ruleid:no-string-eqeq
         if ("hello" == a) return 2;
+        //ok
+        if (null == "hello") return 12;
+        //ok
+        if ("hello" == null) return 0;
     }
 }
