@@ -1,6 +1,6 @@
 // example from https://raw.githubusercontent.com/aviadatsnyk/adm-zip/576f7c5a5ccd529c75c0c7cf870a69856d99ca3a/adm-zip.js
 var Utils = require("./util");
-// ruleid: path-join-resolve-traversal
+// ruleid:path-join-resolve-traversal
 var fs = Utils.FileSystem.require(),
     pth = require("path");
 
@@ -247,7 +247,7 @@ module.exports = function(/*String*/input) {
             }
             // normalize the path first
             localPath = pth.normalize(localPath);
-	    localPath = localPath.split("\\").join("/"); //windows fix
+        localPath = localPath.split("\\").join("/"); //windows fix
             if (localPath.charAt(localPath.length - 1) != "/")
                 localPath += "/";
 
@@ -258,7 +258,7 @@ module.exports = function(/*String*/input) {
 
                 if (items.length) {
                     items.forEach(function(path) {
-						var p = path.split("\\").join("/").replace( new RegExp(localPath.replace(/(\(|\))/g,'\\$1'), 'i'), ""); //windows fix
+                        var p = path.split("\\").join("/").replace( new RegExp(localPath.replace(/(\(|\))/g,'\\$1'), 'i'), ""); //windows fix
                         if (filter(p)) {
                             if (p.charAt(p.length - 1) !== "/") {
                                 self.addFile(zipPath+p, fs.readFileSync(path), "", 0)
@@ -347,14 +347,14 @@ module.exports = function(/*String*/input) {
                 throw Utils.Errors.NO_ENTRY;
             }
 
+            // ruleid:path-join-resolve-traversal
             var entryName = item.entryName;
 
             if(isWin){
                 entryName = escapeFileName(entryName)
             }
 
-
-
+            // ruleid:path-join-resolve-traversal
             var target = pth.resolve(targetPath, maintainEntryPath ? entryName : pth.basename(entryName));
 
             if (item.isDirectory) {
