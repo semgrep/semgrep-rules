@@ -9,8 +9,8 @@ rules:
     injection if variables in the SQL statement are not properly sanitized.
     Use a prepared statements (java.sql.PreparedStatement) instead.
   patterns:
-  - pattern-not: $W.execute(<... "=~/.*TABLE *$/" ...>)
-  - pattern-not: $W.execute(<... "=~/.*TABLE %s$/" ...>)
+  - pattern-not: $W.execute(<... "=~/.*TABLE *$/" ...>);
+  - pattern-not: $W.execute(<... "=~/.*TABLE %s$/" ...>);
   - pattern-either:
     - pattern: $W.execute($X + $Y, ...);
     - pattern: |
