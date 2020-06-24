@@ -1,6 +1,7 @@
+var path = require('path');
+
 function test1() {
     // ruleid: path-join-resolve-traversal
-    var path = require('path');
     function someFunc(entry) {
         var extractPath = path.join(opts.path, entry.path);
         return extractFile(extractPath);
@@ -10,10 +11,9 @@ function test1() {
 
 function test2() {
     // ruleid: path-join-resolve-traversal
-    const pth = require('path')
     function someFunc(val) {
         createFile({
-            filePath: pth.resolve(opts.path, val)
+            filePath: path.resolve(opts.path, val)
         })
         return true
     }
@@ -22,14 +22,12 @@ function test2() {
 
 function test3() {
     // ruleid: path-join-resolve-traversal
-    let path = require('path')
     let somePath = req.body.path;
     return path.join(opts.path, somePath);
 }
 
 function okTest1() {
     // ok
-    const pth = require('path')
     function someFunc() {
         createFile({
             filePath: pth.join(opts.path, 'val')
