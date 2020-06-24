@@ -1,0 +1,18 @@
+rules:
+- id: res-render-injection
+  message: |
+    If an attacker controls the x in res.render(x) then they can cause code to load that was not intended to run on the server.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-706: Use of Incorrectly-Resolved Name or Reference'
+  patterns:
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $RES.render(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $RES.render(<... $REQ.$BODY ...>,...)
