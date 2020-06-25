@@ -15,6 +15,18 @@ def not_really_safe(request):
     )
     return HttpResponse(template.render({"html_example": not_actually_safe}, request))
 
+def fine(request):
+    template = loader.get_template('contents.html')
+    # ok
+    fine = mark_safe(
+        """
+        <div>
+            <p>Contents!</p>
+        </div>
+        """
+    )
+    return HttpResponse(template.render({"html_example": fine}, request))
+
 def not_really_safe(request):
     template = loader.get_template('contents.html')
     # ok
