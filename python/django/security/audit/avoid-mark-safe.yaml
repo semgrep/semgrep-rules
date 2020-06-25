@@ -2,6 +2,7 @@ rules:
 - id: avoid-mark-safe
   patterns:
   - pattern-not-inside: django.utils.html.format_html(...)
+  - pattern-not: django.utils.safestring.mark_safe("...")
   - pattern: django.utils.safestring.mark_safe(...)
   message: |
     'mark_safe()' is used to mark a string as "safe" for HTML output.
