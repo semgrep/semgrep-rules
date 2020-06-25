@@ -1,0 +1,15 @@
+rules:
+- id: ssl-wrap-socket-is-deprecated
+  pattern: ssl.wrap_socket(...)
+  message: |
+    'ssl.wrap_socket()' is deprecated. This function creates an insecure socket
+    without server name indication or hostname matching. Instead, create an SSL
+    context using 'ssl.SSLContext()' and use that to wrap a socket.
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://docs.python.org/3/library/ssl.html#ssl.wrap_socket
+    - https://docs.python.org/3/library/ssl.html#ssl.SSLContext.wrap_socket
+  languages: [python]
+  severity: WARNING
