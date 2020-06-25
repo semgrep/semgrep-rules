@@ -1,0 +1,34 @@
+rules:
+- id: dynamic-urllib-use-detected
+  patterns:
+  - pattern-not: urllib.$W("...")
+  - pattern-not: urllib.request.$W("...")
+  - pattern-not: $OPENER.$W("...")
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: urllib.urlopen(...)
+        - pattern: urllib.request.urlopen(...)
+        - pattern: urllib.urlretrieve(...)
+        - pattern: urllib.request.urlretrieve(...)
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $OPENER = urllib.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.FancyURLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.FancyURLopener(...)
+            ...
+      - pattern-either:
+        - pattern: $OPENER.open(...)
+        - pattern: $OPENER.retrieve(...)
+  message: |
+    Stuff
+  languages: [python]
+  severity: WARNING
