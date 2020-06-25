@@ -1,0 +1,19 @@
+rules:
+- id: avoid-mark-safe
+  patterns:
+  - pattern-not-inside: django.utils.html.format_html(...)
+  - pattern: django.utils.safestring.mark_safe(...)
+  message: |
+    'mark_safe()' is used to mark a string as "safe" for HTML output.
+    This disables escaping and could therefore subject the content to
+    XSS attacks. Use 'django.utils.html.format_html()' to build HTML
+    for rendering instead.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site\
+      \ Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/utils/#django.utils.safestring.mark_safe
+    - https://docs.djangoproject.com/en/3.0/ref/utils/#django.utils.html.format_html
+  languages: [python]
+  severity: WARNING
