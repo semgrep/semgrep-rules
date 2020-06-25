@@ -2,7 +2,7 @@
 eval("x = 1; x = x + 2")
 
 blah = "import requests; r = requests.get('https://example.com')"
-# ruleid:eval-detected
+# ok
 eval(blah)
 
 dynamic = "import requests; r = requests.get('{}')"
