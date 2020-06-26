@@ -1,9 +1,7 @@
 # cf. https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/examples/weak_cryptographic_key_sizes.py
 
 import os
-from Crypto.PublicKey import DSA as pycrypto_dsa
 from Crypto.PublicKey import RSA as pycrypto_rsa
-from Cryptodome.PublicKey import DSA as pycryptodomex_dsa
 from Cryptodome.PublicKey import RSA as pycryptodomex_rsa
 
 # ok
