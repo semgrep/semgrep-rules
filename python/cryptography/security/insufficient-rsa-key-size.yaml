@@ -5,7 +5,12 @@ rules:
     - pattern: cryptography.hazmat.primitives.asymmetric.rsa.generate_private_key(..., key_size=$SIZE, ...)
     - pattern: cryptography.hazmat.primitives.asymmetric.rsa.generate_private_key($EXP, $SIZE, ...)
   - pattern-where-python: |
-      int(vars['$SIZE']) < 2048
+      alert = False
+      try:
+        alert = int(vars['$SIZE']) < 2048
+      except:
+        alert = False
+      alert
   message: |
     Detected an insufficient key size for RSA. NIST recommends
     a key size of 2048 or higher.
