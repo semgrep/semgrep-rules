@@ -12,12 +12,13 @@ rules:
         bits = 0
         for flag in mode.split('|'):
           try:
-            bits |= stat.__dict__[flag.strip().replace("stat.", "")]
+            bits |= {k: v for k, v in stat.__dict__.items() if type(v) == int}[flag.strip().replace("stat.", "")]
           except: # ignore things that aren't in stat module
             continue
         return bits
 
       def numeric_to_bits(mode):
+        # Try combos of ints: 0o777, 511, 0x1ff
         bits = 0
         for num in mode.split("|"):
           num = num.strip()
