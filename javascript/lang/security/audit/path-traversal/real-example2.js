@@ -8,7 +8,6 @@ var path = require('path');
 
 util.inherits(Extract, Parse);
 
-// ruleid:path-join-resolve-traversal
 function Extract (opts) {
   if (!(this instanceof Extract))
     return new Extract(opts);
@@ -20,6 +19,7 @@ function Extract (opts) {
   self.on('entry', function(entry) {
     if (entry.type == 'Directory') return;
     entry.pipe(Writer({
+      // ruleid:path-join-resolve-traversal
       somePath: path.join(opts.path,entry.path)
     }))
     .on('error',function(e) {
