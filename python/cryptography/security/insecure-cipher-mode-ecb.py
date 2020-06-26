@@ -1,4 +1,4 @@
-# cf. https://github.com/PyCQA/bandit/blob/master/examples/cipher-modes.py
+# cf. https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/examples/cipher-modes.py
 
 from cryptography.hazmat.primitives.ciphers.modes import CBC
 from cryptography.hazmat.primitives.ciphers.modes import ECB
