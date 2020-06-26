@@ -2,7 +2,7 @@
 exec("x = 1; x = x + 2")
 
 blah = "import requests; r = requests.get('https://example.com')"
-# ruleid:exec-detected
+# ok
 exec(blah)
 
 dynamic = "import requests; r = requests.get('{}')"
