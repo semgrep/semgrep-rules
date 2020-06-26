@@ -16,7 +16,7 @@ rules:
 - id: express_cors
   patterns:
   - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
   - pattern-either:
     - pattern: |
         $APP.options('*', cors(...))
