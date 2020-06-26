@@ -4,7 +4,6 @@ module.exports = Extract;
 var Parse = require('./parse');
 var Writer = require('fstream').Writer;
 var util = require('util');
-// ruleid: path-join-resolve-traversal
 var path = require('path');
 
 util.inherits(Extract, Parse);
@@ -20,6 +19,7 @@ function Extract (opts) {
   self.on('entry', function(entry) {
     if (entry.type == 'Directory') return;
     entry.pipe(Writer({
+      // ruleid:path-join-resolve-traversal
       somePath: path.join(opts.path,entry.path)
     }))
     .on('error',function(e) {
