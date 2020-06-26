@@ -1,0 +1,18 @@
+rules:
+- id: mako-templates-detected
+  pattern: mako.template.Template(...)
+  message: |
+    Mako templates do not provide a global HTML escaping mechanism.
+    This means you must escape all sensitive data in your templates
+    using '| u' for URL escaping or '| h' for HTML escaping.
+    If you are using Mako to serve web content, consider using
+    a system such as Jinja2 which enables global escaping.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/mako_templates.py
+    references:
+    - https://docs.makotemplates.org/en/latest/syntax.html#expression-escaping
+    - https://jinja.palletsprojects.com/en/2.11.x/intro/#
+  languages: [python]
+  severity: INFO
