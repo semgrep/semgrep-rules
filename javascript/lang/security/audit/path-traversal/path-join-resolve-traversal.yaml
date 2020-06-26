@@ -1,132 +1,44 @@
 rules:
 - id: path-join-resolve-traversal
   patterns:
-  - pattern-inside: "... $PATH = require('path'); ..."
+  - pattern-inside: |
+      ...
+      $PATH = require('path');
+      ...
   - pattern-either:
+    - pattern-inside: function $FUNC(...,$INPUT,...) {...}
+    - pattern-inside: function (...,$INPUT,...) {...}
+  - pattern-either:
+    - pattern: $PATH.join(...,<... $INPUT ...>,...)
+    - pattern: $PATH.join(...,<... $INPUT.$FOO ...>,...)
+    - pattern: $PATH.join(...,<... $INPUT.$FOO.$BAR ...>,...)
     - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $PATH.join(...,$Y,...);
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          var $R = {$SMTH:$PATH.join(...,$Y,...)};
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $R({$SMTH:$PATH.join(...,$Y,...)});
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $PATH.join(...,$Y.$P,...);
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          var $R = {$SMTH:$PATH.join(...,$Y.$P,...)};
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $R({$SMTH:$PATH.join(...,$Y.$P,...)});
-          ...
-        }
-    - pattern: |
-        var $X = ...;
+        $VAR = <... $INPUT ...>;
         ...
-        $PATH.join(...,$X,...);
+        $PATH.join(...,<... $VAR ...>,...);
     - pattern: |
-        $X = ...;
+        $VAR = <... $INPUT.$FOO ...>;
         ...
-        $PATH.join(...,$X,...);
+        $PATH.join(...,<... $VAR ...>,...);
     - pattern: |
-        $PATH.join(...,$X(),...);
-    - pattern: |
-        $PATH.join(...,$X.$P(),...);
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $PATH.resolve(...,$Y,...);
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          var $R = {$SMTH:$PATH.resolve(...,$Y,...)};
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $R({$SMTH:$PATH.resolve(...,$Y,...)});
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $PATH.resolve(...,$Y.$P,...);
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          var $R = {$SMTH:$PATH.resolve(...,$Y.$P,...)};
-          ...
-        }
-    - pattern: |
-        function $X(...,$Y,...) {
-          ...
-          $R({$SMTH:$PATH.resolve(...,$Y.$P,...)});
-          ...
-        }
-    - pattern: |
-        var $X = ...;
+        $VAR = <... $INPUT.$FOO.$BAR ...>;
         ...
-        $PATH.resolve(...,$X,...);
+        $PATH.join(...,<... $VAR ...>,...);
+    - pattern: $PATH.resolve(...,<... $INPUT ...>,...)
+    - pattern: $PATH.resolve(...,<... $INPUT.$FOO ...>,...)
+    - pattern: $PATH.resolve(...,<... $INPUT.$FOO.$BAR ...>,...)
     - pattern: |
-        $X = ...;
+        $VAR = <... $INPUT ...>;
         ...
-        $PATH.resolve(...,$X,...);
+        $PATH.resolve(...,<... $VAR ...>,...);
     - pattern: |
-        $PATH.resolve(...,$X(),...);
+        $VAR = <... $INPUT.$FOO ...>;
+        ...
+        $PATH.resolve(...,<... $VAR ...>,...);
     - pattern: |
-        $PATH.resolve(...,$X.$P(),...);
-  - pattern-not: |
-      $X = "...";
-      ...
-      $PATH.join(...,$X,...);
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PATH.join(...,$X,...);
-  - pattern-not: |
-      $X = "...";
-      ...
-      $PATH.resolve(...,$X,...);
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PATH.resolve(...,$X,...);
-  - pattern-not-inside: |
-      ...
-      $R.indexOf(...);
-  - pattern-not-inside: |
-      ...
-      if (<... $R.indexOf(...) ...>) {...}
-  - pattern-not-inside: |
-      ...
-      $R.startsWith(...);
-  - pattern-not-inside: |
-      ...
-      if (<... $R.startsWith(...) ...>) {...}
+        $VAR = <... $INPUT.$FOO.$BAR ...>;
+        ...
+        $PATH.resolve(...,<... $VAR ...>,...);
   message: |
     Possible writing outside of the destination,
     make sure that the target path is nested in the intended destination
