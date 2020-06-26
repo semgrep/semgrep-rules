@@ -1,0 +1,16 @@
+rules:
+- id: insufficient-rsa-key-size
+  patterns:
+  - pattern: cryptography.hazmat.primitives.asymmetric.rsa.generate_private_key(..., key_size=$SIZE, ...)
+  - pattern-where-python: |
+      int(vars['$SIZE']) < 2048
+  message: |
+    Detected an insufficient key size for RSA. NIST recommends
+    a key size of 2048 or higher.
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
+  languages: [python]
+  severity: WARNING
