@@ -47,6 +47,7 @@ class DaskExecutor(BaseExecutor):
     def start(self):
         if self.tls_ca or self.tls_key or self.tls_cert:
             from distributed.security import Security
+            # ruleid: require-encryption
             security = Security(
                 tls_client_key=self.tls_key,
                 tls_client_cert=self.tls_cert,
