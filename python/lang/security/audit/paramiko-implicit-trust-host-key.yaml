@@ -1,0 +1,23 @@
+rules:
+- id: paramiko-implicit-trust-host-key
+  patterns:
+  - pattern-inside: |
+      $CLIENT = paramiko.client.SSHClient(...)
+      ...
+      $CLIENT.set_missing_host_key_policy(...)
+  - pattern-either:
+    - pattern: paramiko.client.AutoAddPolicy
+    - pattern: paramiko.client.WarningPolicy
+  message: |
+    Detected a paramiko host key policy that implicitly trusts a server's
+    host key. Host keys should be verified to ensure the connection
+    is not to a malicious server. Use RejectPolicy or a custom subclass
+    instead.
+  metadata:
+    cwe: 'CWE-322: Key Exchange without Entity Authentication'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/ssh_no_host_key_verification.py
+    references:
+    - http://docs.paramiko.org/en/stable/api/client.html#paramiko.client.AutoAddPolicy
+  languages: [python]
+  severity: WARNING
