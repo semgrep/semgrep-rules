@@ -1,0 +1,20 @@
+rules:
+- id: use-defused-xmlrpc
+  pattern-either:
+  - pattern: import xmlrpclib
+  - pattern: import SimpleXMLRPCServer
+  # Python 3
+  - pattern: import xmlrpc
+  message: |
+    Detected use of xmlrpc. xmlrpc is not inherently safe from vulnerabilities.
+    Use defusedxml.xmlrpc instead.
+  metadata:
+    cwe: "CWE-776: Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')"
+    owasp: 'A4: XML External Entities (XXE)'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/07f84cb5f5e7c1055e6feaa0fe93afa471de0ac3/bandit/blacklists/imports.py#L160
+    references:
+    - https://pypi.org/project/defusedxml/
+    - https://docs.python.org/3/library/xml.html#xml-vulnerabilities
+  severity: ERROR
+  languages:
+  - python
