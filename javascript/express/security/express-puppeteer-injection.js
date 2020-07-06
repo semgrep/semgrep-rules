@@ -41,6 +41,31 @@ const controller = async (req, res) => {
     res.send('Hello World!');
 }
 
+app.post('/test2', async (req, res) => {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+// ruleid: express-puppeteer-injection
+    await page.evaluateOnNewDocument(`${req.body.foo}`)
+
+    await page.screenshot({path: 'example.png'})
+    await browser.close()
+
+    res.send('Hello World!')
+})
+
+const controller2 = async (req, res) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+// ruleid: express-puppeteer-injection
+    const body = req.body.foo;
+    await page.evaluate('alert(' + body + ')');
+
+    await page.screenshot({path: 'example.png'});
+    await browser.close();
+
+    res.send('Hello World!');
+}
+
 app.post('/test2', controller)
 
 app.post('/ok-test', async (req, res) => {
