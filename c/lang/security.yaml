@@ -1,0 +1,21 @@
+rules:
+- id: c-bad-functions
+  severity: WARNING
+  message: These are a few C functions known to lead to buffer overflow/integer overflow/arbitrary
+    memory reads.
+  pattern-either:
+  - pattern: strcpy(...)
+  - pattern: strncpy(...)
+  - pattern: gets(...)
+  - pattern: strcat(...)
+  - pattern: scanf(...)
+  - pattern: sscanf(...)
+  - pattern: strtok(...)
+  - pattern: sprintf(...)
+  - pattern: sprintf(...)
+  - pattern: vsprintf(...)
+  - pattern: printf("=~/.*%.*[n,s,x,u,d].*/")
+
+
+  languages:
+  - c
