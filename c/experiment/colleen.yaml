@@ -1,0 +1,13 @@
+rules:
+- id: c-bad-functions
+  severity: ERROR
+  message: Experimenting with some C rules.
+  pattern-either:
+  - pattern: strcpy(...)
+  - pattern: gets(...)
+  - pattern: scanf(...)
+  - pattern: strcat(...)
+  - pattern: scanf("...%s...")
+  - pattern: strtok(...)
+  languages:
+  - c
