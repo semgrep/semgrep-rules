@@ -1,0 +1,17 @@
+rules:
+- id: c-bad-functions
+  severity: WARNING
+  message: Experimenting with some C rules. These functions are common causes of buffer
+    overflows or memory vulns.
+  pattern-either:
+  - pattern: strcpy(...)
+  - pattern: strncpy(...)
+  - pattern: gets(...)
+  - pattern: scanf(...)
+  - pattern: sscanf(...)
+  - pattern: strcat(...)
+  - pattern: strtok(...)
+  - pattern: sprintf(...)
+  - pattern: vsprintf(...)
+  languages:
+  - c
