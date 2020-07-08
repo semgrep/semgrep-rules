@@ -1,0 +1,11 @@
+rules:
+- id: detect-disable-mustache-escape
+  message: |
+    Markup escaping disabled. This can be used with some template engines to escape
+    disabling of HTML entities, which can lead to XSS attacks.
+# metadata: TODO
+# cwe, owasp, source-rule-url, references
+  severity: ERROR # TODO check this
+  pattern: $OBJ.escapeMarkup = false
+  languages:
+  - javascript
