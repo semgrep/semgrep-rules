@@ -1,0 +1,9 @@
+rules:
+- id: detect-pseudoRandomBytes
+  severity: ERROR # TODO fix
+  # metadata: cwe, owasp, references TODO
+  message: |
+    Detected usage of crypto.pseudoRandomBytes, which does not produce secure random numbers.
+  languages:
+  - javascript
+  pattern: crypto.pseudoRandomBytes
