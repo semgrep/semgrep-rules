@@ -42,7 +42,7 @@ If a `security` rule is discouraging the use of a bad pattern (such as formatted
 
 ## Running Rules in CI/Pre-Commit/Developer Workflow
 
-If you want run these rules rather than write them, check out the easy-to-use [bento.dev](https://bento.dev)
+If you want run these rules rather than write them, [see the CI instructions on the semgrep live registry](https://semgrep.live/packs). That website is a convenient frontend for this git repository.
 
 ## Help
 
