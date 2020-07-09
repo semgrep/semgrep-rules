@@ -4,20 +4,16 @@ int DST_BUFFER_SIZE = 120;
 
 int bad_code() {
     char str[DST_BUFFER_SIZE];
-    fgets(str, DST_BUFFER_SIZE, stdin);
-    // ruleid:no-strtok
-    strtok(str, " ");
+    // ruleid:insecure-use-gets-fn
+    gets(str);
     printf("%s", str);
     return 0;
 }
 
 int main() {
     char str[DST_BUFFER_SIZE];
-    char dest[DST_BUFFER_SIZE];
-    fgets(str, DST_BUFFER_SIZE, stdin);
     // ok
-    strtok_r(str, " ", *dest);
+    fgets(str);
     printf("%s", str);
     return 0;
-}
 }

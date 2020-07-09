@@ -4,8 +4,8 @@ int DST_BUFFER_SIZE = 120;
 
 int bad_code() {
     char str[DST_BUFFER_SIZE];
-    // ruleid:no-gets
-    gets(str);
+    // ruleid:insecure-use-scanf-fn
+    scanf("%s", str);
     printf("%s", str);
     return 0;
 }
