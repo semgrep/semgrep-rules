@@ -1,0 +1,16 @@
+rules:
+- id: insecure-use-strcat-fn
+  pattern-either:
+  - pattern: strcat(...)
+  - pattern: strncat(...)
+  message: |
+    Finding triggers whenever there is a strcat or strncat used. 
+    This is an issue because strcat or strncat can lead to buffer overflow vulns. 
+    Fix this by using strcat_s instead.
+  metadata:
+    references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2019-12553
+    - https://techblog.mediaservice.net/2020/04/cve-2020-2851-stack-based-buffer-overflow-in-cde-libdtsvc/
+  languages: [c]
+  severity: WARNING
+
