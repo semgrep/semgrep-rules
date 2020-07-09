@@ -1,9 +1,13 @@
 rules:
 - id: detect-pseudoRandomBytes
-  severity: ERROR # TODO fix
-  # metadata: cwe, owasp, references TODO
+  metadata:
+    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-pseudoRandomBytes.js
   message: |
     Detected usage of crypto.pseudoRandomBytes, which does not produce secure random numbers.
+  pattern: crypto.pseudoRandomBytes
+  severity: WARNING
   languages:
   - javascript
-  pattern: crypto.pseudoRandomBytes
+  
