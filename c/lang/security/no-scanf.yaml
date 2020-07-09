@@ -1,6 +1,6 @@
 rules:
-- id: no-scanf
-  pattern: scanf(...);
+- id: insecure-use-scanf-fn
+  pattern: scanf(...)
   message: |
     Avoid using 'scanf()'. This function, when used improperly, does not consider
     buffer boundaries and can lead to buffer overflows. Use 'fgets()' instead

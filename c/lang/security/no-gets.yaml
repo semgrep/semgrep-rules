@@ -1,6 +1,6 @@
 rules:
-- id: no-gets
-  pattern: gets(...);
+- id: insecure-use-gets-fn
+  pattern: gets(...)
   message: |
     Avoid 'gets()'. This function does not consider buffer boundaries and can lead
     to buffer overflows. Use 'fgets()' or 'gets_s()' instead.
