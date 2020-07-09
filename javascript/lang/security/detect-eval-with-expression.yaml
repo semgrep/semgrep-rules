@@ -1,0 +1,11 @@
+rules:
+- id: detect-eval-with-expression
+  message: |
+    Detected eval(variable), which could allow a malicious actor to run arbitrary code.
+  severity: WARNING
+  patterns:
+   - pattern: eval($OBJ)
+   - pattern-not: eval("...")
+  languages:
+  - javascript
+
