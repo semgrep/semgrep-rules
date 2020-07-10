@@ -6,7 +6,11 @@ rules:
     references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
-  message: Avoid using `pickle` library which is known to lead to remote code execution vulnerabilities.
+  message: |
+    Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
   severity: WARNING
   pattern-either:
   - pattern: pickle.$FUNC(...)
@@ -18,7 +22,11 @@ rules:
     references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
-  message: Avoid using `cPickle` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  message: |
+    Avoid using `cPickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
   severity: WARNING
   pattern: cPickle.$FUNC(...)
 - id: avoid-dill
@@ -28,7 +36,11 @@ rules:
     references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
-  message: Avoid using `dill` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  message: |
+    Avoid using `dill`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
   severity: WARNING
   pattern-either:
   - pattern: dill.$FUNC(...)
@@ -39,7 +51,11 @@ rules:
     references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
-  message: Avoid using `shelve` library as it is backed by `pickle` which is known to lead to remote code execution vulnerabilities.
+  message: |
+    Avoid using `shelve`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
   severity: WARNING
   pattern-either:
   - pattern: shelve.$FUNC(...)
