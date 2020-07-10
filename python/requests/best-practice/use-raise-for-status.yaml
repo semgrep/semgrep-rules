@@ -1,0 +1,26 @@
+rules:
+- id: use-raise-for-status
+  patterns:
+  - pattern-either:
+    - pattern: requests.request(...)
+    - pattern: requests.get(...)
+    - pattern: requests.post(...)
+    - pattern: requests.put(...)
+    - pattern: requests.delete(...)
+    - pattern: requests.head(...)
+    - pattern: requests.patch(...)
+  - pattern-not-inside: |
+      $RESP = requests.$METHOD(...)
+      $RESP.raise_for_status(...)
+  - pattern-not-inside: |
+      requests.$METHOD(...).raise_for_status(...)
+  message: |-
+    There's an HTTP request made with requests,
+    but the raise_for_status() utility method isn't used.
+    This can result in request errors going unnoticed
+    and your code behaving in unexpected ways,
+    such as if your authorization API returns a 500 error
+    while you're only checking for a 401.
+  severity: WARNING
+  languages:
+  - python
