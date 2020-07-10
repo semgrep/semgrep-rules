@@ -5,8 +5,9 @@ rules:
     - pattern: urllib3.HTTPConnectionPool(...)
     - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
   message: |
-    Detected HTTPConnectionPool. It is recommended to use
-    HTTPSConnectionPool instead for security.
+    Detected HTTPConnectionPool. This will transmit data in cleartext.
+    It is recommended to use HTTPSConnectionPool instead for to encrypt
+    communications.
   metadata:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     owasp: 'A3: Sensitive Data Exposure'

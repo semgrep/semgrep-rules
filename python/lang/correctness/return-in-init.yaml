@@ -7,7 +7,7 @@ rules:
           def __init__(...):
               ...
   - pattern: return ...
-  message: '`return` should never appear inside a class __init__ function'
+  message: '`return` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR
 - id: yield-in-init
@@ -18,6 +18,6 @@ rules:
           def __init__(...):
               ...
   - pattern: yield ...
-  message: '`yield` should never appear inside a class __init__ function'
+  message: '`yield` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR

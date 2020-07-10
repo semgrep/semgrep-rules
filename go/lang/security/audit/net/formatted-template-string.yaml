@@ -3,7 +3,8 @@ rules:
   message: |
     Found a formatted template string passed to 'template.HTML()'.
     'template.HTML()' does not escape contents. Be absolutely sure
-    there is no user-controlled data in this template.
+    there is no user-controlled data in this template. If user data
+    can reach this template, you may have a XSS vulnerability.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A1: Injection'
