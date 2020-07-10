@@ -1,7 +1,9 @@
 rules:
 - id: unvalidated-redirect
   message: |
-    Application redirects a user to a destination URL specified by a user supplied parameter that is not validated.
+    Application redirects to a destination URL specified by a user-supplied
+    parameter that is not validated. This could direct users to malicious locations.
+    Consider using a whitelist to validate URLs.
   metadata:
     cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
     owasp: 'A1: Injection'

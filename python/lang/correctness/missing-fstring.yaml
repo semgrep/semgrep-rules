@@ -5,6 +5,10 @@ rules:
       $X = $Y
       ...
       print('...{$X}...')
-  message: possibly missing an f-string specifier for string containing variable $X
+  fix-regex:
+    regex: (['|"])
+    replacement: f\1
+    count: 1
+  message: Missing an f-string specifier for string containing variable '$X'.
   languages: [python]
   severity: WARNING
