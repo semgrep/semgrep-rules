@@ -1,7 +1,10 @@
 rules:
 - id: ldap-injection
   message: |
-    All inputs passed to an LDAP query need to be passed in safely.
+    Detected non-constant data passed into an LDAP query. If this data can be
+    controlled by an external user, this is an LDAP injection.
+    Ensure data passed to an LDAP query is not controllable; or properly sanitize
+    the data.
   metadata:
     cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
     owasp: 'A1: Injection'
