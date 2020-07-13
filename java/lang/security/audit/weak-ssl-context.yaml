@@ -17,3 +17,6 @@ rules:
   - pattern-not: SSLContext.getInstance("TLS1.3")
   - pattern-not: SSLContext.getInstance("TLS1.2")
   - pattern: SSLContext.getInstance("...")
+  fix-regex:
+    regex: (.*?)\.getInstance\(.*?\)
+    replacement: \1.getInstance("TLS1.2")
