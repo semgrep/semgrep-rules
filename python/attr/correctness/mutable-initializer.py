@@ -22,3 +22,7 @@ class ExampleClass(object):
     def foo(self):
         # ok
         x = {}
+        
+    def bar(self) -> int:
+        #ok
+        thisset = set()
