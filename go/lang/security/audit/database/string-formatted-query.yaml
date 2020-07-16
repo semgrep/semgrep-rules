@@ -1,8 +1,11 @@
 rules:
 - id: string-formatted-query
   languages: [go]
-  message: String-formatted SQL query detected. This could lead to SQL injection if the string is not sanitized properly.
-  severity: ERROR
+  message: |
+    String-formatted SQL query detected. This could lead to SQL injection if
+    the string is not sanitized properly. Audit this call to ensure the
+    SQL is not manipulatable by external data.
+  severity: WARNING
   metadata:
     owasp: 'A1: Injection'
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"

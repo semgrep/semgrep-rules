@@ -7,6 +7,10 @@ rules:
         $URL = "=~/http:\/\/.../"
         ...
         requests.$W($URL, ..., auth=$X, ...)
+  fix-regex:
+    regex: http:\/\/
+    replacement: https://
+    count: 1
   message: |
     Authentication detected over HTTP. HTTP does not provide any
     encryption or protection for these authentication credentials.
