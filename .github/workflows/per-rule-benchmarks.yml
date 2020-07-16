@@ -1,0 +1,22 @@
+# This is a basic workflow to help you get started with Actions
+
+name: per-rule-benchmarks
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the develop branch
+on:
+  workflow_dispatch:
+    inputs:
+      dummy:
+        description: Not used
+        default: ""
+
+jobs:
+  run-benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pipenv
+      run: pip3 install pipenv
+    - name: Install pipenv dev dependnecies
+      run: pipenv install -d
