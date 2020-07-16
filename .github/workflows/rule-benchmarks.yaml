@@ -1,11 +1,9 @@
 name: rule-benchmarks
 
 on:
-  workflow_dispatch:
-    inputs:
-      dummy:
-        description: Not used
-        default: ""
+  pull_request:
+  push:
+    branches: [develop, per-rule-benchmarks-5]
 
 jobs:
   setup_env:
