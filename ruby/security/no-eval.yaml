@@ -1,0 +1,27 @@
+rules:
+- id: ruby-eval
+  patterns:
+  - pattern-either:
+    - pattern: eval(...)
+    - pattern: |
+        $CLASS.class_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.instance_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.module_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.class_eval(...)
+    - pattern: |
+        $CLASS.instance_eval(...)
+    - pattern: |
+        $CLASS.module_eval(...)
+  message: |
+    using eval is generally not a good idea and can open up security vulnerabilies.
+  languages: [ruby]
+  severity: WARNING
