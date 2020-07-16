@@ -6,8 +6,6 @@ on:
       fake:
         description: Not used
         default: ''
-  schedule:
-  - cron: 0 0 * * SUN
 
 jobs:
   run-benchmark:
@@ -23,8 +21,3 @@ jobs:
       run: |
         pipenv install -d
       # cf. https://stackoverflow.com/questions/58886293/getting-current-branch-and-commit-hash-in-github-action
-    - name: Get formatted date
-      id: vars
-      shell: bash
-      run: |-
-        echo "::set-output name=today::$(printf -v date '%(%Y-%m-%d)')"
