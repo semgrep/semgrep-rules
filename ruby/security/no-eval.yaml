@@ -1,0 +1,29 @@
+rules:
+- id: ruby-eval
+  patterns:
+  - pattern-either:
+    - pattern: eval(...)
+    - pattern: |
+        $CLASS.class_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.instance_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.module_eval do
+          ...
+        end
+    - pattern: |
+        $CLASS.class_eval(...)
+    - pattern: |
+        $CLASS.instance_eval(...)
+    - pattern: |
+        $CLASS.module_eval(...)
+  message: |
+    Use of eval detected. This can run arbirary code. Ensure external data
+    does not reach here, otherwise this is a security vulnerability.
+    Consider other ways to do this without eval.
+  languages: [ruby]
+  severity: WARNING
