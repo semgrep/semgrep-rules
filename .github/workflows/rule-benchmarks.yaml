@@ -26,7 +26,7 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pytest --benchmark-only --benchmark-json=${{ steps.vars.outputs.today }}.json --benchmark-histogram=${{ steps.vars.outputs.today }}.svg
+        python3 -m pipenv run pytest --benchmark-only --benchmark-json=${{ steps.vars.outputs.today }}.json --benchmark-histogram=${{ steps.vars.outputs.today }}.svg
     - name: Upload JSON results
       uses: actions/upload-artifact@v1
       with:
