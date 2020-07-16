@@ -1,0 +1,45 @@
+name: rule-benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      fake:
+        description: Not used
+        default: ''
+  schedule:
+  - cron: 0 0 * * SUN
+
+jobs:
+  run-benchmark:
+    runs-on: ubuntu-latest
+    name: Setup test environment
+    steps:
+    - name: Install pipenv
+      shell: bash
+      run: |
+        pip3 install pipenv
+    - name: Install pipenv dev dependencies
+      shell: bash
+      run: |
+        pipenv install -d
+      # cf. https://stackoverflow.com/questions/58886293/getting-current-branch-and-commit-hash-in-github-action
+    - name: Get formatted date
+      id: vars
+      shell: bash
+      run: |
+        echo "::set-output name=today::$(printf -v date '%(%Y-%m-%d)')"
+    - name: Run benchmarks
+      shell: bash
+      run: |
+        pytest --benchmark-only --benchmark-json=${{ steps.vars.outputs.today }}.json --benchmark-histogram=${{ steps.vars.outputs.today }}.svg
+    - name: Upload JSON results
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.vars.outputs.today }}.json
+        path: ${{ steps.vars.outputs.today }}.json
+    - name: Upload historgram
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.vars.outputs.today }}.svg
+        path: ${{ steps.vars.outputs.today }}.svg
+
