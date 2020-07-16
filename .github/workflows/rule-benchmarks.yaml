@@ -30,14 +30,9 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --benchmark-only --benchmark-json=${{ steps.vars.outputs.today }}.json --benchmark-histogram=${{ steps.vars.outputs.today }}.svg tests
+        pipenv run pytest --benchmark-only --benchmark-json=${{ steps.vars.outputs.today }}.json tests
     - name: Upload JSON results
       uses: actions/upload-artifact@v1
       with:
         name: ${{ steps.vars.outputs.today }}.json
         path: ${{ steps.vars.outputs.today }}.json
-    - name: Upload historgram
-      uses: actions/upload-artifact@v1
-      with:
-        name: ${{ steps.vars.outputs.today }}.svg
-        path: ${{ steps.vars.outputs.today }}.svg
