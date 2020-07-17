@@ -19,7 +19,6 @@ RepoTarget = Tuple[RepoUrl, Optional[CommitHash]]
 Config = Dict[Language, RepoTarget]
 
 CONFIG_PATH = (Path(__file__).parent) / "test_public_repos.yaml"
-TEST_CONFIG_PATH = (Path(__file__).parent) / "test_test.yaml"
 
 language_to_rules: Dict[Language, Path] = defaultdict(list)
 for rule_path in rule_paths():
@@ -29,7 +28,7 @@ def read_config(config_path: Path) -> Config:
     with open(config_path, 'r') as fin:
         return yaml.safe_load(fin)
 
-config = read_config(TEST_CONFIG_PATH)
+config = read_config(CONFIG_PATH)
 
 def repo_params(config: Config) -> List[Tuple[Language, RepoTarget]]:
     targets = []
@@ -86,4 +85,4 @@ def test_benchmark_on_repository(
             rule_path,
             setup_repo 
         ],
-    )        
+    )
