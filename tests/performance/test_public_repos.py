@@ -127,6 +127,6 @@ def test_{language}_rules(setup_repo_{language}, rule_path, benchmark):
     )
 """
 
-for language in ["javascript"]:
+for language in config.keys():
     language = ''.join([c for c in language if c.isalpha()]) # Only include alphanum chars because I'm paranoid
     exec(testing_template.format(language=language))
