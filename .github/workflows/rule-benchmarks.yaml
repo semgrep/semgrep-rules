@@ -1,6 +1,8 @@
 name: rule-benchmarks
 
 on:
+  push: 
+    branches: ['per-rule-benchmarks-5']
   schedule:
   - cron: '*/15 * * * *'
 
@@ -29,7 +31,7 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-save=${{ steps.vars.output.today }}.txt --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
+        pipenv run pytest --rule-directory c --git-repo https://github.com/zlib-ng/zlib-ng --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-save=${{ steps.vars.outputs.today }}.txt --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
     - name: Upload text results
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
