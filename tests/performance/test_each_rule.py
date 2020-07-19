@@ -9,7 +9,6 @@ import pytest
 
 from tests.util import is_rule, rule_paths
 
-
 @pytest.mark.parametrize(
     "rule",
     rule_paths(),
@@ -17,7 +16,7 @@ from tests.util import is_rule, rule_paths
 )
 def test_semgrep_rules_rule(rule, benchmark):
     benchmark(
-        subprocess.check_output,
+        subprocess.run,
         [
             "python3",
             "-m",
@@ -25,9 +24,6 @@ def test_semgrep_rules_rule(rule, benchmark):
             "--jobs",
             "1",
             "--dangerously-allow-arbitrary-code-execution-from-rules",
-            "--strict",
-            "--test",
-            "--test-ignore-todo",
             rule,
         ],
     )
