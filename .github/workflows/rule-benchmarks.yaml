@@ -1,9 +1,8 @@
 name: rule-benchmarks
 
 on:
-  pull_request:
-  push:
-    branches: [develop, per-rule-benchmarks-5]
+  schedule:
+  - cron: */15 * * * * 
 
 jobs:
   run_benchmarks:
