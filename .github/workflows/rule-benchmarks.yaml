@@ -30,7 +30,7 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests
+        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/tests_public_repos.py
     - name: Upload JSON results
       uses: actions/upload-artifact@v1
       with:
