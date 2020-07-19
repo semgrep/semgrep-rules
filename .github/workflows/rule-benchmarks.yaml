@@ -30,14 +30,22 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-save=${{ steps.vars.output.today }}.txt --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/
+        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-save=${{ steps.vars.output.today }}.txt --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
     - name: Upload text results
       uses: actions/upload-artifact@v1
+      if: ${{ always() }}
       with:
         name: ${{ steps.vars.outputs.today }}.txt
         path: ${{ steps.vars.outputs.today }}.txt
+    - name: Upload text log
+      uses: actions/upload-artifact@v1
+      if: ${{ always() }}
+      with:
+        name: test-logs.txt
+        path: test-logs.txt
     - name: Upload JSON results
       uses: actions/upload-artifact@v1
+      if: ${{ always() }}
       with:
         name: ${{ steps.vars.outputs.today }}.json
         path: ${{ steps.vars.outputs.today }}.json
