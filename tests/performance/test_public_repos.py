@@ -16,7 +16,7 @@ import pytest
 import tests.util
 from tests.util import rule_paths, ArchList
 
-CONFIG_PATH = (Path(__file__).parent) / "test_public_repos.yaml"
+CONFIG_PATH = (Path(__file__).parent) / ".test_public_repos.yaml"
 
 Language = str
 RepoUrl = str
