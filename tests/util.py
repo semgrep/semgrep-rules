@@ -20,8 +20,8 @@ def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
     return "yaml" in ext or "yml" in ext
 
-def rule_paths() -> Generator[Path, None, None]:
-    for dirpath, _, filenames in os.walk(os.getcwd()):
+def rule_paths(root=os.getcwd()) -> Generator[Path, None, None]:
+    for dirpath, _, filenames in os.walk(root):
         for filename in filenames:
             path = os.path.join(dirpath, filename)
             if is_rule(path) and os.path.basename(path) != "template.yaml" and (not os.path.basename(path).startswith(".")):

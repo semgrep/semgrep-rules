@@ -13,6 +13,7 @@ from typing import Generator, Tuple, Dict, Optional, List, Set
 
 import pytest
 
+import tests.util
 from tests.util import rule_paths, ArchList
 
 CONFIG_PATH = (Path(__file__).parent) / "test_public_repos.yaml"
@@ -28,6 +29,16 @@ def _read_config(config_path: Path) -> Config:
         return yaml.safe_load(fin)
 
 config = _read_config(CONFIG_PATH)
+
+# Override config if --git-repo set.
+# This is a little hacky since it'll add 'skip' tests
+# for all other languages.
+if tests.util.git_repo:
+    for language in config.keys():
+        config[language] = [{
+            "url": tests.util.git_repo,
+            "commit": None
+        }]
 
 language_to_rules: Dict[Language, List[Path]] = defaultdict(list)
 for rule_path in rule_paths():
@@ -73,7 +84,7 @@ def get_language(rule_path: Path) -> Optional[str]:
 for language in config.keys():
     inject_fixture(f"setup_repo_{language}", config.get(language).pop()) # Only do one repo for now
 
-all_rule_paths = list(rule_paths()) # Consume generator to produce list
+all_rule_paths = list(rule_paths(tests.util.rule_directory)) # Consume generator to produce list
 def filter_by_language(rule_paths, language):
     for rule_path in rule_paths:
         with open(rule_path, 'r') as fin:
