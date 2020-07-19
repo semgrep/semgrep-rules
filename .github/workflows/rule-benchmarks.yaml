@@ -6,9 +6,9 @@ on:
     branches: [develop, per-rule-benchmarks-5]
 
 jobs:
-  setup_env:
+  run_benchmarks:
     runs-on: ubuntu-latest
-    name: Setup test environment
+    name: Run benchmarks for each rule
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -30,7 +30,7 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests
+        pipenv run pytest --timeout 60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests
     - name: Upload JSON results
       uses: actions/upload-artifact@v1
       with:
