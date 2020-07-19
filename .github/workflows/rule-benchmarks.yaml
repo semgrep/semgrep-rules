@@ -29,7 +29,7 @@ jobs:
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --rule-directory=c --git-repo=https://github.com/zlib-ng/zlib-ng --timeout=60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
+        pipenv run pytest --timeout=60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
     - name: Upload text log
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
