@@ -2,11 +2,11 @@ rules:
 - id: missing-csrf-protection
   patterns:
   - pattern: |
-      class $CONTROLLER < ApplicationController
+      class $CONTROLLER < ActionController
         ...
       end
   - pattern-not: |
-      class $CONTROLLER < ApplicationController
+      class $CONTROLLER < ActionController
         ...
         protect_from_forgery :with => :exception
       end
