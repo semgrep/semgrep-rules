@@ -11,6 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
     - name: set PY
       run: echo "::set-env name=PY::$(python --version --version | sha256sum | cut -d' ' -f1)"
     - uses: actions/cache@v1

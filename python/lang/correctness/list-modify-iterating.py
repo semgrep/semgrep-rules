@@ -1,5 +1,5 @@
 l  = list(range(100))
-# ruleid:list-pop-while-iterate
+# ruleid:list-modify-while-iterate
 for i in l:
     print(i),
     print(l.pop(0))
@@ -7,13 +7,13 @@ for i in l:
     print(x)
 
 a = [1, 2, 3, 4]
-# ruleid:list-pop-while-iterate
+# ruleid:list-modify-while-iterate
 for i in a:
     print(i)
     a.pop(0)
 
 b = [1, 2, 3, 4]
-# ruleid:list-pop-while-iterate
+# ruleid:list-modify-while-iterate
 for i in b:
     print(i)
     b.append(0)

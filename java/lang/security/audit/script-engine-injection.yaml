@@ -1,7 +1,9 @@
 rules:
 - id: script-engine-injection
   message: |
-    Potential code injection when using Script Engine.
+    Detected potential code injection using ScriptEngine. Ensure
+    user-controlled data cannot enter '.eval()', otherwise, this is
+    a code injection vulnerability.
   metadata:
     cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp: 'A1: Injection'
