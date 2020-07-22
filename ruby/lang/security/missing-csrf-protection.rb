@@ -1,12 +1,12 @@
 # ruleid:missing-csrf-protection
-class DangerousController < ActionController
+class DangerousController < ActionController::Base
 
   puts "do more stuff"
 
 end
 
 # ok
-class OkController < ActionController
+class OkController < ActionController::Base
 
   protect_from_forgery :with => :exception
 
