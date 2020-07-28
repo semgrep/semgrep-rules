@@ -13,6 +13,8 @@ class FakeModel(Model):
     # ok
     fieldEmail = EmailField(blank=True)
     # ok
+    fieldURL = URLField(blank=True)
+    # ok
     fieldUUID = UUIDField(blank=True)
     # ruleid: nontext-field-must-set-null-true
     fieldInt = IntegerField(
