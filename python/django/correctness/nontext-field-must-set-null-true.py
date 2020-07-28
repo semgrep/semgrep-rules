@@ -1,6 +1,7 @@
 from django.db import models
-from django.db.models import (CharField, EmailField, IntegerField, Model,
-                              SlugField, TextField, URLField, UUIDField)
+from django.db.models import (CharField, EmailField, IntegerField,
+                              ManyToManyField, Model, SlugField, TextField,
+                              URLField, UUIDField)
 
 
 class FakeModel(Model):
@@ -18,6 +19,8 @@ class FakeModel(Model):
     fieldURL = URLField(blank=True)
     # ok
     fieldUUID = UUIDField(blank=True)
+    # ok
+    fieldManyToMany = ManyToManyField("self", blank=True)
     # ruleid: nontext-field-must-set-null-true
     fieldInt = IntegerField(
         blank=True,
