@@ -1,5 +1,7 @@
 from django.db import models
-from django.db.models import Model, CharField, TextField, URLField, EmailField, SlugField, UUIDField, IntegerField
+from django.db.models import (CharField, EmailField, IntegerField, Model,
+                              SlugField, TextField, URLField, UUIDField)
+
 
 class FakeModel(Model):
     # ok
