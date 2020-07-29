@@ -1,33 +1,30 @@
 from django.db import models
-from django.db.models import (CharField, EmailField, IntegerField,
-                              ManyToManyField, Model, SlugField, TextField,
-                              URLField, UUIDField)
 
 
-class FakeModel(Model):
+class FakeModel(models.Model):
     # ok
-    fieldChar = CharField(
+    fieldChar = models.CharField(
         max_length=200,
         blank=True)
     # ok
-    fieldText = TextField(blank=True)
+    fieldText = models.TextField(blank=True)
     # ok
-    fieldSlug = SlugField(blank=True)
+    fieldSlug = models.SlugField(blank=True)
     # ok
-    fieldEmail = EmailField(blank=True)
+    fieldEmail = models.EmailField(blank=True)
     # ok
-    fieldURL = URLField(blank=True)
+    fieldURL = models.URLField(blank=True)
     # ok
-    fieldUUID = UUIDField(blank=True)
+    fieldUUID = models.UUIDField(blank=True)
     # ok
-    fieldManyToMany = ManyToManyField("self", blank=True)
+    fieldManyToMany = models.ManyToManyField("self", blank=True)
     # ruleid: nontext-field-must-set-null-true
-    fieldInt = IntegerField(
+    fieldInt = models.IntegerField(
         blank=True,
         max_value=30
     )
     # ok
-    fieldIntNull = IntegerField(
+    fieldIntNull = models.IntegerField(
         null=True,
         blank=True,
         max_value=100
