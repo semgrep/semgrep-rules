@@ -87,7 +87,7 @@ t5 = BashOperator(
     dag=dag
 )
 
-# ruleid: formatted-string-bashoperator
+# todoruleid: formatted-string-bashoperator
 echo_message = f"echo {message}"
 t5 = BashOperator(
     task_id="safe",
