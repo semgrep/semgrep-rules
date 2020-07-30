@@ -3,7 +3,11 @@
 import subprocess
 import sys
 
+# ok
 subprocess.call("echo 'hello'")
+
+# ok
+subprocess.call(["echo", "a", ";", "rm", "-rf", "/"])
 
 # ruleid:dangerous-subprocess-use
 subprocess.call("grep -R {} .".format(sys.argv[1]))
