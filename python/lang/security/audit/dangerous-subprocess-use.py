@@ -3,8 +3,10 @@
 import subprocess
 import sys
 
+# ok
 subprocess.call("echo 'hello'")
 
+# ok
 subprocess.call(["echo", "a", ";", "rm", "-rf", "/"])
 
 # ruleid:dangerous-subprocess-use
