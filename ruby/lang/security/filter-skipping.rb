@@ -1,5 +1,6 @@
 class MyController < ApplicationController
     def bad_route
+        # ruleid: filter-skipping
         match '/:controller(/:action(/:id))'
     end
 
