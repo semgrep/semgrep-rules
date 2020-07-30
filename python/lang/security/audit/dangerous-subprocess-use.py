@@ -5,6 +5,8 @@ import sys
 
 subprocess.call("echo 'hello'")
 
+subprocess.call(["echo", "hello"])
+
 # ruleid:dangerous-subprocess-use
 subprocess.call("grep -R {} .".format(sys.argv[1]))
 
