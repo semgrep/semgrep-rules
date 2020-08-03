@@ -67,4 +67,11 @@ def f():
 
 def f():
     # ok
+    r = requests.get("")
+    if r.status_code != requests.codes.ok:
+        logging.error("Something awful happened", r)
+    return r
+
+def f():
+    # ok
     requests.put("").raise_for_status()
