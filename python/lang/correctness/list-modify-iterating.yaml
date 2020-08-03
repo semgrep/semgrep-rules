@@ -1,5 +1,5 @@
 rules:
-- id: list-pop-while-iterate
+- id: list-modify-while-iterate
   patterns:
   - pattern-either:
     - pattern: |
@@ -18,6 +18,8 @@ rules:
         for $ELEMENT in $LIST:
           ...
           $LIST.extend(...)
-  message: It appears that `$LIST` is a list that is being modified while in a for loop. This is usually a bad idea
+  message: |
+    It appears that `$LIST` is a list that is being modified while in a for loop.
+    This will likely cause a runtime error or an infinite loop.
   languages: [python]
-  severity: WARNING
+  severity: ERROR

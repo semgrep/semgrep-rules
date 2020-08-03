@@ -9,7 +9,7 @@
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 
-This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the main semgrep documentation for details on semgrep and the syntax for the yaml files in this repository.
+This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the [main semgrep documentation for details on semgrep](https://semgrep.live) and the syntax for the yaml files in this repository. You can also [browse these rules online](https://semgrep.live/registry).
 
 ## Security Coverage
 

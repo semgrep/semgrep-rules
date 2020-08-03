@@ -5,8 +5,8 @@ rules:
   - pattern-not-inside: subprocess.call(...) == $X
   - pattern: subprocess.call(...)
   fix: subprocess.check_call(...)
-  message: Not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call()
-    instead
+  message: This is not checking the return value of this subprocess call; if it fails no exception will be raised. Consider
+    subprocess.check_call() instead
   languages: [python]
   severity: WARNING
 

@@ -4,6 +4,9 @@ rules:
   - pattern-not-inside: |
       def $Y(...):
         ...
+  - pattern-not-inside: |
+      def $Y(...) -> $TYPE:
+        ...
   - pattern-inside: |
       @attr.s(...,auto_attribs=True, ...)
       class $X(...):
