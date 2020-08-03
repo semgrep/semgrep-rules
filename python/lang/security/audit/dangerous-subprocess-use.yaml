@@ -2,6 +2,7 @@ rules:
 - id: dangerous-subprocess-use
   patterns:
   - pattern-not: subprocess.$FUNC("...", ...)
+  - pattern-not: subprocess.$FUNC([...], ...)
   - pattern: subprocess.$FUNC(...)
   message: |
     Detected subprocess function '$FUNC' without a static string. Audit the use of this
