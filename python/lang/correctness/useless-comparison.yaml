@@ -1,5 +1,5 @@
 rules:
-- id: useless-comparison
+- id: no-strings-as-booleans
   patterns:
   - pattern-either:
     - pattern: |
@@ -15,6 +15,10 @@ rules:
       - pattern: |
           if "...":
               ...
-  message: don't use strings as booleans
+  message: |
+    Using strings as booleans in Python has unexpected results.
+    `"one" and "two"` will return "two".
+    `"one" or "two"` will return "one".
+     In Python, strings are truthy, evaluating to True.
   languages: [python]
   severity: ERROR

@@ -9,7 +9,7 @@
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 
-This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the main semgrep documentation for details on semgrep and the syntax for the yaml files in this repository.
+This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the [main semgrep documentation for details on semgrep](https://semgrep.live) and the syntax for the yaml files in this repository. You can also [browse these rules online](https://semgrep.live/registry).
 
 ## Security Coverage
 
@@ -42,7 +42,7 @@ If a `security` rule is discouraging the use of a bad pattern (such as formatted
 
 ## Running Rules in CI/Pre-Commit/Developer Workflow
 
-If you want run these rules rather than write them, check out the easy-to-use [bento.dev](https://bento.dev)
+If you want run these rules rather than write them, [see the CI instructions on the Semgrep Registry](https://semgrep.live/packs) (click through to any rule pack). That website is a convenient frontend for this repository.
 
 ## Help
 
@@ -73,4 +73,3 @@ x != x
 If you fork this repo or create your own, you can add a special [semgrep-rules-test](https://github.com/marketplace/actions/semgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of semgrep.
 
 See ours [here](.github/workflows/semgrep-rules-test.yml)
-
