@@ -22,6 +22,16 @@ rules:
       $RESP = requests.$METHOD(...)
       if $RESP.status_code != ...:
         ...
+  - pattern-not-inside: |
+      $RESP = requests.$METHOD(...)
+      ...
+      if $RESP.ok:
+        ...
+  - pattern-not-inside: |
+      $RESP = requests.$METHOD(...)
+      ...
+      if not $RESP.ok:
+        ...
   message: |-
     There's an HTTP request made with requests,
     but the raise_for_status() utility method isn't used.
