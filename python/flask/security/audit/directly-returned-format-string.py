@@ -13,6 +13,7 @@ app = Flask(__name__)
 @app.route("/loginpage")
 def render_login_page():
     thing = "blah"
+    # ruleid:directly-returned-format-string
     return '''
 <p>{}</p>
 <form method="POST" style="margin: 60px auto; width: 140px;">
@@ -25,6 +26,7 @@ def render_login_page():
 @app.route("/loginpage2")
 def render_login_page2():
     thing = "blah"
+    # ruleid:directly-returned-format-string
     return '''
 <p>%s</p>
 <form method="POST" style="margin: 60px auto; width: 140px;">
@@ -37,6 +39,7 @@ def render_login_page2():
 @app.route("/loginpage3")
 def render_login_page3():
     thing = "blah"
+    # ruleid:directly-returned-format-string
     return '''
 <p>%s</p>
 <form method="POST" style="margin: 60px auto; width: 140px;">
@@ -49,6 +52,7 @@ def render_login_page3():
 @app.route("/loginpage4")
 def render_login_page4():
     thing = "blah"
+    # ruleid:directly-returned-format-string
     return thing + '''
 <form method="POST" style="margin: 60px auto; width: 140px;">
     <p><input name="username" type="text" /></p>
@@ -60,6 +64,7 @@ def render_login_page4():
 @app.route("/loginpage5")
 def render_login_page5():
     thing = "blah"
+    # ruleid:directly-returned-format-string
     return f'''
 {thing}
 <form method="POST" style="margin: 60px auto; width: 140px;">
