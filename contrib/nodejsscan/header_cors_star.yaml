@@ -33,28 +33,24 @@ rules:
     - pattern: >
         $RES.writeHead(...,
         {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
-        '*' }, ...);
+        '*' }, ...)
     - pattern: >
-        ...
         var $VAL = '*';
         ...
         $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
         $VAL, ...);
     - pattern: >
-        ...
         var $VAL = '*';
         ...
         $RES.set(..., {
         "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
         $VAL }, ...);
     - pattern: >
-        ...
         var $VAL = '*';
         ...
         $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
         $VAL, ...);
     - pattern: >
-        ...
         var $VAL = '*';
         ...
         $RES.writeHead(...,
