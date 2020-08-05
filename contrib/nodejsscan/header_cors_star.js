@@ -9,9 +9,7 @@ app.get('/', function (req, res) {
     res.set(ffff)
 });
 
-// ruleid:express_cors
 app.get('/', function (req, res) {
-    // ruleid:express_cors
     var y = 1;
     // ruleid:express_cors
     var x = '*';
