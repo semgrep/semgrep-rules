@@ -1,29 +1,38 @@
 //git@github.com:JoyChou93/java-sec-code.git
 package org.joychou.util;
 
+// ruleid:owasp.java.ssrf.possible.import.statements
 import com.squareup.okhttp.OkHttpClient;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import org.apache.http.client.fluent.Request;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// ruleid:owasp.java.ssrf.possible.import.statements
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import java.net.URI;
+// ruleid:owasp.java.ssrf.possible.import.statements
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.*;
@@ -35,6 +44,7 @@ public class HttpUtils {
 
     private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
+    // ruleid:owasp.java.ssrf.org.apache.commons.httpclient
     public static String commonHttpClient(String url) {
 
         HttpClient client = new HttpClient();
@@ -63,6 +73,7 @@ public class HttpUtils {
     }
 
 
+    // ruleid:owasp.java.ssrf.org.apache.http.impl.client.CloseableHttpClient
     public static String httpClient(String url) {
 
         StringBuilder result = new StringBuilder();
@@ -87,6 +98,7 @@ public class HttpUtils {
     }
 
 
+    // ruleid:owasp.java.ssrf.java.net.url
     public static String URLConnection(String url) {
         try {
             URL u = new URL(url);
@@ -107,6 +119,7 @@ public class HttpUtils {
     }
 
 
+    // ruleid:owasp.java.ssrf.java.net.url
     public static String HTTPURLConnection(String url) {
         try {
             URL u = new URL(url);
@@ -160,6 +173,7 @@ public class HttpUtils {
     }
 
 
+    // ruleid:owasp.java.ssrf.java.net.url
     public static void imageIO(String url) {
         try {
             URL u = new URL(url);
