@@ -1,0 +1,24 @@
+rules:
+- id: directly-returned-format-string
+  message: |
+    Detected Flask route directly returning a formatted string. This
+    is subject to cross-site scripting if user input can reach the string.
+    Consider using the template engine instead and rendering pages with
+    'render_template()'.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+  languages:
+  - python
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      @$APP.route(...)
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: return "...".format(...)
+    - pattern: return "..." % ...
+    - pattern: return "..." + ...
+    - pattern: return ... + "..."
+    - pattern: return f"...{...}..."
