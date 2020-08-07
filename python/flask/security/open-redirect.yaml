@@ -17,19 +17,19 @@ rules:
     - pattern: |
         $V = flask.request.$W.get(...)
         ...
-        flask.redirect($V, ...)
+        flask.redirect(<... $V ...>, ...)
     - pattern: |
         $V = flask.request.$W[...]
         ...
-        flask.redirect($V, ...)
+        flask.redirect(<... $V ...>, ...)
     - pattern: |
         $V = flask.request.$W(...)
         ...
-        flask.redirect($V, ...)
+        flask.redirect(<... $V ...>, ...)
     - pattern: |
         $V = flask.request.$W
         ...
-        flask.redirect($V, ...)
+        flask.redirect(<... $V ...>, ...)
   message: |
     Data from request is passed to redirect().
     This is an open redirect and could be exploited.
