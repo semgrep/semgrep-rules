@@ -1,0 +1,19 @@
+rules:
+- id: dom-based-xss
+  pattern-either:
+  - pattern: document.write(<... document.location.$W ...>)
+  - pattern: document.write(<... location.$W ...>)
+  message: |
+    Detected possible DOM-based XSS. This occurs because a portion of the URL is being used
+    to construct an element added directly to the page. For example, a malicious actor could
+    send someone a link like this: http://www.some.site/page.html?default=<script>alert(document.cookie)</script>
+    which would add the script to the page.
+    Consider whitelisting appropriate values or using an approach which does not involve the URL.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://owasp.org/www-community/attacks/DOM_Based_XSS
+  severity: ERROR
+  languages:
+  - js
