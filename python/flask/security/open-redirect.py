@@ -38,6 +38,7 @@ def userprefs():
     err = dict()
 
     # The URL to go back to, if not main.html
+    # ruleid: open-redirect
     from_url = request.args.get("from", None)
 
     if request.method == "GET":
