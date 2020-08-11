@@ -1,7 +1,8 @@
 rules:
 - id: dom-based-xss
-  pattern: |
-    document.write(<... document.location.$W ...>);
+  pattern-either:
+  - pattern: document.write(<... document.location.$W ...>)
+  - pattern: document.write(<... location.$W ...>)
   message: |
     Detected possible DOM-based XSS. This occurs because a portion of the URL is being used
     to construct an element added directly to the page. For example, a malicious actor could
