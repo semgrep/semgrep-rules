@@ -1,0 +1,22 @@
+rules:
+- id: express-xml2json-xxe-event
+  message: |
+    Xml Parser is used inside Request Event.
+    Make sure that unverified user data can not reach the XML Parser,
+    as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
+  metadata:
+    owasp: 'A4: XML External Entities (XXE)'
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+  severity: WARNING
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('xml2json');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern: $REQ.on('...', function(...) { ... $EXPAT.toJson($INPUT,...); ... });

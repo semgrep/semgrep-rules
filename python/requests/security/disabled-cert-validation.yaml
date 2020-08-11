@@ -1,0 +1,23 @@
+rules:
+- id: disabled-cert-validation
+  patterns:
+  - pattern-either:
+    - pattern: requests.put(..., verify=False, ...)
+    - pattern: requests.patch(..., verify=False, ...)
+    - pattern: requests.delete(..., verify=False, ...)
+    - pattern: requests.head(..., verify=False, ...)
+    - pattern: requests.options(..., verify=False, ...)
+    - pattern: requests.request(..., verify=False, ...)
+    - pattern: requests.get(..., verify=False, ...)
+    - pattern: requests.post(..., verify=False, ...)
+  message: |
+    Certificate verification has been explicitly disabled. This
+    permits insecure connections to insecure servers. Re-enable
+    certification validation.
+  metadata:
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://stackoverflow.com/questions/41740361/is-it-safe-to-disable-ssl-certificate-verification-in-pythonss-requests-lib
+  languages: [python]
+  severity: ERROR

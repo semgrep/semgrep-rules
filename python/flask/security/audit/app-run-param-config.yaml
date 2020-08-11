@@ -1,0 +1,14 @@
+# Flask check3: Flask application app.run best practices https://flask.palletsprojects.com/en/1.1.x/api/?highlight=run#flask.Flask.run
+rules:
+  # . Rules for app.run() parameters
+- id: avoid_app_run_with_bad_host
+  patterns:
+  - pattern-either:
+    - pattern: app.run(..., host="0.0.0.0", ...)
+    - pattern: app.run(..., "0.0.0.0", ...)
+  message: Running flask app with host 0.0.0.0 could expose the server publicly.
+  metadata:
+    cwe: 'CWE-668: Exposure of Resource to Wrong Sphere'
+    owasp: 'A6: Security Misconfiguration'
+  languages: [python]
+  severity: WARNING

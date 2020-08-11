@@ -11,9 +11,9 @@ s = boto3.sessions
 # ruleid:hardcoded-token
 s.Session(aws_access_key_id="AKIAxxxxxxxxxxxxxxxx")
 
-# ruleid:hardcoded-token
 uhoh_key = "AKIAxxxxxxxxxxxxxxxx"
 ok_secret = os.environ.get("SECRET_ACCESS_KEY")
+# ruleid:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id=uhoh_key,
@@ -23,8 +23,9 @@ s3 = boto3.resource(
 )
 
 ok_key = os.environ.get("ACCESS_KEY_ID")
-# ruleid:hardcoded-token
+
 uhoh_secret = "jWnyxxxxxxxxxxxxxxxxX7ZQxxxxxxxxxxxxxxxx"
+# ruleid:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id=ok_key,

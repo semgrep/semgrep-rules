@@ -1,0 +1,18 @@
+rules:
+- id: useless-assignment
+  patterns:
+  - pattern-not: |
+      $X = $Y;
+      $X = $X.$METHOD(...);
+  - pattern-not: |
+      $X = $Y;
+      $X = $PREPEND + $X;
+  - pattern-not: |
+      $X = $Y;
+      $X = $X + $POSTPEND;
+  - pattern: |
+      $X = $Y;
+      $X = $Z;
+  message: '`$X` is assigned twice; the first assignment is useless'
+  languages: [javascript]
+  severity: WARNING

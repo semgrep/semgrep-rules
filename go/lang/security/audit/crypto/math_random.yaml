@@ -1,0 +1,20 @@
+rules:
+- id: math-random-used
+  metadata:
+    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation
+  message: Do not use math.rand. Use `crypto/rand` instead.
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        import "math/rand"
+        ...
+        math.rand.Int()
+    - pattern: |-
+        import "math/rand"
+        ...
+        math.rand.Read(...)

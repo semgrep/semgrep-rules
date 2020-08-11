@@ -1,0 +1,92 @@
+rules:
+- id: expat-xxe
+  message: |
+    If unverified user data can reach the XML Parser it can result in XML External or
+    Internal Entity (XXE) Processing vulnerabilities
+  metadata:
+    owasp: 'A4: XML External Entities (XXE)'
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+  severity: WARNING
+  languages: [javascript]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        var $EXPAT = require('node-expat');
+        ...
+        new $EXPAT.Parser(...);
+        ...
+        $PARSER.parse(...);
+    - pattern: |
+        var $EXPAT = require('node-expat');
+        ...
+        new $EXPAT.Parser(...);
+        ...
+        $PARSER.write(...);
+    - pattern: |
+        require('node-expat');
+        ...
+        new Parser(...);
+        ...
+        $PARSER.parse(...);
+    - pattern: |
+        require('node-expat');
+        ...
+        new Parser(...);
+        ...
+        $PARSER.write(...);
+  - pattern-not: |
+      var $EXPAT = require('node-expat');
+      ...
+      new $EXPAT.Parser(...);
+      ...
+      $PARSER.parse("...");
+  - pattern-not: |
+      var $EXPAT = require('node-expat');
+      ...
+      new $EXPAT.Parser(...);
+      ...
+      $PARSER.write("...");
+  - pattern-not: |
+      require('node-expat');
+      ...
+      new Parser(...);
+      ...
+      $PARSER.parse("...");
+  - pattern-not: |
+      require('node-expat');
+      ...
+      new Parser(...);
+      ...
+      $PARSER.write("...");
+  - pattern-not: |
+      var $X = "...";
+      ...
+      $PARSER.parse($X);
+  - pattern-not: |
+      var $X = "...";
+      ...
+      $PARSER.write($X);
+  - pattern-not: |
+      var $X = "...";
+      ...
+      $PARSER.parse($X);
+  - pattern-not: |
+      var $X = "...";
+      ...
+      $PARSER.write($X);
+  - pattern-not: |
+      $X = "...";
+      ...
+      $PARSER.parse($X);
+  - pattern-not: |
+      $X = "...";
+      ...
+      $PARSER.write($X);
+  - pattern-not: |
+      $X = "...";
+      ...
+      $PARSER.parse($X);
+  - pattern-not: |-
+      $X = "...";
+      ...
+      $PARSER.write($X);

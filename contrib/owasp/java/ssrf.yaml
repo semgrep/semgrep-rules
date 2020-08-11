@@ -1,0 +1,112 @@
+rules:
+- id: owasp.java.ssrf.java.net.url
+  message: |
+    A parameter being passed directly into java.net.URL function most likely lead to SSRF.
+  metadata:
+    cwe: CWE-918
+    owasp: Undefined
+    source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $RETURN $METHOD(...,String $VAR, ...) {
+          ...
+          URL $URL = new URL($VAR);
+          ...
+        }
+# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.       
+  - pattern-not: $URL = new URL("...");
+  languages:
+  - java
+
+- id: owasp.java.ssrf.org.apache.commons.httpclient
+  message: |
+    A parameter being passed directly into HttpClient functions most likely lead to SSRF.
+  metadata:
+    cwe: CWE-918
+    owasp: Undefined
+    source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $RETURN $METHOD(...,String $VAR, ...) {
+          ...
+          HttpClient $CLIENT = new HttpClient();
+          ... 
+          $METHODOBJ = new $METHODCLASS($VAR);
+          ...
+          $CLIENT.executeMethod($METHODOBJ);
+          ...
+        }
+# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.       
+  - pattern-not: |
+      $RETURN $METHOD(...,String $VAR, ...) {
+        ...
+        HttpClient $CLIENT = new HttpClient();
+        ... 
+        $METHODOBJ = new $METHODCLASS("...");
+        ...
+        $CLIENT.executeMethod($METHODOBJ);
+        ...
+      }
+  languages:
+  - java
+
+- id: owasp.java.ssrf.org.apache.http.impl.client.CloseableHttpClient
+  message: |
+    A parameter being passed directly into CloseableHttpClient functions most likely lead to SSRF.
+  metadata:
+    cwe: CWE-918
+    owasp: Undefined
+    source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $RETURN $METHOD(...,String $VAR, ...) {
+          ...
+          CloseableHttpClient $CLIENT = ... ;
+          ... 
+          $METHODOBJ = new $METHODCLASS($VAR);
+          ...
+          HttpResponse httpResponse = $CLIENT.execute($METHODOBJ);
+          ...
+        }
+# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.       
+    - pattern: |
+        $RETURN $METHOD(...,String $VAR, ...) {
+          ...
+          CloseableHttpClient $CLIENT = ... ;
+          ... 
+          $METHODOBJ = new $METHODCLASS("...");
+          ...
+          HttpResponse httpResponse = $CLIENT.execute($METHODOBJ);
+          ...
+        }
+  languages:
+  - java
+
+- id: owasp.java.ssrf.possible.import.statements
+  message: |
+    Non-exhaustive list of Libraries that provide functionality to accept URL as a parameter
+  metadata:
+    cwe: CWE-918
+    owasp: Undefined
+    source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+  severity: INFO
+  patterns:
+  - pattern-either:
+# Some Other libraries whose import statements are worth investigating    
+    - pattern: import org.apache.commons.httpclient.HttpClient;
+    - pattern: import com.squareup.okhttp.OkHttpClient;
+    - pattern: import org.apache.http.client.fluent.Request;
+    - pattern: import org.apache.http.client.methods.HttpGet;
+    - pattern: import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+    - pattern: import org.jsoup.Jsoup;
+    - pattern: import javax.imageio.ImageIO;
+    - pattern: import java.net.URI;
+    - pattern: import java.net.URL;
+  languages:
+  - java

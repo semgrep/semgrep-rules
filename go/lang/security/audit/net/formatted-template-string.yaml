@@ -1,0 +1,43 @@
+rules:
+- id: formatted-template-string
+  message: |
+    Found a formatted template string passed to 'template.HTML()'.
+    'template.HTML()' does not escape contents. Be absolutely sure
+    there is no user-controlled data in this template. If user data
+    can reach this template, you may have a XSS vulnerability.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A1: Injection'
+    references:
+    - https://golang.org/pkg/html/template/#HTML
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-not: template.HTML("..." + "...")
+  - pattern-either:
+    - pattern: template.HTML($T + $X, ...)
+    - pattern: template.HTML(fmt.$P("...", ...), ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $T = $FXN(..., $T, ...)
+        ...
+        template.HTML($T, ...)
+    - pattern: |
+        $T = fmt.$P("...", ...)
+        ...
+        template.HTML($T, ...)
+    - pattern: |
+        $T, $ERR = fmt.$P("...", ...)
+        ...
+        template.HTML($T, ...)
+    - pattern: |
+        $T = $X + $Y
+        ...
+        template.HTML($T, ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $OTHER, $ERR = fmt.$P(..., $T, ...)
+        ...
+        template.HTML($OTHER, ...)

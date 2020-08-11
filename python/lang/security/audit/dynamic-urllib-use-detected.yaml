@@ -1,0 +1,41 @@
+rules:
+- id: dynamic-urllib-use-detected
+  patterns:
+  - pattern-not: urllib.$W("...")
+  - pattern-not: urllib.request.$W("...")
+  - pattern-not: $OPENER.$W("...")
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: urllib.urlopen(...)
+        - pattern: urllib.request.urlopen(...)
+        - pattern: urllib.urlretrieve(...)
+        - pattern: urllib.request.urlretrieve(...)
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $OPENER = urllib.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.FancyURLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.FancyURLopener(...)
+            ...
+      - pattern-either:
+        - pattern: $OPENER.open(...)
+        - pattern: $OPENER.retrieve(...)
+  message: |
+    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes.
+    Audit uses of urllib calls to ensure user data cannot control the URLs, or consider
+    using the 'requests' library instead.
+  metadata:
+    cwe: 'CWE-939: Improper Authorization in Handler for Custom URL Scheme'
+    owasp: 'A1: Injection'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/blacklists/calls.py#L163
+    bandit-code: B310
+  languages: [python]
+  severity: WARNING

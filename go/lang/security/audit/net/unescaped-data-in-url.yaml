@@ -1,0 +1,42 @@
+rules:
+- id: unescaped-data-in-url
+  message: |
+    Found a formatted template string passed to 'template.URL()'.
+    'template.URL()' does not escape contents. Be absolutely sure
+    there is no user-controlled data in this template.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A1: Injection'
+    references:
+    - https://golang.org/pkg/html/template/#URL
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: template.URL($T + $X, ...)
+    - pattern: template.URL(fmt.$P("...", ...), ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $T = $FXN(..., $T, ...)
+        ...
+        template.URL($T, ...)
+    - pattern: |
+        $T = fmt.$P("...", ...)
+        ...
+        template.URL($T, ...)
+    - pattern: |
+        $T, $ERR = fmt.$P("...", ...)
+        ...
+        template.URL($T, ...)
+    - pattern: |
+        $T = $X + $Y
+        ...
+        template.URL($T, ...)
+    - pattern: |
+        $T = "..."
+        ...
+        $OTHER, $ERR = fmt.$P(..., $T, ...)
+        ...
+        template.URL($OTHER, ...)
+

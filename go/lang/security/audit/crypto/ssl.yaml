@@ -1,0 +1,21 @@
+rules:
+- id: ssl-v3-is-insecure
+  message: |
+    SSLv3 is insecure because it has known vulnerabilities.
+    Starting with go1.14, SSLv3 will be removed. Instead, use 
+    'tls.VersionTLS13'.
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    source-rule-url: https://github.com/securego/gosec/blob/master/rules/tls_config.go
+    references:
+    - https://golang.org/doc/go1.14#crypto/tls
+    - https://www.us-cert.gov/ncas/alerts/TA14-290A
+  languages: [go]
+  severity: ERROR
+  patterns:
+  - pattern: |-
+      tls.Config{..., MinVersion: $TLS.VersionSSL30, ...}
+  fix-regex:
+    regex: VersionSSL30
+    replacement: VersionTLS13

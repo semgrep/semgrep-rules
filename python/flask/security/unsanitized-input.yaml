@@ -1,0 +1,34 @@
+rules:
+- id: response-contains-unsanitized-input
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X = flask.request.args.get(...)
+        ...
+        flask.make_response("...".format($X))
+    - pattern: |
+        $X = flask.request.args.get(...)
+        ...
+        flask.make_response(f"...{$X}...")
+    - pattern: |
+        $X = flask.request.args.get(...)
+        ...
+        flask.make_response(f"...{$X}")
+    - pattern: |
+        $X = flask.request.args.get(...)
+        ...
+        flask.make_response(f"{$X}...")
+  message: |
+    Flask response reflects unsanitized user input. This could lead to a
+    cross-site scripting vulnerability (https://owasp.org/www-community/attacks/xss/)
+    in which an attacker causes arbitrary code to be executed in the user's browser.
+    To prevent, please sanitize the user input, e.g. by rendering the response
+    in a Jinja2 template (see considerations in https://flask.palletsprojects.com/en/1.0.x/security/).
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://flask.palletsprojects.com/en/1.0.x/security/
+    - https://owasp.org/www-community/attacks/xss/
+  languages: [python]
+  severity: WARNING

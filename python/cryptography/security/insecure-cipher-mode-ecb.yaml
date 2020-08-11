@@ -1,0 +1,16 @@
+rules:
+- id: insecure-cipher-mode-ecb
+  pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
+  message: |
+    Detected ECB cipher mode which is considered insecure. The algorithm can
+    potentially leak information about the plaintext. Use CBC mode instead.
+  metadata:
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    bandit-code: B305
+    references:
+    - https://crypto.stackexchange.com/questions/20941/why-shouldnt-i-use-ecb-encryption
+  severity: WARNING
+  languages:
+  - python

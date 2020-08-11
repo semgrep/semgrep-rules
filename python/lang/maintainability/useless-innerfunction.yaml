@@ -1,0 +1,29 @@
+rules:
+- id: useless-inner-function
+  patterns:
+  - pattern-not-inside: |
+      def $F(...):
+          ...
+          def $FF(...):
+             ...
+          ...
+          <...$FF...>
+  - pattern-not-inside: |
+      def $F(...):
+          ...
+          class $CLAZZ(...):
+            ...
+  - pattern-inside: |
+      def $F(...):
+        ...
+        def $FF(...):
+           ...
+        ...
+  # We want to report where the inner function is defined, so
+  # we add a "pattern" match for the inner function only
+  - pattern: |
+      def $FF(...):
+        ...
+  message: function `$FF` is defined inside a function but never used
+  languages: [python]
+  severity: ERROR

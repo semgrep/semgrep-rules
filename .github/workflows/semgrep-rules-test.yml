@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     name: test
     steps:
-      - uses: actions/checkout@v2
-      - name: test
-        id: test
-        uses: returntocorp/semgrep-rules-test-action@master
-      - uses: actions/upload-artifact@v1
-        if: always()
-        with:
-          name: tests
-          path: ${{ steps.test.outputs.output_dir }}
+    - uses: actions/checkout@v2
+    - name: test
+      id: test
+      uses: returntocorp/semgrep-rules-test-action@master
+    - uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: tests
+        path: ${{ steps.test.outputs.output_dir }}

@@ -1,0 +1,21 @@
+rules:
+- id: grpc-nodejs-insecure-connection
+  message: |
+    Found an insecure gRPC connection. This creates a connection without encryption to a gRPC client/server. A malicious attacker
+    could tamper with the gRPC message, which could compromise the machine.
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+  severity: ERROR
+  languages: [javascript]
+  pattern-either:
+  - pattern: |
+      require('grpc');
+      ...
+      $GRPC($ADDR,...,$CREDENTIALS.createInsecure(),...);
+  - pattern: |-
+      require('grpc');
+      ...
+      $CREDS = <... $CREDENTIALS.createInsecure() ...>;
+      ...
+      $GRPC($ADDR,...,$CREDS,...);

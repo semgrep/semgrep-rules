@@ -1,0 +1,19 @@
+rules:
+- id: listen-eval
+  languages:
+  - python
+  message: |
+    Because portions of the logging configuration are passed through eval(),
+    use of this function may open its users to a security risk. While the
+    function only binds to a socket on localhost, and so does not accept
+    connections from remote machines, there are scenarios where untrusted
+    code could be run under the account of the process which calls listen().
+    See more details at https://docs.python.org/3/library/logging.config.html?highlight=security#logging.config.listen
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://docs.python.org/3/library/logging.config.html?highlight=security#logging.config.listen
+  patterns:
+  - pattern: logging.config.listen(...)
+  severity: WARNING

@@ -1,0 +1,35 @@
+rules:
+- id: no-static-initialization-vector
+  message: |
+    Initialization Vectors (IVs) for block ciphers should be randomly generated
+    each time they are used. Using a static IV means the same plaintext
+    encrypts to the same ciphertext every time, weakening the strength
+    of the encryption.
+  metadata:
+    cwe: 'CWE-329: Not Using a Random IV with CBC Mode'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#STATIC_IV
+    references:
+    - https://cwe.mitre.org/data/definitions/329.html
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        byte[] $IV = {
+            ...
+        };
+        ...
+        new IvParameterSpec($IV, ...);
+    - pattern: |
+        class $CLASS {
+            byte[] $IV = {
+                ...
+            };
+            ...
+            $METHOD(...) {
+                ...
+                new IvParameterSpec($IV, ...);
+                ...
+            }
+        }

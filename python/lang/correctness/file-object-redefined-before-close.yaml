@@ -1,0 +1,18 @@
+rules:
+- id: file-object-redefined-before-close
+  patterns:
+  - pattern: |
+      $F = open($X, ...)
+      ...
+      $F = open($Y, ...)
+  - pattern-not: |
+      $F = open($X, ...)
+      ...
+      $F.close()
+      ...
+      $F = open($Y, ...)
+  message: |
+    Detected a file object that is redefined and never closed. This
+    could leak file descriptors and unnecessarily consume system resources.
+  languages: [python]
+  severity: WARNING

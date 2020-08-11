@@ -1,0 +1,14 @@
+rules:
+- id: should-be-fstring
+  patterns:
+  - pattern: |
+      $X = $Y
+      ...
+      print('...{$X}...')
+  fix-regex:
+    regex: (['|"])
+    replacement: f\1
+    count: 1
+  message: Missing an f-string specifier for string containing variable '$X'.
+  languages: [python]
+  severity: WARNING

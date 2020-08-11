@@ -1,0 +1,19 @@
+rules:
+- id: debug-enabled
+  patterns:
+  - pattern-inside: |
+      import flask
+      ...
+  - pattern: $APP.run(..., debug=True, ...)
+  message: |
+    Detected Flask app with debug=True. Do not deploy to production with this flag enabled
+    as it will leak sensitive information. Instead, consider using Flask configuration
+    variables or setting 'debug' using system environment variables.
+  metadata:
+    cwe: 'CWE-489: Active Debug Code'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://labs.detectify.com/2015/10/02/how-patreon-got-hacked-publicly-exposed-werkzeug-debugger/
+  severity: WARNING
+  languages:
+  - python

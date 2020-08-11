@@ -1,10 +1,19 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
-    hooks:
-      - id: check-yaml
-      - id: check-case-conflict
-      - id: check-added-large-files
-      - id: check-executables-have-shebangs
-      - id: check-merge-conflict
-      - id: check-symlinks
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.5.0
+  hooks:
+  - id: check-yaml
+  - id: check-case-conflict
+  - id: check-added-large-files
+  - id: check-executables-have-shebangs
+  - id: check-merge-conflict
+  - id: check-symlinks
+- repo: https://github.com/rcoh/pre-commit-hook-yamlfmt
+  rev: 0.0.13
+  hooks:
+  - id: yamlfmt
+    language_version: python3.7
+        # NOTE: If you change these settings, be sure to also
+        # change the semgrep.live YAML settings, otherwise diffs will fail
+        # to lint
+    args: [--width, '120', --no-explicit-start, --mapping, '2', --sequence, '2', --offset, '0']

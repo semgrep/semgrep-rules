@@ -1,0 +1,122 @@
+rules:
+- id: string-formatted-query
+  languages: [go]
+  message: |
+    String-formatted SQL query detected. This could lead to SQL injection if
+    the string is not sanitized properly. Audit this call to ensure the
+    SQL is not manipulatable by external data.
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    source-rule-url: https://github.com/securego/gosec
+  patterns:
+  - pattern-either:
+    - pattern: $OBJ.Exec("..." + $X)
+    - pattern: $OBJ.ExecContext($CTX, "..." + $X)
+    - pattern: $OBJ.Query("..." + $X)
+    - pattern: $OBJ.QueryContext($CTX, "..." + $X)
+    - pattern: $OBJ.QueryRow("..." + $X)
+    - pattern: $OBJ.QueryRowContext($CTX, "..." + $X)
+    - pattern: $OBJ.Exec(fmt.$P("...", ...))
+    - pattern: $OBJ.ExecContext($CTX, fmt.$P("...", ...))
+    - pattern: $OBJ.Query(fmt.$P("...", ...))
+    - pattern: $OBJ.QueryContext($CTX, fmt.$P("...", ...))
+    - pattern: $OBJ.QueryRow(fmt.$P("...", ...))
+    - pattern: $OBJ.QueryRowContext($CTX, fmt.$P("...", ...))
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.Exec($QUERY, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.Query($QUERY, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.ExecContext($CTX, $QUERY, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryContext($CTX, $QUERY, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryRow($QUERY)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryRowContext($CTX, $QUERY, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.Exec($OTHER, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.Query($OTHER, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.ExecContext($CTX, $OTHER, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryContext($CTX, $OTHER, ...)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryRow($OTHER)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryRowContext($CTX, $OTHER, ...)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.Exec($QUERY, ...)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.Query($QUERY, ...)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.ExecContext($CTX, $QUERY, ...)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.QueryContext($CTX, $QUERY, ...)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.QueryRow($QUERY)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.QueryRowContext($CTX, $QUERY, ...)

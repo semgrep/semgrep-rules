@@ -1,0 +1,17 @@
+# Flask check3: Flask application app.run best practices https://flask.palletsprojects.com/en/1.1.x/api/?highlight=run#flask.Flask.run
+rules:
+- id: avoid_using_app_run_directly
+  patterns:
+  - pattern-not-inside: |
+      if __name__ == '__main__':
+        ...
+  - pattern-not-inside: |
+      def $X(...):
+        ...
+  - pattern: app.run(...)
+  message: top-level app.run(...) is ignored by flask. Consider putting app.run(...) behind a guard, like inside a function
+  metadata:
+    cwe: 'CWE-668: Exposure of Resource to Wrong Sphere'
+    owasp: 'A6: Security Misconfiguration'
+  languages: [python]
+  severity: WARNING
