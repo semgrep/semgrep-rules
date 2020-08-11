@@ -1,677 +1,280 @@
 rules:
-  - id: sql-injection-using-rawsql
-    message: Data from request is passed to RawSQL().
-      This is a SQL injection and could be exploited.
-      See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.expressions.RawSQL to learn how to mitigate.
-      See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
-    languages: [python]
-    severity: WARNING
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...):
-            ...
-      - pattern-either:
-        - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W.get(...), ...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W.get(...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W.get(...)}...", ...)
-        - pattern: django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: return django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W(...), ...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W(...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W(...)}...", ...)
-        - pattern: django.db.models.expressions.RawSQL(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: return django.db.models.expressions.RawSQL(..., request.$W(...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W[...], ...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W[...], ...)
-        - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W[...]}...", ...)
-        - pattern: django.db.models.expressions.RawSQL(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: return django.db.models.expressions.RawSQL(..., request.$W[...], ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W, ...), ...)
-        - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W, ...)
-        - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W}...", ...)
-        - pattern: django.db.models.expressions.RawSQL(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            $A = django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: return django.db.models.expressions.RawSQL(..., request.$W, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.db.models.expressions.RawSQL(..., $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR.format(..., $DATA, ...)
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = f"...{$DATA}..."
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            return django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR + $DATA
-            ...
-            return django.db.models.expressions.RawSQL(..., $INTERM, ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
-        - pattern: |
-            $DATA = request.$W.get(...)
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W(...)
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W[...]
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL($INTERM, ...)
-        - pattern: |
-            $DATA = request.$W
-            ...
-            $INTERM = $STR % (..., $DATA, ...)
-            ...
-            django.db.models.expressions.RawSQL($INTERM, ...)
+- id: sql-injection-using-rawsql
+  message: Data from request is passed to RawSQL(). This is a SQL injection and could be exploited. See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.expressions.RawSQL
+    to learn how to mitigate. See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.expressions.RawSQL
+  languages: [python]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...):
+        ...
+  - pattern-either:
+    - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W.get(...), ...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W.get(...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W.get(...)}...", ...)
+    - pattern: django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
+    - pattern: return django.db.models.expressions.RawSQL(..., request.$W.get(...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W(...), ...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W(...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W(...)}...", ...)
+    - pattern: django.db.models.expressions.RawSQL(..., request.$W(...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W(...), ...)
+    - pattern: return django.db.models.expressions.RawSQL(..., request.$W(...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W[...], ...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W[...], ...)
+    - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W[...]}...", ...)
+    - pattern: django.db.models.expressions.RawSQL(..., request.$W[...], ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W[...], ...)
+    - pattern: return django.db.models.expressions.RawSQL(..., request.$W[...], ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S.format(..., request.$W, ...), ...)
+    - pattern: django.db.models.expressions.RawSQL(..., $S % request.$W, ...)
+    - pattern: django.db.models.expressions.RawSQL(..., f"...{request.$W}...", ...)
+    - pattern: django.db.models.expressions.RawSQL(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL(..., $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL(..., $STR.format(..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR.format(..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL(..., $STR % $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL(..., f"...{$DATA}...", ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = f"...{$DATA}..."
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL(..., $STR + $DATA, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR + $DATA
+        ...
+        django.db.models.expressions.RawSQL(..., $INTERM, ...)
+    - pattern: $A = django.db.models.expressions.RawSQL(..., request.$W, ...)
+    - pattern: return django.db.models.expressions.RawSQL(..., request.$W, ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        django.db.models.expressions.RawSQL($STR % (..., $DATA, ...), ...)
+    - pattern: |
+        $DATA = request.$W.get(...)
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W(...)
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W[...]
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL($INTERM, ...)
+    - pattern: |
+        $DATA = request.$W
+        ...
+        $INTERM = $STR % (..., $DATA, ...)
+        ...
+        django.db.models.expressions.RawSQL($INTERM, ...)

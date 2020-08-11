@@ -1,0 +1,40 @@
+rules:
+- id: tls-with-insecure-cipher
+  message: |
+    Detected an insecure CipherSuite via the 'tls' module. This suite is considered weak.
+    Use the function 'tls.CipherSuites()' to get a list of good cipher suites.
+    See https://golang.org/pkg/crypto/tls/#InsecureCipherSuites
+    for why and what other cipher suites to use.
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    source-rule-url: https://github.com/securego/gosec/blob/master/rules/tls.go
+    references:
+    - https://golang.org/pkg/crypto/tls/#InsecureCipherSuites
+  languages: [go]
+  severity: WARNING
+  pattern-either:
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_RSA_WITH_RC4_128_SHA,...}}
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_RSA_WITH_AES_128_CBC_SHA256,...}}
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_ECDHE_ECDSA_WITH_RC4_128_SHA,...}}
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_ECDHE_RSA_WITH_RC4_128_SHA,...}}
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,...}}
+  - pattern: |
+      tls.Config{..., CipherSuites: []$TYPE{..., tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,...}}
+  - pattern: |
+      tls.CipherSuite{..., TLS_RSA_WITH_RC4_128_SHA ,...}
+  - pattern: |
+      tls.CipherSuite{..., TLS_RSA_WITH_AES_128_CBC_SHA256 ,...}
+  - pattern: |
+      tls.CipherSuite{..., TLS_ECDHE_ECDSA_WITH_RC4_128_SHA ,...}
+  - pattern: |
+      tls.CipherSuite{..., TLS_ECDHE_RSA_WITH_RC4_128_SHA ,...}
+  - pattern: |
+      tls.CipherSuite{..., TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 ,...}
+  - pattern: |-
+      tls.CipherSuite{..., TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256 ,...}

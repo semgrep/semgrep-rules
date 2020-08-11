@@ -1,0 +1,23 @@
+rules:
+- id: missing-csrf-protection
+  patterns:
+  - pattern: |
+      class $CONTROLLER < ActionController::Base
+        ...
+      end
+  - pattern-not: |
+      class $CONTROLLER < ActionController::Base
+        ...
+        protect_from_forgery :with => :exception
+      end
+  message: |
+    Detected controller which does not enable cross-site request forgery
+    protections using 'protect_from_forgery'. Add
+    'protect_from_forgery :with => :exception' to your controller class.
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp: 'A6: Security Misconfiguration'
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/cross-site_request_forgery/index.markdown
+  languages:
+  - ruby

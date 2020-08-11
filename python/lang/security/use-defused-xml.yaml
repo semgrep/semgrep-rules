@@ -1,0 +1,17 @@
+rules:
+- id: use-defused-xml
+  pattern-either:
+  - pattern: import xml
+  - pattern: import lxml
+  fix: import defusedxml
+  metadata:
+    owasp: 'A4: XML External Entities (XXE)'
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    references:
+    - https://docs.python.org/3/library/xml.html
+  message: |
+    Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
+    attacks. The Python documentation recommends the 'defusedxml' library instead if the XML being
+    loaded is untrusted.
+  languages: [python]
+  severity: ERROR

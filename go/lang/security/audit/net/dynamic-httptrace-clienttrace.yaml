@@ -1,0 +1,25 @@
+rules:
+- id: dynamic-httptrace-clienttrace
+  message: |
+    Detected a potentially dynamic ClientTrace. This occurred because semgrep could not
+    find a static definition for '$TRACE'. Dynamic ClientTraces are dangerous because
+    they deserialize function code to run when certain Request events occur, which could lead
+    to code being run without your knowledge. Ensure that your ClientTrace is statically defined.
+  metadata:
+    cwe: 'CWE-913: Improper Control of Dynamically-Managed Code Resources'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://github.com/returntocorp/semgrep-rules/issues/518
+  # Detects when a static ClientTrace is not defined in the same file as 
+  # WithClientTrace. Not a perfect detection, but sufficiently works in a
+  # scan of ~1k repos: https://dev.massive.ret2.co/triager/filter/1007
+  patterns:
+  - pattern-not-inside: |
+      ...
+      &httptrace.ClientTrace { ... }
+      ...
+  - pattern: httptrace.WithClientTrace($ANY, $TRACE)
+
+  severity: WARNING
+  languages:
+  - go

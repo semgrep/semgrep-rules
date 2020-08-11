@@ -1,0 +1,22 @@
+rules:
+- id: code-after-unconditional-return
+  patterns:
+  - pattern: |
+      return ...
+      $S
+  message: code after return statement will not be executed
+  languages: [python]
+  severity: WARNING
+- id: return-not-in-function
+  patterns:
+  - pattern-not-inside: |
+      def $F(...):
+          ...
+      # TODO: first pattern should just automatically include this one
+  - pattern-not-inside: |
+      def $F(...) ->  $Y:
+          ...
+  - pattern: return ...
+  message: '`return` only makes sense inside a function'
+  languages: [python]
+  severity: WARNING

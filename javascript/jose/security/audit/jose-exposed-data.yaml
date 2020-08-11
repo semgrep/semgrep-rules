@@ -1,0 +1,27 @@
+rules:
+- id: jose-exposed-data
+  message: |
+    The object is passed strictly to jose.JWT.sign(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  severity: WARNING
+  metadata:
+    owasp: A3:2017-Sensitive Data Exposure
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('jose');
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-inside: function (...,$INPUT,...) {...}
+      - pattern-either:
+        - pattern: $JOSE.JWT.sign($INPUT,...)
+        - pattern: $JWT.sign($INPUT,...)
+    - patterns:
+      - pattern-inside: function $F(...,$INPUT,...) {...}
+      - pattern-either:
+        - pattern: $JOSE.JWT.sign($INPUT,...)
+        - pattern: $JWT.sign($INPUT,...)

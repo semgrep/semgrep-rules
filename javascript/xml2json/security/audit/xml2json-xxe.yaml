@@ -1,0 +1,25 @@
+rules:
+- id: xml2json-xxe
+  message: |
+    If unverified user data can reach the XML Parser it can result in XML External or
+    Internal Entity (XXE) Processing vulnerabilities
+  metadata:
+    owasp: 'A4: XML External Entities (XXE)'
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+  severity: WARNING
+  languages: [javascript]
+  patterns:
+  - pattern: |
+      var $XML = require('xml2json');
+      ...
+      $XML.toJson(...);
+  - pattern-not: |
+      var $XML = require('xml2json');
+      ...
+      $XML.toJson("...",...);
+  - pattern-not: |-
+      var $XML = require('xml2json');
+      ...
+      var $S = "...";
+      ...
+      $XML.toJson($S,...);

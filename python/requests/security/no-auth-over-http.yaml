@@ -1,0 +1,27 @@
+rules:
+- id: no-auth-over-http
+  patterns:
+  - pattern-either:
+    - pattern: requests.$W("=~/http:\/\/.*/", ..., auth=$X, ...)
+    - pattern: |
+        $URL = "=~/http:\/\/.../"
+        ...
+        requests.$W($URL, ..., auth=$X, ...)
+  fix-regex:
+    regex: http:\/\/
+    replacement: https://
+    count: 1
+  message: |
+    Authentication detected over HTTP. HTTP does not provide any
+    encryption or protection for these authentication credentials.
+    This may expose these credentials to unauthhorized parties.
+    Use 'https://' instead.
+  metadata:
+    cwe: 'CWE-523: Unprotected Transport of Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://pypi.org/project/flake8-flask/
+    references:
+    - https://blog.r2c.dev/2020/bento-check-no-auth-over-http/
+    - https://bento.dev/checks/requests/no-auth-over-http/
+  languages: [python]
+  severity: ERROR

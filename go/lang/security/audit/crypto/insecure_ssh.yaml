@@ -1,0 +1,19 @@
+rules:
+- id: avoid-ssh-insecure-ignore-host-key
+  message: |
+    Disabled host key verification detected. This allows man-in-the-middle
+    attacks. Use the 'golang.org/x/crypto/ssh/knownhosts' package to do
+    host key verification.
+    See https://skarlso.github.io/2019/02/17/go-ssh-with-host-key-verification/
+    to learn more about the problem and how to fix it.
+  metadata:
+    cwe: 'CWE-322: Key Exchange without Entity Authentication'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://github.com/securego/gosec
+    references:
+    - https://skarlso.github.io/2019/02/17/go-ssh-with-host-key-verification/
+    - https://gist.github.com/Skarlso/34321a230cf0245018288686c9e70b2d
+  languages: [go]
+  severity: WARNING
+  pattern: |-
+    ssh.InsecureIgnoreHostKey()

@@ -1,0 +1,14 @@
+rules:
+- id: use-tls
+  pattern: http.ListenAndServe($ADDR, $HANDLER)
+  fix: http.ListenAndServeTLS($ADDR, certFile, keyFile, $HANDLER)
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://golang.org/pkg/net/http/#ListenAndServeTLS
+  message: |-
+    Found an HTTP server without TLS. Use http.ListenAndServeTLS instead.
+    See https://golang.org/pkg/net/http/#ListenAndServeTLS for more information.
+  languages: [go]
+  severity: WARNING

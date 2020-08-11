@@ -1,0 +1,21 @@
+rules:
+- id: avoid-pyyaml-load
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
+    - https://nvd.nist.gov/vuln/detail/CVE-2017-18342
+  languages:
+  - python
+  message: |
+    Avoid using `load()`. `PyYAML.load` can create arbitrary Python
+    objects. A malicious actor could exploit this to run arbitrary
+    code. Use `safe_load()` instead.
+  fix: yaml.safe_load($FOO)
+  severity: ERROR
+  patterns:
+  - pattern-not-inside: |
+      yaml = $X
+      ...
+  - pattern: yaml.load($FOO)

@@ -1,0 +1,11 @@
+rules:
+- id: bad-tmp-file-creation
+  message: File creation in shared tmp directory without using ioutil.Tempfile
+  languages: [go]
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-377: Insecure Temporary File'
+    source_rule_url: https://github.com/securego/gosec
+  pattern-either:
+  - pattern: ioutil.WriteFile("=~//tmp/.*$/", ...)
+  - pattern: os.Create("=~//tmp/.*$/", ...)

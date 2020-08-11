@@ -1,0 +1,14 @@
+rules:
+- id: len-all-count
+  pattern: len($X.all())
+  message: Using QUERY.count() instead of len(QUERY.all()) sends less data to the client since the SQLAlchemy method is performed
+    server-side.
+  languages: [python]
+  severity: WARNING
+- id: batch-import
+  pattern: |
+    for $X in $Y:
+      db.session.add($Z)
+  message: Rather than adding one element at a time, consider batch loading to improve performance.
+  languages: [python]
+  severity: WARNING

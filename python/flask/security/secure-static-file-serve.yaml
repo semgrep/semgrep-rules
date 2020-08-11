@@ -1,0 +1,19 @@
+# For Flask app to serve file securely, it should use `send_from_directory` method
+# The other methods like `send_file` or `send_static_file` are not recommended per
+# https://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
+rules:
+- id: avoid_send_file_without_path_sanitization
+  patterns:
+  - pattern-inside: |
+      @app.route(...)
+      def $X(filename):
+        ...
+  - pattern-either:
+    - pattern: flask.send_file(filename, ...)
+  message: Looks like `filename` could flow to `flask.send_file()` function. Make sure to properly sanitize filename or use
+    `flask.send_from_directory`
+  metadata:
+    cwe: 'CWE-73: External Control of File Name or Path'
+    owasp: 'A1: Injection'
+  languages: [python]
+  severity: WARNING

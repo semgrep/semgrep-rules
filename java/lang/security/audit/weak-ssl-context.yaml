@@ -1,0 +1,22 @@
+rules:
+- id: weak-ssl-context
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source_rule_url: https://find-sec-bugs.github.io/bugs.htm#SSL_CONTEXT
+    references:
+    - https://tools.ietf.org/html/rfc7568
+    - https://tools.ietf.org/id/draft-ietf-tls-oldversions-deprecate-02.html
+  message: |
+    An insecure SSL context was detected. TLS versions 1.0, 1.1, and all SSL versions
+    are considered weak encryption and are deprecated.
+    Use SSLContext.getInstance("TLSv1.2") for the best security.
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-not: SSLContext.getInstance("TLS1.3")
+  - pattern-not: SSLContext.getInstance("TLS1.2")
+  - pattern: SSLContext.getInstance("...")
+  fix-regex:
+    regex: (.*?)\.getInstance\(.*?\)
+    replacement: \1.getInstance("TLS1.2")

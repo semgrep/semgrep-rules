@@ -1,0 +1,15 @@
+rules:
+- id: telnetlib
+  pattern: telnetlib.$ANYTHING(...)
+  message: |
+    Telnet does not encrypt communications. Use SSH instead.
+  metadata:
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L208
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    bandit-code: B312
+    references:
+    - https://docs.python.org/3/library/telnetlib.html
+  severity: WARNING
+  languages:
+  - python
