@@ -73,3 +73,17 @@ x != x
 If you fork this repo or create your own, you can add a special [semgrep-rules-test](https://github.com/marketplace/actions/semgrep-rules-test) Github Action to your workflow that will automatically test your rules by running `make test` using the latest version of semgrep.
 
 See ours [here](.github/workflows/semgrep-rules-test.yml)
+
+### Benchmarks
+The [benchmark job](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Arule-benchmarks) runs every weekend. It uploads a few artifacts, which can be downloaded. If you download the test logs, there are two relevant pieces of information in there: the benchmark table, which roughly shows the performance of every rule that completes in under 60 seconds, and any failed tests are rules that did not complete within 60 seconds.
+
+To run benchmark tests locally, do the following from the root of `semgrep-rules`:
+```
+pipenv shell
+pipenv install --dev
+export PYTHONPATH=.
+pytest --timeout=60 --rule-directory=[path_to_rule_directory] --git-repo=[git_URL] tests/performance/test_public_repos.py
+```
+If you omit `--git-repo` from the pytest command, it will run the provided benchmark repo.
+
+
