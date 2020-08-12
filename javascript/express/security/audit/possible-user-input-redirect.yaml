@@ -11,9 +11,6 @@ rules:
     - pattern-inside: |
         $UNK = req.$SOMETHING;
         ...
-    - pattern-inside: |
-        $UNK = $ANYFUNC(...);
-        ...
   - pattern: $RES.redirect(..., <... $UNK ...>, ...)
   message: |
     It looks like '$UNK' is read from user input and it is used to as a redirect. Ensure
