@@ -21,7 +21,7 @@ jobs:
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - uses: pre-commit/action@v2.0.0
       with:
-        extra_args: yamlfmt
+        extra_args: yamlfmt --all
     - name: commit yaml files
       if: ${{ failure() }}
       run: |
