@@ -6,8 +6,36 @@ on:
     branches: [master, develop]
 
 jobs:
+  yaml-format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: set PY
+      run: echo "::set-env name=PY::$(python --version --version | sha256sum | cut -d' ' -f1)"
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+    - uses: pre-commit/action@v1.0.1
+      with:
+        extra_args: yamlfmt
+    - name: commit yaml files
+      run: |
+        echo ${{ github.ref }}
+        git add .
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "ci: YAML formatting" -a | exit 0
+    - name: push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
   pre-commit:
     runs-on: ubuntu-latest
+    needs: [yaml-format]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
