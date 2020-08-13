@@ -19,7 +19,8 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - uses: pre-commit/action@v2.0.0
+    - name: yaml format with pre-commit
+      uses: pre-commit/action@v2.0.0
       with:
         extra_args: yamlfmt --all
     - name: commit yaml files
@@ -34,6 +35,7 @@ jobs:
       if: ${{ failure() }}
       uses: ad-m/github-push-action@master
       with:
+        branch: ${GITHUB_REF##*/}
         github_token: ${{ secrets.GITHUB_TOKEN }}
   pre-commit:
     runs-on: ubuntu-latest
