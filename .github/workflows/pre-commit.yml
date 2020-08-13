@@ -6,39 +6,8 @@ on:
     branches: [master, develop]
 
 jobs:
-  yaml-format:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v1
-      with:
-        python-version: '3.7'
-    - name: set PY
-      run: echo "::set-env name=PY::$(python --version --version | sha256sum | cut -d' ' -f1)"
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pre-commit
-        key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - name: yaml format with pre-commit
-      uses: pre-commit/action@v2.0.0
-      with:
-        extra_args: yamlfmt --all
-      continue-on-error: true
-    - name: commit yaml files
-      run: |
-        git fetch && git checkout ${{ github.head_ref }}
-        git add .
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git diff --quiet && git diff --staged quiet || (git commit -m "ci: YAML formatting" -a)
-    - name: push changes
-      uses: ad-m/github-push-action@master
-      with:
-        branch: ${{ github.head_ref }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
   pre-commit:
     runs-on: ubuntu-latest
-    needs: [yaml-format]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
@@ -50,4 +19,6 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - uses: pre-commit/action@v1.0.1
+    - uses: pre-commit/action@v2.0.0
+      env:
+        SKIP: yamlfmt
