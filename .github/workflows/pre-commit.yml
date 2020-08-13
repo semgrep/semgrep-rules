@@ -26,11 +26,11 @@ jobs:
     - name: commit yaml files
       if: ${{ failure() }}
       run: |
-        git pull origin ${{ github.head_ref }}
+        git checkout ${{ github.head_ref }}
         git add .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "ci: YAML formatting" -a | exit 0
+        git commit -m "ci: YAML formatting" -a
     - name: push changes
       if: ${{ failure() }}
       uses: ad-m/github-push-action@master
