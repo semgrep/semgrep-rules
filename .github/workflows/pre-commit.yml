@@ -26,7 +26,7 @@ jobs:
     - name: commit yaml files
       if: ${{ failure() }}
       run: |
-        git pull
+        git pull origin ${{ github.head_ref }}
         git add .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
