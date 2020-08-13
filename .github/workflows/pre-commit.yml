@@ -23,6 +23,11 @@ jobs:
       uses: pre-commit/action@v2.0.0
       with:
         extra_args: yamlfmt --all
+    - name: extract branch name
+      id: extract_branch
+      if: ${{ failure() }}
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
     - name: commit yaml files
       if: ${{ failure() }}
       run: |
@@ -35,7 +40,7 @@ jobs:
       if: ${{ failure() }}
       uses: ad-m/github-push-action@master
       with:
-        branch: ${GITHUB_REF##*/}
+        branch: ${{ steps.extract_branch.outputs.branch }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
   pre-commit:
     runs-on: ubuntu-latest
