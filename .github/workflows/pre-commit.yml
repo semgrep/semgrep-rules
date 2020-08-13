@@ -8,7 +8,6 @@ on:
 jobs:
   yaml-format:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
@@ -24,8 +23,8 @@ jobs:
       uses: pre-commit/action@v2.0.0
       with:
         extra_args: yamlfmt --all
+      continue-on-error: true
     - name: commit yaml files
-      if: ${{ failure() }}
       run: |
         git fetch && git checkout ${{ github.head_ref }}
         git add .
@@ -33,7 +32,6 @@ jobs:
         git config --local user.name "GitHub Action"
         git diff --quiet && git diff --staged quiet || (git commit -m "ci: YAML formatting" -a)
     - name: push changes
-      if: ${{ failure() }}
       uses: ad-m/github-push-action@master
       with:
         branch: ${{ github.head_ref }}
