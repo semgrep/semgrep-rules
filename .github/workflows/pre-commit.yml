@@ -19,4 +19,6 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - uses: pre-commit/action@v1.0.1
+    - uses: pre-commit/action@v2.0.0
+      env:
+        SKIP: yamlfmt
