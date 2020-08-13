@@ -22,17 +22,15 @@ jobs:
     - name: yaml format with pre-commit
       uses: pre-commit/action@v2.0.0
       with:
-        extra_args: yamlfmt --all
+        extra_args: yamlfmt --all | exit 0
     - name: commit yaml files
-      if: ${{ failure() }}
       run: |
         git fetch && git checkout ${{ github.head_ref }}
         git add .
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "ci: YAML formatting" -a
+        git diff --quiet && git diff --staged quiet || (git commit -m "ci: YAML formatting" -a)
     - name: push changes
-      if: ${{ failure() }}
       uses: ad-m/github-push-action@master
       with:
         branch: ${{ github.head_ref }}
