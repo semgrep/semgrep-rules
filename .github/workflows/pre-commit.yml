@@ -19,10 +19,11 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - uses: pre-commit/action@v1.0.1
+    - uses: pre-commit/action@v2.0.0
       with:
         extra_args: yamlfmt
     - name: commit yaml files
+      if: ${{ failure() }}
       run: |
         echo ${{ github.ref }}
         git add .
@@ -30,6 +31,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git commit -m "ci: YAML formatting" -a | exit 0
     - name: push changes
+      if: ${{ failure() }}
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
