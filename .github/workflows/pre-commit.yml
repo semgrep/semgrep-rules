@@ -8,6 +8,7 @@ on:
 jobs:
   yaml-format:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
@@ -22,7 +23,7 @@ jobs:
     - name: yaml format with pre-commit
       uses: pre-commit/action@v2.0.0
       with:
-        extra_args: yamlfmt --all | exit 0
+        extra_args: yamlfmt --all
     - name: commit yaml files
       run: |
         git fetch && git checkout ${{ github.head_ref }}
