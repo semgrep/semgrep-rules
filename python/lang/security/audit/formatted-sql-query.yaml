@@ -1,0 +1,29 @@
+rules:
+- id: formatted-sql-query
+  patterns:
+  - pattern-either:
+    - pattern: $DB.execute("..." % ...)
+    - pattern: $DB.execute("...".format(...))
+    - pattern: $DB.execute(f"...")
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $SQL = "..." % ...
+            ...
+        - pattern-inside: |
+            $SQL = "...".format(...)
+            ...
+        - pattern-inside: |
+            $SQL = f"...{$X}..."
+            ...
+      - pattern: $DB.execute($SQL)
+  message: |
+    Detected possible formatted SQL query. Use parameterized queries instead.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    references:
+    - https://stackoverflow.com/questions/775296/mysql-parameterized-queries
+  severity: WARNING
+  languages:
+  - python
