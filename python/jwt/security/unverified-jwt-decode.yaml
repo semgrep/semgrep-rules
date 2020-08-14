@@ -1,0 +1,19 @@
+rules:
+- id: unverified-jwt-decode
+  pattern: |
+    jwt.decode(..., verify=False, ...)
+  message: |
+    Detected JWT token decoded with 'verify=False'. This bypasses any integrity
+    checks for the token which means the token could be tampered with by
+    malicious actors. Ensure that the JWT token is verified.
+  metadata:
+    owasp: 'A5: Broken Authentication'
+    cwe: 'CWE-287: Improper Authentication'
+    references:
+    - https://github.com/we45/Vulnerable-Flask-App/blob/752ee16087c0bfb79073f68802d907569a1f0df7/app/app.py#L96
+  fix-regex:
+    regex: (verify\s*=\s*)False
+    replacement: \1True
+  severity: ERROR
+  languages:
+  - python
