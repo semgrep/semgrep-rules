@@ -1,5 +1,5 @@
  def bad_escape
-     # ruleid: json-encoding
+     # ruleid: json-entity-escape
      ActiveSupport.escape_html_entities_in_json = false
  end
 
