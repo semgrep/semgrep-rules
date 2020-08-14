@@ -1,0 +1,14 @@
+rules:
+- id: non-constant-sql-query
+  patterns:
+  - pattern: $SQL.query(...)
+  - pattern-not: $SQL.query("...")
+  message: |
+    Non-constant SQL query detected. Ensure this is not controlled
+    by external data, otherwise this is a SQL injection.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+  severity: INFO
+  languages:
+  - js
