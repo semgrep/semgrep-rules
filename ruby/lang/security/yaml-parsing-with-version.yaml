@@ -1,0 +1,17 @@
+rules:
+- id: yaml-parsing
+  patterns:
+  - pattern: ActionController::Base.param_parsers[Mime::YAML] = :yaml
+  - pattern-where-python: |
+      import subprocess
+      res = subprocess.check_output(["ruby", "-v"])
+      'ruby 2' in res.decode()
+  message: |
+    Detected enabled YAML parsing. This is vulnerable to remote code execution in Rails 2.x
+    versions up to 2.3.14. To fix, delete this line.
+  fix-regex:
+    regex: ActionController.*:yaml
+    replacement: ' '
+  severity: WARNING
+  languages:
+  - ruby
