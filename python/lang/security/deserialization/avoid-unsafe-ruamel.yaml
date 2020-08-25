@@ -1,0 +1,18 @@
+rules:
+- id: avoid-unsafe-ruamel
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://yaml.readthedocs.io/en/latest/basicuse.html?highlight=typ
+  languages:
+  - python
+  message: |
+    Avoid using unsafe `ruamel.yaml.YAML()`. `ruamel.yaml.YAML` can
+    create arbitrary Python objects. A malicious actor could exploit
+    this to run arbitrary code. Use `YAML(typ='rt')` or
+    `YAML(typ='safe')` instead.
+  severity: ERROR
+  pattern-either:
+  - pattern: ruamel.yaml.YAML(..., typ='unsafe', ...)
+  - pattern: ruamel.yaml.YAML(..., typ='base', ...)
