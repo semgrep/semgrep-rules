@@ -68,12 +68,13 @@ rules:
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
   pattern-either:
-  - pattern: lxml.$ANYTHING
-  - pattern: xml.$ANYTHING
-  - pattern: xmlrpclib.$ANYTHING
-  - pattern-not: xml.sax.saxutils
-  - pattern-not: xml.etree.ElementTree.Element
-  - pattern-not: xml.etree.ElementTree.SubElement
+    - patterns:
+      - pattern: xml.$ANYTHING
+      - pattern-not: xml.sax.saxutils
+      - pattern-not: xml.etree.ElementTree.Element
+      - pattern-not: xml.etree.ElementTree.SubElement
+    - pattern: lxml.$ANYTHING
+    - pattern: xmlrpclib.$ANYTHING
 - id: insecure-yaml-use
   message: The Python 'yaml' module is not secure against maliciously constructed input
   languages: [python]
