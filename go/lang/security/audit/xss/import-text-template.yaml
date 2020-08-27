@@ -1,0 +1,15 @@
+rules:
+- id: import-text-template
+  message: |
+    'text/template' does not escape HTML content. If you need
+    to escape HTML content, use 'html/template' instead.
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://www.veracode.com/blog/secure-development/use-golang-these-mistakes-could-compromise-your-apps-security
+  severity: WARNING
+  pattern: |
+    import "text/template"
+  languages:
+  - go
