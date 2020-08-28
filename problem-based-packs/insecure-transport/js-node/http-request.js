@@ -3,7 +3,7 @@ function bad_http() {
     http.get('http://nodejs.org/dist/index.json', (res) => {
     const { statusCode } = res;})
 
-    // ruleid: http-request
+    // ok: http-request
     https.get('http://nodejs.org/dist/index.json', (res) => {
     const { statusCode } = res;})
 
@@ -14,10 +14,10 @@ function bad_http() {
         path: '/upload'
     }
 
-    const req = http.request(options, (res) => {
+    consit req = http.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 
-    // ruleid: http-request
+    // ok: http-request
     const options = {
         port: 80,
         hostname: 'www.google.com',
@@ -33,7 +33,7 @@ function bad_http() {
     const req = http.request(options, (res) => {
     });
 
-    // ruleid: http-request
+    // ok: http-request
     const options = new URL('http://abc:xyz@example.com');
 
     const req = https.request(options, (res) => {
@@ -42,7 +42,7 @@ function bad_http() {
 
 function more_bad_http() {
     console.log("what");
-    // ruleid: http-request
+    // ok: http-request
     const req = https.request('http://google.com', options, (res) => {
     });
 
@@ -53,7 +53,7 @@ function more_bad_http() {
 
 function ok_http() {
     // ok
-    const options = {
+i    const options = {
         port: 80,
         hostname: 'www.google.com',
         path: '/upload',
