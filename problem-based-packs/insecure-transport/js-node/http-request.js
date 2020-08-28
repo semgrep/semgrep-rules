@@ -14,7 +14,7 @@ function bad_http() {
         path: '/upload'
     }
 
-    consit req = http.request(options, (res) => {
+    const req = http.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 
     // ok: http-request
@@ -74,5 +74,6 @@ function ok_http() {
     const req = https.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 }
+
 
 
