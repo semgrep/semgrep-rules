@@ -53,7 +53,7 @@ function more_bad_http() {
 
 function ok_http() {
     // ok
-i    const options = {
+    const options = {
         port: 80,
         hostname: 'www.google.com',
         path: '/upload',
