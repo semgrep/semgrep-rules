@@ -1,0 +1,33 @@
+rules:
+- id: http-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        http.get("=~/http://.*/", ...)
+    - pattern: |
+        $VAR = {hostname: "..."};
+        ...
+        http.request(..., $VAR, ...);
+    - pattern: |
+        $VAR = new URL("=~/http://.*/");
+        ...
+        http.request(..., $VAR, ...);
+    - pattern: |
+        http.request("=~/http://.*/",...);
+  - pattern-not: |
+      $VAR = {protocol: "https"};
+      ...
+      http.request(..., $VAR, ...);
+  message: |
+    Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
+    that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://nodejs.org/api/http.html#http_http_request_options_callback
+  languages:
+  - js
+  severity: WARNING
+
