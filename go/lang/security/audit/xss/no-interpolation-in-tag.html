@@ -1,0 +1,16 @@
+<h4>From: {{.from_email}}</h4>
+<h4>To: {{.recipient}}</h4>
+<h4>Subject: {{.subject}}</h4>
+<div class="email" style="display: block;">
+    {{.message}}
+</div>
+<div class="email-text" style="display: none;">
+    <pre>{{.body}}</pre>
+    <a href="https://example.com/">
+        <!-- ruleid:no-interpolation-in-tag -->
+        <{{.HeaderSize}} class="upper">
+            {{.link_text}}
+        </{{.HeaderSize}}>
+    </a>
+</div>
+<hr>
