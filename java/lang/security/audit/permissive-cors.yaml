@@ -9,19 +9,19 @@ rules:
   - pattern: |
       HttpServletResponse $RES = ...;
       ...
-      $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+      $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
   - pattern: |
       HttpServletResponse $RES = ...;
       ...
-      $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+      $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
   - pattern: |
       ServerHttpResponse $RES = ...;
       ...
-      $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+      $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
   - pattern: |
       HttpHeaders $HEADERS = ...;
       ...
-      $HEADERS.set("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+      $HEADERS.set("=~/access-control-allow-origin/i", "=~/^*|null$/i");
   - pattern: |
       ServerWebExchange $SWE = ...;
       ...
@@ -29,28 +29,26 @@ rules:
   - pattern: |
       $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.addHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.setHeader("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,ServerHttpResponse $RES,...) {
         ...
-        $RES.getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,ServerWebExchange $SWE,...) {
         ...
-        $SWE.getResponse().getHeaders().add("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/", "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/");
+        $SWE.getResponse().getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
         ...
       }
-  - pattern: ResponseEntity.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
-      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")
-  - pattern: ServerResponse.$RES().header("=~/[Aa][Cc][Cc][Ee][Ss][Ss][-][Cc][Oo][Nn][Tt][Rr][Oo][Ll][-][Aa][Ll][Ll][Oo][Ww][-][Oo][Rr][Ii][Gg][Ii][Nn]/",
-      "=~/\(\(\*\)\|\(^[Nn][Uu][Ll][Ll]$\)\)/")
+  - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
+  - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
