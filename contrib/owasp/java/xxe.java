@@ -1,7 +1,7 @@
 package org.joychou.controller;
 
-// ruleid:owasp.java.xxe.possible.import.statements    
 import org.dom4j.DocumentHelper;
+// ruleid:owasp.java.xxe.possible.import.statements
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.helpers.XMLReaderFactory;
-// ruleid:owasp.java.xxe.possible.import.statements 
+// ruleid:owasp.java.xxe.possible.import.statements
 import org.xml.sax.XMLReader;
 
 import java.io.*;
@@ -21,16 +21,16 @@ import java.io.*;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
-// ruleid:owasp.java.xxe.possible.import.statements 
+// ruleid:owasp.java.xxe.possible.import.statements
 import javax.xml.parsers.DocumentBuilderFactory;
-// ruleid:owasp.java.xxe.possible.import.statements 
+// ruleid:owasp.java.xxe.possible.import.statements
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.helpers.DefaultHandler;
-// ruleid:owasp.java.xxe.possible.import.statements 
+// ruleid:owasp.java.xxe.possible.import.statements
 import org.apache.commons.digester3.Digester;
-// ruleid:owasp.java.xxe.possible.import.statements 
+// ruleid:owasp.java.xxe.possible.import.statements
 import org.jdom2.input.SAXBuilder;
 import org.joychou.util.WebUtils;
 
@@ -52,7 +52,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.org.xml.sax.XMLReader            
+            // ruleid:owasp.java.xxe.org.xml.sax.XMLReader
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.parse(new InputSource(new StringReader(body)));  // parse xml
             return "xmlReader xxe vuln code";
@@ -92,7 +92,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.org.jdom2.input.SAXBuilder
+            // ruleid:owasp.java.xxe.org.jdom2.input.SAXBuilder
             SAXBuilder builder = new SAXBuilder();
             // org.jdom2.Document document
             builder.build(new InputSource(new StringReader(body)));  // cause xxe
@@ -130,7 +130,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.org.dom4j.io.SAXReader
+            // ruleid:owasp.java.xxe.org.dom4j.io.SAXReader
             SAXReader reader = new SAXReader();
             // org.dom4j.Document document
             reader.read(new InputSource(new StringReader(body))); // cause xxe
@@ -167,9 +167,8 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory
+            // ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory
             SAXParserFactory spf = SAXParserFactory.newInstance();
-// ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory            
             SAXParser parser = spf.newSAXParser();
             parser.parse(new InputSource(new StringReader(body)), new DefaultHandler());  // parse xml
 
@@ -186,7 +185,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory            
+            // ruleid:owasp.java.xxe.javax.xml.stream.XMLInputFactory
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -206,7 +205,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.org.apache.commons.digester3.Digester
+            // ruleid:owasp.java.xxe.org.apache.commons.digester3.Digester
             Digester digester = new Digester();
             digester.parse(new StringReader(body));  // parse xml
         } catch (Exception e) {
@@ -242,7 +241,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
@@ -275,7 +274,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
@@ -310,7 +309,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -334,7 +333,7 @@ public class XXE {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
 
-// ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setXIncludeAware(true);   // 支持XInclude
             dbf.setNamespaceAware(true);  // 支持XInclude
@@ -360,7 +359,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory            
+            // ruleid:owasp.java.xxe.javax.xml.stream.XMLInputFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
             dbf.setXIncludeAware(true);   // 支持XInclude
@@ -391,10 +390,10 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory
+            // ruleid:owasp.java.xxe.javax.xml.stream.XMLInputFactory
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
-// ruleid:owasp.java.xxe.org.xml.sax.XMLReader
+            // ruleid:owasp.java.xxe.org.xml.sax.XMLReader
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.parse(new InputSource(new StringReader(body)));
 
@@ -412,7 +411,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-// ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory
+            // ruleid:owasp.java.xxe.javax.xml.stream.XMLInputFactory
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
