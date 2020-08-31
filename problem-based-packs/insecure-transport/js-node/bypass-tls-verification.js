@@ -42,9 +42,9 @@ function bad_tls2() {
 // ruleid: bypass-tls-verification
 require('request').defaults({method: 'GET', rejectUnauthorized: false, requestCert: true})
 
-// ruleid: bypass-tls-verification
 var requestvar = require('request');
 console.log("hello!");
+// ruleid: bypass-tls-verification
 requestvar.defaults({method: 'GET', rejectUnauthorized: false, requestCert: true});
 
 function ok_tls1() {
