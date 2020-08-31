@@ -1,0 +1,35 @@
+rules:
+- id: owasp.java.xxe.org.xml.sax.XMLReader
+  message: |
+    XMLReader being instantiated without calling the setFeature functions that are generally used for disabling entity processing
+  metadata:
+    cwe: "CWE-611"
+    owasp: "A4:2017-XML External Entities (XXE)"
+    source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+  severity: ERROR
+  patterns:
+  - pattern-either:
+# References : https://www.programcreek.com/java-api-examples/?api=jdk.internal.org.xml.sax.XMLReader 
+# References : https://www.programcreek.com/java-api-examples/?api=org.xml.sax.XMLReader 
+    - pattern: |
+        XMLReader $XMLREADER = ... ;
+        ...
+        $XMLREADER.parse(...);
+    - pattern: XMLReader $XMLREADER = $W.createXMLReader(...);
+    - pattern: XMLReader $XMLREADER = $W.getXMLReader(...);
+  - pattern-not-inside: |
+        $RETURNTYPE $METHOD(...) {
+          ...
+          $XMLREADER.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+          $XMLREADER.setFeature("http://xml.org/sax/features/external-general-entities", false);
+          $XMLREADER.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+          ...
+        }
+  - pattern-not-inside: |
+          XMLReader $XMLREADER = ... ;
+          ...
+          $XMLREADER.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+          $XMLREADER.setFeature("http://xml.org/sax/features/external-general-entities", false);
+          $XMLREADER.setFeature("http://xml.org/sax/features/external-parameter-entities", false);      
+  languages:
+  - java
