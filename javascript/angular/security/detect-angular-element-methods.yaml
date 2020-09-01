@@ -1,0 +1,27 @@
+rules:
+    - id: detect-angular-element-methods
+      patterns:
+        - pattern-either: 
+          - pattern: |
+              angular.element($SOURCE).html(...);
+          - pattern: |
+              angular.element($SOURCE).append(...);
+          - pattern: |
+              angular.element($SOURCE).prepend(...);
+          - pattern: |
+              angular.element($SOURCE).replaceWith(...);
+          - pattern: |
+              angular.element($SOURCE).wrap(...);
+          - pattern: |
+              angular.element($SOURCE).after(...);
+      message: |
+        Use of angular.element can lead to XSS if after,append,html,prepend,replaceWith,wrap are used with user-input.
+      languages:
+        - javascript
+      metadata:
+          references:
+            - https://docs.angularjs.org/api/ng/function/angular.element
+            - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+      fix: |
+        
+      severity: WARNING
