@@ -1,0 +1,34 @@
+rules:
+- id: telnet-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $TEL = require('telnet-client');
+        ...
+        $SERVER = new $TEL();
+        ...
+        $SERVER.on(...);
+    - pattern: |
+        $TEL = require('telnet-client');
+        ...
+        $SERVER = new $TEL();
+        ...
+        $SERVER.connect(...);
+    - pattern: |
+        $TEL = require('telnet');
+        ...
+        $TEL.createServer(...);
+  message: |
+    Checks for creation of telnet servers or attempts to connect through telnet. This is insecure as the telnet protocol supports
+    no encryption, and data passes through unencrypted. 
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://www.npmjs.com/package/telnet
+    - https://www.npmjs.com/package/telnet-client
+  languages:
+  - javascript
+  severity: WARNING
+
