@@ -1,0 +1,23 @@
+rules:
+    - id: detect-angular-trust-as-resourceurl-method
+      patterns:
+        - pattern-either: 
+          - pattern: |
+              $SOURCE = $scope.$INPUT;
+              $sce.trustAsResourceUrl($SOURCE);
+          - pattern: |
+              $sce.trustAsResourceUrl($scope.$INPUT);
+        - pattern-inside: |
+            app.controller(..., function($scope,$sce){ 
+            ...
+            });
+      message: |
+        The use of $sce.trustAsResourceUrl can be dangerous if unsantiized user input flows through this API.
+      languages:
+        - javascript
+      severity: WARNING
+      metadata:
+            references:
+            - https://docs.angularjs.org/api/ng/service/$sce#trustAsResourceUrl
+            - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+      fix: |

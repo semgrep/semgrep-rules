@@ -1,0 +1,20 @@
+<h4>From: {{.from_email}}</h4>
+<h4>To: {{.recipient}}</h4>
+<h4>Subject: {{.subject}}</h4>
+<div class="email" style="display: block;">
+    {{.message}}
+</div>
+<div class="email-text" style="display: none;">
+    <pre>{{.body}}</pre>
+    <a href="https://example.com/">
+        <h2 class="upper">
+            {{.link_text}}
+        </h2>
+    </a>
+</div>
+<hr>
+
+<script>
+// ruleid:no-interpolation-js-template-string
+var x = `hello {{.recipient}}`;
+</script>
