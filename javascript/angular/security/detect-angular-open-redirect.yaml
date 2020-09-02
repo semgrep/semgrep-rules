@@ -1,0 +1,20 @@
+rules:
+    - id: detect-angular-open-redirect
+      patterns:
+        - pattern-either: 
+          - pattern: |
+              $SOURCE = $INPUT;
+              $window.location.href = $SOURCE + $STATICVALUE;
+          - pattern: |
+              $window.location.href = $SOURCE + $STATICVALUE;
+      message: |
+        Use of $window.location.href can lead to open-redirect if user input is used for redirection.
+      languages:
+        - javascript
+      metadata:
+        references:
+          - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
+          - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+      fix: |
+        
+      severity: ERROR
