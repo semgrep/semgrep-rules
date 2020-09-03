@@ -1,0 +1,45 @@
+rules:
+- id: insecure-urlopener-retrieve-ftp
+  message: |
+    Detected an insecure transmission channel. 'URLopener.retrieve(...)' is
+    being used with 'ftp://'. Use SFTP instead. urllib does not support
+    SFTP, so consider using a library which supports SFTP.
+  metadata:
+    owasp: 'A3: Sensitve Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.retrieve
+  severity: WARNING
+  languages: [python]
+  patterns:
+  - pattern-either:
+    - pattern: urllib.request.URLopener(...).retrieve("=~/[Ff][Tt][Pp]://.*/", ...)
+    - patterns:
+      - pattern-inside: |
+          $OPENERDIRECTOR = urllib.request.URLopener(...)
+          ...
+      - pattern: $OPENERDIRECTOR.retrieve("=~/[Ff][Tt][Pp]://.*/", ...)
+    - patterns:
+      - pattern-inside: |
+          $OPENERDIRECTOR = urllib.request.URLopener(...)
+          ...
+      - pattern: |
+          $URL = "=~/[Ff][Tt][Pp]://.*/"
+          ...
+          $OPENERDIRECTOR.retrieve($URL, ...)
+    - patterns:
+      - pattern: |
+          $URL = "=~/[Ff][Tt][Pp]://.*/"
+          ...
+          urllib.request.URLopener(...).retrieve($URL, ...)
+    - patterns:
+      - pattern-inside: |
+          def $FUNC(..., $URL = "=~/[Ff][Tt][Pp]://.*/", ...):
+            ...
+      - pattern-either:
+        - pattern: urllib.request.URLopener(...).retrieve($URL, ...)
+        - patterns:
+          - pattern-inside: |
+              $OPENERDIRECTOR = urllib.request.URLopener(...)
+              ...
+          - pattern: $OPENERDIRECTOR.retrieve($URL, ...)
