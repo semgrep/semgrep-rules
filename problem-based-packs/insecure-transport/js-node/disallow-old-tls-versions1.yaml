@@ -1,0 +1,46 @@
+rules:
+- id: disallow-old-tls-versions1
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $CONST = require('crypto');
+        ...
+        https.createServer(...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_SSLv3 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_SSLv3 |$CONST.SSL_OP_NO_TLSv1 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3}, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_TLSv1}, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1| $CONST.SSL_OP_NO_SSLv2}, ...).$FUNC(...);
+  message: |
+    Detects direct creations of https servers that don't disallow SSL v2, SSL v3, and TLS v1. These protocols are deprecated due to
+    POODLE, man in the middle attacks, and other vulnerabilities.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://us-cert.cisa.gov/ncas/alerts/TA14-290A
+    - https://stackoverflow.com/questions/40434934/how-to-disable-the-ssl-3-0-and-tls-1-0-in-nodejs
+    - https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
+  severity: WARNING
+  languages: [javascript]
+

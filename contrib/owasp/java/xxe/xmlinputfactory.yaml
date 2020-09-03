@@ -1,0 +1,26 @@
+rules:
+- id: owasp.java.xxe.javax.xml.stream.XMLInputFactory
+  severity: WARNING
+  metadata:
+    cwe: "CWE-611"
+    owasp: 'A4: XML External Entities (XXE)'
+    source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+  message: |
+    XMLInputFactory being instantiated without calling the setProperty functions that are generally used for disabling entity processing
+  patterns:
+  - pattern-not-inside: |
+      $RETURNTYPE $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+        ...
+      }
+  - pattern-not-inside: |
+      $XMLFACTORY = $W.newInstance(...);
+      ...
+      $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+  - pattern-either:
+    - pattern: $XMLFACTORY = $W.newFactory(...);
+    - pattern: $XMLFACTORY = new XMLInputFactory(...);
+    - pattern: $XMLFACTORY = $W.newInstance(...);
+  languages:
+  - java

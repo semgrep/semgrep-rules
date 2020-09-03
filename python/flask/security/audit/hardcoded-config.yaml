@@ -88,7 +88,7 @@ rules:
   severity: ERROR
   # Rules for `ENV` config
 - id: avoid_hardcoded_config_ENV
-  pattern: $M.update(ENV="=~/development\|production/")
+  pattern: $M.update(ENV="=~/^development|production$/")
   message: Hardcoded variable `ENV` detected. Set this by using FLASK_ENV environment variable
   metadata:
     cwe: 'CWE-489: Active Debug Code'
@@ -100,7 +100,7 @@ rules:
   languages: [python]
   severity: WARNING
 - id: avoid_hardcoded_config_ENV
-  pattern: $M.config['ENV'] = "=~/development\|production/"
+  pattern: $M.config['ENV'] = "=~/^development|production$/"
   message: Hardcoded variable `ENV` detected. Set this by using FLASK_ENV environment variable
   metadata:
     cwe: 'CWE-489: Active Debug Code'

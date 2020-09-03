@@ -9,7 +9,7 @@ rules:
     owasp: 'A6: Security Misconfiguration'
     source-rule-url: https://github.com/securego/gosec
   pattern-either:
-  - pattern: tls.Listen($NETWORK, "=~/0.0.0.0:.*$/", ...)
-  - pattern: net.Listen($NETWORK, "=~/0.0.0.0:.*$/", ...)
-  - pattern: tls.Listen($NETWORK, "=~/:.*$/", ...)
-  - pattern: net.Listen($NETWORK, "=~/:.*$/", ...)
+  - pattern: tls.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
+  - pattern: net.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
+  - pattern: tls.Listen($NETWORK, "=~/^:.*$/", ...)
+  - pattern: net.Listen($NETWORK, "=~/^:.*$/", ...)
