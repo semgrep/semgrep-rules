@@ -1,0 +1,16 @@
+rules:
+- id: use-ftp-tls
+  pattern: ftplib.FTP(...)
+  fix-regex:
+    regex: FTP(.*)\)
+    replacement: FTP_TLS\1, context=ssl.create_default_context())
+  message: |
+    The 'FTP' class sends information unencrypted. Consider using
+    the 'FTP_TLS' class instead.
+  metadata:
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.python.org/3/library/ftplib.html#ftplib.FTP_TLS
+  severity: WARNING
+  languages: [python]
