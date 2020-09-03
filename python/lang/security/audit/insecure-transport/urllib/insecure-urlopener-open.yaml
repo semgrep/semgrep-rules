@@ -1,0 +1,48 @@
+rules:
+- id: insecure-urlopener-open
+  message: |
+    Detected an unsecured transmission channel. 'URLopener.open(...)' is
+    being used with 'http://'. Use 'https://' instead to secure the channel.
+  metadata:
+    owasp: 'A3: Sensitve Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.open
+  severity: WARNING
+  languages: [python]
+  patterns:
+  - pattern-either:
+    - pattern: urllib.request.URLopener(...).open("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+    - patterns:
+      - pattern-inside: |
+          $OPENERDIRECTOR = urllib.request.URLopener(...)
+          ...
+      - pattern: $OPENERDIRECTOR.open("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+    - patterns:
+      - pattern-inside: |
+          $OPENERDIRECTOR = urllib.request.URLopener(...)
+          ...
+      - pattern: |
+          $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
+          ...
+          $OPENERDIRECTOR.open($URL, ...)
+    - patterns:
+      - pattern: |
+          $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
+          ...
+          urllib.request.URLopener(...).open($URL, ...)
+    - patterns:
+      - pattern-inside: |
+          def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
+            ...
+      - pattern-either:
+        - pattern: urllib.request.URLopener(...).open($URL, ...)
+        - patterns:
+          - pattern-inside: |
+              $OPENERDIRECTOR = urllib.request.URLopener(...)
+              ...
+          - pattern: $OPENERDIRECTOR.open($URL, ...)
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1

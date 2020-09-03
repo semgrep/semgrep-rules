@@ -1,0 +1,15 @@
+rules:
+- id: no-set-ciphers
+  pattern: $CONTEXT.set_ciphers(...)
+  message: |
+    The 'ssl' module disables insecure cipher suites by default. Therefore,
+    use of 'set_ciphers()' should only be used when you have very specialized
+    requirements. Otherwise, you risk lowering the security of the SSL channel.
+  metadata:
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    references:
+    - https://docs.python.org/3/library/ssl.html#cipher-selection
+    - https://docs.python.org/3/library/ssl.html#ssl.SSLContext.set_ciphers
+  languages: [python]
+  severity: WARNING
