@@ -1,0 +1,42 @@
+rules:
+- id: request-with-http
+  patterns:
+  - pattern-either:
+    - pattern: requests.$W("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+    - pattern: |
+        $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
+        ...
+        requests.$W($URL, ...)
+    - pattern: |
+        def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
+          ...
+          requests.$W($URL, ...)
+    - pattern: requests.request($METHOD, "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+    - pattern: |
+        $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
+        ...
+        requests.request($METHOD, $URL, ...)
+    - pattern: |
+        def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
+          ...
+          requests.request($METHOD, $URL, ...)
+    - pattern: requests.Request($METHOD, "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+    - pattern: |
+        $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
+        ...
+        requests.Request($METHOD, $URL, ...)
+    - pattern: |
+        def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
+          ...
+          requests.Request($METHOD, $URL, ...)
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  message: |
+    Detected a request using 'http://'. This request will be unencrypted. Use 'https://' instead.
+  metadata:
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+  languages: [python]
+  severity: ERROR
