@@ -1,0 +1,27 @@
+rules:
+- id: js-open-redirect
+  message: |
+    Possible open redirect
+  metadata:
+    cwe: 'CWE-601: URL Redirection to Untrusted Site (Open Redirect)'
+    owasp: 'A1: Injection'
+  languages: [javascript]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        window.location.replace($URL)
+    - pattern: |
+        location.replace($URL)
+    - pattern: |
+        window.location.href = $URL
+    - pattern: |
+        location.href = $URL
+  - pattern-not: |
+      window.location.href = "..."
+  - pattern-not: |
+      location.href = "..."
+  - pattern-not: |
+      location.replace("...")
+  - pattern-not: |-
+      window.location.replace("...")
