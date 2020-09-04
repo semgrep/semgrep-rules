@@ -1,0 +1,20 @@
+rules:
+- id: no-direct-response-writer
+  patterns:
+  - pattern-either:
+    - pattern: |
+        (HttpServletResponse $RESPONSE).getWriter(...).$WRITE(...)
+    - pattern: |
+        (HttpServletResponse $RESPONSE).getOutputStream(...).$WRITE(...)
+    - pattern: |
+        (PrintWriter $WRITER).$WRITE(...)
+    - pattern: |
+        (ServletOutputStream $WRITER).$WRITE(...)
+    - pattern: |
+        (OutputStream $WRITER).$WRITE(...)
+  - pattern-not: |
+      $WRITER.$WRITE("...", ...)
+  message: |
+    Match found
+  severity: WARNING
+  languages: [java]
