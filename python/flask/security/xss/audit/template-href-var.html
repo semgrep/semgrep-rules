@@ -14,12 +14,9 @@
     <a href='{{ link }}'>{{ link_text }}</a>
     <!-- ruleid: template-href-var -->
     <a href = '{{ link }}' >{{ link_text }}</a>
-    <!-- TODO: should not flag here. -->
-    <!-- Might need something like pattern-not-regex. -->
-    <!-- Tried negative lookahead to no avail. -->
-    <!-- ruleid: template-href-var -->
+    <!-- ok: template-href-var -->
     <a href="{{ url_for('index') }}">{{ link_text }}</a>
-    <!-- ok -->
+    <!-- ok: template-href-var -->
     <a href="https://example.com/">{{ link_text }}</a>
 </div>
 <hr>
