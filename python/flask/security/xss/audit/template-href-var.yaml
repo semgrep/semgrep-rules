@@ -4,9 +4,9 @@ rules:
     Detected a template variable used in an anchor tag with
     the 'href' attribute. This allows a malicious actor to 
     input the 'javascript:' URI and is subject to cross-
-    site scripting (XSS) attacks. Ensure no user data is
-    rendered here, or consider setting the Content Security
-    Policy header.
+    site scripting (XSS) attacks. Use 'url_for()' to safely
+    generate a URL. You may also consider setting the Content 
+    Security Policy (CSP) header.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
@@ -19,6 +19,5 @@ rules:
     include:
     - '*.html'
   severity: WARNING
-  patterns:
-  - pattern-regex: |-
-      .*href\s*=\s*[\"\']?{{\s*.*
+  pattern-regex: |-
+    .*href\s*=\s*[\"\']?{{\s*(?!.*url_for).*
