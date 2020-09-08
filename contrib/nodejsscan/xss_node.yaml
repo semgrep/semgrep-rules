@@ -1,10 +1,12 @@
 rules:
 - id: express_xss
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {
-          ...
-      });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $RES.write(..., <... $REQ.$QUERY ...>, ...);
@@ -15,43 +17,111 @@ rules:
     - pattern: |
         $RES.send(..., <... $REQ.$QUERY.$FOO ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY ...>;
+        $LOCALVAR = <... $REQ.$QUERY ...>;
         ...
         $RES.write(..., <... $LOCALVAR ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
+        $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
         ...
         $RES.write(..., <... $LOCALVAR ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
+        $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
         ...
         $RES.send(..., <... $LOCALVAR ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY ...>;
+        $LOCALVAR = <... $REQ.$QUERY ...>;
         ...
         $RES.send(..., <... $LOCALVAR ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY ...>;
+        var {$LOCALVAR} = <... $REQ.$QUERY.$FOO ...>;
         ...
-        var $OUT = <... $LOCALVAR ...>;
+        $RES.write(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        var {$LOCALVAR} = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        var {$LOCALVAR} = <... $REQ.$QUERY ...>;
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR = {$KEY: <... $REQ.$QUERY ...>};
+        ...
+        $RES.write(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR =  {$KEY: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $RES.write(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR = {$KEY: <... $REQ.$QUERY.$VAR ...>};
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR =  {$KEY: <... $REQ.$QUERY ...>};
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR.push(<... $REQ.$QUERY ...>);
+        ...
+        $RES.write(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR.push(<... $REQ.$QUERY.$FOO ...>);
+        ...
+        $RES.write(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR.push(<... $REQ.$QUERY.$VAR ...>);
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR.push(<... $REQ.$QUERY ...>);
+        ...
+        $RES.send(..., <... $LOCALVAR ...>, ...);
+    - pattern: |
+        $LOCALVAR = <... $REQ.$QUERY ...>;
+        ...
+        $ARR.push(<...$LOCALVAR...>);
+        ...
+        $RES.write(..., <... $ARR ...>, ...);
+    - pattern: |
+        $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $ARR.push(<...$LOCALVAR...>);
+        ...
+        $RES.write(..., <... $ARR ...>, ...);
+    - pattern: |
+        $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $ARR.push(<...$LOCALVAR...>);
+        ...
+        $RES.send(..., <... $ARR ...>, ...);
+    - pattern: |
+        $LOCALVAR = <... $REQ.$QUERY ...>;
+        ...
+        $ARR.push(<...$LOCALVAR...>);
+        ...
+        $RES.send(..., <... $ARR ...>, ...);
+    - pattern: |
+        $LOCALVAR = <... $REQ.$QUERY ...>;
+        ...
+        $OUT = <... $LOCALVAR ...>;
         ...
         $RES.write(..., <... $OUT ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
+        $LOCALVAR = <... $REQ.$QUERY.$FOO ...>;
         ...
-        var $OUT = <... $LOCALVAR ...>;
+        $OUT = <... $LOCALVAR ...>;
         ...
         $RES.write(..., <... $OUT ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
+        $LOCALVAR = <... $REQ.$QUERY.$VAR ...>;
         ...
-        var $OUT = <... $LOCALVAR ...>;
+        $OUT = <... $LOCALVAR ...>;
         ...
         $RES.send(..., <... $OUT ...>, ...);
     - pattern: |
-        var $LOCALVAR = <... $REQ.$QUERY ...>;
+        $LOCALVAR = <... $REQ.$QUERY ...>;
         ...
-        var $OUT = <... $LOCALVAR ...>;
+        $OUT = <... $LOCALVAR ...>;
         ...
         $RES.send(..., <... $OUT ...>, ...);
   message: >-

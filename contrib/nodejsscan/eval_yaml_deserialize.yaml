@@ -2,23 +2,10 @@ rules:
 - id: yaml_deserialize
   patterns:
   - pattern-inside: |
-      var $X = require('js-yaml');
+      require('js-yaml');
       ...
   - pattern: |
       $X.load(...)
-  message: >-
-    User controlled data in 'yaml.load()' function can result in Remote Code
-    Injection.
-  languages:
-  - javascript
-  severity: ERROR
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-- id: yaml_deserialize2
-  patterns:
-  - pattern: |
-      require('js-yaml').load(...)
   message: >-
     User controlled data in 'yaml.load()' function can result in Remote Code
     Injection.
