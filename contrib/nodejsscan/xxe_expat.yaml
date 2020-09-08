@@ -1,0 +1,49 @@
+rules:
+- id: xxe_expat
+  patterns:
+  - pattern-inside: |
+      require('node-expat');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern-inside: |
+        $PARSER = new $EXPAT.Parser(...);
+        ...
+    - pattern-inside: |
+        $PARSER = new Parser(...);
+        ...
+  - pattern-either:
+    - pattern: $PARSER.parse(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PARSER.parse(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PARSER.parse(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PARSER.parse(<... $INPUT ...>,...);
+    - pattern: $PARSER.write(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PARSER.write(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PARSER.write(<... $INPUT ...>,...);
+    - pattern: |-
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PARSER.write(<... $INPUT ...>,...);
+  message: >-
+    Make sure that unverified user data can not reach the XML Parser, as it
+    can result in XML External or Internal Entity (XXE) Processing
+    vulnerabilities.
+  metadata:
+    owasp: 'A4: XML External Entities (XXE)'
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+  severity: ERROR
+  languages:
+  - javascript
