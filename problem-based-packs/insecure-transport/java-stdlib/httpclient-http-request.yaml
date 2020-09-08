@@ -1,0 +1,64 @@
+rules:
+- id: httpclient-http-request
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern-inside: |
+        HttpClient $CLIENT = ...;
+        ...
+        HttpRequest $REQ = ...;
+        ...
+        $CLIENT.sendAsync(...);
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern-inside: |
+        HttpClient $CLIENT = ...;
+        ...
+        HttpRequest $REQ = ...;
+        ...
+        $CLIENT.send(...);
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          URI.create($URI)
+    - pattern-inside: |
+        String $URI = "=~/[hH][tT][tT][pP]://.*/";
+        ...
+        HttpClient $CLIENT = ...;
+        ...
+        HttpRequest $REQ = ...;
+        ...
+        $CLIENT.send(...);
+  - patterns:
+    - pattern: |
+        URI.create($URI)
+    - pattern-inside: |
+        String $URI = "=~/[hH][tT][tT][pP]://.*/";
+        ...
+        HttpClient $CLIENT = ...;
+        ...
+        HttpRequest $REQ = ...;
+        ...
+        $CLIENT.sendAsync(...);
+  message: |
+    Checks for requests sent via HttpClient to http:// URLS. This is dangerous because
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
+    https:// URLS.
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://openjdk.java.net/groups/net/httpclient/intro.html
+  languages:
+  - java
+  severity: WARNING
+
