@@ -1,0 +1,26 @@
+rules:
+- id: owasp.java.xxe.possible.import.statements
+  message: |
+    Non-exhaustive list of Libraries that provide functionality to accept XML as an input
+  metadata:
+    cwe: "CWE-611"
+    owasp: 'A4: XML External Entities (XXE)'
+    source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+  severity: INFO
+  patterns:
+  - pattern-either:
+    - pattern: import org.jdom2.input.SAXBuilder;
+    - pattern: import org.xml.sax.XMLReader;
+    - pattern: import org.dom4j.io.SAXReader;
+    - pattern: import javax.xml.parsers.SAXParserFactory;
+    - pattern: import org.apache.commons.digester3.Digester;
+    - pattern: import javax.xml.parsers.DocumentBuilderFactory;
+    - pattern: import javax.xml.stream.XMLInputFactory;
+    - pattern: import javax.xml.XPathExpression;
+    - pattern: import java.beans.XMLDecoder;
+    - pattern: import javax.xml.transform.sax.SAXTransformerFactory;
+    - pattern: import javax.xml.validation.SchemaFactory;
+    - pattern: import javax.xml.validation.Validator;
+    - pattern: import javax.xml.transform.TransformerFactory;
+  languages:
+  - java
