@@ -1,0 +1,21 @@
+rules:
+- id: jwt_not_revoked
+  patterns:
+  - pattern-inside: |
+      $JWT = require('express-jwt');
+      ...
+  - pattern: $JWT(...)
+  - pattern-not-inside: $JWT(<... {isRevoked:...} ...>,...)
+  - pattern-not-inside: |-
+      $OPTS = <... {isRevoked:...} ...>;
+      ...
+      $JWT($OPTS,...);
+  message: >-
+    No token revoking configured for `express-jwt`. A leaked token could still
+    be used and unable to be revoked. Consider using function as the `isRevoked` option.
+  severity: WARNING
+  languages:
+  - javascript
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'

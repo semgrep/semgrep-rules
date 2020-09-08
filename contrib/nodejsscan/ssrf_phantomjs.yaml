@@ -1,0 +1,71 @@
+rules:
+- id: phantom_ssrf
+  patterns:
+  - pattern-inside: |
+      require('phantom');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $PAGE.open(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.setContent(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.open(<... $REQ.$BODY ...>,...)
+    - pattern: $PAGE.setContent(<... $REQ.$BODY ...>,...)
+    - pattern: $PAGE.openUrl(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.openUrl(<... $REQ.$BODY ...>,...)
+    - pattern: $PAGE.evaluateJavaScript(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.evaluateJavaScript(<... $REQ.$BODY ...>,...)
+    - pattern: $PAGE.property("content",<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $PAGE.property("content",<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.open(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.open(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.openUrl(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.openUrl(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluateJavaScript(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluateJavaScript(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.property("content",<... $INPUT ...>,...);
+    - pattern: |-
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.property("content",<... $INPUT ...>,...);
+  message: >
+    If unverified user data can reach the `phantom` methods it can result in
+    Server-Side Request Forgery vulnerabilities.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  severity: ERROR
+  languages:
+  - javascript

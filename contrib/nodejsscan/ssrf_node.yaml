@@ -3,34 +3,38 @@ rules:
   patterns:
   - pattern-either:
     - pattern-inside: |
-        var $PKG =  require('request');
+        require('request');
         ...
     - pattern-inside: |
-        var $PKG =  require('axios');
+        require('axios');
         ...
     - pattern-inside: |
-        var $PKG = require('needle');
+        require('needle');
         ...
     - pattern-inside: |
-        var $PKG = require('bent');
+        require('bent');
         ...
     - pattern-inside: |
-        var $PKG = require('urllib');
+        require('urllib');
         ...
     - pattern-inside: |
-        var $PKG = require('net');
+        require('net');
         ...
     - pattern-inside: |
-        var $PKG = require('https');
+        require('https');
         ...
     - pattern-inside: |
-        var $PKG =  require('superagent');
+        require('superagent');
         ...
     - pattern-inside: |
-        var $PKG =  require('got');
+        require('got');
         ...
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $PKG.get(<... $REQ.$VAR ...>, ...)
@@ -80,6 +84,102 @@ rules:
         $PKG.get(..., {hostname: <... $REQ.$VAR ...>}, ...)
     - pattern: |
         $PKG.get(..., {hostname: <... $REQ.$VAR.$FOO ...>}, ...)
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.get(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.get(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.post(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.post(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.put(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.put(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        needle("=~/[get|post|put|GET|POST|PUT]+/", <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        needle("=~/[get|post|put|GET|POST|PUT]+/", <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        request(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        request(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.request(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.request(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        getJSON(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        getJSON(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        getBuffer(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        getBuffer(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        fetch(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        fetch(<... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $SOCKET.connect($PORT, <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $SOCKET.connect($PORT, <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.get(..., {host: <... $INP ...>}, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.get(..., {host: <... $INP ...>}, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR ...>;
+        ...
+        $PKG.get(..., {hostname: <... $INP ...>}, ...);
+    - pattern: |
+        $INP = <... $REQ.$VAR.$FOO ...>;
+        ...
+        $PKG.get(..., {hostname: <... $INP ...>}, ...);
   message: >-
     User controlled URL in http client libraries can result in Server Side
     Request Forgery (SSRF).
