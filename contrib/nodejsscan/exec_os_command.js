@@ -1,3 +1,29 @@
+
+const { exec, spawn } = require('child_process');
+
+
+router.post('/ping', (req, res) => {
+    // ruleid:generic_os_command_exec2
+    exec(`${req.body.url}`, (error) => {
+        if (error) {
+            return res.send('error');
+        }
+        res.send('pong')
+    })
+
+})
+
+router.post('/gzip', (req, res) => {
+    // ruleid:generic_os_command_exec2
+    exec(
+        'gzip ' + req.query.file_path,
+        function (err, data) {
+            console.log('err: ', err)
+            console.log('data: ', data);
+            res.send('done');
+        });
+})
+
 var child_process = require('child_process');
 var x = 1;
 app.get('/', function (req, res) {

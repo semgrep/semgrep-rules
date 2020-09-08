@@ -5,31 +5,31 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
+        $JWT = require("jsonwebtoken");
         ...
         $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
     - pattern: |
-        var $JWT = require("jsonwebtoken");
+        $JWT = require("jsonwebtoken");
+        ...
+        $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+    - pattern: |
+        $JWT = require("jsonwebtoken");
         ...
         $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
     - pattern: |
-        var $JOSE = require("jose");
-        ...
-        var { JWK, JWT } = $JOSE;
-        ...
-        var $T = JWT.verify($P, JWK.None,...);
-    - pattern: |
-        var $JOSE = require("jose");
+        $JOSE = require("jose");
         ...
         var { JWK, JWT } = $JOSE;
         ...
         $T = JWT.verify($P, JWK.None,...);
     - pattern: |
-        var $JOSE = require("jose");
+        $JOSE = require("jose");
+        ...
+        var { JWK, JWT } = $JOSE;
+        ...
+        $T = JWT.verify($P, JWK.None,...);
+    - pattern: |
+        $JOSE = require("jose");
         ...
         var { JWK, JWT } = $JOSE;
         ...
