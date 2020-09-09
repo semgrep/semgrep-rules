@@ -7,23 +7,23 @@ rules:
     - pattern: |
         $CON.query(<... $REQ.$QUERY ...>, ...)
     - pattern: |
-        var $SQL = <... $REQ.$QUERY.$VAR ...>;
+        $SQL = <... $REQ.$QUERY.$VAR ...>;
         ...
         $CON.query(<... $SQL ...>, ...);
     - pattern: |
-        var $SQL = <... $REQ.$QUERY ...>;
+        $SQL = <... $REQ.$QUERY ...>;
         ...
         $CON.query(<... $SQL ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY.$VAR ...>;
+        $INP = <... $REQ.$QUERY.$VAR ...>;
         ...
-        var $SQL = <... $INP ...>;
+        $SQL = <... $INP ...>;
         ...
         $CON.query(<... $SQL ...>, ...);  
     - pattern: |
-        var $INP = <... $REQ.$QUERY ...>;
+        $INP = <... $REQ.$QUERY ...>;
         ...
-        var $SQL = <... $INP ...>;
+        $SQL = <... $INP ...>;
         ...
         $CON.query(<... $SQL ...>, ...);  
   message: >-

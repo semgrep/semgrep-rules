@@ -1,9 +1,8 @@
-#Semgrep bug overmatching https://github.com/returntocorp/semgrep/issues/513
 rules:
 - id: header_xss_lusca
   patterns:
   - pattern-inside: |
-      var $X = require('lusca');
+      $X = require('lusca');
       ...
   - pattern-not: |
       $X.use(helmet())
@@ -23,8 +22,12 @@ rules:
     cwe: 'CWE-693: Protection Mechanism Failure'
 - id: header_xss_generic
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... })
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
@@ -37,20 +40,20 @@ rules:
         $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/": 0
         }, ...);
     - pattern: |
-        var $VAL = 0;
+        $VAL = 0;
         ...
         $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
     - pattern: |
-        var $VAL = 0;
+        $VAL = 0;
         ...
         $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
     - pattern: >
-        var $VAL = 0;
+        $VAL = 0;
         ...
         $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : $VAL
         }, ...);
     - pattern: >
-        var $VAL = 0;
+        $VAL = 0;
         ...
         $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/":
         $VAL }, ...);

@@ -1,0 +1,236 @@
+# Convert this to INFO when semgrep supports that
+rules:
+- id: helmet_header_check_csp
+  message: >-
+    Content Security Policy header is present. More Information:
+    https://helmetjs.github.io/docs/csp/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {contentSecurityPolicy: false}, ...)
+  - pattern-either:
+    - pattern: |
+        helmet({contentSecurityPolicy: {directives: ...}})
+    - pattern: |
+        helmet.contentSecurityPolicy({directives: ...})
+    - pattern: |
+        csp({directives: ...})
+- id: helmet_header_check_crossdomain
+  message: >-
+    X-Permitted-Cross-Domain-Policies header set to off. More information:
+    https://helmetjs.github.io/docs/crossdomain/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {permittedCrossDomainPolicies: false}, ...)
+  - pattern-either:
+    - pattern: |
+        permittedCrossDomainPolicies()
+    - pattern: |
+        permittedCrossDomainPolicies({ permittedPolicies: ... })
+    - pattern: |
+        helmet.permittedCrossDomainPolicies({ permittedPolicies: ... })
+    - pattern: |
+        helmet({permittedCrossDomainPolicies: { permittedPolicies: ... }})
+    - pattern: |
+        helmet.permittedCrossDomainPolicies()
+- id: helmet_header_check_expect_ct
+  message: >-
+    Expect-CT header is present. More information:
+    https://helmetjs.github.io/docs/expect-ct/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {expectCt: false}, ...)
+  - pattern-either:
+    - pattern: |
+        expectCt({maxAge: ...,})
+    - pattern: |
+        helmet.expectCt({maxAge: ...,})
+    - pattern: |
+        expectCt({enforce: ...,})
+    - pattern: |
+        hemlet.expectCt({enforce: ...,})
+    - pattern: |
+        helmet({expectCt: { enforce: ... }})
+- id: helmet_header_feature_policy
+  message: >-
+    Feature-Policy header is present. More information:
+    https://helmetjs.github.io/docs/feature-policy/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {featurePolicy: false}, ...)
+  - pattern-either:
+    - pattern: |
+        featurePolicy(..., {features: ...}, ...)
+    - pattern: |
+        helmet.featurePolicy(..., {features: ...}, ...)
+    - pattern: |
+        helmet({featurePolicy: {features: ...}})
+- id: helmet_header_frame_guard
+  message: >-
+    X-Frame-Options header is present. More information:
+    https://helmetjs.github.io/docs/frameguard/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {frameguard: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(hemlet())
+    - pattern: |
+        helmet.frameguard(...)
+    - pattern: |
+        frameguard(...)
+    - pattern: |
+        helmet({frameguard: ...})
+- id: helmet_header_dns_prefetch
+  message: >-
+    X-DNS-Prefetch-Control header is present and DNS Prefetch Control is
+    enabled. More information:
+    https://helmetjs.github.io/docs/dns-prefetch-control/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {dnsPrefetchControl: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        helmet.dnsPrefetchControl()
+    - pattern: |
+        dnsPrefetchControl()
+    - pattern: |
+        helmet.dnsPrefetchControl({ allow: false })
+    - pattern: |
+        helmet({dnsPrefetchControl: {allow: false}})
+    - pattern: |
+        dnsPrefetchControl({ allow: false })
+- id: helmet_header_x_powered_by
+  message: >-
+    Default X-Powered-By is removed or modified. More information:
+    https://helmetjs.github.io/docs/hide-powered-by/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {hidePoweredBy: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        app.disable('x-powered-by')
+    - pattern: |
+        helmet.hidePoweredBy(...)
+    - pattern: |
+        hidePoweredBy(...)
+    - pattern: |
+        helmet({hidePoweredBy: ...})
+- id: helmet_header_hsts
+  message: >-
+    HSTS header is present. More information:
+    https://helmetjs.github.io/docs/hsts/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {hsts: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        helmet.hsts(...)
+    - pattern: |
+        hsts({ maxAge: ...})
+    - pattern: |
+        helmet({hsts: ...})
+- id: helmet_header_ienoopen
+  message: >-
+    X-Download-Options header is present. More information:
+    https://helmetjs.github.io/docs/ienoopen/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {ieNoOpen: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        helmet.ieNoOpen()
+    - pattern: |
+        ieNoOpen()
+    - pattern: |
+        helmet({ieNoOpen: ...})  
+- id: helmet_header_nosniff
+  message: >-
+    Content-Type-Options header is present. More information:
+    https://helmetjs.github.io/docs/dont-sniff-mimetype/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {noSniff: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        helmet.noSniff()
+    - pattern: |
+        noSniff()
+    - pattern: |
+        helmet({noSniff: ...})
+- id: helmet_header_referrer_policy
+  message: >-
+    Referrer-Policy header is present. More information:
+    https://helmetjs.github.io/docs/referrer-policy/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {referrerPolicy: false}, ...)
+  - pattern-either:
+    - pattern: |
+        helmet.referrerPolicy(...)
+    - pattern: |
+        referrerPolicy(...)
+    - pattern: |
+        helmet({referrerPolicy: ...})
+- id: helmet_header_xss_filter
+  message: >-
+    X-XSS-Protection header is present. More information:
+    https://helmetjs.github.io/docs/xss-filter/
+  languages:
+  - javascript
+  severity: WARNING
+  patterns:
+  - pattern-not: |
+      $HELMET(..., {xssFilter: false}, ...)
+  - pattern-either:
+    - pattern: |
+        $APP.use(helmet())
+    - pattern: |
+        helmet.xssFilter(...)
+    - pattern: |
+        xssFilter(...)
+    - pattern: |
+        helmet({xssFilter: ...})
+

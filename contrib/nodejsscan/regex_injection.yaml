@@ -1,53 +1,57 @@
 rules:
 - id: regex_injection_dos
   patterns:
-  - pattern-inside: |
-      app.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
-        var $INP = <... $REQ.$PARAM ...>;
+        $INP = <... $REQ.$PARAM ...>;
         ...
-        var $RE = new RegExp(<... $INP ...>);
+        $RE = new RegExp(<... $INP ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM.$BAR ...>;
+        $INP = <... $REQ.$PARAM.$BAR ...>;
         ...
-        var $RE = new RegExp(<... $INP ...>);
+        $RE = new RegExp(<... $INP ...>);
     - pattern: |
         new RegExp(<... $REQ.$PARAM ...>);
     - pattern: |
         new RegExp(<... $REQ.$PARAM.$BAR ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM ...>;
+        $INP = <... $REQ.$PARAM ...>;
         ...
-        var $RE = $STR.search(<... $INP ...>);
+        $RE = $STR.search(<... $INP ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM.$FOO ...>;
+        $INP = <... $REQ.$PARAM.$FOO ...>;
         ...
-        var $RE = $STR.search(<... $INP ...>);
+        $RE = $STR.search(<... $INP ...>);
     - pattern: |
         $STR.search(<... $REQ.$PARAM ...>);
     - pattern: |
         $STR.search(<... $REQ.$PARAM.$BAR ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM ...>;
+        $INP = <... $REQ.$PARAM ...>;
         ...
-        var $RE = $STR.match(<... $INP ...>);
+        $RE = $STR.match(<... $INP ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM.$FOO ...>;
+        $INP = <... $REQ.$PARAM.$FOO ...>;
         ...
-        var $RE = $STR.match(<... $INP ...>);
+        $RE = $STR.match(<... $INP ...>);
     - pattern: |
         $STR.match(<... $REQ.$PARAM ...>);
     - pattern: |
         $STR.match(<... $REQ.$PARAM.$BAR ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM ...>;
+        $INP = <... $REQ.$PARAM ...>;
         ...
-        var $RE = $STR.split(<... $INP ...>);
+        $RE = $STR.split(<... $INP ...>);
     - pattern: |
-        var $INP = <... $REQ.$PARAM.$FOO ...>;
+        $INP = <... $REQ.$PARAM.$FOO ...>;
         ...
-        var $RE = $STR.split(<... $INP ...>);
+        $RE = $STR.split(<... $INP ...>);
     - pattern: |
         $STR.split(<... $REQ.$PARAM ...>);
     - pattern: |
