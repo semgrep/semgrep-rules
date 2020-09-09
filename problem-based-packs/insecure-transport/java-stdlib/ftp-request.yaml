@@ -1,0 +1,30 @@
+rules:
+- id: ftp-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        FTPClient $FTPCLIENT = new FTPClient();
+        ...
+        $FTPCLIENT.connect(...);
+    - pattern: |
+        URL $URL = new URL("=~/^[fF][tT][pP]://.*/");
+        ...
+        URLConnection $CONN = $URL.openConnection(...);
+  message: |
+    Checks for outgoing connections to ftp servers. FTP does not encrypt traffic, possibly
+    leading to PII being sent plaintext over the network.
+  fix-regex:
+    regex: '[fF][tT][pP]://'
+    replacement: sftp://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://www.codejava.net/java-se/ftp/connect-and-login-to-a-ftp-server
+    - https://commons.apache.org/proper/commons-net/apidocs/org/apache/commons/net/ftp/FTPClient.html
+  languages:
+  - java
+  severity: WARNING
+
