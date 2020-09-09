@@ -1,8 +1,12 @@
 rules:
 - id: node_xpath_injection
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $XPATH.parse(<... "=~/[\/\/].+/" + $REQ.$QUERY.$VAR ...>, ...)
@@ -16,6 +20,30 @@ rules:
         $XPATH.parse(<... "=~/[\/\/].+/" + $REQ["..."] ...>, ...)
     - pattern: |
         $XPATH.parse(<... "=~/[\/\/].+/" + $REQ("...") ...>, ...)
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$PARAM...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$PARAM["..."] ...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$PARAM("...") ...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ["..."] ...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ("...") ...>;
+        ...
+        $XPATH.parse(<... "=~/[\/\/].+/" + $INP ...>, ...);
   message: >-
     User controlled data in xpath.parse() can result in XPATH injection
     vulnerability.

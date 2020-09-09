@@ -15,8 +15,12 @@ rules:
     cwe: 'CWE-346: Origin Validation Error'
 - id: express_cors
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $APP.options('*', cors(...))
@@ -33,25 +37,25 @@ rules:
     - pattern: >
         $RES.writeHead(...,
         {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
-        '*' }, ...)
+        '*' }, ...);
     - pattern: >
-        var $VAL = '*';
+        $VAL = '*';
         ...
         $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
         $VAL, ...);
     - pattern: >
-        var $VAL = '*';
+        $VAL = '*';
         ...
         $RES.set(..., {
         "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
         $VAL }, ...);
     - pattern: >
-        var $VAL = '*';
+        $VAL = '*';
         ...
         $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
         $VAL, ...);
     - pattern: >
-        var $VAL = '*';
+        $VAL = '*';
         ...
         $RES.writeHead(...,
         {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":

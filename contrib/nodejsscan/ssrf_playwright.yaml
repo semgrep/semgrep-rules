@@ -1,0 +1,101 @@
+rules:
+- id: playwright_ssrf
+  patterns:
+  - pattern-inside: |
+      require('playwright');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $PAGE.goto(<... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.goto(<... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.setContent(<... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.setContent(<... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluate(<... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.evaluate(<... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluate($CODE,..., <... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.evaluate($CODE,..., <... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluateHandle(<... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.evaluateHandle(<... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluateHandle($CODE,..., <... $REQ.$QUERY.$FOO ...>, ...)
+    - pattern: $PAGE.evaluateHandle($CODE,..., <... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluateOnNewDocument(<... $REQ.$BODY ...>, ...)
+    - pattern: $PAGE.evaluateOnNewDocument(<... $REQ.$BODY.$FOO ...>, ...)
+    - pattern: $CONTEXT.addInitScript(<... $REQ.$BODY ...>,...)
+    - pattern: $CONTEXT.addInitScript(<... $REQ.$BODY.$FOO ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.goto(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.goto(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.setContent(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluate($CODE,..., <... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluate($CODE,..., <... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluate(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluate(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluateHandle(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluateHandle(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluateHandle($CODE,..., <... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluateHandle($CODE,..., <... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PAGE.evaluateOnNewDocument(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $PAGE.evaluateOnNewDocument(<... $INPUT ...>,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT.addInitScript($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT.addInitScript($INPUT,...);
+  message: >-
+    If unverified user data can reach the `puppeteer` methods it can result in
+    Server-Side Request Forgery vulnerabilities.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  severity: ERROR
+  languages:
+  - javascript
