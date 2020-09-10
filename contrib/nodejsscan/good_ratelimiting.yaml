@@ -1,0 +1,11 @@
+rules:
+- id: rate_limit_control
+  patterns:
+  - pattern-either:
+    - pattern: require("express-rate-limit");
+    - pattern: require("express-limiter");
+    - pattern: require("@authentication/rate-limit");
+  message: This application has API rate limiting controls.
+  languages:
+  - javascript
+  severity: WARNING

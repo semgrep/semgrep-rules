@@ -1,3 +1,67 @@
+
+const express = require('express')
+const router = express.Router()
+
+router.get('/greeting', (req, res) => {
+    // ruleid:express_xss
+    const { name } = req.query;
+    res.send('<h1> Hello :' + name + "</h1>")
+})
+
+//template handle escaping 
+router.get('/greet-template', (req, res) => {
+    name = req.query.name
+    res.render('index', { user_name: name });
+})
+
+module.exports = router
+
+
+app.get('/', function (req, res) {
+    // ruleid:express_xss
+    var user = req.query.name;
+
+    msg = "Hi " + user
+    res.send('Response</br>' + msg);
+});
+
+
+var msg = '';
+app.get('/3', function (req, res) {
+    // ruleid:express_xss
+    var user = req.query.name;
+
+    msg = "Hi " + user
+    res.send('Response</br>' + msg);
+});
+
+app.get('/2', function (req, res) {
+    // ruleid:express_xss
+    var user = { user: req.query.name };
+    res.send('Response</br>' + user.name);
+});
+
+app.get('/1', function (req, res) {
+    // ruleid:express_xss
+    var user = req.query.name;
+    var msg = [];
+    msg.push(user);
+    res.send('Response</br>' + msg[0]);
+});
+
+app.get('/4', function (req, res) {
+    var user = req.query.name;
+    var header = "<html>";
+    var msg = 'Hi ' + user;
+    var footer = "</html>";
+    var output = header + msg + footer;
+    res.send(output);
+});
+
+
+
+
+
 var express = require('express');
 var app = express();
 app.get('/', function (req, res) {

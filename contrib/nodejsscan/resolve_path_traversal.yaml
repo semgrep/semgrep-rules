@@ -1,0 +1,44 @@
+rules:
+- id: join_resolve_path_traversal
+  patterns:
+  - pattern-inside: |
+      require('path');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $PATH.join(...,<... $REQ.$BODY ...>,...)
+    - pattern: $PATH.join(...,<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $PATH.join(...,<... $VAR ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PATH.join(...,<... $VAR ...>,...);
+    - pattern: $PATH.resolve(...,<... $REQ.$BODY ...>,...)
+    - pattern: $PATH.resolve(...,<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $PATH.resolve(...,<... $VAR ...>,...);
+    - pattern: |-
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $PATH.resolve(...,<... $VAR ...>,...);
+  message: >-
+    Path constructed with user input can result in Path Traversal. Ensure that
+    user input does not reach `join()` or `resolve()`. 
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A5: Broken Access Control'
+    cwe: >-
+      CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+      (Path Traversal)
+  severity: WARNING

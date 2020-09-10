@@ -3,44 +3,48 @@ rules:
   patterns:
   - pattern-either:
     - pattern-inside: |
-        var $HB =  require('handlebars');
+        require('handlebars');
         ...
     - pattern-inside: |
-        var $HB = require('pug');
+        require('pug');
         ...
     - pattern-inside: |
-        var $HB = require('hamljs');
+        require('hamljs');
         ...
     - pattern-inside: |
-        var $HB = require('ejs');
+        require('ejs');
         ...
     - pattern-inside: |
-        var $HB = require('squirrelly');
+        require('squirrelly');
         ...
     - pattern-inside: |
-        var $HB = require('eta');
+        require('eta');
         ...
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) { ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         $HB.compile(..., <... $REQ.$FOO ...>, ...)
     - pattern: |
         $HB.compile(..., <... $REQ.$FOO.$BAR ...>, ...)
     - pattern: |
-        var $X = <... $REQ.$FOO ...>;
+        $X = <... $REQ.$FOO ...>;
         ...
         $HB.compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = <... $REQ.$FOO.$BAR ...>;
+        $X = <... $REQ.$FOO.$BAR ...>;
         ...
         $HB.compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
+        $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
         ...
         $HB.compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
+        $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
         ...
         $HB.compile(..., <... $X ...>, ...);
     - pattern: |
@@ -48,19 +52,19 @@ rules:
     - pattern: |
         $HB.Compile(..., <... $REQ.$FOO.$BAR ...>, ...)
     - pattern: |
-        var $X = <... $REQ.$FOO ...>;
+        $X = <... $REQ.$FOO ...>;
         ...
         $HB.Compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = <... $REQ.$FOO.$BAR ...>;
+        $X = <... $REQ.$FOO.$BAR ...>;
         ...
         $HB.Compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
+        $X = $SOURCE.replace('...', <... $REQ.$FOO ...>, ...);
         ...
         $HB.Compile(..., <... $X ...>, ...);
     - pattern: |
-        var $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
+        $X = $SOURCE.replace('...', <... $REQ.$FOO.$BAR ...>, ...);
         ...
         $HB.Compile(..., <... $X ...>, ...);
   message: >-
@@ -71,4 +75,4 @@ rules:
   severity: ERROR
   metadata:
     owasp: 'A1: Injection'
-    cwe: CWE-94 Improper Control of Generation of Code ('Code Injection')
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
