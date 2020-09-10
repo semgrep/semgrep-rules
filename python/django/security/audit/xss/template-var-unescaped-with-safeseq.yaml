@@ -1,10 +1,11 @@
 rules:
 - id: template-var-unescaped-with-safeseq
   message: |
-    Detected a segment of a Flask template where autoescaping is explicitly
-    disabled with '| safe' filter. This allows rendering of raw HTML
+    Detected a template variable where autoescaping is explicitly
+    disabled with '| safeseq' filter. This allows rendering of raw HTML
     in this segment. Ensure no user data is rendered here, otherwise this
-    is a cross-site scripting (XSS) vulnerability.
+    is a cross-site scripting (XSS) vulnerability. If you must do this,
+    use `mark_safe` in your Python code.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'

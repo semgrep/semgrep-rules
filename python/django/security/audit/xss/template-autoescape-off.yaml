@@ -1,0 +1,19 @@
+rules:
+- id: template-autoescape-off
+  message: |
+    Detected a template block where autoescaping is explicitly
+    disabled with '{% autoescape off %}'. This allows rendering of raw HTML
+    in this segment. Turn autoescaping on to prevent cross-site scripting (XSS).
+    If you must do this, consider instead, using `mark_safe` in Python code.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#autoescape
+  languages:
+  - none
+  paths:
+    include:
+    - '*.html'
+  severity: WARNING
+  pattern-regex: '{%\s+autoescape\s+off\s+%}'
