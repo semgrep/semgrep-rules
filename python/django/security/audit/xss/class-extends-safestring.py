@@ -1,12 +1,17 @@
-from django.utils.safestring import SafeString, SafeData
+from django.utils.safestring import SafeString, SafeData, SafeText
 
 # ruleid:class-extends-safestring
-class IWantToBypassEsccaping(SafeString):
+class IWantToBypassEscaping(SafeString):
+    def __init__(self):
+        super().__init__()
+        
+# ruleid:class-extends-safestring
+class IWantToBypassEscaping2(SafeText):
     def __init__(self):
         super().__init__()
 
 # ruleid:class-extends-safestring
-class IWantToBypassEsccaping2(SafeData):
+class IWantToBypassEscaping3(SafeData):
     def __init__(self):
         super().__init__()
 
