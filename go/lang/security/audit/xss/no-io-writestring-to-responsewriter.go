@@ -17,7 +17,7 @@ func vulnerableHandler(w http.ResponseWriter, r *http.Request) {
   tok := r.FormValue("token")
   if !isValid(tok) {
     // ruleid:no-io-writestring-to-responsewriter
-    io.WriteString(w, Sprintf("Invalid token: %q", tok))
+    io.WriteString(w, fmt.Sprintf("Invalid token: %q", tok))
   }
   // ...
 }
