@@ -18,7 +18,7 @@ class Bad {
 
 class Ok {
     public static void badftp2() {
-        // ok: ftprequest
+        // ok: ftp-request
         URL url = new URL("sftp://user01:pass1234@ftp.foo.com/README.txt;type=i");
         URLConnection urlc = url.openConnection();
         InputStream is = urlc.getInputStream(); // To download
