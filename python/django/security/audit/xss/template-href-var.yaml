@@ -1,0 +1,24 @@
+rules:
+- id: template-href-var
+  message: |
+    Detected a template variable used in an anchor tag with
+    the 'href' attribute. This allows a malicious actor to 
+    input the 'javascript:' URI and is subject to cross-
+    site scripting (XSS) attacks. Use the 'url' template tag
+    to safely generate a URL. You may also consider setting
+    the Content Security Policy (CSP) header.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+    - https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#url
+    - https://content-security-policy.com/
+  languages:
+  - none
+  paths:
+    include:
+    - '*.html'
+  severity: WARNING
+  pattern-regex: |-
+    .*href\s*=\s*[\"\']?{{\s*.*

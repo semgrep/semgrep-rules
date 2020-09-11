@@ -1,0 +1,20 @@
+rules:
+- id: template-var-unescaped-with-safeseq
+  message: |
+    Detected a template variable where autoescaping is explicitly
+    disabled with '| safeseq' filter. This allows rendering of raw HTML
+    in this segment. Ensure no user data is rendered here, otherwise this
+    is a cross-site scripting (XSS) vulnerability. If you must do this,
+    use `mark_safe` in your Python code.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#safeseq
+  languages:
+  - none
+  paths:
+    include:
+    - '*.html'
+  severity: WARNING
+  pattern-regex: '{{.*?\|\s+safeseq(\s+}})?'
