@@ -1,6 +1,6 @@
 class Bad {
     public void bad_disable_old_tls1() {
-        //ruleid: disallow-old_tls-versions1
+        //ruleid: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"},
@@ -9,7 +9,7 @@ class Bad {
     }
 
     public void bad_disable_old_tls2() {
-        //ruleid: disallow-old_tls-versions1
+        //ruleid: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 null,
@@ -17,7 +17,7 @@ class Bad {
     }
 
     public void bad_disable_old_tls2() {
-        //ruleid: disallow-old_tls-versions1
+        //ruleid: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 new String[] {"TLSv1", "TLSv1.1", "SSLv3"},
@@ -28,7 +28,7 @@ class Bad {
 
 class Ok {
     public void ok_disable_old_tls1() {
-        //ok: disallow-old_tls-versions1
+        //ok: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 new String[] {"TLSv1.2"},
@@ -37,7 +37,7 @@ class Ok {
     }
 
     public void ok_disable_old_tls2() {
-        //ok: disallow-old_tls-versions1
+        //ok: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 new String[] {"TLSv1.2", "TLSv1.3"},
@@ -46,7 +46,7 @@ class Ok {
     }
 
     public void ok_disable_old_tls3() {
-        //ok: disallow-old_tls-versions1
+        //ok: disallow-old-tls-versions1
         SSLConnectionSocketFactory sf = new SSLConnectionSocketFactory(
                 sslContext,
                 new String[] {"TLSv1.3"},
