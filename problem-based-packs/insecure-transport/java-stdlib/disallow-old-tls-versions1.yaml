@@ -1,0 +1,27 @@
+rules:
+- id: disallow-old-tls-versions1
+  patterns:
+  - pattern-either:
+    - pattern: |
+        new SSLConnectionSocketFactory(...);
+  - pattern-not: |
+      new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2", "TLSv1.3"}, ...);
+  - pattern-not: |
+      new SSLConnectionSocketFactory(..., new String[] {"TLSv1.3", "TLSv1.2"}, ...);
+  - pattern-not: |
+      new SSLConnectionSocketFactory(..., new String[] {"TLSv1.3"}, ...);
+  - pattern-not: |
+      new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2"}, ...);
+  message: |
+    Detects direct creations of SSLConnectionSocketFactories that don't disallow SSL v2, SSL v3, and TLS v1.
+    SSLSocketFactory can be used to validate the identity of the HTTPS server against a list of trusted certificates.
+    These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://stackoverflow.com/questions/26429751/java-http-clients-and-poodle
+  severity: WARNING
+  languages: [java]
+
