@@ -1,0 +1,20 @@
+rules:
+- id: autoescape-disabled
+  message: |
+    Detected an element with disabled HTML escaping. If external
+    data can reach this, this is a cross-site scripting (XSS)
+    vulnerability. Ensure no external data can reach here, or
+    remove 'escape=false' from this element.
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: 'CWE-150: Improper Neutralization of Escape, Meta, or Control Sequences'
+    references:
+    - https://stackoverflow.com/a/7442668
+  pattern-regex: |-
+    .*escape.*?=.*?false.*
+  paths:
+    include:
+    - '*.html'
+    - '*.xhtml'
+  languages: [none]
+  severity: WARNING

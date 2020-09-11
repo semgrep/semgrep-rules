@@ -1,0 +1,26 @@
+rules:
+- id: unirest-http-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        Unirest.get("=~/[hH][tT][tT][pP]://.*/")
+    - pattern: |
+        Unirest.post("=~/[hH][tT][tT][pP]://.*/")
+  message: |
+    Checks for requests sent via Unirest to http:// URLS. This is dangerous because
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
+    https:// URLS.
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://kong.github.io/unirest-java/#requests
+  languages:
+  - java
+  severity: WARNING
+

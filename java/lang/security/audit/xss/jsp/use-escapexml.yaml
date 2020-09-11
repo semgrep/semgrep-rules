@@ -1,0 +1,22 @@
+rules:
+- id: use-escapexml
+  message: |
+    Detected an Expression Language segment that does not escape
+    output. This is dangerous because if any data in this expression
+    can be controlled externally, it is a cross-site scripting
+    vulnerability. Instead, use the 'escapeXml' function from
+    the JSTL taglib. See https://www.tutorialspoint.com/jsp/jstl_function_escapexml.htm
+    for more information.
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    references:
+    - https://www.tutorialspoint.com/jsp/jstl_function_escapexml.htm
+    - https://stackoverflow.com/a/4948856
+    - https://stackoverflow.com/a/3180202
+  pattern-regex: \$\{(?!.*escapeXml).*\}
+  paths:
+    include:
+    - '*.jsp'
+  languages: [none]
+  severity: WARNING
