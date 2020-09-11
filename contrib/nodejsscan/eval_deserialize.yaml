@@ -1,11 +1,27 @@
 rules:
+- id: serializetojs_deserialize
+  patterns:
+  - pattern-inside: |
+      require('serialize-to-js');
+      ...
+  - pattern: |
+      $X.deserialize(...)
+  message: >-
+    User controlled data in 'unserialize()' or 'deserialize()' function can
+    result in Object Injection or Remote Code Injection.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
 - id: node_deserialize
   patterns:
-  - pattern-either:
-    - pattern: |
-        $X.deserialize(...)
-    - pattern: |
-        $X.unserialize(...)
+  - pattern-inside: |
+      require('node-serialize');
+      ...
+  - pattern: |
+      $X.unserialize(...)
   message: >-
     User controlled data in 'unserialize()' or 'deserialize()' function can
     result in Object Injection or Remote Code Injection.

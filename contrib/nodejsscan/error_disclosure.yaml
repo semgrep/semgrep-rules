@@ -1,15 +1,19 @@
 rules:
 - id: node_error_disclosure
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
-        var $ERR = $ERROR.stack;
+        $ERR = $ERROR.stack;
         ...
         $RES.end($ERR);
     - pattern: |
-        var $ERR = $ERROR.stack;
+        $ERR = $ERROR.stack;
         ...
         $RES.send($ERR);
     - pattern: |

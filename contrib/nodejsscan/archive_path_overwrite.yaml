@@ -3,17 +3,17 @@ rules:
   patterns:
   - pattern-either:
     - pattern-inside: |
-        var $X = require('unzip');
+        $X = require('unzip');
         ...
     - pattern-inside: |
-        var $X = require('unzipper');
+        $X = require('unzipper');
         ...
   - pattern-inside: |
       $Y.pipe($UNZIP.Parse(...)).on('entry', function $FUNC(...) {
           ...
       }, ...);
   - pattern-not: |
-      var $X = $FILENAME.indexOf(...);
+      $X = $FILENAME.indexOf(...);
   - pattern-not: >
       $FUNC.pipe($FS.createWriteStream($PATH.join(...,
       $PATH.basename($FILENAME, ...))));
@@ -45,10 +45,10 @@ rules:
   patterns:
   - pattern-either:
     - pattern-inside: |
-        var $X = require('unzip');
+        $X = require('unzip');
         ...
     - pattern-inside: |
-        var $X = require('unzipper');
+        $X = require('unzipper');
         ...
   - pattern-inside: |
       $UNZIP.Parse(...).on('entry', function $FUNC($ENTRY) {
@@ -84,7 +84,7 @@ rules:
 - id: admzip_path_overwrite
   patterns:
   - pattern-inside: |
-      var $X = require('adm-zip');
+      $X = require('adm-zip');
       ...
   - pattern-not: |
       if ($FILENAME.indexOf('..'));
@@ -119,7 +119,7 @@ rules:
 - id: tar_path_overwrite
   patterns:
   - pattern-inside: |
-      var $X = require('tar-stream');
+      $X = require('tar-stream');
       ...
   - pattern-not-inside: |
       $Y.pipe($UNZIP.Parse(...)).on('entry', function $FUNC(...) {

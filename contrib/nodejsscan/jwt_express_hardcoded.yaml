@@ -1,0 +1,31 @@
+rules:
+- id: jwt_express_hardcoded
+  patterns:
+  - pattern-inside: |
+      $JWT = require('express-jwt');
+      ...
+  - pattern-either:
+    - pattern: |
+        $JWT(<... {secret: "..."} ...>,...);
+    - pattern: |
+        $SECRET = "...";
+        ...
+        $JWT(<... {secret: $SECRET} ...>,...);
+    - pattern: |
+        $OPTS = <... {secret: "..."} ...>;
+        ...
+        $JWT($OPTS,...);
+    - pattern: |-
+        $SECRET = "...";
+        ...
+        $OPTS = <... {secret: $SECRET} ...>;
+        ...
+        $JWT($OPTS,...);
+  message: >-
+    Hardcoded JWT secret or private key was found. Store it properly in  an environment variable.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'

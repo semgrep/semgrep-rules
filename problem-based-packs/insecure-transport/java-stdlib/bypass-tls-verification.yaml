@@ -1,0 +1,43 @@
+rules:
+- id: bypass-tls-verification
+  patterns:
+  - pattern-either:
+    - pattern: |
+        new X509TrustManager() {
+          ...
+          public void checkClientTrusted(X509Certificate[] certs, String authType) {...}
+          ...
+        }
+  - pattern-not: |
+      new X509TrustManager() {
+        ...
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+          ...
+          throw new CertificateException(...);
+          ...
+        }
+        ...
+      }
+  - pattern-not: |
+      new X509TrustManager() {
+        ...
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+          ...
+          throw new IllegalArgumentException(...);
+          ...
+        }
+        ...
+      }
+  message: |
+    Checks for redefinitions of the checkServerTrusted function in the X509TrustManager class that disables TLS/SSL certificate verification.
+    This should only be used for debugging purposes because it leads to vulnerability to MTM attacks.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://riptutorial.com/java/example/16517/temporarily-disable-ssl-verification--for-testing-purposes-
+    - https://stackoverflow.com/questions/35530558/how-to-fix-unsafe-implementation-of-x509trustmanager-in-android-app?rq=1
+  languages: [java]
+  severity: WARNING
+

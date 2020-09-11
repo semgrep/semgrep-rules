@@ -1,0 +1,22 @@
+{% block opengraph %}
+
+<!-- safeseq probably isn't used this way, but it illustrates the point -->
+
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="semgrep" />
+<meta property="og:description" content="content" />
+<!-- ruleid: template-var-unescaped-with-safeseq -->
+<meta property="og:image" content="{{ sequence_of_things | safeseq | join:','}}" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
+<!-- ok: template-var-unescaped-with-safeseq -->
+<meta property="not-real-only-for-testing" content="{{ safeseq }}" />
+
+<!-- Google OAuth sign-in -->
+<meta name="google-signin-scope" content="profile email openid">
+<!-- ruleid: template-var-unescaped-with-safeseq -->
+<meta name="google-signin-client_id" content="{{ client_id | safeseq }}">
+
+{% endblock %}
