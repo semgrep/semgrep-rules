@@ -1,0 +1,19 @@
+rules:
+- id: telnet-request
+  pattern: |
+    $TELNETCLIENT = new TelnetClient(...);
+    ...
+    $TELNETCLIENT.connect(...);
+  message: |
+    Checks for attempts to connect through telnet. This is insecure as the telnet protocol supports
+    no encryption, and data passes through unencrypted.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://commons.apache.org/proper/commons-net/javadocs/api-3.6/org/apache/commons/net/telnet/TelnetClient.html
+  languages:
+  - java
+  severity: WARNING
+
