@@ -2,7 +2,7 @@ rules:
 - id: unsafe-template-type
   message: |
     Semgrep could not determine that the argument to 'template.HTML()'
-    is a constant. 'template.HTML()' or similar does not escape contents.
+    is a constant. 'template.HTML()' and similar does not escape contents.
     Be absolutely sure there is no user-controlled data in this 
     template. If user data can reach this template, you may have
     a XSS vulnerability. Instead, do not use this function and
@@ -18,10 +18,11 @@ rules:
   patterns:
   - pattern-not: template.$ANY("..." + "...")
   - pattern-not: template.$ANY("...")
-  - pattern: template.HTML(...)
-  - pattern: template.CSS(...)
-  - pattern: template.HTMLAttr(...)
-  - pattern: template.JS(...)
-  - pattern: template.JSStr(...)
-  - pattern: template.Srcset(...)
-  - pattern: template.URL(...)
+  - pattern-either:
+    - pattern: template.HTML(...)
+    - pattern: template.CSS(...)
+    - pattern: template.HTMLAttr(...)
+    - pattern: template.JS(...)
+    - pattern: template.JSStr(...)
+    - pattern: template.Srcset(...)
+    - pattern: template.URL(...)

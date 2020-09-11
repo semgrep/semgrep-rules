@@ -47,7 +47,7 @@ func Concat(r *http.Request) template.HTML {
 	customerId := r.URL.Query().Get("id")
 	tmpl := "<html><body><h1>" + customerId + "</h1></body></html>"
 
-	// ruleid: template-html-does-not-escape
+	// ruleid: unsafe-template-type
 	return template.HTML(tmpl)
 }
 
