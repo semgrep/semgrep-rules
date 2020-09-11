@@ -1,0 +1,26 @@
+rules:
+- id: disallow-old-tls-versions2
+  patterns:
+  - pattern-either:
+    - pattern: |
+        java.lang.System.setProperty("jdk.tls.client.protocols", "...");
+  - pattern-not: |
+      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2,TLSv1.3");
+  - pattern-not: |
+      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3,TLSv1.2");
+  - pattern-not: |
+      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
+  - pattern-not: |
+      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
+  message: |
+    Detects setting client protocols to insecure versions of TLS and SSL.
+    These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://stackoverflow.com/questions/26504653/is-it-possible-to-disable-sslv3-for-all-java-applications
+  severity: WARNING
+  languages: [java]
+
