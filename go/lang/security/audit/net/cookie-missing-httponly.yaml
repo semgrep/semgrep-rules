@@ -1,0 +1,30 @@
+rules:
+- id: cookie-missing-httponly
+  patterns:
+  - pattern-not-inside: |
+      http.Cookie{
+        ...,
+        HttpOnly: true,
+        ...,
+      }
+  - pattern: |
+      http.Cookie{
+        ...,
+      }
+  message: |
+    A session cookie was detected without setting the 'HttpOnly' flag.
+    The 'HttpOnly' flag for cookies instructs the browser to forbid
+    client-side scripts from reading the cookie which mitigates XSS
+    attacks. Set the 'HttpOnly' flag by setting 'HttpOnly' to 'true'
+    in the Cookie.
+  metadata:
+    cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://github.com/0c34/govwa/blob/139693e56406b5684d2a6ae22c0af90717e149b8/util/cookie.go
+    - https://golang.org/src/net/http/cookie.go
+  fix-regex:
+    regex: (HttpOnly\s*:\s+)false
+    replacement: \1true
+  severity: WARNING
+  languages: [go]
