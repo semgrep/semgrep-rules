@@ -1,8 +1,12 @@
 rules:
 - id: eval_nodejs
   patterns:
-  - pattern-inside: |
-      $APP.$METHOD(..., function $FUNC($REQ, $RES, ...){ ... });
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
         new Function(..., <... $REQ.$QUERY.$VAR ...>, ...)
@@ -21,35 +25,35 @@ rules:
     - pattern: |
         setInterval(..., <... $REQ.$QUERY ...>, ...)
     - pattern: |
-        var $INP = <... $REQ.$QUERY.$VAR ...>;
+        $INP = <... $REQ.$QUERY.$VAR ...>;
         ...
         new Function(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY ...>;
+        $INP = <... $REQ.$QUERY ...>;
         ...
         new Function(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY.$VAR ...>;
+        $INP = <... $REQ.$QUERY.$VAR ...>;
         ...
         eval(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY ...>;
+        $INP = <... $REQ.$QUERY ...>;
         ...
         eval(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY.$VAR ...>;
+        $INP = <... $REQ.$QUERY.$VAR ...>;
         ...
         setTimeout(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY ...>;
+        $INP = <... $REQ.$QUERY ...>;
         ...
         setTimeout(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY.$VAR ...>;
+        $INP = <... $REQ.$QUERY.$VAR ...>;
         ...
         setInterval(..., <... $INP ...>, ...);
     - pattern: |
-        var $INP = <... $REQ.$QUERY ...>;
+        $INP = <... $REQ.$QUERY ...>;
         ...
         setInterval(..., <... $INP ...>, ...);
   message: >-

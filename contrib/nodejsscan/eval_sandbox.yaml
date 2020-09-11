@@ -1,0 +1,44 @@
+rules:
+- id: sandbox_code_injection
+  patterns:
+  - pattern-inside: |
+      require('sandbox');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $S.run(<... $REQ.$QUERY.$FOO ...>,...);
+    - pattern: |
+        $CODE = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $S.run(<... $CODE ...>,...);
+    - pattern: |
+        new $SANDBOX(...).run(<... $REQ.$QUERY.$FOO ...>,...);
+    - pattern: |
+        $CODE = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        new $SANDBOX(...).run(<... $CODE ...>,...);
+    - pattern: |
+        $S.run(<... $REQ.$BODY ...>,...);
+    - pattern: |
+        $CODE = <... $REQ.$BODY ...>;
+        ...
+        $S.run(<... $CODE ...>,...);
+    - pattern: |
+        new $SANDBOX(...).run(<... $REQ.$BODY ...>,...);
+    - pattern: |-
+        $CODE = <... $REQ.$BODY ...>;
+        ...
+        new $SANDBOX(...).run(<... $CODE ...>,...);
+  message: Unrusted data in `sandbox` can result in code injection.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'

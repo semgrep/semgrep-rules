@@ -1,0 +1,23 @@
+rules:
+- id: missing-ratelimit
+  patterns:
+  - pattern: |
+      def $FUNC(..., request, ...):
+        ...
+  - pattern-not: |
+      @ratelimit.decorators.ratelimit(...)
+      def $FUNC(..., request, ...):
+        ...
+  message: |
+    Function '$FUNC' is missing a rate-limiting decorator.
+    High volume traffic to this function could starve application
+    resources. Consider adding rate limiting from a library such
+    as 'django-ratelimit'.
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    references:
+    - https://github.com/jsocol/django-ratelimit/blob/main/docs/index.rst#quickstart
+  severity: WARNING
+  languages: [python]
+

@@ -1,0 +1,128 @@
+rules:
+- id: generic_path_traversal
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        require('http');
+        ...
+    - pattern-inside: |
+        require('express');
+        ...
+    - pattern-inside: |
+        require('koa');
+        ...
+    - pattern-inside: |
+        require('electron');
+        ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $X.createReadStream(..., <... $REQ.$QUERY.$VAR ...>, ...)
+    - pattern: |
+        $X.createReadStream(..., <... $REQ.$QUERY ...>, ...)
+    - pattern: |
+        $X.readFile(..., <... $REQ.$QUERY.$VAR ...>, ...)
+    - pattern: |
+        $X.readFile(..., <... $REQ.$QUERY ...>, ...)
+    - pattern: |
+        $X.readFileSync(..., <... $REQ.$QUERY.$VAR ...>, ...)
+    - pattern: |
+        $X.readFileSync(..., <... $REQ.$QUERY ...>, ...)
+    - pattern: |
+        $X.readFileAsync(..., <... $REQ.$QUERY.$VAR ...>, ...)
+    - pattern: |
+        $X.readFileAsync(..., <... $REQ.$QUERY ...>, ...)
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $X.createReadStream(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY ...>;
+        ...
+        $X.createReadStream(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $X.readFile(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY ...>;
+        ...
+        $X.readFile(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $X.readFileSync(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY ...>;
+        ...
+        $X.readFileSync(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $X.readFileAsync(..., <... $INP ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY ...>;
+        ...
+        $X.readFileAsync(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY.$VAR;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.createReadStream(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.createReadStream(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY.$VAR;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFile(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFile(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY.$VAR;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFileSync(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFileSync(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY.$VAR;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFileAsync(..., <... $INP ...>, ...);
+    - pattern: |
+        $Y = $REQ.$QUERY;
+        ...
+        $INP = <... $Y ...>;
+        ...
+        $X.readFileAsync(..., <... $INP ...>, ...);
+  message: >-
+    Untrusted user input in readFile()/readFileSync() can endup in Directory
+    Traversal Attacks.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    owasp: 'A5: Broken Access Control'
+    cwe: 'CWE-23: Relative Path Traversal'
