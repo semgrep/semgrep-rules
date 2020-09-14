@@ -1,0 +1,21 @@
+rules:
+- id: global-autoescape-off
+  message: |
+    Autoescape is globally disbaled for this Django application. If you are
+    rendering any web pages, this exposes your application to cross-site
+    scripting (XSS) vulnerabilities. Remove 'autoescape: False' or set it
+    to 'True'.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.1/ref/settings/#templates
+    - https://docs.djangoproject.com/en/3.1/topics/templates/#django.template.backends.django.DjangoTemplates
+  languages:
+  - python
+  severity: WARNING
+  pattern: |
+    {..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': False, ...}, ...}
+  fix-regex:
+    regex: (autoescape.*?)False
+    replacement: \1True

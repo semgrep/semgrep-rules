@@ -1,0 +1,30 @@
+rules:
+- id: direct-use-of-httpresponse
+  message: |
+    Detected data rendered directly to the end user via 'HttpResponse'
+    or a similar object. This bypasses Django's built-in cross-site scripting
+    (XSS) defenses and could result in an XSS vulnerability. Use Django's
+    template engine to safely render HTML. 
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.1/intro/tutorial03/#a-shortcut-render
+    - https://docs.djangoproject.com/en/3.1/topics/http/shortcuts/#render
+  languages:
+  - python
+  severity: WARNING
+  patterns:
+  - pattern-not: django.http.$ANY("...", ...)
+  - pattern-not: django.http.$ANY()
+  - pattern-not: django.http.$ANY(..., content=None, ...)
+  - pattern-not: django.http.$ANY(status=...)
+  - pattern-not: django.http.HttpResponseNotAllowed([...])
+  - pattern-either:
+    - pattern: django.http.HttpResponse(...)
+    - pattern: django.http.HttpResponseBadRequest(...)
+    - pattern: django.http.HttpResponseNotFound(...)
+    - pattern: django.http.HttpResponseForbidden(...)
+    - pattern: django.http.HttpResponseNotAllowed(...)
+    - pattern: django.http.HttpResponseGone(...)
+    - pattern: django.http.HttpResponseServerError(...)
