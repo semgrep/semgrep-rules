@@ -1,0 +1,35 @@
+rules:
+- id: spring-ftp-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $SF = new DefaultFtpSessionFactory(...);
+        ...
+        $SF.setHost("=~/^[fF][tT][pP]://.*/");
+        ...
+        $SF.$FUNC(...);
+    - pattern: |
+        $SF = new DefaultFtpSessionFactory(...);
+        ...
+        String $URL = "=~/^[fF][tT][pP]://.*/";
+        ...
+        $SF.setHost($URL);
+        ...
+        $SF.$FUNC(...);
+  message: |
+    Checks for outgoing connections to ftp servers via Spring plugin ftpSessionFactory. FTP does not encrypt traffic, possibly
+    leading to PII being sent plaintext over the network.
+  fix-regex:
+    regex: '[fF][tT][pP]://'
+    replacement: sftp://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.spring.io/spring-integration/api/org/springframework/integration/ftp/session/AbstractFtpSessionFactory.html#setClientMode-int-
+  languages:
+  - java
+  severity: WARNING
+
