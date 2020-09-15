@@ -18,5 +18,29 @@
 <meta name="google-signin-scope" content="profile email openid">
 <!-- ruleid: template-unquoted-attribute-var -->
 <meta name="google-signin-client_id" content={{ client_id  }}>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve={{ carbonad_serve }}&placement={{ carbonad_placement }}" id="_carbonads_js"></script>
 
 {% endblock %}
+
+
+<!-- extra tests -->
+
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve={{carbonad_serve}}&placement={{carbonad_placement}}" id="_carbonads_js"></script>
+
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src= {{ link }} id="_carbonads_js"></script>
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src={{ link }} id="_carbonads_js"></script>
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src= {{ link }}
+	 id="_carbonads_js"></script>
+
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src=" {{ link }}" id="_carbonads_js"></script>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="{{ link }}" id="_carbonads_js"></script>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="{{ link }}"
+	 id="_carbonads_js"></script>

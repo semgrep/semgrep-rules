@@ -15,7 +15,7 @@ rules:
     include:
     - '*.html'
   severity: WARNING
-  pattern-regex: <\w.*=\s*{{.*
+  pattern-regex: <.*=.*{{.*?}}(\s+|>).*
   fix-regex:
     regex: '{{(.*?)}}'
     replacement: '"{{\1}}"'
