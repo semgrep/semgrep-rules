@@ -1,7 +1,4 @@
-x = 'foo'
-# useless reassign below, but without this, x would now be considered a
-# constant and constant propagation would apply.
-x = 'foo'
+x = object()
 
 # ruleid:identical-is-comparison
 if x is x:
