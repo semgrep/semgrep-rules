@@ -1,4 +1,4 @@
-x = 'foo'
+x = object()
 
 # ruleid:identical-is-comparison
 if x is x:
