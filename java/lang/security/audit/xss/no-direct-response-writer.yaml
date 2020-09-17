@@ -2,6 +2,12 @@ rules:
 - id: no-direct-response-writer
   patterns:
   - pattern-either:
+    - pattern-inside: |
+        $RETURN $METHOD(..., HttpServletResponse $RESP, ...) { ... }
+    - pattern-inside: |
+        HttpServletResponse $RESPONSE = ...;
+        ...
+  - pattern-either:
     - pattern: |
         (HttpServletResponse $RESPONSE).getWriter(...).$WRITE(...)
     - pattern: |
@@ -12,8 +18,9 @@ rules:
         (ServletOutputStream $WRITER).$WRITE(...)
     - pattern: |
         (OutputStream $WRITER).$WRITE(...)
-  - pattern-not: |
-      $WRITER.$WRITE("...", ...)
+  - pattern-not: $WRITER.$WRITE("...", ...)
+  - pattern-not: $WRITER.flush(...)
+  - pattern-not: $WRITER.close(...)
   message: |
     Detected a direct write to the HTTP response. This bypasses any
     view or template environments, including HTML escaping, which may
