@@ -1,0 +1,31 @@
+rules:
+- id: var-in-script-tag
+  message: |
+    Detected a template variable used in a script tag.
+    Although template variables are HTML escaped, HTML
+    escaping does not always prevent cross-site scripting (XSS)
+    attacks when used directly in JavaScript. If you need this
+    data on the rendered page, consider placing it in the HTML
+    portion (outside of a script tag). Alternatively, use a
+    JavaScript-specific encoder, such as the one available
+    in OWASP ESAPI.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://www.veracode.com/blog/secure-development/nodejs-template-engines-why-default-encoders-are-not-enough
+    - https://github.com/ESAPI/owasp-esapi-js
+  languages:
+  - none
+  paths:
+    include:
+    - '*.pug'
+  severity: WARNING
+  pattern-either:
+  - pattern-regex: script\s*=[A-Za-z0-9]+
+  - pattern-regex: script\s*=.*["']\s*\+.*
+  - pattern-regex: script\s*=[^'"]+\+.*
+  - pattern-regex: script\(.*?\)\s*=\s*[A-Za-z0-9]+
+  - pattern-regex: script\(.*?\)\s*=\s*.*["']\s*\+.*
+  - pattern-regex: script\(.*?\)\s*=\s*[^'"]+\+.*
+
