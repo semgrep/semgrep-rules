@@ -307,5 +307,53 @@ public class BenchmarkTest02388 extends HttpServlet {
 	
 		return bar;	
 	}
+
+    ///
+    // random tests from https://dev.massive.ret2.co/triager/triage/1193
+    ///
+    private static void writeAndFlush(
+        final ByteBuffer buffer, final OutputStream outputStream) throws IOException {
+
+        if (buffer.hasArray()) {
+            // ok: no-direct-response-writer
+            outputStream.write(buffer.array(), buffer.position(), buffer.remaining());
+        }
+    }
+
+    private void saveResourceAsFile(String resourceName, File file) throws IOException {
+		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+		if ( input==null ) {
+			System.err.println("Can't find " + resourceName + " as resource");
+			throw new IOException("Missing resource:" + resourceName);
+		}
+		OutputStream output = new FileOutputStream(file.getAbsolutePath());
+		while(input.available()>0) {
+            // ok: no-direct-response-writer
+			output.write(input.read());
+		}
+		output.close();
+		input.close();
+	}
+    
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Cache-Control","no-cache");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        // ruleid: no-direct-response-writer
+        response.getWriter().println(JSONUtil.parse(CommonResult.unauthorized(authException.getMessage())));
+        // ok: no-direct-response-writer
+        response.getWriter().flush();
+    }
+    
+    // test pattern where HttpServletResponse is retrieved via a method rather than parameters
+    public void commence2(Something something) throws IOException, ServletException {
+        HttpServletResponse response = something.getResponse();
+        // ruleid: no-direct-response-writer
+        response.getWriter().println("blarg" + something.getData());
+        // ok: no-direct-response-writer
+        response.getWriter().flush();
+    }
 }
 
