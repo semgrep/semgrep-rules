@@ -4,6 +4,7 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.X509ExtendedTrustManager;
 
 //cf. https://find-sec-bugs.github.io/bugs.htm#WEAK_TRUST_MANAGER
 public class TrustAllManager implements X509TrustManager {
@@ -80,4 +81,44 @@ public final class TMClass {
             return null;
         }
     };
+}
+
+public final class TMEClass {
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509ExtendedTrustManager() {
+        // ruleid:insecure-trust-manager
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) throws CertificateException {
+        }
+    }};
 }
