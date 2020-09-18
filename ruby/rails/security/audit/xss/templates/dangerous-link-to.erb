@@ -1,0 +1,8 @@
+<h1>Welcome#index</h1>
+<p>Find me in app/views/welcome/index.html.erb</p>
+<!-- ok: dangerous-link-to -->
+<%= link_to "Go here", "/blahblah" %>
+<!-- ok: dangerous-link-to -->
+<%= link_to "Go here", "/"+@link %>
+<!-- ruleid: dangerous-link-to -->
+<%= link_to "Go here", @link %>
