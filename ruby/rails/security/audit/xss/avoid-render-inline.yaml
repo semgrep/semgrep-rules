@@ -1,0 +1,15 @@
+rules:
+- id: avoid-render-inline
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#inline-renders---even-worse-than-xss
+  message: |
+    'render inline: ...' renders an entire ERB template inline and is dangerous.
+    If external data can reach here, this exposes your application
+    to server-side template injection (SSTI) or cross-site scripting (XSS) attacks.
+    Instead, consider using a partial or another safe rendering method.
+  languages: [ruby]
+  severity: WARNING
+  pattern: 'render inline: ...'

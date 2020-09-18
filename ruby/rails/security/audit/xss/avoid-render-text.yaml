@@ -1,0 +1,18 @@
+rules:
+- id: avoid-render-text
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#inline-renders---even-worse-than-xss
+  message: |
+    'render text: ...' actually sets the content-type to 'text/html'.
+    If external data can reach here, this exposes your application
+    to cross-site scripting (XSS) attacks. Instead, use 'render plain: ...' to
+    render non-HTML text.
+  languages: [ruby]
+  severity: WARNING
+  pattern: 'render text: ...'
+  fix-regex:
+    regex: 'text:'
+    replacement: 'plain:'
