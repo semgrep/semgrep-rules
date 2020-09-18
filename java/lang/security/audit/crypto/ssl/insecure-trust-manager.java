@@ -34,7 +34,7 @@ public class GoodTrustManager implements X509TrustManager {
         return ks;
     }
 
-    // ok
+    // ok:insecure-trust-manager
     @Override
     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
         KeyStore ks = loadKeyStore();
@@ -43,7 +43,7 @@ public class GoodTrustManager implements X509TrustManager {
         tmf.getTrustManagers[0].checkClientTrusted(x509Certificates, s);
     }
 
-    // ok
+    // ok:insecure-trust-manager
     @Override
     public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
         KeyStore ks = loadKeyStore();
@@ -52,9 +52,32 @@ public class GoodTrustManager implements X509TrustManager {
         tmf.getTrustManagers[0].checkClientTrusted(x509Certificates, s);
     }
 
-    // ok
+    // ok:insecure-trust-manager
     @Override
     public X509Certificate[] getAcceptedIssuers() {
         return loadKeyStore().getCertificate("alias");
     }
+}
+
+public final class TMClass {
+
+    private static final X509TrustManager TM = new X509TrustManager() {
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkClientTrusted(final X509Certificate[] chain, final String authType)
+                throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public void checkServerTrusted(final X509Certificate[] chain, final String authType)
+                throws CertificateException {
+        }
+
+        // ruleid:insecure-trust-manager
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+    };
 }
