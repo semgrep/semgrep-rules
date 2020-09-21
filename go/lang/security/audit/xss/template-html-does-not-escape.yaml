@@ -1,20 +1,28 @@
 rules:
-- id: template-html-does-not-escape
+- id: unsafe-template-type
   message: |
     Semgrep could not determine that the argument to 'template.HTML()'
-    is a constant. 'template.HTML()' does not escape contents.
+    is a constant. 'template.HTML()' and similar does not escape contents.
     Be absolutely sure there is no user-controlled data in this 
     template. If user data can reach this template, you may have
-    a XSS vulnerability.
+    a XSS vulnerability. Instead, do not use this function and
+    use 'template.Execute()'.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A1: Injection'
+    owasp: 'A7: Cross-site Scripting (XSS)'
     references:
     - https://golang.org/pkg/html/template/#HTML
     - https://github.com/0c34/govwa/blob/139693e56406b5684d2a6ae22c0af90717e149b8/vulnerability/xss/xss.go#L33
   languages: [go]
   severity: WARNING
   patterns:
-  - pattern-not: template.HTML("..." + "...")
-  - pattern-not: template.HTML("...")
-  - pattern: template.HTML(...)
+  - pattern-not: template.$ANY("..." + "...")
+  - pattern-not: template.$ANY("...")
+  - pattern-either:
+    - pattern: template.HTML(...)
+    - pattern: template.CSS(...)
+    - pattern: template.HTMLAttr(...)
+    - pattern: template.JS(...)
+    - pattern: template.JSStr(...)
+    - pattern: template.Srcset(...)
+    - pattern: template.URL(...)
