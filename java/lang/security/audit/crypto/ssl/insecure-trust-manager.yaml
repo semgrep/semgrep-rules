@@ -15,10 +15,23 @@ rules:
   severity: WARNING
   languages: [java]
   patterns:
-  - pattern-inside: |
-      class $CLASS implements X509TrustManager {
-        ...
-      }
+  - pattern-either:
+    - pattern-inside: |
+        class $CLASS implements X509TrustManager {
+          ...
+        }
+    - pattern-inside: |
+        new X509TrustManager() {
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS implements X509ExtendedTrustManager {
+          ...
+        }
+    - pattern-inside: |
+        new X509ExtendedTrustManager() {
+          ...
+        }
   - pattern-not: public void checkClientTrusted(...) { $SOMETHING; }
   - pattern-not: public void checkServerTrusted(...) { $SOMETHING; }
   - pattern-either:
