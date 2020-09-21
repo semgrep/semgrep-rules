@@ -1,0 +1,25 @@
+rules:
+- id: html-magic-method
+  message: |
+    The `__html__` method indicates to the Django template engine that the
+    value is 'safe' for rendering. This means that normal HTML escaping will
+    not be applied to the return value. This exposes your application to
+    cross-site scripting (XSS) vulnerabilities. If you need to render raw HTML,
+    consider instead using `mark_safe()` which more clearly marks the intent
+    to render raw HTML than a class with a magic method.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://docs.djangoproject.com/en/3.0/_modules/django/utils/html/#conditional_escape
+    - https://gist.github.com/minusworld/7885d8a81dba3ea2d1e4b8fd3c218ef5
+  languages:
+  - python
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      class $CLASS(...):
+        ...
+  - pattern: |
+      def __html__(...):
+        ...

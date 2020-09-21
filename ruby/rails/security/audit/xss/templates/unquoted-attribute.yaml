@@ -1,0 +1,22 @@
+rules:
+- id: unquoted-attribute
+  message: |
+    Detected a unquoted template variable as an attribute. If unquoted, a
+    malicious actor could inject custom JavaScript handlers. To fix this,
+    add quotes around the template expression, like this: "<%= expr %>".
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#unquoted-attributes
+    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+  languages:
+  - none
+  paths:
+    include:
+    - '*.erb'
+  severity: WARNING
+  pattern-regex: <.*=[^'"]*<%=.*?%>(\s+|>).*
+  fix-regex:
+    regex: <%=(.*?)%>
+    replacement: '"<%=\1%>"'
