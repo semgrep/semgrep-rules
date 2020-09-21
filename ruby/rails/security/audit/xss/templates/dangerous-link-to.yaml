@@ -1,0 +1,24 @@
+rules:
+- id: dangerous-link-to
+  message: |
+    Detected a template variable used in 'link_to'. This will
+    generate dynamic data in the 'href' attribute.
+    This allows a malicious actor to 
+    input the 'javascript:' URI and is subject to cross-
+    site scripting (XSS) attacks. If using a relative URL,
+    start with a literal forward slash and concatenate the URL,
+    like this: 'link_to "Here", "/"+@link'. You may also consider
+    setting the Content Security Policy (CSP) header.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html#cross-site-scripting-xss
+    - https://brakemanscanner.org/docs/warning_types/link_to_href/
+  languages:
+  - none
+  paths:
+    include:
+    - '*.erb'
+  severity: WARNING
+  pattern-regex: <%.*?link_to(?!.*\+).*?\@.*?%>

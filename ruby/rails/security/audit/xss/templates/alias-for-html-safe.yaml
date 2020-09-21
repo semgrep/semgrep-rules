@@ -1,0 +1,13 @@
+rules:
+- id: alias-for-html-safe
+  message: ''
+  metadata:
+    references:
+    - https://medium.com/sumone-technical-blog/a-pretty-way-to-unescape-html-in-a-ruby-on-rails-application-efc22b850027
+    - https://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html#:~:text===
+  languages: [none]
+  paths:
+    include:
+    - '*.erb'
+  severity: WARNING
+  pattern-regex: <%==.*?%>
