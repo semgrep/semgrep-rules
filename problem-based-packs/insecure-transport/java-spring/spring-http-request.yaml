@@ -1,0 +1,42 @@
+rules:
+- id: spring-http-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $RESTTEMP = new RestTemplate(...);
+        ...
+        $RESTTEMP.$FUNC("=~/[hH][tT][tT][pP]://.*/", ...);
+    - pattern: |
+        $RESTTEMP = new RestTemplate(...);
+        ...
+        String $URL = "=~/[hH][tT][tT][pP]://.*/";
+        ...
+        $RESTTEMP.$FUNC($URL, ...);
+    - pattern: |
+        $RESTTEMP = new RestTemplate(...);
+        ...
+        $URL = new URI(..., "=~/[hH][tT][tT][pP]://.*/", ...);
+        ...
+        $RESTTEMP.$FUNC($URL, ...);
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: (delete|doExecute|exchange|getForEntity|getForObject|headForHeaders|optionsForAllow|patchForObject|postForEntity|postForLocation|postForObject|put)
+  message: |
+    Checks for requests sent via Java Spring RestTemplate API to http:// URLS. This is dangerous because
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
+    https:// URLS.
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html#delete-java.lang.String-java.util.Map-
+    - https://www.baeldung.com/rest-template
+  languages:
+  - java
+  severity: WARNING
+

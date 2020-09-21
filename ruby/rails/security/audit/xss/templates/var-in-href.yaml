@@ -1,0 +1,23 @@
+rules:
+- id: var-in-href
+  message: |
+    Detected a template variable used in an anchor tag with
+    the 'href' attribute. This allows a malicious actor to 
+    input the 'javascript:' URI and is subject to cross-
+    site scripting (XSS) attacks. If using a relative URL,
+    start with a literal forward slash and concatenate the URL,
+    like this: href='/<%= link =>'. You may also consider setting
+    the Content Security Policy (CSP) header.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss#:~:text=javascript:%20URI
+    - https://github.com/pugjs/pug/issues/2952
+  languages:
+  - none
+  paths:
+    include:
+    - '*.erb'
+  severity: WARNING
+  pattern-regex: <a.*href\s*=[^>]*?[^\/&=]<%.*?%>.*?>
