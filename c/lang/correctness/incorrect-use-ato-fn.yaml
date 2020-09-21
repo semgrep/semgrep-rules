@@ -1,0 +1,16 @@
+rules:
+- id: incorrect-use-ato-fn
+  pattern-either:
+    - pattern: atoi(...)
+    - pattern: atol(...)
+    - pattern: atoll(...)
+  message: |
+    Avoid the 'ato*()' family of functions. Their use can lead to undefined
+    behavior, integer overflows, and lack of appropriate error handling. Instead
+    prefer the 'strtol*()' family of functions.
+  metadata:
+    references:
+    - https://stackoverflow.com/q/38393162
+    - https://stackoverflow.com/q/14176123
+  languages: [c]
+  severity: WARNING
