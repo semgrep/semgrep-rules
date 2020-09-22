@@ -17,7 +17,11 @@ html(lang="en")
             li(class="nav-item")
               // ruleid: template-explicit-unescape
               a(class="nav-link" target="_blank" href!=url) Documentation
-    
+
+    // ok: template-explicit-unescape
+    if disableSignUp !== true
+      a.button(href="/signup")=t("Signup")
+
     //- Page Content
     section
       div(class="container")
