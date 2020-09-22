@@ -15,7 +15,7 @@ rules:
       ('Cross-site Scripting')
   patterns:
   - pattern-inside: |
-      $APP.get($ROUTE, function ($REQ, $RES) { ... });
+      function ($REQ, $RES) { ... }
   - pattern-not: $RES.$ANY("...")
   - pattern-either:
     - pattern: $RES.write(...)
