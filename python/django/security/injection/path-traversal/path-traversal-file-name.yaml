@@ -56,7 +56,8 @@ rules:
         $V = request.$W
         ...
         $FILE.format(..., $V, ...)
-  - pattern-where-python: |
-      vars.get('$FILE', '').replace('"', '').replace('\'', '').split('.')[-1] in ['log', 'zip', 'txt', 'csv', 'xml', 'html']
+  - metavariable-regex:
+      metavariable: '$FILE'
+      regex: '.*\.(log|zip|txt|csv|xml|html).*'
   languages: [python]
   severity: WARNING
