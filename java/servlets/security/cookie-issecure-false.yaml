@@ -1,0 +1,25 @@
+rules:
+- id: cookie-issecure-false
+  patterns:
+  - pattern: |
+      $COOKIE = new Cookie(...);
+      ...
+  - pattern-not-inside: |
+      $COOKIE = new Cookie(...);
+      ...
+      $COOKIE.setSecure(true);
+  message: |
+    Default session middleware settings: `setSecure` not set to true.
+    This ensures that the cookie is sent only over HTTPS to prevent cross-site scripting attacks.
+  fix-regex:
+    regex: setSecure\(false\)
+    replacement: setSecure(true)
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://tomcat.apache.org/tomcat-5.5-doc/servletapi/
+  languages:
+  - java
+  severity: WARNING
