@@ -1,0 +1,17 @@
+rules:
+- id: telnet-request
+  pattern: |
+    telnet.DialToAndCall(...)
+  message: |
+    Checks for attempts to connect to an insecure telnet server using the package telnet. 
+    This is bad because it can lead to man in the middle attacks. 
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://godoc.org/github.com/reiver/go-telnet
+  languages:
+  - go
+  severity: WARNING
+
