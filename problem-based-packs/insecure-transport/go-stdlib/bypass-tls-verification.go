@@ -57,6 +57,14 @@ func bad3() {
     }
 }
 
+func bad4() {
+    // ruleid: bypass-tls-verification
+    mTLSConfig := &tls.Config {
+    }
+    mTLSConfig.PreferServerCipherSuites = true
+    mTLSConfig.InsecureSkipVerify = true
+}
+
 func ok1() {
     w := os.Stdout
 
@@ -106,3 +114,12 @@ func ok3() {
         fmt.Println(err)
     }
 }
+
+func ok4() {
+    // ok: bypass-tls-verification
+    mTLSConfig := &tls.Config {
+    }
+    mTLSConfig.PreferServerCipherSuites = true
+    mTLSConfig.InsecureSkipVerify = false
+}
+
