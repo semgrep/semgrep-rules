@@ -1,0 +1,40 @@
+rules:
+- id: ftp-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        ftp.Dial("=~/^[fF][tT][pP]://.*/", ...)
+    - pattern: |
+        ftp.DialTimeout("=~/^[fF][tT][pP]://.*/", ...)
+    - pattern: |
+        ftp.Connect("=~/^[fF][tT][pP]://.*/")
+    - pattern: |
+        $URL = "=~/^[fF][tT][pP]://.*/"
+        ...
+        ftp.Dial($URL, ...)
+    - pattern: |
+        $URL = "=~/^[fF][tT][pP]://.*/"
+        ...
+        ftp.DialTimeout($URL, ...)
+    - pattern: |
+        $URL = "=~/^[fF][tT][pP]://.*/"
+        ...
+        ftp.Connect($URL)
+  message: |
+    Checks for outgoing connections to ftp servers with the ftp package. FTP does not encrypt traffic, possibly
+    leading to PII being sent plaintext over the network. Instead, connect via the SFTP protocol.
+  fix-regex:
+    regex: '[fF][tT][pP]://'
+    replacement: sftp://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://godoc.org/github.com/jlaffaye/ftp#Dial
+    - https://github.com/jlaffaye/ftp
+  languages:
+  - go
+  severity: WARNING
+
