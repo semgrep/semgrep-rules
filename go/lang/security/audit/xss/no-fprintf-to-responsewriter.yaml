@@ -21,7 +21,7 @@ rules:
         func(..., $WRITER http.ResponseWriter, ...) {
           ...
         }
-  - pattern: |
-      fmt.$PRINTF($WRITER, ...)
+  - pattern-not: fmt.$PRINTF($WRITER, "...")
+  - pattern: fmt.$PRINTF($WRITER, ...)
   languages:
   - go
