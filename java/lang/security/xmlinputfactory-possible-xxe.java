@@ -19,7 +19,6 @@ class GoodXMLInputFactory {
 
 class GoodConstXMLInputFactory {
     public void Blah() {
-        // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
         // See
