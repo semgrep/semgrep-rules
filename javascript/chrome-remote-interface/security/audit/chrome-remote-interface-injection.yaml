@@ -20,3 +20,92 @@ rules:
       $PAGE.navigate({url: $INPUT},...)
   - pattern-not: |-
       $PAGE.navigate({url: "..."},...)
+- id: chrome-remote-interface-setdocumentcontent-injection
+  message: |
+    If unverified user data can reach the `setDocumentContent` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: |
+      $PAGE.setDocumentContent({html: $INPUT},...)
+  - pattern-not: |-
+      $PAGE.setDocumentContent({html: "..."},...)
+- id: chrome-remote-interface-evaluate-injection
+  message: |
+    If unverified user data can reach the `evaluate` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: |
+      $RUNTIME.evaluate({expression: $INPUT},...)
+  - pattern-not: |-
+      $RUNTIME.evaluate({expression: "..."},...)
+- id: chrome-remote-interface-compilescript-injection
+  message: |
+    If unverified user data can reach the `compileScript` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: |
+      $RUNTIME.compileScript({expression: $INPUT},...)
+  - pattern-not: |-
+      $RUNTIME.compileScript({expression: "..."},...)
+- id: chrome-remote-interface-printtopdf-injection
+  message: |
+    If unverified user data can reach the `printToPDF` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern-either:
+    - pattern: |
+        $RUNTIME.printToPDF({headerTemplate: $INPUT},...)
+    - pattern: |
+        $RUNTIME.printToPDF({footerTemplate: $INPUT},...)
+  - pattern-not: |
+      $RUNTIME.printToPDF({headerTemplate: "..."},...)
+  - pattern-not: |-
+      $RUNTIME.printToPDF({footerTemplate: "..."},...)
