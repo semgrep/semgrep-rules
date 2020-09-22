@@ -62,7 +62,7 @@ func ok1() {
 
 	client := &http.Client{
 		Transport: &http.Transport{
-			// ruleid: bypass-tls-verification
+			// ok: bypass-tls-verification
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter:       w,
 				MinVersion:         tls.VersionSSL30,
@@ -74,7 +74,7 @@ func ok1() {
 
 	client_good := &http.Client{
 		Transport: &http.Transport{
-			// ruleid: bypass-tls-verification
+			// ok: bypass-tls-verification
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter: w,
 				// OK
@@ -86,9 +86,9 @@ func ok1() {
 
 }
 
-func bad2() {
+func ok2() {
     tr := &http.Transport{
-    	// ruleid: bypass-tls-verification
+    	// ok: bypass-tls-verification
         TLSClientConfig: &tls.Config{InsecureSkipVerify: false},
     }
     client := &http.Client{Transport: tr}
@@ -98,8 +98,8 @@ func bad2() {
     }
 }
 
-func bad3() {
-	// ruleid: bypass-tls-verification
+func ok3() {
+	// ok: bypass-tls-verification
     http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: false}
     _, err := http.Get("https://golang.org/")
     if err != nil {
