@@ -18,5 +18,6 @@ rules:
       interface $INTERFACE extends Remote {
         $RETURNTYPE $METHOD($CLASS $PARAM) throws RemoteException;
       }
-  - pattern-where-python: |
-      vars['$CLASS'] not in ('int', 'boolean', 'short', 'long', 'byte', 'char', 'float', 'double')
+  - metavariable-regex:
+      metavariable: '$CLASS'
+      regex: '(?!int|boolean|short|long|byte|char|float|double)'

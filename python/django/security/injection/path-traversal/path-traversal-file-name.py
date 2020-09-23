@@ -37,7 +37,7 @@ def post2(request, format=None):
 
 def post3(request, format=None):
   try:
-      # should be ok given that we call abspath
+      # ok: path-traversal-file-name
       app_log_path = request.data['app_log_path']
       app_log_path = os.path.abspath(app_log_path)
       host = request.data['host']
@@ -54,7 +54,7 @@ def post3(request, format=None):
       print("foo")
 
 def post4(request, format=None):
-    # ok
+    # ok: path-traversal-file-name
     filename = request.GET.get('filename')
     host = request.data['host']
     commands = "find %s -name ." % (filename)
