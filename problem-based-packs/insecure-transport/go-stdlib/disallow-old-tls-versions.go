@@ -22,10 +22,9 @@ func ok1() {
 	// w, err := os.OpenFile("tls-secrets.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	w := os.Stdout
 
-    // ok: disallow-old-tls-versions
 	client := &http.Client{
 		Transport: &http.Transport{
-			// ruleid: ssl-v3-is-insecure
+            // ok: disallow-old-tls-versions
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter:       w,
 				MinVersion:         tls.VersionTLS12,
@@ -41,9 +40,9 @@ func ok1() {
 	resp.Body.Close()
 
 
-    // ok: disallow-old-tls-versions
 	client_good := &http.Client{
 		Transport: &http.Transport{
+            // ok: disallow-old-tls-versions
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter: w,
 				MinVersion:         tls.VersionTLS13,
@@ -60,7 +59,7 @@ func ok1() {
 }
 
 func ok2() {
-    // ruleid: disallow-old-tls-versions
+    // ok: disallow-old-tls-versions
     mTLSConfig := &tls.Config {
     }
 
@@ -82,10 +81,9 @@ func bad1() {
 	// w, err := os.OpenFile("tls-secrets.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	w := os.Stdout
 
-    // ruleid: disallow-old-tls-versions
 	client := &http.Client{
 		Transport: &http.Transport{
-			// ruleid: ssl-v3-is-insecure
+            // ruleid: disallow-old-tls-versions
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter:       w,
 				MinVersion:         tls.VersionSSL30,
