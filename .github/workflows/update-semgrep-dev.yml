@@ -1,0 +1,18 @@
+name: update-semgrep-live
+
+on:
+  push:
+    branches:
+    - develop
+
+jobs:
+  build:
+    name: Update semgrep.dev
+    runs-on: ubuntu-latest
+    steps:
+    - name: update dev.semgrep.dev
+      run: curl --fail -X POST -L https://dev.semgrep.dev/api/admin/update-registry
+    - name: update staging.semgrep.dev
+      run: curl --fail -X POST -L https://staging.semgrep.dev/api/admin/update-registry
+    - name: update semgrep.dev
+      run: curl --fail -X POST -L https://semgrep.dev/api/admin/update-registry
