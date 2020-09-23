@@ -17,9 +17,9 @@ rules:
       - metavariable-regex:
           metavariable: $FUNC
           regex: (Get|Post|Delete|Head|Put|Patch)
-    message: |
-      Checks for requests to http (unencrypted) sites using gorequest, a popular HTTP client library. 
-      This is dangerous because it could result in plaintext PII being passed around the network.
+  message: |
+    Checks for requests to http (unencrypted) sites using gorequest, a popular HTTP client library. 
+    This is dangerous because it could result in plaintext PII being passed around the network.
   metadata:
     vulnerability: Insecure Transport
     owasp: 'A3: Sensitive Data Exposure'
