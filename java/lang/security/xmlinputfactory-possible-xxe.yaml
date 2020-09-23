@@ -17,6 +17,12 @@ rules:
         $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
         ...
       }
+  - pattern-not-inside: |
+      $RETURNTYPE $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty(java.xml.stream.XMLFactoryInput.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        ...
+      }
   - pattern-either:
     - pattern: $XMLFACTORY = $W.newFactory(...);
     - pattern: $XMLFACTORY = new XMLInputFactory(...);

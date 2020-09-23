@@ -18,7 +18,7 @@ rules:
     - '*.ejs'
     - '*.html'
   severity: WARNING
-  pattern-regex: <%-.*?%>
+  pattern-regex: <%-((?!include).)*?%>
   fix-regex:
     regex: <%-(.*?)%>
     replacement: <%=\1%>
