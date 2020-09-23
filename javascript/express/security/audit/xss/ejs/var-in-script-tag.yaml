@@ -23,5 +23,4 @@ rules:
     - '*.html'
   severity: WARNING
   patterns:
-  - pattern-regex: <%.*?%>(.|\n)*?<\/script>
-
+  - pattern-regex: <%.*?%>((?!(<\s*script[^>]*>))(.|\n))*?<\s*/\s*script>
