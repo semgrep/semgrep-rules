@@ -15,8 +15,8 @@ func bad2() {
 func bad3() {
     params := &Params{Count: 5}
 
-    // ruleid: sling-http-request
     sling = sling.New()
+    // ruleid: sling-http-request
     req, err := sling.Post("http://example.com").QueryStruct(params).Request()
     client.Do(req)
 }
