@@ -9,7 +9,7 @@ hostname = 'www.python.org'
 context = sss.create_default_context()
 
 with socket.create_connection((hostname, 443)) as sock:
-    # ok
+    # ok:disabled-cert-validation
     with context.wrap_socket(sock, server_hostname=hostname) as ssock:
         print(ssock.version())
 
@@ -19,9 +19,8 @@ with socket.create_connection((hostname, 443)) as sock:
         print(ssock.version())
 
 with socket.create_connection((hostname, 443)) as sock:
-    # won't work because of how we are using python to filter
-    # todoruleid:disabled-cert-validation
-    with context.wrap_socket(sock, server_hostname=hostname, cert_reqs = sss.CERT_NONE) as ssock:
+    # ruleid:disabled-cert-validation
+    with context.wrap_socket(sock, server_hostname=hostname, cert_reqs = ssl.CERT_NONE) as ssock:
         print(ssock.version())
 
 from urllib3 import PoolManager
@@ -43,19 +42,19 @@ pool = ur3.connection_from_url('someurl', cert_reqs= ssl.CERT_NONE)
 # ruleid:disabled-cert-validation
 pool = ur3.connection_from_url('someurl', cert_reqs='NONE')
 
-# OK; invalid
+# ok:disabled-cert-validation
 pool = ur3.connection_from_url('someurl', cert_reqs='CERT NONE')
 
 # ruleid:disabled-cert-validation
 pool = ur3.connection_from_url('someurl', cert_reqs="NONE")
 
-# ok
+# ok:disabled-cert-validation
 pool = ur3.connection_from_url('someurl', cert_reqs= 'CERT_REQUIRED')
 
 
 # ruleid:disabled-cert-validation
 pool = ur3.proxy_from_url('someurl', cert_reqs= ssl.CERT_NONE)
-# ok
+# ok:disabled-cert-validation
 pool = ur3.proxy_from_url('someurl', cert_reqs= ssl.CERT_REQUIED)
-# ok
+# ok:disabled-cert-validation
 pool = ur3.proxy_from_url('someurl', cert_reqs=None)

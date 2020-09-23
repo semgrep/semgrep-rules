@@ -523,5 +523,6 @@ rules:
     - pattern: return django.http.HttpResponseRedirect(..., $S.format(..., request.$W, ...), ...)
     - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W, ...)
     - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W}...", ...)
-  - pattern-where-python: |-
-      vars['$W'] not in {"get_full_path"}
+  - metavariable-regex:
+      metavariable: '$W'
+      regex: '(?!get_full_path)'
