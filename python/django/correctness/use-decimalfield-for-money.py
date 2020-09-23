@@ -6,6 +6,7 @@ from django.utils import timezone
 class Product(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
+    # ok:use-decimalfield-for-money
     price = models.DecimalField(max_digits=6, decimal_places=2)
     # ruleid:use-decimalfield-for-money
     old_price = models.FloatField()

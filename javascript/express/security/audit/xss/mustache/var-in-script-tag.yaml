@@ -20,8 +20,9 @@ rules:
   paths:
     include:
     - '*.mustache'
+    - '*.hbs'
     - '*.html'
   severity: WARNING
   patterns:
-  - pattern-regex: '{{.*?}}(.|\n)*?<\/script>'
+  - pattern-regex: '{{.*?}}((?!(<\s*script[^>]*>))(.|\n))*?<\s*/\s*script>'
 
