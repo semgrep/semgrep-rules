@@ -22,7 +22,7 @@ rules:
         func(..., $WRITER http.ResponseWriter, ...) {
           ...
         }
-  - pattern: |
-      io.WriteString($WRITER, $STRING)
+  - pattern-not: io.WriteString($WRITER, "...")
+  - pattern: io.WriteString($WRITER, $STRING)
   languages:
   - go
