@@ -2,6 +2,37 @@
 const express = require('express')
 const router = express.Router()
 
+// cf. juice-shop
+exports.promotionVideo = () => {
+    return (req, res) => {
+      fs.readFile('views/promotionVideo.pug', function (err, buf) {
+        if (err) throw err
+        let template = buf.toString()
+        const subs = getSubsFromFile()
+  
+        utils.solveIf(challenges.videoXssChallenge, () => { return utils.contains(subs, '</script><script>alert(`xss`)</script>') })
+  
+        const theme = themes[config.get('application.theme')]
+        template = template.replace(/_title_/g, config.get('application.name'))
+        template = template.replace(/_favicon_/g, favicon())
+        template = template.replace(/_bgColor_/g, theme.bgColor)
+        template = template.replace(/_textColor_/g, theme.textColor)
+        template = template.replace(/_navColor_/g, theme.navColor)
+        template = template.replace(/_primLight_/g, theme.primLight)
+        template = template.replace(/_primDark_/g, theme.primDark)
+        const fn = pug.compile(template)
+        let compiledTemplate = fn()
+        compiledTemplate = compiledTemplate.replace('<script id="subtitle"></script>', '<script id="subtitle" type="text/vtt" data-label="English" data-lang="en">' + subs + '</script>')
+        // ruleid: direct-response-write
+        res.send(compiledTemplate)
+      })
+    }
+    function favicon () {
+      return utils.extractFilename(config.get('application.favicon'))
+    }
+  }
+
+
 router.get('/greeting', (req, res) => {
     const { name } = req.query;
     // ruleid: direct-response-write
@@ -117,3 +148,4 @@ app.get('/xss', function (req, res) {
     res.write('Response</br>' + html);
 });
 app.listen(8000);
+
