@@ -1,0 +1,23 @@
+rules:
+- id: bypass-tls-verification
+  patterns:
+  - pattern-either:
+    - pattern: |
+        tls.Config{..., InsecureSkipVerify: true, ...}
+    - pattern: |
+        $CONFIG = &tls.Config{...}
+        ...
+        $CONFIG.InsecureSkipVerify = true
+  message: |
+    Checks for disabling of TLS/SSL certificate verification.
+     This should only be used for debugging purposes because it leads to vulnerability to MTM attacks.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://stackoverflow.com/questions/12122159/how-to-do-a-https-request-with-bad-certificate
+  languages: [go]
+  severity: WARNING
+
+
