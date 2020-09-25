@@ -6,6 +6,10 @@ rules:
         $CONST = require('crypto');
         ...
         https.createServer(...).$FUNC(...);
+    - pattern: |
+        $CONST = require('constants');
+        ...
+        https.createServer(...).$FUNC(...);
   - pattern-not: |
       $CONST = require('crypto');
       ...
@@ -28,6 +32,30 @@ rules:
       https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_TLSv1}, ...).$FUNC(...);
   - pattern-not: |
       $CONST = require('crypto');
+      ...
+      https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1| $CONST.SSL_OP_NO_SSLv2}, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_SSLv3 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_SSLv3 |$CONST.SSL_OP_NO_TLSv1 }, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
+      ...
+      https.createServer({secureOptions: $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3}, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
+      ...
+      https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 |$CONST.SSL_OP_NO_TLSv1}, ...).$FUNC(...);
+  - pattern-not: |
+      $CONST = require('constants');
       ...
       https.createServer({secureOptions:$CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1| $CONST.SSL_OP_NO_SSLv2}, ...).$FUNC(...);
   message: |
