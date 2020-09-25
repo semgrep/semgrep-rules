@@ -1,0 +1,22 @@
+rules:
+- id: http-customized-request
+  pattern: |
+    http.NewRequest(..., "=~/[hH][tT][tT][pP]://.*/", ...)
+  message: |
+    Checks for requests sent via http.NewRequest to http:// URLS. This is dangerous because
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,    send requests only to
+    https:// URLS.
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://golang.org/pkg/net/http/#NewRequest
+  languages:
+  - go
+  severity: WARNING
+
