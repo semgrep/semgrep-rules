@@ -1,8 +1,10 @@
 rules:
 - id: json-entity-escape
-  patterns:
+  pattern-either:
   - pattern: |
       ActiveSupport.escape_html_entities_in_json = false
+  - pattern: |
+      config.active_support.escape_html_entities_in_json = false
   message: |
     Checks if HTML escaping is globally disabled for JSON output. This could lead to XSS. 
   metadata:
