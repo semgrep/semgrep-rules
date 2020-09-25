@@ -1,0 +1,24 @@
+rules:
+- id: grequests-http-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        grequests.$FUNC(...,"=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern: |
+        $FUNC(...,"=~/[hH][tT][tT][pP]://.*/", ...)
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: (Get|Head|Post|Put|Delete|Patch|Options|Req|DoRegularRequest)
+  message: |
+    Checks for requests to http (unencrypted) sites using grequests, a popular HTTP client library.
+    This is dangerous because it could result in plaintext PII being passed around the network.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://godoc.org/github.com/levigross/grequests#DoRegularRequest
+    - https://github.com/levigross/grequests
+  severity: WARNING
+  languages: [go]
+

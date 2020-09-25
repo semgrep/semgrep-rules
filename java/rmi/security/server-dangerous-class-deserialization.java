@@ -15,7 +15,7 @@ public interface IBSidesService extends Remote {
    void poke(Attendee attende) throws RemoteException;
 }
 
-// ok
+// ok:server-dangerous-class-deserialization
 public interface IBSidesServiceOK extends Remote {
    boolean registerTicket(long ticketID) throws RemoteException;
    void vistTalk(long talkID) throws RemoteException;

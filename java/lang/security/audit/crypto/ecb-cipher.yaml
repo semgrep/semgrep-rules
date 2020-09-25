@@ -14,5 +14,6 @@ rules:
   patterns:
   - pattern: |
       Cipher $VAR = $CIPHER.getInstance($MODE);
-  - pattern-where-python: |
-      "ECB" in vars['$MODE']
+  - metavariable-regex:
+      metavariable: '$MODE'
+      regex: '.*ECB.*'

@@ -1,0 +1,55 @@
+rules:
+- id: sling-http-request
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $REQ = sling.New()
+          ...
+          $RES = ...
+      - pattern: |
+          $REQ.$FUNC("=~/[hH][tT][tT][pP]://.*/")
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (Get|Post|Delete|Head|Put|Options|Patch|Base|Connect)
+    - patterns:
+      - pattern-either:
+        - pattern: sling.New().$FUNC("=~/[hH][tT][tT][pP]://.*/")
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (Get|Post|Delete|Head|Put|Options|Patch|Base|Connect)
+    - patterns:
+      - pattern-inside: |
+          $REQ = sling.New()
+          ...
+          $URL = "=~/[hH][tT][tT][pP]://.*/"
+          ...
+          $RES = ...
+      - pattern: |
+          $REQ.$FUNC($URL)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (Get|Post|Delete|Head|Put|Options|Patch|Base|Connect)
+    - patterns:
+      - pattern-inside: |
+          $URL = "=~/[hH][tT][tT][pP]://.*/"
+          ...
+          $RES = ...
+      - pattern: |
+          sling.New().$FUNC($URL)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (Get|Post|Delete|Head|Put|Options|Patch|Base|Connect)
+  message: |
+    Checks for requests to http (unencrypted) sites using gorequest, a popular HTTP client library. 
+    This is dangerous because it could result in plaintext PII being passed around the network.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://godoc.org/github.com/dghubble/sling#Sling.Add
+    - https://github.com/dghubble/sling
+  severity: WARNING
+  languages: [go]
+
