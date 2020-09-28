@@ -52,9 +52,11 @@ public class IncomeConsumerBean implements MessageListener {
                 
                 ObjectMessage msg = (ObjectMessage) message;
                 
+                // ruleid: insecure-jms-deserialization
                 Object o = msg.getObject(); // variant 1 : calling getObject method directly on an ObjectMessage object
                 logger.info("o=" + o);
                 
+                // ruleid: insecure-jms-deserialization
                 Income income = (Income) msg.getObject(); // variant 2 : calling getObject method and casting to a custom class 
                 logger.info("Message is : " + income);
                 
