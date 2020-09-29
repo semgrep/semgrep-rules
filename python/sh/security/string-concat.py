@@ -16,3 +16,7 @@ sh.semgrep("--config {}".format(confurl))
 
 # ruleid: string-concat
 sh.semgrep(f"--config {confurl}")
+
+# ok: string-concat
+args = ["--config", confurl]
+sh.semgrep(*args)
