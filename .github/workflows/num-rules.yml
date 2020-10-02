@@ -15,4 +15,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: record stats
       run: |
-        NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl --fail -L -X POST https://dashboard.r2c.dev/api/metric/rules.num -d $NUM
+        NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl --fail -L -X POST https://dashboard.r2c.dev/api/metric/semgrep-rules.num -d $NUM
