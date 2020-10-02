@@ -1,0 +1,17 @@
+rules:
+- id: no-auth-over-http
+  patterns:
+  - pattern-either:
+    - pattern: |
+        requests.$W("=~/http:\/\/.*/", ..., auth=$X, ...)
+    - pattern: |
+        $URL = "=~/http:\/\/.../"
+        ...
+        requests.$W($URL, ..., auth=$X, ...)
+  message: |
+    <div><h1>Hello world</h1><img src=x /></div>
+  fix: |
+
+  severity: ERROR
+  languages:
+  - python
