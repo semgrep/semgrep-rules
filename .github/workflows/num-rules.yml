@@ -3,7 +3,7 @@ name: num-rules
 on:
   workflow_dispatch:
   schedule:
-  - cron: 0 0 * * *
+  - cron: "* * * * *"
 
 jobs:
   run_benchmarks:
@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@v2
       - name: record stats
         run: |
-        NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl -X POST https://dashboard.r2c.dev/api/metric/rules.num -d $NUM
+          NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl -X POST https://dashboard.r2c.dev/api/metric/rules.num -d $NUM
