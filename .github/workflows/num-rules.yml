@@ -1,0 +1,16 @@
+name: num-rules
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: 0 0 * * *
+
+jobs:
+  run_benchmarks:
+    runs-on: ubuntu-latest
+    name: Run benchmarks for each rule
+    steps:
+      - uses: actions/checkout@v2
+      - name: record stats
+        run: |
+        NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl -X POST https://dashboard.r2c.dev/api/metric/rules.num -d $NUM
