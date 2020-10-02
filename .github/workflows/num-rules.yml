@@ -1,9 +1,11 @@
 name: num-rules
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - develop
   schedule:
-  - cron: '* * * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   run_benchmarks:
