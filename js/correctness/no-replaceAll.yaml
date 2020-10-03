@@ -1,0 +1,10 @@
+rules:
+- id: no-replaceall-javascript
+  patterns:
+  - pattern: $STRING.replaceAll("...",$NEW)
+  message: |
+    The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions. Consider using replace() with a regex as the first argument instead like mystring.replace(/bad/g, "good") instead of mystring.replaceAll("bad", "good") (https://discourse.threejs.org/t/replaceall-is-not-a-function/14585)
+  severity: WARNING
+  languages:
+  - js
+  - ts
