@@ -13,6 +13,7 @@ rules:
       $JDBC = new JdbcTemplate(...);
       ...
   - pattern-either:
+# Unsafe queryForObject
     - pattern: $JDBC.queryForObject($STR + $VAR, ...);
     - pattern: $JDBC.queryForObject(String.format(...), ...);
     - pattern: |
@@ -23,6 +24,80 @@ rules:
         String $Q = String.format(...);
         ...
         $JDBC.queryForObject($Q, ...);
+    - pattern: |
+        StringBuilder $Q = new StringBuilder(...);
+        ...
+        $Q.append($STR + $VAR);
+        ...
+        $JDBC.queryForObject($Q, ...);
+# Unsafe queryForList
+    - pattern: $JDBC.queryForList($STR + $VAR);
+    - pattern: $JDBC.queryForList(String.format(...));
+    - pattern: |
+        String $Q = $STR + $VAR;
+        ...
+        $JDBC.queryForList($Q);
+    - pattern: |
+        String $Q = String.format(...);
+        ...
+        $JDBC.queryForList($Q);
+    - pattern: |
+        StringBuilder $Q = new StringBuilder(...);
+        ...
+        $Q.append($STR + $VAR);
+        ...
+        $JDBC.queryForList($Q, ...);
+# Unsafe update
+    - pattern: $JDBC.update($STR + $VAR);
+    - pattern: $JDBC.update(String.format(...));
+    - pattern: |
+        String $Q = $STR + $VAR;
+        ...
+        $JDBC.update($Q);
+    - pattern: |
+        String $Q = String.format(...);
+        ...
+        $JDBC.update($Q);
+    - pattern: |
+        StringBuilder $Q = new StringBuilder(...);
+        ...
+        $Q.append($STR + $VAR);
+        ...
+        $JDBC.update($Q, ...);
+# Unsafe execute
+    - pattern: $JDBC.execute($STR + $VAR);
+    - pattern: $JDBC.execute(String.format(...));
+    - pattern: |
+        String $Q = $STR + $VAR;
+        ...
+        $JDBC.execute($Q);
+    - pattern: |
+        String $Q = String.format(...);
+        ...
+        $JDBC.execute($Q);
+    - pattern: |
+        StringBuilder $Q = new StringBuilder(...);
+        ...
+        $Q.append($STR + $VAR);
+        ...
+        $JDBC.execute($Q, ...);
+# Unsafe insert
+    - pattern: $JDBC.insert($STR + $VAR);
+    - pattern: $JDBC.insert(String.format(...));
+    - pattern: |
+        String $Q = $STR + $VAR;
+        ...
+        $JDBC.insert($Q);
+    - pattern: |
+        String $Q = String.format(...);
+        ...
+        $JDBC.insert($Q);
+    - pattern: |
+        StringBuilder $Q = new StringBuilder(...);
+        ...
+        $Q.append($STR + $VAR);
+        ...
+        $JDBC.insert($Q, ...);
   severity: WARNING
   languages:
   - java
