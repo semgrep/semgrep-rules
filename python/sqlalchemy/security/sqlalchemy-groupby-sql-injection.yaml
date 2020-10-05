@@ -1,0 +1,30 @@
+rules:
+- id: sqlalchemy-groupby-sql-injection
+  patterns:
+  - pattern-either:
+    - pattern: |
+        def $FUNC(...,$VAR,...):
+          ...
+          $SESSION.query(...).group_by("...".format(...,$VAR,...))
+    - pattern: |
+        def $FUNC(...,$VAR,...):
+          ...
+          $SESSION.query.join(...).group_by("...".format(...,$VAR,...))
+    - pattern: |
+        def $FUNC(...,$VAR,...):
+          ...
+          $SESSION.query.group_by("...".format(...,$VAR,...))
+    - pattern: |
+        def $FUNC(...,$VAR,...):
+          ...
+          query.group_by("...".format(...,$VAR,...))
+  message: |
+    Group_by in SQLAlchemy can cause sql injections if the developer inputs raw SQL into the filter clause. 
+    This pattern captures relevant cases in which the developer inputs raw SQL into the group_by parameter and 
+    injects user-input into the raw SQL with "format". Instead, use bindParams to securely bind user-input
+    to SQL statements.
+  fix-regex:
+    regex: format
+    replacement: bindparams
+  severity: WARNING
+
