@@ -52,8 +52,8 @@ class TestClass {
     public void unsafe_jdbc_update(String paramName, String paramSalary) {
         JdbcTemplate jdbc = new JdbcTemplate();
         System.out.println("Hello");
-        String updateQuery = "update Users set salary = '"+paramSalary+"' where name = '"+paramName+"'";
         // ruleid:jdbc-sql-formatted-string
+        String updateQuery = "update Users set salary = '"+paramSalary+"' where name = '"+paramName+"'";
         jdbc.update(updateQuery);
     }
     public void safe(String paramName) {
