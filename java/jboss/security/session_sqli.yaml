@@ -29,6 +29,7 @@ rules:
   message: |
     In $METHOD, $X is used to construct a SQL query via string concatenation.
   fix: |
-    
+    Use prepared statment syntax ( "select foo from bar where biz = ? limit 5" ) instead of string conatenation.
+  languages: [java] 
   severity: WARNING
 
