@@ -20,7 +20,7 @@ public class Cls extends HttpServlet
     protected void danger(String ean) {
         Session session = this.sessionFactory.openSession();
 
-        String query = "select foo from bar where" + biz + " limit 1";
+        String query = "select foo from bar where" + ean + " limit 1";
         try {
             PreparedStatement ps = session.connection().prepareStatement(query);
             ResultSet rs = ps.executeQuery();
