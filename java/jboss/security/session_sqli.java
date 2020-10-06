@@ -16,6 +16,7 @@ public class Cls extends HttpServlet
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
+    // ruleid:find-sql-string-concatenation
     protected void danger(String ean) {
         Session session = this.sessionFactory.openSession();
 
