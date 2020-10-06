@@ -1,0 +1,16 @@
+rules:
+- id: no-md5
+  patterns:
+  - pattern-either:
+    - pattern: |
+        Hash.md5
+    - pattern: |
+        MAC.hmac_md5
+  message: |
+    Usage of md5 is not secure due to the simplicity of finding a collision in the hash space. 
+    hmac_md5 is also not secure due to this same reason. Instead, use hmac_256 or sha3 
+    for better security and more collision-resistant hashes.
+  languages:
+  - ocaml
+  severity: ERROR
+
