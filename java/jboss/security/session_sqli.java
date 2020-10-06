@@ -33,6 +33,7 @@ public class Cls extends HttpServlet
             session.close();
         }
     }
+    // ruleid:find-sql-string-concatenation
     protected void danger2(String biz) {
         String query = "select foo from bar where" + biz + " limit 1";
         Session session = this.sessionFactory.openSession();
