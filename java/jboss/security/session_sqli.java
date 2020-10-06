@@ -50,6 +50,7 @@ public class Cls extends HttpServlet
         }
     }
 
+    // ok:find-sql-string-concatenation
     protected void ok(String foo) throws ServletException, IOException {
         String query = "select foo from bar where ? limit 1";
         Session session = this.sessionFactory.openSession();
