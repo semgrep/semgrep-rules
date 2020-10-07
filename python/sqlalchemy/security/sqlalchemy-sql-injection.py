@@ -2,7 +2,7 @@
 def bad1(var):
     session.query(MyClass).distinct("foo={}".format(var))
 
-# ruleid: sqlalchemy-sql-injectionn
+# ruleid: sqlalchemy-sql-injection
 def bad2(var):
     query = cls.query.join(DeploymentPermission).having(
         "oops{}".format(var)
