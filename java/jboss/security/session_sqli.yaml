@@ -1,0 +1,34 @@
+rules:
+- id: find-sql-string-concatenation
+  patterns:
+    - pattern-either: 
+      - pattern: |
+          $RETURN $METHOD(...,String $X,...){
+            ...
+            Session $SESSION = ...;
+            ...
+            String $QUERY = ... + $X + ...;
+            ...
+            PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
+            ...
+            ResultSet $RESULT = $PS.executeQuery();
+            ...
+          }
+      - pattern: |
+          $RETURN $METHOD(...,String $X,...){
+            ...
+            String $QUERY = ... + $X + ...;
+            ...
+            Session $SESSION = ...;
+            ...
+            PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
+            ...
+            ResultSet $RESULT = $PS.executeQuery();
+            ...
+          }
+  message: |
+    In $METHOD, $X is used to construct a SQL query via string concatenation.
+  fix: |
+  
+  languages: [java] 
+  severity: WARNING
