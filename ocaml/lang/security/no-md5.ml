@@ -1,6 +1,6 @@
 let _ =
   testing_function "MD5";
-  (* ruleid: no-md5i *)
+  (* ruleid: no-md5 *)
   let hash s = hash_string (Hash.md5()) s in
   test 1 (hash "") (hex "D41D8CD98F00B204E9800998ECF8427E");
   test 2 (hash "a") (hex "0CC175B9C0F1B6A831C399E269772661");
