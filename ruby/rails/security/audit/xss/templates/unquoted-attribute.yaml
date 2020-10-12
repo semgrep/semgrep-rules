@@ -16,7 +16,7 @@ rules:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <.*=[^'"]*<%=.*?%>(\s+|>).*
+  pattern-regex: <[^<>]*=[^'"<>]*<%=.*?%>(\s+|>).*
   fix-regex:
     regex: <%=(.*?)%>
     replacement: '"<%=\1%>"'
