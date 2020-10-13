@@ -16,10 +16,11 @@ public class Cls extends HttpServlet
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
+    // ruleid:find-sql-string-concatenation
     protected void danger(String ean) {
         Session session = this.sessionFactory.openSession();
 
-        String query = "select foo from bar where" + biz + " limit 1";
+        String query = "select foo from bar where" + ean + " limit 1";
         try {
             PreparedStatement ps = session.connection().prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -32,6 +33,7 @@ public class Cls extends HttpServlet
             session.close();
         }
     }
+    // ruleid:find-sql-string-concatenation
     protected void danger2(String biz) {
         String query = "select foo from bar where" + biz + " limit 1";
         Session session = this.sessionFactory.openSession();
@@ -48,6 +50,7 @@ public class Cls extends HttpServlet
         }
     }
 
+    // ok:find-sql-string-concatenation
     protected void ok(String foo) throws ServletException, IOException {
         String query = "select foo from bar where ? limit 1";
         Session session = this.sessionFactory.openSession();
