@@ -1,0 +1,11 @@
+rules:
+- id: hashtbl-find-outside-try
+  patterns:
+  - pattern-either: 
+    - pattern: |
+        Hashtbl.find ...
+  - pattern-not-inside: |
+      try ... with ... -> ...
+  message: You should not use Hashtbl.find outside of a try, or you should use Hashtbl.find_opt
+  languages: [ocaml]
+  severity: WARNING

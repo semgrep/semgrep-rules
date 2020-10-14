@@ -1,0 +1,11 @@
+rules:
+- id: list-find-outside-try
+  patterns:
+  - pattern-either: 
+    - pattern: |
+        List.find ...
+  - pattern-not-inside: |
+      try ... with ... -> ...
+  message: You should not use List.find outside of a try, or you should use List.find_opt
+  languages: [ocaml]
+  severity: WARNING
