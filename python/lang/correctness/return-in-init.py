@@ -5,22 +5,21 @@ class A:
         return A(a, b, c)
 
 class A:
-
+    print ('hello')
     def __init__(a, b, c):
         # ruleid:return-in-init
         return
 
-
 class B:
 
     def __init__(a, b, c):
-        # ruleid: yield-in-init
+        # ruleid:yield-in-init
         yield
 
 class C:
 
     def __init__():
-        # ruleid: yield-in-init
+        # ruleid:yield-in-init
         yield 5
 
 
