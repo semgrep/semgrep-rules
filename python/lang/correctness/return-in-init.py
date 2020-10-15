@@ -36,3 +36,9 @@ def __init__():
     # OK, not in class
     yield 5
 
+class Ab:
+    def func1():
+        if not hello:
+            yield from blah
+        yield from other
+
