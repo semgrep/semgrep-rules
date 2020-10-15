@@ -25,6 +25,8 @@ jobs:
         ls $PWD
         echo $PWD
         echo ${{ steps.test }}
+        make output
+        ls $PWD
     - uses: actions/upload-artifact@v2
       with:
         name: semgrep_runs
