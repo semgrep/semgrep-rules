@@ -6,13 +6,9 @@ rules:
     - pattern: Crypto.PublicKey.RSA.generate($SIZE, ...)
     - pattern: Cryptodome.PublicKey.RSA.generate(..., bits=$SIZE, ...)
     - pattern: Cryptodome.PublicKey.RSA.generate($SIZE, ...)
-  - pattern-where-python: |
-      alert = False
-      try:
-        alert = int(vars['$SIZE']) < 2048
-      except:
-        alert = False
-      alert
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 2048
   message: |
     Detected an insufficient key size for RSA. NIST recommends
     a key size of 2048 or higher.

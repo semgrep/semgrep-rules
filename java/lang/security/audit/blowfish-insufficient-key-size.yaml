@@ -15,5 +15,6 @@ rules:
       $KEYGEN = KeyGenerator.getInstance("Blowfish");
       ...
       $KEYGEN.init($SIZE);
-  - pattern-where-python: |-
-      int(vars['$SIZE']) < 128
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 128
