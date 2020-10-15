@@ -16,9 +16,12 @@ jobs:
         set -x
         ls $PWD
         echo $PWD
-        echo ${{ steps.test }}
+        cd ../
+        ls $PWD
+        echo $PWD
         make output
         ls $PWD
+        echo $PWD
     - uses: actions/checkout@v2
     - name: test
       id: test
