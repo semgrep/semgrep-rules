@@ -21,6 +21,11 @@ jobs:
         name: tests
         path: ${{ steps.test.outputs.output_dir }}
     - uses: actions/upload-artifact@v2
+      run: |
+        ls $PWD
+        echo $PWD
+        ls /github/workspace
+        echo ${{ steps.test }}
       with:
         name: semgrep_runs
         path: /github/workspace/semgrep_runs_output.tar.gz
