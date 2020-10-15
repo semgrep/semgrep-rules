@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     name: test-develop
     steps:
+    - name: check
+      run: |
+        ls $PWD
+        echo $PWD
+        echo ${{ steps.test }}
+        make output
+        ls $PWD
     - uses: actions/checkout@v2
     - name: test
       id: test
@@ -20,13 +27,6 @@ jobs:
       with:
         name: tests
         path: ${{ steps.test.outputs.output_dir }}
-    - name: check
-      run: |
-        ls $PWD
-        echo $PWD
-        echo ${{ steps.test }}
-        make output
-        ls $PWD
     - uses: actions/upload-artifact@v2
       with:
         name: semgrep_runs
