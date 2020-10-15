@@ -20,14 +20,14 @@ jobs:
       with:
         name: tests
         path: ${{ steps.test.outputs.output_dir }}
-    - uses: actions/upload-artifact@v2
-      with:
-        name: semgrep_runs
-        path: /github/workspace/semgrep_runs_output.tar.gz
-        if-no-files-found: error
     - name: check
       run: |
         ls $PWD
         echo $PWD
         ls /github/workspace
         echo ${{ steps.test }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: semgrep_runs
+        path: /github/workspace/semgrep_runs_output.tar.gz
+        if-no-files-found: error
