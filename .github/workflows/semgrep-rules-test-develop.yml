@@ -23,8 +23,8 @@ jobs:
     - name: print-pwd
       shell: bash
       run: |
-        echo '${PWD}'
+        echo $PWD
     - uses: actions/upload-artifact@v2
       with:
         name: semgrep_runs
-        path: ${PWD}/semgrep_runs_output.tar.gz
+        path: semgrep_runs_output.tar.gz
