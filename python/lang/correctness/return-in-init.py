@@ -39,6 +39,6 @@ def __init__():
 class Ab:
     def func1():
         if not hello:
-            yield from blah
-        yield from other
+            yield 5
+        yield other
 
