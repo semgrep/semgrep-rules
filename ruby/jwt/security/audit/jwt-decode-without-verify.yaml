@@ -1,0 +1,19 @@
+rules:
+- id: ruby-jwt-decode-without-verify
+  message: |
+    Detected the decoding of a JWT token without a verify step.
+    JWT tokens must be verified before use, otherwise the token's
+    integrity is unknown. This means a malicious actor could forge
+    a JWT token with any claims.
+  metadata:
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      require 'jwt'
+      ...
+  - pattern: |-
+      JWT.decode($PAYLOAD,$SECRET,false,...)
