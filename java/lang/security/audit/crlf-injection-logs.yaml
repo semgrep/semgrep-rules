@@ -1,14 +1,5 @@
 rules:
 - id: crlf-injection-logs
-  message: |
-    When data from an untrusted source is put into a logger and not neutralized correctly,
-    an attacker could forge log entries or include malicious content.
-  metadata:
-    cwe: "CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CRLF_INJECTION_LOGS
-  severity: WARNING
-  languages: [java]
   pattern-either:
   - pattern: |
       class $CLASS {
@@ -315,3 +306,13 @@ rules:
         $LOG.log($LEVEL,<... $REQ.getParameter(...) ...>);
         ...
       }
+  message: |
+    When data from an untrusted source is put into a logger and not neutralized correctly,
+    an attacker could forge log entries or include malicious content.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CRLF_INJECTION_LOGS

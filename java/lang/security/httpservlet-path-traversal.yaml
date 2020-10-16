@@ -1,18 +1,5 @@
 rules:
 - id: httpservlet-path-traversal
-  metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN
-    references:
-    - https://www.owasp.org/index.php/Path_Traversal
-  message: |
-    Detected a potential path traversal. A malicious actor
-    could control the location of this file, to include going backwards
-    in the directory with '../'. To address this, ensure that user-controlled
-    variables in file paths are sanitized. You may aslso consider using a utility
-    method such as org.apache.commons.io.FilenameUtils.getName(...) to only
-    retrieve the file name from the path.
   patterns:
   - pattern-inside: |
       $RETURNTYPE $FUNC (..., HttpServletRequest $REQ, ...) {
@@ -27,6 +14,19 @@ rules:
         $VAR = $REQ.getParameter(...);
         ...
         new File(..., $VAR, ...);
-  severity: ERROR
+  message: |
+    Detected a potential path traversal. A malicious actor
+    could control the location of this file, to include going backwards
+    in the directory with '../'. To address this, ensure that user-controlled
+    variables in file paths are sanitized. You may aslso consider using a utility
+    method such as org.apache.commons.io.FilenameUtils.getName(...) to only
+    retrieve the file name from the path.
   languages:
   - java
+  severity: ERROR
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp: 'A1: Injection'
+    references:
+    - https://www.owasp.org/index.php/Path_Traversal
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN

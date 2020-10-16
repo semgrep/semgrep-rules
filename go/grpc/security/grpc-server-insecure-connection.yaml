@@ -1,15 +1,16 @@
 rules:
 - id: grpc-server-insecure-connection
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-300: Channel Accessible by Non-Endpoint'
-    references:
-    - https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption
-  message: Found an insecure gRPC connection. This allows for a connection without encryption to this server. A malicious
+  patterns:
+  - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
+  - pattern: grpc.NewServer(...)
+  message: >-
+    Found an insecure gRPC connection. This allows for a connection without encryption to this server. A malicious
     attacker could tamper with the gRPC message, which could compromise the machine.
   languages:
   - go
   severity: ERROR
-  patterns:
-  - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
-  - pattern: grpc.NewServer(...)
+  metadata:
+    cwe: 'CWE-300: Channel Accessible by Non-Endpoint'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption

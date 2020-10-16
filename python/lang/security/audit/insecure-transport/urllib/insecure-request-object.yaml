@@ -1,16 +1,5 @@
 rules:
 - id: insecure-request-object
-  message: |
-    Detected a 'urllib.request.Request()' object using an insecure transport
-    protocol, 'http://'. This connection will not be encrypted. Use
-    'https://' instead.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.Request("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
@@ -22,7 +11,19 @@ rules:
         def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
           ...
           urllib.request.Request($URL, ...)
+  message: |
+    Detected a 'urllib.request.Request()' object using an insecure transport
+    protocol, 'http://'. This connection will not be encrypted. Use
+    'https://' instead.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
   fix-regex:
+    count: 1
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://
-    count: 1

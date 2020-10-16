@@ -4,8 +4,9 @@ rules:
   message: |
     Avoid 'gets()'. This function does not consider buffer boundaries and can lead
     to buffer overflows. Use 'fgets()' or 'gets_s()' instead.
+  languages:
+  - c
+  severity: ERROR
   metadata:
     references:
     - https://us-cert.cisa.gov/bsi/articles/knowledge/coding-practices/fgets-and-gets_s
-  languages: [c]
-  severity: ERROR

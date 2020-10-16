@@ -1,14 +1,5 @@
 rules:
 - id: sql-injection-using-extra-where
-  message: Data from request is passed to extra(). This is a SQL injection and could be exploited. See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#.objects.extra
-    to learn how to mitigate. See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
-  metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#.objects.extra
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -278,3 +269,15 @@ rules:
         $INTERM = $STR % (..., $DATA, ...)
         ...
         $MODEL.objects.extra(..., where=[..., $INTERM, ...], ...)
+  message: >-
+    Data from request is passed to extra(). This is a SQL injection and could be exploited. See
+    https://docs.djangoproject.com/en/3.0/ref/models/expressions/#.objects.extra to learn how to mitigate. See
+    https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#.objects.extra

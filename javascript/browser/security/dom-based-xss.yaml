@@ -9,11 +9,11 @@ rules:
     send someone a link like this: http://www.some.site/page.html?default=<script>alert(document.cookie)</script>
     which would add the script to the page.
     Consider whitelisting appropriate values or using an approach which does not involve the URL.
+  languages:
+  - javascript
+  severity: ERROR
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
     references:
     - https://owasp.org/www-community/attacks/DOM_Based_XSS
-  severity: ERROR
-  languages:
-  - javascript

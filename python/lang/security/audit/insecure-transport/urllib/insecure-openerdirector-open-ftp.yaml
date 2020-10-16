@@ -1,17 +1,5 @@
 rules:
 - id: insecure-openerdirector-open-ftp
-  message: |
-    Detected an unsecured transmission channel. 'OpenerDirector.open(...)' is
-    being used with 'ftp://'. Information sent over this connection will be
-    unencrypted. Consider using SFTP instead. urllib does not support SFTP,
-    so consider a library which supports SFTP.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector.open
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.OpenerDirector(...).open("=~/^[Ff][Tt][Pp]://.*/", ...)
@@ -44,3 +32,16 @@ rules:
               $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
               ...
           - pattern: $OPENERDIRECTOR.open($URL, ...)
+  message: |
+    Detected an unsecured transmission channel. 'OpenerDirector.open(...)' is
+    being used with 'ftp://'. Information sent over this connection will be
+    unencrypted. Consider using SFTP instead. urllib does not support SFTP,
+    so consider a library which supports SFTP.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector.open

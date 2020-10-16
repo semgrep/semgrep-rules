@@ -17,6 +17,9 @@ rules:
     client-side scripts from reading the cookie which mitigates XSS
     attacks. Set the 'HttpOnly' flag by setting 'HttpOnly' to 'true'
     in the Cookie.
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
     owasp: 'A3: Sensitive Data Exposure'
@@ -26,5 +29,3 @@ rules:
   fix-regex:
     regex: (HttpOnly\s*:\s+)false
     replacement: \1true
-  severity: WARNING
-  languages: [go]

@@ -1,15 +1,5 @@
 rules:
 - id: os-system-injection
-  languages:
-  - python
-  severity: ERROR
-  message: User data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this
-    must be done, use the 'subprocess' module instead and pass the arguments as a list.
-  metadata:
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Command_Injection
   patterns:
   - pattern-either:
     - patterns:
@@ -51,4 +41,14 @@ rules:
               $INTERM = <... flask.request.$W ...>
               ... 
           - pattern: os.system(..., <... $INTERM ...>, ...)
-
+  message: >-
+    User data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this
+    must be done, use the 'subprocess' module instead and pass the arguments as a list.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Command_Injection

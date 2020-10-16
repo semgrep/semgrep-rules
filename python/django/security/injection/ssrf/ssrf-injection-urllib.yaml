@@ -1,20 +1,5 @@
 rules:
 - id: ssrf-injection-urllib
-  message: |
-    Data from request object is passed to a new server-side request.
-    This could lead to a server-side request forgery (SSRF). To mitigate,
-    ensure that schemes and hosts are validated against a whitelist,
-    do not forward the response to the user, and ensure proper authentication
-    and transport-layer security in the proxied request.
-    See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
-    to learn more about SSRF vulnerabilities.
-  metadata:
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -244,3 +229,19 @@ rules:
         urllib.request.urlopen(..., $INTERM, ...)
     - pattern: $A = urllib.request.urlopen(..., request.$W, ...)
     - pattern: return urllib.request.urlopen(..., request.$W, ...)
+  message: |
+    Data from request object is passed to a new server-side request.
+    This could lead to a server-side request forgery (SSRF). To mitigate,
+    ensure that schemes and hosts are validated against a whitelist,
+    do not forward the response to the user, and ensure proper authentication
+    and transport-layer security in the proxied request.
+    See https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+    to learn more about SSRF vulnerabilities.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery

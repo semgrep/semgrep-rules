@@ -1,17 +1,5 @@
 rules:
 - id: insecure-request-object-ftp
-  message: |
-    Detected a 'urllib.request.Request()' object using an insecure transport
-    protocol, 'ftp://'. This connection will not be encrypted. Consider using
-    SFTP instead. urllib does not support SFTP natively, so consider using
-    a library which supports SFTP.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.Request("=~/^[Ff][Tt][Pp]://.*/", ...)
@@ -23,3 +11,16 @@ rules:
         def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
           ...
           urllib.request.Request($URL, ...)
+  message: |
+    Detected a 'urllib.request.Request()' object using an insecure transport
+    protocol, 'ftp://'. This connection will not be encrypted. Consider using
+    SFTP instead. urllib does not support SFTP natively, so consider using
+    a library which supports SFTP.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request

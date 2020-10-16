@@ -1,8 +1,5 @@
 rules:
 - id: writing-to-file-in-read-mode
-  message: |
-    The file object '$FD' was opened in read mode, but is being
-    written to. This will cause a runtime error.
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -18,6 +15,9 @@ rules:
         with open($NAME, "rb", ...) as $FD:
           ...
   - pattern: $FD.write(...)
-  severity: ERROR
+  message: |
+    The file object '$FD' was opened in read mode, but is being
+    written to. This will cause a runtime error.
   languages:
   - python
+  severity: ERROR

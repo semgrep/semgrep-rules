@@ -1,5 +1,17 @@
 rules:
 - id: server-dangerous-object-deserialization
+  patterns:
+  - pattern: |
+      interface $INTERFACE extends Remote {
+        $RETURNTYPE $METHOD(Object $PARAM) throws RemoteException;
+      }
+  message: |
+    Using an arbitrary object ('Object $PARAM') with Java RMI is an insecure deserialization
+    vulnerability. This object can be manipulated by a malicious actor allowing them to execute
+    code on your system. Instead, use an integer ID to look up your object, or consider alternative
+    serializiation schemes such as JSON.
+  languages:
+  - java
   severity: ERROR
   metadata:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
@@ -7,15 +19,3 @@ rules:
     references:
     - https://mogwailabs.de/blog/2019/03/attacking-java-rmi-services-after-jep-290/
     - https://frohoff.github.io/appseccali-marshalling-pickles/
-  message: |
-    Using an arbitrary object ('Object $PARAM') with Java RMI is an insecure deserialization
-    vulnerability. This object can be manipulated by a malicious actor allowing them to execute
-    code on your system. Instead, use an integer ID to look up your object, or consider alternative
-    serializiation schemes such as JSON.
-  patterns:
-  - pattern: |
-      interface $INTERFACE extends Remote {
-        $RETURNTYPE $METHOD(Object $PARAM) throws RemoteException;
-      }
-  languages:
-  - java

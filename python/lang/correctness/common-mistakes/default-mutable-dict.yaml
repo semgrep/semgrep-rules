@@ -179,9 +179,11 @@ rules:
             def $F(..., $D={}, ...):
               ...
               $D.setdefault(...)
-  message: Function $F mutates default dict $D. Instances of default function arguments in Python are shared between function
-    calls.  Mutating a default function argument changes the result for all function consumers. This will most likely cause
-    unexpected results, or lead to security vulnerabilities whereby one function consumer can either view or modify the data
-    of another function consumer.
-  languages: [python]
+  message: >-
+    Function $F mutates default dict $D. Instances of default function arguments in Python are shared between function
+    calls.  Mutating a default function argument changes the result for all function consumers. This will most likely
+    cause unexpected results, or lead to security vulnerabilities whereby one function consumer can either view or
+    modify the data of another function consumer.
+  languages:
+  - python
   severity: ERROR

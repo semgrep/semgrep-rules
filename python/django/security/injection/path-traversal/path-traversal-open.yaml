@@ -1,14 +1,5 @@
 rules:
 - id: path-traversal-open
-  message: Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise it could result
-    in path traversal attacks.
-  metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Path_Traversal
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -422,3 +413,14 @@ rules:
         ...
         with open(..., $DATA, ...) as $FD:
           ...
+  message: >-
+    Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise it could
+    result in path traversal attacks.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Path_Traversal

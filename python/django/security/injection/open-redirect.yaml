@@ -1,17 +1,5 @@
 rules:
 - id: open-redirect
-  message: |
-    Data from request ($DATA) is passed to redirect(). This is an open redirect and could be exploited.
-    Ensure you are redirecting to safe URLs by using django.utils.http.is_safe_url().
-    See https://cwe.mitre.org/data/definitions/601.html for more information.
-  metadata:
-    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-    owasp: 'A1: Injection'
-    references:
-    - https://www.djm.org.uk/posts/djangos-little-protections-word-redirect-dangers/
-    - https://github.com/django/django/blob/d1b7bd030b1db111e1a3505b1fc029ab964382cc/django/utils/http.py#L231
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -524,5 +512,18 @@ rules:
     - pattern: return django.http.HttpResponseRedirect(..., $S % request.$W, ...)
     - pattern: return django.http.HttpResponseRedirect(..., f"...{request.$W}...", ...)
   - metavariable-regex:
-      metavariable: '$W'
-      regex: '(?!get_full_path)'
+      metavariable: $W
+      regex: (?!get_full_path)
+  message: |
+    Data from request ($DATA) is passed to redirect(). This is an open redirect and could be exploited.
+    Ensure you are redirecting to safe URLs by using django.utils.http.is_safe_url().
+    See https://cwe.mitre.org/data/definitions/601.html for more information.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp: 'A1: Injection'
+    references:
+    - https://www.djm.org.uk/posts/djangos-little-protections-word-redirect-dangers/
+    - https://github.com/django/django/blob/d1b7bd030b1db111e1a3505b1fc029ab964382cc/django/utils/http.py#L231

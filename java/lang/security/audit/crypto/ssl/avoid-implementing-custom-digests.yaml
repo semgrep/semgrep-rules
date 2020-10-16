@@ -1,19 +1,20 @@
 rules:
 - id: avoid-implementing-custom-digests
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CUSTOM_MESSAGE_DIGEST
-    references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#custom-algorithms
+  pattern: |-
+    class $CLASS extends MessageDigest {
+      ...
+    }
   message: |
     Cryptographic algorithms are notoriously difficult to get right. By implementing
     a custom message digest, you risk introducing security issues into your program.
     Use one of the many sound message digests already available to you:
     MessageDigest sha256Digest = MessageDigest.getInstance("SHA256");
+  languages:
+  - java
   severity: WARNING
-  languages: [java]
-  pattern: |-
-    class $CLASS extends MessageDigest {
-      ...
-    }
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#custom-algorithms
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CUSTOM_MESSAGE_DIGEST

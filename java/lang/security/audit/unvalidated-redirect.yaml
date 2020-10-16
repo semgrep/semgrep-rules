@@ -1,15 +1,5 @@
 rules:
 - id: unvalidated-redirect
-  message: |
-    Application redirects to a destination URL specified by a user-supplied
-    parameter that is not validated. This could direct users to malicious locations.
-    Consider using a whitelist to validate URLs.
-  metadata:
-    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT
-  severity: WARNING
-  languages: [java]
   pattern-either:
   - pattern: |
       $X $METHOD(...,HttpServletResponse $RES,...,String $URL,...) {
@@ -107,3 +97,14 @@ rules:
         $RES.addHeader("Location",$REQ.getParameter(...));
         ...
       }
+  message: |
+    Application redirects to a destination URL specified by a user-supplied
+    parameter that is not validated. This could direct users to malicious locations.
+    Consider using a whitelist to validate URLs.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT

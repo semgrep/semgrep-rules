@@ -4,19 +4,20 @@ rules:
   - pattern-either:
     - pattern: Cryptodome.Cipher.ARC2.new(...)
     - pattern: Crypto.Cipher.ARC2.new
-  message: |
-    Detected RC2 cipher algorithm which is considered insecure. The algorithm has known vulnerabilities and is difficult to use securely. Use AES instead.
+  message: >
+    Detected RC2 cipher algorithm which is considered insecure. The algorithm has known vulnerabilities and is
+    difficult to use securely. Use AES instead.
+  languages:
+  - python
+  severity: WARNING
   metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    bandit-code: B304
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp: 'A3: Sensitive Data Exposure'
-    bandit-code: B304
     references:
     - https://security.stackexchange.com/questions/93924/is-rc2-cbc-at-all-secure
     - https://sweet32.info/
-  severity: WARNING
-  languages:
-  - python
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
 - id: insecure-cipher-algorithm-rc4
   patterns:
   - pattern-either:
@@ -25,17 +26,17 @@ rules:
   message: |
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
+  languages:
+  - python
+  severity: WARNING
   metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    bandit-code: B304
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp: 'A3: Sensitive Data Exposure'
-    bandit-code: B304
     references:
     - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
     - https://sweet32.info/
-  severity: WARNING
-  languages:
-  - python
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
 - id: insecure-cipher-algorithm-blowfish
   patterns:
   - pattern-either:
@@ -44,16 +45,16 @@ rules:
   message: |
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
-  metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A3: Sensitive Data Exposure'
-    bandit-code: B304
-    references:
-    - https://sweet32.info/
-  severity: WARNING
   languages:
   - python
+  severity: WARNING
+  metadata:
+    bandit-code: B304
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
 - id: insecure-cipher-algorithm-des
   patterns:
   - pattern-either:
@@ -62,16 +63,16 @@ rules:
   message: |
     Detected DES cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
-  metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A3: Sensitive Data Exposure'
-    bandit-code: B304
-    references:
-    - https://tools.ietf.org/html/rfc5469
-  severity: WARNING
   languages:
   - python
+  severity: WARNING
+  metadata:
+    bandit-code: B304
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc5469
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
 - id: insecure-cipher-algorithm-xor
   patterns:
   - pattern-either:
@@ -80,13 +81,13 @@ rules:
   message: |
     Detected XOR cipher algorithm which is considered insecure. This algorithm
     is not cryptographically secure and can be reversed easily. Use AES instead.
-  metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A3: Sensitive Data Exposure'
-    bandit-code: B304
-    references:
-    - https://stackoverflow.com/questions/1135186/whats-wrong-with-xor-encryption
-  severity: WARNING
   languages:
   - python
+  severity: WARNING
+  metadata:
+    bandit-code: B304
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://stackoverflow.com/questions/1135186/whats-wrong-with-xor-encryption
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84

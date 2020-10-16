@@ -11,10 +11,11 @@ rules:
         $DATA = json.dumps(...)
         ...
         return <... $DATA ...>
+  message: flask.jsonify() is a Flask helper method which handles the correct settings for returning JSON from Flask routes
+  languages:
+  - python
+  severity: ERROR
   fix-regex:
+    count: 1
     regex: (json\.){0,1}dumps
     replacement: flask.jsonify
-    count: 1
-  message: flask.jsonify() is a Flask helper method which handles the correct settings for returning JSON from Flask routes
-  languages: [python]
-  severity: ERROR

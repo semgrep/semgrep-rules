@@ -1,60 +1,63 @@
 rules:
 - id: use-of-md5
-  message: |
-    Detected MD5 hash algorithm which is considered insecure. MD5 is not 
-    collision resistant and is therefore not suitable as a cryptographic
-    signature. Use SHA256 or SHA3 instead. 
-  languages: [go]
-  severity: WARNING
-  metadata:
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    source-rule-url: https://github.com/securego/gosec#available-rules
   pattern-either:
   - pattern: |
       md5.New()
   - pattern: |
       md5.Sum(...)
-- id: use-of-sha1
   message: |
-    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not 
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not 
     collision resistant and is therefore not suitable as a cryptographic
-    signature. Use SHA256 or SHA3 instead.
-  languages: [go]
+    signature. Use SHA256 or SHA3 instead. 
+  languages:
+  - go
   severity: WARNING
   metadata:
-    owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
     source-rule-url: https://github.com/securego/gosec#available-rules
+- id: use-of-sha1
   pattern-either:
   - pattern: |
       sha1.New()
   - pattern: |
       sha1.Sum(...)
-- id: use-of-DES
   message: |
-    Detected DES cipher algorithm which is insecure. The algorithm is
-    considered weak and has been deprecated. Use AES instead.
-  languages: [go]
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not 
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  languages:
+  - go
   severity: WARNING
   metadata:
-    owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
     source-rule-url: https://github.com/securego/gosec#available-rules
+- id: use-of-DES
   pattern-either:
   - pattern: |
       des.NewTripleDESCipher(...)
   - pattern: |
       des.NewCipher(...)
+  message: |
+    Detected DES cipher algorithm which is insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    source-rule-url: https://github.com/securego/gosec#available-rules
 - id: use-of-rc4
+  pattern: rc4.NewCipher(...)
   message: |
     Detected RC4 cipher algorithm which is insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
-  languages: [go]
+  languages:
+  - go
   severity: WARNING
   metadata:
-    owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
     source-rule-url: https://github.com/securego/gosec#available-rules
-  pattern: |-
-    rc4.NewCipher(...)

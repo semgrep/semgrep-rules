@@ -8,7 +8,6 @@ rules:
     - pattern-inside: |
         import django.shortcuts.render
         ...
-      # Exclude vendored i18n code
   - pattern-not-inside: |
       LANGUAGE_QUERY_PARAMETER = 'language'
       ...
@@ -32,6 +31,9 @@ rules:
     If you want to send the cookie over http, set secure=False.  If you want to let client-side JavaScript
     read the cookie, set httponly=False. If you want to attach cookies to requests for external sites,
     set samesite=None.
+  languages:
+  - python
+  severity: WARNING
   metadata:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'
@@ -39,5 +41,3 @@ rules:
     - https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponse.set_cookie
     - https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/
     - https://bento.dev/checks/flask/secure-set-cookie/
-  languages: [python]
-  severity: WARNING

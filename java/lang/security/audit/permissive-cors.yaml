@@ -1,10 +1,5 @@
 rules:
 - id: permissive-cors
-  message: |
-    https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
-    Permissive CORS policy will allow a malicious application to communicate with the victim application in an inappropriate way, leading to spoofing, data theft, relay and other attacks.
-  severity: WARNING
-  languages: [java]
   pattern-either:
   - pattern: |
       HttpServletResponse $RES = ...;
@@ -52,3 +47,11 @@ rules:
       }
   - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
   - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
+  message: >
+    https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
+
+    Permissive CORS policy will allow a malicious application to communicate with the victim application in an
+    inappropriate way, leading to spoofing, data theft, relay and other attacks.
+  languages:
+  - java
+  severity: WARNING

@@ -12,11 +12,11 @@ rules:
     Detected public s3 bucket policy. This policy allows anyone to access
     certain properties of or items in the bucket. Do not do this unless you
     will never have sensitive data inside the bucket.
-  metadata:
-    owasp: 'A6: Security Misconfiguration'
-    cwe: CWE-264 - Permissions, Privileges, and Access Controls
-    references:
-    - https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteAccessPermissionsReqd.html
-  severity: WARNING
   languages:
   - json
+  severity: WARNING
+  metadata:
+    cwe: CWE-264 - Permissions, Privileges, and Access Controls
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteAccessPermissionsReqd.html

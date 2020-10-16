@@ -1,15 +1,5 @@
 rules:
 - id: express-cookie-session-default-name
-  message: |
-    Don’t use the default session cookie name
-    Using the default session cookie name can open your app to attacks.
-    The security issue posed is similar to X-Powered-By: a potential attacker can use it to fingerprint the server and target attacks accordingly.
-  severity: WARNING
-  languages: [javascript]
-  metadata:
-    cwe: 'CWE-522: Insufficiently Protected Credentials'
-    owasp: 'A2: Broken Authentication'
-    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -32,16 +22,21 @@ rules:
       $OPTS.name = ...;
       ...
       $SESSION($OPTS,...);
-- id: express-cookie-session-no-secure
-  message: |
-    Default session middleware settings: `secure` not set.
-    It ensures the browser only sends the cookie over HTTPS.
+  message: >
+    Don’t use the default session cookie name
+
+    Using the default session cookie name can open your app to attacks.
+
+    The security issue posed is similar to X-Powered-By: a potential attacker can use it to fingerprint the server and
+    target attacks accordingly.
+  languages:
+  - javascript
   severity: WARNING
-  languages: [javascript]
   metadata:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+- id: express-cookie-session-no-secure
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -82,16 +77,17 @@ rules:
       $OPTS.cookie.secure = true;
       ...
       $SESSION($OPTS,...);
-- id: express-cookie-session-no-httponly
   message: |
-    Default session middleware settings: `httpOnly` not set.
-    It ensures the cookie is sent only over HTTP(S), not client JavaScript, helping to protect against cross-site scripting attacks.
+    Default session middleware settings: `secure` not set.
+    It ensures the browser only sends the cookie over HTTPS.
+  languages:
+  - javascript
   severity: WARNING
-  languages: [javascript]
   metadata:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+- id: express-cookie-session-no-httponly
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -132,17 +128,19 @@ rules:
       $OPTS.cookie.httpOnly = true;
       ...
       $SESSION($OPTS,...);
-- id: express-cookie-session-no-domain
-  message: |
-    Default session middleware settings: `domain` not set.
-    It indicates the domain of the cookie; use it to compare against the domain of the server in which the URL is being requested.
-    If they match, then check the path attribute next.
+  message: >
+    Default session middleware settings: `httpOnly` not set.
+
+    It ensures the cookie is sent only over HTTP(S), not client JavaScript, helping to protect against cross-site
+    scripting attacks.
+  languages:
+  - javascript
   severity: WARNING
-  languages: [javascript]
   metadata:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+- id: express-cookie-session-no-domain
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -183,16 +181,21 @@ rules:
       $OPTS.cookie.domain = ...;
       ...
       $SESSION($OPTS,...);
-- id: express-cookie-session-no-path
-  message: |
-    Default session middleware settings: `path` not set.
-    It indicates the path of the cookie; use it to compare against the request path. If this and domain match, then send the cookie in the request.
+  message: >
+    Default session middleware settings: `domain` not set.
+
+    It indicates the domain of the cookie; use it to compare against the domain of the server in which the URL is
+    being requested.
+
+    If they match, then check the path attribute next.
+  languages:
+  - javascript
   severity: WARNING
-  languages: [javascript]
   metadata:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+- id: express-cookie-session-no-path
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -233,16 +236,19 @@ rules:
       $OPTS.cookie.path = ...;
       ...
       $SESSION($OPTS,...);
-- id: express-cookie-session-no-expires
-  message: |
-    Default session middleware settings: `expires` not set.
-    Use it to set expiration date for persistent cookies.
+  message: >
+    Default session middleware settings: `path` not set.
+
+    It indicates the path of the cookie; use it to compare against the request path. If this and domain match, then
+    send the cookie in the request.
+  languages:
+  - javascript
   severity: WARNING
-  languages: [javascript]
   metadata:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+- id: express-cookie-session-no-expires
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -283,3 +289,13 @@ rules:
       $OPTS.cookie.expires = ...;
       ...
       $SESSION($OPTS,...);
+  message: |
+    Default session middleware settings: `expires` not set.
+    Use it to set expiration date for persistent cookies.
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html

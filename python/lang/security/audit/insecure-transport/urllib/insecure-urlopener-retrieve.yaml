@@ -1,15 +1,5 @@
 rules:
 - id: insecure-urlopener-retrieve
-  message: |
-    Detected an unsecured transmission channel. 'URLopener.retrieve(...)' is
-    being used with 'http://'. Use 'https://' instead to secure the channel.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.retrieve
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.URLopener(...).retrieve("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
@@ -42,7 +32,18 @@ rules:
               $OPENERDIRECTOR = urllib.request.URLopener(...)
               ...
           - pattern: $OPENERDIRECTOR.retrieve($URL, ...)
+  message: |
+    Detected an unsecured transmission channel. 'URLopener.retrieve(...)' is
+    being used with 'http://'. Use 'https://' instead to secure the channel.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.retrieve
   fix-regex:
+    count: 1
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://
-    count: 1

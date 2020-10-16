@@ -1,13 +1,5 @@
 rules:
 - id: require-request
-  message: |
-    If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the server.
-  severity: ERROR
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-706: Use of Incorrectly-Resolved Name or Reference'
-    source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html
   patterns:
   - pattern-either:
     - pattern-inside: function ($REQ, $RES, ...) {...}
@@ -18,3 +10,13 @@ rules:
   - pattern-either:
     - pattern: require(<... $REQ.$QUERY.$FOO ...>)
     - pattern: require(<... $REQ.$BODY ...>)
+  message: >
+    If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the
+    server.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-706: Use of Incorrectly-Resolved Name or Reference'
+    owasp: 'A1: Injection'
+    source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html

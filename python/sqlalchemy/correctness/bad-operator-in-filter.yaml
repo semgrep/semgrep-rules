@@ -1,13 +1,5 @@
 rules:
 - id: bad-operator-in-filter
-  languages: [python]
-  message: |
-    Only comparison operators should be used inside SQLAlchemy filter expressions. Use `==` instead of `is`,
-    `!=` instead of `is not`, `sqlalchemy.and_` instead of `and`, `sqlalchemy.or_` instead of `or`,
-    `sqlalchemy.not_` instead of `not`, and `sqlalchemy.in_` instead of `in_`.
-  metadata:
-    references:
-    - https://docs.sqlalchemy.org/en/13/orm/tutorial.html#common-filter-operators
   patterns:
   - pattern-inside: |
       def $ANY(...):
@@ -23,4 +15,13 @@ rules:
     - pattern: $A or $B
     - pattern: $A in $B
     - pattern: $A not in $B
+  message: |
+    Only comparison operators should be used inside SQLAlchemy filter expressions. Use `==` instead of `is`,
+    `!=` instead of `is not`, `sqlalchemy.and_` instead of `and`, `sqlalchemy.or_` instead of `or`,
+    `sqlalchemy.not_` instead of `not`, and `sqlalchemy.in_` instead of `in_`.
+  languages:
+  - python
   severity: WARNING
+  metadata:
+    references:
+    - https://docs.sqlalchemy.org/en/13/orm/tutorial.html#common-filter-operators

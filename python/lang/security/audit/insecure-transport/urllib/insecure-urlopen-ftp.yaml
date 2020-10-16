@@ -1,16 +1,5 @@
 rules:
 - id: insecure-urlopen-ftp
-  message: |
-    Detected 'urllib.urlopen()' using 'ftp://'. This request will not be
-    encrypted. Consider using SFTP instead. urllib does not support SFTP,
-    so consider switching to a library which supports SFTP.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.urlopen("=~/^[Ff][Tt][Pp]://.*/", ...)
@@ -22,3 +11,15 @@ rules:
         def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
           ...
           urllib.request.urlopen($URL, ...)
+  message: |
+    Detected 'urllib.urlopen()' using 'ftp://'. This request will not be
+    encrypted. Consider using SFTP instead. urllib does not support SFTP,
+    so consider switching to a library which supports SFTP.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen

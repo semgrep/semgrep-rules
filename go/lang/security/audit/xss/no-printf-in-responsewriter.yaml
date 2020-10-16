@@ -1,16 +1,5 @@
 rules:
 - id: no-printf-in-responsewriter
-  message: |
-    Detected 'printf' or similar in 'http.ResponseWriter.write()'.
-    This bypasses HTML escaping that prevents cross-site scripting
-    vulnerabilities. Instead, use the 'html/template' package
-    to render data to users.
-  metadata:
-    owasp: 'A7: Cross-site Scripting (XSS)'
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    references:
-    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
-  severity: WARNING
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -23,5 +12,16 @@ rules:
         }
   - pattern: |
       $WRITER.Write(<... fmt.$PRINTF(...) ...>, ...)
+  message: |
+    Detected 'printf' or similar in 'http.ResponseWriter.write()'.
+    This bypasses HTML escaping that prevents cross-site scripting
+    vulnerabilities. Instead, use the 'html/template' package
+    to render data to users.
   languages:
   - go
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/

@@ -6,18 +6,22 @@ rules:
         process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
     - pattern: |
         {rejectUnauthorized:false}
-  message: |
+  message: >
     Checks for setting the environment variable NODE_TLS_REJECT_UNAUTHORIZED to 0, which disables TLS verification. 
-    This should only be used for debugging purposes. Setting the option rejectUnauthorized to false bypasses verification
+
+    This should only be used for debugging purposes. Setting the option rejectUnauthorized to false bypasses
+    verification
+
     against the list of trusted CAs, which also leads to insecure transport. These options lead to vulnerability
+
     to MTM attacks, and should not be used.
+  languages:
+  - javascript
+  severity: WARNING
   metadata:
-    vulnerability: Insecure Transport
-    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
     references:
     - https://nodejs.org/api/https.html#https_https_request_options_callback
     - https://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100
-  severity: WARNING
-  languages: [javascript]
-
+    vulnerability: Insecure Transport

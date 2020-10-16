@@ -1,12 +1,5 @@
 rules:
 - id: express-sandbox-code-injection
-  message: |
-    Make sure that unverified user data can not reach `sandbox`.
-  severity: ERROR
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
       ...
@@ -63,3 +56,11 @@ rules:
         $CODE = <... $REQ.$BODY ...>;
         ...
         new $SANDBOX(...).run(<... $CODE ...>,...);
+  message: |
+    Make sure that unverified user data can not reach `sandbox`.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'

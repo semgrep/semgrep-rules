@@ -1,15 +1,5 @@
 rules:
 - id: hardcoded-passport-secret
-  message: |
-    Hardcoded secret used for Passport Strategy.
-    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables: process.env.SECRET)
-  metadata:
-    cwe: 'CWE-522: Insufficiently Protected Credentials'
-    owasp: 'A2: Broken Authentication'
-    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-  languages: [javascript]
-  severity: ERROR
   pattern-either:
   - pattern: |
       var $F = require("passport-auth0").Strategy;
@@ -795,3 +785,17 @@ rules:
       $P = {consumerSecret: $S};
       ...
       new $F($P, ...);
+  message: >
+    Hardcoded secret used for Passport Strategy.
+
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment
+    variables: process.env.SECRET)
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/

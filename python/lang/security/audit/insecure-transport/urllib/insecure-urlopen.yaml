@@ -1,15 +1,5 @@
 rules:
 - id: insecure-urlopen
-  message: |
-    Detected 'urllib.urlopen()' using 'http://'. This request will not be
-    encrypted. Use 'https://' instead.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.urlopen("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
@@ -21,6 +11,17 @@ rules:
         def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
           ...
           urllib.request.urlopen($URL, ...)
+  message: |
+    Detected 'urllib.urlopen()' using 'http://'. This request will not be
+    encrypted. Use 'https://' instead.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
   fix-regex:
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://

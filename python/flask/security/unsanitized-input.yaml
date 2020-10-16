@@ -24,11 +24,12 @@ rules:
     in which an attacker causes arbitrary code to be executed in the user's browser.
     To prevent, please sanitize the user input, e.g. by rendering the response
     in a Jinja2 template (see considerations in https://flask.palletsprojects.com/en/1.0.x/security/).
+  languages:
+  - python
+  severity: WARNING
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://flask.palletsprojects.com/en/1.0.x/security/
     - https://owasp.org/www-community/attacks/xss/
-  languages: [python]
-  severity: WARNING

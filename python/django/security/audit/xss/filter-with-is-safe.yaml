@@ -1,5 +1,9 @@
 rules:
 - id: filter-with-is-safe
+  pattern: |-
+    @register.filter(..., is_safe=True, ...)
+    def $FILTER(...):
+      ...
   message: |
     Detected Django filters flagged with 'is_safe'. 'is_safe' tells Django
     not to apply escaping on the value returned by this filter (although the
@@ -8,6 +12,9 @@ rules:
     1) add HTML characters, 2) remove characters, or 3) use external data in
     any way. Consider instead removing 'is_safe' and explicitly marking safe
     content with 'mark_safe()'.
+  languages:
+  - python
+  severity: WARNING
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
@@ -15,10 +22,3 @@ rules:
     - https://docs.djangoproject.com/en/3.1/topics/security/#cross-site-scripting-xss-protection
     - https://docs.djangoproject.com/en/3.1/howto/custom-template-tags/#filters-and-auto-escaping
     - https://stackoverflow.com/questions/7665512/why-use-is-safe
-  languages:
-  - python
-  severity: WARNING
-  pattern: |-
-    @register.filter(..., is_safe=True, ...)
-    def $FILTER(...):
-      ...

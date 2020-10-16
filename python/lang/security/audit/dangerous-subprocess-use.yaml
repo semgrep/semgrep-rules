@@ -8,12 +8,13 @@ rules:
     Detected subprocess function '$FUNC' without a static string. Audit the use of this
     call to ensure it is not vulnerable to a command injection. You may consider using
     shlex.escape.
+  languages:
+  - python
+  severity: WARNING
   metadata:
-    owasp: 'A1: Injection'
     cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
     references:
     - https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess
     - https://docs.python.org/3/library/subprocess.html
     - https://docs.python.org/3/library/shlex.html
-  languages: [python]
-  severity: WARNING

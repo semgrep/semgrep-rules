@@ -1,12 +1,5 @@
 rules:
 - id: express-wkhtmltoimage-injection
-  message: |
-    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-  severity: ERROR
-  languages: [javascript]
   patterns:
   - pattern-inside: |
       ...
@@ -32,14 +25,16 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         $WK.generate(<... $INPUT ...>,...);
-- id: express-wkhtmltopdf-injection
-  message: |
-    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  message: >
+    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery
+    vulnerabilities
+  languages:
+  - javascript
   severity: ERROR
-  languages: [javascript]
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'
+- id: express-wkhtmltopdf-injection
   patterns:
   - pattern-inside: |
       ...
@@ -65,3 +60,12 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         $WK(<... $INPUT ...>,...);
+  message: >
+    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery
+    vulnerabilities
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'

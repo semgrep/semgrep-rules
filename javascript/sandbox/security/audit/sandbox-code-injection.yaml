@@ -1,12 +1,5 @@
 rules:
 - id: sandbox-code-injection
-  message: |
-    Make sure that unverified user data can not reach `sandbox`.
-  severity: WARNING
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
       ...
@@ -27,5 +20,12 @@ rules:
       $S = new $SANDBOX(...);
       ...
       $S.run("...",...);
-  - pattern-not: |-
-      new $SANDBOX(...).run("...",...);
+  - pattern-not: new $SANDBOX(...).run("...",...);
+  message: |
+    Make sure that unverified user data can not reach `sandbox`.
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'

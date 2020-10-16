@@ -1,18 +1,5 @@
 rules:
 - id: extends-custom-expression
-  languages:
-  - python
-  message: |
-    Found extension of custom expression: $CLASS. Extending expressions
-    in this way could inadvertently expose a SQL injection vulnerability.
-    See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#avoiding-sql-injection
-    for more information.
-  metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#avoiding-sql-injection
-    - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
   patterns:
   - pattern-either:
     - pattern: |
@@ -129,4 +116,17 @@ rules:
     - pattern: |
         class $CLASS(..., django.db.models.expressions.ValueRange, ...):
             ...
+  message: |
+    Found extension of custom expression: $CLASS. Extending expressions
+    in this way could inadvertently expose a SQL injection vulnerability.
+    See https://docs.djangoproject.com/en/3.0/ref/models/expressions/#avoiding-sql-injection
+    for more information.
+  languages:
+  - python
   severity: WARNING
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#avoiding-sql-injection
+    - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/

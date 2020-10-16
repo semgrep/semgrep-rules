@@ -1,16 +1,5 @@
 rules:
 - id: xssrequestwrapper-is-insecure
-  metadata:
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XSS_REQUEST_WRAPPER
-  message: |
-    It looks like you're using an implementation of XSSRequestWrapper from dzone.
-    (https://www.javacodegeeks.com/2012/07/anti-cross-site-scripting-xss-filter.html)
-    The XSS filtering in this code is not secure and can be bypassed by malicious actors.
-    It is recommended to use a stack that automatically escapes in your view or templates
-    instead of filtering yourself.
-  severity: WARNING
   patterns:
   - pattern-either:
     - pattern: |
@@ -20,5 +9,16 @@ rules:
     - pattern: |-
         $P = $X.compile("</script>", $X.CASE_INSENSITIVE);
         $V = $P.matcher(...).replaceAll("");
+  message: |
+    It looks like you're using an implementation of XSSRequestWrapper from dzone.
+    (https://www.javacodegeeks.com/2012/07/anti-cross-site-scripting-xss-filter.html)
+    The XSS filtering in this code is not secure and can be bypassed by malicious actors.
+    It is recommended to use a stack that automatically escapes in your view or templates
+    instead of filtering yourself.
   languages:
   - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XSS_REQUEST_WRAPPER

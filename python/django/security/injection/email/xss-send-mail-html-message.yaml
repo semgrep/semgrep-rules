@@ -1,16 +1,5 @@
 rules:
 - id: xss-send-mail-html-message
-  message: |
-    Found request data in 'send_mail(...)' that uses 'html_message'.
-    This is dangerous because HTML emails are susceptible to XSS.
-    An attacker could inject data into this HTML email, causing XSS.
-  metadata:
-    cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://www.damonkohler.com/2008/12/email-injection.html
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -228,3 +217,15 @@ rules:
         django.core.mail.send_mail(..., html_message=$INTERM, ...)
     - pattern: $A = django.core.mail.send_mail(..., html_message=request.$W, ...)
     - pattern: return django.core.mail.send_mail(..., html_message=request.$W, ...)
+  message: |
+    Found request data in 'send_mail(...)' that uses 'html_message'.
+    This is dangerous because HTML emails are susceptible to XSS.
+    An attacker could inject data into this HTML email, causing XSS.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://www.damonkohler.com/2008/12/email-injection.html

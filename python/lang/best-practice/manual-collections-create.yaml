@@ -19,7 +19,8 @@ rules:
             ...
             $DICT.setdefault($KEY, {}).update(...)
   message: manually creating a defaultdict - use collections.defaultdict(dict)
-  languages: [python]
+  languages:
+  - python
   severity: WARNING
 - id: manual-defaultdict-set-create
   patterns:
@@ -41,7 +42,8 @@ rules:
             ...
             $DICT.setdefault($KEY, set()).add(...)
   message: manually creating a defaultdict - use collections.defaultdict(set)
-  languages: [python]
+  languages:
+  - python
   severity: WARNING
 - id: manual-defaultdict-list-create
   patterns:
@@ -63,7 +65,8 @@ rules:
             ...
             $DICT.setdefault($KEY, []).append(...)
   message: manually creating a defaultdict - use collections.defaultdict(list)
-  languages: [python]
+  languages:
+  - python
   severity: WARNING
 - id: manual-counter-create
   pattern: |
@@ -77,5 +80,6 @@ rules:
             ...
         $DICT[$KEY] += 1
   message: manually creating a counter - use collections.Counter
-  languages: [python]
+  languages:
+  - python
   severity: WARNING

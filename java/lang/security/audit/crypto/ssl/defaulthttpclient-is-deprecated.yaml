@@ -1,16 +1,17 @@
 rules:
 - id: defaulthttpclient-is-deprecated
-  metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
-    owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#DEFAULT_HTTP_CLIENT
+  pattern: new DefaultHttpClient(...);
   message: |
     DefaultHttpClient is deprecated. Further, it does not support connections
     using TLS1.2, which makes using DefaultHttpClient a security hazard.
     Use SystemDefaultHttpClient instead, which supports TLS1.2.
+  languages:
+  - java
   severity: WARNING
-  languages: [java]
-  pattern: new DefaultHttpClient(...);
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#DEFAULT_HTTP_CLIENT
   fix-regex:
     regex: DefaultHttpClient
     replacement: SystemDefaultHttpClient

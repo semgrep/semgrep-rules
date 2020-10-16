@@ -1,12 +1,5 @@
 rules:
 - id: express-vm2-code-injection
-  message: |
-    Make sure that unverified user data can not reach `vm2`.
-  severity: WARNING
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
       ...
@@ -115,14 +108,15 @@ rules:
         $CODE = <... $REQ.$BODY ...>;
         ...
         new VMScript(<... $CODE ...>,...);
-- id: express-vm2-context-injection
   message: |
     Make sure that unverified user data can not reach `vm2`.
-  severity: ERROR
-  languages: [javascript]
+  languages:
+  - javascript
+  severity: WARNING
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
+- id: express-vm2-context-injection
   patterns:
   - pattern-inside: |
       ...
@@ -311,3 +305,11 @@ rules:
         $OPTS = {sandbox: <... $CONTEXT ...>};
         ...
         new NodeVM($OPTS,...);
+  message: |
+    Make sure that unverified user data can not reach `vm2`.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'

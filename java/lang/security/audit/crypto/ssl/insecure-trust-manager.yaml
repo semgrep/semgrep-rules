@@ -1,19 +1,5 @@
 rules:
 - id: insecure-trust-manager
-  metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
-    owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_TRUST_MANAGER
-    references:
-    - https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
-  message: |
-    Detected empty trust manager implementations. This is dangerous because it accepts any
-    certificate, enabling man-in-the-middle attacks. Consider using a KeyStore
-    and TrustManagerFactory isntead.
-    See https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
-    for more information.
-  severity: WARNING
-  languages: [java]
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -38,3 +24,18 @@ rules:
     - pattern: public void checkClientTrusted(...) {}
     - pattern: public void checkServerTrusted(...) {}
     - pattern: public X509Certificate[] getAcceptedIssuers(...) { return null; }
+  message: |
+    Detected empty trust manager implementations. This is dangerous because it accepts any
+    certificate, enabling man-in-the-middle attacks. Consider using a KeyStore
+    and TrustManagerFactory isntead.
+    See https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
+    for more information.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_TRUST_MANAGER

@@ -1,20 +1,20 @@
 rules:
 - id: no-scriptlets
+  pattern-regex: \<\%[^\@].*
   message: |
     JSP scriptlet detected. Scriptlets are difficult to use securely and
     are considered bad practice. See https://stackoverflow.com/a/3180202.
     Instead, consider migrating to JSF or using the Expression Language
     '${...}' with the escapeXml function in your JSP files.
+  languages:
+  - none
+  severity: WARNING
   metadata:
-    owasp: 'A7: Cross-site Scripting (XSS)'
     cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    owasp: 'A7: Cross-site Scripting (XSS)'
     references:
     - https://stackoverflow.com/a/3180202
     - https://stackoverflow.com/a/4948856
-  pattern-regex: |-
-    \<\%[^\@].*
   paths:
     include:
     - '*.jsp'
-  languages: [none]
-  severity: WARNING

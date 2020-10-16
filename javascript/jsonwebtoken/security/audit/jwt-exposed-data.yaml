@@ -1,14 +1,5 @@
 rules:
 - id: jwt-exposed-data
-  message: |
-    The object is passed strictly to jsonwebtoken.sign(...)
-    Make sure that sensitive information is not exposed through JWT token payload.
-  severity: WARNING
-  metadata:
-    owasp: A3:2017-Sensitive Data Exposure
-    cwe: 'CWE-522: Insufficiently Protected Credentials'
-    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-  languages: [javascript]
   patterns:
   - pattern-inside: |
       ...
@@ -18,3 +9,13 @@ rules:
     - pattern-inside: function (...,$INPUT,...) {...}
     - pattern-inside: function $F(...,$INPUT,...) {...}
   - pattern: $JWT.sign($INPUT,...)
+  message: |
+    The object is passed strictly to jsonwebtoken.sign(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: A3:2017-Sensitive Data Exposure
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/

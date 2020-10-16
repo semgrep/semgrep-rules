@@ -1,13 +1,5 @@
 rules:
 - id: spring-unvalidated-redirect
-  message: |
-    Application redirects a user to a destination URL specified by a user supplied parameter that is not validated.
-  metadata:
-    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT
-  severity: WARNING
-  languages: [java]
   pattern-either:
   - pattern: |
       $X $METHOD(...,String $URL,...) {
@@ -35,3 +27,12 @@ rules:
         new ModelAndView($REDIR);
         ...
       }
+  message: |
+    Application redirects a user to a destination URL specified by a user supplied parameter that is not validated.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT

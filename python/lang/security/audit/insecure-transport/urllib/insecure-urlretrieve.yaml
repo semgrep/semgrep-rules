@@ -1,15 +1,5 @@
 rules:
 - id: insecure-urlretrieve
-  message: |
-    Detected 'urllib.urlretrieve()' using 'http://'. This request will not be
-    encrypted. Use 'https://' instead.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.urlretrieve("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
@@ -21,6 +11,17 @@ rules:
         def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
           ...
           urllib.request.urlretrieve($URL, ...)
+  message: |
+    Detected 'urllib.urlretrieve()' using 'http://'. This request will not be
+    encrypted. Use 'https://' instead.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve
   fix-regex:
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://

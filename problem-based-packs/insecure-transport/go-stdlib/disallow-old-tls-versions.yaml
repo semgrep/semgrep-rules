@@ -14,12 +14,12 @@ rules:
   message: |
     Detects creations of tls configuration objects with an insecure MinVersion of TLS.
     These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
+  languages:
+  - go
+  severity: WARNING
   metadata:
-    vulnerability: Insecure Transport
-    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
     references:
     - https://stackoverflow.com/questions/26429751/java-http-clients-and-poodle
-  severity: WARNING
-  languages: [go]
-
+    vulnerability: Insecure Transport

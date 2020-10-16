@@ -1,16 +1,5 @@
 rules:
 - id: insecure-urlopener-open-ftp
-  message: |
-    Detected an insecure transmission channel. 'URLopener.open(...)' is
-    being used with 'ftp://'. Use SFTP instead. urllib does not support
-    SFTP, so consider using a library which supports SFTP.
-  metadata:
-    owasp: 'A3: Sensitve Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.open
-  severity: WARNING
-  languages: [python]
   patterns:
   - pattern-either:
     - pattern: urllib.request.URLopener(...).open("=~/[Ff][Tt][Pp]://.*/", ...)
@@ -43,3 +32,15 @@ rules:
               $OPENERDIRECTOR = urllib.request.URLopener(...)
               ...
           - pattern: $OPENERDIRECTOR.open($URL, ...)
+  message: |
+    Detected an insecure transmission channel. 'URLopener.open(...)' is
+    being used with 'ftp://'. Use SFTP instead. urllib does not support
+    SFTP, so consider using a library which supports SFTP.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitve Data Exposure'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.open

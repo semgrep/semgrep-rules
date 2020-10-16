@@ -1,16 +1,5 @@
 rules:
 - id: globals-misuse-code-execution
-  message: |
-    Found request data as an index to 'globals()'. This is extremely
-    dangerous because it allows an attacker to execute arbirary code
-    on the system. Refactor your code not to use 'globals()'.
-  metadata:
-    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://github.com/mpirnat/lets-be-bad-guys/blob/d92768fb3ade32956abd53bd6bb06e19d634a084/badguys/vulnerable/views.py#L181-L186
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -208,3 +197,16 @@ rules:
         $INTERM = globals()["...".format(..., $DATA, ...)]
         ...
         $INTERM(...)
+  message: |
+    Found request data as an index to 'globals()'. This is extremely
+    dangerous because it allows an attacker to execute arbirary code
+    on the system. Refactor your code not to use 'globals()'.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - >-
+      https://github.com/mpirnat/lets-be-bad-guys/blob/d92768fb3ade32956abd53bd6bb06e19d634a084/badguys/vulnerable/views.py#L181-L186

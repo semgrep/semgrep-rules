@@ -1,12 +1,5 @@
 rules:
 - id: puppeteer-exposed-chrome-devtools
-  message: |
-    Remote debugging protocol does not perform any authentication, so exposing it too widely can be a security risk.
-  severity: WARNING
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
-  languages: [javascript]
   patterns:
   - pattern-inside: |
       ...
@@ -17,3 +10,11 @@ rules:
     - pattern-regex: --remote-debugging-port
     - pattern-regex: --remote-debugging-socket-name
     - pattern-regex: --remote-debugging-targets
+  message: |
+    Remote debugging protocol does not perform any authentication, so exposing it too widely can be a security risk.
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'

@@ -2,77 +2,92 @@ rules:
 - id: python37-compatibility-importlib
   pattern: importlib.source_hash()
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-importlib2
   pattern: import importlib.resources
   message: this module is only available on Python 3.7+; use importlib_resources for older Python versions
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-httpconn
   pattern: http.client.HTTPConnection(blocksize=$X,...)
   message: HTTPConnection blocksize keyword argument is Python 3.7+ only
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-httpsconn
   pattern: http.client.HTTPSConnection(blocksize=$X,...)
   message: HTTPSConnection blocksize keyword argument is Python 3.7+ only
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-importlib3
   pattern: import importlib.abc.ResourceReader
   message: this module is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-textiowrapper
   pattern: TextIOWrapper.reconfigure(...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-ipv6network1
   pattern: ipaddress.IPv6Network.subnet_of($X)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-ipv6network2
   pattern: ipaddress.IPv6Network.supernet_of($X)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-ipv4network1
   pattern: ipaddress.IPv4Network.subnet_of($X)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-ipv4network2
   pattern: ipaddress.IPv4Network.supernet_of($X)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-locale1
   pattern: locale.format_string(monetary=$X, ...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-math1
   pattern: math.remainder($X, $Y)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-multiprocess1
   pattern: multiprocessing.Process.close()
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-multiprocess2
   pattern: multiprocessing.Process.kill()
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-os1
   pattern: os.preadv(...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatability-os-module
   patterns:
@@ -81,7 +96,8 @@ rules:
           ...
   - pattern: os.pwrite(...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-os2-ok2
   patterns:
@@ -90,10 +106,12 @@ rules:
           ...
   - pattern: os.pwritev(...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
 - id: python37-compatibility-pdb
   pattern: pdb.set_trace(header=$X, ...)
   message: this function is only available on Python 3.7+
-  languages: [python]
+  languages:
+  - python
   severity: ERROR

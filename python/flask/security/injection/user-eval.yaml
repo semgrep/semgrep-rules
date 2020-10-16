@@ -1,14 +1,5 @@
 rules:
 - id: eval-injection
-  languages:
-  - python
-  severity: ERROR
-  message: Detected user data flowing into eval. This is code injection and should be avoided.
-  metadata:
-    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html
   patterns:
   - pattern-either:
     - patterns:
@@ -50,4 +41,12 @@ rules:
               $INTERM = <... flask.request.$W ...>
               ... 
           - pattern: eval(..., <... $INTERM ...>, ...)
-
+  message: Detected user data flowing into eval. This is code injection and should be avoided.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html

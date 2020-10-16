@@ -1,18 +1,5 @@
 rules:
 - id: formatted-sql-string
-  metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION
-    references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-    - https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html#create_ps
-    - https://software-security.sans.org/developer-how-to/fix-sql-injection-in-java-using-prepared-callable-statement
-  message: |
-    Detected a formatted string in a SQL statement. This could lead to SQL
-    injection if variables in the SQL statement are not properly sanitized.
-    Use a prepared statements (java.sql.PreparedStatement) instead. You
-    can obtain a PreparedStatement using 'connection.prepareStatement'.
   patterns:
   - pattern-not: $W.execute(<... "=~/.*TABLE *$/" ...>);
   - pattern-not: $W.execute(<... "=~/.*TABLE %s$/" ...>);
@@ -105,6 +92,20 @@ rules:
         $SQL += String.format(...);
         ...
         $W.query($SQL, ...);
-  severity: WARNING
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
   languages:
   - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    - https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html#create_ps
+    - >-
+      https://software-security.sans.org/developer-how-to/fix-sql-injection-in-java-using-prepared-callable-statement
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION

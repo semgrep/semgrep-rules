@@ -1,19 +1,5 @@
 rules:
 - id: direct-use-of-jinja2
-  message: |
-    Detected direct use of jinja2 in a Flask route. If not done properly,
-    this may bypass HTML escaping which opens up the application to 
-    cross-site scripting (XSS) vulnerabilities. Prefer using the Flask
-    method 'render_template()' and templates with a '.html' extension
-    in order to prevent XSS.
-  metadata:
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
-    references:
-    - https://jinja.palletsprojects.com/en/2.11.x/api/#basics
-  languages:
-  - python
-  severity: WARNING
   pattern-either:
   - pattern: jinja2.Environment(...)
   - patterns:
@@ -22,3 +8,17 @@ rules:
         def $FUNC(...):
           ...
     - pattern: $TEMPLATE.render(...)
+  message: |
+    Detected direct use of jinja2 in a Flask route. If not done properly,
+    this may bypass HTML escaping which opens up the application to 
+    cross-site scripting (XSS) vulnerabilities. Prefer using the Flask
+    method 'render_template()' and templates with a '.html' extension
+    in order to prevent XSS.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://jinja.palletsprojects.com/en/2.11.x/api/#basics

@@ -29,14 +29,15 @@ rules:
         def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
           ...
           requests.Request($METHOD, $URL, ...)
-  fix-regex:
-    regex: '[Hh][Tt][Tt][Pp]://'
-    replacement: https://
-    count: 1
   message: |
     Detected a request using 'http://'. This request will be unencrypted. Use 'https://' instead.
-  metadata:
-    owasp: 'A3: Sensitive Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+  fix-regex:
+    count: 1
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://

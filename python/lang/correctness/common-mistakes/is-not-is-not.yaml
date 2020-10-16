@@ -2,7 +2,9 @@ rules:
 - id: is-not-is-not
   patterns:
   - pattern: $S is (not ...)
-  message: In python 'X is not ...' is different from 'X is (not ...)'. In the latter the 'not' converts the '...' directly
+  message: >-
+    In python 'X is not ...' is different from 'X is (not ...)'. In the latter the 'not' converts the '...' directly
     to boolean.
-  languages: [python]
+  languages:
+  - python
   severity: ERROR

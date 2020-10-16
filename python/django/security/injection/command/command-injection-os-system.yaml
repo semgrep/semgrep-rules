@@ -1,15 +1,5 @@
 rules:
 - id: command-injection-os-system
-  message: Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this
-    must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection
-    for more information.
-  metadata:
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Command_Injection
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -263,3 +253,15 @@ rules:
     - pattern: return os.system(..., $S.format(..., request.$W, ...), ...)
     - pattern: return os.system(..., $S % request.$W, ...)
     - pattern: return os.system(..., f"...{request.$W}...", ...)
+  message: >-
+    Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this
+    must be done, use the 'subprocess' module instead and pass the arguments as a list. See
+    https://owasp.org/www-community/attacks/Command_Injection for more information.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Command_Injection

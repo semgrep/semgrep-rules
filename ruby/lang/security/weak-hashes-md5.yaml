@@ -10,12 +10,15 @@ rules:
     - pattern: OpenSSL::Digest::MD5.hexdigest $X
     - pattern: OpenSSL::Digest::MD5.digest $X
     - pattern: OpenSSL::Digest::MD5.new
-  message: |
+  message: >
     Should not use md5 to generate hashes. md5 is proven to be vulnerable through the use of brute-force attacks.  
-    Could also result in collisions,leading to potential collision attacks. Use SHA256 or other hashing functions instead.
-  metadata:
-    references:
-    - https://www.ibm.com/support/pages/security-bulletin-vulnerability-md5-signature-and-hash-algorithm-affects-sterling-integrator-and-sterling-file-gateway-cve-2015-7575
+
+    Could also result in collisions,leading to potential collision attacks. Use SHA256 or other hashing functions
+    instead.
   languages:
   - ruby
   severity: WARNING
+  metadata:
+    references:
+    - >-
+      https://www.ibm.com/support/pages/security-bulletin-vulnerability-md5-signature-and-hash-algorithm-affects-sterling-integrator-and-sterling-file-gateway-cve-2015-7575

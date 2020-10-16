@@ -1,19 +1,5 @@
 rules:
 - id: pprof-debug-exposure
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    source-rule-url: https://github.com/securego/gosec#available-rules
-    references:
-    - https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
-  message: |
-    The profiling 'pprof' endpoint is automatically exposed on /debug/pprof.
-    This could leak information about the server.
-    Instead, use `import "net/http/pprof"`. See 
-    https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
-    for more information and mitigation.
-  languages: [go]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       import _ "net/http/pprof"
@@ -25,3 +11,18 @@ rules:
   - pattern-not: http.ListenAndServe("=~/^localhost.*/", ...)
   - pattern-not: http.ListenAndServe("=~/^127[.]0[.]0[.]1.*/", ...)
   - pattern: http.ListenAndServe(...)
+  message: |
+    The profiling 'pprof' endpoint is automatically exposed on /debug/pprof.
+    This could leak information about the server.
+    Instead, use `import "net/http/pprof"`. See 
+    https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
+    for more information and mitigation.
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-489: Active Debug Code'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://www.farsightsecurity.com/blog/txt-record/go-remote-profiling-20161028/
+    source-rule-url: https://github.com/securego/gosec#available-rules

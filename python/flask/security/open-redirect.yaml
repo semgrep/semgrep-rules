@@ -37,12 +37,14 @@ rules:
     If you must use a URL to unknown pages, consider using 'urlparse()'
     or similar and checking if the 'netloc' property is the same as
     your site's host name. See the references for more information.
+  languages:
+  - python
+  severity: ERROR
   metadata:
     cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
     owasp: 'A1: Injection'
     references:
     - https://flask-login.readthedocs.io/en/latest/#login-example
-    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html#dangerous-url-redirect-example-1
+    - >-
+      https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html#dangerous-url-redirect-example-1
     - https://docs.python.org/3/library/urllib.parse.html#url-parsing
-  languages: [python]
-  severity: ERROR

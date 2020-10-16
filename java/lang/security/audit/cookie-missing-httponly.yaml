@@ -1,15 +1,5 @@
 rules:
 - id: cookie-missing-httponly
-  metadata:
-    cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
-    owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#HTTPONLY_COOKIE
-  message: |
-    A cookie was detected without setting the 'HttpOnly' flag. The 'HttpOnly' flag
-    for cookies instructs the browser to forbid client-side scripts from reading the
-    cookie. Set the 'HttpOnly' flag by calling 'cookie.setHttpOnly(true);'
-  severity: WARNING
-  languages: [java]
   patterns:
   - pattern-not-inside: $COOKIE.setValue(""); ...
   - pattern-either:
@@ -17,3 +7,14 @@ rules:
     - patterns:
       - pattern-not-inside: $COOKIE.setHttpOnly(...); ...
       - pattern: $RESPONSE.addCookie($COOKIE);
+  message: |
+    A cookie was detected without setting the 'HttpOnly' flag. The 'HttpOnly' flag
+    for cookies instructs the browser to forbid client-side scripts from reading the
+    cookie. Set the 'HttpOnly' flag by calling 'cookie.setHttpOnly(true);'
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#HTTPONLY_COOKIE

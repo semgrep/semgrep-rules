@@ -1,9 +1,5 @@
 rules:
 - id: handler-assignment-from-multiple-sources
-  metadata:
-    cwe: 'CWE-289: Authentication Bypass by Alternate Name'
-    owasp: 'A2: Broken Authentication'
-    owaspapi: 'API1: Broken Object Level Authorization'
   patterns:
   - pattern-inside: |
       func $HANDLER(..., $R *http.Request, ...) {
@@ -45,7 +41,13 @@ rules:
       $VAR = $X
       ...
       $VAR = $Y
-  message: "Variable $VAR is assigned from two different sources: '$X' and '$Y'. Make sure this is intended, as this could\
-    \ cause logic bugs if they are treated as they are the same object."
-  languages: [go]
+  message: >-
+    Variable $VAR is assigned from two different sources: '$X' and '$Y'. Make sure this is intended, as this could
+    cause logic bugs if they are treated as they are the same object.
+  languages:
+  - go
   severity: WARNING
+  metadata:
+    cwe: 'CWE-289: Authentication Bypass by Alternate Name'
+    owasp: 'A2: Broken Authentication'
+    owaspapi: 'API1: Broken Object Level Authorization'

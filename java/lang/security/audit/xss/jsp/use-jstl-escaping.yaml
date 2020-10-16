@@ -1,5 +1,6 @@
 rules:
 - id: use-jstl-escaping
+  pattern-regex: <(?![A-Za-z0-9]+:out).*?\$\{.*?\}.*>
   message: |
     Detected an Expression Language segment in a tag that does not escape
     output. This is dangerous because if any data in this expression
@@ -8,16 +9,16 @@ rules:
     to escape this expression. 
     See https://www.tutorialspoint.com/jsp/jstl_core_out_tag.htm
     for more information.
+  languages:
+  - none
+  severity: WARNING
   metadata:
-    owasp: 'A7: Cross-site Scripting (XSS)'
     cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    owasp: 'A7: Cross-site Scripting (XSS)'
     references:
     - https://www.tutorialspoint.com/jsp/jstl_core_out_tag.htm
     - https://stackoverflow.com/a/4948856
     - https://stackoverflow.com/a/3180202
-  pattern-regex: <(?![A-Za-z0-9]+:out).*?\$\{.*?\}.*>
   paths:
     include:
     - '*.jsp'
-  languages: [none]
-  severity: WARNING

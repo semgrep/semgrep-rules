@@ -1,61 +1,61 @@
 rules:
 - id: avoid-pickle
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
-  languages:
-  - python
+  pattern-either:
+  - pattern: pickle.$FUNC(...)
+  - pattern: _pickle.$FUNC(...)
   message: |
     Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
-  severity: WARNING
-  pattern-either:
-  - pattern: pickle.$FUNC(...)
-  - pattern: _pickle.$FUNC(...)
-- id: avoid-cPickle
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references: https://docs.python.org/3/library/pickle.html
+- id: avoid-cPickle
+  pattern: cPickle.$FUNC(...)
   message: |
     Avoid using `cPickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
-  severity: WARNING
-  pattern: cPickle.$FUNC(...)
-- id: avoid-dill
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references: https://docs.python.org/3/library/pickle.html
+- id: avoid-dill
+  pattern-either:
+  - pattern: dill.$FUNC(...)
   message: |
     Avoid using `dill`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
-  severity: WARNING
-  pattern-either:
-  - pattern: dill.$FUNC(...)
-- id: avoid-shelve
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
   languages:
   - python
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references: https://docs.python.org/3/library/pickle.html
+- id: avoid-shelve
+  pattern-either:
+  - pattern: shelve.$FUNC(...)
   message: |
     Avoid using `shelve`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
+  languages:
+  - python
   severity: WARNING
-  pattern-either:
-  - pattern: shelve.$FUNC(...)
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references: https://docs.python.org/3/library/pickle.html

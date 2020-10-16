@@ -1,12 +1,5 @@
 rules:
 - id: potential-dos-via-decompression-bomb
-  message: Potential DOS via zip bomb attack. You cau use `io.CopyN()` to prevent it. Refer to https://bomb.codes/ to learn
-    more about this attack and other ways to mitigate it.
-  metadata:
-    cwe: 'CWE-400: Uncontrolled Resource Consumption'
-    source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
   pattern-either:
   - pattern: |
       gzip.NewReader(...)
@@ -48,4 +41,12 @@ rules:
       zip.OpenReader(...)
       ...
       io.Copy(...)
-
+  message: >-
+    Potential DOS via zip bomb attack. You cau use `io.CopyN()` to prevent it. Refer to https://bomb.codes/ to learn
+    more about this attack and other ways to mitigate it.
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    source_rule_url: https://github.com/securego/gosec

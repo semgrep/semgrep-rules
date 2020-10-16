@@ -1,12 +1,5 @@
 rules:
 - id: express-vm-runincontext-context-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInContext.
-  severity: ERROR
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
       ...
@@ -91,14 +84,15 @@ rules:
         $CONTEXT = {$NAME: <... $VAR ...>};
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-- id: express-vm-runinnewcontext-context-injection
   message: |
-    Make sure that unverified user data can not reach vm.runInNewContext.
+    Make sure that unverified user data can not reach vm.runInContext.
+  languages:
+  - javascript
   severity: ERROR
-  languages: [javascript]
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
+- id: express-vm-runinnewcontext-context-injection
   patterns:
   - pattern-inside: |
       ...
@@ -151,14 +145,15 @@ rules:
         $CONTEXT = {$NAME: <... $VAR ...>};
         ...
         $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-- id: express-vm-compilefunction-context-injection
   message: |
-    Make sure that unverified user data can not reach vm.compileFunction.
+    Make sure that unverified user data can not reach vm.runInNewContext.
+  languages:
+  - javascript
   severity: ERROR
-  languages: [javascript]
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
+- id: express-vm-compilefunction-context-injection
   patterns:
   - pattern-inside: |
       ...
@@ -259,14 +254,15 @@ rules:
         $OPTS = {parsingContext: <... $CONTEXT ...>};
         ...
         $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-- id: express-vm-code-injection
   message: |
-    Make sure that unverified user data can not reach vm instance.
+    Make sure that unverified user data can not reach vm.compileFunction.
+  languages:
+  - javascript
   severity: ERROR
-  languages: [javascript]
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
+- id: express-vm-code-injection
   patterns:
   - pattern-inside: |
       ...
@@ -329,3 +325,11 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         new $VM.Script($INPUT,...);
+  message: |
+    Make sure that unverified user data can not reach vm instance.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'

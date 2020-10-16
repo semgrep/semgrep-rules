@@ -1,61 +1,65 @@
 rules:
 - id: incorrect-default-permission
-  message: Expect permissions to be `0600` or less for os.Chmod()
-  metadata:
-    cwe: 'CWE-276: Incorrect Default Permissions'
-    source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
   patterns:
   - pattern: |
       os.Chmod($NAME, $PERM)
   - pattern-where-python: |
       int(vars['$PERM'], 8) > 0o600
-- id: incorrect-default-permission
-  message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+  message: Expect permissions to be `0600` or less for os.Chmod()
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
+- id: incorrect-default-permission
   patterns:
   - pattern: |
       ioutil.WriteFile($NAME, $DATA, $PERM)
   - pattern-where-python: |
       int(vars['$PERM'], 8) > 0o600
-- id: incorrect-default-permission
   message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
+- id: incorrect-default-permission
   patterns:
   - pattern: |
       os.Mkdir($NAME, $PERM)
   - pattern-where-python: |
       int(vars['$PERM'], 8) > 0o600
-- id: incorrect-default-permission
   message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
+- id: incorrect-default-permission
   patterns:
   - pattern: |
       os.MkdirAll($NAME, $PERM)
   - pattern-where-python: |
       int(vars['$PERM'], 8) > 0o600
-- id: incorrect-default-permission
   message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
-  severity: WARNING
-  languages: [go]
+- id: incorrect-default-permission
   patterns:
   - pattern: |
       os.OpenFile($NAME, $FLAG, $PERM)
-  - pattern-where-python: |-
-      int(vars['$PERM'], 8) > 0o600
+  - pattern-where-python: int(vars['$PERM'], 8) > 0o600
+  message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    source_rule_url: https://github.com/securego/gosec

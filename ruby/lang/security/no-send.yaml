@@ -22,10 +22,10 @@ rules:
     Checks for unsafe use of Object#send, try, __send__, and public_send. These only account for unsafe
     use of a method, not target. This can lead to arbitrary calling of exit, along with arbitrary code     execution.
     Please be sure to sanitize input in order to avoid this.
+  languages:
+  - ruby
+  severity: ERROR
   metadata:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_send.rb
     - https://the.igreque.info/posts/2016/01-object-send-considered-harmful-en.html
-  languages:
-  - ruby
-  severity: ERROR

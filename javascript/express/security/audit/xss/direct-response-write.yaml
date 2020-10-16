@@ -1,18 +1,5 @@
 rules:
 - id: direct-response-write
-  message: >-
-    Detected direclty writing to a Response object. This bypasses
-    any HTML escaping and may expose your app to a cross-site scripting
-    (XSS) vulnerability. Instead, use 'resp.render()' to render
-    safely escaped HTML.
-  languages:
-  - javascript
-  severity: ERROR
-  metadata:
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    cwe: >-
-      CWE-79: Improper Neutralization of Input During Web Page Generation
-      ('Cross-site Scripting')
   patterns:
   - pattern-inside: |
       function ($REQ, $RES) { ... }
@@ -20,3 +7,12 @@ rules:
   - pattern-either:
     - pattern: $RES.write(...)
     - pattern: $RES.send(...)
+  message: >-
+    Detected direclty writing to a Response object. This bypasses any HTML escaping and may expose your app to a
+    cross-site scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'

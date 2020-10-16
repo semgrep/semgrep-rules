@@ -1,5 +1,6 @@
 rules:
 - id: template-href-var
+  pattern-regex: .*href\s*=\s*[\"\']?{{\s*(?!.*url_for).*
   message: |
     Detected a template variable used in an anchor tag with
     the 'href' attribute. This allows a malicious actor to 
@@ -7,17 +8,15 @@ rules:
     site scripting (XSS) attacks. Use 'url_for()' to safely
     generate a URL. You may also consider setting the Content 
     Security Policy (CSP) header.
+  languages:
+  - none
+  severity: WARNING
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
     references:
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
     - https://content-security-policy.com/
-  languages:
-  - none
   paths:
     include:
     - '*.html'
-  severity: WARNING
-  pattern-regex: |-
-    .*href\s*=\s*[\"\']?{{\s*(?!.*url_for).*

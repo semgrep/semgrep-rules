@@ -1,13 +1,5 @@
 rules:
 - id: express-expat-xxe
-  message: |
-    Make sure that unverified user data can not reach the XML Parser,
-    as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
-  metadata:
-    owasp: 'A4: XML External Entities (XXE)'
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
-  severity: ERROR
-  languages: [javascript]
   patterns:
   - pattern-inside: |
       ...
@@ -52,3 +44,12 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         $PARSER.write(<... $INPUT ...>,...);
+  message: |
+    Make sure that unverified user data can not reach the XML Parser,
+    as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp: 'A4: XML External Entities (XXE)'

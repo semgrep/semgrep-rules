@@ -1,5 +1,6 @@
 rules:
 - id: var-in-script-tag
+  pattern-regex: <%(?!.*(j\b|escape_javascript\b)).*?%>([^\/]|\n)*?<\/script>
   message: |
     Detected a template variable used in a script tag.
     Although template variables are HTML escaped, HTML
@@ -9,14 +10,14 @@ rules:
     will not protect from XSS in all circumstances; see the references
     for more information. Consider placing this value in the HTML
     portion (outside of a script tag). 
+  languages:
+  - none
+  severity: WARNING
   metadata:
     references:
     - https://www.netsparker.com/blog/web-security/preventing-xss-ruby-on-rails-web-applications/
     - https://www.youtube.com/watch?v=yYTkLUEdIyE
     - https://www.veracode.com/blog/secure-development/nodejs-template-engines-why-default-encoders-are-not-enough
-  languages: [none]
   paths:
     include:
     - '*.erb'
-  severity: WARNING
-  pattern-regex: <%(?!.*(j\b|escape_javascript\b)).*?%>([^\/]|\n)*?<\/script>

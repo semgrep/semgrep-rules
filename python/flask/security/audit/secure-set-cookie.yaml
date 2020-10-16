@@ -17,6 +17,9 @@ rules:
     If you want to send the cookie over http, set secure=False.  If you want to let client-side JavaScript
     read the cookie, set httponly=False. If you want to attach cookies to requests for external sites,
     set samesite=None.
+  languages:
+  - python
+  severity: WARNING
   metadata:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'
@@ -24,5 +27,3 @@ rules:
     - https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/
     - https://bento.dev/checks/flask/secure-set-cookie/
     - https://flask.palletsprojects.com/en/1.1.x/security/#set-cookie-options
-  languages: [python]
-  severity: WARNING

@@ -1,14 +1,5 @@
 rules:
 - id: path-traversal-file-name
-  message: |
-    Data from request is passed to a file name `$FILE`.
-    This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
-    To mitigate, consider using os.path.abspath or os.path.realpath or Path library.
-  metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Path_Traversal
   patterns:
   - pattern-inside: |
       def $F(...):
@@ -22,7 +13,6 @@ rules:
       os.path.abspath(...)
       ...
   - pattern-either:
-        # match % use cases
     - pattern: |
         $V = request.$W.get($X)
         ...
@@ -57,7 +47,17 @@ rules:
         ...
         $FILE.format(..., $V, ...)
   - metavariable-regex:
-      metavariable: '$FILE'
-      regex: '.*\.(log|zip|txt|csv|xml|html).*'
-  languages: [python]
+      metavariable: $FILE
+      regex: .*\.(log|zip|txt|csv|xml|html).*
+  message: |
+    Data from request is passed to a file name `$FILE`.
+    This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
+    To mitigate, consider using os.path.abspath or os.path.realpath or Path library.
+  languages:
+  - python
   severity: WARNING
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Path_Traversal

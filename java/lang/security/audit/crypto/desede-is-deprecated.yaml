@@ -1,17 +1,17 @@
 rules:
 - id: desede-is-deprecated
+  pattern: $CIPHER.getInstance("=~/DESede.*/");
   message: |
     Triple DES (3DES or DESede) is considered deprecated. AES is the recommended cipher.
     Upgrade to use AES.
     See https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA for more information.
+  languages:
+  - java
+  severity: WARNING
   metadata:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#TDES_USAGE
     references:
     - https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA
-  severity: WARNING
-  pattern: $CIPHER.getInstance("=~/DESede.*/");
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#TDES_USAGE
   fix: Cipher.getInstance("AES/GCM/NoPadding");
-  languages:
-  - java

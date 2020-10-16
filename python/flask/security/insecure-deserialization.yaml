@@ -1,18 +1,5 @@
 rules:
 - id: insecure-deserialization
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references:
-    - https://docs.python.org/3/library/pickle.html
-  message: |
-    Detected the use of an insecure deserizliation library in a Flask route. These libraries
-    are prone to code execution vulnerabilities. Ensure user data does not enter this function.
-    To fix this, try to avoid serializing whole objects. Consider instead using a serializer
-    such as JSON.
-  languages:
-  - python
-  severity: ERROR
   patterns:
   - pattern-inside: |
       @app.route(...)
@@ -27,3 +14,16 @@ rules:
     - pattern: dill.$FUNC(...)
     - pattern: shelve.$FUNC(...)
     - pattern: yaml.load(...)
+  message: |
+    Detected the use of an insecure deserizliation library in a Flask route. These libraries
+    are prone to code execution vulnerabilities. Ensure user data does not enter this function.
+    To fix this, try to avoid serializing whole objects. Consider instead using a serializer
+    such as JSON.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/pickle.html

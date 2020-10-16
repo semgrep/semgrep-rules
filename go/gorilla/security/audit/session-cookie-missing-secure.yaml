@@ -16,6 +16,9 @@ rules:
     The 'secure' flag for cookies prevents the client from transmitting
     the cookie over insecure channels such as HTTP.  Set the 'Secure'
     flag by setting 'Secure' to 'true' in the Options struct.
+  languages:
+  - go
+  severity: WARNING
   metadata:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'
@@ -24,5 +27,3 @@ rules:
   fix-regex:
     regex: (Secure\s*:\s+)false
     replacement: \1true
-  severity: WARNING
-  languages: [go]

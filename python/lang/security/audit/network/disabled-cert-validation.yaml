@@ -11,11 +11,12 @@ rules:
     - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
     - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
   - metavariable-regex:
-      metavariable: '$REQS'
+      metavariable: $REQS
       regex: (NONE|CERT_NONE|CERT_OPTIONAL|ssl\.CERT_NONE|ssl\.CERT_OPTIONAL|\'NONE\'|\"NONE\"|\'OPTIONAL\'|\"OPTIONAL\")
   message: certificate verification explicitly disabled, insecure connections possible
+  languages:
+  - python
+  severity: ERROR
   metadata:
     cwe: 'CWE-295: Improper Certificate Validation'
     owasp: 'A3: Sensitive Data Exposure'
-  languages: [python]
-  severity: ERROR

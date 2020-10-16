@@ -1,19 +1,15 @@
 rules:
 - id: overly-permissive-file-permission
-  message: |
-    It is generally a bad practices to set overly permissive file permission such as read+write+exec for all users.
-    If the file affected is a configuration, a binary, a script or sensitive data, it can lead to privilege escalation or information leakage. 
-  severity: WARNING
-  languages: [java]
-  metadata:
-    cwe: 'CWE-276: Incorrect Default Permissions'
-    owasp: 'A6: Security Misconfiguration'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#OVERLY_PERMISSIVE_FILE_PERMISSION
   pattern-either:
-  - pattern: java.nio.file.Files.setPosixFilePermissions($FILE, java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
-  - pattern: |
-      $TYPE $P = java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/");
+  - pattern: >-
+      java.nio.file.Files.setPosixFilePermissions($FILE,
+      java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
+  - pattern: >
+      $TYPE $P =
+      java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/");
+
       ...
+
       java.nio.file.Files.setPosixFilePermissions($FILE, $P);
   - pattern: |
       $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_READ);
@@ -27,3 +23,15 @@ rules:
       $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_EXECUTE);
       ...
       java.nio.file.Files.setPosixFilePermissions($FILE, $P);
+  message: >
+    It is generally a bad practices to set overly permissive file permission such as read+write+exec for all users.
+
+    If the file affected is a configuration, a binary, a script or sensitive data, it can lead to privilege escalation
+    or information leakage. 
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    owasp: 'A6: Security Misconfiguration'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#OVERLY_PERMISSIVE_FILE_PERMISSION

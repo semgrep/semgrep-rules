@@ -1,15 +1,5 @@
 rules:
 - id: bad-hexa-conversion
-  metadata:
-    cwe: 'CWE-704: Incorrect Type Conversion or Cast'
-    owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BAD_HEXA_CONVERSION
-  message: |
-    'Integer.toHexString()' strips leading zeroes from each byte if read byte-by-byte.
-    This mistake weakens the hash value computed since it introduces more collisions.
-    Use 'String.format("%02X", ...)' instead.
-  severity: WARNING
-  languages: [java]
   pattern: |-
     $X $METHOD(...) {
       ...
@@ -19,3 +9,14 @@ rules:
       ...
       Integer.toHexString(...);
     }
+  message: |
+    'Integer.toHexString()' strips leading zeroes from each byte if read byte-by-byte.
+    This mistake weakens the hash value computed since it introduces more collisions.
+    Use 'String.format("%02X", ...)' instead.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-704: Incorrect Type Conversion or Cast'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BAD_HEXA_CONVERSION

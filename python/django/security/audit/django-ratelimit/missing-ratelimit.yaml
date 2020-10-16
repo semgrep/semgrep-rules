@@ -13,11 +13,11 @@ rules:
     High volume traffic to this function could starve application
     resources. Consider adding rate limiting from a library such
     as 'django-ratelimit'.
+  languages:
+  - python
+  severity: WARNING
   metadata:
-    owasp: 'A6: Security Misconfiguration'
     cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    owasp: 'A6: Security Misconfiguration'
     references:
     - https://github.com/jsocol/django-ratelimit/blob/main/docs/index.rst#quickstart
-  severity: WARNING
-  languages: [python]
-

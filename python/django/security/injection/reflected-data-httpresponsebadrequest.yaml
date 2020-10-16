@@ -1,14 +1,5 @@
 rules:
 - id: reflected-data-httpresponsebadrequest
-  message: Found request data reflected into HttpResponseBadRequest. This could be vulnerable to XSS. Ensure the request data
-    is properly escaped or sanitzed.
-  metadata:
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    references:
-    - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
-  languages: [python]
-  severity: WARNING
   patterns:
   - pattern-inside: |
       def $FUNC(...):
@@ -238,3 +229,14 @@ rules:
         django.http.HttpResponseBadRequest(..., $INTERM, ...)
     - pattern: $A = django.http.HttpResponseBadRequest(..., request.$W, ...)
     - pattern: return django.http.HttpResponseBadRequest(..., request.$W, ...)
+  message: >-
+    Found request data reflected into HttpResponseBadRequest. This could be vulnerable to XSS. Ensure the request data
+    is properly escaped or sanitzed.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss

@@ -1,12 +1,5 @@
 rules:
 - id: user-exec
-  message: |
-    Found user data in a call to 'exec'. This is extremely dangerous because
-    it can enable an attacker to execute remote code. See
-    https://owasp.org/www-community/attacks/Code_Injection for more information.
-  metadata:
-    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-    owasp: 'A1: Injection'
   patterns:
   - pattern-inside: |
       def $F(...):
@@ -27,5 +20,13 @@ rules:
         $V = request.$W[...]
         ...
         exec(..., $V, ...)
-  languages: [python]
+  message: |
+    Found user data in a call to 'exec'. This is extremely dangerous because
+    it can enable an attacker to execute remote code. See
+    https://owasp.org/www-community/attacks/Code_Injection for more information.
+  languages:
+  - python
   severity: WARNING
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'

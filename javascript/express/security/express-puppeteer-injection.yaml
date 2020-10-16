@@ -1,12 +1,5 @@
 rules:
 - id: express-puppeteer-injection
-  message: |
-    If unverified user data can reach the `puppeteer` methods it can result in Server-Side Request Forgery vulnerabilities
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-  severity: ERROR
-  languages: [javascript]
   patterns:
   - pattern-inside: |
       ...
@@ -102,3 +95,12 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         $PAGE.evaluateOnNewDocument($CODE,<... $INPUT ...>,...);
+  message: >
+    If unverified user data can reach the `puppeteer` methods it can result in Server-Side Request Forgery
+    vulnerabilities
+  languages:
+  - javascript
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'

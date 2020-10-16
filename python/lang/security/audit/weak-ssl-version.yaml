@@ -15,13 +15,15 @@ rules:
     An insecure SSL version was detected. TLS versions 1.0, 1.1, and all SSL versions
     are considered weak encryption and are deprecated.
     Use 'ssl.PROTOCOL_TLSv1_2' or higher.
+  languages:
+  - python
+  severity: WARNING
   metadata:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     owasp: 'A3: Sensitive Data Exposure'
-    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/insecure_ssl_tls.py#L30
     references:
     - https://tools.ietf.org/html/rfc7568
     - https://tools.ietf.org/id/draft-ietf-tls-oldversions-deprecate-02.html
     - https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLSv1_2
-  languages: [python]
-  severity: WARNING
+    source-rule-url: >-
+      https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/insecure_ssl_tls.py#L30

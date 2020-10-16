@@ -1,12 +1,5 @@
 rules:
 - id: unsafe-serialize-javascript
-  message: |
-    `serialize-javascript` used with `unsafe` parameter, this could be vulnerable to XSS.
-  severity: WARNING
-  languages: [javascript]
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-80: Improper Neutralization of Script-Related HTML Tags in a Web Page'
   patterns:
   - pattern-inside: |
       ...
@@ -16,3 +9,11 @@ rules:
   - pattern-not-inside: encodeURI(...)
   - pattern: |
       $S(..., {unsafe: true});
+  message: |
+    `serialize-javascript` used with `unsafe` parameter, this could be vulnerable to XSS.
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-80: Improper Neutralization of Script-Related HTML Tags in a Web Page'
+    owasp: 'A1: Injection'
