@@ -3,12 +3,13 @@ rules:
   metadata:
     cwe: 'CWE-798: Use of Hard-coded Credentials'
     owasp: 'A2: Broken Authentication'
-  pattern: |-
-    var $X = []byte("...")
-    ...
-    $TOKEN := jwt.NewWithClaims(...)
-    ...
-    $Y := $TOKEN.SignedString($X)
+  pattern-either:
+  - pattern: |
+      $X = []byte("...")
+      ...
+      $Y := $TOKEN.SignedString($X)
+  - pattern: |
+      $TOKEN.SignedString([]byte("..."))
   message: JWT token is hardcoded
   languages: [go]
   severity: WARNING
