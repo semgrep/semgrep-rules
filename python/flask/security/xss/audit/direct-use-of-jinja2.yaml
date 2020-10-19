@@ -16,6 +16,7 @@ rules:
   severity: WARNING
   pattern-either:
   - pattern: jinja2.Environment(...)
+  - pattern: jinja2.Template.render(...)
   - patterns:
     - pattern-inside: |
         @$APP.route(...)
