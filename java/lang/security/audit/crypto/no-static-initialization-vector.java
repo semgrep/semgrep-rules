@@ -8,9 +8,9 @@ public class StaticIV {
             (byte) 0, (byte) 0, (byte) 0, (byte) 0,
             (byte) 0, (byte) 0, (byte) 0, (byte) 0
         };
-        
+
         IvParameterSpec staticIvSpec = new IvParameterSpec(iv);
-        
+
         c.init(Cipher.ENCRYPT_MODE, skeySpec, staticIvSpec, new SecureRandom());
     }
 }
@@ -27,7 +27,7 @@ public class StaticIV2 {
 
     public StaticIV2() {
         IvParameterSpec staticIvSpec = new IvParameterSpec(iv);
-        
+
         c.init(Cipher.ENCRYPT_MODE, skeySpec, staticIvSpec, new SecureRandom());
     }
 }
@@ -38,9 +38,9 @@ public class RandomIV {
         // ok
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
-        
+
         IvParameterSpec staticIvSpec = new IvParameterSpec(iv); // IvParameterSpec initialized using its own randomizer.
-        
+
         c.init(Cipher.ENCRYPT_MODE, skeySpec, staticIvSpec, new SecureRandom());
     }
 }

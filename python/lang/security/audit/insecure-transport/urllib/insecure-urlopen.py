@@ -1,4 +1,4 @@
-from urllib.request import urlopen 
+from urllib.request import urlopen
 
 def test1():
     # ruleid: insecure-urlopen
@@ -21,8 +21,7 @@ def test2_ok():
 # ruleid: insecure-urlopen
 def test3(url = "http://example.com"):
     urlopen(url)
-    
+
 # ok: insecure-urlopen
 def test3_ok(url = "https://example.com"):
     urlopen(url)
-    

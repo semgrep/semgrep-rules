@@ -27,7 +27,7 @@ public class TestController {
         response.addCookie(cookie);
         return response;
     }
-    
+
     @RequestMapping(value = "/{name}/{book}", method = RequestMethod.POST)
     @PreAuthorize(Permissions.USER)
     @ResponseBody

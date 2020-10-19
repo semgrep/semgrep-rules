@@ -17,7 +17,7 @@ class Bad {
             return ftpSessionFactory;
         }
     }
-    
+
     @Bean
     @ConditionalOnMissingBean
     public SessionFactory<FTPFile> bad2(FtpSessionFactoryProperties properties) {
@@ -58,7 +58,7 @@ class Ok {
             return ftpSessionFactory;
         }
     }
-    
+
     @Bean
     @ConditionalOnMissingBean
     public SessionFactory<FTPFile> ok2(FtpSessionFactoryProperties properties) {

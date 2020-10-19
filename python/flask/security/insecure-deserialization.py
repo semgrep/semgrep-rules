@@ -11,7 +11,7 @@ class UserID:
         self.uuid = str(uuid1())
     def __str__(self):
         return self.uuid
-    
+
 # The main Flask Backend
 app = Flask(__name__)
 

@@ -39,7 +39,7 @@ def previewNode(request, uid):
 def inline_test(request):
     # ruleid:direct-use-of-httpresponse
     return HttpResponse("Received {}".format(request.POST.get('message')))
-    
+
 
 def vote(request, question_id):
     if request.method != "GET" and request.method != "POST":

@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
-public class App 
+public class App
 {
 
     private static void bad1() {
@@ -18,7 +18,7 @@ public class App
             //Invalid Signing configuration / Couldn't convert Claims.
         }
     }
-    
+
     private static void bad2() {
         try {
             // ruleid: java-jwt-none-alg
@@ -29,7 +29,7 @@ public class App
             //Invalid Signing configuration / Couldn't convert Claims.
         }
     }
-    
+
     private static void ok1(String secretKey) {
         try {
             // ok: java-jwt-none-alg
@@ -41,7 +41,7 @@ public class App
             //Invalid Signing configuration / Couldn't convert Claims.
         }
     }
-    
+
     public static void main( String[] args )
     {
         bad1();
@@ -54,7 +54,7 @@ abstract class App2
 {
 
     static String secret = "secret";
-            
+
     public void bad2() {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

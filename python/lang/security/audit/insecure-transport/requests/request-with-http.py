@@ -21,7 +21,7 @@ def test2_ok():
 # ruleid: request-with-http
 def test3(url = "http://example.com"):
     requests.delete(url)
-    
+
 # ok: request-with-http
 def test3_ok(url = "https://example.com"):
     requests.delete(url)
@@ -29,7 +29,7 @@ def test3_ok(url = "https://example.com"):
 # ruleid: request-with-http
 def test4(url = "http://example.com"):
     requests.request("HEAD", url, timeout=30)
-    
+
 # ok: request-with-http
 def test4_ok(url = "https://example.com"):
     requests.request("HEAD", url, timeout=30)
@@ -37,7 +37,7 @@ def test4_ok(url = "https://example.com"):
 # ruleid: request-with-http
 def test5(url = "http://example.com"):
     requests.Request("HEAD", url, timeout=30)
-    
+
 # ok: request-with-http
 def test5_ok(url = "https://example.com"):
     requests.Request("HEAD", url, timeout=30)

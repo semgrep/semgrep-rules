@@ -27,7 +27,7 @@ public class UrlRewriting extends HttpServlet {
     public String encodeRedirectURLRewrite(HttpServletResponse resp, String url) {
         return resp.encodeRedirectURL(url);
     }
-    
+
     // ruleid: url-rewriting
     public String encodeRedirectUrlRewrite(HttpServletResponse resp, String url) {
         return resp.encodeRedirectUrl(url); //Deprecated
@@ -37,7 +37,7 @@ public class UrlRewriting extends HttpServlet {
     public String encodeRedirectURLRewrite(SomeDifferentRequest resp, String url) {
         return resp.encodeURL(url);
     }
-    
+
     // ok
     public String encodeRedirectUrlRewrite(HttpServletResponse resp, String url) {
         return resp.getHeader(url);

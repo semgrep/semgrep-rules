@@ -14,7 +14,7 @@ class GoodXMLInputFactory {
         // ok
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
     }
-}           
+}
 
 class BadXMLInputFactory {
     public BadXMLInputFactory() {
@@ -22,4 +22,4 @@ class BadXMLInputFactory {
         // ruleid:xmlinputfactory-external-entities-enabled
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
     }
-}  
+}

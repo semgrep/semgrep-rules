@@ -7,9 +7,9 @@ public class Bad {
                 }
             });
     }
-    
+
     // ruleid: bypass-tls-verification
-    public RestTemplate restTemplate() 
+    public RestTemplate restTemplate()
                         throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
             TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
@@ -30,7 +30,7 @@ public class Bad {
             RestTemplate restTemplate = new RestTemplate(requestFactory);
             return restTemplate;
     }
-    
+
     public RestTemplate getRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         // ruleid: bypass-tls-verification
         TrustStrategy acceptingTrustStrategy = new TrustStrategy() {

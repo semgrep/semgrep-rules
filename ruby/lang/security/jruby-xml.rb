@@ -1,5 +1,5 @@
 include ActiveSupport
- 
+
  def bad_xml
      # ruleid: jruby-xml
      XmlMini.backend = 'JDOM'

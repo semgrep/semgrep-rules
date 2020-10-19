@@ -9,8 +9,8 @@ rules:
   severity: ERROR
   patterns:
   - pattern-either:
-# References : https://www.programcreek.com/java-api-examples/?api=jdk.internal.org.xml.sax.XMLReader 
-# References : https://www.programcreek.com/java-api-examples/?api=org.xml.sax.XMLReader 
+# References : https://www.programcreek.com/java-api-examples/?api=jdk.internal.org.xml.sax.XMLReader
+# References : https://www.programcreek.com/java-api-examples/?api=org.xml.sax.XMLReader
     - pattern: |
         XMLReader $XMLREADER = ... ;
         ...
@@ -30,6 +30,6 @@ rules:
           ...
           $XMLREADER.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
           $XMLREADER.setFeature("http://xml.org/sax/features/external-general-entities", false);
-          $XMLREADER.setFeature("http://xml.org/sax/features/external-parameter-entities", false);      
+          $XMLREADER.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
   languages:
   - java

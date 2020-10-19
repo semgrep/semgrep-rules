@@ -14,7 +14,7 @@ public class WeakHashes {
     byte[] hashValue = DigestUtils.getSha1Digest().digest(password.getBytes());
     return hashValue;
   }
-  
+
   public byte[] md5(String password) {
     // ruleid: use-of-md5
     MessageDigest md5Digest = MessageDigest.getInstance("MD5");
@@ -22,7 +22,7 @@ public class WeakHashes {
     byte[] hashValue = md5Digest.digest();
     return hashValue;
   }
-  
+
   public byte[] md5_digestutil(String password) {
     // ruleid: use-of-md5
     byte[] hashValue = DigestUtils.getMd5Digest().digest(password.getBytes());

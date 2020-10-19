@@ -7,11 +7,11 @@ def bad1(secret, value):
     # ruleid: jwt-python-exposed-credentials
     encoded = jwt.encode({'some': 'payload','password': value}, secret, algorithm='HS256')
     return encoded
-    
+
 def bad2(secret):
     encoded = jwt.encode(payload, secret, algorithm='HS256')
     return encoded
-    
+
 def bad3(secret, value):
     # ruleid: jwt-python-exposed-credentials
     pp = {'one': 'two','password': value}

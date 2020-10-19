@@ -14,7 +14,7 @@ func bad2() {
     ro := &RequestOptions{
     Params: map[string]string{"Hello": "Goodbye"},
     }
-    
+
     // ruleid: grequests-http-request
     Get("http://httpbin.org/get?Hello=World", ro)
 }
@@ -35,7 +35,7 @@ func ok2() {
     ro := &RequestOptions{
     Params: map[string]string{"Hello": "Goodbye"},
     }
-    
+
     // ok: grequests-http-request
     Get("https://httpbin.org/get?Hello=World", ro)
 }

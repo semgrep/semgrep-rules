@@ -19,7 +19,7 @@ rules:
     - pattern: $M = set(...)
     - pattern: $M = dict(...)
   message: |
-    Unsafe usage of mutable initializer with attr.s decorator. 
+    Unsafe usage of mutable initializer with attr.s decorator.
     Multiple instances of this class will re-use the same data structure, which is likely not the desired behavior.
     Consider instead: replace assignment to mutable initializer (ex. dict() or {}) with attr.ib(factory=type) where type is dict, set, or list
   severity: WARNING

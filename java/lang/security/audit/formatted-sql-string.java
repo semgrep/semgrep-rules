@@ -35,7 +35,7 @@ public class SqlExample {
         Connection c = DB.getConnection();
         ResultSet rs = c.createStatement().executeQuery(sql);
     }
-    
+
     public void findAccountsById(String id, String field) throws SQLException {
         // ruleid:formatted-sql-string
         String sql = "SELECT ";
@@ -64,15 +64,15 @@ public class SqlExample2 {
         Connection c = db.getConnection();
         ResultSet rs = c.createStatement().execute(sql);
     }
-    
-    public List<AccountDTO> findAccountsById(String id) {    
+
+    public List<AccountDTO> findAccountsById(String id) {
         // ruleid:formatted-sql-string
-        String jql = "from Account where id = '" + id + "'";        
-        TypedQuery<Account> q = em.createQuery(jql, Account.class);        
+        String jql = "from Account where id = '" + id + "'";
+        TypedQuery<Account> q = em.createQuery(jql, Account.class);
         return q.getResultList()
         .stream()
         .map(this::toAccountDTO)
-        .collect(Collectors.toList());        
+        .collect(Collectors.toList());
     }
 }
 

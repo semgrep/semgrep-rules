@@ -25,19 +25,19 @@ import com.rands.couponproject.jpa.Income;
         propertyName = "destination", propertyValue = "java:/jms/queue/MyQueue")
         })
 public class IncomeConsumerBean implements MessageListener {
-    
+
     static Logger logger = Logger.getLogger(IncomeConsumerBean.class);
-    
+
     @EJB
     IncomeServiceBean isb;
 
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public IncomeConsumerBean() {
         // TODO Auto-generated constructor stub
     }
-    
+
     /**
      * @see MessageListener#onMessage(Message)
      */
@@ -49,22 +49,22 @@ public class IncomeConsumerBean implements MessageListener {
                 logger.warn("onMessage ignoring TextMessage : " + msg.getText());
             } else if (message instanceof ObjectMessage) {
                 logger.info("onMessage received an ObjectMessage at " + new Date());
-                
+
                 ObjectMessage msg = (ObjectMessage) message;
-                
+
                 // ruleid: insecure-jms-deserialization
                 Object o = msg.getObject(); // variant 1 : calling getObject method directly on an ObjectMessage object
                 logger.info("o=" + o);
-                
+
                 // ruleid: insecure-jms-deserialization
-                Income income = (Income) msg.getObject(); // variant 2 : calling getObject method and casting to a custom class 
+                Income income = (Income) msg.getObject(); // variant 2 : calling getObject method and casting to a custom class
                 logger.info("Message is : " + income);
-                
+
                 isb.StoreIncome(income);
             } else {
                 logger.error("onMessage received an invalid message type");
             }
- 
+
         } catch (JMSException e) {
             logger.error("onMessage failed : " + e.toString());
         }

@@ -8,7 +8,7 @@ int bad_strcpy(src, dst) {
     {
         // ruleid: insecure-use-string-copy-fn
         strcpy(dst, src);
-        
+
         // ruleid: insecure-use-string-copy-fn
         strncpy(dst, src, 100);
     }

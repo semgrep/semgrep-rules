@@ -22,10 +22,10 @@ public class LocalHost implements HostnameVerifier {
 public class InlineVerifier {
     public InlineVerifier() {
         // ruleid:insecure-hostname-verifier
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier(){ 
-            public boolean verify(String hostname, SSLSession session) { 
-                return true; 
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier(){
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
             }
-        }); 
+        });
     }
 }

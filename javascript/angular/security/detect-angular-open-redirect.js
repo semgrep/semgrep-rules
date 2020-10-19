@@ -9,7 +9,7 @@ $scope.userInput = 'foo';
      input = $scope.input;
      // ruleid:detect-angular-open-redirect
      $window.location.href = input + '/app/logout';
-   
+
 
      //Data is not coming from user input
      $location.location.location = test
