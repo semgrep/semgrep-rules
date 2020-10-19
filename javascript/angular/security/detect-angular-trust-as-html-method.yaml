@@ -1,14 +1,14 @@
 rules:
     - id: detect-angular-trust-as-html-method
       patterns:
-        - pattern-either: 
+        - pattern-either:
           - pattern: |
               $SOURCE = $scope.$INPUT;
               $sce.trustAsHtml($SOURCE);
           - pattern: |
               $sce.trustAsHtml($scope.$INPUT);
         - pattern-inside: |
-            app.controller(..., function($scope,$sce){ 
+            app.controller(..., function($scope,$sce){
             ...
             });
       message: |

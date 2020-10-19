@@ -66,7 +66,7 @@ app.post('/test2', async (req, res) => {
         // ruleid: phantom_ssrf
         await page.setContent(req.body);
 
-       
+
         await instance.exit();
 
         res.send('Hello World!')
@@ -85,7 +85,7 @@ app.post('/test2', async (req, res) => {
         // ruleid: phantom_ssrf
         await page.evaluateJavaScript(req.body.script);
 
-      
+
         await instance.exit();
 
         res.send('Hello World!')
@@ -111,7 +111,7 @@ app.post('/test3', async (req, res) => {
     // ruleid: phantom_ssrf
     await page.evaluateJavaScript(req.body.script);
 
-   
+
 
     await instance.exit();
 

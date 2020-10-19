@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = function (sequelize) {
   const OauthAccessToken = require('./OauthAccessToken')(sequelize);
-  
+
   return async function passport_middleware(request, response, next) {
     const { headers } = request;
     if (headers.authorization) {

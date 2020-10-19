@@ -1,7 +1,7 @@
 rules:
 - id: find-sql-string-concatenation
   patterns:
-    - pattern-either: 
+    - pattern-either:
       - pattern: |
           $RETURN $METHOD(...,String $X,...){
             ...
@@ -29,6 +29,6 @@ rules:
   message: |
     In $METHOD, $X is used to construct a SQL query via string concatenation.
   fix: |
-  
-  languages: [java] 
+
+  languages: [java]
   severity: WARNING

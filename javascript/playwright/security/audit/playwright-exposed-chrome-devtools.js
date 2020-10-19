@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
 })();
 
 (async () => {
-  var port = 9222;  
+  var port = 9222;
   // ruleid:playwright-exposed-chrome-devtools
   const browser = await chromium.launch({args:[`--remote-debugging-port=${port}`,'--somethin-else']});
   const page = await browser.newPage();

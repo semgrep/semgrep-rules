@@ -11,7 +11,7 @@ let test3 s =
   String.sub s (String.length s - 20) 20
 
 
-let test 4 s = 
+let test 4 s =
   (* ruleid:ocamllint-useless-sprintf *)
   let s1 = Printf.sprintf "this is useless" in
   (* ruleid:ocamllint-useless-sprintf *)

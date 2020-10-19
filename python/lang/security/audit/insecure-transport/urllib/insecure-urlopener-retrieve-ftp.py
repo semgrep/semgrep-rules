@@ -43,16 +43,16 @@ def test4_ok():
 def test5(url = "ftp://example.com"):
     # ruleid: insecure-urlopener-retrieve-ftp
     URLopener().retrieve(url)
-    
+
 def test5_ok(url = "ftps://example.com"):
     # ok: insecure-urlopener-retrieve-ftp
     URLopener().retrieve(url)
-    
+
 def test6(url = "ftp://example.com"):
     od = URLopener()
     # ruleid: insecure-urlopener-retrieve-ftp
     od.retrieve(url)
-    
+
 def test6_ok(url = "ftps://example.com"):
     od = URLopener()
     # ok: insecure-urlopener-retrieve-ftp

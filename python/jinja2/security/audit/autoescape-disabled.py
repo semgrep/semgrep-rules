@@ -40,7 +40,7 @@ Environment(loader=templateLoader,
 
 def fake_func():
     return 'foobar'
-    
+
 
 # ruleid:autoescape-disabled
 Environment(loader=templateLoader, autoescape=fake_func())

@@ -1,4 +1,4 @@
-from urllib.request import urlretrieve 
+from urllib.request import urlretrieve
 
 def test1():
     # ruleid: insecure-urlretrieve-ftp
@@ -21,8 +21,7 @@ def test2_ok():
 # ruleid: insecure-urlretrieve-ftp
 def test3(url = "ftp://example.com"):
     urlretrieve(url)
-    
+
 # ok: insecure-urlretrieve-ftp
 def test3_ok(url = "sftp://example.com"):
     urlretrieve(url)
-    

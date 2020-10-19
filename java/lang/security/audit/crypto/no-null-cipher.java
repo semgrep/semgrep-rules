@@ -5,7 +5,7 @@ class Cls {
     public Cls() {
         System.out.println("Hello");
     }
-    
+
     public byte[] test1(String plainText) {
         // ruleid: no-null-cipher
         Cipher doNothingCihper = new NullCipher();

@@ -16,7 +16,7 @@ public class Cls extends HttpServlet
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) 
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException
 	{
         // ruleid:httpservlet-path-traversal
@@ -30,8 +30,8 @@ public class Cls extends HttpServlet
 
         response.sendRedirect("/index.html");
 	}
-    
-    public void ok(HttpServletRequest request, HttpServletResponse response) 
+
+    public void ok(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException
 	{
         // ok

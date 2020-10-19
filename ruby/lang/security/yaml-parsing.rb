@@ -4,6 +4,6 @@
 ActionController::Base.param_parsers[Mime::YAML] = :yaml
 
 # ok
-ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('symbol') 
+ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('symbol')
 # ok
-ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('yaml') 
+ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('yaml')

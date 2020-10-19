@@ -1,6 +1,6 @@
 import requests
 
-def test1(): 
+def test1():
     session = requests.Session()
     # ruleid: request-session-with-http
     session.get("http://example.com")
@@ -41,4 +41,3 @@ def test4(url = "http://example.com"):
 def test4_ok(url = "https://example.com"):
     session = requests.Session()
     session.request("HEAD", url, timeout=30)
-    

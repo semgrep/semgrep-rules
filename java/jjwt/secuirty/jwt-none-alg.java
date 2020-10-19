@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-public class App 
+public class App
 {
 
     private static void bad1() {
@@ -24,7 +24,7 @@ public class App
                 .signWith(key)
                 .compact();
     }
-    
+
     public static void main( String[] args )
     {
         bad1();

@@ -4,7 +4,7 @@ def bad1():
     # ruleid: jwt-python-none-alg
     encoded = jwt.encode({'some': 'payload'}, None, algorithm='none')
     return encoded
-    
+
 def bad2(encoded):
     # ruleid: jwt-python-none-alg
     jwt.decode(encoded, None, algorithms=['none'])
