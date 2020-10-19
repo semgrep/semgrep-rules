@@ -20,7 +20,6 @@ rules:
   - pattern: jinja2.Template.render(...)
   - patterns:
     - pattern-inside: |
-        @$APP.route(...)
-        def $FUNC(...):
-          ...
+        $TEMPLATE = $ENV.get_template(...)
+        ...
     - pattern: $TEMPLATE.render(...)
