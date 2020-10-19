@@ -8,7 +8,7 @@ template = jinja2.Template("""
 {{ body }}
 </body>
 </html>
-"""
+""")
 
 # ruleid: direct-use-of-jinja2
 rendered = template.render(body=input())
