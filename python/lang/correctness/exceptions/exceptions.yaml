@@ -3,15 +3,14 @@ rules:
   patterns:
   - pattern-either:
     - pattern: raise "..."
-          # TODO - literal support
-          #- pattern: |
-          #    raise $X: int
-          #- pattern: |
-          #    raise $X: float
-          # TODO, the second pattern requires semgrep typing support
     - pattern: |
         $X: BaseException
         raise $X(...)
+    - patterns:
+      - pattern: raise $EXCEPTION
+      - metavariable-regex:
+          metavariable: $EXCEPTION
+          regex: '[0-9]*\.?[0-9]+'
   message: In Python3, a runtime `TypeError` will be thrown if you attempt to raise an object or class which does not inherit
     from `BaseException`
   languages: [python]
