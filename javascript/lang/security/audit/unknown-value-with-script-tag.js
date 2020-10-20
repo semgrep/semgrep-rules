@@ -49,10 +49,10 @@ exports.promotionVideo = () => {
       let template = buf.toString()
       const subs = getSubsFromFile()
 
-      // ok
+      // ok:unknown-value-with-script-tag
       var w = "<script>";
 
-      // ok
+      // ok:unknown-value-with-script-tag
       utils.solveIf(challenges.videoXssChallenge, () => { return utils.contains(subs, '</script><script>alert(`xss`)</script>') })
 
       const theme = themes[config.get('application.theme')]
@@ -99,7 +99,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 		var script, callback;
 		return {
 			send: function( _, complete ) {
-                // ok
+                // ok:unknown-value-with-script-tag
 				script = jQuery("<script>").prop({
 					async: true,
 					charset: s.scriptCharset,

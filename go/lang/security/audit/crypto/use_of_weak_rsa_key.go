@@ -15,7 +15,7 @@ func main() {
 	}
 	fmt.Println(pvk)
 
-	// ok
+	// ok: use-of-weak-rsa-key
 	pvk, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		fmt.Println(err)

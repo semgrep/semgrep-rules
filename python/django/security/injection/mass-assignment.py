@@ -16,7 +16,7 @@ def update_whatzit(request, id):
     return render(request, 'saved.html')
 
 def good_whatzit(request):
-    # ok
+    # ok: mass-assignment
     Whatzit.objects.create(
         name=request.POST.get('name'),
         dob=request.POST.get('dob')

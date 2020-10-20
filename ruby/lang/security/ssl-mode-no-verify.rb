@@ -15,7 +15,7 @@ http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
 response = http.request(request)
 
-# ok
+# ok:ssl-mode-no-verify
 http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 request = Net::HTTP::Get.new(uri.request_uri)
 response = http.request(request)

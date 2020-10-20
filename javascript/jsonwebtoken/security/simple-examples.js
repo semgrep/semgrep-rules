@@ -16,14 +16,14 @@ function example2() {
 }
 
 function example3() {
-// ok
+// ok: hardcoded-jwt-secret
   const jsonwt = require('jsonwebtoken')
   const payload = {foo: 'bar'}
   const token3 = jsonwt.sign(payload, config.secret)
 }
 
 function example4() {
-// ok
+// ok: hardcoded-jwt-secret
   const jsonwt = require('jsonwebtoken')
   const payload = {foo: 'bar'}
   const secret2 = config.secret
@@ -31,7 +31,7 @@ function example4() {
 }
 
 function example5() {
-// ok
+// ok: hardcoded-jwt-secret
   const jsonwt = require('jsonwebtoken')
   const payload = {foo: 'bar'}
   const secret3 = process.env.SECRET || 'fallback-secret'

@@ -17,8 +17,8 @@ hashlib.new('MD4', string='test')
 # ruleid:insecure-hash-function
 hashlib.new(string='test', name='MD5')
 
-# ok
+# ok:insecure-hash-function
 hashlib.new('sha256')
 
-# ok
+# ok:insecure-hash-function
 hashlib.new('SHA512')

@@ -10,7 +10,7 @@ void bad_vsprintf(char *args) {
     //ruleid: insecure-use-printf-fn
     vsprintf(buffer, "%n", args);
 
-    //ok
+    //ok: insecure-use-printf-fn
     vsnprintf(buffer, format, args);
 }
 
@@ -25,7 +25,7 @@ void bad_sprintf() {
     int i = 3;
     sprintf(buffer, format, a, b, c);
 
-    //ok
+    //ok: insecure-use-printf-fn
     snprintf(buffer, format, a,b,c);
 }
 
@@ -38,7 +38,7 @@ void bad_printf() {
     int i = 3;
     printf(format, 1234);
 
-    //ok
+    //ok: insecure-use-printf-fn
     printf("hello");
 }
 

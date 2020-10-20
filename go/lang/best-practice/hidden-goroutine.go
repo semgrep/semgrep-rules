@@ -9,7 +9,7 @@ func HiddenGoroutine() {
     }()
 }
 
-// ok
+// ok: hidden-goroutine
 func FunctionThatCallsGoroutineIsOk() {
     fmt.Println("This is normal")
     go func() {
@@ -17,7 +17,7 @@ func FunctionThatCallsGoroutineIsOk() {
     }()
 }
 
-// ok
+// ok: hidden-goroutine
 func FunctionThatCallsGoroutineAlsoOk() {
     go func() {
         fmt.Println("This is OK because the function does other things")

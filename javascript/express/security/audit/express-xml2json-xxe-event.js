@@ -44,7 +44,7 @@ function okTest() {
     const port = 3000
     const someEvent = require('some-event')
 
-// ok
+// ok: express-xml2json-xxe-event
     someEvent.on('event', function (err, data) {
         req.body = expat.toJson(data, {coerce: true, object: true});
         next();

@@ -2,7 +2,7 @@
 
 int
 ok() {
-    // ok
+    // ok:double_goto
 	if (0) {
 		goto ONE;
 		goto ONE;

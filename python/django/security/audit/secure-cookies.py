@@ -10,7 +10,7 @@ class CookieStorage(BaseStorage):
         store, or deletes the cookie.
         """
         if encoded_data:
-            # ok
+            # ok: django-secure-set-cookie
             response.set_cookie(
                 self.cookie_name, encoded_data,
                 domain=settings.SESSION_COOKIE_DOMAIN,
@@ -24,13 +24,13 @@ class CookieStorage(BaseStorage):
 def index(request, template):
     response = render(request, template)
 
-    # ok
+    # ok: django-secure-set-cookie
     response.set_cookie("hello", "world", secure=True, httponly=True, samesite="Lax")
 
-    # ok
+    # ok: django-secure-set-cookie
     response.set_cookie("hello", "world", **kwargs)
 
-    # ok
+    # ok: django-secure-set-cookie
     response.set_cookie(
         settings.SESSION_COOKIE_NAME,
         request.session.session_key, max_age=max_age,
@@ -40,7 +40,7 @@ def index(request, template):
         httponly=settings.SESSION_COOKIE_HTTPONLY or None,
     )
 
-    # ok
+    # ok: django-secure-set-cookie
     response.set_cookie(
         settings.CSRF_COOKIE_NAME,
         request.META['CSRF_COOKIE'],

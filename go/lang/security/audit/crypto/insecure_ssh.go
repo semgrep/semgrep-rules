@@ -13,7 +13,7 @@ func ok() {
 	}
 	publicKey = &privateKey.PublicKey
 	hostKey, _ := ssh.NewPublicKey(publicKey)
-	// ok
+	// ok: avoid-ssh-insecure-ignore-host-key
 	_ = ssh.FixedHostKey(hostKey);
 }
 

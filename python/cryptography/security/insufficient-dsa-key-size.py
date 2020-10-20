@@ -1,11 +1,11 @@
 from cryptography.hazmat import backends
 from cryptography.hazmat.primitives.asymmetric import dsa
 
-# ok
+# ok: insufficient-dsa-key-size
 dsa.generate_private_key(key_size=2048,
                          backend=backends.default_backend())
 
-# ok
+# ok: insufficient-dsa-key-size
 dsa.generate_private_key(2048,
                          backend=backends.default_backend())
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Model, CharField, IntegerField, TextField
 
 class FakeModel(Model):
-    # ok
+    # ok: string-field-must-set-null-true
     fieldOne = CharField(
         max_length=200,
         unique=True)
@@ -18,14 +18,14 @@ class FakeModel(Model):
         blank=True,
         max_length=30
     )
-    # ok
+    # ok: string-field-must-set-null-true
     fieldThree = CharField(
         unique=True,
         null=True,
         blank=True,
         max_length=100
     )
-    # ok
+    # ok: string-field-must-set-null-true
     notText = IntegerField(
         max_value=255
     )
@@ -34,5 +34,5 @@ def fake(**kwargs):
     pass
 
 def nope():
-    # ok
+    # ok: string-field-must-set-null-true
     return fake(unique=True, blank=True)

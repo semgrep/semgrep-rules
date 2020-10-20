@@ -12,13 +12,13 @@ public class Cls {
     }
 
     public void safeKeySize() {
-        // ok
+        // ok: blowfish-insufficient-key-size
         KeyGenerator keyGen = KeyGenerator.getInstance("Blowfish");
         keyGen.init(128);
     }
 
     public void superSafeKeySize() {
-        // ok
+        // ok: blowfish-insufficient-key-size
         KeyGenerator keyGen = KeyGenerator.getInstance("Blowfish");
         keyGen.init(448);
     }

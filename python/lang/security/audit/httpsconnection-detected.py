@@ -12,5 +12,5 @@ import six
 # ruleid:httpsconnection-detected
 six.moves.http_client.HTTPSConnection("example.com")
 
-# ok
+# ok:httpsconnection-detected
 raise http.client.HTTPException

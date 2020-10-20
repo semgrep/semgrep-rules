@@ -66,7 +66,7 @@ public class TestLog5 {
   }
 }
 
-// ok
+// ok: crlf-injection-logs
 public class OkTestLog1 {
   private final static NotLogger log = new NorLogger();
 
@@ -80,7 +80,7 @@ public class OkTestLog1 {
 }
 
 public class OkTestLog2 {
-  // ok
+  // ok: crlf-injection-logs
   @Override
   public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {

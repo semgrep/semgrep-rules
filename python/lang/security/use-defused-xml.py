@@ -7,9 +7,9 @@ def bad():
     root = tree.getroot()
 
 def ok():
-    # ok
+    # ok: use-defused-xml
     import defusedxml
-    # ok
+    # ok: use-defused-xml
     from defusedxml.etree import ElementTree
     tree = ElementTree.parse('country_data.xml')
     root = tree.getroot()

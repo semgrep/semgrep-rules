@@ -17,7 +17,7 @@ app.get('/test2', (req, res) => {
 })
 
 app.get('/ok-test', (req, res) => {
-// ok
+// ok: res-render-injection
     return res.render(hardcodedPath, {foo: bar})
 })
 

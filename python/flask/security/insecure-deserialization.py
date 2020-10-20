@@ -31,7 +31,7 @@ def index():
 
 @app.route("/ok")
 def ok():
-    # ok
+    # ok:insecure-deserialization
     novellist = pickle.load(open('./novel/list.dat', "rb"))
 
 if __name__ == "__main__":

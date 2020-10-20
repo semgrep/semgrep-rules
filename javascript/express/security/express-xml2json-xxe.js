@@ -36,7 +36,7 @@ function okTest() {
     const port = 3000
 
     app.get('/', (req, res) => {
-// ok
+// ok: express-xml2json-xxe
         const content = expat.toJson(someVerifiedData(), {coerce: true, object: true});
         res.send(content)
     })

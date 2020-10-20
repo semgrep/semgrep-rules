@@ -15,7 +15,7 @@ public interface IBSidesService extends Remote {
    void poke(Object attende) throws RemoteException;
 }
 
-// ok
+// ok:server-dangerous-object-deserialization
 public interface IBSidesServiceOK extends Remote {
    boolean registerTicket(String ticketID) throws RemoteException;
    void vistTalk(String talkname) throws RemoteException;

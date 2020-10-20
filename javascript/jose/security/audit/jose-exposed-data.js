@@ -8,13 +8,13 @@ function example(user) {
 }
 
 function example2(user) {
-// ok
+// ok: jose-exposed-data
     const token = JWT.sign({name: user.name}, secret)
     return token;
 }
 
 function example3(user) {
-// ok
+// ok: jose-exposed-data
     const obj = {
         name: user.name
     }

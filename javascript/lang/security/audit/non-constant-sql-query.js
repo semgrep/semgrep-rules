@@ -34,7 +34,7 @@ module.exports = function searchProducts () {
         }
         if (utils.notSolved(challenges.dbSchemaChallenge)) {
           let solved = true
-          // ok
+          // ok:non-constant-sql-query
           models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]) => {
             const tableDefinitions = utils.queryResultToJson(data)
             if (tableDefinitions.data && tableDefinitions.data.length) {

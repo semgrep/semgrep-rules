@@ -1,9 +1,9 @@
 import os
 
-# ok
+# ok:dangerous-system-call
 os.system("ls -al")
 
-# ok
+# ok:dangerous-system-call
 os.popen("cat contents.txt")
 
 from somewhere import something

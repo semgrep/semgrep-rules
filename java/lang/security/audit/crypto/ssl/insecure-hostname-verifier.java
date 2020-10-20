@@ -10,7 +10,7 @@ public class AllHosts implements HostnameVerifier {
     }
 }
 
-// ok
+// ok:insecure-hostname-verifier
 public class LocalHost implements HostnameVerifier {
     public boolean verify(final String hostname, final SSLSession session) {
         return hostname.equals("localhost");

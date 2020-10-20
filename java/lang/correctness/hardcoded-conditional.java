@@ -17,17 +17,17 @@ class Bar {
             continue;
         }
 
-        // ok
+        // ok:hardcoded-conditional
         if (myBoolean) {
 
         }
 
-        // ok
+        // ok:hardcoded-conditional
         if (myBoolean == myBoolean) {
             continue;
         }
 
-        // ok
+        // ok:hardcoded-conditional
         if (myBoolean != myBoolean) {
             continue;
         }

@@ -120,13 +120,13 @@ public class SuperWebFlet extends HttpServlet {
         return chain.filter(exchange);
     }
 
-    // ok
+    // ok: permissive-cors
     public void setErrorsResponse1(Errors errors, HttpStatus responseHttpStatus, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.addHeader("Foo", "Bar");
         response.getWriter().write(responseData.getBody());
     }
 
-    // ok
+    // ok: permissive-cors
     @GetMapping("/ok-ok")
     public Mono<String> usingServerHttpResponse1(ServerHttpResponse response) {
         response.getHeaders().add("Foo", "Bar");
@@ -135,7 +135,7 @@ public class SuperWebFlet extends HttpServlet {
 
     @GetMapping("/ok-ok-ok")
     public ResponseEntity<String> usingResponseEntityBuilderAndHttpHeaders1() {
-        // ok
+        // ok: permissive-cors
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Foo", "Bar");
 
