@@ -1,4 +1,4 @@
-https://github.com/mybb/mybb/blob/897593d36d2db00ac09dd0c0379595354538b85a/jscripts/bbcodes_sceditor.js
+//https://github.com/mybb/mybb/blob/897593d36d2db00ac09dd0c0379595354538b85a/jscripts/bbcodes_sceditor.js
 $(function ($) {
     'use strict';
 
@@ -116,3 +116,25 @@ var tarteaucitron = {
         }
     }
 };
+
+//https://github.com/mbraak/jqTree/blob/d6b8d11c4ebd7aa4a60498786bc94724b6f6ffda/lib/dragAndDropHandler.js
+var DragElement = /** @class */ (function () {
+    function DragElement(nodeName, offsetX, offsetY, $tree) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        // ruleid: raw-html-concat
+        this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
+        this.$element.css("position", "absolute");
+        $tree.append(this.$element);
+    }
+    DragElement.prototype.move = function (pageX, pageY) {
+        this.$element.offset({
+            left: pageX - this.offsetX,
+            top: pageY - this.offsetY
+        });
+    };
+    DragElement.prototype.remove = function () {
+        this.$element.remove();
+    };
+    return DragElement;
+}());
