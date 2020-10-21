@@ -1,14 +1,14 @@
 rules:
   - id: detect-angular-trust-as-method
     patterns:
-      - pattern-either: 
+      - pattern-either:
         - pattern: |
             $SOURCE = $scope.$INPUT;
             $sce.trustAs($sce.$TRUSTMETHOD,$SOURCE);
         - pattern: |
             $sce.trustAs($sce.$TRUSTMETHOD,$INPUT);
       - pattern-inside: |
-          app.controller(..., function($scope,$sce){ 
+          app.controller(..., function($scope,$sce){
           ...
           });
     message: |
@@ -20,5 +20,5 @@ rules:
        - https://docs.angularjs.org/api/ng/service/$sce
        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
     fix: |
-      
+
     severity: WARNING

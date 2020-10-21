@@ -6,9 +6,9 @@ $scope.userInput = 'foo';
      // ruleid:detect-angular-trust-as-css-method
      $scope.trustedurl = $sce.trustAsCss($scope.html);
      // ruleid:detect-angular-trust-as-css-method
-     input = $scope.html 
+     input = $scope.html
      $scope.trustedurl = $sce.trustAsCss(input);
-   
+
 
      //Data is not coming from user input
      $scope.trustedurl = $sce.trustAsCss('stringLiteral');

@@ -5,7 +5,7 @@ class Bad {
         HttpGet httpGet = new HttpGet("http://targethost/homepage");
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
     }
-    
+
     public void bad2() {
         // ruleid: http-components-request
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -27,7 +27,7 @@ class Ok {
         HttpGet httpGet = new HttpGet("https://targethost/homepage");
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
     }
-    
+
     public void ok2() {
         // ok: http-components-request
         CloseableHttpClient httpclient = HttpClients.createDefault();

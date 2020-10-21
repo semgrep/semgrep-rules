@@ -24,7 +24,7 @@ Person.human? # true
 Array.class_eval(array_second)
 
 
-  
+
 class Account < ActiveRecord::Base
   validates_format_of :name, :with => /^[a-zA-Z]+$/
   validates_format_of :blah, :with => /\A[a-zA-Z]+$/

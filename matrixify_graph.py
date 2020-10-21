@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     if args.img_tag:
         dump = img_tag(dump)
-    
+
     if args.save:
         save(dump, args.save)
     else:

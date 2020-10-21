@@ -34,4 +34,4 @@ public class Cls extends HttpServlet
         // ok
         resp.getWriter().write(Encode.forHtml(input1));
     }
-} 
+}

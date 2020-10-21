@@ -1,0 +1,13 @@
+rules:
+- id: avoid-v-html
+  message: Dynamically rendering arbitrary HTML on your website can be very dangerous because it can easily lead to XSS vulnerabilities.
+    Only use HTML interpolation on trusted content and never on user-provided content.
+  metadata:
+    references:
+    - https://vuejs.org/v2/guide/syntax.html#Raw-HTML
+  languages: [none]
+  paths:
+    include:
+    - '*.vue'
+  severity: WARNING
+  pattern-regex: <[^<>]*v-html=

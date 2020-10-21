@@ -32,7 +32,7 @@ export class Auth {
     digest = 'sha512';
 
     create(password) {
-        const salt = randomBytes(128).toString('base64'); // <- salt 
+        const salt = randomBytes(128).toString('base64'); // <- salt
         // salt was not base64 before being used by pbkdf2
 
         const hash = pbkdf2Sync(password, salt, this.iters, this.keylen, this.digest).toString('base64');

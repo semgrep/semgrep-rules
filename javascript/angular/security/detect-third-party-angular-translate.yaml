@@ -1,11 +1,11 @@
 rules:
     - id: detect-angular-translateprovider-useStrategy-method
       patterns:
-        - pattern-either: 
+        - pattern-either:
           - pattern: |
               $translateSanitization.useStrategy();
         - pattern-inside: |
-            app.controller(..., function($scope,$sce){ 
+            app.controller(..., function($scope,$sce){
             ...
             });
       message: |
@@ -19,11 +19,11 @@ rules:
             - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
     - id: detect-angular-translateprovider-translations-method
       patterns:
-        - pattern-either: 
+        - pattern-either:
           - pattern: |
               $translateProvider.translations(...,$SOURCE);
         - pattern-inside: |
-            app.controller(..., function($scope,$sce){ 
+            app.controller(..., function($scope,$sce){
             ...
             });
       message: |

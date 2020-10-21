@@ -1,7 +1,7 @@
 rules:
   - id: wildcard-postmessage-configuration
     patterns:
-      - pattern-either: 
+      - pattern-either:
         - pattern: |
             $OBJECT.postMessage(...,'*')
     message: |
@@ -14,7 +14,7 @@ rules:
       cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
   - id: insufficient-postmessage-origin-validation
     patterns:
-      - pattern-either: 
+      - pattern-either:
         - pattern: |
             window.addEventListener(...)
       - pattern-not: |
@@ -34,7 +34,7 @@ rules:
     languages:
     - javascript
     fix: |
-      
+
     severity: WARNING
     metadata:
       owasp: 'A6: Sensitive Data Exposure'

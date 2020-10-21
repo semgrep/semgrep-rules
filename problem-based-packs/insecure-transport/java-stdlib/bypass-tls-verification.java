@@ -31,7 +31,7 @@ public class Ok {
              }
         }
     }
-    
+
     public void ok_bypass() {
         // ok: bypass-tls-verification
         new X509TrustManager() {

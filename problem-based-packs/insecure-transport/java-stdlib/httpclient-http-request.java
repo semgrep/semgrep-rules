@@ -153,7 +153,7 @@ class Ok {
         HttpResponse<String> response =
             client.send(request, BodyHandlers.ofString());
     }
-    
+
     public void sendok5() {
         String uri = "https://openjdk.java.net/";
         HttpClient client = HttpClient.newBuilder().build();

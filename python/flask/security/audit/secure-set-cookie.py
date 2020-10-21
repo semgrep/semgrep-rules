@@ -41,7 +41,7 @@ def set_cookie(settings):
 def use_cookie(cookie):
     # ok
     foo = set_cookie({"goodbye": "planet"})
-    
+
 # cf. # https://github.com/pallets/flask/blob/b7f6fae9b34341b9be7742b86f6caffe07fc6f25/tests/test_basic.py#L1956
 def test_real_code():
     import flask

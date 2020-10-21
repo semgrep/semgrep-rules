@@ -6,7 +6,7 @@ let test1 xs =
 
 let test2 xs =
  (* ok *)
- try 
+ try
    if Hashtbl.find h 1
    then 1
    else 2

@@ -127,6 +127,30 @@ rules:
       $TF = tarfile.TarFile(...)
       ...
       $TF.extractall(...)
+  - pattern: |
+      $TF = tarfile.open(...)
+      ...
+      $TF.extract(...)
+  - pattern: |
+      $TF = tarfile.open(...)
+      ...
+      $TF.extractall(...)
+  - pattern: |
+      with tarfile.TarFile(...) as $TF:
+          ...
+          $TF.extract(...)
+  - pattern: |
+      with tarfile.TarFile(...) as $TF:
+          ...
+          $TF.extractall(...)
+  - pattern: |
+      with tarfile.open(...) as $TF:
+          ...
+          $TF.extract(...)
+  - pattern: |
+      with tarfile.open(...) as $TF:
+          ...
+          $TF.extractall(...)
 - id: insecure-subprocess-use
   message: The Python 'subprocess' module called with 'shell=True' may allow for shell injection
   languages: [python]

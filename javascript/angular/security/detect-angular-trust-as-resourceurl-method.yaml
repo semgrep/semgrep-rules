@@ -1,14 +1,14 @@
 rules:
     - id: detect-angular-trust-as-resourceurl-method
       patterns:
-        - pattern-either: 
+        - pattern-either:
           - pattern: |
               $SOURCE = $scope.$INPUT;
               $sce.trustAsResourceUrl($SOURCE);
           - pattern: |
               $sce.trustAsResourceUrl($scope.$INPUT);
         - pattern-inside: |
-            app.controller(..., function($scope,$sce){ 
+            app.controller(..., function($scope,$sce){
             ...
             });
       message: |

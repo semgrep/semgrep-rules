@@ -15,7 +15,7 @@ public class CookieController {
         cookie.setSecure(true);
         response.addCookie(cookie);
     }
-    
+
     @RequestMapping(value = "/cookie3", method = "GET")
     public void setSecureHttponlyCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);

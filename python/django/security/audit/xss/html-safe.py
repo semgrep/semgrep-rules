@@ -4,7 +4,7 @@ from django.utils.html import (
 )
 from django.utils.safestring import mark_safe
 
-# cf.https://github.com/django/django/blob/76ed1c49f804d409cfc2911a890c78584db3c76e/tests/utils_tests/test_html.py#L204 
+# cf.https://github.com/django/django/blob/76ed1c49f804d409cfc2911a890c78584db3c76e/tests/utils_tests/test_html.py#L204
 # ruleid: html-safe
 @html_safe
 class HtmlClass:
