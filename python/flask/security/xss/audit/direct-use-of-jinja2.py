@@ -1,4 +1,3 @@
-# ruleid: direct-use-of-jinja2
 import jinja2
 
 template = jinja2.Template("""
