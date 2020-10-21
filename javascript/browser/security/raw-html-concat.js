@@ -17,47 +17,47 @@ $(function ($) {
                   $elm = $(element),
                   $cite = $elm.children('cite').first();
               $cite.html($cite.text());
-  
+
               if ($cite.length === 1 || $elm.data('author')) {
                   author = $cite.text() || $elm.data('author');
-  
+
                   $elm.data('author', author);
                   $cite.remove();
-  
+
                   content = this.elementToBbcode(element);
                   author = '=' + author.replace(/(^\s+|\s+$)/g, '');
-  
+
                   $elm.prepend($cite);
               }
-  
+
               if ($elm.data('pid'))
                   author += " pid='" + $elm.data('pid') + "'";
-  
+
               if ($elm.data('dateline'))
                   author += " dateline='" + $elm.data('dateline') + "'";
-  
+
               return '[quote' + author + ']' + content + '[/quote]';
           },
           html: function (token, attrs, content) {
               var data = '';
-  
+
               if (attrs.pid)
                   // ruleid: raw-html-concat
                   data += ' data-pid="' + attrs.pid + '"';
-  
+
               if (attrs.dateline)
                   // ruleid: raw-html-concat
                   data += ' data-dateline="' + attrs.dateline + '"';
-  
+
               if (typeof attrs.defaultattr !== "undefined")
                   // ruleid: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
-  
+
               return '<blockquote' + data + '>' + content + '</blockquote>';
           },
           quoteType: function (val, name) {
               var quoteChar = val.indexOf('"') !== -1 ? "'" : '"';
-  
+
               return quoteChar + val + quoteChar;
           },
           breakStart: true,
