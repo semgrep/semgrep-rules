@@ -36,4 +36,3 @@ def subexpression():
 def ok():
     # ok
     open("static/path.txt", 'r')
-

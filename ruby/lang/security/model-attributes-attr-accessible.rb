@@ -32,5 +32,3 @@ end
 def create
     user = User.create(person_params)
 end
-
-

@@ -37,4 +37,3 @@ def good_test():
     search_query = request.args.get('q')
     # ok
     return render_template('/markup-unescape.html', query=Markup.escape(search_query))
-

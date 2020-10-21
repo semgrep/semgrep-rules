@@ -74,6 +74,3 @@ function ok_http() {
     const req = https.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 }
-
-
-

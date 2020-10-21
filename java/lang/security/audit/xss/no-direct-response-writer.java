@@ -356,4 +356,3 @@ public class BenchmarkTest02388 extends HttpServlet {
         response.getWriter().flush();
     }
 }
-

@@ -127,4 +127,3 @@ function samestite() {
     // ruleid:cookie_session_no_samesite
     app.use(session(opts))
 }
-

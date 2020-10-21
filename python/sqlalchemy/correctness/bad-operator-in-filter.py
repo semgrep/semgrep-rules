@@ -38,4 +38,3 @@ def test_ok_1():
     model = Model.query.first()
     # ok
     return model.id is 5
-

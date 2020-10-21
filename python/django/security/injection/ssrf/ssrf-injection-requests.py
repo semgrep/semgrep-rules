@@ -57,4 +57,3 @@ def test_bad_6():
         bucket = request.headers["bucket"]
         inner_response = get("http://my.redis.foo/{}".format(bucket), data=3)
         return render({"response_code": inner_response.status_code})
-

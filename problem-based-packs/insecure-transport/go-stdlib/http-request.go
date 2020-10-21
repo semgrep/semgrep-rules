@@ -37,4 +37,3 @@ func ok2() {
 
     resp, err := client.Get("https://example.com")
 }
-
