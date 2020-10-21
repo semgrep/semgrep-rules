@@ -1,0 +1,56 @@
+rules:
+- id: jquery-insecure-selector
+  message: >-
+    User controlled data in a `$(...)` is an anti-pattern than can lead to XSS vulnerabilities
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://owasp.org/www-community/attacks/xss/
+    - https://bugs.jquery.com/ticket/9521
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $(<... window ...>);
+    - pattern: |
+        $(<... location ...>);
+    - pattern: |
+        $X = <... window ...>;
+        ...
+        $(<... $X ...>);
+    - pattern: |
+        $X = <... location ...>;
+        ...
+        $(<... $X ...>);
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            function $FUNC(..., $Y, ...) {
+              ...
+            }
+        - pattern-inside: |
+            function (..., $Y, ...) {
+              ...
+            }
+        - pattern-inside: |
+            function $FUNC(...,$Z,...) {
+              ...
+              $Y = <... $Z ...>;
+              ...
+            }
+        - pattern-inside: |
+            function (...,$Z,...) {
+              ...
+              $Y = <... $Z ...>;
+              ...
+            }
+      - pattern-either:
+        - pattern: |
+            $(<... $Y ...>);
+        - pattern: |
+            $("..." + (<... $Y ...>));
+        - pattern: |
+            $((<... $Y ...>) + "...");
