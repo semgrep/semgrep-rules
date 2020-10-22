@@ -1,29 +1,34 @@
 #include <stdio.h>
 
-void bad_vsprintf(char *args) {
-    char buffer[256];
+void bad_vsprintf(int argc, char **argv) {
+    char format[256];
 
     //ruleid: insecure-use-printf-fn
-    char format[] = "%n";
+    strncpy(format, argv[1], 255);
+    char buffer[100];
     vsprintf (buffer,format, args);
 
     //ruleid: insecure-use-printf-fn
-    vsprintf(buffer, "%n", args);
+    vsprintf(buffer, argv[1], args);
 
     //ok
     vsnprintf(buffer, format, args);
 }
 
-void bad_sprintf() {
-    char buffer[256];
+void bad_sprintf(int argc, char **argv) {
+    char format[256];
+
     int a = 10, b = 20, c=30;
     //ruleid: insecure-use-printf-fn
-    sprintf(buffer, "Sum of %d and %d is %d", a, b, c);
-
-    //ruleid: insecure-use-printf-fn
-    char format[] = "Sum of %d and %d is %d";
-    int i = 3;
+    strcpy(format, argv[1]);
+    char buffer[200];
     sprintf(buffer, format, a, b, c);
+
+
+    char buffer[256];
+    int i = 3;
+    //ruleid: insecure-use-printf-fn
+    sprintf(buffer, argv[2], a, b, c);
 
     //ok
     snprintf(buffer, format, a,b,c);
@@ -31,11 +36,11 @@ void bad_sprintf() {
 
 void bad_printf() {
     //ruleid: insecure-use-printf-fn
-    printf("what %x", 1234);
+    printf(argv[2], 1234);
 
     //ruleid: insecure-use-printf-fn
-    char format[] = "what %x";
-    int i = 3;
+    char format[300];
+    strcpy(format, argv[1]);
     printf(format, 1234);
 
     //ok
