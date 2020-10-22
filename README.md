@@ -61,7 +61,7 @@ x == x
 
 Running `make test` will execute the test suite, and if `my-eqeq-bad` does not fire on the line below the comment, your rule will fail.
 
-If you have a rule that is not working, but you want to commit it soo it's documented but not fail the tests, use `#todoruleid:...`:
+If you have a rule that is not working, but you want to commit it so it's documented but not fail the tests, use `#todoruleid:...`:
 
 ```python
 # todoruleid:my-eqeq-bad
