@@ -1,0 +1,27 @@
+rules:
+- id: chrome-remote-interface-printtopdf-injection
+  message: |
+    If unverified user data can reach the `printToPDF` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern-either:
+    - pattern: |
+        $RUNTIME.printToPDF({headerTemplate: $INPUT},...)
+    - pattern: |
+        $RUNTIME.printToPDF({footerTemplate: $INPUT},...)
+  - pattern-not: |
+      $RUNTIME.printToPDF({headerTemplate: "..."},...)
+  - pattern-not: |-
+      $RUNTIME.printToPDF({footerTemplate: "..."},...)
