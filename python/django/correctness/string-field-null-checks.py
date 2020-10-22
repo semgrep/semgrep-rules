@@ -18,14 +18,14 @@ class FakeModel(Model):
         blank=True,
         max_length=30
     )
-    # ok
+    # ok: string-field-must-set-null-true
     fieldThree = models.CharField(
         unique=True,
         null=True,
         blank=True,
         max_length=100
     )
-    # ok
+    # ok: string-field-must-set-null-true
     notText = models.IntegerField(
         max_value=255
     )
@@ -34,5 +34,5 @@ def fake(**kwargs):
     pass
 
 def nope():
-    # ok
+    # ok: string-field-must-set-null-true
     return fake(unique=True, blank=True)

@@ -21,7 +21,7 @@ public class CookieController {
         Cookie cookie = new Cookie("cookie", value);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        // ok
+        // ok: cookie-missing-httponly
         response.addCookie(cookie);
     }
 
@@ -59,7 +59,7 @@ public class CookieController {
         // we have an existing cookie on another path: clear it, and add a new cookie on root path
         existingCookie.setValue("");
         existingCookie.setMaxAge(0);
-        // ok
+        // ok: cookie-missing-httponly
         response.addCookie(existingCookie);
 
         Cookie c = new Cookie(name, value);
@@ -100,7 +100,7 @@ public class CookieController {
       existingCookie.setPath(Constant.cookiePath);
       existingCookie.setValue("");
       existingCookie.setMaxAge(0);
-      // ok
+      // ok: cookie-missing-httponly
       response.addCookie(existingCookie);
     }
     return this;
