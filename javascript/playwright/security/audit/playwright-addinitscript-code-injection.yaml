@@ -1,0 +1,26 @@
+rules:
+- id: playwright-addinitscript-code-injection
+  message: |
+    If unverified user data can reach the `addInitScript` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('playwright');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = function $FNAME(...){...};
+      ...
+  - pattern: $CONTEXT.addInitScript($INPUT,...)
+  - pattern-not: $CONTEXT.addInitScript("...",...)
+  - pattern-not: $CONTEXT.addInitScript(function(...){...},...)
+  - pattern-not: $CONTEXT.addInitScript(function $FNAME(...){...},...)
