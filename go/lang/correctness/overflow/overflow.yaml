@@ -1,5 +1,5 @@
 rules:
-- id: interter-overflow-int16
+- id: integer-overflow-int16
   message: Potential Integer overflow made by strconv.Atoi result conversion to int16
   languages: [go]
   severity: WARNING
@@ -9,7 +9,7 @@ rules:
       ...
       int16($F)
   - pattern-where-python: int(vars['$NUM'].replace('"', '')) > 32767 or int(vars['$NUM'].replace('"', '')) < -32768
-- id: interter-overflow-int32
+- id: integer-overflow-int32
   message: Potential Integer overflow made by strconv.Atoi result conversion to int32
   languages: [go]
   severity: WARNING
