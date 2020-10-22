@@ -17,9 +17,6 @@ rules:
         ...
         printf(..., $BUFFER, ...);
     - pattern: printf(...,argv[$NUM],...)
-  - metavariable-regex:
-      metavariable: $FUNC
-      regex: (strcpy|strncpy|memcpy|strcpy_s|strncpy_s|memcpy_s|stpcpy|stpncpy|strlcpy|memccpy)
   message: |
     Avoid using user-controlled format strings passed into 'sprintf', 'printf' and 'vsprintf'.
     These functions put you at risk of buffer overflow vulnerabilities through the use of format string exploits.
