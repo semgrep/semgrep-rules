@@ -10,6 +10,6 @@ template.Template("hern")
 # ruleid:mako-templates-detected
 Template("hello")
 
-# ok
+# ok:mako-templates-detected
 t = jinja2.Template("Hello {{ name }}")
 t.render(name="world!")

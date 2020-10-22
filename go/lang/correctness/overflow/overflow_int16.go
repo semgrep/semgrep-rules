@@ -21,7 +21,7 @@ func mainInt16Ex1() {
 }
 
 func mainInt16Ex2() {
-	// ok
+	// ok: interter-overflow-int16
 	bigValue, err := strconv.Atoi("10")
 	if err != nil {
 		panic(err)

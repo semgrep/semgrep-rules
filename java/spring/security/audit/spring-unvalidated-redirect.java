@@ -44,7 +44,7 @@ public class SpringUnvalidatedRedirectController {
         return new ModelAndView(view);
     }
 
-    // ok
+    // ok: spring-unvalidated-redirect
     @RequestMapping("/redirectfp")
     public String redirectfp() {
         return "redirect:/";

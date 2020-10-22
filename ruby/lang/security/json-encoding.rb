@@ -6,6 +6,6 @@
  end
 
  def ok_xml
-     # ok
+     # ok: json-encoding
      "hello".to_json
  end

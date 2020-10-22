@@ -31,7 +31,7 @@ def unsafe_with(request):
     return HttpResponse(data)
 
 def safe(request):
-    # ok
+    # ok: path-traversal-open
     filename = "/tmp/data.txt"
     f = open(filename)
     f.write("hello")

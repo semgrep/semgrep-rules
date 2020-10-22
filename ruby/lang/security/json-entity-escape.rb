@@ -4,6 +4,6 @@
  end
 
  def ok_escape
-     # ok
+     # ok: json-entity-escape
      ActiveSupport.escape_html_entities_in_json = true
  end

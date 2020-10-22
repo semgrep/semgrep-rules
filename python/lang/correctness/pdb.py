@@ -4,11 +4,11 @@ import pdb as db
 def foo():
     # ruleid:pdb-remove
     db.set_trace()
-    # ok
+    # ok:pdb-remove
     a = "apple"
-    #ok
+    #ok:pdb-remove
     db = "the string, not the library"
-    #ok
+    #ok:pdb-remove
     pdb = "also a string"
     # ruleid:pdb-remove
     pdb.Pdb.set_trace()

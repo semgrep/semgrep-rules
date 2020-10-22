@@ -31,7 +31,7 @@ public class Cls extends HttpServlet
 
     protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String input1 = req.getParameter("input1");
-        // ok
+        // ok:servletresponse-writer-xss
         resp.getWriter().write(Encode.forHtml(input1));
     }
 }

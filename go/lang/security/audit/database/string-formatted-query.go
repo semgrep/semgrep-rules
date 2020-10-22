@@ -130,13 +130,13 @@ func dbQueryRowContextFmt(r *http.Request) {
 }
 
 func unmodifiedString() {
-	// ok
+	// ok: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1234"
 	row, _ := db.Query(query)
 }
 
 func unmodifiedStringDirectly() {
-    // ok
+    // ok: string-formatted-query
 	row, _ := db.Query("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1234")
 }
 

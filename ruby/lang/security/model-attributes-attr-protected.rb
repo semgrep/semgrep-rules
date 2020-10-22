@@ -7,7 +7,7 @@ end
 
 class ok_use_attr_protected
   include ActiveModel::MassAssignmentSecurity
-  # ok
+  # ok: model-attributes-attr-protected
   attr_accessible :name, :email
   attr_accessible :name, :email, :admin, :as => :admin
 

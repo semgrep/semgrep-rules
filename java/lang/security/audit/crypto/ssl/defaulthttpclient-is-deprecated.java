@@ -22,7 +22,7 @@ public class WebCrawler {
 public class SecureWebCrawler {
 
 	public void crawl(String[] args) throws Exception {
-        // ok
+        // ok: defaulthttpclient-is-deprecated
 		HttpClient client = new SystemDefaultHttpClient();
 		HttpGet request = new HttpGet("http://google.com");
 		HttpResponse response = client.execute(request);

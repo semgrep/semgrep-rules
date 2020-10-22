@@ -13,14 +13,14 @@ function test2(input) {
 }
 
 function okTest3() {
-    // ok
+    // ok: expat-xxe
     var expat = require('node-expat')
     var parser = new expat.Parser('UTF-8')
     parser.parse("safe input")
 }
 
 function okTest4() {
-    // ok
+    // ok: expat-xxe
     const {Parser} = require('node-expat')
     const parser = new Parser('UTF-8')
     const x = "safe input"
@@ -28,7 +28,7 @@ function okTest4() {
 }
 
 function okTest5(input) {
-    // ok
+    // ok: expat-xxe
     const {Parser} = require('some-other-module')
     const parser = new Parser('UTF-8')
     parser.write(input)

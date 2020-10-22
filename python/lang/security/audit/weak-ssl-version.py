@@ -10,7 +10,7 @@ SSL.Context(method=SSL.SSLv2_METHOD)
 # ruleid:weak-ssl-version
 SSL.Context(method=SSL.SSLv23_METHOD)
 
-# ok
+# ok:weak-ssl-version
 ssl.wrap_socket(ssl_version=ssl.PROTOCOL_TLSv1_2)
 
 # ruleid:weak-ssl-version

@@ -24,7 +24,7 @@ def test_email_auth_backend_empty_password(user_profile: UserProfile) -> None:
 		validate_password(password)
 	except ValidationError as e:
 		return HttpResponseBadRequest(str(e))
-    # ok
+    # ok: unvalidated-password
 	user_profile.set_password(password)
 	user_profile.save()
 
@@ -57,7 +57,7 @@ class ModelBackend(BaseBackend):
         except UserModel.DoesNotExist:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a nonexistent user (#20760).
-			# ok
+			# ok: unvalidated-password
             UserModel().set_password(password)
         else:
             if user.check_password(password) and self.user_can_authenticate(user):

@@ -23,7 +23,7 @@ func main() {
     // ruleid:go-insecure-templates
     var f template.Srcset = g;
 
-    // ok
+    // ok:go-insecure-templates
     tmpl, err := template.New("test").ParseFiles("file.txt")
 
     // other code

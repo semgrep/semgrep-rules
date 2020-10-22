@@ -21,7 +21,7 @@ func mainInt32Ex1() {
 }
 
 func mainInt32Ex2() {
-	// ok
+	// ok: interter-overflow-int32
 	bigValue, err := strconv.Atoi("10")
 	if err != nil {
 		panic(err)

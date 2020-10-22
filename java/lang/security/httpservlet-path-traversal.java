@@ -34,7 +34,7 @@ public class Cls extends HttpServlet
     public void ok(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException
 	{
-        // ok
+        // ok:httpservlet-path-traversal
         String image = request.getParameter("image");
         File file = new File("static/images/", FilenameUtils.getName(image));
 

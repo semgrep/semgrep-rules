@@ -7,7 +7,7 @@ def test1():
     fin.close()
 
 def test2():
-    #ok
+    #ok:file-object-redefined-before-close
     fin = open("file1.txt", 'r')
     data = fin.read()
     fin.close()

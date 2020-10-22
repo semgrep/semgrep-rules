@@ -11,6 +11,6 @@ end
 
 def ok_nested_attributes_bypass
     has_one :avatar
-    # ok
+    # ok: nested-attributes-bypass
     accepts_nested_attributes_for :avatar, allow_destroy: true
 end

@@ -1,7 +1,7 @@
 import sys
 
 if False:
-    # ok
+    # ok: use-sys-exit
     sys.exit(2)
 
 if True:
@@ -14,5 +14,5 @@ def check_db(user):
         exit(4)
     else:
         print(user)
-        # ok
+        # ok: use-sys-exit
         sys.exit(0)

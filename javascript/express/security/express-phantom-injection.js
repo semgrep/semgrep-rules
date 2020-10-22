@@ -32,7 +32,7 @@ app.post('/test2', async (req, res) => {
 // ruleid: express-phantom-injection
     await page.setContent(req.body);
 
-// ok
+// ok: express-phantom-injection
     var html = '<html>123</html>'
     const status = await page.property('content', html);
 
@@ -57,7 +57,7 @@ app.post('/test3', async (req, res) => {
 // ruleid: express-phantom-injection
     await page.evaluateJavaScript(req.body.script);
 
-// ok
+// ok: express-phantom-injection
     var url = 'https://stackoverflow.com/'
     const status = await page.openUrl(url, {}, {});
 

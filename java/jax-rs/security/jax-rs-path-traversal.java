@@ -29,7 +29,7 @@ public class Cls
         return Response.ok().entity(new FileInputStream(file)).build();
     }
 
-    // ok
+    // ok:jax-rs-path-traversal
     @GET
     @Path("/images/{image}")
     @Produces("images/*")

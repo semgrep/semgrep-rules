@@ -10,7 +10,7 @@ const phantom = require('phantom');
 // ruleid: phantom-injection
   const status = await page.open(input());
 
-// ok
+// ok: phantom-injection
   const status = await page.open('https://stackoverflow.com/');
 
   const content = await page.property('content');
@@ -32,7 +32,7 @@ const phantom = require('phantom');
 // ruleid: phantom-injection
   await page.setContent(userInput);
 
-// ok
+// ok: phantom-injection
   var html = '<html>123</html>'
   const status = await page.property('content', html);
 
@@ -55,7 +55,7 @@ const phantom = require('phantom');
 // ruleid: phantom-injection
   await page.evaluateJavaScript(userInput);
 
-// ok
+// ok: phantom-injection
   var url = 'https://stackoverflow.com/'
   const status = await page.openUrl(url, {}, {});
 

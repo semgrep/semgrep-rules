@@ -9,6 +9,6 @@ def sanitize_css(self, style):
         if not gauntlet.match(part):
             return ''
 
-    # ok
+    # ok: dlint-catastrophic-redos
     safe = re.compile(r""".*""")
     print(safe.match("foo"))

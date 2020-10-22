@@ -18,7 +18,7 @@ def unsafe_dict(request):
     exec("print(%s)" % request.POST['message'])
 
 def safe(request):
-    # ok
+    # ok: user-exec-format-string
     code = """
     print('hello')
     """
@@ -42,7 +42,7 @@ def fmt_unsafe_dict(request):
     exec("print({}, {})".format(request.POST['message'], "pwned"))
 
 def fmt_safe(request):
-    # ok
+    # ok: user-exec-format-string
     code = """
     print('hello')
     """

@@ -30,7 +30,7 @@ void bad_sprintf(int argc, char **argv) {
     //ruleid: insecure-use-printf-fn
     sprintf(buffer, argv[2], a, b, c);
 
-    //ok: insecure-use-print-fn
+    //ok: insecure-use-printf-fn
     snprintf(buffer, format, a,b,c);
 }
 
@@ -43,7 +43,7 @@ void bad_printf() {
     strcpy(format, argv[1]);
     printf(format, 1234);
 
-    //ok: insecure-use-print-fn
+    //ok: insecure-use-printf-fn
     printf("hello");
 }
 

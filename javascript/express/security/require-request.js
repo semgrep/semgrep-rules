@@ -37,13 +37,13 @@ app.get('/test3', testController3)
 })(req, res)
 
 app.get('/ok-test', (req, res) => {
-// ok
+// ok: require-request
     const func = require(hardcodedPath)
     return res.send(func())
 })
 
 let okController = function (req, res) {
-// ok
+// ok: require-request
     const func = require('lib/func.js')
     return res.send(func())
 }

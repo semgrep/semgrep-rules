@@ -39,11 +39,11 @@ class bad_attr_accessible
 end
 
 class ok_attr_accessible
-   # ok
+   # ok: model-attr-accessible
    attr_accessible :name, :address, :age,
                    :telephone, as: :create_params
-   # ok
+   # ok: model-attr-accessible
    User.new(params.permit(:address, :acc, :age))
-   # ok
+   # ok: model-attr-accessible
    params_with_conditional_require(ctrl.params).permit(:name, :address, :age)
 end

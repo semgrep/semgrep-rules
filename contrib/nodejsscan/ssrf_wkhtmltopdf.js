@@ -1,10 +1,10 @@
 const wkhtmltopdf = require('wkhtmltopdf')
 
-// ok:wkhtmltopdf_ssrf_warning
+// ok:wkhtmltopdf_ssrf
 wkhtmltopdf(input(), { output: 'vuln.pdf' })
 
 function test(userInput) {
-    // ok:wkhtmltopdf_ssrf_warning
+    // ok:wkhtmltopdf_ssrf
     return wkhtmltopdf(userInput, { output: 'vuln.pdf' })
 }
 
