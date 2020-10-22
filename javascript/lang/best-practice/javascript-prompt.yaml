@@ -1,0 +1,10 @@
+rules:
+- id: javascript-prompt
+  patterns:
+  - pattern-either:
+    - pattern: prompt()
+    - pattern: prompt($X)
+    - pattern: prompt($X, $Y)
+  message: found prompt() call; should this be in production code?
+  languages: [javascript]
+  severity: INFO

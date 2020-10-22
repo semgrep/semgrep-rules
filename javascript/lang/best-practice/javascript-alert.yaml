@@ -1,0 +1,9 @@
+rules:
+- id: javascript-alert
+  patterns:
+  - pattern-either:
+    - pattern: alert()
+    - pattern: alert($X)
+  message: found alert() call; should this be in production code?
+  languages: [javascript]
+  severity: INFO
