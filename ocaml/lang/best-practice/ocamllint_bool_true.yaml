@@ -1,0 +1,9 @@
+rules:
+- id: ocamllint-bool-true
+  pattern-either:
+  - pattern: $X = true
+  - pattern: $X == true
+  - pattern: $X != false
+  message: Comparison to boolean. Just use `$X`
+  languages: [ocaml]
+  severity: WARNING

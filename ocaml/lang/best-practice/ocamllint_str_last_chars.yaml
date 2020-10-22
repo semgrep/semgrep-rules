@@ -1,0 +1,6 @@
+rules:
+- id: ocamllint-str-last-chars
+  pattern: String.sub $S (String.length $S - $N) $N
+  message: Use instead `Str.last_chars`
+  languages: [ocaml]
+  severity: WARNING
