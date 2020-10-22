@@ -8,7 +8,7 @@ int bad_strcpy(src, dst) {
     {
         // ruleid: insecure-use-strcat-fn
         strcat(dst, src);
-        
+
         // ruleid: insecure-use-strcat-fn
         strncat(dst, src, 100);
     }
@@ -18,4 +18,3 @@ int main() {
    printf("Hello, World!");
    return 0;
 }
-

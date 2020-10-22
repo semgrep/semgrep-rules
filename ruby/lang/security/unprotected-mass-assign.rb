@@ -11,9 +11,8 @@ def safe_send
     #ok
     attr_accessible :name
     User.new(params[:user])
-    
+
     #ok
     attr_accessible :name
     user = User.new(params[:user])
 end
-

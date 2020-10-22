@@ -7,7 +7,7 @@ class Cls {
         // ruleid: command-injection-formatted-runtime-call
         r.exec("/bin/sh -c some_tool" + input);
     }
-    
+
     public void test1(String input) {
         Runtime r = Runtime.getRuntime();
         // ruleid: command-injection-formatted-runtime-call

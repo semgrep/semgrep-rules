@@ -15,7 +15,7 @@ func bad1() {
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter:       w,
 				MinVersion:         tls.VersionSSL30,
-				Rand:               randSource{}, 
+				Rand:               randSource{},
 				InsecureSkipVerify: true,         // test server certificate is not trusted.
 			},
 		},
@@ -28,7 +28,7 @@ func bad1() {
 				KeyLogWriter: w,
 				// OK
 				MinVersion:         tls.VersionTLS10,
-				Rand:               randSource{}, 
+				Rand:               randSource{},
 				InsecureSkipVerify: true,         // test server certificate is not trusted.
 			},
 		},
@@ -74,7 +74,7 @@ func ok1() {
 			TLSClientConfig: &tls.Config{
 				KeyLogWriter:       w,
 				MinVersion:         tls.VersionSSL30,
-				Rand:               randSource{}, 
+				Rand:               randSource{},
 				InsecureSkipVerify: false,         // test server certificate is not trusted.
 			},
 		},
@@ -87,7 +87,7 @@ func ok1() {
 				KeyLogWriter: w,
 				// OK
 				MinVersion:         tls.VersionTLS10,
-				Rand:               randSource{}, 
+				Rand:               randSource{},
 			},
 		},
 	}
@@ -122,4 +122,3 @@ func ok4() {
     mTLSConfig.PreferServerCipherSuites = true
     mTLSConfig.InsecureSkipVerify = false
 }
-

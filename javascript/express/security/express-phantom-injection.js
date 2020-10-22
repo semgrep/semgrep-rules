@@ -38,7 +38,7 @@ app.post('/test2', async (req, res) => {
 
     const content = await page.property('content');
     console.log(content);
-    
+
     await instance.exit();
 
     res.send('Hello World!')
@@ -63,7 +63,7 @@ app.post('/test3', async (req, res) => {
 
     const content = await page.property('content');
     console.log(content);
-    
+
     await instance.exit();
 
     res.send('Hello World!')

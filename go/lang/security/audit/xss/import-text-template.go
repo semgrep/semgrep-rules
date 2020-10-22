@@ -38,15 +38,15 @@ func getTodos() []Todo {
 
 func main() {
   tmpl := template.Must(template.ParseFiles("index.html"))
-   
+
   http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
       data := TodoPageData {
           PageTitle: "My Todos!",
           Todos: getTodos(),
       }
-       
+
       tmpl.Execute(w, data)
-   
+
   })
 
   http.ListenAndServe(":" + os.Getenv("PORT"), nil)

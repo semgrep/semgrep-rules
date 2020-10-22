@@ -28,13 +28,13 @@ public class Cls
 
         return Response.ok().entity(new FileInputStream(file)).build();
     }
-    
+
     // ok
     @GET
     @Path("/images/{image}")
     @Produces("images/*")
     public Response ok(@javax.ws.rs.PathParam("image") String image) {
-        
+
         File file = new File("resources/images/", FilenameUtils.getName(image)); //Fix
 
         if (!file.exists()) {

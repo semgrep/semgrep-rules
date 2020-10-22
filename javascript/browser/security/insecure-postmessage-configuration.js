@@ -7,7 +7,7 @@ popup.postMessage(data, '*');
 popup.postMessage( JSON.stringify( data ), '*' );
 
 //postMessage Safe Usage
-popup.postMessage("hello there!", "http://domain.tld");    
+popup.postMessage("hello there!", "http://domain.tld");
 popup.postMessage( JSON.stringify( data ), 'semgrep.dev/editor');
 
 //ruleid:insufficient-postmessage-origin-validation

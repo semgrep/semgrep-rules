@@ -125,4 +125,3 @@ func bad2() {
     mTLSConfig.PreferServerCipherSuites = true
     mTLSConfig.MinVersion = tls.VersionTLS11
 }
-

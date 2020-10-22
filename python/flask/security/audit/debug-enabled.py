@@ -9,7 +9,7 @@ def index():
 def main():
     # ok
     app.run()
-    
+
 def env():
     # ok
     app.run("0.0.0.0", debug=os.environ.get("DEBUG", False))

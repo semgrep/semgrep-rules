@@ -18,11 +18,11 @@ class ExampleClass(object):
     ex_good3 = attr.ib(factory=set)
     # ruleid:attr-mutable-initializer
     myset = {1, 2, 3}
-    
+
     def foo(self):
         # ok
         x = {}
-        
+
     def bar(self) -> int:
         #ok
         thisset = set()

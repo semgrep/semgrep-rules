@@ -1,5 +1,5 @@
 class ECBCipher {
-  
+
   public void ecbCipher() {
     // ruleid: ecb-cipher
     Cipher c = Cipher.getInstance("AES/ECB/NoPadding");

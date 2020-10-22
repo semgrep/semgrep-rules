@@ -68,13 +68,13 @@ rules:
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
   pattern-either:
-    - patterns:
-      - pattern: xml.$ANYTHING
-      - pattern-not: xml.sax.saxutils
-      - pattern-not: xml.etree.ElementTree.Element
-      - pattern-not: xml.etree.ElementTree.SubElement
-    - pattern: lxml.$ANYTHING
-    - pattern: xmlrpclib.$ANYTHING
+  - patterns:
+    - pattern: xml.$ANYTHING
+    - pattern-not: xml.sax.saxutils
+    - pattern-not: xml.etree.ElementTree.Element
+    - pattern-not: xml.etree.ElementTree.SubElement
+  - pattern: lxml.$ANYTHING
+  - pattern: xmlrpclib.$ANYTHING
 - id: insecure-yaml-use
   message: The Python 'yaml' module is not secure against maliciously constructed input
   languages: [python]
@@ -127,6 +127,30 @@ rules:
       $TF = tarfile.TarFile(...)
       ...
       $TF.extractall(...)
+  - pattern: |
+      $TF = tarfile.open(...)
+      ...
+      $TF.extract(...)
+  - pattern: |
+      $TF = tarfile.open(...)
+      ...
+      $TF.extractall(...)
+  - pattern: |
+      with tarfile.TarFile(...) as $TF:
+          ...
+          $TF.extract(...)
+  - pattern: |
+      with tarfile.TarFile(...) as $TF:
+          ...
+          $TF.extractall(...)
+  - pattern: |
+      with tarfile.open(...) as $TF:
+          ...
+          $TF.extract(...)
+  - pattern: |
+      with tarfile.open(...) as $TF:
+          ...
+          $TF.extractall(...)
 - id: insecure-subprocess-use
   message: The Python 'subprocess' module called with 'shell=True' may allow for shell injection
   languages: [python]

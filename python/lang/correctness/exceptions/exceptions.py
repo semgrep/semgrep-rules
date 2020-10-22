@@ -1,7 +1,7 @@
 # ruleid:raise-not-base-exception
 raise "error here"
 
-# todoruleid:raise-not-base-exception
+# ruleid:raise-not-base-exception
 raise 5
 
 
@@ -17,8 +17,8 @@ class Foobar2(BaseException):
     x = 5
 
 
-# OK
+# ok:raise-not-base-exception
 raise Foobar2()
 
-# OK
+# ok:raise-not-base-exception
 raise Exception()

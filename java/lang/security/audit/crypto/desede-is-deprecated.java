@@ -28,4 +28,4 @@ public class Cls extends HttpServlet
         c.init(Cipher.ENCRYPT_MODE, k, iv);
         byte[] cipherText = c.doFinal(plainText);
     }
-} 
+}

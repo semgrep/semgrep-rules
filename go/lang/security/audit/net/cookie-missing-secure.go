@@ -33,7 +33,7 @@ func CheckLevel(r *http.Request) bool {
 func SetCookie(w http.ResponseWriter, name, value string){
     // ruleid: cookie-missing-secure
 	cookie := http.Cookie{
-		Name: name, 
+		Name: name,
 		Value: value,
 	}
 	http.SetCookie(w, &cookie)
@@ -44,7 +44,7 @@ func SetSecureCookie(w http.ResponseWriter, name, value string){
 	cookie := http.Cookie{
         Secure: true,
         HttpOnly: true,
-		Name: name, 
+		Name: name,
 		Value: value,
 	}
 	http.SetCookie(w, &cookie)

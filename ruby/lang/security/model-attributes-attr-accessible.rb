@@ -17,8 +17,8 @@ acts_as_authentic do |t|
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 end
 
-def create 
-    user = User.create(person_params) 
+def create
+    user = User.create(person_params)
 end
 
 # ruleid: model-attributes-attr-accessible
@@ -29,8 +29,6 @@ acts_as_authentic do |t|
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 end
 
-def create 
-    user = User.create(person_params) 
+def create
+    user = User.create(person_params)
 end
-
-

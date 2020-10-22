@@ -10,10 +10,9 @@ function test(userInput) {
 
 
 app.get('/', function (req, res) {
-    
+
     // ruleid:wkhtmltoimage_ssrf
     wkhtmltoimage.generate(req.foo, { output: 'vuln.jpg' })
 
 
 });
-

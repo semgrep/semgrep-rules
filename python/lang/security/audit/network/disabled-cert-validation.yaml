@@ -11,7 +11,7 @@ rules:
     - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
     - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
   - metavariable-regex:
-      metavariable: '$REQS'
+      metavariable: $REQS
       regex: (NONE|CERT_NONE|CERT_OPTIONAL|ssl\.CERT_NONE|ssl\.CERT_OPTIONAL|\'NONE\'|\"NONE\"|\'OPTIONAL\'|\"OPTIONAL\")
   message: certificate verification explicitly disabled, insecure connections possible
   metadata:

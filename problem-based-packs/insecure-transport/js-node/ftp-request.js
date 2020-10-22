@@ -53,4 +53,3 @@ function ok_ftp2() {
 
     c.connect(options);
 }
-

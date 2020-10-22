@@ -3,17 +3,17 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        $MOD.new(params[$CODE])     
+        $MOD.new(params[$CODE])
     - pattern: |
         $MOD.new(..., params[$CODE], :without_protection => true, ...)
   - pattern-not-inside: |
       attr_accessible $VAR
       ...
-      $MOD.new(params[$CODE])  
+      $MOD.new(params[$CODE])
   message: |
-    Checks for calls to without_protection during mass assignment (which allows record creation from hash values). 
+    Checks for calls to without_protection during mass assignment (which allows record creation from hash values).
     This can lead to users bypassing permissions protections. For Rails 4 and higher, mass protection is on by default.
-    Fix: Don't use :without_protection => true. Instead, configure attr_acessible to control attribute access. 
+    Fix: Don't use :without_protection => true. Instead, configure attr_acessible to control attribute access.
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'

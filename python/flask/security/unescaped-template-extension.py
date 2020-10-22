@@ -60,7 +60,7 @@ def no_vars():
 def escaped_extensions():
     # ok
     return render_template("safe.html", name=request.args.get("name"))
-    
+
 @app.route("/concat")
 def concat():
     # ruleid: unescaped-template-extension
@@ -69,7 +69,7 @@ def concat():
     msg.html = render_template(template + '.html', **kwargs)
     # ruleid: unescaped-template-extension
     return render_template('%s.txt' % style, **kwargs).replace('<table>', table)
-    
+
 @app.route("/format")
 def format():
     name = "world"

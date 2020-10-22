@@ -32,4 +32,3 @@ def subexpression():
 @app.route("/ok")
 def ok():
     requests.get("https://www.google.com")
-

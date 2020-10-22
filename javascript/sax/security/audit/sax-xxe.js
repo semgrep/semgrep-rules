@@ -11,7 +11,7 @@ function test1() {
     parser.ondoctype = function(dt) {
         processDocType(dt)
     }
-    
+
     const xml = `<?xml version="1.0" encoding="ISO-8859-1"?>
     <!DOCTYPE foo [
     <!ENTITY xxe SYSTEM "file:///etc/passwd" >]>

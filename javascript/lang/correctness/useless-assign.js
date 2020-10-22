@@ -20,3 +20,11 @@ console.log(z);
 // ok
 a = "Hi ";
 a += "Mom";
+
+// ok
+b = i;
+b = f(1, b);
+
+// ok
+c = j;
+c = f(1, g(c));

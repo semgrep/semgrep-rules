@@ -28,9 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value="/xss-04/BenchmarkTest02229")
 public class BenchmarkTest02229 extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -46,17 +46,17 @@ public class BenchmarkTest02229 extends HttpServlet {
 			String[] values = map.get("BenchmarkTest02229");
 			if (values != null) param = values[0];
 		}
-		
+
 
 		String bar = doSomething(request, param);
-		
+
 response.setHeader("X-XSS-Protection", "0");
 		Object[] obj = { "a", bar};
         // ruleid: no-direct-response-writer
 		response.getWriter().printf(java.util.Locale.US,"Formatted like: %1$s and %2$s.",obj);
 	}  // end doPost
-	
-		
+
+
 	private static String doSomething(HttpServletRequest request, String param) throws ServletException, IOException {
 
 		String bar = "safe!";
@@ -66,8 +66,8 @@ response.setHeader("X-XSS-Protection", "0");
 		map26903.put("keyC", "another_Value"); // put some stuff in the collection
 		bar = (String)map26903.get("keyB-26903"); // get it back out
 		bar = (String)map26903.get("keyA-26903"); // get safe value back out
-	
-		return bar;	
+
+		return bar;
 	}
 }
 
@@ -81,9 +81,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value="/hash-02/BenchmarkTest02388")
 public class BenchmarkTest02388 extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -98,7 +98,7 @@ public class BenchmarkTest02388 extends HttpServlet {
 		if (param == null) param = "";
 
 		String bar = doSomething(request, param);
-		
+
 		try {
 			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
 			byte[] input = { (byte)'?' };
@@ -115,9 +115,9 @@ public class BenchmarkTest02388 extends HttpServlet {
 					return;
 				}
 				input = java.util.Arrays.copyOf(strInput, i);
-			}			
+			}
 			md.update(input);
-			
+
 			byte[] result = md.digest();
 			java.io.File fileTarget = new java.io.File(
 					new java.io.File(org.owasp.benchmark.helpers.Utils.testfileDir),"passwordFile.txt");
@@ -133,15 +133,15 @@ public class BenchmarkTest02388 extends HttpServlet {
 			System.out.println("Problem executing hash - TestCase");
 			throw new ServletException(e);
 		}
-		
+
         // OK because constant string
-        // ok: no-direct-response-writer 
+        // ok: no-direct-response-writer
 		response.getWriter().println(
 "Hash Test java.security.MessageDigest.getInstance(java.lang.String) executed"
 );
 	}  // end doPost
-	
-		
+
+
 	private static String doSomething(HttpServletRequest request, String param) throws ServletException, IOException {
 
 		String bar = "safe!";
@@ -151,8 +151,8 @@ public class BenchmarkTest02388 extends HttpServlet {
 		map94322.put("keyC", "another_Value"); // put some stuff in the collection
 		bar = (String)map94322.get("keyB-94322"); // get it back out
 		bar = (String)map94322.get("keyA-94322"); // get safe value back out
-	
-		return bar;	
+
+		return bar;
 	}
 }
 
@@ -186,9 +186,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value="/xss-04/BenchmarkTest02229")
 public class BenchmarkTest02229 extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -204,18 +204,18 @@ public class BenchmarkTest02229 extends HttpServlet {
 			String[] values = map.get("BenchmarkTest02229");
 			if (values != null) param = values[0];
 		}
-		
+
 
 		String bar = doSomething(request, param);
-		
+
 response.setHeader("X-XSS-Protection", "0");
 		PrintWriter writer = response.getWriter();
 		Object[] obj = { "a", bar};
-        // ruleid: no-direct-response-writer 
+        // ruleid: no-direct-response-writer
 		writer.printf(java.util.Locale.US,"Formatted like: %1$s and %2$s.",obj);
 	}  // end doPost
-	
-		
+
+
 	private static String doSomething(HttpServletRequest request, String param) throws ServletException, IOException {
 
 		String bar = "safe!";
@@ -225,16 +225,16 @@ response.setHeader("X-XSS-Protection", "0");
 		map26903.put("keyC", "another_Value"); // put some stuff in the collection
 		bar = (String)map26903.get("keyB-26903"); // get it back out
 		bar = (String)map26903.get("keyA-26903"); // get safe value back out
-	
-		return bar;	
+
+		return bar;
 	}
 }
 
 @WebServlet(value="/hash-02/BenchmarkTest02388")
 public class BenchmarkTest02388 extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -249,7 +249,7 @@ public class BenchmarkTest02388 extends HttpServlet {
 		if (param == null) param = "";
 
 		String bar = doSomething(request, param);
-		
+
 		try {
 			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
 			byte[] input = { (byte)'?' };
@@ -259,16 +259,16 @@ public class BenchmarkTest02388 extends HttpServlet {
 				byte[] strInput = new byte[1000];
 				int i = ((java.io.InputStream) inputParam).read(strInput);
 				if (i == -1) {
-					// ok: no-direct-response-writer 
+					// ok: no-direct-response-writer
 					response.getWriter().println(
 "This input source requires a POST, not a GET. Incompatible UI for the InputStream source."
 );
 					return;
 				}
 				input = java.util.Arrays.copyOf(strInput, i);
-			}			
+			}
 			md.update(input);
-			
+
 			byte[] result = md.digest();
 			java.io.File fileTarget = new java.io.File(
 					new java.io.File(org.owasp.benchmark.helpers.Utils.testfileDir),"passwordFile.txt");
@@ -276,7 +276,7 @@ public class BenchmarkTest02388 extends HttpServlet {
 			    fw.write("hash_value=" + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true) + "\n");
 			fw.close();
 			PrintWriter writer = response.getWriter();
-			// ruleid: no-direct-response-writer 
+			// ruleid: no-direct-response-writer
 			writer.println(
 "Sensitive value '" + org.owasp.esapi.ESAPI.encoder().encodeForHTML(new String(input)) + "' hashed and stored<br/>"
 );
@@ -285,7 +285,7 @@ public class BenchmarkTest02388 extends HttpServlet {
 			System.out.println("Problem executing hash - TestCase");
 			throw new ServletException(e);
 		}
-		
+
         // OK because constant string
         // ok: no-direct-response-writer
 		PrintWriter writer = response.getWriter();
@@ -293,8 +293,8 @@ public class BenchmarkTest02388 extends HttpServlet {
 "Hash Test java.security.MessageDigest.getInstance(java.lang.String) executed"
 );
 	}  // end doPost
-	
-		
+
+
 	private static String doSomething(HttpServletRequest request, String param) throws ServletException, IOException {
 
 		String bar = "safe!";
@@ -304,8 +304,8 @@ public class BenchmarkTest02388 extends HttpServlet {
 		map94322.put("keyC", "another_Value"); // put some stuff in the collection
 		bar = (String)map94322.get("keyB-94322"); // get it back out
 		bar = (String)map94322.get("keyA-94322"); // get safe value back out
-	
-		return bar;	
+
+		return bar;
 	}
 
     ///
@@ -334,7 +334,7 @@ public class BenchmarkTest02388 extends HttpServlet {
 		output.close();
 		input.close();
 	}
-    
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -346,7 +346,7 @@ public class BenchmarkTest02388 extends HttpServlet {
         // ok: no-direct-response-writer
         response.getWriter().flush();
     }
-    
+
     // test pattern where HttpServletResponse is retrieved via a method rather than parameters
     public void commence2(Something something) throws IOException, ServletException {
         HttpServletResponse response = something.getResponse();
@@ -356,4 +356,3 @@ public class BenchmarkTest02388 extends HttpServlet {
         response.getWriter().flush();
     }
 }
-

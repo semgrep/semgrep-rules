@@ -1,9 +1,9 @@
 rules:
 - id: incorrect-use-ato-fn
   pattern-either:
-    - pattern: atoi(...)
-    - pattern: atol(...)
-    - pattern: atoll(...)
+  - pattern: atoi(...)
+  - pattern: atol(...)
+  - pattern: atoll(...)
   message: |
     Avoid the 'ato*()' family of functions. Their use can lead to undefined
     behavior, integer overflows, and lack of appropriate error handling. Instead

@@ -8,7 +8,7 @@ rules:
     - pattern: OpenSSL::Digest::SHA1.$FUNC
     - pattern: OpenSSL::HMAC.$FUNC("sha1",...)
   message: |
-    Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision by Google, which could lead to vulnerabilities.  
+    Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision by Google, which could lead to vulnerabilities.
     Use SHA256, SHA3 or other hashing functions instead.
   metadata:
     references:

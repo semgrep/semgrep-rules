@@ -28,15 +28,15 @@ public class BSidesServer {
 			// Create new RMI registry to which we can register
 			LocateRegistry.createRegistry(1099);
 
-			// Make our BSides Server object 
+			// Make our BSides Server object
 			// available under the name "bsides"
-			Naming.bind("bsides", new BSidesServiceServerImpl()); 
+			Naming.bind("bsides", new BSidesServiceServerImpl());
 			System.out.println("BSides RMI server is ready");
-		
+
 		} catch (Exception e) {
-			// In case of an error, print the stacktrace 
+			// In case of an error, print the stacktrace
 			// and bail out
 			e.printStackTrace();
-		} 
+		}
 	}
 }

@@ -14,7 +14,7 @@ def say_something_else(something_else="something else"):
 # ruleid:hardcoded-password-default-argument
 def whoops(password="this-could-be-bad"):
     print(password)
-    
+
 # ok
 def ok(password=None):
     print(password)

@@ -191,3 +191,4 @@ class ActionPackAssertionsControllerTest < ActionController::TestCase
       end
     end
   end
+end

@@ -27,7 +27,7 @@ public class UnvalidatedRedirectServlet extends HttpServlet {
             resp.addHeader("Location", url);
         }
     }
-    
+
     // ruleid: unvalidated-redirect
     private void unvalidatedRedirect3(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect(req.getParameter("urlRedirect"));

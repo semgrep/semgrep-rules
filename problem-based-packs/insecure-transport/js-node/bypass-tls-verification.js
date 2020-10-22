@@ -71,7 +71,3 @@ function ok_tls2() {
       agent: false
     });
 }
-
-
-
-

@@ -1,8 +1,11 @@
 # Flask check3: Avoid hardcoded config rules
 rules:
-  # . Rules for `TESTING` config
 - id: avoid_hardcoded_config_TESTING
-  pattern: $M.config['TESTING'] = True
+  pattern-either:
+  - pattern: $M.config['TESTING'] = True
+  - pattern: $M.config['TESTING'] = False
+  - pattern: $M.update(TESTING=True, ...)
+  - pattern: $M.update(TESTING=False, ...)
   message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
   metadata:
     cwe: 'CWE-489: Active Debug Code'
@@ -13,57 +16,10 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
   languages: [python]
   severity: WARNING
-- id: avoid_hardcoded_config_TESTING
-  pattern: $M.config['TESTING'] = False
-  message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_TESTING
-  pattern: $M.update(TESTING=True, ...)
-  message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_TESTING
-  pattern: $M.update(TESTING=False, ...)
-  message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_TESTING
-  pattern: $M.update(TESTING=False, ...)
-  message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-  # Rules for `SECRET_KEY` config
 - id: avoid_hardcoded_config_SECRET_KEY
-  pattern: $M.config['SECRET_KEY'] = "=~/.*/"
+  pattern-either:
+  - pattern: $M.update(SECRET_KEY="=~/.*/")
+  - pattern: $M.config['SECRET_KEY'] = "=~/.*/"
   message: Hardcoded variable `SECRET_KEY` detected. Use environment variables or config files instead
   metadata:
     cwe: 'CWE-798: Use of Hard-coded Credentials'
@@ -74,21 +30,10 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
   languages: [python]
   severity: ERROR
-- id: avoid_hardcoded_config_SECRET_KEY
-  pattern: $M.update(SECRET_KEY="=~/.*/")
-  message: Hardcoded variable `SECRET_KEY` detected. Use environment variables or config files instead
-  metadata:
-    cwe: 'CWE-798: Use of Hard-coded Credentials'
-    owasp: 'A2: Broken Authentication'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: ERROR
-  # Rules for `ENV` config
 - id: avoid_hardcoded_config_ENV
-  pattern: $M.update(ENV="=~/^development|production$/")
+  pattern-either:
+  - pattern: $M.update(ENV="=~/^development|production$/")
+  - pattern: $M.config['ENV'] = "=~/^development|production$/"
   message: Hardcoded variable `ENV` detected. Set this by using FLASK_ENV environment variable
   metadata:
     cwe: 'CWE-489: Active Debug Code'
@@ -99,57 +44,12 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
   languages: [python]
   severity: WARNING
-- id: avoid_hardcoded_config_ENV
-  pattern: $M.config['ENV'] = "=~/^development|production$/"
-  message: Hardcoded variable `ENV` detected. Set this by using FLASK_ENV environment variable
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-    # Rules for `DEBUG` config
 - id: avoid_hardcoded_config_DEBUG
-  pattern: $M.update(DEBUG=True)
-  message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_DEBUG
-  pattern: $M.update(DEBUG=False)
-  message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_DEBUG
-  pattern: $M.config['DEBUG'] = True
-  message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
-  metadata:
-    cwe: 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-  languages: [python]
-  severity: WARNING
-- id: avoid_hardcoded_config_DEBUG
-  pattern: $M.config['DEBUG'] = False
+  pattern-either:
+  - pattern: $M.update(DEBUG=True)
+  - pattern: $M.update(DEBUG=False)
+  - pattern: $M.config['DEBUG'] = True
+  - pattern: $M.config['DEBUG'] = False
   message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
   metadata:
     cwe: 'CWE-489: Active Debug Code'

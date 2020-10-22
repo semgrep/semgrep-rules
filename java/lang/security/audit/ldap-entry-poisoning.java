@@ -8,7 +8,7 @@ public class Cls {
             true, //Enable object deserialization if bound in directory
             deref));
     }
-    
+
     public void ldapSearchEntryPoisonViaSetter(Environment env) {
         DirContext ctx = new InitialDirContext();
         // ruleid:ldap-entry-poisoning

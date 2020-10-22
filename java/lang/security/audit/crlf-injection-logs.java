@@ -22,7 +22,7 @@ public class TestLog2 {
   private final static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, 
+  public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {
       HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 			String param = request.getParameter("param");
@@ -45,7 +45,7 @@ public class TestLog4 {
   private final static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, 
+  public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {
       HttpServletRequest httpServletReq = (HttpServletRequest) request;
 			String param = httpServletReq.getParameter("param");
@@ -54,10 +54,10 @@ public class TestLog4 {
 }
 
 public class TestLog5 {
-  
+
 	// ruleid: crlf-injection-logs
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, 
+  public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {
 			Logger  log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
       HttpServletRequest httpServletReq = (HttpServletRequest) request;
@@ -71,7 +71,7 @@ public class OkTestLog1 {
   private final static NotLogger log = new NorLogger();
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, 
+  public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {
       HttpServletRequest httpServletReq = (HttpServletRequest) request;
 			String param = httpServletReq.getParameter("param");
@@ -82,7 +82,7 @@ public class OkTestLog1 {
 public class OkTestLog2 {
   // ok
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, 
+  public void doFilter(ServletRequest request, ServletResponse response,
     FilterChian chain) throws IOException, ServletException {
 			Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
       HttpServletRequest httpServletReq = (HttpServletRequest) request;

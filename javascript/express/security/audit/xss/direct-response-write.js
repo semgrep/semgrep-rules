@@ -9,9 +9,9 @@ exports.promotionVideo = () => {
         if (err) throw err
         let template = buf.toString()
         const subs = getSubsFromFile()
-  
+
         utils.solveIf(challenges.videoXssChallenge, () => { return utils.contains(subs, '</script><script>alert(`xss`)</script>') })
-  
+
         const theme = themes[config.get('application.theme')]
         template = template.replace(/_title_/g, config.get('application.name'))
         template = template.replace(/_favicon_/g, favicon())
@@ -39,7 +39,7 @@ router.get('/greeting', (req, res) => {
     res.send('<h1> Hello :' + name + "</h1>")
 })
 
-//template handle escaping 
+//template handle escaping
 router.get('/greet-template', (req, res) => {
     name = req.query.name
     // ok: direct-response-write
@@ -148,4 +148,3 @@ app.get('/xss', function (req, res) {
     res.write('Response</br>' + html);
 });
 app.listen(8000);
-

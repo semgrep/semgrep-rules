@@ -49,7 +49,7 @@ public class HttpUtils {
 
         HttpClient client = new HttpClient();
         GetMethod method = new GetMethod(url);
-        
+
         try {
             client.executeMethod(method); // send request
             byte[] resBody = method.getResponseBody();

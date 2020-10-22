@@ -41,4 +41,3 @@ class Ab:
         if not hello:
             yield 5
         yield other
-

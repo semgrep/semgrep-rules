@@ -7,4 +7,3 @@ def ok_file_disclosure
     # ok
     config.serve_static_assets = false
 end
-

@@ -4,10 +4,10 @@ rules:
   - pattern: |
       accepts_nested_attributes_for ..., allow_destroy: false, ...
   message: |
-    Checks for nested attributes vulnerability (CVE-2015-7577). Setting allow_destroy: false in 
+    Checks for nested attributes vulnerability (CVE-2015-7577). Setting allow_destroy: false in
     accepts_nested_attributes_for can lead to attackers setting attributes to invalid values and clearing all attributes.
     This affects versions 3.1.0 and newer, with fixed versions 5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1.
-    To fix, upgrade to a newer version or use the initializer specified in the google groups. 
+    To fix, upgrade to a newer version or use the initializer specified in the google groups.
   metadata:
     references:
     - https://groups.google.com/g/rubyonrails-security/c/cawsWcQ6c8g/m/tegZtYdbFQAJ
@@ -15,5 +15,3 @@ rules:
   languages:
   - ruby
   severity: WARNING
-
-

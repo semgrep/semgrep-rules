@@ -48,7 +48,7 @@ exports.promotionVideo = () => {
       if (err) throw err
       let template = buf.toString()
       const subs = getSubsFromFile()
-      
+
       // ok
       var w = "<script>";
 

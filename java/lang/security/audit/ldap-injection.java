@@ -16,7 +16,7 @@ import javax.naming.ldap.LdapName;
 import java.util.Properties;
 
 public class JndiLdapAdditionalSignature {
-    
+
     // ruleid: ldap-injection
     public static void moreLdapInjections(String input) throws NamingException {
         Properties props = new Properties();

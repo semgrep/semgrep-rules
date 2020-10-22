@@ -42,6 +42,3 @@ def get_user_age(request):
   user_age = Person.objects.extra(where=["name = 'user_name'"])
   html = "<html><body>User Age %s.</body></html>" % user_age
   return HttpResponse(html)
-
-
-

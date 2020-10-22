@@ -7,7 +7,7 @@ rules:
     - pattern: |
         {rejectUnauthorized:false}
   message: |
-    Checks for setting the environment variable NODE_TLS_REJECT_UNAUTHORIZED to 0, which disables TLS verification. 
+    Checks for setting the environment variable NODE_TLS_REJECT_UNAUTHORIZED to 0, which disables TLS verification.
     This should only be used for debugging purposes. Setting the option rejectUnauthorized to false bypasses verification
     against the list of trusted CAs, which also leads to insecure transport. These options lead to vulnerability
     to MTM attacks, and should not be used.
@@ -20,4 +20,3 @@ rules:
     - https://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100
   severity: WARNING
   languages: [javascript]
-

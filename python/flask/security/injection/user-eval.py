@@ -31,4 +31,3 @@ def format():
 @app.route("/ok")
 def ok():
     eval("This is fine")
-

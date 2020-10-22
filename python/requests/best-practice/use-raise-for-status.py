@@ -77,7 +77,7 @@ def f():
     r = requests.get("")
     if not r.ok:
         logging.error("Something awful happened", r)
-    return r   
+    return r
 
 def f():
     # ok

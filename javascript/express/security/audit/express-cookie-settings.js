@@ -80,7 +80,7 @@ function test5() {
 	if (app.get('env') === 'production') {
 	  app.set('trust proxy', 1) // trust first proxy
 	  opts.cookie.domain = 'example.com'
-   	    opts.cookie.expires = expiryDate 
+   	    opts.cookie.expires = expiryDate
 	}
 
 // ruleid: express-cookie-session-no-path
