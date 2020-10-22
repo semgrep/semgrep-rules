@@ -10,9 +10,11 @@ const testFunc = async (userInput) => {
 // ok
   await page.goto(url);
 
+// ruleid:puppeteer-goto-injection
   await page.goto(unverifiedInput());
 
   const newUrl = userInput;
+// ruleid:puppeteer-goto-injection
   await page.goto(newUrl);
 
   await page.screenshot({path: 'example.png'});
@@ -26,6 +28,7 @@ const testFunc = async (userInput) => {
 // ok
   await page.setContent('<html></html>');
 
+// ruleid:puppeteer-setcontent-injection
   await page.setContent(unverifiedInput());
 
   await page.screenshot({path: 'example.png'});
@@ -40,6 +43,7 @@ async function test2(userInput) {
 // ok
   await page.evaluate(x => console.log(x), 5);
 
+// ruleid:puppeteer-evaluate-code-injection
   await page.evaluate(`fetch(${userInput})`);
 
   await page.screenshot({path: 'example.png'});
@@ -51,7 +55,7 @@ async function test3(userInput) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-// ok:puppeteer-evaluate-arg-injection
+// ok
   await page.evaluate(x => console.log(x), 5);
 
 // ruleid:puppeteer-evaluate-arg-injection
