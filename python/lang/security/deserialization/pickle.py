@@ -15,7 +15,7 @@ def serialize_exploit():
 
 # Application insecurely deserializes the attacker's serialized data
 def insecure_deserialization(exploit_code):
-  # ok
+  # ok: avoid-pickle
   # _pickle.loads(exploit_code)
 
   # ruleid: avoid-pickle

@@ -22,7 +22,7 @@ app.get('/', (req,res) => {
     res.send('hello world')
 })
 
-// ok
+// ok:express-vm-runincontext-context-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -53,7 +53,7 @@ app.get('/', function (req,res) {
     res.send('hello world')
 })
 
-// ok
+// ok:express-vm-runinnewcontext-context-injection
 app.get('/', function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -71,7 +71,7 @@ app.get('/', function(req,res) {
     res.send('hello world')
 })
 
-// ok
+// ok:express-vm-code-injection
 app.get('/', function okTest3(req,res) {
     const code = `
         var x = 1;
@@ -88,7 +88,7 @@ app.get('/', function test4(req,res) {
     res.send('hello world')
 })
 
-// ok
+// ok:express-vm-code-injection
 app.get('/', function okTest4(req,res) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
@@ -103,7 +103,7 @@ app.get('/', (req,res) => {
     res.send('hello world')
 })
 
-// ok
+// ok:express-vm-compilefunction-context-injection
 app.get('/', function okTest5(req, res) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
@@ -125,7 +125,7 @@ app.get('/', function (req,res) {
     res.send('hello world')
 })
 
-//ok
+//ok:express-vm-code-injection
 app.get('/', function okTest6(req, res) {
     const script = new vm.Script(`
         function add(a, b) {

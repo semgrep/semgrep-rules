@@ -11,7 +11,7 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/ok', async (req, res) => {
-// ok
+// ok: express-wkhtmltopdf-injection
     const pdf = wkhtmltopdf('<html></html>', { output: 'vuln.pdf' })
     res.send(pdf)
 })
@@ -23,7 +23,7 @@ app.post('/test', async (req, res) => {
 })
 
 app.post('/test-ok', async (req, res) => {
-// ok
+// ok: express-wkhtmltoimage-injection
     const data = '<html></html>'
     const img = wkhtmltoimage.generate(data, { output: 'vuln.pdf' })
     res.send(img)

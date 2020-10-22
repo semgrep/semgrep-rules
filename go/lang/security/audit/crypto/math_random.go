@@ -20,7 +20,7 @@ func main0() {
 }
 
 func main1() {
-	// ok
+	// ok: math-random-used
 	good, _ := rand.Read(nil)
 	println(good)
 }
@@ -33,7 +33,7 @@ func main2() {
 }
 
 func main3() {
-	// ok because we only care about Read or Int
+	// ok: math-random-used; because we only care about Read or Int
 	good, _ := rand.Read(nil)
 	println(good)
 	i := mrand.Int31()
