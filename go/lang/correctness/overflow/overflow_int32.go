@@ -11,7 +11,7 @@ func main1() {
 }
 
 func mainInt32Ex1() {
-	// ruleid: interter-overflow-int32
+	// ruleid: integer-overflow-int32
 	bigValue, err := strconv.Atoi("2147483648")
 	if err != nil {
 		panic(err)
@@ -21,7 +21,7 @@ func mainInt32Ex1() {
 }
 
 func mainInt32Ex2() {
-	// ok: interter-overflow-int32
+	// ok: integer-overflow-int32
 	bigValue, err := strconv.Atoi("10")
 	if err != nil {
 		panic(err)
