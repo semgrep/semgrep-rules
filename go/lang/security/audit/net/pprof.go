@@ -12,7 +12,7 @@ func ok() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World!")
 	})
-    // ok
+    // ok: pprof-debug-exposure
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
 
@@ -20,7 +20,7 @@ func ok2() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World!")
 	})
-    // ok
+    // ok: pprof-debug-exposure
 	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
 

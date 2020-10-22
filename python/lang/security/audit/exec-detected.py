@@ -1,8 +1,8 @@
-# ok
+# ok:exec-detected
 exec("x = 1; x = x + 2")
 
 blah = "import requests; r = requests.get('https://example.com')"
-# ok
+# ok:exec-detected
 exec(blah)
 
 dynamic = "import requests; r = requests.get('{}')"
@@ -15,5 +15,5 @@ def eval_something(something):
 
 from something import exec
 
-# ok
+# ok:exec-detected
 exec("something")

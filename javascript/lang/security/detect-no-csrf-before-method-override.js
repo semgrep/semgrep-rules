@@ -1,5 +1,5 @@
 function ok() {
-	// ok
+	// ok:detect-no-csrf-before-method-override
 	express.methodOverride()
 	express.csrf()
 }

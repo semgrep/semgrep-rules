@@ -38,7 +38,7 @@ function test2() {
 }
 
 function okTest1() {
-// ok
+// ok: sax-xxe
     var saxStream = require("sax").createStream(strict, options)
 
     saxStream.on("ontext", function (node) {

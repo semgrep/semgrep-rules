@@ -5,7 +5,7 @@ class DangerousController < ActionController::Base
 
 end
 
-# ok
+# ok:missing-csrf-protection
 class OkController < ActionController::Base
 
   protect_from_forgery :with => :exception

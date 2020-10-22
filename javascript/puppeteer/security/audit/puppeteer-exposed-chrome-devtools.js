@@ -18,7 +18,7 @@ const puppeteer = require('puppeteer');
 })();
 
 (async () => {
-  // ok
+  // ok:puppeteer-exposed-chrome-devtools
   const browser = await puppeteer.launch({args:['--somethin-else', '--more-examples']});
   const page = await browser.newPage();
   await page.goto('https://example.com');

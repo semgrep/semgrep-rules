@@ -7,7 +7,7 @@ public class MyProprietaryMessageDigest extends MessageDigest {
     }
 }
 
-// ok
+// ok: avoid-implementing-custom-digests
 public class NotMessageDigest {
     public NotMessageDigest() {
         System.out.println("");

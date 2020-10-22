@@ -22,7 +22,7 @@ public class XmlDecodeUtil {
         }
     }
 
-    // ok
+    // ok: xml-decoder
     public static Object handleXml1() {
         XMLDecoder d = new XMLDecoder("<safe>XML</safe>");
         try {
@@ -34,7 +34,7 @@ public class XmlDecodeUtil {
         }
     }
 
-    // ok
+    // ok: xml-decoder
     public static Object handleXml2() {
         String strXml = "<safe>XML</safe>";
         XMLDecoder d = new XMLDecoder(strXml);

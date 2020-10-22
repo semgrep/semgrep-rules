@@ -12,7 +12,7 @@ func ReadMessage() {
         messages <- "ping"
     }()
 
-    // ok
+    // ok: channel-guarded-with-mutex
     msg := <-messages
     fmt.Println(msg)
 }

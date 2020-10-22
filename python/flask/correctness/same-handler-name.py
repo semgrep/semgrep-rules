@@ -11,7 +11,7 @@ def hello():
 def hello():
   return 'hi'
 
-# ok
+# ok: flask-duplicate-handler-name
 @app.route('/howdy/:name')
 def howdy(name):
   return f"""howdy {name}"""

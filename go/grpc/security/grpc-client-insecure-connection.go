@@ -15,7 +15,7 @@ func unsafe() {
 }
 
 func safe() {
-    // ok
+    // ok:grpc-client-insecure-connection
     conn, err := grpc.Dial(address)
     if err != nil {
         log.Fatalf("did not connect: %v", err)

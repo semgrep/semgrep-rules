@@ -22,12 +22,12 @@ class Cls {
     }
 
     public void test4() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance("TLS1.2");
     }
 
     public void test5() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance("TLS1.3");
     }
 
@@ -36,7 +36,7 @@ class Cls {
     }
 
     public void test5() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance(getSslContext());
     }
 }

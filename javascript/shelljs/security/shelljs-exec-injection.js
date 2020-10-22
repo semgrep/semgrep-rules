@@ -12,12 +12,12 @@ function test2(userInput) {
 }
 
 function okTest3(userInput) {
-// ok
+// ok:shelljs-exec-injection
     const input = 'ls ./'
     return shell.exec(input, {silent: true})
 }
 
 function okTest4(userInput) {
-// ok
+// ok:shelljs-exec-injection
     return shell.exec('ls ./', {silent: true})
 }

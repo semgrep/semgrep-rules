@@ -7,7 +7,7 @@ class DangerousController < ApplicationController
 
 end
 
-# ok
+# ok:hardcoded-http-auth-in-controller
 class OkController < ApplicationController
 
   http_basic_authenticate_with :name => "dhh", :password => not_a_string, :except => :index

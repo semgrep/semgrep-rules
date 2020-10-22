@@ -42,7 +42,7 @@ def notify_users_about_challenge(request):
 
 def send_an_email(request):
     subject = request.POST.get("subject")
-    # ok
+    # ok: xss-send-mail-html-message
     body= request.POST.get("body")
 
     sender = "blah@blah.com"

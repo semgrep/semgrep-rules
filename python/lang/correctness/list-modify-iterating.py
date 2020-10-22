@@ -19,14 +19,14 @@ for i in b:
     b.append(0)
 
 c = []
-# ok
+# ok:list-modify-while-iterate
 for i in range(5):
     print(i)
     c.append(i)
 
 d = []
 e = [1, 2, 3, 4]
-# ok
+# ok:list-modify-while-iterate
 for i in e:
     print(i)
     d.append(i)

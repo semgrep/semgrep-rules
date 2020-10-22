@@ -5,7 +5,7 @@ from jwt.exceptions import DecodeError, MissingRequiredClaimError, InvalidKeyErr
 
 def verify_jwt(token):
     try:
-        # ok
+        # ok:unverified-jwt-decode
         decoded = jwt.decode(token, app.config['SECRET_KEY_HMAC'], verify=True, issuer = 'we45', leeway=10, algorithms=['HS256'])
         print("JWT Token from API: {0}".format(decoded))
         return True

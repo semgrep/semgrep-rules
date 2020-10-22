@@ -5,12 +5,12 @@ def func1():
 
 
 def func2():
-    # ok
+    # ok:open-never-closed
     fd = open('bar')
     fd.close()
 
 def func3():
-    # ok
+    # ok:open-never-closed
     fd = open('baz')
     try:
         pass
