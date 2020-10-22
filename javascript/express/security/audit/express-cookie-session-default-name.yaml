@@ -1,0 +1,34 @@
+rules:
+- id: express-cookie-session-default-name
+  message: |
+    Don’t use the default session cookie name
+    Using the default session cookie name can open your app to attacks.
+    The security issue posed is similar to X-Powered-By: a potential attacker can use it to fingerprint the server and target attacks accordingly.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        ...
+        $SESSION = require('cookie-session');
+        ...
+    - pattern-inside: |
+        ...
+        $SESSION = require('express-session');
+        ...
+  - pattern: $SESSION(...)
+  - pattern-not-inside: $SESSION(<... {name:...} ...>,...)
+  - pattern-not-inside: |
+      $OPTS = <... {name:...} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.name = ...;
+      ...
+      $SESSION($OPTS,...);

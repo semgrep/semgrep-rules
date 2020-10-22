@@ -1,0 +1,52 @@
+rules:
+- id: express-cookie-session-no-domain
+  message: |
+    Default session middleware settings: `domain` not set.
+    It indicates the domain of the cookie; use it to compare against the domain of the server in which the URL is being requested.
+    If they match, then check the path attribute next.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        ...
+        $SESSION = require('cookie-session');
+        ...
+    - pattern-inside: |
+        ...
+        $SESSION = require('express-session');
+        ...
+  - pattern: $SESSION(...)
+  - pattern-not-inside: $SESSION(<... {cookie:{domain:...}} ...>,...)
+  - pattern-not-inside: |
+      $OPTS = <... {cookie:{domain:...}} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE = <... {domain:...} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie = <... {domain:...} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE.domain = ...;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie.domain = ...;
+      ...
+      $SESSION($OPTS,...);

@@ -1,0 +1,51 @@
+rules:
+- id: express-cookie-session-no-httponly
+  message: |
+    Default session middleware settings: `httpOnly` not set.
+    It ensures the cookie is sent only over HTTP(S), not client JavaScript, helping to protect against cross-site scripting attacks.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        ...
+        $SESSION = require('cookie-session');
+        ...
+    - pattern-inside: |
+        ...
+        $SESSION = require('express-session');
+        ...
+  - pattern: $SESSION(...)
+  - pattern-not-inside: $SESSION(<... {cookie:{httpOnly:true}} ...>,...)
+  - pattern-not-inside: |
+      $OPTS = <... {cookie:{httpOnly:true}} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE = <... {httpOnly:true} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie = <... {httpOnly:true} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE.httpOnly = true;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie.httpOnly = true;
+      ...
+      $SESSION($OPTS,...);

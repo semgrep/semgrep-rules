@@ -1,0 +1,51 @@
+rules:
+- id: express-cookie-session-no-secure
+  message: |
+    Default session middleware settings: `secure` not set.
+    It ensures the browser only sends the cookie over HTTPS.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        ...
+        $SESSION = require('cookie-session');
+        ...
+    - pattern-inside: |
+        ...
+        $SESSION = require('express-session');
+        ...
+  - pattern: $SESSION(...)
+  - pattern-not-inside: $SESSION(<... {cookie:{secure:true}} ...>,...)
+  - pattern-not-inside: |
+      $OPTS = <... {cookie:{secure:true}} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE = <... {secure:true} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie = <... {secure:true} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE.secure = true;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie.secure = true;
+      ...
+      $SESSION($OPTS,...);

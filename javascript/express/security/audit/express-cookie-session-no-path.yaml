@@ -1,0 +1,51 @@
+rules:
+- id: express-cookie-session-no-path
+  message: |
+    Default session middleware settings: `path` not set.
+    It indicates the path of the cookie; use it to compare against the request path. If this and domain match, then send the cookie in the request.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://expressjs.com/en/advanced/best-practice-security.html
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        ...
+        $SESSION = require('cookie-session');
+        ...
+    - pattern-inside: |
+        ...
+        $SESSION = require('express-session');
+        ...
+  - pattern: $SESSION(...)
+  - pattern-not-inside: $SESSION(<... {cookie:{path:...}} ...>,...)
+  - pattern-not-inside: |
+      $OPTS = <... {cookie:{path:...}} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE = <... {path:...} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie = <... {path:...} ...>;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $COOKIE.path = ...;
+      ...
+      $SESSION($OPTS,...);
+  - pattern-not-inside: |
+      $OPTS = ...;
+      ...
+      $OPTS.cookie.path = ...;
+      ...
+      $SESSION($OPTS,...);
