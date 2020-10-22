@@ -24,6 +24,6 @@ if x is 'hello there':
 if "hello there" is x:
   pass
 
-# Ook: string-is-comparison
+# ok: string-is-comparison
 if x is '':
   pass
