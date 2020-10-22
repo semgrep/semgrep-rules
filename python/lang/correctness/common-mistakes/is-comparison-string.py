@@ -4,17 +4,21 @@ x = object()
 if x is x:
   print('true')
 
-if x is None: # ok:identical-is-comparison
+# ok:identical-is-comparison
+if x is None:
   pass
 
+# ok:identical-is-comparison
 if (type(X) is str):
-  pass # ok:identical-is-comparison
+  pass
 
+# ok:identical-is-comparison
 if x is True:
-  pass # ok:identical-is-comparison
+  pass
 
+# ok:identical-is-comparison
 if x is False:
-  pass # ok:identical-is-comparison
+  pass
 
 # ruleid: string-is-comparison
 if x is 'hello there':
