@@ -5,13 +5,11 @@ const wkhtmltopdf = require('wkhtmltopdf')
 const wkhtmltoimage = require('wkhtmltoimage')
 
 app.get('/', async (req, res) => {
-// ruleid: express-wkhtmltopdf-injection
     const pdf = wkhtmltopdf(req.query.q, { output: 'vuln.pdf' })
     res.send(pdf)
 })
 
 app.post('/ok', async (req, res) => {
-// ok: express-wkhtmltopdf-injection
     const pdf = wkhtmltopdf('<html></html>', { output: 'vuln.pdf' })
     res.send(pdf)
 })

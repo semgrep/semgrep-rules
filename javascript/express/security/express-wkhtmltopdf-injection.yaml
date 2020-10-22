@@ -1,0 +1,34 @@
+rules:
+- id: express-wkhtmltopdf-injection
+  message: |
+    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  severity: ERROR
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      $WK = require('wkhtmltopdf');
+      ...
+  - pattern-inside: |
+      ...
+      require('express');
+      ...
+  - pattern-either:
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $WK(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $WK(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $WK(<... $INPUT ...>,...);
+    - pattern: |-
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $WK(<... $INPUT ...>,...);
