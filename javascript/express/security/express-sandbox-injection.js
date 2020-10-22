@@ -32,14 +32,14 @@ app.get('/test3', function (req, res) {
 })
 
 app.get('/ok-test1', function (req, res) {
-// ok
+// ok:express-sandbox-code-injection
     const s = new Sandbox();
     s.run('lol("hi")', cb);
     res.send('Hello world');
 })
 
 app.get('/ok-test2', function (req, res) {
-// ok
+// ok:express-sandbox-code-injection
     const s = new Sandbox();
     var code = 'lol("hi")'
     s.run(code, cb);
@@ -47,7 +47,7 @@ app.get('/ok-test2', function (req, res) {
 })
 
 app.get('/test1', function (req, res) {
-// ok
+// ok:express-sandbox-code-injection
     const s = new Sandbox();
     s.run(`lol("hi")`, cb);
     res.send('Hello world');

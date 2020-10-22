@@ -20,7 +20,7 @@ public class SpelSample {
         System.out.println("exp2="+dynamicValue);
     }
 
-    // ok
+    // ok: spel-injection
     public static void parseExpressionInterface2(String property) {
         ExpressionParser parser = new SpelExpressionParser();
         Expression exp1 = parser.parseExpression("'safe expression'");
@@ -37,7 +37,7 @@ public class SpelSample {
         System.out.println("exp2=" + dynamicValue);
     }
 
-    // ok
+    // ok: spel-injection
     public static void parseSpelExpression4(String property) {
         SpelExpressionParser parser = new SpelExpressionParser();
         Expression exp1 = parser.parseExpression("'safe expression'");
@@ -45,7 +45,7 @@ public class SpelSample {
         System.out.println("exp1="+constantValue);
     }
 
-    // ok
+    // ok: spel-injection
     public static void parseTemplateAwareExpression1(String property) {
         TemplateAwareExpressionParser parser = new SpelExpressionParser();
         Expression exp1 = parser.parseExpression("'safe expression'");

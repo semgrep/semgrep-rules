@@ -1,7 +1,7 @@
 var wkhtmltoimage = require('wkhtmltoimage')
 
 const html = '<html></html>'
-// ok
+// ok: wkhtmltoimage-injection
 wkhtmltoimage.generate(html, { output: 'vuln.jpg' })
 
 // ruleid: wkhtmltoimage-injection

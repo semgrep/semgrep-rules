@@ -20,7 +20,7 @@ func whyyyy(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     vm := otto.New()
-    // ok
+    // ok: dangerous-execution
     vm.Run(`
         abc = 2 + 2;
         console.log("The value of abc is " + abc); // 4

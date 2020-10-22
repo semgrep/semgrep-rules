@@ -27,7 +27,7 @@ function testCtrl3(req,res) {
 app.post('/test3', testCtrl3)
 
 app.post('/okTest', function (req,res) {
-    // ok
+    // ok:express-path-join-resolve-traversal
     createFile({
         filePath: pth.join(opts.path, 'val')
     })

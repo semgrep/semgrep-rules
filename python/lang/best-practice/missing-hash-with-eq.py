@@ -5,7 +5,7 @@ class A:
         pass
 
 
-# ok
+# ok:missing-hash-with-eq
 class A2:
     def __eq__(self, someother):
         pass

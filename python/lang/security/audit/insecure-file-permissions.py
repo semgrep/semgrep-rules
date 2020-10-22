@@ -43,7 +43,7 @@ import stat
 os.chmod("file", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH | stat.S_IWOTH | stat.S_IXOTH)
 
 # Try to inject Semgrep. Perms end up OK.
-# ok
+# ok:insecure-file-permissions
 os.chmod("file", stat.S_IRWXU | print("GOTCHA"))
 
 # Try to inject Semgrep.
@@ -62,11 +62,11 @@ def ensure_exec_perms2(file_):
     os.chmod(file_, st.st_mode | 0o111)
     return file_
 
-# ok
+# ok:insecure-file-permissions
 os.chmod("file", 0o644)
-# ok
+# ok:insecure-file-permissions
 os.chmod("file", 0o444)
-# ok
+# ok:insecure-file-permissions
 os.chmod("file", stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
-# ok
+# ok:insecure-file-permissions
 os.chmod("file", stat.S_IRWXU)

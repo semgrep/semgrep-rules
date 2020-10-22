@@ -35,7 +35,7 @@ public class StaticIV2 {
 public class RandomIV {
 
     public RandomIV() {
-        // ok
+        // ok: no-static-initialization-vector
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
 

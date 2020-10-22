@@ -16,7 +16,7 @@ import javax.persistence.Query;
 public class SqlExample {
     public void staticQuery() throws SQLException {
         Connection c = DB.getConnection();
-        // ok
+        // ok:formatted-sql-string
         ResultSet rs = c.createStatement().executeQuery("SELECT * FROM happy_messages");
     }
 
@@ -78,7 +78,7 @@ public class SqlExample2 {
 
 public class tableConcatStatements {
     public void tableConcat() {
-        // ok
+        // ok:formatted-sql-string
         stmt.execute("DROP TABLE " + tableName);
         stmt.execute(String.format("CREATE TABLE %s", tableName));
     }

@@ -27,14 +27,14 @@ app.get('/test2', async (req, res) => {
 
 app.get('/okTest1', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
-// ok
+// ok: express-expat-xxe
     parser.write('<xml>hardcoded</xml>')
     res.send('Hello World!')
 })
 
 app.get('/okTest2', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
-// ok
+// ok: express-expat-xxe
     var data = foo()
     parser.write(data)
     res.send('Hello World!')

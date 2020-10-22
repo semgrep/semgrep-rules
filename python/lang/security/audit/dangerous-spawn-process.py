@@ -1,18 +1,18 @@
 import os
 
-# ok
+# ok:dangerous-spawn-process
 os.execl("ls")
 
-# ok
+# ok:dangerous-spawn-process
 os.spawnlp(os.P_WAIT, "ls")
 
-# ok
+# ok:dangerous-spawn-process
 os.spawnlpe(os.P_WAIT, "ls")
 
-# ok
+# ok:dangerous-spawn-process
 os.spawnv(os.P_WAIT, "/bin/ls")
 
-# ok
+# ok:dangerous-spawn-process
 os.spawnve(os.P_WAIT, "/bin/ls", ["-a"], os.environ)
 
 from somewhere import something

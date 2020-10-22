@@ -18,7 +18,7 @@ const { chromium } = require('playwright');
 })();
 
 (async () => {
-  // ok
+  // ok:playwright-exposed-chrome-devtools
   const browser = await chromium.launch({args:['--somethin-else', '--more-examples']});
   const page = await browser.newPage();
   await page.goto('https://example.com');

@@ -8,12 +8,12 @@ import (
 )
 
 func Fine(r *http.Request) template.HTML {
-	// ok
+	// ok: formatted-template-string
 	return template.HTML("<html><body><h1>Hello, world</h1></body></html>")
 }
 
 func AlsoFine(r *http.Request) template.HTML {
-	// ok
+	// ok: formatted-template-string
 	return template.HTML("<html><body><h1>" + "Hello, world</h1></body></html>")
 }
 

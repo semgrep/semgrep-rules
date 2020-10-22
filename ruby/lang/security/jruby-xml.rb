@@ -9,6 +9,6 @@ include ActiveSupport
  end
 
  def ok_xml
-     # ok
+     # ok: jruby-xml
      XmlMini.backend = 'REXML'
  end

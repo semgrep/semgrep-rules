@@ -114,14 +114,14 @@ function example43 () {
 }
 
 function exampleOk1() {
-// ok
+// ok: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign(Object.assign({bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
 }
 
 function exampleOk2 () {
-// ok
+// ok: jwt-exposed-credentials
     const jsonwt = require('jsonwebtoken')
     let payload;
     payload = {one: 1, two: 2, foo: 'bar'}

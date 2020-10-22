@@ -28,7 +28,7 @@ function test2(input) {
   return nodeVM.run('console.log("Hello world")')
 }
 
-// ok
+// ok:vm2-context-injection
 async function okTest1() {
   code = `
     console.log("Hello world")
@@ -42,7 +42,7 @@ async function okTest1() {
   return new VM({timeout: 40 * 1000, sandbox}).run(code);
 }
 
-// ok
+// ok:vm2-context-injection
 function okTest2() {
   const sandbox = {
     setTimeout,

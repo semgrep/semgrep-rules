@@ -34,7 +34,7 @@ public class WebSecurityConfigCsrfDisable extends WebSecurityConfigurerAdapter {
 public class WebSecurityConfigOK extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-        // ok
+        // ok: spring-csrf-disabled
 		http
 			.authorizeRequests()
 				.antMatchers("/", "/home").permitAll()

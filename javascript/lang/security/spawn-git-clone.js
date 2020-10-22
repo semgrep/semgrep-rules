@@ -38,7 +38,7 @@ function test3() {
 function testOk1() {
     const { spawn } = require('child_process');
     function downloadGitCommitOk1() {
-        // ok
+        // ok: spawn-git-clone
         const gitClone = spawn('git', [ 'clone', 'https://hardcoded-url.com' ]);
         return res.send('ok');
     }
@@ -48,7 +48,7 @@ function testOk2() {
     const childProcess = require('child_process');
     const gitUrl = 'https://hardcoded-url.com';
     function downloadGitCommitOk2() {
-        // ok
+        // ok: spawn-git-clone
         const gitClone = childProcess.spawn('git', [ 'clone', gitUrl ]);
         return res.send('ok');
     }

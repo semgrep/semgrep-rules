@@ -14,14 +14,14 @@ o.popen2('/bin/chmod *')
 subp.Popen('/bin/chown *', shell=True)
 
 # Not vulnerable to wildcard injection
-# ok
+# ok:system-wildcard-detected
 subp.Popen('/bin/rsync *')
-# ok
+# ok:system-wildcard-detected
 subp.Popen("/bin/chmod *")
-# ok
+# ok:system-wildcard-detected
 subp.Popen(['/bin/chown', '*'])
-# ok
+# ok:system-wildcard-detected
 subp.Popen(["/bin/chmod", sys.argv[1], "*"],
                  stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-# ok
+# ok:system-wildcard-detected
 o.spawnvp(os.P_WAIT, 'tar', ['tar', 'xvzf', '*'])

@@ -1,6 +1,6 @@
 fout = open("example.txt", 'w')
 print("stuff")
-# ok
+# ok:writing-to-file-in-read-mode
 fout.write("I'm writable!")
 fout.close()
 

@@ -18,7 +18,7 @@ def unsafe_dict(request):
     eval("print(%s)" % request.POST['message'])
 
 def safe(request):
-    # ok
+    # ok: user-eval-format-string
     code = """
     print('hello')
     """
@@ -42,7 +42,7 @@ def fmt_unsafe_dict(request):
     eval("print({}, {})".format(request.POST['message'], "pwned"))
 
 def fmt_safe(request):
-    # ok
+    # ok: user-eval-format-string
     code = """
     print('hello')
     """
@@ -67,7 +67,7 @@ def fstr_unsafe_dict(request):
 
 def fstr_safe(request):
     var = "hello"
-    # ok
+    # ok: user-eval-format-string
     code = f"""
     print('{var}')
     """

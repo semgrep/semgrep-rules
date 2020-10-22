@@ -27,7 +27,7 @@ function test3(req,res) {
 }
 
 function okTest1() {
-    // ok
+    // ok:path-join-resolve-traversal
     function someFunc() {
         createFile({
             filePath: pth.join(opts.path, 'val')

@@ -9,6 +9,6 @@ function test2(userInput) {
 }
 
 function testOk() {
-    //ok
+    //ok:js-open-redirect
     window.location.href = "/hardcoded-place";
 }

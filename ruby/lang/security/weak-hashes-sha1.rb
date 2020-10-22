@@ -22,11 +22,11 @@ class bad_md5
         digest = OpenSSL::Digest::SHA1.digest 'abc'
         # ruleid: weak-hashes-sha1
         OpenSSL::HMAC.hexdigest("sha1", key, data)
-        # ok:
+        # ok: weak-hashes-sha1
         OpenSSL::HMAC.hexdigest("SHA256", key, data)
-        # ok:
+        # ok: weak-hashes-sha1
         digest = OpenSSL::Digest::SHA256.new
-        # ok:
+        # ok: weak-hashes-sha1
         digest = OpenSSL::Digest::SHA256.hexdigest 'abc'
     end
 end

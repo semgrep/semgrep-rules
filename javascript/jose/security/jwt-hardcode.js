@@ -35,7 +35,7 @@ function example9() {
 }
 
 function example10() {
-// ok
+// ok: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -44,7 +44,7 @@ function example10() {
 }
 
 function example11() {
-// ok
+// ok: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}

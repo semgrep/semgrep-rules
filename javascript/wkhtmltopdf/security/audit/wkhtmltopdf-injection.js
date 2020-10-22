@@ -8,11 +8,11 @@ function test(userInput) {
   return wkhtmltopdf(userInput, { output: 'vuln.pdf' })
 }
 
-// ok
+// ok: wkhtmltopdf-injection
 wkhtmltopdf('<html><html/>', { output: 'vuln.pdf' })
 
 function okTest(userInput) {
    var html = '<html><html/>';
-// ok
+// ok: wkhtmltopdf-injection
    return wkhtmltopdf(html, { output: 'vuln.pdf' })
 }

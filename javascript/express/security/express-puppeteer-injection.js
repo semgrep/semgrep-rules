@@ -71,7 +71,7 @@ app.post('/test2', controller)
 app.post('/ok-test', async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ok
+// ok: express-puppeteer-injection
     await page.goto('https://example.com');
 
     await page.screenshot({path: 'example.png'});
@@ -83,7 +83,7 @@ app.post('/ok-test', async (req, res) => {
 const controller = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ok
+// ok: express-puppeteer-injection
     const body = '<div>123</div>';
     await page.setContent('<html>' + body + '</html>');
 

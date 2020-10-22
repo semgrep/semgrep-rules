@@ -9,7 +9,7 @@ class Bar {
             continue;
         }
 
-        // ok
+        // ok:assignment-comparison
         if (myBoolean) {
 
         }

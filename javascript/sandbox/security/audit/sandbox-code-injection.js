@@ -20,20 +20,20 @@ function test3(userInput, cb) {
 }
 
 function okTest1(cb) {
-// ok
+// ok: sandbox-code-injection
     const s = new Sandbox();
     s.run('lol("hi")', cb);
 }
 
 function okTest2(cb) {
-// ok
+// ok: sandbox-code-injection
     const s = new Sandbox();
     var code = 'lol("hi")'
     s.run(code, cb);
 }
 
 function okTest3(cb) {
-// ok
+// ok: sandbox-code-injection
     const s = new Sandbox();
     s.run(`lol("hi")`, cb);
 }
