@@ -2,7 +2,7 @@ class SignalsWeak:
     from django.dispatch.signals.Signal import disconnect
     # ruleid: django-compat-2_0-signals-weak
     disconnect(weak=True)
-    # ok
+    # ok: django-compat-2_0-signals-weak
     disconnect()
 
 class CheckAggregateSupport:
@@ -39,13 +39,13 @@ class AssertRedirects:
     # ruleid: django-compat-2_0-assert-redirects-helper
     self.assertRedirects(expected_url="https://my.host/foo/bar", host="my.host")
 
-    # ok
+    # ok: django-compat-2_0-assert-redirects-helper
     self.assertRedirects(expected_url="https://my.host/foo/bar")
 
     # ruleid: django-compat-2_0-assert-redirects-helper
     assertRedirects(expected_url="https://my.host/foo/bar", host="my.host")
 
-    # ok
+    # ok: django-compat-2_0-assert-redirects-helper
     assertRedirects(expected_url="https://my.host/foo/bar")
 
 class AssignmentHelper:

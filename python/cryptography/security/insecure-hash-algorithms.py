@@ -6,7 +6,9 @@ from cryptography.hazmat.primitives import hashes
 hashes.MD5()
 # ruleid:insecure-hash-algorithm-sha1
 hashes.SHA1()
-# ok
+# ok:insecure-hash-algorithm-sha1
+# ok:insecure-hash-algorithm-md5
 hashes.SHA256()
-# ok
+# ok:insecure-hash-algorithm-sha1
+# ok:insecure-hash-algorithm-md5
 hashes.SHA3_256()

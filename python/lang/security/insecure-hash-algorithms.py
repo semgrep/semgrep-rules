@@ -16,5 +16,6 @@ print(hashlib.md5("1"))
 # ruleid:insecure-hash-algorithm-sha1
 hashlib.sha1(1)
 
-# ok
+# ok:insecure-hash-algorithm-sha1
+# ok:insecure-hash-algorithm-md5
 hashlib.sha256(1)

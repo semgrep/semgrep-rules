@@ -133,7 +133,7 @@ app.post('/test5', function test2(req, res) {
   return nodeVM.run('console.log("Hello world")')
 })
 
-// ok
+// ok:express-vm2-context-injection
 app.get('/ok-test4', async function okTest1() {
   code = `
     console.log("Hello world")
@@ -147,7 +147,7 @@ app.get('/ok-test4', async function okTest1() {
   return new VM({timeout: 40 * 1000, sandbox}).run(code);
 })
 
-// ok
+// ok:express-vm2-context-injection
 app.get('/ok-test5', function okTest2() {
   const sandbox = {
     setTimeout,
