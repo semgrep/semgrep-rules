@@ -4,10 +4,10 @@ const testFunc = async (userInput) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   let url = 'https://hardcoded.url.com'
-// ok
+// ok:puppeteer-goto-injection
   await page.goto('https://example.com');
 
-// ok
+// ok:puppeteer-goto-injection
   await page.goto(url);
 
 // ruleid:puppeteer-goto-injection
@@ -20,3 +20,44 @@ const testFunc = async (userInput) => {
   await page.screenshot({path: 'example.png'});
   await browser.close();
 };
+
+(async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+// ok
+  await page.setContent('<html></html>');
+
+  await page.setContent(unverifiedInput());
+
+  await page.screenshot({path: 'example.png'});
+  await browser.close();
+})();
+
+async function test2(userInput) {
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+// ok
+  await page.evaluate(x => console.log(x), 5);
+
+  await page.evaluate(`fetch(${userInput})`);
+
+  await page.screenshot({path: 'example.png'});
+  await browser.close();
+}
+
+async function test3(userInput) {
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+// ok
+  await page.evaluate(x => console.log(x), 5);
+
+  await page.evaluate(x => fetch(x), userInput);
+
+  await page.screenshot({path: 'example.png'});
+  await browser.close();
+}
