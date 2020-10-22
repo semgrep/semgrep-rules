@@ -1,0 +1,20 @@
+rules:
+- id: playwright-setcontent-injection
+  message: |
+    If unverified user data can reach the `setContent` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('playwright');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: $PAGE.setContent($INPUT,...)
+  - pattern-not: $PAGE.setContent("...",...)
