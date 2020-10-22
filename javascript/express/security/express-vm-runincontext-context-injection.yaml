@@ -1,0 +1,93 @@
+rules:
+- id: express-vm-runincontext-context-injection
+  message: |
+    Make sure that unverified user data can not reach vm.runInContext.
+  severity: ERROR
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      ...
+      $VM = require('vm');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
