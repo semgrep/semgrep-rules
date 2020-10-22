@@ -1,0 +1,20 @@
+rules:
+- id: vm-script-code-injection
+  message: |
+    Make sure that unverified user data can not reach vm.Script.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      ...
+      $VM = require('vm');
+      ...
+  - pattern: new $VM.Script($CODE,...)
+  - pattern-not-inside: new $VM.Script("...",...)
+  - pattern-not-inside: |-
+      $CODE = "...";
+      ...
+      new $VM.Script($CODE,...);

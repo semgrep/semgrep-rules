@@ -1,0 +1,20 @@
+rules:
+- id: vm-runinnewcontext-code-injection
+  message: |
+    Make sure that unverified user data can not reach vm.runInNewContext.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      ...
+      $VM = require('vm');
+      ...
+  - pattern: $VM.runInNewContext($CODE,...)
+  - pattern-not-inside: $VM.runInNewContext("...",...)
+  - pattern-not-inside: |
+      $CODE = "...";
+      ...
+      $VM.runInNewContext($CODE,...);

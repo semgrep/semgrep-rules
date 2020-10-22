@@ -1,0 +1,20 @@
+rules:
+- id: vm-compilefunction-code-injection
+  message: |
+    Make sure that unverified user data can not reach vm.compileFunction.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      ...
+      $VM = require('vm');
+      ...
+  - pattern: $VM.compileFunction($CODE,...)
+  - pattern-not-inside: $VM.compileFunction("...",...)
+  - pattern-not-inside: |-
+      $CODE = "...";
+      ...
+      $VM.compileFunction($CODE,...);
