@@ -11,7 +11,7 @@ void bad_vsprintf(int argc, char **argv) {
     //ruleid: insecure-use-printf-fn
     vsprintf(buffer, argv[1], args);
 
-    //ok: insecure-use-print-fn
+    //ok: insecure-use-printf-fn
     vsnprintf(buffer, format, args);
 }
 
