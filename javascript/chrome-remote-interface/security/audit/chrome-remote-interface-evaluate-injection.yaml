@@ -1,0 +1,22 @@
+rules:
+- id: chrome-remote-interface-evaluate-injection
+  message: |
+    If unverified user data can reach the `evaluate` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: |
+      $RUNTIME.evaluate({expression: $INPUT},...)
+  - pattern-not: |-
+      $RUNTIME.evaluate({expression: "..."},...)
