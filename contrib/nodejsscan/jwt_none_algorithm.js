@@ -11,4 +11,3 @@ function verifyJwt() {
         console.log(payload);
     });
 }
-

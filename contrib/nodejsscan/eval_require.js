@@ -35,4 +35,3 @@ app.get('/test3', testController3)
         const func = require(req.body)
         return res.send(func())
     })(req, res)
-

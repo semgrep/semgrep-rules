@@ -14,5 +14,3 @@ def ok_nested_attributes_bypass
     # ok
     accepts_nested_attributes_for :avatar, allow_destroy: true
 end
-
-

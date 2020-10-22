@@ -148,4 +148,3 @@ app.get('/xss', function (req, res) {
     res.write('Response</br>' + html);
 });
 app.listen(8000);
-

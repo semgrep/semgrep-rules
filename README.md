@@ -85,5 +85,3 @@ export PYTHONPATH=.
 pytest --timeout=60 --rule-directory=[path_to_rule_directory] --git-repo=[git_URL] tests/performance/test_public_repos.py
 ```
 If you omit `--git-repo` from the pytest command, it will run the provided benchmark repo.
-
-

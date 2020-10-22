@@ -6,8 +6,8 @@ rules:
         ...
   - pattern: $F = django.db.models.FloatField(...)
   - metavariable-regex:
-      metavariable: '$F'
-      regex: '.*(price|amount|subtotal|donation|fee|salary|precio).*'
+      metavariable: $F
+      regex: .*(price|amount|subtotal|donation|fee|salary|precio).*
   message: Found a FloatField used for variable $F. Use DecimalField for currency fields to avoid float-rounding errors.
   languages: [python]
   severity: ERROR

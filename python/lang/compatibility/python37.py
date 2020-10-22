@@ -64,4 +64,3 @@ if hasattr(os, 'pwritev'):
 
 # ruleid:python37-compatibility-os2-ok2
 os.pwritev('b')
-

@@ -122,4 +122,3 @@ func ok4() {
     mTLSConfig.PreferServerCipherSuites = true
     mTLSConfig.InsecureSkipVerify = false
 }
-

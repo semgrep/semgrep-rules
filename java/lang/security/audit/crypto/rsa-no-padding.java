@@ -9,4 +9,3 @@ class RSAPadding {
     Cipher.getInstance("RSA/ECB/OAEPWithMD5AndMGF1Padding");
   }
 }
-

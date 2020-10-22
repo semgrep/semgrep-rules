@@ -155,4 +155,3 @@ func badDirectQueryFmt(r *http.Request) {
 	// ruleid: string-formatted-query
     row, _ := db.QueryRowContext(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
 }
-

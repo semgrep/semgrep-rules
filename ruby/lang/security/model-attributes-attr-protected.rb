@@ -13,4 +13,3 @@ class ok_use_attr_protected
 
   public :sanitize_for_mass_assignment
 end
-

@@ -15,4 +15,3 @@ $scope.userInput = 'foo';
    };
 
 });
-

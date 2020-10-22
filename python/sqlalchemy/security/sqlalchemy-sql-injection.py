@@ -50,5 +50,3 @@ def ok5(var):
 # ok: sqlalchemy-sql-injection
 def ok6(var):
     query = query.filter("oops{}".bindparams(var)).limit(limit)
-
-
