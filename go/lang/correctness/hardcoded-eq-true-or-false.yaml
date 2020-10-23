@@ -1,0 +1,9 @@
+rules:
+- id: hardcoded-eq-true-or-false
+  patterns:
+  - pattern-either:
+    - pattern: if (true) { ... }
+    - pattern: if (false) { ... }
+  message: useless if statement, always the same behavior
+  languages: [go]
+  severity: ERROR
