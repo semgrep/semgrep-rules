@@ -1,0 +1,13 @@
+rules:
+- id: use-of-rc4
+  message: |
+    Detected RC4 cipher algorithm which is insecure. The algorithm has many
+    known vulnerabilities. Use AES instead.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://github.com/securego/gosec#available-rules
+  pattern: |-
+    rc4.NewCipher(...)

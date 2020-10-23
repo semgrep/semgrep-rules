@@ -1,0 +1,16 @@
+rules:
+- id: use-of-DES
+  message: |
+    Detected DES cipher algorithm which is insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://github.com/securego/gosec#available-rules
+  pattern-either:
+  - pattern: |
+      des.NewTripleDESCipher(...)
+  - pattern: |
+      des.NewCipher(...)
