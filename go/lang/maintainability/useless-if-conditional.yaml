@@ -12,15 +12,3 @@ rules:
     Detected an if block that checks for the same condition on both branches (`$X`)
   languages: [go]
   severity: WARNING
-- id: useless-if-body
-  patterns:
-  - pattern: |-
-      if ($X) {
-          $S
-      } else {
-          $S
-      }
-  message: |
-    Detected identical if-statement bodies. Is this intentional?
-  languages: [go]
-  severity: WARNING

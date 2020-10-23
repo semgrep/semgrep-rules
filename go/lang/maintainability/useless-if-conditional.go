@@ -17,13 +17,6 @@ func main() {
 		fmt.Println("of course other thing")
 	}
 
-	// ruleid:useless-if-body
-	if y {
-		fmt.Println("of course")
-	} else {
-		fmt.Println("of course")
-	}
-
 	fmt.Println("of course2")
 	fmt.Println(1)
 	fmt.Println(2)

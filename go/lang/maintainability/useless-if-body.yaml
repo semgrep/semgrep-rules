@@ -1,0 +1,13 @@
+rules:
+- id: useless-if-body
+  patterns:
+  - pattern: |-
+      if ($X) {
+          $S
+      } else {
+          $S
+      }
+  message: |
+    Detected identical if-statement bodies. Is this intentional?
+  languages: [go]
+  severity: WARNING
