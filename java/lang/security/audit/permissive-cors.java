@@ -105,7 +105,7 @@ public class SuperWebFlet extends HttpServlet {
     }
 
     public Mono<ServerResponse> useHandler(final ServerRequest request) {
-    // ruleid: permissive-cors
+     // ruleid: permissive-cors
      return ServerResponse.ok()
         .header("Access-Control-Allow-Origin", "null")
         .body(Mono.just("Response with header using Handler"),String.class);

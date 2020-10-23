@@ -10,10 +10,10 @@ app.get('/test', async (req, res) => {
         console.info('Requesting', requestData.url);
     });
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     const status = await page.property('content', req.get('name'));
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     await page.setContent(req.query.q);
 
     res.send('Hello World!')
@@ -26,13 +26,13 @@ app.post('/test2', async (req, res) => {
         console.info('Requesting', requestData.url);
     });
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     const status = await page.property('content', req.query.q);
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     await page.setContent(req.body);
 
-// ok: express-phantom-injection
+    // ok: express-phantom-injection
     var html = '<html>123</html>'
     const status = await page.property('content', html);
 
@@ -51,13 +51,13 @@ app.post('/test3', async (req, res) => {
         console.info('Requesting', requestData.url);
     });
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     const status = await page.openUrl(req.params.url, {}, {});
 
-// ruleid: express-phantom-injection
+    // ruleid: express-phantom-injection
     await page.evaluateJavaScript(req.body.script);
 
-// ok: express-phantom-injection
+    // ok: express-phantom-injection
     var url = 'https://stackoverflow.com/'
     const status = await page.openUrl(url, {}, {});
 

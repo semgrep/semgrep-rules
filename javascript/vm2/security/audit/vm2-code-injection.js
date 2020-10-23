@@ -16,7 +16,7 @@ async function test1(code, input) {
     }
   };
 
-// ruleid: vm2-code-injection
+  // ruleid: vm2-code-injection
   return new VM({
     timeout: 40 * 1000,
     sandbox
@@ -31,7 +31,7 @@ function test2(input) {
     }
   };
 
-// ruleid: vm2-code-injection
+  // ruleid: vm2-code-injection
   const nodeVM = new NodeVM({timeout: 40 * 1000, sandbox});
   return nodeVM.run('console.log(' + input + ')')
 }
@@ -45,7 +45,7 @@ function test3(input) {
   };
 
   const nodeVM = new NodeVM({timeout: 40 * 1000, sandbox});
-// ruleid: vm2-code-injection
+  // ruleid: vm2-code-injection
   const script = new VMScript(`console.log(${input})`)
   return nodeVM.run(script)
 }

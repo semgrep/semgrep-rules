@@ -8,7 +8,7 @@ async function test2(userInput) {
 // ok
   await page.evaluate(x => console.log(x), 5);
 
-// ruleid:puppeteer-evaluate-code-injection
+  // ruleid:puppeteer-evaluate-code-injection
   await page.evaluate(`fetch(${userInput})`);
 
   await page.screenshot({path: 'example.png'});

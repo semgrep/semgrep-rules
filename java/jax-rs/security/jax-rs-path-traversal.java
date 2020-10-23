@@ -15,8 +15,8 @@ import org.apache.commons.io.FilenameUtils;
 @Path("/")
 public class Cls
 {
-	// ruleid:jax-rs-path-traversal
-	@GET
+    // ruleid:jax-rs-path-traversal
+    @GET
     @Path("/images/{image}")
     @Produces("images/*")
     public Response getImage(@javax.ws.rs.PathParam("image") String image) {

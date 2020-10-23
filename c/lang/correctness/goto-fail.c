@@ -3,26 +3,26 @@
 int
 ok() {
     // ok:double_goto
-	if (0) {
-		goto ONE;
-		goto ONE;
+    if (0) {
+        goto ONE;
+        goto ONE;
     }
-	printf("did not go to one\n");
-	return 0;
+    printf("did not go to one\n");
+    return 0;
 ONE:
-	printf("went to one\n");
-	return 1;
+    printf("went to one\n");
+    return 1;
 }
 
 int
 main(int argc, char *argv[]) {
     // ruleid:double_goto
-	if (0)
-		goto ONE;
-		goto ONE;
-	printf("did not go to one\n");
-	return 0;
+    if (0)
+        goto ONE;
+        goto ONE;
+    printf("did not go to one\n");
+    return 0;
 ONE:
-	printf("went to one\n");
-	return 1;
+    printf("went to one\n");
+    return 1;
 }
