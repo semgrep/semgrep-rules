@@ -19,27 +19,3 @@ rules:
     \ could cause logic bugs if they are treated as if they are the same object."
   languages: [go]
   severity: WARNING
-- id: handler-attribute-read-from-multiple-sources-dict
-  metadata:
-    cwe: 'CWE-289: Authentication Bypass by Alternate Name'
-    owasp: 'A2: Broken Authentication'
-    owaspapi: 'API1: Broken Object Level Authorization'
-  patterns:
-  - pattern-inside: |
-      func $HANDLER(..., $R *http.Request, ...) {
-        ...
-      }
-  - pattern-either:
-    - pattern: |
-        $A = $X[$KEY]
-        ...
-        $B = $Y.$ATT
-    - pattern: $A = $X[$KEY] || $Y.$ATT
-    - pattern: $A = $X.$ATT || $Y[$KEY]
-    - pattern: $A = $X($KEY) || $Y.$ATT
-    - pattern: $A = $X.$ATT || $Y($KEY)
-  - pattern-where-python: vars['$KEY'].strip('"') == vars['$ATT']
-  message: "Attribute $ATT is read from two different sources: '$X[$KEY]' and '$Y.$ATT'. Make sure this is intended, as this\
-    \ could cause logic bugs if they are treated as if they are the same object."
-  languages: [go]
-  severity: WARNING
