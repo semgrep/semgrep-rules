@@ -1,6 +1,6 @@
 rules:
 - id: ssl-mode-no-verify
-  pattern: $X = OpenSSL::SSL::VERIFY_NONE
+  pattern: OpenSSL::SSL::VERIFY_NONE
   message: |
     Detected SSL that will accept an unverified connection.
     This makes the connections susceptible to man-in-the-middle attacks.
@@ -8,9 +8,6 @@ rules:
   fix-regex:
     regex: VERIFY_NONE
     replacement: VERIFY_PEER
-
-
-
   severity: WARNING
   languages:
   - ruby
