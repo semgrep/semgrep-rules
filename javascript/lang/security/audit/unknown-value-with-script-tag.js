@@ -94,33 +94,33 @@ function videoPath () {
 
 // cf. https://github.com/ianmin2/lightframer//blob/182348e6e9f2066991df80d02b1233ff7db0d4a1/assets/assets/js/jquery.js#L9232
 jQuery.ajaxTransport( "script", function( s ) {
-	// This transport only deals with cross domain requests
-	if ( s.crossDomain ) {
-		var script, callback;
-		return {
-			send: function( _, complete ) {
+    // This transport only deals with cross domain requests
+    if ( s.crossDomain ) {
+        var script, callback;
+        return {
+            send: function( _, complete ) {
                 // ok:unknown-value-with-script-tag
-				script = jQuery("<script>").prop({
-					async: true,
-					charset: s.scriptCharset,
-					src: s.url
-				}).on(
-					"load error",
-					callback = function( evt ) {
-						script.remove();
-						callback = null;
-						if ( evt ) {
-							complete( evt.type === "error" ? 404 : 200, evt.type );
-						}
-					}
-				);
-				document.head.appendChild( script[ 0 ] );
-			},
-			abort: function() {
-				if ( callback ) {
-					callback();
-				}
-			}
-		};
-	}
+                script = jQuery("<script>").prop({
+                    async: true,
+                    charset: s.scriptCharset,
+                    src: s.url
+                }).on(
+                    "load error",
+                    callback = function( evt ) {
+                        script.remove();
+                        callback = null;
+                        if ( evt ) {
+                            complete( evt.type === "error" ? 404 : 200, evt.type );
+                        }
+                    }
+                );
+                document.head.appendChild( script[ 0 ] );
+            },
+            abort: function() {
+                if ( callback ) {
+                    callback();
+                }
+            }
+        };
+    }
 });

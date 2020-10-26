@@ -6,13 +6,9 @@ rules:
     - pattern: Crypto.PublicKey.DSA.generate($SIZE, ...)
     - pattern: Cryptodome.PublicKey.DSA.generate(..., bits=$SIZE, ...)
     - pattern: Cryptodome.PublicKey.DSA.generate($SIZE, ...)
-  - pattern-where-python: |
-      alert = False
-      try:
-        alert = int(vars['$SIZE']) < 2048
-      except:
-        alert = False
-      alert
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 2048
   message: |
     Detected an insufficient key size for DSA. NIST recommends
     a key size of 2048 or higher.

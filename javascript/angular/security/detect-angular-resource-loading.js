@@ -13,7 +13,7 @@ var app = angular.module('MyApp', []).config(function ($sceDelegateProvider) {
 
  $scope.userInput = 'foo';
      $scope.sayHello = function() {
-	  $scope.html = "Hello <b>" + $scope.userInput + "</b>!"
+      $scope.html = "Hello <b>" + $scope.userInput + "</b>!"
 
     };
 

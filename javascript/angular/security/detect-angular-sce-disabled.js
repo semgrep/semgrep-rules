@@ -6,7 +6,7 @@ var app = angular.module('MyApp', []).config(function ($sceProvider) {
 
  $scope.userInput = 'foo';
      $scope.sayHello = function() {
-	  $scope.html = "Hello <b>" + $scope.userInput + "</b>!"
+      $scope.html = "Hello <b>" + $scope.userInput + "</b>!"
 
     };
 

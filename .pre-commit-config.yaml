@@ -19,3 +19,8 @@ repos:
         # change the semgrep.live YAML settings, otherwise diffs will fail
         # to lint
     args: [--width, '120', --no-explicit-start, --mapping, '2', --sequence, '2', --offset, '0']
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.1.9
+  hooks:
+  - id: remove-tabs
+    exclude_types: [go]
