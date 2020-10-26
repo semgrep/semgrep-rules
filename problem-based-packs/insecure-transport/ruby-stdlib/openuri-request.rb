@@ -63,7 +63,7 @@ def ok3
 end
 
 def ok4
-  # ruleid: openuri-request
+  # ok: openuri-request
   uri = URI.parse("sftp://www.ruby-lang.org/en/")
   uri.open {|f|
     # ...
