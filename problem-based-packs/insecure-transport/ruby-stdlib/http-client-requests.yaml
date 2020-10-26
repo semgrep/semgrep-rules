@@ -1,0 +1,27 @@
+rules:
+- id: http-client-requests
+  patterns:
+  - pattern-either:
+    - pattern: |
+        HTTParty.$PARTYVERB("=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern: |
+        $STRING = "=~/[hH][tT][tT][pP]://.*/"
+        ...
+        HTTParty.$PARTYVERB($STRING, ...)
+    - pattern: |
+        RestClient.$RESTVERB "=~/[hH][tT][tT][pP]://.*/", ...
+    - pattern: |
+        RestClient::Request.execute(..., url: "=~/[hH][tT][tT][pP]://.*/", ...)
+  message: |
+    Checks for requests to http (unencrypted) sites using some of ruby's most popular REST/HTTP       libraries,
+    including httparty and restclient.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://github.com/rest-client/rest-client
+    - https://github.com/jnunemaker/httparty/tree/master/docs
+  severity: WARNING
+  languages:
+  - ruby
