@@ -19,4 +19,3 @@ jobs:
     - name: record registry/all stats
       run: |
         NUM=$(curl --fail -L https://semgrep.dev/c/r/all | grep -e'- id:' - | wc -l | bc) && curl --fail -L -X POST https://dashboard.semgrep.dev/api/metric/registry.rules.num -d $NUM
-
