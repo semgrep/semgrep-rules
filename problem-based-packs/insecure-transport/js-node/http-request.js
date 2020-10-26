@@ -52,7 +52,7 @@ function more_bad_http() {
 };
 
 function ok_http() {
-    // ok
+    // ok: http-request
     const options = {
         port: 80,
         hostname: 'www.google.com',
@@ -63,7 +63,7 @@ function ok_http() {
     const req = http.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 
-    // ok
+    // ok: http-request
     const options = {
         port: 80,
         hostname: 'www.google.com',
@@ -74,6 +74,3 @@ function ok_http() {
     const req = https.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 }
-
-
-

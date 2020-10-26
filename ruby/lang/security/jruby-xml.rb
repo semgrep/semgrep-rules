@@ -1,5 +1,5 @@
 include ActiveSupport
- 
+
  def bad_xml
      # ruleid: jruby-xml
      XmlMini.backend = 'JDOM'
@@ -9,6 +9,6 @@ include ActiveSupport
  end
 
  def ok_xml
-     # ok
+     # ok: jruby-xml
      XmlMini.backend = 'REXML'
  end

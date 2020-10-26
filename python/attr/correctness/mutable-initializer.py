@@ -10,19 +10,19 @@ class ExampleClass(object):
     somelist = list()
     # ruleid:attr-mutable-initializer
     someset = set()
-    # ok
+    # ok:attr-mutable-initializer
     ex_good1 = attr.ib(factory=dict)
-    # ok
+    # ok:attr-mutable-initializer
     ex_good2 = attr.ib(factory=list)
-    # ok
+    # ok:attr-mutable-initializer
     ex_good3 = attr.ib(factory=set)
     # ruleid:attr-mutable-initializer
     myset = {1, 2, 3}
-    
+
     def foo(self):
-        # ok
+        # ok:attr-mutable-initializer
         x = {}
-        
+
     def bar(self) -> int:
-        #ok
+        #ok:attr-mutable-initializer
         thisset = set()

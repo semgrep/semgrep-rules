@@ -1,13 +1,13 @@
 //jose
 function example30 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign({password: 123}, 'secret', {some: 'params'})
 }
 
 function example31 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = {one: 1, two: 2, password: 123}
@@ -15,7 +15,7 @@ function example31 () {
 }
 
 function example32 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     let payload;
@@ -24,7 +24,7 @@ function example32 () {
 }
 
 function example33 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = {}
@@ -33,7 +33,7 @@ function example33 () {
 }
 
 function example34 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2})
@@ -41,7 +41,7 @@ function example34 () {
 }
 
 function example35 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     let payload;
@@ -50,21 +50,21 @@ function example35 () {
 }
 
 function example36 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign(Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
 }
 
 function example37 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign({user: {password: 123}}, 'secret', {some: 'params'})
 }
 
 function example38 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = {one: 1, two: 2, user: {password: 123}}
@@ -72,7 +72,7 @@ function example38 () {
 }
 
 function example39 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     let payload;
@@ -81,7 +81,7 @@ function example39 () {
 }
 
 function example40 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = {user:{}}
@@ -90,7 +90,7 @@ function example40 () {
 }
 
 function example41 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const payload = Object.assign({user: {password: 123}}, {bar: 123}, {one: 1, two: 2})
@@ -98,7 +98,7 @@ function example41 () {
 }
 
 function example42 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     let payload;
@@ -107,21 +107,21 @@ function example42 () {
 }
 
 function example43 () {
-// ruleid: jwt-exposed-credentials
+    // ruleid: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign(Object.assign({user: {password: 123}}, {bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
 }
 
 function exampleOk1() {
-// ok
+    // ok: jwt-exposed-credentials
     const jose = require('jose')
     const { JWK, JWT } = jose
     const token1 = JWT.sign(Object.assign({bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
 }
 
 function exampleOk2 () {
-// ok
+    // ok: jwt-exposed-credentials
     const jsonwt = require('jsonwebtoken')
     let payload;
     payload = {one: 1, two: 2, foo: 'bar'}

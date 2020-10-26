@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 User.findOne({name: req.body.name}, function(err, user){
-// ruleid: jwt-exposed-data
+    // ruleid: jwt-exposed-data
     var token = jwt.sign(user, key, {expiresIn: 60*60*10});
     res.json({
         success: true,
@@ -11,14 +11,14 @@ User.findOne({name: req.body.name}, function(err, user){
 });
 
 User.findOne({name: req.body.name}, function(err, user){
-// ok
+    // ok: jwt-exposed-data
     const {name, email} = user
     var token = jwt.sign({name, email}, key, {expiresIn: 60*60*10});
     return token;
 });
 
 User.findOne({name: req.body.name}, function(err, user){
-// ok
+    // ok: jwt-exposed-data
     const {name, email} = user
     var token = jwt.sign({name, email}, key, {expiresIn: 60*60*10});
     return token;

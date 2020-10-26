@@ -3,8 +3,8 @@ rules:
   message: |
     DocumentBuilderFactory being instantiated without calling the setFeature functions that are generally used for disabling entity processing
   metadata:
-    cwe: "CWE-611"
-    owasp: "A4:2017-XML External Entities (XXE)"
+    cwe: CWE-611
+    owasp: A4:2017-XML External Entities (XXE)
     source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
   severity: ERROR
   patterns:
@@ -16,20 +16,9 @@ rules:
         DocumentBuilder $DB = $DBF.newDocumentBuilder();
         ...
         $DB.parse(...);
-    - pattern: DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance().newDocumentBuilder();      
+    - pattern: DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance().newDocumentBuilder();
   - pattern-not-inside: |
-        $RETURNTYPE $METHOD(...) {
-          ...
-          $DBF.setXIncludeAware(true);
-          $DBF.setNamespaceAware(true);
-          ...
-          $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-          $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
-          $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-          ...
-        }
-  - pattern-not-inside: |
-        DocumentBuilderFactory $DBF =  ... ;
+      $RETURNTYPE $METHOD(...) {
         ...
         $DBF.setXIncludeAware(true);
         $DBF.setNamespaceAware(true);
@@ -37,5 +26,16 @@ rules:
         $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
         $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
         $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        ...
+      }
+  - pattern-not-inside: |
+      DocumentBuilderFactory $DBF =  ... ;
+      ...
+      $DBF.setXIncludeAware(true);
+      $DBF.setNamespaceAware(true);
+      ...
+      $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
   languages:
   - java

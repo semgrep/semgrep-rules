@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer')
 app.get('/', async (req, res) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-// ruleid: express-puppeteer-injection
+    // ruleid: express-puppeteer-injection
     const url = `https://${req.query.name}`
     await page.goto(url)
 
@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
 app.post('/test', async (req, res) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-// ruleid: express-puppeteer-injection
+    // ruleid: express-puppeteer-injection
     await page.setContent(`${req.body.foo}`)
 
     await page.screenshot({path: 'example.png'})
@@ -31,7 +31,7 @@ app.post('/test', async (req, res) => {
 const controller = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ruleid: express-puppeteer-injection
+    // ruleid: express-puppeteer-injection
     const body = req.body.foo;
     await page.setContent('<html>' + body + '</html>');
 
@@ -44,7 +44,7 @@ const controller = async (req, res) => {
 app.post('/test2', async (req, res) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-// ruleid: express-puppeteer-injection
+    // ruleid: express-puppeteer-injection
     await page.evaluateOnNewDocument(`${req.body.foo}`)
 
     await page.screenshot({path: 'example.png'})
@@ -56,7 +56,7 @@ app.post('/test2', async (req, res) => {
 const controller2 = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ruleid: express-puppeteer-injection
+    // ruleid: express-puppeteer-injection
     const body = req.body.foo;
     await page.evaluate('alert(' + body + ')');
 
@@ -71,7 +71,7 @@ app.post('/test2', controller)
 app.post('/ok-test', async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ok
+    // ok: express-puppeteer-injection
     await page.goto('https://example.com');
 
     await page.screenshot({path: 'example.png'});
@@ -83,7 +83,7 @@ app.post('/ok-test', async (req, res) => {
 const controller = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-// ok
+    // ok: express-puppeteer-injection
     const body = '<div>123</div>';
     await page.setContent('<html>' + body + '</html>');
 

@@ -15,7 +15,7 @@ def search_certificates(request):
 
     user = User.objects.get(Q(email=user_filter) | Q(username=user_filter))
     if user.DoesNotExist:
-         # ruleid:direct-use-of-httpresponse
+        # ruleid:direct-use-of-httpresponse
         return HttpResponseBadRequest(_("user '{user}' does not exist").format(user_filter))
 
 def previewNode(request, uid):
@@ -39,7 +39,7 @@ def previewNode(request, uid):
 def inline_test(request):
     # ruleid:direct-use-of-httpresponse
     return HttpResponse("Received {}".format(request.POST.get('message')))
-    
+
 
 def vote(request, question_id):
     if request.method != "GET" and request.method != "POST":

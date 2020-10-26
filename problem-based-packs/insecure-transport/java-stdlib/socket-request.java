@@ -24,7 +24,7 @@ class Bad {
             in.close();
             pingSocket.close();
     }
-    
+
     public void badsocket3() {
         // ruleid: socket-request
         pingSocket = new Socket("http://example.com", 80);
@@ -37,7 +37,7 @@ class Bad {
             in.close();
             pingSocket.close();
     }
-    
+
     public void badsocket4() {
         // ruleid: socket-request
         String servername = "telnet://example.com";
@@ -51,7 +51,7 @@ class Bad {
             in.close();
             pingSocket.close();
     }
-    
+
     public void badsocket5() {
         // ruleid: socket-request
         String servername = "ftp://example.com";
@@ -107,7 +107,7 @@ class Ok {
             in.close();
             pingSocket.close();
     }
-    
+
     public void oksocket3() {
         // ok: socket-request
         pingSocket = new Socket("https://example.com", 443);
@@ -120,7 +120,7 @@ class Ok {
             in.close();
             pingSocket.close();
     }
-    
+
     public void oksocket4() {
         // ok: socket-request
         String servername = "ssh://example.com";
@@ -134,7 +134,7 @@ class Ok {
             in.close();
             pingSocket.close();
     }
-    
+
     public void oksocket5() {
         // ok: socket-request
         String servername = "sftp://example.com";

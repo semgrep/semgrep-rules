@@ -3,10 +3,9 @@ class RSAPadding {
     // ruleid: rsa-no-padding
     Cipher.getInstance("RSA/NONE/NoPadding");
   }
-  
+
   public void rsaNoPadding() {
-    // ok
+    // ok: rsa-no-padding
     Cipher.getInstance("RSA/ECB/OAEPWithMD5AndMGF1Padding");
   }
 }
-

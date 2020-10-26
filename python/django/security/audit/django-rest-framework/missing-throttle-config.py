@@ -1,4 +1,4 @@
-# ok
+# ok: missing-throttle-config
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [

@@ -1,4 +1,4 @@
-from urllib.request import urlopen 
+from urllib.request import urlopen
 
 def test1():
     # ruleid: insecure-urlopen-ftp
@@ -21,8 +21,7 @@ def test2_ok():
 # ruleid: insecure-urlopen-ftp
 def test3(url = "ftp://example.com"):
     urlopen(url)
-    
+
 # ok: insecure-urlopen-ftp
 def test3_ok(url = "sftp://example.com"):
     urlopen(url)
-    

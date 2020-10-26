@@ -20,7 +20,7 @@ def previewNode(request, uid):
     """Preview evaluante node"""
     try:
         if uid in engines:
-            # ok
+            # ok: reflected-data-httpresponsebadrequest
             _nodeId = request.data.get('nodeId')
             engines[uid].stoppable = True
             _res = engines[uid].model.previewNode(_nodeId)

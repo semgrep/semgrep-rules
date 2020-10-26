@@ -22,9 +22,9 @@ rules:
       $OPTIONS = {secure: true};
       $C.connect($OPTIONS);
   message: |
-    Checks for lack of usage of the "secure: true" option when sending ftp requests through the nodejs ftp module. 
-    This leads to unencrypted traffic being sent to the ftp server. There are other options 
-    such as "implicit" that still does not encrypt all traffic. ftp is the most utilized npm ftp module. 
+    Checks for lack of usage of the "secure: true" option when sending ftp requests through the nodejs ftp module.
+    This leads to unencrypted traffic being sent to the ftp server. There are other options
+    such as "implicit" that still does not encrypt all traffic. ftp is the most utilized npm ftp module.
   metadata:
     vulnerability: Insecure Transport
     owasp: 'A3: Sensitive Data Exposure'
@@ -35,4 +35,3 @@ rules:
   languages:
   - javascript
   severity: WARNING
-

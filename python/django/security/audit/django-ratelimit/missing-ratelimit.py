@@ -9,12 +9,12 @@ def missing_view(request):
 def other_decorator(request):
     pass
 
-# ok
+# ok:missing-ratelimit
 @ratelimit(key=’user’, rate=’10/s’)
 def my_view(request):
     pass
 
-# ok
+# ok:missing-ratelimit
 @ratelimit(key='ip', rate='100/h')
 def secondview(request):
     pass

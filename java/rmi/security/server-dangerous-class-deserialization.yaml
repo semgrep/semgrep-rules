@@ -10,7 +10,7 @@ rules:
     - https://mogwailabs.de/blog/2019/03/attacking-java-rmi-services-after-jep-290/
   message: |
     Using a non-primitive class with Java RMI may be an insecure deserialization vulnerability. Depending
-    on the underlying implementation. This object could be manipulated by a malicious actor allowing them to 
+    on the underlying implementation. This object could be manipulated by a malicious actor allowing them to
     execute code on your system. Instead, use an integer ID to look up your object, or consider alternative
     serializiation schemes such as JSON.
   patterns:
@@ -19,5 +19,5 @@ rules:
         $RETURNTYPE $METHOD($CLASS $PARAM) throws RemoteException;
       }
   - metavariable-regex:
-      metavariable: '$CLASS'
-      regex: '(?!int|boolean|short|long|byte|char|float|double)'
+      metavariable: $CLASS
+      regex: (?!int|boolean|short|long|byte|char|float|double)

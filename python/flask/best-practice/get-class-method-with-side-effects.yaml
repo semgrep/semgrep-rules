@@ -1,0 +1,19 @@
+rules:
+- id: flask-class-method-get-side-effects
+  patterns:
+  - pattern-either:
+    - pattern: |
+        def get(self,...):
+            ...
+            $METHOD(...)
+    - pattern: |
+        def get(self,...):
+            ...
+            $VAR = $METHOD(...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: (?i)(create|update|delete).*
+  message: |
+    Flask class method GET with side effects
+  severity: WARNING
+  languages: [python]

@@ -42,4 +42,4 @@ class MaybeBadXMLInputFactory {
         // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     }
-}  
+}

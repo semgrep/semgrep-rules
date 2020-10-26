@@ -6,10 +6,10 @@
  * Negative matches
  */
 
-// ok
+// ok:eval-detected
 eval('var x = "static strings are okay";');
 
-// ok
+// ok:eval-detected
 const constVar = "function staticStrings() { return 'static strings are okay';}";
 eval(constVar);
 

@@ -1,7 +1,7 @@
 const config = require('./config')
 
 function example6() {
-// ruleid: hardcoded-jwt-secret
+  // ruleid: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -10,7 +10,7 @@ function example6() {
 }
 
 function example7() {
-// ruleid: hardcoded-jwt-secret
+  // ruleid: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -18,7 +18,7 @@ function example7() {
 }
 
 function example8() {
-// ruleid: hardcoded-jwt-secret
+  // ruleid: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -27,7 +27,7 @@ function example8() {
 }
 
 function example9() {
-// ruleid: hardcoded-jwt-secret
+  // ruleid: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -35,7 +35,7 @@ function example9() {
 }
 
 function example10() {
-// ok
+  // ok: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}
@@ -44,7 +44,7 @@ function example10() {
 }
 
 function example11() {
-// ok
+  // ok: hardcoded-jwt-secret
   const jose = require('jose')
   const { JWK, JWT } = jose
   const payload = {foo: 'bar'}

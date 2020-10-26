@@ -6,7 +6,7 @@ import (
 )
 
 func mainInt16Ex1() {
-	// ruleid: interter-overflow-int16
+	// ruleid: integer-overflow-int16
 	bigValue, err := strconv.Atoi("2147483648")
 	if err != nil {
 		panic(err)
@@ -16,7 +16,7 @@ func mainInt16Ex1() {
 }
 
 func mainInt16Ex2() {
-	// ok
+	// ok: integer-overflow-int16
 	bigValue, err := strconv.Atoi("10")
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func mainInt16Ex2() {
 }
 
 func mainInt32Ex1() {
-	// ruleid: interter-overflow-int32
+	// ruleid: integer-overflow-int32
 	bigValue, err := strconv.Atoi("2147483648")
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func mainInt32Ex1() {
 }
 
 func mainInt32Ex2() {
-	// ok
+	// ok: integer-overflow-int32
 	bigValue, err := strconv.Atoi("10")
 	if err != nil {
 		panic(err)

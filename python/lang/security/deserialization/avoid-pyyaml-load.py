@@ -7,5 +7,5 @@ yaml.load("!!python/object/new:os.system [echo EXPLOIT!]")
 def check_ruamel_yaml():
     from ruamel.yaml import YAML
     yaml = YAML(typ="rt")
-    # ok
+    # ok:avoid-pyyaml-load
     yaml.load("thing.yaml")

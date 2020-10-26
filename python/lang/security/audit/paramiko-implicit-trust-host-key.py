@@ -5,5 +5,5 @@ ssh_client = client.SSHClient()
 ssh_client.set_missing_host_key_policy(client.AutoAddPolicy())
 # ruleid:paramiko-implicit-trust-host-key
 ssh_client.set_missing_host_key_policy(client.WarningPolicy())
-# ok
+# ok:paramiko-implicit-trust-host-key
 ssh_client.set_missing_host_key_policy(client.RejectPolicy())

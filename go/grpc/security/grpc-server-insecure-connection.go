@@ -22,7 +22,7 @@ func unsafe() {
 
 func safe() {
     // Server
-    // ok
+    // ok:grpc-server-insecure-connection
     s := grpc.NewServer(grpc.Creds(credentials.NewClientTLSFromCert(x509.NewCertPool(), "")))
     // ... register gRPC services ...
     if err = s.Serve(lis); err != nil {
@@ -41,7 +41,7 @@ func startServer() {
 		Handler:   Handler(subProtoServer),
 	}
 	http.Handle("/subproto", subproto)
-    // ok
+    // ok:grpc-server-insecure-connection
 	server := httptest.NewServer(nil)
 	serverAddr = server.Listener.Addr().String()
 	log.Print("Test WebSocket server listening on ", serverAddr)

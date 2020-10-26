@@ -11,4 +11,3 @@ def unvalidated_forward(request):
 
 def admin(request):
     return render(request, 'vulnerable/redirects/admin.html', {})
-

@@ -7,16 +7,16 @@ def foo():
     pass
 
 def __init__(self):
-    # ok
+    # ok:pass-body-fn
     pass
 
 def __init__(self, other):
-    # ok
+    # ok:pass-body-fn
     pass
 
 class foo:
     def somemethod():
-        # ok
+        # ok:pass-body-fn
         pass
 
 

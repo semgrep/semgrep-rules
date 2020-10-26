@@ -43,16 +43,16 @@ def test4_ok():
 def test5(url = "http://example.com"):
     # ruleid: insecure-urlopener-open
     URLopener().open(url)
-    
+
 def test5_ok(url = "https://example.com"):
     # ok: insecure-urlopener-open
     URLopener().open(url)
-    
+
 def test6(url = "http://example.com"):
     od = URLopener()
     # ruleid: insecure-urlopener-open
     od.open(url)
-    
+
 def test6_ok(url = "https://example.com"):
     od = URLopener()
     # ok: insecure-urlopener-open

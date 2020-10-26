@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 public class UnencryptedSocket {
 
     static void sslSocket() throws IOException {
-        // ok
+        // ok: unencrypted-socket
         Socket soc = SSLSocketFactory.getDefault().createSocket("www.google.com", 443);
         doGetRequest(soc);
     }
@@ -43,7 +43,7 @@ public class UnencryptedSocket {
 public class UnencryptedServerSocket {
 
     static void sslServerSocket() throws IOException {
-        // ok
+        // ok: unencrypted-socket
         ServerSocket ssoc = SSLServerSocketFactory.getDefault().createServerSocket(1234);
         ssoc.close();
     }

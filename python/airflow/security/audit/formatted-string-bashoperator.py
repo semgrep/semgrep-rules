@@ -61,7 +61,7 @@ t3 = BashOperator(
     dag=dag
 )
 
-# ok
+# ok: formatted-string-bashoperator
 templated_command = """
 {% for i in range(5) %}
     echo "{{ ds }}"
@@ -80,7 +80,7 @@ t4 = BashOperator(
     dag=dag
 )
 
-# ok
+# ok: formatted-string-bashoperator
 t5 = BashOperator(
     task_id="safe",
     bash_command="echo hello world!",

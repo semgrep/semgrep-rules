@@ -1,0 +1,21 @@
+rules:
+- id: ruby-jwt-exposed-data
+  message: |
+    The object is passed strictly to jsonwebtoken.sign(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  severity: WARNING
+  metadata:
+    owasp: A3:2017-Sensitive Data Exposure
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+  languages: [ruby]
+  patterns:
+  - pattern-inside: |
+      require 'jwt'
+      ...
+  - pattern-inside: |
+      def $FUNC(...,$INPUT,...)
+        ...
+      end
+  - pattern: |
+      JWT.encode($INPUT,...)

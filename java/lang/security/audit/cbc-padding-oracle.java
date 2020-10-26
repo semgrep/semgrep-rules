@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 
 public class Cls extends HttpServlet
 {
-	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
+    private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
     // cf. https://find-sec-bugs.github.io/bugs.htm#TDES_USAGE
-	protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // ruleid:cbc-padding-oracle
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
         c.init(Cipher.ENCRYPT_MODE, k, iv);
@@ -23,9 +23,9 @@ public class Cls extends HttpServlet
     }
 
     protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // ok
+        // ok:cbc-padding-oracle
         Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
         c.init(Cipher.ENCRYPT_MODE, k, iv);
         byte[] cipherText = c.doFinal(plainText);
     }
-} 
+}

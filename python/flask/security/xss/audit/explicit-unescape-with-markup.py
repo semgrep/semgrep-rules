@@ -35,6 +35,5 @@ def markupsafe_test():
 @app.route('/good')
 def good_test():
     search_query = request.args.get('q')
-    # ok
+    # ok: explicit-unescape-with-markup
     return render_template('/markup-unescape.html', query=Markup.escape(search_query))
-

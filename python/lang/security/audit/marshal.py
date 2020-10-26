@@ -6,5 +6,5 @@ for line in fin:
     marshal.dumps(line)
 
 for line in fin:
-    # ok
+    # ok: marshal-usage
     marshal.someokfunc(line)

@@ -17,7 +17,7 @@ public class ElExpressionSample {
         System.out.println(result);
     }
 
-    // ok
+    // ok: el-injection
     public void safeEL() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
@@ -32,7 +32,7 @@ public class ElExpressionSample {
         expressionFactory.createMethodExpression(elContext, expression, String.class, new Class[]{Integer.class});
     }
 
-    //ok
+    //ok: el-injection
     public void safeELMethod(ELContext elContext,ExpressionFactory expressionFactory) {
         expressionFactory.createMethodExpression(elContext, "1+1", String.class,new Class[] {Integer.class});
     }

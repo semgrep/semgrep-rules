@@ -8,5 +8,5 @@ click.echo(click.style("foo"))
 click.echo(click.style("foo", color="blue"))
 
 
-# ok
+# ok:use-click-secho
 click.secho("foo")

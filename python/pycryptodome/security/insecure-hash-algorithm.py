@@ -11,7 +11,10 @@ from Cryptodome.Hash import MD5 as pycryptodomex_md5
 from Cryptodome.Hash import SHA as pycryptodomex_sha
 from Crypto.Hash import SHA3_256
 
-# ok
+# ok:insecure-hash-algorithm-md2
+# ok:insecure-hash-algorithm-md5
+# ok:insecure-hash-algorithm-sha1
+# ok:insecure-hash-algorithm-md4
 h_obj = SHA3_256.new()
 h_obj.update(b'Some data')
 print(h_obj.hexdigest())

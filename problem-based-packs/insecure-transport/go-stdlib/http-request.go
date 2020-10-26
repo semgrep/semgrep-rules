@@ -1,7 +1,7 @@
 func bad1() {
     // ruleid: http-request
     resp, err := http.Get("http://example.com/")
-    // ruleid: http-request    
+    // ruleid: http-request
     resp, err := http.Post("http://example.com/", val, val)
     // ruleid: http-request
     resp, err := http.Head("http://example.com/")
@@ -21,7 +21,7 @@ func bad2() {
 func ok1() {
     // ok: http-request
     resp, err := http.Get("https://example.com/")
-    // ok: http-request    
+    // ok: http-request
     resp, err := http.Post("https://example.com/", val, val)
     // ok: http-request
     resp, err := http.Head("https://example.com/")
@@ -37,4 +37,3 @@ func ok2() {
 
     resp, err := client.Get("https://example.com")
 }
-

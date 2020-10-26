@@ -1,0 +1,29 @@
+rules:
+- id: net-http-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $URI = URI('=~/[hH][tT][tT][pP]://.*/')
+        ...
+        Net::HTTP::$FUNC.new $URI
+    - pattern: |
+        $URI = URI('=~/[hH][tT][tT][pP]://.*/')
+        ...
+        Net::HTTP.$FUNC($URI, ...)
+    - pattern: |
+        Net::HTTP.$FUNC(URI('=~/[hH][tT][tT][pP]://.*/'), ...)
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: ([gG]et|post_form|[pP]ost|get_response|get_print|Head|Patch|Put|Proppatch|Lock|Unlock|Options|Propfind|Delete|Move|Copy|Trace|Mkcol)
+  languages:
+  - ruby
+  message: |
+    Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
+    that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://ruby-doc.org/stdlib-2.6.5/libdoc/net/http/rdoc/Net/
+  severity: WARNING

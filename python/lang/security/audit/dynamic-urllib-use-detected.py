@@ -27,14 +27,14 @@ def test_urlopen():
     opener = urllib.URLopener()
 
     # This is OK because it's a constant.
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener.open('file:///bin/ls')
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener.retrieve('file:///bin/ls')
     opener2 = urllib.FancyURLopener()
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener2.open('file:///bin/ls')
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener2.retrieve('file:///bin/ls')
 
     # ruleid:dynamic-urllib-use-detected
@@ -47,17 +47,17 @@ def test_urlopen():
     opener2.retrieve(url)
 
     # Python 3
-    # ok
+    # ok:dynamic-urllib-use-detected
     urllib.request.urlopen('file:///bin/ls')
     # ruleid:dynamic-urllib-use-detected
     urllib.request.urlretrieve('file:///bin/ls', '/bin/ls2')
     opener = urllib.request.URLopener()
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener.open('file:///bin/ls')
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener.retrieve('file:///bin/ls')
     opener2 = urllib.request.FancyURLopener()
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener2.open('file:///bin/ls')
-    # ok
+    # ok:dynamic-urllib-use-detected
     opener2.retrieve('file:///bin/ls')

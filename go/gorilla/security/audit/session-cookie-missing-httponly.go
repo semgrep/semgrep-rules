@@ -42,7 +42,7 @@ func (self *Self) SetSession(w http.ResponseWriter, r *http.Request, data map[st
 		}
 	}
 	err = session.Save(r, w) //safe session and send it to client as cookie
-	
+
 		if err != nil {
 			log.Println(err.Error())
 		}
@@ -65,11 +65,11 @@ func (self *Self) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	
+
     // ruleid: session-cookie-missing-httponly
 	session.Options = &sessions.Options{
 		MaxAge:   -1,
-		HttpOnly: false, //set to false for xss :) 
+		HttpOnly: false, //set to false for xss :)
 	}
 
 	session.Values["govwa_session"] = false

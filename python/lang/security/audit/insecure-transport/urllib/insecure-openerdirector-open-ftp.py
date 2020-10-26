@@ -43,16 +43,16 @@ def test4_ok():
 def test5(url = "ftp://example.com"):
     # ruleid: insecure-openerdirector-open-ftp
     OpenerDirector().open(url)
-    
+
 def test5_ok(url = "sftp://example.com"):
     # ok: insecure-openerdirector-open-ftp
     OpenerDirector().open(url)
-    
+
 def test6(url = "ftp://example.com"):
     od = OpenerDirector()
     # ruleid: insecure-openerdirector-open-ftp
     od.open(url)
-    
+
 def test6_ok(url = "sftp://example.com"):
     od = OpenerDirector()
     # ok: insecure-openerdirector-open-ftp

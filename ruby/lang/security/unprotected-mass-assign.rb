@@ -8,12 +8,11 @@ def mass_assign_unsafe
 end
 
 def safe_send
-    #ok
+    #ok: mass-assignment-vuln
     attr_accessible :name
     User.new(params[:user])
-    
-    #ok
+
+    #ok: mass-assignment-vuln
     attr_accessible :name
     user = User.new(params[:user])
 end
-

@@ -11,15 +11,15 @@ public class CookieController {
     @RequestMapping(value = "/cookie2", method = "GET")
     public void setSecureCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);
-        // ok
+        // ok:cookie-missing-secure-flag
         cookie.setSecure(true);
         response.addCookie(cookie);
     }
-    
+
     @RequestMapping(value = "/cookie3", method = "GET")
     public void setSecureHttponlyCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);
-        // ok
+        // ok:cookie-missing-secure-flag
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
@@ -52,13 +52,13 @@ public class CookieController {
         if (Constant.cookieDomain != null) {
           existingCookie.setDomain(Constant.cookieDomain);
         }
-        // ok
+        // ok:cookie-missing-secure-flag
         response.addCookie(existingCookie);
       } else {
         // we have an existing cookie on another path: clear it, and add a new cookie on root path
         existingCookie.setValue("");
         existingCookie.setMaxAge(0);
-        // ok
+        // ok:cookie-missing-secure-flag
         response.addCookie(existingCookie);
 
         Cookie c = new Cookie(name, value);
@@ -71,7 +71,7 @@ public class CookieController {
         if (Constant.cookieDomain != null) {
           c.setDomain(Constant.cookieDomain);
         }
-        // ok
+        // ok:cookie-missing-secure-flag
         response.addCookie(c);
       }
     } else {
@@ -85,7 +85,7 @@ public class CookieController {
       if (Constant.cookieDomain != null) {
         c.setDomain(Constant.cookieDomain);
       }
-      // ok
+      // ok:cookie-missing-secure-flag
       response.addCookie(c);
     }
     return this;
@@ -97,7 +97,7 @@ public class CookieController {
       existingCookie.setPath(Constant.cookiePath);
       existingCookie.setValue("");
       existingCookie.setMaxAge(0);
-      // ok
+      // ok:cookie-missing-secure-flag
       response.addCookie(existingCookie);
     }
     return this;

@@ -12,7 +12,7 @@ rules:
     JMS Object messages depend on Java Serialization for marshalling/unmarshalling of the message payload when ObjectMessage.getObject() is called.
     Deserialization of untrusted data can lead to security flaws; a remote attacker could via a crafted JMS ObjectMessage to execute
     arbitrary code with the permissions of the application listening/consuming JMS Messages.
-    In this case, the JMS MessageListener consume an ObjectMessage type recieved inside 
+    In this case, the JMS MessageListener consume an ObjectMessage type recieved inside
     the onMessage method, which may lead to arbitrary code execution when calling the $Y.getObject method.
   patterns:
   - pattern-inside: |
@@ -25,5 +25,3 @@ rules:
   - pattern-either:
     - pattern-inside: $X = $Y.getObject(...);
     - pattern-inside: $X = ($Z) $Y.getObject(...);
-
-

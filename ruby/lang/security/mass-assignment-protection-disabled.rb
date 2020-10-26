@@ -1,5 +1,5 @@
 # ruleid:mass-assignment-protection-disabled
 User.new(params[:user], :without_protection => true)
 
-# ok
+# ok:mass-assignment-protection-disabled
 User.new(params[:user])

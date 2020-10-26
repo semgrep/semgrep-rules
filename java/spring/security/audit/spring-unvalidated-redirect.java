@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SpringUnvalidatedRedirectController {
-    
+
     // ruleid: spring-unvalidated-redirect
     @RequestMapping("/redirect1")
     public String redirect1(@RequestParam("url") String url) {
@@ -44,7 +44,7 @@ public class SpringUnvalidatedRedirectController {
         return new ModelAndView(view);
     }
 
-    // ok
+    // ok: spring-unvalidated-redirect
     @RequestMapping("/redirectfp")
     public String redirectfp() {
         return "redirect:/";

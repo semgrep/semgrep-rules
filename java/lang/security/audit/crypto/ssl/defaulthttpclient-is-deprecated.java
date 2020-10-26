@@ -10,22 +10,22 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class WebCrawler {
 
-	public void crawl(String[] args) throws Exception {
+    public void crawl(String[] args) throws Exception {
         // ruleid: defaulthttpclient-is-deprecated
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet("http://google.com");
-		HttpResponse response = client.execute(request);
-	}
+        HttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet("http://google.com");
+        HttpResponse response = client.execute(request);
+    }
 
 }
 
 public class SecureWebCrawler {
 
-	public void crawl(String[] args) throws Exception {
-        // ok
-		HttpClient client = new SystemDefaultHttpClient();
-		HttpGet request = new HttpGet("http://google.com");
-		HttpResponse response = client.execute(request);
-	}
+    public void crawl(String[] args) throws Exception {
+        // ok: defaulthttpclient-is-deprecated
+        HttpClient client = new SystemDefaultHttpClient();
+        HttpGet request = new HttpGet("http://google.com");
+        HttpResponse response = client.execute(request);
+    }
 
 }

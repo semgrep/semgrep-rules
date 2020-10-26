@@ -24,7 +24,7 @@ func bind_default() {
 }
 
 func main() {
-	// ok
+	// ok: avoid-bind-to-all-interfaces
 	l, err := net.Listen("tcp", "192.168.1.101:2000")
 	if err != nil {
 		log.Fatal(err)

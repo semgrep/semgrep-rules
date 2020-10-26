@@ -3,4 +3,3 @@ let test a b =
   if foo
   then a+b
   else a+b
-

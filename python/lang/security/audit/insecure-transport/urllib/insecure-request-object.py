@@ -21,8 +21,7 @@ def test2_ok():
 # ruleid: insecure-request-object
 def test3(url = "http://example.com"):
     Request(url)
-    
+
 # ok: insecure-request-object
 def test3_ok(url = "https://example.com"):
     Request(url)
-    

@@ -7,14 +7,14 @@ class TestClass {
     public TestClass() {
         System.out.println("Hello");
     }
-    
+
     public void unsafe_jdbc_queryForObject_1(String paramName) {
         JdbcTemplate jdbc = new JdbcTemplate();
         System.out.println("Hello");
         // ruleid:jdbc-sql-formatted-string
         int count = jdbc.queryForObject("select count(*) from Users where name = '"+paramName+"'", Integer.class);
     }
-    
+
     public void unsafe_jdbc_queryForObject_2(String paramName) {
         JdbcTemplate jdbc = new JdbcTemplate();
         System.out.println("Hello");
@@ -39,7 +39,7 @@ class TestClass {
         // ruleid:jdbc-sql-formatted-string
         String query = "select count(*) from Users where name = '"+paramName+"'";
         List<Map<String, Object>> rows =  jdbc.queryForList(query);
-    }    
+    }
 
     public void unsafe_jdbc_queryForList_2(String paramName) {
         JdbcTemplate jdbc = new JdbcTemplate();
@@ -58,7 +58,7 @@ class TestClass {
     }
     public void safe(String paramName) {
         JdbcTemplate jdbc = new JdbcTemplate();
-        // ok
+        // ok:jdbc-sql-formatted-string
         int count = jdbc.queryForObject("select count(*) from Users where name = ?", Integer.class, paramName);
     }
 }

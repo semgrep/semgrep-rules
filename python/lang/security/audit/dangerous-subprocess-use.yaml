@@ -3,6 +3,8 @@ rules:
   patterns:
   - pattern-not: subprocess.$FUNC("...", ...)
   - pattern-not: subprocess.$FUNC([...], ...)
+  - pattern-not: subprocess.CalledProcessError(...)
+  - pattern-not: subprocess.SubprocessError(...)
   - pattern: subprocess.$FUNC(...)
   message: |
     Detected subprocess function '$FUNC' without a static string. Audit the use of this

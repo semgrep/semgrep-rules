@@ -13,7 +13,7 @@ func Fine(r *http.Request) template.HTML {
 }
 
 func AlsoFine(r *http.Request) template.HTML {
-	// ok
+	// ok: unsafe-template-type
 	return template.HTML("<html><body><h1>" + "Hello, world</h1></body></html>")
 }
 

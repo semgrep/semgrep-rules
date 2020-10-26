@@ -8,5 +8,5 @@ def download_file(filename):
   return send_file(filename)
 
 def download_not_flask_route(filename):
-  # ok
+  # ok:avoid_send_file_without_path_sanitization
   return send_file(filename)

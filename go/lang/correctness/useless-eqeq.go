@@ -6,7 +6,7 @@ func main() {
     var y = 1;
     // ruleid:eqeq-is-bad
     fmt.Println(y == y)
-    // ok
+    // ok:eqeq-is-bad
     assert(y == y)
 
     // ruleid:hardcoded-eq-true-or-false

@@ -1,5 +1,5 @@
 function test1() {
-// ruleid: sax-xxe
+    // ruleid: sax-xxe
     var sax = require("sax"),
     strict = false,
     parser = sax.parser(strict);
@@ -11,7 +11,7 @@ function test1() {
     parser.ondoctype = function(dt) {
         processDocType(dt)
     }
-    
+
     const xml = `<?xml version="1.0" encoding="ISO-8859-1"?>
     <!DOCTYPE foo [
     <!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
@@ -21,7 +21,7 @@ function test1() {
 }
 
 function test2() {
-// ruleid: sax-xxe
+    // ruleid: sax-xxe
     var saxStream = require("sax").createStream(strict, options)
 
     saxStream.on("opentag", function (node) {
@@ -38,7 +38,7 @@ function test2() {
 }
 
 function okTest1() {
-// ok
+    // ok: sax-xxe
     var saxStream = require("sax").createStream(strict, options)
 
     saxStream.on("ontext", function (node) {

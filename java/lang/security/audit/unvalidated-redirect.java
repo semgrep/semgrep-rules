@@ -27,7 +27,7 @@ public class UnvalidatedRedirectServlet extends HttpServlet {
             resp.addHeader("Location", url);
         }
     }
-    
+
     // ruleid: unvalidated-redirect
     private void unvalidatedRedirect3(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect(req.getParameter("urlRedirect"));
@@ -39,7 +39,7 @@ public class UnvalidatedRedirectServlet extends HttpServlet {
         resp.addHeader("Location", url);
     }
 
-    // ok
+    // ok: unvalidated-redirect
     public void falsePositiveRedirect1(HttpServletResponse resp) throws IOException {
         String url = "/Home";
         if (url != null) {
@@ -47,7 +47,7 @@ public class UnvalidatedRedirectServlet extends HttpServlet {
         }
     }
 
-    // ok
+    // ok: unvalidated-redirect
     public void falsePositiveRedirect2(HttpServletResponse resp) {
         resp.addHeader("Location", "/login.jsp");
     }

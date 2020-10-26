@@ -16,7 +16,7 @@ public class SuperWebFlet extends HttpServlet {
     public SuperWebFlet() {
         // Auto-generated constructor stub
     }
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
@@ -25,7 +25,7 @@ public class SuperWebFlet extends HttpServlet {
         res.addHeader("Access-Control-Allow-Origin", "*");
         chain.doFilter(request, response);
     }
-    
+
     // ruleid: permissive-cors
     @GetMapping({"", "/"})
     @PreAuthorize("hasPermission('User', 'read')")
@@ -66,7 +66,7 @@ public class SuperWebFlet extends HttpServlet {
             response.getWriter().write(responseData.getBody());
         }
     }
-    
+
     // ruleid: permissive-cors
     public static void write(HttpServletResponse response, Object o) throws Exception {
         response.setContentType("text/html;charset=utf-8");
@@ -76,25 +76,25 @@ public class SuperWebFlet extends HttpServlet {
         out.flush();
         out.close();
     }
- 
+
     @GetMapping("/response-entity-builder-with-http-headers")
     public ResponseEntity<String> usingResponseEntityBuilderAndHttpHeaders() {
         // ruleid: permissive-cors
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Allow-Origin", "*");
-    
+
         return ResponseEntity.ok()
         .headers(responseHeaders)
         .body("Response with header using ResponseEntity");
     }
-    
+
     // ruleid: permissive-cors
     @GetMapping("/server-http-response")
     public Mono<String> usingServerHttpResponse(ServerHttpResponse response) {
         response.getHeaders().add("Access-Control-Allow-Origin", "*");
         return Mono.just("Response with header using ServerHttpResponse");
     }
-    
+
     @GetMapping("/response-entity")
     public Mono<ResponseEntity<String>> usingResponseEntityBuilder() {
         String responseBody = "Response with header using ResponseEntity (builder)";
@@ -105,7 +105,7 @@ public class SuperWebFlet extends HttpServlet {
     }
 
     public Mono<ServerResponse> useHandler(final ServerRequest request) {
-    // ruleid: permissive-cors
+     // ruleid: permissive-cors
      return ServerResponse.ok()
         .header("Access-Control-Allow-Origin", "null")
         .body(Mono.just("Response with header using Handler"),String.class);
@@ -120,25 +120,25 @@ public class SuperWebFlet extends HttpServlet {
         return chain.filter(exchange);
     }
 
-    // ok
+    // ok: permissive-cors
     public void setErrorsResponse1(Errors errors, HttpStatus responseHttpStatus, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.addHeader("Foo", "Bar");
         response.getWriter().write(responseData.getBody());
     }
 
-    // ok
+    // ok: permissive-cors
     @GetMapping("/ok-ok")
     public Mono<String> usingServerHttpResponse1(ServerHttpResponse response) {
         response.getHeaders().add("Foo", "Bar");
         return Mono.just("Response with header using ServerHttpResponse");
     }
-    
+
     @GetMapping("/ok-ok-ok")
     public ResponseEntity<String> usingResponseEntityBuilderAndHttpHeaders1() {
-        // ok
+        // ok: permissive-cors
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Foo", "Bar");
-    
+
         return ResponseEntity.ok()
         .headers(responseHeaders)
         .body("Response with header using ResponseEntity");

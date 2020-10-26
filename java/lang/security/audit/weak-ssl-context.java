@@ -5,7 +5,7 @@ class Cls {
     public Cls() {
         System.out.println("Hello");
     }
-    
+
     public void test1() {
         // ruleid: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance("SSL");
@@ -22,21 +22,21 @@ class Cls {
     }
 
     public void test4() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance("TLS1.2");
     }
-    
+
     public void test5() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance("TLS1.3");
     }
 
     public String getSslContext() {
         return "Anything";
     }
-    
+
     public void test5() {
-        // ok
+        // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance(getSslContext());
     }
 }

@@ -34,6 +34,5 @@ def subexpression():
 
 @app.route("/ok")
 def ok():
-    # ok
+    # ok: path-traversal-open
     open("static/path.txt", 'r')
-

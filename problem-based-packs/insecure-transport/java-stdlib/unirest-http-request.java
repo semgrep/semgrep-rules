@@ -8,7 +8,7 @@ class Bad {
             .field("firstname", "Gary")
             .asJson();
     }
-    
+
     public void bad2() {
         // ruleid: unirest-http-request
         Unirest.get("http://httpbin.org")
@@ -28,7 +28,7 @@ class Ok {
             .field("firstname", "Gary")
             .asJson();
     }
-    
+
     public void ok2() {
         // ok: unirest-http-request
         Unirest.get("https://httpbin.org")

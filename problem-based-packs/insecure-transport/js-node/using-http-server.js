@@ -19,13 +19,13 @@ options.agent = keepAliveAgent;
 // ruleid: using-http-server
 http.request(options, onResponseCallback);
 
-// ok
+// ok: using-http-server
 var httpsServer = https.createServer(app);
 httpsServer.listen(8080);
 
 const https = require('https');
-// ok
+// ok: using-http-server
 const keepAliveAgent = new https.Agent({ keepAlive: true });
 options.agent = keepAliveAgent;
-// ok
+// ok: using-http-server
 https.request(options, onResponseCallback);

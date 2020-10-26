@@ -14,7 +14,7 @@ def test1():
 
 
 def test2():
-    # ok
+    # ok: response-contains-unsanitized-input
     x = request.args.get("x")
     y = some_safe_operation_on(x)
     return make_response("found {}".format(y))

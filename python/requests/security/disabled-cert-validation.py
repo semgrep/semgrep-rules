@@ -4,9 +4,9 @@ import requests
 
 some_url = "https://example.com"
 
-# ok
+# ok:disabled-cert-validation
 r = req.get(some_url, stream=True)
-# ok
+# ok:disabled-cert-validation
 r = requests.post(some_url, stream=True)
 
 # ruleid:disabled-cert-validation

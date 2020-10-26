@@ -70,5 +70,3 @@ func ok5() {
     resp, err := githubBase.New().Get(path).QueryStruct(params).ReceiveSuccess(issues)
     fmt.Println(issues, resp, err)
 }
-
-

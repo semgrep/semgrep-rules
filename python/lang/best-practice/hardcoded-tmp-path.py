@@ -11,13 +11,13 @@ def test2():
     f.close()
 
 def test3():
-    # ok
+    # ok:hardcoded-tmp-path
     f = open("./tmp/blah.txt", 'w')
     f.write("hello world")
     f.close()
 
 def test3a():
-    # ok
+    # ok:hardcoded-tmp-path
     f = open("/var/log/something/else/tmp/blah.txt", 'w')
     f.write("hello world")
     f.close()
@@ -28,6 +28,6 @@ def test4():
         data = fin.read()
 
 def test5():
-    # ok
+    # ok:hardcoded-tmp-path
     with open("./tmp/blah.txt", 'w') as fout:
         fout.write("hello world")

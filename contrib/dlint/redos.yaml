@@ -1,8 +1,22 @@
 rules:
 - id: dlint-catastrophic-redos
+  metadata:
+    references:
+    - https://r2c.dev/blog/2020/finding-python-redos-bugs-at-scale-using-dlint-and-r2c/
+    - https://r2c.dev/blog/2020/improving-redos-detection-with-dlint-and-r2c/
   patterns:
-  - pattern: |-
-      re.compile($X, ...)
+  - pattern-either:
+    - pattern: re.compile($X, ...)
+    - pattern: re.search($X, ...)
+    - pattern: re.match($X, ...)
+    - pattern: re.fullmatch($X, ...)
+    - pattern: re.split($X, ...)
+    - pattern: re.findall($X, ...)
+    - pattern: re.finditer($X, ...)
+    - pattern: re.sub($X, ...)
+    - pattern: re.subn($X, ...)
+    - pattern: django.core.validators.RegexValidator($X, ...)
+    - pattern: django.urls.re_path($X, ...)
   - pattern-where-python: |
       # COPIED FROM https://github.com/dlint-py/dlint/blob/master/dlint/redos/detect.py
 
@@ -56,7 +70,7 @@ rules:
                   self.op,
                   self.args,
                   self.backtrackable
-              )        
+              )
 
       def _build_op_tree_helper(node, subpattern, parent_backtrackable):
           prev_sibling_backtrackable = False
@@ -335,7 +349,6 @@ rules:
               print(root)
 
       catastrophic(vars['$X'])
-  message: regex `$X` is likely vulnerable to catastrophic backtracking and can lead to denial of service attacks. See https://r2c.dev/blog/2020/improving-redos-detection-with-dlint-and-r2c/
-    for more info.
+  message: Regex `$X` may be vulnerable to catastrophic backtracking, which may lead to denial of service attacks.
   languages: [python]
   severity: ERROR
