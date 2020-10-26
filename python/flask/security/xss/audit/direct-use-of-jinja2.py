@@ -11,7 +11,6 @@ template = jinja2.Template("""
 # ruleid: direct-use-of-jinja2
 rendered = template.render(body=input())
 
-# ruleid: direct-use-of-jinja2
 from jinja2 import Environment, PackageLoader, select_autoescape
 # ruleid: direct-use-of-jinja2
 env = Environment(
