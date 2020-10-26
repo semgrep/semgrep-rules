@@ -51,7 +51,7 @@ public class Bad {
 
     public void bad8() {
         // ruleid: spring-http-request
-    	RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Foo> request = new HttpEntity<>(new Foo("bar"));
         String fooResourceUrl = "http://example.com";
         Foo foo = restTemplate.postForObject(fooResourceUrl, request, Foo.class);
@@ -123,7 +123,7 @@ public class Ok {
 
     public void ok8() {
         // ok: spring-http-request
-    	RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Foo> request = new HttpEntity<>(new Foo("bar"));
         String fooResourceUrl = "https://example.com";
         Foo foo = restTemplate.postForObject(fooResourceUrl, request, Foo.class);

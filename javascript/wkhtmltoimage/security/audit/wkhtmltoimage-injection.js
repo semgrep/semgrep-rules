@@ -8,6 +8,6 @@ wkhtmltoimage.generate(html, { output: 'vuln.jpg' })
 wkhtmltoimage.generate(input(), { output: 'vuln.jpg' })
 
 function test(userInput) {
-// ruleid: wkhtmltoimage-injection
+    // ruleid: wkhtmltoimage-injection
     wkhtmltoimage.generate(userInput, { output: 'vuln.jpg' })
 }

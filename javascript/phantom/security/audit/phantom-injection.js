@@ -7,10 +7,10 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.open(input());
 
-// ok: phantom-injection
+  // ok: phantom-injection
   const status = await page.open('https://stackoverflow.com/');
 
   const content = await page.property('content');
@@ -26,13 +26,13 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.property('content', input());
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   await page.setContent(userInput);
 
-// ok: phantom-injection
+  // ok: phantom-injection
   var html = '<html>123</html>'
   const status = await page.property('content', html);
 
@@ -49,13 +49,13 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.openUrl(input(), {}, {});
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   await page.evaluateJavaScript(userInput);
 
-// ok: phantom-injection
+  // ok: phantom-injection
   var url = 'https://stackoverflow.com/'
   const status = await page.openUrl(url, {}, {});
 

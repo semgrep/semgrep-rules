@@ -1,5 +1,5 @@
 function test1() {
-// ruleid: sax-xxe
+    // ruleid: sax-xxe
     var sax = require("sax"),
     strict = false,
     parser = sax.parser(strict);
@@ -21,7 +21,7 @@ function test1() {
 }
 
 function test2() {
-// ruleid: sax-xxe
+    // ruleid: sax-xxe
     var saxStream = require("sax").createStream(strict, options)
 
     saxStream.on("opentag", function (node) {
@@ -38,7 +38,7 @@ function test2() {
 }
 
 function okTest1() {
-// ok: sax-xxe
+    // ok: sax-xxe
     var saxStream = require("sax").createStream(strict, options)
 
     saxStream.on("ontext", function (node) {

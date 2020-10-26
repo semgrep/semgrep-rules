@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 // ok
   await page.setContent('<html></html>');
 
-// ruleid:puppeteer-setcontent-injection
+  // ruleid:puppeteer-setcontent-injection
   await page.setContent(unverifiedInput());
 
   await page.screenshot({path: 'example.png'});

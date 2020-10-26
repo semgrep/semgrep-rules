@@ -10,11 +10,11 @@ const testFunc = async (userInput) => {
 // ok
   await page.goto(url);
 
-// ruleid:puppeteer-goto-injection
+  // ruleid:puppeteer-goto-injection
   await page.goto(unverifiedInput());
 
   const newUrl = userInput;
-// ruleid:puppeteer-goto-injection
+  // ruleid:puppeteer-goto-injection
   await page.goto(newUrl);
 
   await page.screenshot({path: 'example.png'});

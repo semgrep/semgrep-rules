@@ -10,11 +10,11 @@ const testFunc = async (userInput) => {
 // ok
   await page.goto(url);
 
-// ruleid:playwright-goto-injection
+  // ruleid:playwright-goto-injection
   await page.goto(unverifiedInput());
 
   const newUrl = userInput;
-// ruleid:playwright-goto-injection
+  // ruleid:playwright-goto-injection
   await page.goto(newUrl);
 
   await page.screenshot({path: 'example.png'});

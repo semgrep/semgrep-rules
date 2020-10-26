@@ -9,7 +9,7 @@ async function test4(userInput) {
 // ok
   await context.addInitScript(x => console.log(x), 5);
 
-// ruleid:playwright-addinitscript-code-injection
+  // ruleid:playwright-addinitscript-code-injection
   await context.addInitScript(`fetch(${userInput})`);
 
   await page.screenshot({path: 'example.png'});
