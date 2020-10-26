@@ -1,4 +1,5 @@
 def bad1
+  # ruleid: net-ftp-request
   ftp = Net::FTP.new('example.com')
   ftp.login
   files = ftp.chdir('pub/lang/ruby/contrib')
@@ -8,6 +9,7 @@ def bad1
 end
 
 def bad2
+  # ruleid: net-ftp-request
   Net::FTP.open('example.com') do |ftp|
     ftp.login
     files = ftp.chdir('pub/lang/ruby/contrib')

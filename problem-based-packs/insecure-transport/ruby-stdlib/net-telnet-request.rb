@@ -1,4 +1,5 @@
 def bad1
+  # ruleid: net-telnet-request
   localhost = Net::Telnet::new("Host" => "localhost",
                               "Timeout" => 10,
                               "Prompt" => /[$%#>] \z/n)
@@ -8,6 +9,7 @@ def bad1
 end
 
 def bad2
+  # ruleid: net-telnet-request
   pop = Net::Telnet::new("Host" => "your_destination_host_here",
                         "Port" => 110,
                         "Telnetmode" => false,
@@ -18,6 +20,7 @@ def bad2
 end
 
 def bad3
+  # ruleid: net-telnet-request
   s = Net::SSH::Telnet.new(
         "Dump_log" => "/dev/stdout",
         "Session" => ssh
@@ -27,6 +30,7 @@ def bad3
 end
 
 def ok1
+  # ok: net-telnet-request
   Net::SSH.start("host", "user", password: "password") do |ssh|
     result = ssh.exec!("ls -l")
     puts result
