@@ -17,12 +17,14 @@ rules:
     - pattern: $OBJ.Query("..." + $X)
     - pattern: $OBJ.QueryContext($CTX, "..." + $X)
     - pattern: $OBJ.QueryRow("..." + $X)
+    - pattern: $OBJ.QueryRow($CTX, "..." + $X)
     - pattern: $OBJ.QueryRowContext($CTX, "..." + $X)
     - pattern: $OBJ.Exec(fmt.$P("...", ...))
     - pattern: $OBJ.ExecContext($CTX, fmt.$P("...", ...))
     - pattern: $OBJ.Query(fmt.$P("...", ...))
     - pattern: $OBJ.QueryContext($CTX, fmt.$P("...", ...))
     - pattern: $OBJ.QueryRow(fmt.$P("...", ...))
+    - pattern: $OBJ.QueryRow($CTX, fmt.$P("...", ...))
     - pattern: $OBJ.QueryRowContext($CTX, fmt.$P("...", ...))
     - pattern: |
         $QUERY = "..."
@@ -54,6 +56,12 @@ rules:
         $QUERY = $FXN(..., $QUERY, ...)
         ...
         $OBJ.QueryRow($QUERY)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $QUERY = $FXN(..., $QUERY, ...)
+        ...
+        $OBJ.QueryRow($CTX, $QUERY)
     - pattern: |
         $QUERY = "..."
         ...
@@ -95,6 +103,12 @@ rules:
         ...
         $OTHER = $FXN(..., $QUERY, ...)
         ...
+        $OBJ.QueryRow($CTX, $OTHER)
+    - pattern: |
+        $QUERY = "..."
+        ...
+        $OTHER = $FXN(..., $QUERY, ...)
+        ...
         $OBJ.QueryRowContext($CTX, $OTHER, ...)
     - pattern: |
         $QUERY = "..." + $X
@@ -116,6 +130,10 @@ rules:
         $QUERY = "..." + $X
         ...
         $OBJ.QueryRow($QUERY)
+    - pattern: |
+        $QUERY = "..." + $X
+        ...
+        $OBJ.QueryRow($CTX, $QUERY)
     - pattern: |
         $QUERY = "..." + $X
         ...

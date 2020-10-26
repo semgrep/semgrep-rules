@@ -5,9 +5,12 @@ import (
 	"database/sql"
 	"fmt"
 	"http"
+
+	"github.com/jackc/pgx/v4"
 )
 
 var db *sql.DB
+var postgresDb *pgx.Conn
 
 func dbExec(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
@@ -154,4 +157,12 @@ func badDirectQueryFmt(r *http.Request) {
 
 	// ruleid: string-formatted-query
     row, _ := db.QueryRowContext(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
+}
+
+func postgresBadDirectQueryFmt(r *http.Request) {
+    ctx := context.Background()
+    customerId := r.URL.Query().Get("id")
+
+	// ruleid: string-formatted-query
+    row, _ := postgresDb.QueryRow(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
 }
