@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-# ok:
+# ok:mongo-client-bad-auth
 client = MongoClient('example.com',
                      username='user',
                      password='password',
