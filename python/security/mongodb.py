@@ -6,7 +6,7 @@ client = MongoClient('example.com',
                      password='password',
                      authSource='the_database',
                      authMechanism='SCRAM-SHA-256')
-# ok:
+# ok:mongo-client-bad-auth
 client = MongoClient('example.com',
                      username='user',
                      password='password',
