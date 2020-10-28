@@ -50,7 +50,7 @@ def get_pack_modify_verb(pack_id: str) -> ApiResponse:
         return jsonify(pack)
     else:
         raise NotFound
-        
+
 # ruleid:flask-cache-query-string
 @app.route("/api/pack/<pack_id>", methods=["POST", "PUT"])
 @cache.cached(timeout=None)  # cache until restart or manual invalidation
