@@ -1,0 +1,41 @@
+rules:
+- id: flask-cache-query-string
+  patterns:
+  - pattern-either:
+    - pattern: |
+        @app.route("...")
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+          request.args.get(...)
+    - pattern: |
+        @app.route("...", methods=[..., "POST", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "PUT", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "DELETE", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "PATCH", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+  - pattern-not: |
+      @app.route("...")
+      @cache.cached(..., query_string=True)
+      def $HANDLER(...):
+        ...
+        request.args.get(...)
+  message: |
+    Flask-caching doesn't cache query strings by default. You have to use `query_string=True`. Also you shouldn't cache verbs that can mutate state.
+  severity: WARNING
+  languages:
+  - python
