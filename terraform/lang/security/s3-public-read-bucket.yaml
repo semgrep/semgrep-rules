@@ -1,0 +1,16 @@
+rules:
+- id: s3-public-read-bucket
+  patterns:
+  - pattern: acl = "public-read"
+  - pattern-not-inside: '{ ... website { ... } ... }'
+  languages:
+  - generic
+  paths:
+    include:
+    - '*.tf'
+  severity: WARNING
+  message: S3 bucket with public read access detected.
+  metadata:
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#acl
+    - https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl

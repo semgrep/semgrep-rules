@@ -1,0 +1,15 @@
+rules:
+- id: all-origins-allowed
+  patterns:
+  - pattern-inside: cors_rule { ... }
+  - pattern: allowed_origins = ["*"]
+  languages:
+  - generic
+  paths:
+    include:
+    - '*.tf'
+  severity: WARNING
+  message: CORS rule on bucket permits any origin
+  metadata:
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#using-cors
