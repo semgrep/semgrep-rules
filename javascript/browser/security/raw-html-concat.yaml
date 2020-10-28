@@ -1,10 +1,9 @@
 rules:
 - id: raw-html-concat
-  message: >-
-    User controlled data in a HTML string may result in XSS
   languages:
   - javascript
-  severity: WARNING
+  - typescript
+  message: User controlled data in a HTML string may result in XSS
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
@@ -12,82 +11,31 @@ rules:
     - https://owasp.org/www-community/attacks/xss/
   patterns:
   - pattern-either:
-    - pattern: |
-        "..." + (<... window ...>);
-    - pattern: |
-        (<... window ...>) + "...";
-    - pattern: |
-        "..." + (<... location ...>);
-    - pattern: |
-        (<... location ...>) + "...";
-    - pattern: |
-        "..." + (<... document ...>);
-    - pattern: |
-        (<... document ...>) + "...";
+    - pattern: "\"...\" + (<... window ...>);\n"
+    - pattern: "(<... window ...>) + \"...\";\n"
+    - pattern: "\"...\" + (<... location ...>);\n"
+    - pattern: "(<... location ...>) + \"...\";\n"
+    - pattern: "\"...\" + (<... document ...>);\n"
+    - pattern: "(<... document ...>) + \"...\";\n"
     - patterns:
       - pattern-either:
-        - pattern-inside: |
-            function $FUNC(..., $X, ...) {
-              ...
-            }
-        - pattern-inside: |
-            function (..., $X, ...) {
-              ...
-            }
-        - pattern-inside: |
-            function $FUNC(...) {
-              ...
-              $X = (<... document ...>);
-              ...
-            }
-        - pattern-inside: |
-            function (...) {
-              ...
-              $X = (<... document ...>);
-              ...
-            }
-        - pattern-inside: |
-            function $FUNC(...) {
-              ...
-              $X = (<... window ...>);
-              ...
-            }
-        - pattern-inside: |
-            function (...) {
-              ...
-              $X = (<... window ...>);
-              ...
-            }
-        - pattern-inside: |
-            function $FUNC(...) {
-              ...
-              $X = (<... location ...>);
-              ...
-            }
-        - pattern-inside: |
-            function (...) {
-              ...
-              $X = (<... location ...>);
-              ...
-            }
+        - pattern-inside: "function $FUNC(..., $X, ...) {\n  ...\n}\n"
+        - pattern-inside: "function (..., $X, ...) {\n  ...\n}\n"
+        - pattern-inside: "function $FUNC(...) {\n  ...\n  $X = (<... document ...>);\n  ...\n}\n"
+        - pattern-inside: "function (...) {\n  ...\n  $X = (<... document ...>);\n  ...\n}\n"
+        - pattern-inside: "function $FUNC(...) {\n  ...\n  $X = (<... window ...>);\n  ...\n}\n"
+        - pattern-inside: "function (...) {\n  ...\n  $X = (<... window ...>);\n  ...\n}\n"
+        - pattern-inside: "function $FUNC(...) {\n  ...\n  $X = (<... location ...>);\n  ...\n}\n"
+        - pattern-inside: "function (...) {\n  ...\n  $X = (<... location ...>);\n  ...\n}\n"
       - pattern-either:
-        - pattern: |
-            "..." + (<... $X ...>);
-        - pattern: |
-            "..." + (<... $X[...] ...>);
-        - pattern: |
-            "..." + (<... $X.$PROPERTY ...>);
-        - pattern: |
-            "..." + (<... $X.$METHOD(...) ...>);
-        - pattern: |
-            "..." + (<... $X.$PROPERTY.$METHOD(...) ...>);
-        - pattern: |
-            (<... $X ...>) + "...";
-        - pattern: |
-            (<... $X[...] ...>) + "...";
-        - pattern: |
-            (<... $X.$PROPERTY ...>) + "...";
-        - pattern: |
-            (<... $X.$METHOD(...) ...>) + "...";
-        - pattern: |-
-            (<... $X.$PROPERTY.$METHOD(...) ...>) + "...";
+        - pattern: "\"...\" + (<... $X ...>);\n"
+        - pattern: "\"...\" + (<... $X[...] ...>);\n"
+        - pattern: "\"...\" + (<... $X.$PROPERTY ...>);\n"
+        - pattern: "\"...\" + (<... $X.$METHOD(...) ...>);\n"
+        - pattern: "\"...\" + (<... $X.$PROPERTY.$METHOD(...) ...>);\n"
+        - pattern: "(<... $X ...>) + \"...\";\n"
+        - pattern: "(<... $X[...] ...>) + \"...\";\n"
+        - pattern: "(<... $X.$PROPERTY ...>) + \"...\";\n"
+        - pattern: "(<... $X.$METHOD(...) ...>) + \"...\";\n"
+        - pattern: (<... $X.$PROPERTY.$METHOD(...) ...>) + "...";
+  severity: WARNING
