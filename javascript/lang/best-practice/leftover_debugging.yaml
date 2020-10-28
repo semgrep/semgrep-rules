@@ -1,28 +1,36 @@
 rules:
 - id: javascript-alert
+  languages:
+  - javascript
+  - typescript
+  message: found alert() call; should this be in production code?
   patterns:
   - pattern-either:
     - pattern: alert()
     - pattern: alert($X)
-  message: found alert() call; should this be in production code?
-  languages: [javascript]
   severity: WARNING
 - id: javascript-debugger
-  pattern: debugger;
+  languages:
+  - javascript
+  - typescript
   message: found debugger call; should this be in production code?
-  languages: [javascript]
+  pattern: debugger;
   severity: WARNING
 - id: javascript-confirm
-  pattern: confirm(...)
+  languages:
+  - javascript
+  - typescript
   message: found conform() call; should this be in production code?
-  languages: [javascript]
+  pattern: confirm(...)
   severity: WARNING
 - id: javascript-prompt
+  languages:
+  - javascript
+  - typescript
+  message: found prompt() call; should this be in production code?
   patterns:
   - pattern-either:
     - pattern: prompt()
     - pattern: prompt($X)
     - pattern: prompt($X, $Y)
-  message: found prompt() call; should this be in production code?
-  languages: [javascript]
   severity: WARNING

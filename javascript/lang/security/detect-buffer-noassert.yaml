@@ -1,11 +1,13 @@
 rules:
 - id: detect-buffer-noassert
+  languages:
+  - javascript
+  - typescript
+  message: "Detected usage of noassert in Buffer API, which allows the offset the be beyond the\nend of the buffer. This could\
+    \ result in writing or reading beyond the end of the buffer.\n"
   metadata:
     cwe: 'CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer'
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-buffer-noassert.js
-  message: |
-    Detected usage of noassert in Buffer API, which allows the offset the be beyond the
-    end of the buffer. This could result in writing or reading beyond the end of the buffer.
   pattern-either:
   - pattern: $OBJ.readUInt8(..., true)
   - pattern: $OBJ.readUInt16LE(..., true)
@@ -36,5 +38,3 @@ rules:
   - pattern: $OBJ.writeDoubleLE(..., true)
   - pattern: $OBJ.writeDoubleBE(..., true)
   severity: WARNING
-  languages:
-  - javascript

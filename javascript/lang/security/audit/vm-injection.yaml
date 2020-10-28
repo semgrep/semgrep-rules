@@ -1,446 +1,179 @@
 rules:
 - id: vm-runincontext-context-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInContext.
-  severity: WARNING
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.runInContext.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern-either:
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.runInContext($CODE,<... $CONTEXT\
+        \ ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.runInContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.runInContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $VM.runInContext($CODE,<... $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.runInContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.runInContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.runInContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR\
+        \ ...>};\n  ...\n  $VM.runInContext($CODE,<... $CONTEXT ...>,...);\n  ...\n}\n"
+  severity: WARNING
 - id: vm-runinnewcontext-context-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInNewContext.
-  severity: WARNING
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.runInNewContext.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern-either:
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VM.runInNewContext($CODE,<... $INPUT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $VM.runInNewContext($CODE,<... $INPUT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
-    - pattern: |
-        function $FUNC(...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
-          ...
-        }
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VM.runInNewContext($CODE,<... $INPUT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $VM.runInNewContext($CODE,<... $INPUT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.runInNewContext($CODE,<...\
+        \ $CONTEXT ...>,...);\n  ...\n}\n"
+    - pattern: "function $FUNC(...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR\
+        \ ...>};\n  ...\n  $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);\n  ...\n}\n"
+  severity: WARNING
 - id: vm-compilefunction-context-injection
-  message: |
-    Make sure that unverified user data can not reach vm.compileFunction.
-  severity: WARNING
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.compileFunction.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern-either:
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $INPUT ...>},...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $OPTS = {parsingContext: <... $INPUT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function (...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $INPUT ...>},...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... {$NAME:$INPUT} ...>;
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $OPTS = {parsingContext: <... $INPUT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $CONTEXT = <... $INPUT ...>;
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $CONTEXT = {$NAME: <... $INPUT ...>};
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-    - pattern: |
-        function $F(...,$INPUT,...) {
-          ...
-          $VAR = <... $INPUT ...>;
-          ...
-          $CONTEXT = {$NAME: <... $VAR ...>};
-          ...
-          $OPTS = {parsingContext: <... $CONTEXT ...>};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
-          ...
-        }
-- id: vm-script-code-injection
-  message: |
-    Make sure that unverified user data can not reach vm.Script.
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $INPUT ...>},...);\n\
+        \  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $OPTS = {parsingContext: <... $INPUT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n\
+        \  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $OPTS = {parsingContext: <...\
+        \ $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $OPTS = {parsingContext:\
+        \ <... $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n  ...\n}\n"
+    - pattern: "function (...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $OPTS = {parsingContext: <... $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n\
+        \  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $INPUT ...>},...);\n\
+        \  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... {$NAME:$INPUT} ...>;\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext:\
+        \ <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $OPTS = {parsingContext: <... $INPUT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n\
+        \  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $CONTEXT = <... $INPUT ...>;\n  ...\n  $OPTS = {parsingContext: <...\
+        \ $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $CONTEXT = {$NAME: <... $INPUT ...>};\n  ...\n  $OPTS = {parsingContext:\
+        \ <... $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n  ...\n}\n"
+    - pattern: "function $F(...,$INPUT,...) {\n  ...\n  $VAR = <... $INPUT ...>;\n  ...\n  $CONTEXT = {$NAME: <... $VAR ...>};\n\
+        \  ...\n  $OPTS = {parsingContext: <... $CONTEXT ...>};\n  ...\n  $VM.compileFunction($CODE,$PARAMS,$OPTS,...);\n\
+        \  ...\n}\n"
   severity: WARNING
-  languages: [javascript]
+- id: vm-script-code-injection
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.Script.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern: new $VM.Script($CODE,...)
   - pattern-not-inside: new $VM.Script("...",...)
-  - pattern-not-inside: |-
-      $CODE = "...";
-      ...
-      new $VM.Script($CODE,...);
-- id: vm-runincontext-code-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInContext.
+  - pattern-not-inside: "$CODE = \"...\";\n...\nnew $VM.Script($CODE,...);"
   severity: WARNING
-  languages: [javascript]
+- id: vm-runincontext-code-injection
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.runInContext.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern: $VM.runInContext($CODE,...)
   - pattern-not-inside: $VM.runInContext("...",...)
-  - pattern-not-inside: |
-      $CODE = "...";
-      ...
-      $VM.runInContext($CODE,...);
-- id: vm-runinnewcontext-code-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInNewContext.
+  - pattern-not-inside: "$CODE = \"...\";\n...\n$VM.runInContext($CODE,...);\n"
   severity: WARNING
-  languages: [javascript]
+- id: vm-runinnewcontext-code-injection
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.runInNewContext.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern: $VM.runInNewContext($CODE,...)
   - pattern-not-inside: $VM.runInNewContext("...",...)
-  - pattern-not-inside: |
-      $CODE = "...";
-      ...
-      $VM.runInNewContext($CODE,...);
-- id: vm-runinthiscontext-code-injection
-  message: |
-    Make sure that unverified user data can not reach vm.runInThisContext.
+  - pattern-not-inside: "$CODE = \"...\";\n...\n$VM.runInNewContext($CODE,...);\n"
   severity: WARNING
-  languages: [javascript]
+- id: vm-runinthiscontext-code-injection
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.runInThisContext.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern: $VM.runInThisContext($CODE,...)
   - pattern-not-inside: $VM.runInThisContext("...",...)
-  - pattern-not-inside: |
-      $CODE = "...";
-      ...
-      $VM.runInThisContext($CODE,...);
-- id: vm-compilefunction-code-injection
-  message: |
-    Make sure that unverified user data can not reach vm.compileFunction.
+  - pattern-not-inside: "$CODE = \"...\";\n...\n$VM.runInThisContext($CODE,...);\n"
   severity: WARNING
-  languages: [javascript]
+- id: vm-compilefunction-code-injection
+  languages:
+  - javascript
+  - typescript
+  message: "Make sure that unverified user data can not reach vm.compileFunction.\n"
   metadata:
-    owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    owasp: 'A1: Injection'
   patterns:
-  - pattern-inside: |
-      ...
-      $VM = require('vm');
-      ...
+  - pattern-inside: "...\n$VM = require('vm');\n...\n"
   - pattern: $VM.compileFunction($CODE,...)
   - pattern-not-inside: $VM.compileFunction("...",...)
-  - pattern-not-inside: |-
-      $CODE = "...";
-      ...
-      $VM.compileFunction($CODE,...);
+  - pattern-not-inside: "$CODE = \"...\";\n...\n$VM.compileFunction($CODE,...);"
+  severity: WARNING

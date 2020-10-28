@@ -1,14 +1,14 @@
 rules:
 - id: detect-eval-with-expression
+  languages:
+  - javascript
+  - typescript
+  message: "Detected eval(variable), which could allow a malicious actor to run arbitrary code.\n"
   metadata:
     cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
     owasp: 'A1: Injection'
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-eval-with-expression.js
-  message: |
-    Detected eval(variable), which could allow a malicious actor to run arbitrary code.
   patterns:
   - pattern: eval($OBJ)
   - pattern-not: eval("...")
   severity: WARNING
-  languages:
-  - javascript

@@ -1,14 +1,13 @@
 rules:
 - id: non-constant-sql-query
+  languages:
+  - javascript
+  - typescript
+  message: "Non-constant SQL query detected. Ensure this is not controlled\nby external data, otherwise this is a SQL injection.\n"
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
   patterns:
   - pattern: $SQL.query(...)
   - pattern-not: $SQL.query("...")
-  message: |
-    Non-constant SQL query detected. Ensure this is not controlled
-    by external data, otherwise this is a SQL injection.
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
   severity: INFO
-  languages:
-  - javascript
