@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "a" {
   bucket = "s3-website-test.hashicorp.com"
-  acl    = "public-read"
+  acl    = "private"
 
   cors_rule {
     allowed_headers = ["*"]
@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "a" {
 
 resource "aws_s3_bucket" "b" {
   bucket = "s3-website-test-open.hashicorp.com"
-  acl    = "public-read"
+  acl    = "private"
 
   cors_rule {
     allowed_headers = ["*"]
