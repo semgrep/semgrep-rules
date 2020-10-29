@@ -9,7 +9,15 @@
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 
-This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the [main semgrep documentation for details on semgrep](https://semgrep.live) and the syntax for the yaml files in this repository. You can also [browse these rules online](https://semgrep.live/registry).
+This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
+
+## Contributing
+
+If you want to create your own collection of Semgrep rules, feel free to make your own repository and then make a PR adding it to the [list of repositories with Semgrep rules](https://github.com/returntocorp/semgrep-docs/blob/main/docs/awesome.md). This list automatically gets pulled into the [Semgrep Registry](https://semgrep.dev/r) so that lots of Semgrep users can find your rules!
+
+We also welcome rule contributions directly to this repository! Since this repo is maintained by r2c, there are some extra benefits—for example, if there are bug reports for your rule, we’ll also take responsibility to help fix it. If you are submitting to the semgrep-rules repo (rather than your own, separate repository as mentioned above) we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/).
+
+If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
 ## Security Coverage
 
@@ -19,9 +27,6 @@ This is an repository containing rules written for [semgrep](https://semgrep.dev
     <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
 </p>
 
-## Contributing
-
-We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
 
 ### Rule Namespacing
 
