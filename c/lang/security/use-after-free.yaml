@@ -1,0 +1,32 @@
+rules:
+- id: use-after-free
+  pattern-either:
+  - patterns:
+    - pattern: |
+        free($VAR);
+        ...
+        $VAR->$FUNC(...);
+    - pattern-not: |
+        free($VAR);
+        ...
+        $VAR = NULL;
+        ...
+        $VAR->$FUNC(...);
+  - patterns:
+    - pattern: |
+        free($VAR);
+        ...
+        $FUNC(..., $VAR->$MEMBER, ...);
+    - pattern-not: |
+        free($VAR);
+        ...
+        $VAR = NULL;
+        ...
+        $FUNC(..., $VAR->$MEMBER, ...);
+  message: |
+    Variable '$VAR' was used after being freed. This can lead to undefined behavior.
+  metadata:
+    references:
+    - https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/use_after_free/
+  languages: [c]
+  severity: ERROR
