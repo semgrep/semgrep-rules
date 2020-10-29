@@ -9,7 +9,7 @@
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 
-This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/r).
+This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
 
 ## Contributing
 
