@@ -55,23 +55,7 @@ Join slack for the fastest answers to your questions! Or contact the team at [se
 
 ## Testing Rules
 
-A testing system is available which can be used to check the rules against example source code files. It requires `semgrep` from [semgrep](https://semgrep.dev)
-
-If you wrote a rule in a yaml named `eqeq-bad.yaml` with a rule id named `my-eqeq-bad`, you could put a file in the same directory named eqeq-bad.py (it just needs to have the same name except for the extension as eqeq-bad.yaml). Then:
-
-```python
-# ruleid:my-eqeq-bad
-x == x
-```
-
-Running `make test` will execute the test suite, and if `my-eqeq-bad` does not fire on the line below the comment, your rule will fail.
-
-If you have a rule that is not working, but you want to commit it so it's documented but not fail the tests, use `#todoruleid:...`:
-
-```python
-# todoruleid:my-eqeq-bad
-x != x
-```
+Visit [Testing rules](https://semgrep.dev/docs/writing-rules/testing-rules/) to learn more.
 
 ### Github Action To Run Tests
 
