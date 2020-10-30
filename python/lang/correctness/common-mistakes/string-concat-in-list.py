@@ -4,25 +4,25 @@ bad = ["123" "456" "789"]
 # ruleid:string-concat-in-list
 bad = ["123" f"{456}" "789"]
 
-# ruleid:string-concat-in-list
 bad = [
+# ruleid:string-concat-in-list
     "abc"
     "cde"
     "efg",
     "hijk"
 ]
 
-# ruleid:string-concat-in-list
 bad = [
     "abc",
+# ruleid:string-concat-in-list
     "cde"
     "efg"
     "hijk"
 ]
 
-# ruleid:string-concat-in-list
 bad = [
     "abc",
+# ruleid:string-concat-in-list
     "cde"
     f"efg"
     "hijk"
