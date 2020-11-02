@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+
 import ReactHtmlParser from 'react-html-parser';
 
 
