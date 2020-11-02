@@ -10,5 +10,6 @@ renderContent() {
         }
         return null;
     }
+    // ruleid:react_html_parser
     return <span>{ReactHtmlParser(content)}</span>;
 }
