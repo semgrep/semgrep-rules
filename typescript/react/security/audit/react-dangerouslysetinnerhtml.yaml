@@ -1,10 +1,10 @@
 rules:
 - id: react-dangerouslysetinnerhtml
   pattern-either:
-    - pattern: |
-        <$X dangerouslySetInnerHTML=... />
-    - pattern: |
-        {dangerouslySetInnerHTML: ...}
+  - pattern: |
+      <$X dangerouslySetInnerHTML=... />
+  - pattern: |
+      {dangerouslySetInnerHTML: ...}
   message: |
     Setting HTML from code is risky because it’s easy to inadvertently expose your users to a cross-site scripting (XSS) attack.
   metadata:
