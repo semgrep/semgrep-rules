@@ -1,0 +1,15 @@
+rules:
+- id: insecure-redirect
+  patterns:
+  - pattern: rewrite ... redirect
+  - pattern-not-inside: rewrite ... http ... $host ... redirect
+  - pattern-not-inside: rewrite ... https ... $host ... redirect
+  message: |
+    Detected an open redirect in this nginx configuration.
+    To fix this, include the base URL of your site by prefixing
+    the url with the host: "https://$host/<the-rest-of-the-url>".
+  languages: [generic]
+  severity: WARNING
+  metadata:
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp: 'A1: Injection'
