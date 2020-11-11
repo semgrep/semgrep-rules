@@ -1,0 +1,11 @@
+rules:
+- id: phpinfo-use
+  pattern: phpinfo(...);
+  message: |
+    The 'phpinfo' function may reveal sensitive information about your environment.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.phpinfo
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PhpinfosSniff.php
+  languages: [php]
+  severity: ERROR

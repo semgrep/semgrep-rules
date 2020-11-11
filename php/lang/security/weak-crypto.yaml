@@ -1,0 +1,15 @@
+rules:
+- id: weak-crypto
+  patterns:
+  - pattern: $FUNC(...);
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: crypt|md5|md5_file|sha1|sha1_file|str_rot13
+  message: |
+    Detected usage of weak crypto function. Consider using stronger alternatives.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/book.sodium.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/CryptoFunctionsSniff.php
+  languages: [php]
+  severity: ERROR
