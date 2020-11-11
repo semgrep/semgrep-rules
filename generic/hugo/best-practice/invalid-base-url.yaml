@@ -1,0 +1,10 @@
+rules:
+- id: invalid-base-url
+  patterns:
+  - pattern: baseURL = "..."
+  - pattern-regex: (?!.*http).*
+  severity: WARNING
+  message: |-
+    The 'baseURL' is invalid. This may cause links to not work if deployed.
+    Include the scheme (e.g., https://).
+  languages: [generic]
