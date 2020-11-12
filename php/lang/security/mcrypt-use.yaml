@@ -1,0 +1,16 @@
+rules:
+- id: mcrypt-use
+  patterns:
+  - pattern: $FUNC(...);
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: (mcrypt_|mdecrypt_).+
+  message: |
+    Mcrypt functionality has been deprecated and/or removed in recent PHP
+    versions. Consider using Sodium or OpenSSL.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/intro.mcrypt.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/CryptoFunctionsSniff.php
+  languages: [php]
+  severity: ERROR
