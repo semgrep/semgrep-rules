@@ -1,0 +1,11 @@
+rules:
+- id: react-props-spreading
+  pattern-either:
+  - pattern: |
+      <$X {...$PROPS} />
+  message: |
+    It is a good practice to avoid spreading for JSX attributes.
+    It helps maintainability by avoiding passing unintentional extra props and allowing react to emit warnings when invalid HTML props are passed to HTML elements.
+  languages:
+  - typescript
+  severity: WARNING
