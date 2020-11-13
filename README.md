@@ -19,14 +19,17 @@ We also welcome rule contributions directly to this repository! Since this repo 
 
 If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
+## Running Rules in CI/Pre-Commit/Developer Workflow
+
+If you want run these rules rather than write them, [see the CI instructions on the Semgrep Registry](https://semgrep.dev/explore) (click through to any rule pack). That website is a convenient frontend for this repository.
+
+## Help
+
+Join [Slack](https://r2c.dev/slack) for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
+
 ## Security Coverage
 
-`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
-
-<p align="center">
-    <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
-</p>
-
+`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable).
 
 ### Rule Namespacing
 
@@ -45,13 +48,6 @@ If a `security` rule is discouraging the use of a bad pattern (such as formatted
     <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
 </p>
 
-## Running Rules in CI/Pre-Commit/Developer Workflow
-
-If you want run these rules rather than write them, [see the CI instructions on the Semgrep Registry](https://semgrep.live/packs) (click through to any rule pack). That website is a convenient frontend for this repository.
-
-## Help
-
-Join slack for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
 
 ## Testing Rules
 
