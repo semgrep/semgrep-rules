@@ -1,7 +1,7 @@
 class Test1 extends React.Component {
+// ruleid: react-props-in-state
   state = {
         foo: 'bar',
-// ruleid: react-props-in-state
         color: this.props.color,
         one: 1
   };
@@ -16,8 +16,8 @@ class Test1 extends React.Component {
 }
 
 class Test2 extends React.Component {
-  state = {
 // ruleid: react-props-in-state
+  state = {
     textColor: slowlyCalculateTextColor(this.props.color)
   };
   render() {
