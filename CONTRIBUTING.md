@@ -42,7 +42,7 @@ Once `pre-commit` is set up you may commit code and create pull requests as you 
 
 ### Tests
 
-Test files should be included with new rules. Tests are added by included a source code file with the same name as the rule file. For example, if the rule is in `my-rule.yaml`, the tests should be in `my-rule.js` (or another valid extension for the target language). Inside the test file, expected findings should be marked with a comment that reads `ruleid: my-rule` on the line directly above. You can also include code that should **not** be detected with `ok: my-rule`. Use the appropriate single-line comment syntax for the target language (`#` for Python, `//` for JavaScript, etc.). An example is listed below.
+Test files should accompany new rules. Test file names must match the rule file name, except for the extension. For example, if the rule is in `my-rule.yaml`, the tests should be in `my-rule.js` (or another valid extension for the target language). Inside the test file, expected findings should be marked with a comment that reads `ruleid: my-rule` on the line directly above. You can also include code that should **not** be detected with `ok: my-rule`. Use the appropriate single-line comment syntax for the target language (`#` for Python, `//` for JavaScript, etc.). An example is listed below.
 
 ```yaml
 rules:
