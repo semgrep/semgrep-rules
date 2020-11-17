@@ -15,34 +15,16 @@ This repository is the “standard library” for Semgrep rules, but there are m
 
 If you want to create your own collection of Semgrep rules, feel free to make your own repository and then make a PR adding it to the [list of repositories with Semgrep rules](https://github.com/returntocorp/semgrep-docs/blob/main/docs/awesome.md). This list automatically gets pulled into the [Semgrep Registry](https://semgrep.dev/r) so that lots of Semgrep users can find your rules!
 
-We also welcome rule contributions directly to this repository! Since this repo is maintained by r2c, there are some extra benefits—for example, if there are bug reports for your rule, we’ll also take responsibility to help fix it. If you are submitting to the semgrep-rules repo (rather than your own, separate repository as mentioned above) we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/).
+We also welcome rule contributions directly to this repository! Since this repo is maintained by r2c, there are some extra benefits—for example, if there are bug reports for your rule, we’ll also take responsibility to help fix it. If you are submitting to the semgrep-rules repo (rather than your own, separate repository as mentioned above) we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). Check out the [Contributing Guidelines](/CONTRIBUTING.md) to get started.
 
 If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
-## Security Coverage
+### Security Coverage
 
-`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
+Semgrep features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). `security` rules in this repository should have metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
 
 <p align="center">
     <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
-</p>
-
-
-### Rule Namespacing
-
-The namespacing format for contributing rules is `<language>.<framework>.<category>.$MORE`. If a `framework` isn't applicable, use `lang` instead.
-
-`category` is one of:
-- security
-- correctness
-- best-practice
-- maintainability
-- performance
-
-If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), it is recommended to append `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
-
-<p align="center">
-    <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
 </p>
 
 ## Running Rules in CI/Pre-Commit/Developer Workflow
@@ -52,10 +34,6 @@ If you want run these rules rather than write them, [see the CI instructions on 
 ## Help
 
 Join slack for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
-
-## Testing Rules
-
-Visit [Testing rules](https://semgrep.dev/docs/writing-rules/testing-rules/) to learn more.
 
 ### Github Action To Run Tests
 
