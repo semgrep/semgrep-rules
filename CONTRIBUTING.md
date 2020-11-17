@@ -9,17 +9,17 @@ We're happy to help [semgrep@r2c.dev](mailto:semgrep@r2c.dev)
 Pull requests require approval of at least one maintainer and [CI to be passing](https://github.com/returntocorp/semgrep-rules/actions).
 
 Getting a new rule ready for review is easy to do. The CI jobs will check for these things:
-1. Formatting applied by [`pre-commit`](https://pre-commit.com/)
-1. Passing tests
+1. [Formatting applied by `pre-commit`](#pre-commit)
+1. [Passing tests](#tests)
 
 In addition, we recommend:
-1. Having a good rule message. A good message includes a description of the pattern, a description of why this pattern was detected, and an alternative that resolves the issue.
-1. Using namespacing for your rule.
-1. Metadata. Including references is very helpful!
+1. [Having a good rule message.](#rule-messages) A good message includes a description of the pattern, a description of why this pattern was detected, and an alternative that resolves the issue.
+1. [Using namespacing for your rule.](#rule-namespacing)
+1. [Metadata.](#rule-metadata) Including references is very helpful!
 
 ### `pre-commit`
 
-To install pre-commit:
+To install [pre-commit](https://pre-commit.com/):
 
 ```
 $ python -m pip install pre-commit
