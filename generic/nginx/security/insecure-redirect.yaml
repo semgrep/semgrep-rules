@@ -1,15 +1,15 @@
 rules:
 - id: insecure-redirect
   patterns:
-  - pattern: rewrite ... redirect
-  - pattern-not-inside: rewrite ... http ... $host ... redirect
+  - pattern-either:
+    - pattern: rewrite ... redirect
+    - pattern: rewrite ... permanent
   - pattern-not-inside: rewrite ... https ... $host ... redirect
+  - pattern-not-inside: rewrite ... https ... $host ... permanent
   message: |
-    Detected an open redirect in this nginx configuration.
-    To fix this, include the base URL of your site by prefixing
-    the url with the host: "https://$host/<the-rest-of-the-url>".
+    Detected an insecure redirect in this nginx configuration.
+    If no scheme is specified, nginx will forward the request with the
+    incoming scheme. This could result in unencrypted communications.
+    To fix this, include the 'https' scheme.
   languages: [generic]
   severity: WARNING
-  metadata:
-    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-    owasp: 'A1: Injection'

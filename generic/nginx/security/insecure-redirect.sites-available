@@ -21,6 +21,16 @@ server {
             rewrite ^/(.*)$ /c/$1 redirect;
         }
 
+        if ($http_user_agent ~* "^web-browser-2$") {
+            # ok: insecure-redirect
+            rewrite ^/(.*)$ https://$host/c/$1 permanent;
+        }
+
+        if ($http_accept ~* "json") {
+            # ruleid: insecure-redirect
+            rewrite ^/(.*)$ /c/$1 permanent;
+        }
+
         try_files $uri $uri/ /index.html;
     }
 
