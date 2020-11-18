@@ -1,10 +1,29 @@
 rules:
 - id: react-href-var
-  patterns:
-  - pattern: |
-      <$X href=... />
-  - pattern-not: |
-      <$X href="..." />
+  pattern-either:
+  - patterns:
+    - pattern: |
+        <$EL href=... />
+    - pattern-not: |
+        <$EL href="..." />
+  - patterns:
+    - pattern: |
+        <Link to=... />
+    - pattern-not: |
+        <Link to="..." />
+  - patterns:
+    - pattern: |
+        React.createElement($EL, {href: ...})
+    - pattern-not: |
+        React.createElement($EL, {href: "..."})
+  - patterns:
+    - pattern: |
+        $PARAMS = {href: ...};
+    - pattern-not: |
+        $PARAMS = {href: "..."};
+    - pattern-inside: |
+        ...
+        React.createElement($EL, $PARAMS);
   message: |
     Detected a variable used in an anchor tag with
     the 'href' attribute. This allows a malicious actor to
