@@ -374,6 +374,7 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.SAXParserFactory
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
