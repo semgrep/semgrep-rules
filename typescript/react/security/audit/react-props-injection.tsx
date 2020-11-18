@@ -29,7 +29,7 @@ function test5(input) {
 }
 
 function test6() {
-  // TODO: not currently supported
+  // ruleid: react-props-injection
   return <div className={"foo"} {...something} />;
 }
 
