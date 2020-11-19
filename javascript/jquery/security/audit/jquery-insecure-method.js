@@ -16,8 +16,8 @@
     $('<div>' + window.location.hash + '</div>').insertBefore( ".inner" );
     // ruleid: jquery-insecure-method
     $('.inner').prepend(window.location.hash);
-    // ruleid: jquery-insecure-method
     function test() {
+    // ruleid: jquery-insecure-method
       jQuery.globalEval('<div>' + window.location.hash + '</div>', {
         nonce: "nonce-2726c7f26c"
       } );
