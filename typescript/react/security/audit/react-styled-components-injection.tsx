@@ -19,15 +19,30 @@ function Vulnerable2(userInput) {
   `
 }
 
-function Vulnerable3(nevermind, {userInput}) {
+/*
+ * TODO:
+ *
+ *    - pattern-inside: |
+        function $FUNC(...,{$INPUT},...) {
+          ...
+          $STYLE = <... $INPUT ...>;
+          ...
+        }
+    - pattern-inside: |
+        function $FUNC(...,$INPUT,...) {
+          ...
+          $STYLE = <... $INPUT ...>;
+          ...
+        }
+ *
+ * function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
   return styled.div`
-// ruleid: react-styled-components-injection
     background: ${input};
       /* More styles here... */
   `
-}
+}*/
 
 function OkTest({siteUrl, input}) {
 
