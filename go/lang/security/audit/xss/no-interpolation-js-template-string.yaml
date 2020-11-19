@@ -1,6 +1,6 @@
 rules:
 - id: no-interpolation-js-template-string
-  message: |
+  message: >-
     Detected template variable interpolation in a JavaScript
     template string. This is potentially vulnerable to
     cross-site scripting (XSS) attacks because a malicious
@@ -15,8 +15,8 @@ rules:
     - https://github.com/golang/go/issues/9200#issuecomment-66100328
     - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
   languages:
-  - none
+  - generic
   severity: WARNING
   patterns:
-  - pattern-regex: |-
-      `.*{{.*}}.*`
+  - pattern-inside: <script ...> ... ... ... ... ... </script>
+  - pattern: '` ... {{ ... }} ...`'
