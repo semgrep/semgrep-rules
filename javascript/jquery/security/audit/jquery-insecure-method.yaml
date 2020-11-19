@@ -1,0 +1,25 @@
+rules:
+- id: jquery-insecure-method
+  message: >-
+    User controlled data in a `$JQUERY.$METHOD(...)` is an anti-pattern than can lead to XSS vulnerabilities
+  languages:
+  - javascript
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://owasp.org/www-community/attacks/xss/
+    - https://bugs.jquery.com/ticket/9521
+  pattern-either:
+  - patterns:
+    - pattern: $JQUERY.$METHOD($VAR,...)
+    - pattern-not: $JQUERY.$METHOD("...",...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: html|append|prepend|wrap|wrapInner|wrapAll|before|after|globalEval|getScript
+  - patterns:
+    - pattern: $JQUERY.$METHOD($VAR,...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: appendTo|insertAfter|insertBefore|prependTo
