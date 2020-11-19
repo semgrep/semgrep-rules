@@ -1,0 +1,28 @@
+rules:
+- id: multiargs-code-execution
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $THENIFY($FN, {multiArgs: ...},...)
+    - pattern: |
+        $OPTS = {multiArgs: ...};
+        ...
+        $THENIFY($FN,$OPTS,...);
+  - pattern-not: |
+      $THENIFY($FN, {multiArgs: false},...)
+  - pattern-not: |
+      $OPTS = {multiArgs: false};
+      ...
+      $THENIFY($FN,$OPTS,...)
+  - pattern-inside: |
+      $THENIFY = require('thenify');
+      ...
+  message: |
+    Potential arbitrary code execution, piped to eval
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
