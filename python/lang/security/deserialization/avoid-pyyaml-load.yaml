@@ -15,7 +15,8 @@ rules:
   fix: yaml.safe_load($FOO)
   severity: ERROR
   patterns:
-  - pattern-not-inside: |
-      yaml = $X
+  - pattern-inside: |
+      import yaml
       ...
+      yaml.load($FOO)
   - pattern: yaml.load($FOO)
