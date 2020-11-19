@@ -14,9 +14,13 @@ rules:
       $OPTS = {multiArgs: false};
       ...
       $THENIFY($FN,$OPTS,...)
-  - pattern-inside: |
-      $THENIFY = require('thenify');
-      ...
+  - pattern-either:
+    - pattern-inside: |
+        $THENIFY = require('thenify');
+        ...
+    - pattern-inside: |
+        import 'thenify';
+        ...
   message: |
     Potential arbitrary code execution, piped to eval
   metadata:
