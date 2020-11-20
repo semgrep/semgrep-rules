@@ -1,0 +1,20 @@
+rules:
+- id: header-injection
+  pattern: |
+    location ... <$VARIABLE> ... {
+      ...
+      add_header ... $$VARIABLE
+      ...
+    }
+  languages:
+  - generic
+  severity: ERROR
+  message: >-
+    The $$VARIABLE path parameter is added as a header in the response.
+    This could allow an attacker to inject a newline and add a new header into the response.
+    This is called HTTP response splitting.
+    To fix, do not allow whitespace in the path parameter: '[^\s]+'.
+  metadata:
+    references:
+    - https://github.com/yandex/gixy/blob/master/docs/en/plugins/httpsplitting.md
+    - https://owasp.org/www-community/attacks/HTTP_Response_Splitting
