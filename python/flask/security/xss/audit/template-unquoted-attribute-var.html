@@ -59,3 +59,27 @@
 <div class="upper">
      {{ paragraph_text }}
 </div>
+
+{% if scan_url %}
+    <h2>Semgrep Scan Results for <a href="{{scan_url}}"> {{scan_title}} </a></h2>
+{% else %}
+    <h2>Semgrep Scan Results for {{scan_title}} </h2>
+{% endif %}
+{% for check_id, findings in findings_by_id.items() %}
+    <!-- ok: template-unquoted-attribute-var -->
+    <h3> rule: <a href="https://semgrep.dev/r?q={{check_id}}"> {{check_id}} </a> </h3>
+    <ul>
+        {% for finding in findings %}
+        <li>
+            {% if repo_url %}
+            <!-- ok: template-unquoted-attribute-var -->
+            <a href="{{repo_url}}/blob/{{commit}}/{{finding['path']}}#L{{finding['line']}}"> {{finding["path"]}}:{{finding["line"]}} </a>
+            {% else %}
+            {{finding["path"]}}:{{finding["line"]}}
+            {% endif %}
+            <p> Finding Message: {{finding["message"]}} </p>
+        </li>
+        {% endfor %}
+    </ul>
+    <hr/>
+{% endfor %}
