@@ -1,0 +1,19 @@
+rules:
+- id: insecure-ssl-version
+  patterns:
+  - pattern-not: ssl_protocols TLSv1.2 TLSv1.3;
+  - pattern-not: ssl_protocols TLSv1.3 TLSv1.2;
+  - pattern-not: ssl_protocols TLSv1.2;
+  - pattern-not: ssl_protocols TLSv1.3;
+  - pattern: ssl_protocols ...;
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    Detected use of an insecure SSL version. Secure SSL versions are
+    TLSv1.2 and TLS1.3; older versions are known to be broken and are
+    susceptible to attacks. Prefer use of TLSv1.2 or later.
+  metadata:
+    references:
+    - https://www.acunetix.com/blog/web-security-zone/hardening-nginx/
+    - https://www.acunetix.com/blog/articles/tls-ssl-cipher-hardening/

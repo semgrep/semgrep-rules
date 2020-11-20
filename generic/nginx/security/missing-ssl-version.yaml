@@ -1,0 +1,17 @@
+rules:
+- id: missing-ssl-version
+  patterns:
+  - pattern: server { ... listen $PORT ssl; ... }
+  - pattern-not-inside: server { ... ssl_protocols ... }
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    This server configuration is missing the 'ssl_protocols' directive. By default,
+    this server will use 'ssl_protocols TLSv1 TLSv1.1 TLSv1.2', and versions older
+    than TLSv1.2 are known to be broken. Explicitly specify 'ssl_protocols TLSv1.2 TLSv1.3'
+    to use secure TLS versions.
+  metadata:
+    references:
+    - https://www.acunetix.com/blog/web-security-zone/hardening-nginx/
+    - https://nginx.org/en/docs/http/configuring_https_servers.html

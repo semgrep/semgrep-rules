@@ -1,0 +1,12 @@
+rules:
+- id: request-host-used
+  pattern: $http_host
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    '$http_host' uses the 'Host' request header which could be controlled by an attacker. Use the '$host'
+    variable instead, which will use server names listed in the 'server_name' directive.
+  metadata:
+    references:
+    - https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md
