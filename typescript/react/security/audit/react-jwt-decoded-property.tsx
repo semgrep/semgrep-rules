@@ -3,8 +3,8 @@ import { something } from "foobar";
 
 export const testAuth1 = async (): Promise<void> => {
   const { token } = await retrieveToken();
-// ruleid: react-jwt-decoded-property
   const decoded = jwt_decode<any>(token);
+// ruleid: react-jwt-decoded-property
   const exp = decoded.exp * 1000;
   return exp;
 };
