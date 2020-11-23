@@ -1,6 +1,6 @@
 rules:
 - id: template-href-var
-  message: |
+  message: >-
     Detected a template variable used in an anchor tag with
     the 'href' attribute. This allows a malicious actor to
     input the 'javascript:' URI and is subject to cross-
@@ -14,10 +14,17 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
     - https://content-security-policy.com/
   languages:
-  - none
+  - generic
   paths:
     include:
     - '*.html'
   severity: WARNING
-  pattern-regex: |-
-    .*href\s*=\s*[\"\']?{{\s*(?!.*url_for).*
+  patterns:
+  - pattern-inside: <a ...>
+  - pattern-either:
+    - pattern: href = {{ ... }}
+    - pattern: href = "{{ ... }}"
+    - pattern: href = '{{ ... }}'
+  - pattern-not-inside: href = {{ url_for(...) ... }}
+  - pattern-not-inside: href = "{{ url_for(...) ... }}"
+  - pattern-not-inside: href = '{{ url_for(...) ... }}'
