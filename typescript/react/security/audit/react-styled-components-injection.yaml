@@ -1,0 +1,46 @@
+rules:
+- id: react-styled-components-injection
+  patterns:
+  - pattern-inside: |
+      import styled from 'styled-components';
+      ...
+  - pattern-either:
+    - pattern-inside: |
+        import $STYLE from "...";
+        ...
+    - pattern-inside: |
+        $STYLE = $METHOD(...);
+        ...
+    - pattern-inside: |
+        function $FUNC(...,{$STYLE},...) {
+          ...
+        }
+    - pattern-inside: |
+        function $FUNC(...,$STYLE,...) {
+          ...
+        }
+    - pattern-inside: |
+        function $FUNC(...,{$INPUT},...) {
+          ...
+          $STYLE = <... $INPUT ...>;
+          ...
+        }
+    - pattern-inside: |
+        function $FUNC(...,$INPUT,...) {
+          ...
+          $STYLE = <... $INPUT ...>;
+          ...
+        }
+  - pattern: |
+      styled.$EL`...${$STYLE}...`
+  message: |
+    User controlled data in a styled component's css is an anti-pattern than can lead to XSS vulnerabilities
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://styled-components.com/docs/advanced#security
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
