@@ -27,7 +27,7 @@ jobs:
         if-no-files-found: error
     - uses: zdurham/s3-upload-github-action@master
       env:
-        FILE: semgrep-runs_output.tar.gz
+        FILE: semgrep_runs_output.tar.gz
         AWS_REGION: us-east-1
         S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         S3_KEY: ${{ secrets.S3_KEY }}
