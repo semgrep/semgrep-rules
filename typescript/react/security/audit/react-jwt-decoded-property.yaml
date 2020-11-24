@@ -1,0 +1,15 @@
+rules:
+- id: react-jwt-decoded-property
+  patterns:
+  - pattern-inside: |
+      import jwt_decode from "jwt-decode";
+      ...
+  - pattern-inside: |
+      $DECODED = jwt_decode($TOKEN,...);
+      ...
+  - pattern: $DECODED.$PROPERTY
+  message: |
+    Property decoded from JWT token without verifying and cannot be trustworthy.
+  languages:
+  - typescript
+  severity: WARNING

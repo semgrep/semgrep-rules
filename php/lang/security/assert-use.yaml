@@ -1,0 +1,14 @@
+rules:
+- id: assert-use
+  patterns:
+  - pattern: assert($ASSERT, ...);
+  # - pattern-not: assert(<... $ASSERT ...>, ...); - https://github.com/returntocorp/semgrep/issues/2035
+  - pattern-not: assert("...", ...);
+  message: |
+    Calling assert with user input is equivalent to eval'ing.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.assert
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/AssertsSniff.php
+  languages: [php]
+  severity: ERROR

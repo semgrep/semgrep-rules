@@ -1,0 +1,29 @@
+rules:
+- id: random-fd-exhaustion
+  pattern-either:
+  - patterns:
+    - pattern: |
+        $FD = open("/dev/urandom", ...);
+        ...
+        read($FD, ...);
+    - pattern-not: |
+        $FD = open("/dev/urandom", ...);
+        ...
+        $BYTES_READ = read($FD, ...);
+  - patterns:
+    - pattern: |
+        $FD = open("/dev/random", ...);
+        ...
+        read($FD, ...);
+    - pattern-not: |
+        $FD = open("/dev/random", ...);
+        ...
+        $BYTES_READ = read($FD, ...);
+  message: |
+    Call to 'read()' without error checking is susceptible to file descriptor
+    exhaustion. Consider using the 'getrandom()' function.
+  metadata:
+    references:
+    - https://lwn.net/Articles/606141/
+  languages: [c]
+  severity: ERROR

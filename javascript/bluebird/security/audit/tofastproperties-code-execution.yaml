@@ -1,0 +1,26 @@
+rules:
+- id: tofastproperties-code-execution
+  patterns:
+  - pattern-either:
+    - pattern: $UTIL.toFastProperties(...)
+    - pattern: toFastProperties(...)
+  - pattern-not: |
+      $UTIL.toFastProperties("...",...)
+  - pattern-not: |
+      toFastProperties("...",...)
+  - pattern-either:
+    - pattern-inside: |
+        $BB = require('bluebird');
+        ...
+    - pattern-inside: |
+        import 'bluebird';
+        ...
+  message: |
+    Potential arbitrary code execution, whatever is provided to `toFastProperties` is sent straight to eval()
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING

@@ -1,0 +1,68 @@
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    include proxy.conf;
+
+    server_name example;
+    root /var/www/example/;
+
+    include security.conf;
+
+    location / {
+        if ($http_user_agent ~* "^web-browser$") {
+            # ok: insecure-redirect
+            rewrite ^/(.*)$ https://$host/c/$1 redirect;
+        }
+
+        if ($http_accept ~* "yaml") {
+            # ruleid: insecure-redirect
+            rewrite ^/(.*)$ /c/$1 redirect;
+        }
+
+        if ($http_user_agent ~* "^web-browser-2$") {
+            # ok: insecure-redirect
+            rewrite ^/(.*)$ https://$host/c/$1 permanent;
+        }
+
+        if ($http_accept ~* "json") {
+            # ruleid: insecure-redirect
+            rewrite ^/(.*)$ /c/$1 permanent;
+        }
+
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /privacy {
+        try_files /privacy.html =404;
+    }
+
+    location /api {
+        proxy_set_header Host                   $host;
+        proxy_set_header X-Real-IP              $remote_addr;
+        proxy_set_header X-Forwarded-For        $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto      $scheme;
+        proxy_set_header X-Forwarded-Host       $host;
+        proxy_set_header X-Forwarded-Port       $server_port;
+
+        proxy_pass http://localhost:5000;
+    }
+
+
+    # location for raw configs
+    location /c/ {
+        expires 1h;
+
+        proxy_set_header Host                   $host;
+        proxy_set_header X-Real-IP              $remote_addr;
+        proxy_set_header X-Forwarded-For        $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto      $scheme;
+        proxy_set_header X-Forwarded-Host       $host;
+        proxy_set_header X-Forwarded-Port       $server_port;
+
+        proxy_pass http://localhost:5000;
+    }
+
+    include general.conf;
+}

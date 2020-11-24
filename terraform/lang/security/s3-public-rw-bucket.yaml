@@ -1,0 +1,14 @@
+rules:
+- id: s3-public-rw-bucket
+  pattern: acl = "public-read-write"
+  languages:
+  - generic
+  paths:
+    include:
+    - '*.tf'
+  severity: ERROR
+  message: S3 bucket with public read-write access detected.
+  metadata:
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#acl
+    - https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl

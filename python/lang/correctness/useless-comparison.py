@@ -12,7 +12,7 @@ if ("detached HEAD" or "master" in expected):
 if ("detached HEAD" and ("master" in expected)):
   pass
 
-# todook
+# todook:no-strings-as-booleans
 if ("detached HEAD" in expected) and ("master" in expected):
   pass
 
@@ -20,6 +20,6 @@ if ("detached HEAD" in expected) and ("master" in expected):
 if "":
   pass
 
-# todook
+# todook:no-strings-as-booleans
 if some_id == "foobar":
      pass

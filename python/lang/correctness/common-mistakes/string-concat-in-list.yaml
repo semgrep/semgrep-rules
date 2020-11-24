@@ -1,12 +1,16 @@
 rules:
 - id: string-concat-in-list
   patterns:
+  - pattern-inside: |
+      [...]
   - pattern: |
-      ["..." "...", ...]
+      "..." "..."
+  - pattern-not-inside: |
+      f"..."
   message: |
     Detected strings implicitly concatenated inside a list.
     Python will implicitly concatenate strings when not explicitly delimited.
-    Was this supposed to be individual elements of th list?
+    Was this supposed to be individual elements of the list?
   severity: WARNING
   languages:
   - python

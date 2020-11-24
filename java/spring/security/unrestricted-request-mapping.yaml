@@ -1,0 +1,24 @@
+rules:
+- id: unrestricted-request-mapping
+  patterns:
+  - pattern: |
+      @RequestMapping(...)
+      $RETURNTYPE $METHOD(...) { ... }
+  - pattern-not-inside: |
+      @RequestMapping(..., method = $X)
+      $RETURNTYPE $METHOD(...) { ... }
+  message: >-
+    Detected a method annotated with 'RequestMapping' that does not specify
+    the HTTP method. CSRF protections are not enabled for GET, HEAD, TRACE,
+    or OPTIONS, and by default all HTTP methods are allowed when the HTTP method
+    is not explicitly specified. This means that a method that performs state
+    changes could be vulnerable to CSRF attacks. To mitigate, add the 'method'
+    field and specify the HTTP method (such as 'RequestMethod.POST').
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp: 'A6: Security Misconfiguration'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING
+    references:
+    - https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING
+  languages: [java]

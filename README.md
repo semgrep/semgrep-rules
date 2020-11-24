@@ -9,35 +9,22 @@
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 
-This is an repository containing rules written for [semgrep](https://semgrep.dev), organized by language. Go to the [main semgrep documentation for details on semgrep](https://semgrep.live) and the syntax for the yaml files in this repository. You can also [browse these rules online](https://semgrep.live/registry).
-
-## Security Coverage
-
-`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
-
-<p align="center">
-    <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
-</p>
+This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
 
 ## Contributing
 
-We welcome contributions to this repo! Please fork and make a pull request; we'll contact you about signing our CLA.
+If you want to create your own collection of Semgrep rules, feel free to make your own repository and then make a PR adding it to the [list of repositories with Semgrep rules](https://github.com/returntocorp/semgrep-docs/blob/main/docs/awesome.md). This list automatically gets pulled into the [Semgrep Registry](https://semgrep.dev/r) so that lots of Semgrep users can find your rules!
 
-### Rule Namespacing
+We also welcome rule contributions directly to this repository! Since this repo is maintained by r2c, there are some extra benefits—for example, if there are bug reports for your rule, we’ll also take responsibility to help fix it. If you are submitting to the semgrep-rules repo (rather than your own, separate repository as mentioned above) we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). Check out the [Contributing Guidelines](/CONTRIBUTING.md) to get started.
 
-The namespacing format for contributing rules is `<language>.<framework>.<category>.$MORE`. If a `framework` isn't applicable, use `lang` instead.
+If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
-`category` is one of:
-- security
-- correctness
-- best-practice
-- maintainability
-- performance
+### Security Coverage
 
-If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), it is recommended to append `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
+Semgrep features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). `security` rules in this repository should have metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
 
 <p align="center">
-    <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
+    <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
 </p>
 
 ## Running Rules in CI/Pre-Commit/Developer Workflow
@@ -47,26 +34,6 @@ If you want run these rules rather than write them, [see the CI instructions on 
 ## Help
 
 Join slack for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
-
-## Testing Rules
-
-A testing system is available which can be used to check the rules against example source code files. It requires `semgrep` from [semgrep](https://semgrep.dev)
-
-If you wrote a rule in a yaml named `eqeq-bad.yaml` with a rule id named `my-eqeq-bad`, you could put a file in the same directory named eqeq-bad.py (it just needs to have the same name except for the extension as eqeq-bad.yaml). Then:
-
-```python
-# ruleid:my-eqeq-bad
-x == x
-```
-
-Running `make test` will execute the test suite, and if `my-eqeq-bad` does not fire on the line below the comment, your rule will fail.
-
-If you have a rule that is not working, but you want to commit it so it's documented but not fail the tests, use `#todoruleid:...`:
-
-```python
-# todoruleid:my-eqeq-bad
-x != x
-```
 
 ### Github Action To Run Tests
 
