@@ -74,5 +74,13 @@ def render_login_page5():
 </form>
     '''
 
+@app.route('/totally_not_bad')
+def totally_not_bad():
+    # ok
+    return (
+      "a" + "\n" +
+      "b"
+    )
+
 if __name__ == '__main__':
     app.run(debug=True)

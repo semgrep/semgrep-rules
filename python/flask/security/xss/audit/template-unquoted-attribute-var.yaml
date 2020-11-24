@@ -11,15 +11,11 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
   languages:
   - generic
-  paths:
-    include:
-    - '*.html'
   severity: WARNING
   patterns:
   - pattern-inside: <$TAG ...>
-  - pattern-inside: = ...>
-  - pattern-not-inside: "'...'"
-  - pattern-not-inside: '"..."'
+  - pattern-not-inside: ="..."
+  - pattern-not-inside: ='...'
   - pattern: '{{ ... }}'
   fix-regex:
     regex: '{{(.*?)}}'
