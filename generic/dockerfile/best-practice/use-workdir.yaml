@@ -1,0 +1,12 @@
+rules:
+- id: use-workdir
+  pattern: RUN ... cd
+  message: >-
+    Use 'WORKDIR' instead of 'RUN cd ...'. Using 'RUN cd ...' may not
+    work as expected in a conatiner.
+  severity: WARNING
+  languages: [generic]
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3003
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3003

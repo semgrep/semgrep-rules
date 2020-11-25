@@ -1,0 +1,12 @@
+rules:
+- id: use-absolute-workdir
+  pattern: WORKDIR $WORD
+  message: >-
+    Detected a relative WORKDIR. Use absolute paths. This prevents
+    issues based on assumptions about the WORKDIR of previous containers.
+  severity: WARNING
+  languages: [generic]
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3000
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3000
