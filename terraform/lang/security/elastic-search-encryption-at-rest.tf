@@ -1,3 +1,4 @@
+# ruleid: elastic-search-encryption-at-rest
 resource "aws_elasticsearch_domain" "monitoring-framework" {
   domain_name           = "tg-test-es"
   elasticsearch_version = "2.3"
@@ -15,10 +16,12 @@ resource "aws_elasticsearch_domain" "monitoring-framework" {
     volume_size = 30
   }
 }
+
 resource "aws_elasticsearch_domain" "monitoring-framework" {
   domain_name           = "tg-test-es"
   elasticsearch_version = "2.3"
-encrypt_at_rest {
+  # ruleid: elastic-search-encryption-at-rest
+  encrypt_at_rest {
     enabled = false
   }
   cluster_config {
@@ -36,6 +39,7 @@ encrypt_at_rest {
     volume_size = 30
   }
 }
+
 resource "aws_elasticsearch_domain" "monitoring-framework" {
   domain_name           = "tg-test-es"
   elasticsearch_version = "2.3"
