@@ -1,7 +1,7 @@
-# ruleid: elastic-search-encryption-at-rest
 resource "aws_elasticsearch_domain" "monitoring-framework" {
   domain_name           = "tg-test-es"
   elasticsearch_version = "2.3"
+  # ruleid: elastic-search-encryption-at-rest
   cluster_config {
     instance_type            = "t2.small.elasticsearch"
     instance_count           = 1

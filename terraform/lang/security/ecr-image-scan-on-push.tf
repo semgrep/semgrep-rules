@@ -15,10 +15,10 @@ resource "aws_ecr_repository" "foo" {
   }
 }
 
-# ruleid: ecr-image-scan-on-push
 resource "aws_ecr_repository" "repository" {
   name                 = "test-repository"
   image_tag_mutability = "MUTABLE"
+  # ruleid: ecr-image-scan-on-push
   tags = {
     Name = "test-repository"
   }
