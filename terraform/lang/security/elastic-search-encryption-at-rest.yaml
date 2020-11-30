@@ -8,6 +8,11 @@ rules:
         {... encrypt_at_rest{... enabled = true ...} ...}
     - pattern-inside: |
         resource "aws_elasticsearch_domain" "..." {...}
+  languages:
+    - generic
+  paths:
+    include:
+    - '*.tf'
   message: |
     Encryption at rest is not enabled for the elastic search domain resource
   severity: WARNING

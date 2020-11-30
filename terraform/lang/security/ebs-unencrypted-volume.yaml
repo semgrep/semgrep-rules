@@ -8,6 +8,11 @@ rules:
         resource "aws_ebs_volume" "..." {... encrypted=true ...}
     - pattern-inside: |
         resource "aws_ebs_volume" "..." {...}
+  languages:
+    - generic
+  paths:
+    include:
+    - '*.tf'
   message: |
     An EBS volume is configured without encryption enabled.
   severity: WARNING
