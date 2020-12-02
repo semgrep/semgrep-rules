@@ -6,18 +6,30 @@ rules:
         <$X target="_blank" />
     - pattern-not: |
         <$X target="_blank" rel="..." />
+    - pattern-not: |
+        <$X href="=~/^\/[^\/]/i" />
+    - pattern-not: |
+        <$X to="=~/^\/[^\/]/i" />
   - patterns:
     - pattern-inside: |
         <$X target="_blank" rel=... />
+    - pattern-not-inside: |
+        <$X href="=~/^\/[^\/]/i" rel=... />
+    - pattern-not-inside: |
+        <$X to="=~/^\/[^\/]/i" rel=... />
     - pattern-regex: rel=["']((?!noreferrer).)*?["']
   - patterns:
     - pattern: |
         React.createElement($A, {target: '_blank'},...)
     - pattern-not: |
         React.createElement($A, {rel: '...'},...)
+    - pattern-not: |
+        React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
   - patterns:
     - pattern: |
         React.createElement($A, {target: '_blank', rel: $REL},...)
+    - pattern-not: |
+        React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
     - metavariable-regex:
         metavariable: $REL
         regex: "[\"']((?!noreferrer).)*?['\"]"
@@ -30,9 +42,17 @@ rules:
         $P = {rel: '...'};
         ...
         React.createElement($A, $P,...);
+    - pattern-not: |
+        $P = {href: '=~/^\/[^\/]/i'};
+        ...
+        React.createElement($A, $P,...);
   - patterns:
     - pattern: |
         $P = {target: '_blank', rel: $REL};
+        ...
+        React.createElement($A, $P,...);
+    - pattern-not: |
+        $P = {href: '=~/^\/[^\/]/i'};
         ...
         React.createElement($A, $P,...);
     - metavariable-regex:
