@@ -12,11 +12,11 @@ rules:
     - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
   - pattern-either:
     - pattern: |
-        $INP = <...$REQ.$VAR...>;
+        $INP = <... $REQ.$VAR ...>;
         ...
         wkhtmltopdf(<... $INP ...>, ...);
     - pattern: |
-        $INP = <...$REQ.$VAR.$FOO...>;
+        $INP = <... $REQ.$VAR.$FOO ...>;
         ...
         wkhtmltopdf(<... $INP ...>, ...);
     - pattern: |
