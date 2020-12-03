@@ -1,0 +1,16 @@
+rules:
+- id: remove-package-cache
+  patterns:
+  - pattern: RUN apt-get update
+  - pattern-not-inside: RUN apt-get update ... && apt-get clean
+  message: >-
+    The package cache was not deleted after running 'apt-get update', which
+    increases the size of the image.
+    Remove the package cache by appending '&& apt-get clean' at the end
+    of apt-get command chain.
+  severity: WARNING
+  languages: [generic]
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3009
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3009
