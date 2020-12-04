@@ -1,5 +1,7 @@
 rules:
 - id: missing-pip-no-cache-dir
+  severity: INFO
+  languages: [generic]
   patterns:
   - pattern-either:
     - patterns:
@@ -16,7 +18,6 @@ rules:
     This 'pip install' is missing '--no-cache-dir'. This prevents
     unnecessary packages from being installed, thereby reducing image size. Add
     '--no-cache-dir'.
-  severity: INFO
   metadata:
     source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3042
     references:
