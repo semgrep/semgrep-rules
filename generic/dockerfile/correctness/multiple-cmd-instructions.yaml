@@ -1,0 +1,15 @@
+rules:
+- id: multiple-cmd-instructions
+  severity: ERROR
+  languages: [generic]
+  pattern: |
+    CMD ...
+    ...
+    CMD ...
+  message: |
+    Multiple CMD instructions were found. Only the last one will take effect.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4003
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL4003
+    - https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index#//dash_ref_Instructions/Entry/CMD/0

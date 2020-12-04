@@ -1,0 +1,17 @@
+rules:
+- id: set-pipefail
+  severity: WARNING
+  languages: [generic]
+  patterns:
+  - pattern: RUN $CMD ... | $CMD2
+  - pattern-not-inside: |
+      SHELL [... "pipefail" ...]
+      ...
+      ...
+  message: |
+    Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.
+    If you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL ["/bin/bash", "-o", "pipefail", "-c"] before the command.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4006
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL4006
