@@ -1,0 +1,18 @@
+rules:
+- id: missing-zypper-no-confirm-switch
+  severity: WARNING
+  languages: [generic]
+  patterns:
+  - pattern: |
+      RUN ... zypper install ... $SOMETHING
+  - pattern-not-inside: |
+      RUN ... zypper install ... -y
+  - pattern-not-inside: |
+      RUN ... zypper install ... --no-confirm
+  message: |
+    This 'zypper install' is missing the '-y' switch. This might stall
+    builds because it requires human intervention. Add the '-y' switch.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3034
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3034
