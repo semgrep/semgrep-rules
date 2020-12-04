@@ -32,20 +32,20 @@ let notEvaluatedFunc = new Function(document.getElementById('userInput'));
 
 let dynamic = "function dynamicStrings() { return 'dynamic strings are not'; }"
 
-// ruleid:eval-detected
+// ruleid:new-function-detected
 func = new Function(dynamic + 'possibly malicious code');
 func();
 
-// ruleid:eval-detected
+// ruleid:new-function-detected
 func2 = new Function(`${dynamic} possibly malicious code`);
 func2();
 
-// ruleid:eval-detected
+// ruleid:new-function-detected
 func3 = new Function(dynamic.concat(''));
 func3();
 
 function evalSomething(something) {
-    // ruleid:eval-detected
+    // ruleid:new-function-detected
     let func = new Function(something);
     func();
 }
