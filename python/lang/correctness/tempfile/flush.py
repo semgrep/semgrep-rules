@@ -8,7 +8,7 @@ def main():
     with tempfile.NamedTemporaryFile("w") as fout:
         debug_print(astr)
         fout.write(astr)
-        # OK
+        # ok:tempfile-without-flush
         fout.flush()
         cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
@@ -17,7 +17,7 @@ def main_b():
     with tempfile.NamedTemporaryFile("w") as fout:
         debug_print(astr)
         fout.write(astr)
-        # OK
+        # ok:tempfile-without-flush
         fout.close()
         cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
@@ -27,12 +27,12 @@ def main_c():
         debug_print(astr)
         fout.write(astr)
 
-    # OK
+    # ok:tempfile-without-flush
     cmd = [binary_name, fout.name, *[str(path) for path in targets]]
 
 
 def main_c():
-    # todoruleid:tempfile-without-flush
+    # ruleid:tempfile-without-flush
     with tempfile.NamedTemporaryFile("w") as fout:
         debug_print(astr)
         fout.write(astr)

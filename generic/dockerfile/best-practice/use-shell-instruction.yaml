@@ -1,0 +1,12 @@
+rules:
+- id: use-shell-instruction
+  severity: WARNING
+  languages: [generic]
+  pattern: |
+    RUN ln ... /bin/sh
+  message: |
+    Use the SHELL instruction to set the default shell instead of overwriting '/bin/sh'.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4005
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL4005

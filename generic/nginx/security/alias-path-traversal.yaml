@@ -1,0 +1,23 @@
+rules:
+- id: alias-path-traversal
+  patterns:
+  - pattern: |
+      location ... {
+        ...
+        alias ...;
+        ...
+      }
+  - pattern-not-inside: location /.../ { ... ... }
+  fix-regex:
+    regex: location\s+([A-Za-z0-9/-_\.]+)
+    replacement: location \1/
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    The alias in this location block is subject to a path traversal
+    because the location path does not end in a path separator (e.g., '/').
+    To fix, add a path separator to the end of the path.
+  metadata:
+    references:
+    - https://github.com/yandex/gixy/blob/master/docs/en/plugins/aliastraversal.md

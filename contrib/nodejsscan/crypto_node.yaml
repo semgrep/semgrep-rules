@@ -29,9 +29,9 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        $X.createCipheriv("=~/aes-\([0-9]+\)-ecb/", ...)
+        $X.createCipheriv("=~/aes-([0-9]+)-ecb/", ...)
     - pattern: |
-        $X.createDecipheriv("=~/aes-\([0-9]+\)-ecb/", ...)
+        $X.createDecipheriv("=~/aes-([0-9]+)-ecb/", ...)
   message: >-
     AES with ECB mode is deterministic in nature and not suitable for
     encrypting large amount of repetitive data.

@@ -1,0 +1,13 @@
+rules:
+- id: eval-use
+  patterns:
+  - pattern: eval(...);
+  - pattern-not: eval('...');
+  message: |
+    Evaluating non-constant commands. This can lead to command injection.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.eval
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/NoEvalsSniff.php
+  languages: [php]
+  severity: ERROR

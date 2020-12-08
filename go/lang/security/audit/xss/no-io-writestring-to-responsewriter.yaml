@@ -1,0 +1,28 @@
+rules:
+- id: no-io-writestring-to-responsewriter
+  message: |
+    Detected 'io.WriteString()' writing directly to 'http.ResponseWriter'.
+    This bypasses HTML escaping that prevents cross-site scripting
+    vulnerabilities. Instead, use the 'html/template' package
+    to render data to users.
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
+    - https://golang.org/pkg/io/#WriteString
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        func $HANDLER(..., $WRITER http.ResponseWriter, ...) {
+          ...
+        }
+    - pattern-inside: |
+        func(..., $WRITER http.ResponseWriter, ...) {
+          ...
+        }
+  - pattern-not: io.WriteString($WRITER, "...")
+  - pattern: io.WriteString($WRITER, $STRING)
+  languages:
+  - go

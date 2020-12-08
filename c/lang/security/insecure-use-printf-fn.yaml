@@ -1,24 +1,25 @@
 rules:
 - id: insecure-use-printf-fn
-  pattern-either:
-  - pattern: |
-      $FORMAT = "=~/.*%.*[n,s,x,u,d].*/";
-      ...
-      vsprintf(..., $FORMAT, ...);
-  - pattern: vsprintf(..., "=~/.*%.*[n,s,x,u,d].*/", ...)
-  - pattern: |
-      $FORMAT = "=~/.*%.*[n,s,x,u,d].*/";
-      ...
-      sprintf(..., $FORMAT, ...);
-  - pattern: sprintf(...,"=~/.*%.*[n,s,x,u,d].*/",...)
-  - pattern: |
-      $FORMAT = "=~/.*%.*[n,s,x,u,d].*/";
-      ...
-      printf($FORMAT, ...);
-  - pattern: printf("=~/.*%.*[n,s,x,u,d].*/", ...)
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        vsprintf(..., $BUFFER, ...);
+    - pattern: vsprintf(..., argv[$NUM], ...)
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        sprintf(..., $BUFFER, ...);
+    - pattern: sprintf(...,argv[$NUM],...)
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        printf(..., $BUFFER, ...);
+    - pattern: printf(...,argv[$NUM],...)
   message: |
-    Avoid using specific indicators in 'sprintf', 'printf' and 'vsprintf'. 
-    These functions put you at risk of buffer overflow vulnerabilities through the use of format string exploits. 
+    Avoid using user-controlled format strings passed into 'sprintf', 'printf' and 'vsprintf'.
+    These functions put you at risk of buffer overflow vulnerabilities through the use of format string exploits.
     Instead, use 'snprintf' and 'vsnprintf'.
   metadata:
     references:
@@ -26,4 +27,3 @@ rules:
     - https://www.cvedetails.com/cwe-details/134/Uncontrolled-Format-String.html
   languages: [c]
   severity: WARNING
-

@@ -1,0 +1,20 @@
+rules:
+- id: explicit-unescape-with-markup
+  message: |
+    Detected explicitly unescaped content using 'Markup()'. This permits
+    the unescaped data to include unescaped HTML which could result in
+    cross-site scripting. Ensure this data is not externally controlled,
+    or consider rewriting to not use 'Markup()'.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://tedboy.github.io/flask/generated/generated/flask.Markup.html
+  languages:
+  - python
+  severity: WARNING
+  pattern-either:
+  - pattern: flask.Markup(...)
+  - pattern: flask.Markup.unescape(...)
+  - pattern: markupsafe.Markup(...)
+  - pattern: $MARKUPOBJ.unescape()

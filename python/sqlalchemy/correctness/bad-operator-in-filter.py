@@ -36,6 +36,5 @@ def test_bad_not_5():
 
 def test_ok_1():
     model = Model.query.first()
-    # ok
+    # ok:bad-operator-in-filter
     return model.id is 5
-

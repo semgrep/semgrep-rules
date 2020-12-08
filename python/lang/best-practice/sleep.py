@@ -5,7 +5,7 @@ def a():
     return 10
 
 
-# OK
+# OK:arbitrary-sleep
 t.sleep
 
 # ruleid:arbitrary-sleep
@@ -15,8 +15,8 @@ t.sleep(0.1)
 # todoruleid:arbitrary-sleep
 time.sleep("bad")
 
-# OK
+# OK:arbitrary-sleep
 t.sleep(a())
 
-# ok
+# ok:arbitrary-sleep
 t.sleep(some_var)

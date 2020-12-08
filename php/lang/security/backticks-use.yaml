@@ -1,0 +1,11 @@
+rules:
+- id: backticks-use
+  pattern: '`...`;'
+  message: |
+    Backticks use may lead to command injection vulnerabilities.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/language.operators.execution.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/BackticksSniff.php
+  languages: [php]
+  severity: ERROR

@@ -6,7 +6,7 @@ from paramiko import client
 
 client = paramiko.client.SSHClient()
 # this is safe
-# ok
+# ok:paramiko-exec-command
 client.connect('somehost')
 
 # this is not safe

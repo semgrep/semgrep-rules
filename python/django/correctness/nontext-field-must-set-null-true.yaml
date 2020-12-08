@@ -11,10 +11,9 @@ rules:
   - pattern-not: $F = django.db.models.URLField(...)
   - pattern-not: $F = django.db.models.UUIDField(...)
   - pattern-not: $F = django.db.models.ManyToManyField(...)
+  - pattern-not: $F = django.db.models.NullBooleanField(...)
   - pattern-not: $F = $X(..., null=True, blank=True, ...)
   - pattern: $F = $X(..., blank=True, ...)
   message: null=True should be set if blank=True is set on non-text fields.
   languages: [python]
   severity: ERROR
-
-

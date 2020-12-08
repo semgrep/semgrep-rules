@@ -7,9 +7,11 @@ rules:
     - pattern: $X != $X
   - pattern-not: 1 == 1
   message: |
-    Detected a useless comparison operation `$X == $X` or `$X != $X`. This 
+    Detected a useless comparison operation `$X == $X` or `$X != $X`. This
     operation is always true.
     If testing for floating point NaN, use `math.isnan`, or
     `cmath.isnan` if the number is complex.
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: ERROR

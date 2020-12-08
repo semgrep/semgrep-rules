@@ -91,7 +91,7 @@ func (r *retry) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 				retryResponseWriter.DisableRetries()
 			},
 		}
-        // ok
+        // ok: dynamic-httptrace-clienttrace
 		newCtx := httptrace.WithClientTrace(req.Context(), trace)
 
 		r.next.ServeHTTP(retryResponseWriter, req.WithContext(newCtx))
@@ -248,7 +248,7 @@ func (ht *HTTPTrace) trace() *httptrace.ClientTrace {
 // WithTrace returns the given HTTP Request with this HTTPTrace added to its
 // context.
 func (ht *HTTPTrace) WithTrace(req *http.Request) *http.Request {
-    // ok
+    // ok: dynamic-httptrace-clienttrace
 	return req.WithContext(httptrace.WithClientTrace(req.Context(), ht.trace()))
 }
 
@@ -295,7 +295,7 @@ func (p *Ping) Ping() (Result, error) {
 	req.Header.Add("User-Agent", p.uAgent)
 	// context, tracert
 	if p.tracerEnabled && !p.quiet {
-        // ok
+        // ok: dynamic-httptrace-clienttrace
 		req = req.WithContext(httptrace.WithClientTrace(req.Context(), tracer(&r)))
 	}
 	resp, err = client.Do(req)

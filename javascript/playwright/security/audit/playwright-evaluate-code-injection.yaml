@@ -1,0 +1,35 @@
+rules:
+- id: playwright-evaluate-code-injection
+  message: |
+    If unverified user data can reach the `evaluate` method it can result in Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+  languages: [javascript]
+  patterns:
+  - pattern-inside: |
+      ...
+      require('playwright');
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern-not-inside: |
+      ...
+      var $INPUT = function $FNAME(...){...};
+      ...
+  - pattern-either:
+    - pattern: $PAGE.evaluate($INPUT,...)
+    - pattern: $PAGE.evaluateHandle($INPUT,...)
+    - pattern: $PAGE.evaluateOnNewDocument($INPUT,...)
+  - pattern-not: $PAGE.evaluate("...",...)
+  - pattern-not: $PAGE.evaluate(function(...){...},...)
+  - pattern-not: $PAGE.evaluate(function $FNAME(...){...},...)
+  - pattern-not: $PAGE.evaluateHandle("...",...)
+  - pattern-not: $PAGE.evaluateHandle(function(...){...},...)
+  - pattern-not: $PAGE.evaluateHandle(function $FNAME(...){...},...)
+  - pattern-not: $PAGE.evaluateOnNewDocument("...",...)
+  - pattern-not: $PAGE.evaluateOnNewDocument(function(...){...},...)
+  - pattern-not: $PAGE.evaluateOnNewDocument(function $FNAME(...){...},...)

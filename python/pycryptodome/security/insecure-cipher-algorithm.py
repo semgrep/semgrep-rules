@@ -72,7 +72,11 @@ cipher = pycryptodomex_xor.new(key)
 msg = cipher.encrypt(plaintext)
 
 key = b'Sixteen byte key'
-# ok
+# ok:insecure-cipher-algorithm-rc2
+# ok:insecure-cipher-algorithm-rc4
+# ok:insecure-cipher-algorithm-des
+# ok:insecure-cipher-algorithm-blowfish
+# ok:insecure-cipher-algorithm-xor
 cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
 plaintext = cipher.decrypt(ciphertext)
 try:

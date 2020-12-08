@@ -4,8 +4,8 @@ rules:
   - pattern: strcpy(...)
   - pattern: strncpy(...)
   message: |
-    Finding triggers whenever there is a strcpy or strncpy used. 
-    This is an issue because strcpy or strncpy can lead to buffer overflow vulns. 
+    Finding triggers whenever there is a strcpy or strncpy used.
+    This is an issue because strcpy or strncpy can lead to buffer overflow vulns.
     Fix this by using strcpy_s instead.
   metadata:
     references:
@@ -13,4 +13,3 @@ rules:
     - https://nvd.nist.gov/vuln/detail/CVE-2019-11365
   languages: [c]
   severity: WARNING
-

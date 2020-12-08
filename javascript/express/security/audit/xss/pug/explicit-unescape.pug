@@ -1,0 +1,35 @@
+// cf. https://github.com/abdulaz1z/nodejs-pug-starter/blob/42b48dd68416a87904258d1228686321206efc36/views/index.pug
+doctype html
+html(lang="en")
+  include includes/head.pug
+  body
+    //- Navigation
+    nav(class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom")
+      div(class="container")
+        a(class="navbar-brand" href="/") NodeJs-Pug-Starter
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+
+        div(class="collapse navbar-collapse" id="navbarResponsive")
+          ul(class="navbar-nav ml-auto")
+            li(class="nav-item")
+              a(class="nav-link" href="/") Home
+            li(class="nav-item")
+              // ruleid: template-explicit-unescape
+              a(class="nav-link" target="_blank" href!=url) Documentation
+
+    // ok: template-explicit-unescape
+    if disableSignUp !== true
+      a.button(href="/signup")=t("Signup")
+
+    //- Page Content
+    section
+      div(class="container")
+        div(class="row")
+          div(class="col-lg-6")
+            // ruleid: template-explicit-unescape
+            h1(class="mt-5 text-white") !{title_text}
+            p(class= "text-light") This project is a simple application skeleton for a NodeJs web app with PugJs templating. You can use it to quickly bootstrap your NodeJs webapp projects and dev environment for these projects.
+
+    script(src='vendor/jquery/jquery.min.js')
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')

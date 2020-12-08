@@ -21,7 +21,7 @@ public class ScriptEngineSample {
         Object result = scriptEngine.eval("test=1;" + userInput);
     }
 
-    //ok
+    //ok: script-engine-injection
     public static void scriptingSafe() throws ScriptException {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension("js");

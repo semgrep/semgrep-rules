@@ -4,14 +4,14 @@ import os
 from Crypto.PublicKey import DSA as pycrypto_dsa
 from Cryptodome.PublicKey import DSA as pycryptodomex_dsa
 
-# ok
+# ok:insufficient-dsa-key-size
 pycrypto_dsa.generate(bits=2048)
-# ok
+# ok:insufficient-dsa-key-size
 pycryptodomex_dsa.generate(bits=2048)
 
-# ok
+# ok:insufficient-dsa-key-size
 pycrypto_dsa.generate(4096)
-# ok
+# ok:insufficient-dsa-key-size
 pycryptodomex_dsa.generate(4096)
 
 # ruleid:insufficient-dsa-key-size

@@ -48,7 +48,7 @@ def render_login_page3():
     <p><input value="Login" type="submit" /></p>
 </form>
     ''' % (thing,)
-    
+
 @app.route("/loginpage4")
 def render_login_page4():
     thing = "blah"
@@ -60,7 +60,7 @@ def render_login_page4():
     <p><input value="Login" type="submit" /></p>
 </form>
     '''
-    
+
 @app.route("/loginpage5")
 def render_login_page5():
     thing = "blah"
@@ -73,6 +73,14 @@ def render_login_page5():
     <p><input value="Login" type="submit" /></p>
 </form>
     '''
+
+@app.route('/totally_not_bad')
+def totally_not_bad():
+    # ok
+    return (
+      "a" + "\n" +
+      "b"
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

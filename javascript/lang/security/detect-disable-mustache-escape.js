@@ -1,6 +1,5 @@
 // ruleid:detect-disable-mustache-escape
 a.escapeMarkup = false;
 
-// ok
+// ok:detect-disable-mustache-escape
 escapeMarkup = false;
-

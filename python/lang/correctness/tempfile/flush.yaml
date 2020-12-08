@@ -1,26 +1,48 @@
 rules:
 - id: tempfile-without-flush
-  patterns:
-  - pattern-not: |
-      $F = tempfile.NamedTemporaryFile(...)
-      ...
-      $F.write(...)
-      ...
-      $F.flush()
-      ...
-      $F.name
-  - pattern-not: |
-      $F = tempfile.NamedTemporaryFile(...)
-      ...
-      $F.write(...)
-      ...
-      $F.close()
-      ...
-      $F.name
-  - pattern: |
-      $F = tempfile.NamedTemporaryFile(...)
-      ...
-      $F.name
+  pattern-either:
+  - patterns:
+    - pattern-not: |
+        $F = tempfile.NamedTemporaryFile(...)
+        ...
+        $F.write(...)
+        ...
+        $F.flush()
+        ...
+        $F.name
+    - pattern-not: |
+        $F = tempfile.NamedTemporaryFile(...)
+        ...
+        $F.write(...)
+        ...
+        $F.close()
+        ...
+        $F.name
+    - pattern: |
+        $F = tempfile.NamedTemporaryFile(...)
+        ...
+        $F.name
+  - patterns:
+    - pattern-not: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $F.write(...)
+            ...
+            $F.flush()
+            ...
+            $F.name
+    - pattern-not: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $F.write(...)
+            ...
+            $F.close()
+            ...
+            $F.name
+    - pattern: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $F.name
   message: possibly missing a .flush() or .close() call to temporary file $F; file may or may not exist when $F.name is used
   languages: [python]
   severity: ERROR

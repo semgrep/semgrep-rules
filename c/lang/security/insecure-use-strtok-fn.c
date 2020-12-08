@@ -15,7 +15,7 @@ int main() {
     char str[DST_BUFFER_SIZE];
     char dest[DST_BUFFER_SIZE];
     fgets(str, DST_BUFFER_SIZE, stdin);
-    // ok
+    // ok:insecure-use-strtok-fn
     strtok_r(str, " ", *dest);
     printf("%s", str);
     return 0;

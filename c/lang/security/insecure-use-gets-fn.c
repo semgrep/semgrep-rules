@@ -12,7 +12,7 @@ int bad_code() {
 
 int main() {
     char str[DST_BUFFER_SIZE];
-    // ok
+    // ok:insecure-use-gets-fn
     fgets(str);
     printf("%s", str);
     return 0;

@@ -25,23 +25,23 @@ def test3():
     import flask
     response = flask.make_response()
     # all present
-    # ok
+    # ok:secure-set-cookie
     response.set_cookie("cookie1", "cookie_value", secure=True, httponly=True, samesite='Lax')
-    # ok
+    # ok:secure-set-cookie
     response.set_cookie("cookie2", "cookie_value", secure=True, httponly=True, samesite='Strict')
-    # ok
+    # ok:secure-set-cookie
     response.set_cookie("cookie3", "cookie_value", secure=False, httponly=False, samesite=None)
 
-# ok
+# ok:secure-set-cookie
 def set_cookie(settings):
     d = {"hello": "world"}
     d.update(settings)
     return d
 
 def use_cookie(cookie):
-    # ok
+    # ok:secure-set-cookie
     foo = set_cookie({"goodbye": "planet"})
-    
+
 # cf. # https://github.com/pallets/flask/blob/b7f6fae9b34341b9be7742b86f6caffe07fc6f25/tests/test_basic.py#L1956
 def test_real_code():
     import flask
@@ -69,6 +69,6 @@ def merge_cookies(cookiejar, cookies):
             cookiejar.update(cookies)
         except AttributeError:
             for cookie_in_jar in cookies:
-                # ok
+                # ok:secure-set-cookie
                 cookiejar.set_cookie(cookie_in_jar)
     return cookiejar

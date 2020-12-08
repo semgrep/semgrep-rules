@@ -1,0 +1,10 @@
+rules:
+- id: missing-noopener
+  patterns:
+  - pattern: |
+      <a ... target="_blank" ... >
+  - pattern-not-inside: |
+      <a ... rel="... noopener ..." ... >
+  message: Missing 'noopener' on an anchor tag where target='_blank'.
+  severity: WARNING
+  languages: [generic]

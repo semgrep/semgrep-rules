@@ -1,0 +1,17 @@
+rules:
+- id: insecure-createnodesfrommarkup
+  patterns:
+  - pattern-either:
+    - pattern: createNodesFromMarkup(...)
+    - pattern: $X.createNodesFromMarkup(...)
+  - pattern-not: createNodesFromMarkup("...",...)
+  - pattern-not: $X.createNodesFromMarkup("...",...)
+  message: |
+    User controlled data in a `createNodesFromMarkup` is an anti-pattern than can lead to XSS vulnerabilities
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING

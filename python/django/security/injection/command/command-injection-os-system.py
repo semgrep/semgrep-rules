@@ -16,6 +16,6 @@ def danger3(request):
     os.system("nslookup " + url)
 
 def ok(request):
-    # ok
+    # ok: command-injection-os-system
     url = request.GET['url']
     os.system("echo 'hello'")

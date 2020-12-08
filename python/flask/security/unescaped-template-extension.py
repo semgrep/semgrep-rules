@@ -53,23 +53,23 @@ def six():
 
 @app.route("no_vars")
 def no_vars():
-    # ok
+    # ok: unescaped-template-extension
     return render_template("unsafe.txt")
 
 @app.route("/escaped_extensions")
 def escaped_extensions():
-    # ok
+    # ok: unescaped-template-extension
     return render_template("safe.html", name=request.args.get("name"))
-    
+
 @app.route("/concat")
 def concat():
     # ruleid: unescaped-template-extension
     msg.body = render_template(template + '.txt', **kwargs)
-    # ok
+    # ok: unescaped-template-extension
     msg.html = render_template(template + '.html', **kwargs)
     # ruleid: unescaped-template-extension
     return render_template('%s.txt' % style, **kwargs).replace('<table>', table)
-    
+
 @app.route("/format")
 def format():
     name = "world"
@@ -79,13 +79,13 @@ def format():
 @app.route("/format-ok")
 def format():
     name = "world"
-    # ok
+    # ok: unescaped-template-extension
     return render_template("{}.html".format("hello"), name)
 
 from library import render_template
 def not_flask():
     from library import render_template
-    # ok
+    # ok: unescaped-template-extension
     return render_template("hello.txt")
 
 @app.route("/what_if")

@@ -10,7 +10,7 @@ func main() {
     const a template.HTML = fmt.Sprintf("<a href=%q>link</a>")
     // ruleid:go-insecure-templates
     var b template.CSS = "a { text-decoration: underline; } "
-    
+
     // ruleid:go-insecure-templates
     var c template.HTMLAttr =  fmt.Sprintf("herf=%q")
 
@@ -21,9 +21,9 @@ func main() {
     var e template.JSStr = "setTimeout('alert()')";
 
     // ruleid:go-insecure-templates
-    var f template.Sercset = g;
-    
-    // ok
+    var f template.Srcset = g;
+
+    // ok:go-insecure-templates
     tmpl, err := template.New("test").ParseFiles("file.txt")
 
     // other code

@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
         var str = new Buffer(req.cookies.profile, 'base64').toString();
         // ruleid:node_deserialize
         var obj = serialize.unserialize(str);
-        // ruleid:node_deserialize
+        // ruleid:serializetojs_deserialize
         serialize2.deserialize(str);
         if (obj.username) {
             res.send("Hello " + escape(obj.username));
@@ -27,3 +27,5 @@ app.get('/', function (req, res) {
     res.send("Hello World");
 });
 app.listen(3000);
+// ruleid:serializetojs_deserialize
+require('serialize-to-js').deserialize(str);

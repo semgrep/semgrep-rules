@@ -21,7 +21,9 @@ cipher = Cipher(algorithms.IDEA(key), mode=None, backend=default_backend())
 encryptor = cipher.encryptor()
 ct = encryptor.update(b"a secret message")
 
-# ok
+# ok:insecure-cipher-algorithm-idea
+# ok:insecure-cipher-algorithm-rc4
+# ok:insecure-cipher-algorithm-blowfish
 cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
 encryptor = cipher.encryptor()
 ct = encryptor.update(b"a secret message") + encryptor.finalize()

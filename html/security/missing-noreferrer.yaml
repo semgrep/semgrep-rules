@@ -1,0 +1,10 @@
+rules:
+- id: missing-noreferrer
+  patterns:
+  - pattern: |
+      <a ... target="_blank" ...>
+  - pattern-not-inside: |
+      <a ... rel="... noreferrer ..." ... >
+  message: Missing 'noreferrer' on an anchor tag where target='_blank'.
+  severity: WARNING
+  languages: [generic]

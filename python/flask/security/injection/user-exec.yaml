@@ -19,37 +19,36 @@ rules:
           def $FUNC(..., $ROUTEVAR, ...):
             ...
       - pattern-either:
-        - pattern: eval(..., <... $ROUTEVAR ...>, ...)
+        - pattern: exec(..., <... $ROUTEVAR ...>, ...)
         - pattern: |
             $INTERM = <... $ROUTEVAR ...>
             ...
-            eval(..., <... $INTERM ...>, ...)
+            exec(..., <... $INTERM ...>, ...)
     - patterns:
       - pattern-either:
-        - pattern: eval(..., <... flask.request.$W.get(...) ...>, ...)
-        - pattern: eval(..., <... flask.request.$W[...] ...>, ...)
-        - pattern: eval(..., <... flask.request.$W(...) ...>, ...)
-        - pattern: eval(..., <... flask.request.$W ...>, ...)
+        - pattern: exec(..., <... flask.request.$W.get(...) ...>, ...)
+        - pattern: exec(..., <... flask.request.$W[...] ...>, ...)
+        - pattern: exec(..., <... flask.request.$W(...) ...>, ...)
+        - pattern: exec(..., <... flask.request.$W ...>, ...)
     - patterns:
       - pattern-either:
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W.get(...) ...>
-              ... 
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              ...
+          - pattern: exec(..., <... $INTERM ...>, ...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W[...] ...>
-              ... 
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              ...
+          - pattern: exec(..., <... $INTERM ...>, ...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W(...) ...>
-              ... 
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              ...
+          - pattern: exec(..., <... $INTERM ...>, ...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W ...>
-              ... 
-          - pattern: eval(..., <... $INTERM ...>, ...)
-
+              ...
+          - pattern: exec(..., <... $INTERM ...>, ...)

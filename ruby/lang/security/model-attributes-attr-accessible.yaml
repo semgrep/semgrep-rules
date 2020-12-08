@@ -2,7 +2,7 @@ rules:
 - id: model-attributes-attr-accessible
   patterns:
   - pattern-not: |
-      class $CLASS 
+      class $CLASS
       ...
       attr_accessible
       ...
@@ -10,19 +10,18 @@ rules:
       ...
       $CLASS.$FUNC(...)
   - pattern: |
-      class $CLASS 
+      class $CLASS
       ...
       end
       ...
       $CLASS.$FUNC(...)
   message: |
     Checks for models that do not use attr_accessible. This means there is no limiting of which variables can be manipulated
-    through mass assignment. For newer Rails applications, parameters should be whitelisted using strong parameters. 
-    For older Ruby versions, they should be whitelisted using strong_attributes. 
+    through mass assignment. For newer Rails applications, parameters should be whitelisted using strong parameters.
+    For older Ruby versions, they should be whitelisted using strong_attributes.
   metadata:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_model_attributes.rb
   languages:
   - ruby
   severity: ERROR
-

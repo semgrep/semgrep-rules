@@ -1,0 +1,26 @@
+rules:
+- id: double-free
+  patterns:
+  - pattern: |
+      free($VAR);
+      ...
+      free($VAR);
+  - pattern-not: |
+      free($VAR);
+      ...
+      $VAR = NULL;
+      ...
+      free($VAR);
+  - pattern-not: |
+      free($VAR);
+      ...
+      $VAR = malloc(...);
+      ...
+      free($VAR);
+  message: |
+    Variable '$VAR' was freed twice. This can lead to undefined behavior.
+  metadata:
+    references:
+    - https://owasp.org/www-community/vulnerabilities/Doubly_freeing_memory
+  languages: [c]
+  severity: ERROR

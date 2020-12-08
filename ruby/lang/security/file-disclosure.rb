@@ -4,7 +4,6 @@ def bad_file_disclosure
 end
 
 def ok_file_disclosure
-    # ok
+    # ok: file-disclosure
     config.serve_static_assets = false
 end
-

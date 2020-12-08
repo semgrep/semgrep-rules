@@ -15,8 +15,8 @@ rules:
   - pattern-not: |
       YAML.load(..., safe: true, ...)
   message: |
-    Checks for unsafe deserialization. Objects in Ruby can be serialized into strings, 
-    then later loaded from strings. However, uses of load and object_load can cause remote code execution. 
+    Checks for unsafe deserialization. Objects in Ruby can be serialized into strings,
+    then later loaded from strings. However, uses of load and object_load can cause remote code execution.
     Loading user input with YAML, MARSHAL, or CSV can potentially be dangerous. Use JSON securely instead.
   metadata:
     references:
@@ -25,4 +25,3 @@ rules:
   languages:
   - ruby
   severity: ERROR
-

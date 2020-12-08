@@ -1,0 +1,23 @@
+rules:
+- id: template-explicit-unescape
+  message: |
+    Detected an explicit unescape in a Pug template, using either
+    '!=' or '!{...}'. If external data can reach these locations,
+    your application is exposed to a cross-site scripting (XSS)
+    vulnerability. If you must do this, ensure no external data
+    can reach this location.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://pugjs.org/language/code.html#unescaped-buffered-code
+    - https://pugjs.org/language/attributes.html#unescaped-attributes
+  languages:
+  - none
+  paths:
+    include:
+    - '*.pug'
+  severity: WARNING
+  pattern-either:
+  - pattern-regex: \w.*(!=)[^=].*
+  - pattern-regex: '!{.*?}'

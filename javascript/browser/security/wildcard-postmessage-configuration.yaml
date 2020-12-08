@@ -1,0 +1,15 @@
+rules:
+- id: wildcard-postmessage-configuration
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $OBJECT.postMessage(...,'*')
+  message: |
+    The target origin of the window.postMessage() API is set to "*". This could allow for information disclosure due to the possibility of any origin allowed to receive the message.
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    owasp: 'A6: Sensitive Data Exposure'
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'

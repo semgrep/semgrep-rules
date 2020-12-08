@@ -14,11 +14,11 @@ import org.apache.commons.io.FilenameUtils;
 
 public class Cls extends HttpServlet
 {
-	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
+    private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) 
-	throws ServletException, IOException
-	{
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+    {
         // ruleid:httpservlet-path-traversal
         String image = request.getParameter("image");
         File file = new File("static/images/", image);
@@ -29,12 +29,12 @@ public class Cls extends HttpServlet
         }
 
         response.sendRedirect("/index.html");
-	}
-    
-    public void ok(HttpServletRequest request, HttpServletResponse response) 
-	throws ServletException, IOException
-	{
-        // ok
+    }
+
+    public void ok(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+    {
+        // ok:httpservlet-path-traversal
         String image = request.getParameter("image");
         File file = new File("static/images/", FilenameUtils.getName(image));
 
@@ -44,5 +44,5 @@ public class Cls extends HttpServlet
         }
 
         response.sendRedirect("/index.html");
-	}
+    }
 }

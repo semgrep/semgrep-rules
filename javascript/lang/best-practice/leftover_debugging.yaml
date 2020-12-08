@@ -5,17 +5,23 @@ rules:
     - pattern: alert()
     - pattern: alert($X)
   message: found alert() call; should this be in production code?
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: WARNING
 - id: javascript-debugger
   pattern: debugger;
   message: found debugger call; should this be in production code?
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: WARNING
 - id: javascript-confirm
   pattern: confirm(...)
   message: found conform() call; should this be in production code?
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: WARNING
 - id: javascript-prompt
   patterns:
@@ -24,5 +30,7 @@ rules:
     - pattern: prompt($X)
     - pattern: prompt($X, $Y)
   message: found prompt() call; should this be in production code?
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: WARNING

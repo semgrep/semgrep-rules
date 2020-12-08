@@ -3,7 +3,7 @@
 # ruleid:yaml-parsing
 ActionController::Base.param_parsers[Mime::YAML] = :yaml
 
-# ok
-ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('symbol') 
-# ok
-ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('yaml') 
+# ok:yaml-parsing
+ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('symbol')
+# ok:yaml-parsing
+ActiveSupport::CoreExtensions::Hash::Conversions::XML_PARSING.delete('yaml')

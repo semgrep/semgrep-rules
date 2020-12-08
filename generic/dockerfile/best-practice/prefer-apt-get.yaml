@@ -1,0 +1,13 @@
+rules:
+- id: prefer-apt-get
+  severity: INFO
+  languages: [generic]
+  patterns:
+  - pattern: RUN apt
+  - pattern-not-inside: RUN apt-get
+  message: >-
+    'apt-get' is preferred as an unattended tool for stability. 'apt' is discouraged.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3027
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3027

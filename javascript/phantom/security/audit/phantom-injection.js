@@ -1,5 +1,5 @@
 const phantom = require('phantom');
- 
+
 (async function() {
   const instance = await phantom.create();
   const page = await instance.createPage();
@@ -7,15 +7,15 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.open(input());
 
-// ok
+  // ok: phantom-injection
   const status = await page.open('https://stackoverflow.com/');
 
   const content = await page.property('content');
   console.log(content);
- 
+
   await instance.exit();
 })();
 
@@ -26,19 +26,19 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.property('content', input());
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   await page.setContent(userInput);
 
-// ok
+  // ok: phantom-injection
   var html = '<html>123</html>'
   const status = await page.property('content', html);
 
   const content = await page.property('content');
   console.log(content);
- 
+
   await instance.exit();
 })();
 
@@ -49,18 +49,18 @@ const phantom = require('phantom');
     console.info('Requesting', requestData.url);
   });
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   const status = await page.openUrl(input(), {}, {});
 
-// ruleid: phantom-injection
+  // ruleid: phantom-injection
   await page.evaluateJavaScript(userInput);
 
-// ok
+  // ok: phantom-injection
   var url = 'https://stackoverflow.com/'
   const status = await page.openUrl(url, {}, {});
 
   const content = await page.property('content');
   console.log(content);
- 
+
   await instance.exit();
 })();

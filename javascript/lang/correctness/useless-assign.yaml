@@ -6,6 +6,9 @@ rules:
       $X = $X.$METHOD(...);
   - pattern-not: |
       $X = $Y;
+      $X = $FUNC(..., <... $X ...>, ...);
+  - pattern-not: |
+      $X = $Y;
       $X = $PREPEND + $X;
   - pattern-not: |
       $X = $Y;
@@ -14,5 +17,7 @@ rules:
       $X = $Y;
       $X = $Z;
   message: '`$X` is assigned twice; the first assignment is useless'
-  languages: [javascript]
+  languages:
+  - javascript
+  - typescript
   severity: WARNING

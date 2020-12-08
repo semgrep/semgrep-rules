@@ -17,7 +17,7 @@ def not_really_safe(request):
 
 def fine(request):
     template = loader.get_template('contents.html')
-    # ok
+    # ok:avoid-mark-safe
     fine = mark_safe(
         """
         <div>
@@ -29,7 +29,7 @@ def fine(request):
 
 def not_really_safe(request):
     template = loader.get_template('contents.html')
-    # ok
+    # ok:avoid-mark-safe
     this_is_ok = format_html(
         """
         <div>

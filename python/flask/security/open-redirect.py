@@ -12,13 +12,13 @@ def open_redirect():
 
 @app.route("not_open_redirect/")
 def not_open_redirect():
-    # ok
+    # ok: open-redirect
     url = "/about/"
     return redirect(url)
 
 @app.route("filter")
 def filter():
-    # ok
+    # ok: open-redirect
     next_page = request.args.get('next')
     if not next_page or url_parse(next_page).netloc != '':
         next_page = url_for('main.index')

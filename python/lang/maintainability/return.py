@@ -18,18 +18,18 @@ def alwaysblue():
 
 def resolve(key: str):
     key = os.path.join(path, "keys", key)
-    # ok
+    # ok: code-after-unconditional-return
     return key
 
 
 def resolve(key: str) -> str:
     key = os.path.join(path, "keys", key)
-    # ok
+    # ok: code-after-unconditional-return
     return key
 
 def resolve(key: str) -> str:
     key = os.path.join(path, "keys", key)
-    # ok
+    # ok: code-after-unconditional-return
     return key, key
 
 # ruleid: return-not-in-function

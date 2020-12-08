@@ -1,0 +1,21 @@
+rules:
+- id: net-telnet-request
+  patterns:
+  - pattern-either:
+    - pattern: |
+        Net::Telnet::new(...)
+    - pattern: |
+        Net::SSH::Telnet.new(...)
+  message: |
+    Checks for creation of telnet servers or attempts to connect through telnet. This is insecure as     the telnet protocol supports
+    no encryption, and data passes through unencrypted.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.ruby-lang.org/en/2.2.0/Net/Telnet.html
+    - https://www.rubydoc.info/gems/net-ssh-telnet2/0.1.0/Net/SSH/Telnet
+  languages:
+  - ruby
+  severity: WARNING

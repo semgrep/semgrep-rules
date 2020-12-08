@@ -1,0 +1,16 @@
+rules:
+- id: preg-replace-eval
+  patterns:
+  - pattern: preg_replace(...);
+  - pattern-not: preg_replace("...", ...);
+  message: |
+    Calling preg_replace with user input in the pattern can lead to arbitrary
+    code execution. The eval modifier (`/e`) evaluates the replacement argument
+    as code.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.preg-replace.php
+    - https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PregReplaceSniff.php
+  languages: [php]
+  severity: ERROR

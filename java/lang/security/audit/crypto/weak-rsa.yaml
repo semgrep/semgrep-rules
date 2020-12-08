@@ -14,5 +14,6 @@ rules:
       KeyPairGenerator $KEY = $G.getInstance("RSA");
       ...
       $KEY.initialize($BITS);
-  - pattern-where-python: |-
-      int(vars['$BITS']) < 2048
+  - metavariable-comparison:
+      metavariable: $BITS
+      comparison: $BITS < 2048

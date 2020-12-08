@@ -1,7 +1,7 @@
 import ssl
 import httplib.client
 
-# ok
+# ok:unverified-ssl-context
 context = ssl.create_default_context()
 conn = httplib.client.HTTPSConnection("123.123.21.21", context=context)
 

@@ -4,6 +4,6 @@
  end
 
  def ok_ssl
-    # ok
+    # ok: force-ssl-false
     config.force_ssl = true
  end

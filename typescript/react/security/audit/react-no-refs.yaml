@@ -1,0 +1,17 @@
+rules:
+- id: react-no-refs
+  pattern-either:
+  - pattern: <$EL ref=... />
+  - pattern: $REACT.createRef(...)
+  - pattern: $REACT.useRef(...)
+  - pattern: createRef(...)
+  - pattern: useRef(...)
+  message: |
+    `ref` usage found, refs give direct DOM access and may create a possibility for XSS
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING

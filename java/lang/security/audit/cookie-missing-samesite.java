@@ -3,7 +3,7 @@ public class CookieController {
 
     @RequestMapping(value = "/cookie1", method = "GET")
     public void setCookie(@RequestParam String value, HttpServletResponse response) {
-        // ok
+        // ok:cookie-missing-samesite
         response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=strict");
     }
 
@@ -12,7 +12,7 @@ public class CookieController {
         // ruleid:cookie-missing-samesite
         response.setHeader("Set-Cookie", "key=value; HttpOnly;");
     }
-    
+
     @RequestMapping(value = "/cookie3", method = "GET")
     public void setSecureHttponlyCookie(@RequestParam String value, HttpServletResponse response) {
         Cookie cookie = new Cookie("cookie", value);
@@ -24,7 +24,7 @@ public class CookieController {
 
     @RequestMapping(value = "/cookie4", method = "GET")
     public void setEverything(@RequestParam String value, HttpServletResponse response) {
-        // ok
+        // ok:cookie-missing-samesite
         response.setHeader("Set-Cookie", "key=value; HttpOnly; Secure; SameSite=strict");
         response.addCookie(cookie);
     }

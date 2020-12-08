@@ -1,0 +1,15 @@
+rules:
+- id: insecure-redirect
+  patterns:
+  - pattern-either:
+    - pattern: rewrite ... redirect
+    - pattern: rewrite ... permanent
+  - pattern-not-inside: rewrite ... https ... $host ... redirect
+  - pattern-not-inside: rewrite ... https ... $host ... permanent
+  message: |
+    Detected an insecure redirect in this nginx configuration.
+    If no scheme is specified, nginx will forward the request with the
+    incoming scheme. This could result in unencrypted communications.
+    To fix this, include the 'https' scheme.
+  languages: [generic]
+  severity: WARNING

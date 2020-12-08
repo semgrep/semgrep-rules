@@ -42,7 +42,7 @@ def f():
     return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     r.raise_for_status()
     # ruleid:use-raise-for-status
@@ -54,37 +54,37 @@ def f():
     # ruleid:use-raise-for-status
     r = requests.get("")
     r.raise_for_status
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     r.raise_for_status()
     return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     r.raise_for_status()
     return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     if r.status_code != requests.codes.ok:
         logging.error("Something awful happened", r)
     return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     if not r.ok:
         logging.error("Something awful happened", r)
-    return r   
+    return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     r = requests.get("")
     if r.ok:
         return r
 
 def f():
-    # ok
+    # ok:use-raise-for-status
     requests.put("").raise_for_status()

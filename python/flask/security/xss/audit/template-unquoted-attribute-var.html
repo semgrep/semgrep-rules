@@ -1,0 +1,85 @@
+{% extends "container.html" %}
+
+{% block opengraph %}
+
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="semgrep" />
+<meta property="og:description" content="content" />
+<!-- ruleid: template-unquoted-attribute-var -->
+<meta property="og:image" content={{ url_for('static', filename='picture.jpg', _external=True) }} />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
+<!-- ok -->
+<meta property="not-real-only-for-testing" content="{{ safe }}" />
+
+<!-- Google OAuth sign-in -->
+<meta name="google-signin-scope" content="profile email openid">
+<!-- ruleid: template-unquoted-attribute-var -->
+<meta name="google-signin-client_id" content={{ client_id  }}>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve={{ carbonad_serve }}&placement={{ carbonad_placement }}" id="_carbonads_js"></script>
+
+{% endblock %}
+
+
+<!-- extra tests -->
+
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve={{carbonad_serve}}&placement={{carbonad_placement}}" id="_carbonads_js"></script>
+
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src= {{ link }} id="_carbonads_js"></script>
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src={{ link }} id="_carbonads_js"></script>
+<!-- ruleid: template-unquoted-attribute-var -->
+<script async type="text/javascript" src= {{ link }}
+     id="_carbonads_js"></script>
+<script
+     async
+     type="text/javascript"
+     // ruleid: template-unquoted-attribute-var
+     src= {{ link }}
+     id="_carbonads_js">
+</script>
+
+
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src=" {{ link }}" id="_carbonads_js"></script>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src=' {{ link }}' id="_carbonads_js"></script>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="{{ link }}" id="_carbonads_js"></script>
+<!-- ok: template-unquoted-attribute-var -->
+<script async type="text/javascript" src="{{ link }}"
+     id="_carbonads_js"></script>
+
+<!-- ok: template-unquoted-attribute-var -->
+<div class="upper">
+     {{ paragraph_text }}
+</div>
+
+{% if scan_url %}
+    <h2>Semgrep Scan Results for <a href="{{scan_url}}"> {{scan_title}} </a></h2>
+{% else %}
+    <h2>Semgrep Scan Results for {{scan_title}} </h2>
+{% endif %}
+{% for check_id, findings in findings_by_id.items() %}
+    <!-- ok: template-unquoted-attribute-var -->
+    <h3> rule: <a href="https://semgrep.dev/r?q={{check_id}}"> {{check_id}} </a> </h3>
+    <ul>
+        {% for finding in findings %}
+        <li>
+            {% if repo_url %}
+            <!-- ok: template-unquoted-attribute-var -->
+            <a href="{{repo_url}}/blob/{{commit}}/{{finding['path']}}#L{{finding['line']}}"> {{finding["path"]}}:{{finding["line"]}} </a>
+            {% else %}
+            {{finding["path"]}}:{{finding["line"]}}
+            {% endif %}
+            <p> Finding Message: {{finding["message"]}} </p>
+        </li>
+        {% endfor %}
+    </ul>
+    <hr/>
+{% endfor %}

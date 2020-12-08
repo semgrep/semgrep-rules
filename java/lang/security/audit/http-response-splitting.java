@@ -22,18 +22,18 @@ public class TestController {
     }
 
     private Response safe(String name, Response response) {
-        // ok
+        // ok:http-response-splitting
         Cookie cookie = new Cookie("author", name);
         response.addCookie(cookie);
         return response;
     }
-    
+
     @RequestMapping(value = "/{name}/{book}", method = RequestMethod.POST)
     @PreAuthorize(Permissions.USER)
     @ResponseBody
     public void loadBook(@PathVariable final String name, @PathVariable final String book, HttpServletResponse response) throws APIException {
         AuthorObj author = AuthorObj.getAuthor(name, book);
-        // ok
+        // ok:http-response-splitting
         Cookie cookie = new Cookie("sess", "1234");
         response.addCookie(cookie);
     }

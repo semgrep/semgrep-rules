@@ -6,5 +6,5 @@ pdb.set_trace()
 
 
 def foo():
-    # ok
+    # ok: python-debugger-found
     p = not_pdb.set_trace()

@@ -1,0 +1,25 @@
+rules:
+- id: template-explicit-unescape
+  message: |
+    Detected an explicit unescape in a Mustache template, using
+    triple braces '{{{...}}}' or ampersand '&'. If external data
+    can reach these locations,
+    your application is exposed to a cross-site scripting (XSS)
+    vulnerability. If you must do this, ensure no external data
+    can reach this location.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://github.com/janl/mustache.js/#variables
+  languages:
+  - none
+  paths:
+    include:
+    - '*.mustache'
+    - '*.hbs'
+    - '*.html'
+  severity: WARNING
+  pattern-either:
+  - pattern-regex: '{{{((?!include).)*?}}}'
+  - pattern-regex: '{{.*&.*}}'

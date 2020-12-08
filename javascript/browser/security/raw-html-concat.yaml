@@ -1,0 +1,94 @@
+rules:
+- id: raw-html-concat
+  message: >-
+    User controlled data in a HTML string may result in XSS
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://owasp.org/www-community/attacks/xss/
+  patterns:
+  - pattern-either:
+    - pattern: |
+        "..." + (<... window ...>);
+    - pattern: |
+        (<... window ...>) + "...";
+    - pattern: |
+        "..." + (<... location ...>);
+    - pattern: |
+        (<... location ...>) + "...";
+    - pattern: |
+        "..." + (<... document ...>);
+    - pattern: |
+        (<... document ...>) + "...";
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            function $FUNC(..., $X, ...) {
+              ...
+            }
+        - pattern-inside: |
+            function (..., $X, ...) {
+              ...
+            }
+        - pattern-inside: |
+            function $FUNC(...) {
+              ...
+              $X = (<... document ...>);
+              ...
+            }
+        - pattern-inside: |
+            function (...) {
+              ...
+              $X = (<... document ...>);
+              ...
+            }
+        - pattern-inside: |
+            function $FUNC(...) {
+              ...
+              $X = (<... window ...>);
+              ...
+            }
+        - pattern-inside: |
+            function (...) {
+              ...
+              $X = (<... window ...>);
+              ...
+            }
+        - pattern-inside: |
+            function $FUNC(...) {
+              ...
+              $X = (<... location ...>);
+              ...
+            }
+        - pattern-inside: |
+            function (...) {
+              ...
+              $X = (<... location ...>);
+              ...
+            }
+      - pattern-either:
+        - pattern: |
+            "..." + (<... $X ...>);
+        - pattern: |
+            "..." + (<... $X[...] ...>);
+        - pattern: |
+            "..." + (<... $X.$PROPERTY ...>);
+        - pattern: |
+            "..." + (<... $X.$METHOD(...) ...>);
+        - pattern: |
+            "..." + (<... $X.$PROPERTY.$METHOD(...) ...>);
+        - pattern: |
+            (<... $X ...>) + "...";
+        - pattern: |
+            (<... $X[...] ...>) + "...";
+        - pattern: |
+            (<... $X.$PROPERTY ...>) + "...";
+        - pattern: |
+            (<... $X.$METHOD(...) ...>) + "...";
+        - pattern: |-
+            (<... $X.$PROPERTY.$METHOD(...) ...>) + "...";

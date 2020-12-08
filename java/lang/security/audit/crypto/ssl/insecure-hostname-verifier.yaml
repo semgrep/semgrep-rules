@@ -3,7 +3,7 @@ rules:
   message: |
     Insecure HostnameVerifier implementation detected. This will accept
     any SSL certificate with any hostname, which creates the possibility
-    for man-in-the-middle attacks. 
+    for man-in-the-middle attacks.
   metadata:
     cwe: 'CWE-295: Improper Certificate Validation'
     owasp: 'A6: Security Misconfiguration'
@@ -18,8 +18,8 @@ rules:
           public boolean verify(...) { return true; }
         }
     - pattern: |-
-        new HostnameVerifier(...){ 
-          public boolean verify(...) { 
-            return true; 
+        new HostnameVerifier(...){
+          public boolean verify(...) {
+            return true;
           }
         }

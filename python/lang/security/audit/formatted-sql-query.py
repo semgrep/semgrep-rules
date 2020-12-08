@@ -24,7 +24,7 @@ def search_customer():
             results = []
             if content:
                 try:
-                    # ok
+                    # ok:formatted-sql-query
                     dummy = db.engine.execute("SELECT * FROM customer")
 
                     search_term = content['search']

@@ -1,0 +1,28 @@
+rules:
+- id: uncaught-executor-exceptions
+  patterns:
+  - pattern-inside: |
+      with concurrent.futures.thread.ThreadPoolExecutor(...) as $EXECUTOR:
+        ...
+  - pattern-not-inside: |
+      $VAR = $EXECUTOR.map(...)
+      ...
+      for ... in $VAR:
+        ...
+  - pattern-not-inside: |
+      $VAR = $EXECUTOR.map(...)
+      ...
+      [... for ... in $VAR]
+  - pattern-not-inside: |
+      [... for ... in $EXECUTOR.map(...)]
+  - pattern-not-inside: |
+      for $IT in $EXECUTOR.map(...):
+        ...
+  - pattern: $EXECUTOR.map(...)
+  message: |
+    Values returned by thread pool map must be read in order to raise exceptions. Consider using `for _ in $EXECUTOR.map(...): pass`.
+  fix: |
+
+  severity: WARNING
+  languages:
+  - python

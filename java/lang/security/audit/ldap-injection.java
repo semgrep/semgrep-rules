@@ -16,7 +16,7 @@ import javax.naming.ldap.LdapName;
 import java.util.Properties;
 
 public class JndiLdapAdditionalSignature {
-    
+
     // ruleid: ldap-injection
     public static void moreLdapInjections(String input) throws NamingException {
         Properties props = new Properties();
@@ -120,7 +120,7 @@ public class JndiLdapAdditionalSignature {
         answers = context6.search("dc=People,dc=example,dc=com", "(uid=" + input + ")", new Object[0], ctrls);
     }
 
-    // ok
+    // ok: ldap-injection
     public static void moreLdapInjections4(String input) throws NamingException {
         Properties props = new Properties();
         props.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
