@@ -29,7 +29,8 @@ rules:
         - pattern: $OPENER.open(...)
         - pattern: $OPENER.retrieve(...)
   message: |
-    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes.
+    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes,
+    so a dynamic value controlled by a malicious actor may allow them to read arbitrary files.
     Audit uses of urllib calls to ensure user data cannot control the URLs, or consider
     using the 'requests' library instead.
   metadata:
