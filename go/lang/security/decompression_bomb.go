@@ -15,7 +15,7 @@ func blah() {
 	if err != nil {
 		panic(err)
 	}
-	// rulied: potential-dos-via-decompression-bomb
+	// ruleid: potential-dos-via-decompression-bomb
 	_, err := io.Copy(os.Stdout, r)
 	if err != nil {
 		panic(err)
