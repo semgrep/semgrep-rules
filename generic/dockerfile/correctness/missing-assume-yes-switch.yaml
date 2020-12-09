@@ -1,0 +1,19 @@
+rules:
+- id: missing-assume-yes-switch
+  patterns:
+  - pattern: |
+      RUN ... apt-get install ... $SOMETHING
+  - pattern-not-inside: |
+      RUN ... apt-get install ... -y
+  - pattern-not-inside: |
+      RUN ... apt-get install ... --assume-yes
+  languages:
+  - generic
+  message: |
+    This 'apt-get install' is missing the '-y' switch. This might stall
+    builds because it requires human intervention. Add the '-y' switch.
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3014
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3014
