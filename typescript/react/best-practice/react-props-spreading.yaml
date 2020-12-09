@@ -2,9 +2,16 @@ rules:
 - id: react-props-spreading
   pattern: |
     <$X {...$PROPS} />
-  message: |
+  message: >-
     It is a good practice to avoid spreading for JSX attributes.
-    It helps maintainability by avoiding passing unintentional extra props and allowing react to emit warnings when invalid HTML props are passed to HTML elements.
+    This forces the code to be explicit about which props are given to the component.
+    This avoids situations where warnings are caused by invalid HTML props passed to HTML elements,
+    and further, it avoids passing unintentional extra props by malicious actors.
+    Instead, consider explicitly passing props to the component.
   languages:
   - typescript
   severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+    references:
+    - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
