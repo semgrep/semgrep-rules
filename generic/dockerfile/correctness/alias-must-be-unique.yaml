@@ -14,6 +14,10 @@ rules:
         ...
         ...
         FROM ... AS $REF
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'
   message: >-
     Image aliases must have a unique name, and '$REF' is used twice.
     Use another name for '$REF'.
