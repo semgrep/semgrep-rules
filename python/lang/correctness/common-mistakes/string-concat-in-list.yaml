@@ -1,8 +1,11 @@
 rules:
 - id: string-concat-in-list
   patterns:
-  - pattern-inside: |
-      [...]
+  - pattern-either:
+    - pattern-inside: |
+        [...]
+    - pattern-inside: |
+        {...}
   - pattern: |
       "..." "..."
   - pattern-not-inside: |

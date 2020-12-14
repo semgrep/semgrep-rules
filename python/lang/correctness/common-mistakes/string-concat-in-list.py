@@ -28,6 +28,14 @@ bad = [
     "hijk"
 ]
 
+bad = {
+# ruleid:string-concat-in-list
+    "abc"
+    "cde"
+    "efg",
+    "hijk"
+}
+
 good = ["123"]
 good = [123, 456]
 good = ["123", "456"]
