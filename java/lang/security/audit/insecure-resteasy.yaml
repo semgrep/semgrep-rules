@@ -1,0 +1,43 @@
+rules:
+- id: insecure-resteasy-deserialization
+  severity: WARNING
+  languages:
+  - java
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://access.redhat.com/blogs/766093/posts/3162112
+  message: |
+    When a Restful webservice endpoint is configured to use wildcard mediaType {*/*} as a value for the @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution when calling the $Y.getObject method.
+  patterns:
+    - pattern-either: 
+      - pattern: |
+          @Consumes({"application/x-java-serialized-object"})
+      - pattern: |
+          @Consumes({"*/*"})
+      - pattern: |
+          @Consumes("*/*")
+      - pattern: |
+          @Consumes({MediaType.WILDCARD_TYPE})
+
+- id: default-resteasy-provider-abuse
+  severity: WARNING
+  languages:
+  - java
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://access.redhat.com/blogs/766093/posts/3162112
+  message: |
+    When a Restful webservice endpoint isn't configured with a @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution.
+  patterns:
+    - pattern-either: 
+      - pattern: |
+          @Path("...")
+          public $RETURNTYPE $METHOD(...) { ...}
+    - pattern-not-inside: |
+        @Path("...")
+        @Consumes(...)
+        public $RETURNTYPE $METHOD(...) { ...}
