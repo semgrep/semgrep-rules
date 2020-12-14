@@ -12,6 +12,9 @@ RUN apt-get install --no-install-recommends -y python=2.7 semgrep
 RUN apt-get install -y python=2.7
 
 # ok: missing-assume-yes-switch
+RUN apt-get install --yes python=2.7
+
+# ok: missing-assume-yes-switch
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     python3 \
