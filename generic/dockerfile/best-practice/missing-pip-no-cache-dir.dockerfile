@@ -12,6 +12,9 @@ RUN pip install --no-cache-dir MySQL_python
 # ok: missing-pip-no-cache-dir
 RUN pip install --no-cache-dir MySQL_python semgrep
 
+# ok: missing-pip-no-cache-dir
+RUN pip install .
+
 FROM python:3.7
 
 # ruleid: missing-pip-no-cache-dir
