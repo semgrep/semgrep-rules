@@ -2,7 +2,7 @@ rules:
 - id: tempfile-without-flush
   pattern-either:
   - patterns:
-    - pattern-not: |
+    - pattern-not-inside: |
         $F = tempfile.NamedTemporaryFile(...)
         ...
         $F.write(...)
@@ -10,7 +10,7 @@ rules:
         $F.flush()
         ...
         $F.name
-    - pattern-not: |
+    - pattern-not-inside: |
         $F = tempfile.NamedTemporaryFile(...)
         ...
         $F.write(...)
@@ -18,12 +18,13 @@ rules:
         $F.close()
         ...
         $F.name
-    - pattern: |
+    - pattern-inside: |
         $F = tempfile.NamedTemporaryFile(...)
         ...
+    - pattern: |
         $F.name
   - patterns:
-    - pattern-not: |
+    - pattern-not-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
             $F.write(...)
@@ -31,7 +32,7 @@ rules:
             $F.flush()
             ...
             $F.name
-    - pattern-not: |
+    - pattern-not-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
             $F.write(...)
@@ -39,10 +40,13 @@ rules:
             $F.close()
             ...
             $F.name
-    - pattern: |
+    - pattern-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
-            $F.name
-  message: possibly missing a .flush() or .close() call to temporary file $F; file may or may not exist when $F.name is used
+    - pattern: |
+        $F.name
+  message: >-
+    Using '$F.name' without '.flush()' or '.close()' may cause an error because the file may not exist
+    when '$F.name' is used. Use '.flush()' or close the file before using '$F.name'.
   languages: [python]
   severity: ERROR
