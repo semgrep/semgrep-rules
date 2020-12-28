@@ -16,3 +16,9 @@ def check_db(user):
         print(user)
         # ok: use-sys-exit
         sys.exit(0)
+
+if False:
+    # ok: use-sys-exit
+    from sys import exit
+
+    exit(0)
