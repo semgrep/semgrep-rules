@@ -8,7 +8,7 @@ rules:
     - pattern-inside: os.popen3("...")
     - pattern-inside: os.popen4("...")
     - pattern-inside: subprocess.$W(..., shell=True, ...)
-  - pattern-regex: (.*?)[tar|chmod|chown|rsync](.*?)\*
+  - pattern-regex: (tar|chmod|chown|rsync)(.*?)\*
   message: |
     Detected use of the wildcard character in a system call that spawns a shell.
     This subjects the wildcard to normal shell expansion, which can have unintended consequences
