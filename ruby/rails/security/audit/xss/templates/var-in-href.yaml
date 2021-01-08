@@ -15,9 +15,11 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss#:~:text=javascript:%20URI
     - https://github.com/pugjs/pug/issues/2952
   languages:
-  - none
+  - generic
   paths:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <a.*href\s*=[^>]*?[^\/&=]<%.*?%>.*?>
+  pattern-either:
+  - pattern: <a ... href = "<%= ... %>" ... >
+  - pattern: <a ... href = '<%= ... %>' ... >
