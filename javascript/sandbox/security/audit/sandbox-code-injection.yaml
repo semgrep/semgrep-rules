@@ -13,19 +13,19 @@ rules:
       $SANDBOX = require('sandbox');
       ...
   - pattern-not-inside: |
-      ...
       $CODE = "...";
       ...
   - pattern-either:
-    - pattern: |
-        $S = new $SANDBOX(...);
-        ...
-        $S.run($CODE,...);
+    - patterns:
+      - pattern-inside: |
+          $S = new $SANDBOX(...);
+          ...
+      - pattern: $S.run($CODE,...);
     - pattern: |
         new $SANDBOX(...).run($CODE,...);
-  - pattern-not: |
+  - pattern-not-inside: |
       $S = new $SANDBOX(...);
       ...
       $S.run("...",...);
-  - pattern-not: |-
+  - pattern-not-inside: |-
       new $SANDBOX(...).run("...",...);
