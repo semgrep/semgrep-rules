@@ -1,3 +1,5 @@
+import importImg from "./my/image.jpg";
+
 const url = 'https://www.example.com';
 
 // ok: react-http-leak
@@ -14,6 +16,9 @@ const okTest4 = <applet archive="https://www.example.com">Hello world</applet>;
 
 // ok: react-http-leak
 const okTest5 = <object classid={url}>Hello world</object>;
+
+// ok: react-http-leak
+const okTest6 = <img src={importImg} />;
 
 function test(attackersUrl) {
 // ruleid: react-http-leak

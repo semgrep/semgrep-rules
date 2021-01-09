@@ -27,12 +27,15 @@ rules:
         <$EL longdesc="..." />
   - patterns:
     - pattern: |
-        <$EL src=... />
+        <$EL src={$INJECT} />
     - metavariable-regex:
         metavariable: $EL
         regex: frame|iframe|img|input|script|audio|source|track|embed|video
     - pattern-not: |
         <$EL src="..." />
+    - pattern-not-inside: |
+        import $INJECT from "...";
+        ...
   - patterns:
     - pattern: |
         <$EL usemap=... />
