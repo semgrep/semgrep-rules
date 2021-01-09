@@ -6,8 +6,11 @@ rules:
         class $CN extends React.Component {
           ...
         }
-    - pattern: |
-        state = {$NAME: <... this.props.$PROP ...>}
+    - pattern-either:
+      - pattern: |
+          state = {$NAME: <... this.props.$PROP ...>}
+      - pattern: |
+          this.state = {$NAME: <... this.props.$PROP ...>}
   - patterns:
     - pattern-inside: |
         function $FN({$PROP},...) {

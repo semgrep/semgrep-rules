@@ -1,10 +1,13 @@
 class Test1 extends React.Component {
-// ruleid: react-props-in-state
-  state = {
-        foo: 'bar',
-        color: this.props.color,
-        one: 1
-  };
+// TODO: react-props-in-state
+  constructor() {
+    this.state = {
+          foo: 'bar',
+          color: this.props.color,
+          one: 1
+    };
+  }
+
   render() {
     const { color } = this.state;
     return (
@@ -16,10 +19,13 @@ class Test1 extends React.Component {
 }
 
 class Test2 extends React.Component {
-// ruleid: react-props-in-state
-  state = {
-    textColor: slowlyCalculateTextColor(this.props.color)
-  };
+// TODO: react-props-in-state
+  constructor() {
+    this.state = {
+      textColor: slowlyCalculateTextColor(this.props.color)
+    };
+  }
+
   render() {
     return (
       <button className={
