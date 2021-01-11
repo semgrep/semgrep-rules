@@ -3,7 +3,7 @@ import "fmt"
 
 func main() {
     fmt.Println("hello world")
-    var y = 1;
+    var y = "hello";
     // ruleid:eqeq-is-bad
     fmt.Println(y == y)
     // ok:eqeq-is-bad
