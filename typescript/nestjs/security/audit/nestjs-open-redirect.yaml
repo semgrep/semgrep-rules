@@ -1,0 +1,19 @@
+rules:
+- id: nestjs-open-redirect
+  patterns:
+  - pattern: |
+      return {url: $URL}
+  - pattern-inside: |
+      class $CN {
+          @Redirect(...)
+          $FN(...) {
+              ...
+          }
+      }
+  - pattern-not: |
+      return {url: "..."}
+  message: |
+    Untrusted user input in {url: ...} can result in Open Redirect vulnerability.
+  languages:
+  - typescript
+  severity: WARNING
