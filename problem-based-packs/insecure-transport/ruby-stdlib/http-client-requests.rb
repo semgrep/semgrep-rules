@@ -9,6 +9,7 @@ end
 def bad2
   # ruleid: http-client-requests
   str = 'http://example.com'
+  # ruleid: http-client-requests
   response = HTTParty.get(str, format: :plain)
   JSON.parse response, symbolize_names: true
 end

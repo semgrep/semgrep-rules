@@ -14,6 +14,7 @@ def test2():
     od = OpenerDirector()
     # ruleid: insecure-openerdirector-open-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-openerdirector-open-ftp
     od.open(url)
 
 def test2_ok():
@@ -33,6 +34,7 @@ def test3_ok():
 def test4():
     # ruleid: insecure-openerdirector-open-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-openerdirector-open-ftp
     OpenerDirector().open(url)
 
 def test4_ok():

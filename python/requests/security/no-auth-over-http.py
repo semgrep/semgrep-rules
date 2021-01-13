@@ -17,6 +17,7 @@ def test1():
     # ruleid:no-auth-over-http
     bad_url = "http://www.github.com"
     print("something")
+    # ruleid:no-auth-over-http
     r = requests.get(bad_url, auth=('user', 'pass'))
 
 def test2():
@@ -42,4 +43,5 @@ def from_import_test1(url):
     from requests import get, post
     # ruleid:no-auth-over-http
     bad_url = "http://www.github.com"
+    # ruleid:no-auth-over-http
     r = get(bad_url, timeout=3, auth=('user', 'pass'))

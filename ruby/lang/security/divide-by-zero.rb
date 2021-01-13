@@ -8,5 +8,6 @@
     oops = variable / 0
     # ruleid: divide-by-zero
     zero = 0
+    # ruleid: divide-by-zero
     bad = variable/zero
  end

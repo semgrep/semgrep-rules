@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: insecure-request-object-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-request-object-ftp
     Request(url)
 
 def test2_ok():

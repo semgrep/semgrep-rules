@@ -16,18 +16,21 @@ func bad3() {
 func bad4() {
     // ruleid: ftp-request
     url = "ftp://example.com"
+    // ruleid: ftp-request
     ftp.Dial(url, ftp.DialWithTimeout(5*time.Second))
 }
 
 func bad5() {
     // ruleid: ftp-request
     url = "ftp://example.com"
+    // ruleid: ftp-request
     ftp.DialTimeout(url, 5*time.Second)
 }
 
 func bad6() {
     // ruleid: ftp-request
     url = "ftp://example.com"
+    // ruleid: ftp-request
     ftp.Connect(url)
 }
 

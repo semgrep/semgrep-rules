@@ -31,6 +31,7 @@ app.get('/', function (req, res) {
     // ruleid:express_cors
     res.writeHead(200, { 'Access-Control-Allow-Origin': '*' })
 
+    // ruleid:express_cors
     res.set('access-control-allow-origin', x);
 
     // do not detect - sgrep bug

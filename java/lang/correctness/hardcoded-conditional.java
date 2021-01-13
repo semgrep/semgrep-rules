@@ -1,11 +1,13 @@
 class Bar {
-    void main() {
+    void main(boolean arg) {
         boolean myBoolean;
 
         // ruleid:hardcoded-conditional
         if (myBoolean = true) {
             continue;
         }
+        // note that with new constant propagation, myBoolean is assumed
+        // to true below
 
         // ruleid:hardcoded-conditional
         if (true) {
@@ -17,10 +19,14 @@ class Bar {
             continue;
         }
 
-        // ok:hardcoded-conditional
+        // the dataflow constant-propagation now kicks in! this is true!
+        // ruleid:hardcoded-conditional
         if (myBoolean) {
 
         }
+        // to prevent constant propagation to assumes
+        // myBoolean is true below
+        myBoolean = arg;
 
         // ok:hardcoded-conditional
         if (myBoolean == myBoolean) {

@@ -47,6 +47,7 @@ app.get('/', function (req, res) {
     //sgrep bug - https://github.com/returntocorp/sgrep/issues/512
     // ruleid:header_xss_generic
     res.writeHead(200, { 'x-xss-protection': 0 })
+    // ruleid:header_xss_generic
     res.set('X-XSS-Protection', x);
 
     // do not detect

@@ -6,6 +6,7 @@ secret_const = 'secret-yo'
 def bad1
     # ruleid: ruby-jwt-hardcoded-secret
     hmac_secret = 'my$ecretK3y'
+    # ruleid: ruby-jwt-hardcoded-secret
     token = JWT.encode payload, hmac_secret, 'HS256'
     puts token
 end
