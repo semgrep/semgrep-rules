@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: insecure-urlretrieve-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-urlretrieve-ftp
     urlretrieve(url)
 
 def test2_ok():
