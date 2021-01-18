@@ -25,6 +25,18 @@ rules:
         "..." + (<... document ...>);
     - pattern: |
         (<... document ...>) + "...";
+    - pattern: |
+        "...".concat(..., <... window ...>, ...);
+    - pattern: |
+        (<... window ...>).concat(..., "...", ...);
+    - pattern: |
+        "...".concat(..., <... location ...>, ...);
+    - pattern: |
+        (<... location ...>).concat(..., "...", ...);
+    - pattern: |
+        "...".concat(..., <... document ...>, ...);
+    - pattern: |
+        (<... document ...>).concat(..., "...", ...);
     - patterns:
       - pattern-either:
         - pattern-inside: |
@@ -92,3 +104,23 @@ rules:
             (<... $X.$METHOD(...) ...>) + "...";
         - pattern: |-
             (<... $X.$PROPERTY.$METHOD(...) ...>) + "...";
+        - pattern: |
+            "...".concat(..., <... $X ...>, ...);
+        - pattern: |
+            "...".concat(..., <... $X[...] ...>, ...);
+        - pattern: |
+            "...".concat(..., <... $X.$PROPERTY ...>, ...);
+        - pattern: |
+            "...".concat(..., <... $X.$METHOD(...) ...>, ...);
+        - pattern: |
+            "...".concat(..., <... $X.$PROPERTY.$METHOD(...) ...>, ...);
+        - pattern: |
+            (<... $X ...>).concat(..., "...", ...);
+        - pattern: |
+            (<... $X[...] ...>).concat(..., "...", ...);
+        - pattern: |
+            (<... $X.$PROPERTY ...>).concat(..., "...", ...);
+        - pattern: |
+            (<... $X.$METHOD(...) ...>).concat(..., "...", ...);
+        - pattern: |-
+            (<... $X.$PROPERTY.$METHOD(...) ...>).concat(..., "...", ...);
