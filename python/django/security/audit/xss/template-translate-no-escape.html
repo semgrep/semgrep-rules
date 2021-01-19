@@ -1,0 +1,17 @@
+<!-- ruleid: template-translate-no-escape -->
+<title>{% translate "This is the title." %}</title>
+<!-- ruleid: template-translate-no-escape -->
+<title>{% translate myvar %}</title>
+<!-- ruleid: template-translate-no-escape -->
+<title>{% trans foobar %}</title>
+
+<!-- ok: template-translate-no-escape -->
+{% translate "This is the title" as the_title %}
+<title>{{ the_title | force_escape }}</title>
+
+<div>
+    {% filter force_escape %}
+    <!-- ok: template-translate-no-escape -->
+    <title>{% translate "This is the title." %}</title>
+    {% endfilter %}
+</div>
