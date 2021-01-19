@@ -1,0 +1,18 @@
+<title>
+<!-- ruleid: template-blocktranslate-no-escape -->
+{% blocktranslate %}
+Hello world
+{% endblocktranslate %}
+</title>
+
+<div>
+<!-- ruleid: template-blocktranslate-no-escape -->
+{% blocktrans %}Foo bar{% endblocktrans %}
+</div>
+
+<div>
+{% filter force_escape %}
+    <!-- ok: template-blocktranslate-no-escape -->
+    {% blocktranslate %}Foo bar{% endblocktranslate %}
+{% endfilter %}
+</div>
