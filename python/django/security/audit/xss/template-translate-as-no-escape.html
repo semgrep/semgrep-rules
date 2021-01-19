@@ -1,0 +1,21 @@
+<!-- ruleid: template-translate-as-no-escape -->
+{% translate "Hello world" as the_title %}
+<div>
+<h1>{{ the_title }}</h1>
+</div>
+
+<!-- ruleid: template-translate-as-no-escape -->
+{% trans "Hello world" as title %}
+<p>{{ title }}</p>
+
+<!-- ok: template-translate-as-no-escape -->
+{% translate "Hello world" as foo %}
+<h1>{{foo | force_escape}}</h1>
+
+<!-- ok: template-translate-as-no-escape -->
+{% translate "Hello world" as bar %}
+<div>
+{% filter force_escape %}
+<h1>{{ bar }}</h1>
+{% endfilter %}
+</div>
