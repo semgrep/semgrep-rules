@@ -182,3 +182,32 @@ var DragElement = /** @class */ (function () {
             '</svg>';
     });
 }());
+
+Object.keys(queries).forEach(function someName(key) {
+    value = queries[key];
+    if (angular.isDefined(value)) {
+    // ok: raw-html-concat
+    params.push(key + '=' + value.toString());
+    }
+});
+
+function BytesFilter($translate) {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) { return '-'; }
+        if (typeof precision === 'undefined') { precision = 1; }
+        var units = ['SIZE_BYTES', 'SIZE_KB', 'SIZE_MB', 'SIZE_GB', 'SIZE_TB', 'SIZE_TB'],
+                number = Math.floor(Math.log(bytes) / Math.log(1024));
+
+        units = units.map(function (unit) {
+            // ok: raw-html-concat
+            return $translate.instant('FORM.LABELS.' + unit);
+        });
+
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+    };
+}
+
+function urldecode(str) {
+    // ok: raw-html-concat
+    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
