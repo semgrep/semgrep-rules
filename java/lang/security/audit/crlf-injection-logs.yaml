@@ -12,7 +12,7 @@ rules:
   patterns:
     # Enumerate possible enclosing scopes that define request and logger
   - pattern-either:
-        # Logger is defined as a field on a class
+      # Logger is defined as a field on a class
     - patterns:
       - pattern-inside: |
           class $CLASS {
@@ -41,7 +41,7 @@ rules:
               ServletRequest $REQ = ...;
               ...
             }
-        # Logger is defined as local variable in a method
+      # Logger is defined as local variable in a method
     - pattern-inside: |
         $X $METHOD(...) {
           ...
@@ -58,8 +58,8 @@ rules:
           ServletRequest $REQ = ...;
           ...
         }
-    # Enumerate possible injection sites
   - pattern-either:
+    # Enumerate possible injection sites
     - pattern: |
         String $VAL = $REQ.getParameter(...);
         ...
