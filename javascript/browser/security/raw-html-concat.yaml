@@ -83,6 +83,26 @@ rules:
               $X = (<... location ...>);
               ...
             }
+      - pattern-not-inside: |
+          $ARRAY.map(function $FUNC($X, ...) {
+            ...
+          })
+      - pattern-not-inside: |
+          $ARRAY.every(function $FUNC($X, ...) {
+            ...
+          })
+      - pattern-not-inside: |
+          $ARRAY.reduce(function $FUNC($ACC, $X, ...) {
+            ...
+          })
+      - pattern-not-inside: |
+          $ARRAY.reduceRight(function $FUNC($PREV, $X, ...) {
+            ...
+          })
+      - pattern-not-inside: |
+          $ARRAY.forEach(function $FUNC($X, ...) {
+            ...
+          })
       - pattern-either:
         - pattern: |
             "..." + (<... $X ...>);
@@ -124,3 +144,11 @@ rules:
             (<... $X.$METHOD(...) ...>).concat(..., "...", ...);
         - pattern: |-
             (<... $X.$PROPERTY.$METHOD(...) ...>).concat(..., "...", ...);
+  - pattern-not: |-
+      $X + "";
+  - pattern-not: |-
+      "" + $X;
+  - pattern-not: |-
+      $X = $X + "...";
+  - pattern-not: |-
+      $X = "..." + $X;
