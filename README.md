@@ -21,7 +21,7 @@ The two most popular rulesets are:
 If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules specify:
 `semgrep --config=r/python.flask`
 
-Semgrep releases [new versions at a very high frequency](https://github.com/returntocorp/semgrep/releases) and the rules in this repo are always updated to take advantage of new features or fix breaking changes on new releases. For that reason, we suggest that you avoid stale copies of registry rules.
+Semgrep releases [new versions very frequently](https://github.com/returntocorp/semgrep/releases) and the rules in this repo are always updated to take advantage of new features or fix breaking changes on new releases. For that reason, we suggest that you avoid stale copies of registry rules.
 
 ## Contributing
 
