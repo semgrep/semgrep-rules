@@ -14,7 +14,7 @@ Welcome! This repository is the “standard library” for [Semgrep](https://sem
 
 We recommend starting with a pre-selected subset of rules that someone has already carefully tuned for precision. These rulesets, which may include rules not present in this repository, are available for free on the [Semgrep Registry](https://semgrep.dev/explore).
 
-The two most popular are:
+The two most popular rulesets are:
 * `semgrep --config=p/ci` to find logic bugs, and high-confidence security vulnerabilities; recommended for CI
 * `semgrep --config=p/security-audit` to find security audit points; noisy, not recommended for CI
 
