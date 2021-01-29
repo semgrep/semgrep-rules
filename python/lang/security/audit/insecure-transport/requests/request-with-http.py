@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: request-with-http
     url = "http://example.com"
+    # ruleid: request-with-http
     requests.post(url)
 
 def test2_ok():

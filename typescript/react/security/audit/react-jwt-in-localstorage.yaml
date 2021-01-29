@@ -1,0 +1,23 @@
+rules:
+- id: react-jwt-in-localstorage
+  patterns:
+  - pattern-inside: |
+      import jwt_decode from "jwt-decode";
+      ...
+  - pattern-either:
+    - pattern: |
+        $DECODED = jwt_decode($TOKEN,...);
+        ...
+        localStorage.setItem($NAME, <... $TOKEN ...>);
+    - pattern: |
+        $DECODED = jwt_decode(...);
+        ...
+        localStorage.setItem($NAME, <... $DECODED ...>);
+  message: |
+    Storing JWT tokens in localStorage known to be a bad practice, consider moving your tokens from localStorage to a HTTP cookie.
+  metadata:
+    references:
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+  languages:
+  - typescript
+  severity: WARNING

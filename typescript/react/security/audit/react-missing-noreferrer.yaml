@@ -6,18 +6,30 @@ rules:
         <$X target="_blank" />
     - pattern-not: |
         <$X target="_blank" rel="..." />
+    - pattern-not: |
+        <$X href="=~/^\/[^\/]/i" />
+    - pattern-not: |
+        <$X to="=~/^\/[^\/]/i" />
   - patterns:
     - pattern-inside: |
         <$X target="_blank" rel=... />
+    - pattern-not-inside: |
+        <$X href="=~/^\/[^\/]/i" rel=... />
+    - pattern-not-inside: |
+        <$X to="=~/^\/[^\/]/i" rel=... />
     - pattern-regex: rel=["']((?!noreferrer).)*?["']
   - patterns:
     - pattern: |
         React.createElement($A, {target: '_blank'},...)
     - pattern-not: |
         React.createElement($A, {rel: '...'},...)
+    - pattern-not: |
+        React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
   - patterns:
     - pattern: |
         React.createElement($A, {target: '_blank', rel: $REL},...)
+    - pattern-not: |
+        React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
     - metavariable-regex:
         metavariable: $REL
         regex: "[\"']((?!noreferrer).)*?['\"]"
@@ -30,20 +42,32 @@ rules:
         $P = {rel: '...'};
         ...
         React.createElement($A, $P,...);
+    - pattern-not: |
+        $P = {href: '=~/^\/[^\/]/i'};
+        ...
+        React.createElement($A, $P,...);
   - patterns:
     - pattern: |
         $P = {target: '_blank', rel: $REL};
+        ...
+        React.createElement($A, $P,...);
+    - pattern-not: |
+        $P = {href: '=~/^\/[^\/]/i'};
         ...
         React.createElement($A, $P,...);
     - metavariable-regex:
         metavariable: $REL
         regex: "[\"']((?!noreferrer).)*?['\"]"
   message: |
-    Missing 'noreferrer' on an anchor tag where target='_blank'.
+    This anchor tag with 'target="_blank"' is missing 'noreferrer'.
+    A page opened with 'target="_blank"' can access the window object of the origin page.
+    This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
+    This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
   metadata:
     cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
     owasp: 'A3: Sensitive Data Exposure'
     references:
+    - https://web.dev/external-anchors-use-rel-noopener/
     - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
   languages:
   - typescript

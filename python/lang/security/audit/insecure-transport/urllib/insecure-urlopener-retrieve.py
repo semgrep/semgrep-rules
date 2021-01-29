@@ -14,6 +14,7 @@ def test2():
     od = URLopener()
     # ruleid: insecure-urlopener-retrieve
     url = "http://example.com"
+    # ruleid: insecure-urlopener-retrieve
     od.retrieve(url)
 
 def test2_ok():
@@ -33,6 +34,7 @@ def test3_ok():
 def test4():
     # ruleid: insecure-urlopener-retrieve
     url = "http://example.com"
+    # ruleid: insecure-urlopener-retrieve
     URLopener().retrieve(url)
 
 def test4_ok():

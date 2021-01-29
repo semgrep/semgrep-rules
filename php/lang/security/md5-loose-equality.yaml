@@ -1,0 +1,18 @@
+rules:
+- id: md5-loose-equality
+  patterns:
+  - pattern-either:
+    - pattern: $X == $FUNC(...)
+    - pattern: $FUNC(...) == $X
+    - pattern: $FUNC(...) == $FUNC(...)
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: md5|md5_file
+  message: |
+    Make sure comparisons involving md5 values are strict (use `===` not `==`) to avoid type juggling issues
+  metadata:
+    references:
+    - https://www.php.net/manual/en/types.comparisons.php
+    - https://www.whitehatsec.com/blog/magic-hashes/
+  languages: [php]
+  severity: ERROR

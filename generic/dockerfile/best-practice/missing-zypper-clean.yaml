@@ -1,0 +1,17 @@
+rules:
+- id: missing-zypper-clean
+  severity: WARNING
+  languages: [generic]
+  patterns:
+  - pattern: zypper $COMMAND
+  - pattern-not-inside: RUN ... && zypper clean
+  message: |
+    This zypper command does not end with '&& zypper clean'. Running 'zypper clean' will remove cached data and reduce package size. (This must be performed in the same RUN step.)
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3036
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3036
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

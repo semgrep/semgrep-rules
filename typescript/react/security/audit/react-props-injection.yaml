@@ -1,0 +1,33 @@
+rules:
+- id: react-props-injection
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        import $PROPS from "...";
+        ...
+    - pattern-inside: |
+        $PROPS = $METHOD(...);
+        ...
+    - pattern-inside: |
+        function $FUNC(...,$PROPS,...) {
+          ...
+        }
+  - pattern-either:
+    - pattern: |
+        <$EL {...<... $PROPS ...>} />
+    - pattern: |
+        <$EL {...$F(<... $PROPS ...>)} />
+    - pattern: |
+        React.createElement($EL, <... $PROPS ...>)
+    - pattern: |
+        React.createElement($EL, $F(<... $PROPS ...>))
+  message: |
+    Inject arbitrary props into the new element. It may introduce an XSS vulnerability.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
+  languages:
+  - typescript
+  severity: WARNING

@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: insecure-urlopen-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-urlopen-ftp
     urlopen(url)
 
 def test2_ok():

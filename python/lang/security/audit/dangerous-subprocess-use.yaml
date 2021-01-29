@@ -7,9 +7,10 @@ rules:
   - pattern-not: subprocess.SubprocessError(...)
   - pattern: subprocess.$FUNC(...)
   message: |
-    Detected subprocess function '$FUNC' without a static string. Audit the use of this
-    call to ensure it is not vulnerable to a command injection. You may consider using
-    shlex.escape.
+    Detected subprocess function '$FUNC' without a static string. If this data can be
+    controlled by a malicious actor, it may be an instance of command injection.
+    Audit the use of this call to ensure it is not controllable by an external resource.
+    You may consider using 'shlex.escape()'.
   metadata:
     owasp: 'A1: Injection'
     cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"

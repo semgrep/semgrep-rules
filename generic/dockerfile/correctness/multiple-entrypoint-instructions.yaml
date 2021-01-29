@@ -1,0 +1,19 @@
+rules:
+- id: multiple-entrypoint-instructions
+  severity: ERROR
+  languages: [generic]
+  pattern: |
+    ENTRYPOINT ...
+    ...
+    ENTRYPOINT ...
+  message: |
+    Multiple ENTRYPOINT instructions were found. Only the last one will take effect.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4004
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL4004
+    - https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index#//dash_ref_Instructions/Entry/ENTRYPOINT/0
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

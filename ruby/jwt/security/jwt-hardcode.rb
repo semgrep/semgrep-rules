@@ -1,17 +1,19 @@
 require 'jwt'
 
 # ruleid: ruby-jwt-hardcoded-secret
-secret = 'secret-yo'
+secret_const = 'secret-yo'
 
 def bad1
     # ruleid: ruby-jwt-hardcoded-secret
     hmac_secret = 'my$ecretK3y'
+    # ruleid: ruby-jwt-hardcoded-secret
     token = JWT.encode payload, hmac_secret, 'HS256'
     puts token
 end
 
 def bad2(token)
-    decoded_token = JWT.decode token, secret, true, { algorithm: 'HS256' }
+    # ruleid: ruby-jwt-hardcoded-secret
+    decoded_token = JWT.decode token, secret_const, true, { algorithm: 'HS256' }
     puts decoded_token
 end
 

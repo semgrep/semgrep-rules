@@ -1,0 +1,19 @@
+rules:
+- id: curl-ssl-verifypeer-off
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $ARG = $IS_VERIFIED;
+        ...
+        curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $ARG);
+    - pattern: curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $IS_VERIFIED)
+  - metavariable-regex:
+      metavariable: $IS_VERIFIED
+      regex: 0|false|null
+  message: |
+    SSL verification is disabled but should not be (currently CURLOPT_SSL_VERIFYPEER= $IS_VERIFIED)
+  metadata:
+    references:
+    - https://www.saotn.org/dont-turn-off-curlopt_ssl_verifypeer-fix-php-configuration/
+  languages: [php]
+  severity: ERROR

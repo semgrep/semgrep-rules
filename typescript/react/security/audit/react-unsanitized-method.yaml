@@ -1,0 +1,19 @@
+rules:
+- id: react-unsanitized-method
+  patterns:
+  - pattern-either:
+    - pattern: $EL.insertAdjacentHTML($P, ...)
+    - pattern: document.write(...)
+    - pattern: document.writeln(...)
+  - pattern-not: $EL.insertAdjacentHTML($P, "...")
+  - pattern-not: document.write("...")
+  - pattern-not: document.writeln("...")
+  message: |
+    User controlled data in a insertAdjacentHTML, document.write or document.writeln is an anti-pattern than can lead to XSS vulnerabilities
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING

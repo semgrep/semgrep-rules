@@ -1,0 +1,15 @@
+rules:
+- id: react-legacy-component
+  patterns:
+  - pattern: |
+      $METHOD(...) {
+        ...
+      }
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: componentWillMount|componentWillReceiveProps|componentWillUpdate
+  message: |
+    Legacy component lifecycle was detected - $METHOD.
+  languages:
+  - typescript
+  severity: WARNING

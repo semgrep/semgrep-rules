@@ -1,0 +1,27 @@
+rules:
+- id: missing-pip-no-cache-dir
+  severity: INFO
+  languages: [generic]
+  patterns:
+  - patterns:
+    - pattern: |
+        RUN ... $PIP install ... $SOMETHING
+    - pattern-not-inside: |
+        RUN ... $PIP install ... --no-cache-dir
+    - pattern-not-inside: |
+        RUN ... $PIP install . ... $SOMETHING
+  - metavariable-regex:
+      metavariable: $PIP
+      regex: (pip|pip3)
+  message: |
+    This '$PIP install' is missing '--no-cache-dir'. This prevents
+    unnecessary packages from being installed, thereby reducing image size. Add
+    '--no-cache-dir'.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3042
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3042
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

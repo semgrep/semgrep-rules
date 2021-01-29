@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: insecure-urlopen
     url = "http://example.com"
+    # ruleid: insecure-urlopen
     urlopen(url)
 
 def test2_ok():

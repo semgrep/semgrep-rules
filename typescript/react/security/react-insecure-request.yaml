@@ -1,0 +1,43 @@
+rules:
+- id: react-insecure-request
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import $AXIOS from 'axios';
+            ...
+        - pattern-inside: |
+            $AXIOS = require('axios');
+            ...
+      - pattern-either:
+        - pattern: $AXIOS.$METHOD($URL,...)
+        - pattern: |
+            $VAR = $URL;
+            ...
+            $AXIOS.$METHOD($VAR,...);
+        - pattern: |
+            $AXIOS({url: $URL},...)
+        - pattern: |
+            $VAR = {url: $URL};
+            ...
+            $AXIOS($VAR,...);
+    - pattern: fetch($URL,...)
+    - pattern: |
+        $VAR = $URL;
+        ...
+        fetch($VAR,...);
+  - metavariable-regex:
+      metavariable: $URL
+      regex: "[\"'](http://).*['\"]"
+  message: |
+    Unencrypted request over HTTP detected.
+  metadata:
+    vulnerability: Insecure Transport
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://www.npmjs.com/package/axios
+  languages:
+  - typescript
+  severity: ERROR
