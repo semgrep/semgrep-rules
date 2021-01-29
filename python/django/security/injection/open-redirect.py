@@ -9,7 +9,7 @@ def unsafe(request):
     return redirect(url)
 
 def safe(request):
-    # ok
+    # ok: open-redirect
     url = "https://lmnop.qrs"
     return redirect(url)
 
@@ -30,11 +30,11 @@ def unsafe4(request):
         return HttpResponseRedirect(url)
 
 def fine(request):
-    # ok
+    # ok: open-redirect
     return HttpResponseRedirect(request.get_full_path())
 
 def url_validation(request):
-    # ok
+    # ok: open-redirect
     next = request.POST.get('next', request.GET.get('next'))
     if (next or not request.is_ajax()) and not is_safe_url(url=next, allowed_hosts=request.get_host()):
         next = "/index"
@@ -42,7 +42,7 @@ def url_validation(request):
     return response
 
 def url_validation2(request):
-    # ok
+    # ok: open-redirect
     next = request.POST.get('next', request.GET.get('next'))
     ok = is_safe_url(url=next, allowed_hosts=request.get_host())
     if ok:

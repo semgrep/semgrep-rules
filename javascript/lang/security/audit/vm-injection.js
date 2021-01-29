@@ -19,7 +19,7 @@ foo(function (userInput) {
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 })
 
-// ok
+// ok: vm-runincontext-context-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -45,7 +45,7 @@ foo(function (userInput) {
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 })
 
-// ok
+// ok: vm-runinnewcontext-context-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -57,7 +57,7 @@ function test3(userInput) {
     const code = `
         var x = ${userInput};
     `
-// ruleid: vm-runinthiscontext-code-injection
+    // ruleid: vm-runinthiscontext-code-injection
     vm.runInThisContext(code)
 }
 
@@ -65,21 +65,21 @@ function okTest3(userInput) {
     const code = `
         var x = 1;
     `
-// ok
+    // ok: vm-runinthiscontext-code-injection
     vm.runInThisContext(code)
 }
 
 function test4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + ${userInput}`
-// ruleid: vm-compilefunction-code-injection
+    // ruleid: vm-compilefunction-code-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
 function okTest4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-// ok
+    // ok: vm-compilefunction-code-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
@@ -93,12 +93,12 @@ function test5(userInput) {
 function okTest5(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-// ok
+    // ok: vm-compilefunction-context-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
 function test6(userInput) {
-// ruleid: vm-script-code-injection
+    // ruleid: vm-script-code-injection
     const script = new vm.Script(`
         function add(a, b) {
           return a + ${userInput};
@@ -111,6 +111,7 @@ function test6(userInput) {
 }
 
 function okTest6(userInput) {
+    // ok: vm-script-code-injection
     const script = new vm.Script(`
         function add(a, b) {
           return a + b;

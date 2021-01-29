@@ -1,17 +1,17 @@
-# ok
+# ok:flask-view-func-match-route-params
 @app.route("/api/snippet/<snippit_id>")
 @cache.cached(timeout=None)  # cache until restart or manual invalidation b/c immutable
 def get_snippet(snippit_id):
     db_id = hashids.decode(snippit_id)
 
-# ok
+# ok:flask-view-func-match-route-params
 @app.route("/api/snippet/<int:snippit_id>")
 @cache.cached(timeout=None)  # cache until restart or manual invalidation b/c immutable
 def get_snippet(snippit_id):
     db_id = hashids.decode(snippit_id)
 
 # From segmentio/envoy
-# ok
+# ok:flask-view-func-match-route-params
 @app.route('/trace/<service_number>')
 def trace(service_number):
     x = service_number

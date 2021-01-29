@@ -1,0 +1,24 @@
+<!-- cf. https://github.com/caiomartini/mustache-demo/blob/97b9200ebd2d27953febff23e6718aa1aa9ee44d/demo-mustache.html -->
+<!DOCTYPE HTML>
+<html>
+
+
+<div class="jumbotron text-center">
+    <h1 class="display-4">Oi, meu nome é <%= nome %>!</h1>
+    <p class="lead">Isso é apenas uma demonstração de como utilizar o Mustache.JS</p>
+    <!-- ruleid: var-in-href -->
+    <a href="<%= link %>" class="text-center">Click me</a>
+    <!-- ok: var-in-href -->
+    <a href="/<%= link %>" class="text-center">Click me</a>
+
+    <!-- ok: var-in-href -->
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= current_user.name.pluralize %> Account <b class="caret"></b></a>
+
+    <!-- ok: var-in-href -->
+    <div class="alert lead alert-<%= key %>"><%= value %> </div>
+
+    <!-- ok: var-in-href -->
+    <a class="restore" href="#" style="display: none;"><%= I18n.t("gws/reminder.links.restore_reminder") %></a>
+</div>
+
+</html>

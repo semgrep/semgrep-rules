@@ -27,12 +27,12 @@ if (password == test)
 import { pbkdf2Sync, randomBytes } from 'crypto';
 
 export class Auth {
-    private iters = 1e1; // TODO: increase later
-    private keylen = 64;
-    private digest = 'sha512';
+    iters = 1e1; // TODO: increase later
+    keylen = 64;
+    digest = 'sha512';
 
-    create(password: string) {
-        const salt = randomBytes(128).toString('base64'); // <- salt 
+    create(password) {
+        const salt = randomBytes(128).toString('base64'); // <- salt
         // salt was not base64 before being used by pbkdf2
 
         const hash = pbkdf2Sync(password, salt, this.iters, this.keylen, this.digest).toString('base64');
@@ -40,7 +40,7 @@ export class Auth {
         return [salt, hash, this.iters].join('::');
     }
 
-    verify(stored: string, password: string) {
+    verify(stored, password) {
         const [salt, hash, iters] = stored.split('::');
         const verify = pbkdf2Sync(password, salt, parseInt(iters, 10), this.keylen, this.digest);
 

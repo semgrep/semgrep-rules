@@ -5,8 +5,10 @@ rules:
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNENCRYPTED_SOCKET
   message: |
-    The communication channel used is not encrypted.
-    The traffic could be read by an attacker intercepting the network traffic. 
+    This socket is not encrypted.
+    The traffic could be read by an attacker intercepting the network traffic.
+    Use an SSLSocket created by 'SSLSocketFactory' or 'SSLServerSocketFactory'
+    instead
   severity: WARNING
   languages: [java]
   pattern-either:

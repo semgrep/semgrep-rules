@@ -11,9 +11,9 @@ s = boto3.sessions
 # ruleid:hardcoded-token
 s.Session(aws_access_key_id="AKIAxxxxxxxxxxxxxxxx")
 
-# ruleid:hardcoded-token
 uhoh_key = "AKIAxxxxxxxxxxxxxxxx"
 ok_secret = os.environ.get("SECRET_ACCESS_KEY")
+# ruleid:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id=uhoh_key,
@@ -23,8 +23,9 @@ s3 = boto3.resource(
 )
 
 ok_key = os.environ.get("ACCESS_KEY_ID")
-# ruleid:hardcoded-token
+
 uhoh_secret = "jWnyxxxxxxxxxxxxxxxxX7ZQxxxxxxxxxxxxxxxx"
+# ruleid:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id=ok_key,
@@ -33,10 +34,10 @@ s3 = boto3.resource(
     endpoint_url="https://sfo2.digitaloceanspaces.com",
 )
 
-# ok
+# ok:hardcoded-token
 s3 = client("s3", aws_access_key_id="this-is-not-a-key")
 
-# ok
+# ok:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id="XXXXXXXX",
@@ -44,7 +45,7 @@ s3 = boto3.resource(
     region_name="us-east-1",
 )
 
-# ok
+# ok:hardcoded-token
 s3 = boto3.resource(
     "s3",
     aws_access_key_id="<your token here>",
@@ -52,7 +53,7 @@ s3 = boto3.resource(
     region_name="us-east-1",
 )
 
-# ok
+# ok:hardcoded-token
 key = os.environ.get("ACCESS_KEY_ID")
 secret = os.environ.get("SECRET_ACCESS_KEY")
 s3 = boto3.resource(

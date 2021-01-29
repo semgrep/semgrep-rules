@@ -5,7 +5,7 @@ class Cls {
     public Cls() {
         System.out.println("Hello");
     }
-    
+
     public byte[] test1(String plainText) {
         // ruleid: no-null-cipher
         Cipher doNothingCihper = new NullCipher();
@@ -15,7 +15,7 @@ class Cls {
     }
 
     public void test2(String plainText) {
-        // ok
+        // ok: no-null-cipher
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         byte[] cipherText = cipher.doFinal(plainText);
         return cipherText;

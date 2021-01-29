@@ -1,0 +1,25 @@
+rules:
+- id: template-unquoted-attribute-var
+  message: >-
+    Detected a unquoted template variable as an attribute. If unquoted, a
+    malicious actor could inject custom JavaScript handlers. To fix this,
+    add quotes around the template expression, like this: "{{ expr }}".
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+  languages:
+  - generic
+  paths:
+    include:
+    - '*.html'
+  severity: WARNING
+  patterns:
+  - pattern-inside: <$TAG ...>
+  - pattern-not-inside: ="..."
+  - pattern-not-inside: ='...'
+  - pattern: '{{ ... }}'
+  fix-regex:
+    regex: '{{(.*?)}}'
+    replacement: '"{{\1}}"'

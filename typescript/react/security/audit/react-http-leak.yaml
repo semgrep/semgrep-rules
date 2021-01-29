@@ -1,0 +1,128 @@
+rules:
+- id: react-http-leak
+  pattern-either:
+  - patterns:
+    - pattern: |
+        <$EL codebase=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: applet|object
+    - pattern-not: |
+        <$EL codebase="..." />
+  - patterns:
+    - pattern: |
+        <$EL cite=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: blockquote|del|ins|q
+    - pattern-not: |
+        <$EL cite="..." />
+  - patterns:
+    - pattern: |
+        <$EL longdesc=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: frame|iframe|img
+    - pattern-not: |
+        <$EL longdesc="..." />
+  - patterns:
+    - pattern: |
+        <$EL src={$INJECT} />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: frame|iframe|img|input|script|audio|source|track|embed|video
+    - pattern-not: |
+        <$EL src="..." />
+    - pattern-not-inside: |
+        import $INJECT from "...";
+        ...
+  - patterns:
+    - pattern: |
+        <$EL usemap=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: img|input|object
+    - pattern-not: |
+        <$EL usemap="..." />
+  - patterns:
+    - pattern: |
+        <$EL formaction=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: button|input
+    - pattern-not: |
+        <$EL formaction="..." />
+  - patterns:
+    - pattern: |
+        <$EL srcset=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: img|source
+    - pattern-not: |
+        <$EL srcset="..." />
+  - patterns:
+    - pattern: |
+        <$EL archive=... />
+    - metavariable-regex:
+        metavariable: $EL
+        regex: object|applet
+    - pattern-not: |
+        <$EL archive="..." />
+  - patterns:
+    - pattern: |
+        <body background=... />
+    - pattern-not: |
+        <body background="..." />
+  - patterns:
+    - pattern: |
+        <form action=... />
+    - pattern-not: |
+        <form action="..." />
+  - patterns:
+    - pattern: |
+        <head profile=... />
+    - pattern-not: |
+        <head profile="..." />
+  - patterns:
+    - pattern: |
+        <object $ATTR=... />
+    - metavariable-regex:
+        metavariable: $ATTR
+        regex: classid|data
+    - pattern-not: |
+        <object $ATTR="..." />
+  - patterns:
+    - pattern: |
+        <video poster=... />
+    - pattern-not: |
+        <video poster="..." />
+  - patterns:
+    - pattern: |
+        <command icon=... />
+    - pattern-not: |
+        <command icon="..." />
+  - patterns:
+    - pattern: |
+        <html manifest=... />
+    - pattern-not: |
+        <html manifest="..." />
+  - patterns:
+    - pattern: |
+        <meta content=... />
+    - pattern-not: |
+        <meta content="..." />
+  message: >-
+    This HTML element '$EL' and attribute '$ATTR' together may load an external
+    resource. This means that if dynamic content can enter this attribute it may
+    be possible for an attacker to send HTTP requests to unintended locations which
+    may leak data about your users. If this element is reaching out to a known host,
+    consider hardcoding the host (or loading from a configuration) and appending the
+    dynamic path. See https://github.com/cure53/HTTPLeaks for more information.
+  metadata:
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    references:
+    - https://github.com/cure53/HTTPLeaks
+  languages:
+  - typescript
+  severity: WARNING

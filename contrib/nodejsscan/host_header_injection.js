@@ -42,6 +42,7 @@ app.get('/', function (req, res) {
 
     // ruleid:host_header_injection
     let x = "https://" + req['host'] + "/reset" + foo;
+    // ruleid:host_header_injection
     x = "https://" + req("host") + "/reset" + foo + 'barr' + foo2;
 
     // ruleid:host_header_injection

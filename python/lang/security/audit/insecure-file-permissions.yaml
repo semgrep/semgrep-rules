@@ -1,0 +1,60 @@
+rules:
+- id: insecure-file-permissions
+  patterns:
+  - pattern-either:
+    - pattern: os.chmod($FILENAME, $MODE, ...)
+    - pattern: os.lchmod($FILENAME, $MODE)
+    - pattern: os.fchmod($FD, $MODE)
+  - pattern-where-python: |-
+      import stat
+
+      def stat_to_bits(mode):
+        bits = 0
+        for flag in mode.split('|'):
+          try:
+            bits |= {k: v for k, v in stat.__dict__.items() if type(v) == int}[flag.strip().replace("stat.", "")]
+          except: # ignore things that aren't in stat module
+            continue
+        return bits
+
+      def numeric_to_bits(mode):
+        # Try combos of ints: 0o777, 511, 0x1ff
+        bits = 0
+        for num in mode.split("|"):
+          num = num.strip()
+          try:
+            tidbit = int(num)
+          except:
+            try:
+              tidbit = int(num, 8)
+            except:
+              try:
+                tidbit = int(num, 16)
+              except:
+                try:
+                  tidbit = int(num, 2)
+                except:
+                  tidbit = 0
+          bits |= tidbit
+        return bits
+
+      perms = vars['$MODE']
+      try:
+        if "stat" in perms:
+          mode = stat_to_bits(perms)
+        else:
+          mode = numeric_to_bits(perms)
+      except:
+        mode = 0 # can't resolve. ignore this.
+
+      filemode = stat.filemode(mode)
+      alert = False
+      if 'w' in filemode[-3:] or 'x' in filemode[-3:]:
+        alert = True
+      elif 'x' in filemode[-6:-3]:
+        alert = True
+      alert
+  message: |
+    Insecure file permissions detected.
+  languages: [python]
+  severity: WARNING

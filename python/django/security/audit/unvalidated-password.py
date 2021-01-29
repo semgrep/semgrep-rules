@@ -18,29 +18,29 @@ from django.contrib.auth import get_user_model
 UserModel = get_user_model()
 
 def test_email_auth_backend_empty_password(user_profile: UserProfile) -> None:
-	user_profile = example_user('hamlet')
-	password = "testpassword"
-	try:
-		validate_password(password)
-	except ValidationError as e:
-		return HttpResponseBadRequest(str(e))
-    # ok
-	user_profile.set_password(password)
-	user_profile.save()
+    user_profile = example_user('hamlet')
+    password = "testpassword"
+    try:
+        validate_password(password)
+    except ValidationError as e:
+        return HttpResponseBadRequest(str(e))
+    # ok: unvalidated-password
+    user_profile.set_password(password)
+    user_profile.save()
 
-	user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
+    user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
 
 
 def other(user_profile: UserProfile) -> None:
-	user_profile = example_user('hamlet')
-	password = "testpassword"
-	# ruleid: unvalidated-password
-	user_profile.set_password(password)
+    user_profile = example_user('hamlet')
+    password = "testpassword"
+    # ruleid: unvalidated-password
+    user_profile.set_password(password)
 
 
-	user_profile.save()
+    user_profile.save()
 
-	user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
+    user_profile.assertIsNotNone(EmailAuthBackend().authenticate(username=user_profile.example_email('hamlet'), password=password))
 
 class ModelBackend(BaseBackend):
     """
@@ -57,7 +57,7 @@ class ModelBackend(BaseBackend):
         except UserModel.DoesNotExist:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a nonexistent user (#20760).
-			# ok
+            # ok: unvalidated-password
             UserModel().set_password(password)
         else:
             if user.check_password(password) and self.user_can_authenticate(user):

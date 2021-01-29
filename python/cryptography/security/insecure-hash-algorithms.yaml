@@ -1,0 +1,38 @@
+rules:
+- id: insecure-hash-algorithm-md5
+  pattern: cryptography.hazmat.primitives.hashes.MD5(...)
+  message: |
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    bandit-code: B303
+    references:
+    - https://tools.ietf.org/html/rfc6151
+    - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+  severity: WARNING
+  languages:
+  - python
+- id: insecure-hash-algorithm-sha1
+  pattern: cryptography.hazmat.primitives.hashes.SHA1(...)
+  message: |
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    bandit-code: B303
+    references:
+    - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
+    - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
+    - http://2012.sharcs.org/slides/stevens.pdf
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+  severity: WARNING
+  languages:
+  - python

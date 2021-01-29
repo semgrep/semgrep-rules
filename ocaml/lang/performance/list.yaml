@@ -1,0 +1,11 @@
+rules:
+- id: ocamllint-length-list-zero
+  pattern: List.length $X = 0
+  message: You probably want $X = [], which is faster.
+  languages: [ocaml]
+  severity: WARNING
+- id: ocamllint-length-more-than-zero
+  pattern: List.length $X > 0
+  message: You probably want $X <> [], which is faster.
+  languages: [ocaml]
+  severity: WARNING

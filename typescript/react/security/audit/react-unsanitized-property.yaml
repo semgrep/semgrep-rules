@@ -1,0 +1,20 @@
+rules:
+- id: react-unsanitized-property
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X.innerHTML = ...;
+    - pattern: |
+        $X.outerHTML = ...;
+  - pattern-not: |
+      $X.innerHTML = "...";
+  - pattern-not: |
+      $X.outerHTML = "...";
+  message: |
+    User controlled data in a `$X` is an anti-pattern than can lead to XSS vulnerabilities
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+  languages:
+  - typescript
+  severity: WARNING

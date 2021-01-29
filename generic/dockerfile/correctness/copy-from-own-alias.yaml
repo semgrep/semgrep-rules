@@ -1,0 +1,31 @@
+rules:
+- id: copy-from-own-alias
+  severity: ERROR
+  languages: [generic]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        FROM $IMAGE:$TAG as $REF
+        ...
+        COPY --from=$REF
+        ...
+        FROM
+    - pattern: |
+        FROM $IMAGE:$TAG AS $REF
+        ...
+        COPY --from=$REF
+        ...
+        FROM
+  message: >-
+    COPY instructions cannot copy from its own alias. The '$REF' alias is used before
+    switching
+    to a new image. If you meant to switch to a new image, include
+    a new 'FROM' statement. Otherwise, remove the '--from=$REF' from the COPY statement.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3023
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3023
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

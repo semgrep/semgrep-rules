@@ -1,0 +1,50 @@
+rules:
+- id: vm2-code-injection
+  message: |
+    Make sure that unverified user data can not reach `vm2`.
+  severity: WARNING
+  languages: [javascript]
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      ...
+      require('vm2');
+      ...
+  - pattern-not-inside: |
+      $CODE = "...";
+      ...
+  - pattern-not-inside: |
+      ...
+      $CODE = new VMScript(...);
+      ...
+  - pattern-either:
+    - pattern: |
+        $VM = new VM(...);
+        ...
+        $VM.run($CODE,...);
+    - pattern: |
+        new VM(...).run($CODE,...);
+    - pattern: |
+        $VM = new NodeVM(...);
+        ...
+        $VM.run($CODE,...);
+    - pattern: |
+        new NodeVM(...).run($CODE,...);
+    - pattern: |
+        new VMScript($CODE,...);
+  - pattern-not: |
+      $VM = new NodeVM(...);
+      ...
+      $VM.run("...",...);
+  - pattern-not: |
+      new VM(...).run("...",...);
+  - pattern-not: |
+      $VM = new NodeVM(...);
+      ...
+      $VM.run("...",...);
+  - pattern-not: |
+      new NodeVM(...).run("...",...);
+  - pattern-not: |-
+      new VMScript("...",...);

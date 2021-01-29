@@ -1,0 +1,41 @@
+rules:
+- id: react-href-var
+  pattern-either:
+  - patterns:
+    - pattern: |
+        <$EL href=... />
+    - pattern-not: |
+        <$EL href="..." />
+  - patterns:
+    - pattern: |
+        <Link to=... />
+    - pattern-not: |
+        <Link to="..." />
+  - patterns:
+    - pattern: |
+        React.createElement($EL, {href: ...})
+    - pattern-not: |
+        React.createElement($EL, {href: "..."})
+  - patterns:
+    - pattern: |
+        $PARAMS = {href: ...};
+    - pattern-not: |
+        $PARAMS = {href: "..."};
+    - pattern-inside: |
+        ...
+        React.createElement($EL, $PARAMS);
+  message: >-
+    Detected a variable used in an anchor tag with the 'href' attribute. A malicious actor
+    may be able to input the 'javascript:' URI, which could cause cross-site scripting (XSS).
+    If you are generating a URL to a known host, hardcode the base link (or retrieve it from
+    a configuration) and append the path. You may also consider funneling link generation through
+    a safe method which sanitizes URLs for the 'javascript:' URI.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#deprecating-javascript-urls
+    - https://pragmaticwebsecurity.com/articles/spasecurity/react-xss-part1.html
+  languages:
+  - typescript
+  severity: WARNING

@@ -1,0 +1,19 @@
+rules:
+- id: divide-by-zero
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X / 0
+    - pattern: |
+        $ZERO = 0
+        ...
+        $X / $ZERO
+  message: |
+    Checks for divide by zero. Best practice involves not dividing a variable by zero, as this leads to a Ruby
+    ZeroDivisionError.
+  metadata:
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_divide_by_zero.rb
+  languages:
+  - ruby
+  severity: WARNING

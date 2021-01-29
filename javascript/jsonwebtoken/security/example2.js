@@ -1,7 +1,7 @@
 (()=> {
 
   'use strict';
-// ruleid: hardcoded-jwt-secret
+  // ruleid: hardcoded-jwt-secret
   let User = require('./user'),
   jwt      = require('jsonwebtoken');
 

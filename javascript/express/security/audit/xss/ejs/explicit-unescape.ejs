@@ -1,0 +1,55 @@
+<!-- cf. https://github.com/caiomartini/mustache-demo/blob/97b9200ebd2d27953febff23e6718aa1aa9ee44d/demo-mustache.html -->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Demo Mustache.JS</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+    <script type="text/javascript" src="node_modules\jquery\dist\jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
+    <script type="text/javascript" src="node_modules\mustache\mustache.min.js"></script>
+    <script type="text/javascript" src="demo-mustache.js"></script>
+</head>
+
+<body onload="carregarDemo();">
+    <div class="content">
+        <div id="mustache-header"></div>
+        <div id="mustache-cards"></div>
+    </div>
+</body>
+
+<div class="jumbotron text-center">
+    <!-- ruleid: template-explicit-unescape -->
+    <h1 class="display-4">Oi, meu nome é <%- autor.nome %> <%= autor.sobrenome %>!</h1>
+    <p class="lead">Isso é apenas uma demonstração de como utilizar o Mustache.JS</p>
+</div>
+
+<div class="text-center">
+    <!-- ok: template-explicit-unescape -->
+    <h2>Apresentando o time da <b><%= time.nome %></b></h2>
+    <!-- ruleid: template-explicit-unescape -->
+    <h6>Predio <%- time.predio %></h6>
+</div>
+<div class="container" style="margin-top: 30px;">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <!-- ruleid: template-explicit-unescape -->
+                    <b><%- nome %></b>
+                </div>
+                <div class="card-body">
+                    <!-- ok: template-explicit-unescape -->
+                    <%= template-table %>
+                </div>
+                <div>
+                    <!-- ok: template-explicit-unescape -->
+                    <%- include('partials/example', {data: data}); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

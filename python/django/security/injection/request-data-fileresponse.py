@@ -7,7 +7,7 @@ def func(request):
     return FileResponse(f)
 
 def safe(request):
-    # ok
+    # ok: request-data-fileresponse
     url = request.GET.get("url")
     print(url)
     f = open("blah.txt", 'r')

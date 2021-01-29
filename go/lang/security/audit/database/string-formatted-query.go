@@ -5,9 +5,12 @@ import (
 	"database/sql"
 	"fmt"
 	"http"
+
+	"github.com/jackc/pgx/v4"
 )
 
 var db *sql.DB
+var postgresDb *pgx.Conn
 
 func dbExec(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
@@ -130,13 +133,13 @@ func dbQueryRowContextFmt(r *http.Request) {
 }
 
 func unmodifiedString() {
-	// ok
+	// ok: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1234"
 	row, _ := db.Query(query)
 }
 
 func unmodifiedStringDirectly() {
-    // ok
+    // ok: string-formatted-query
 	row, _ := db.Query("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = 1234")
 }
 
@@ -156,3 +159,10 @@ func badDirectQueryFmt(r *http.Request) {
     row, _ := db.QueryRowContext(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
 }
 
+func postgresBadDirectQueryFmt(r *http.Request) {
+    ctx := context.Background()
+    customerId := r.URL.Query().Get("id")
+
+	// ruleid: string-formatted-query
+    row, _ := postgresDb.QueryRow(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
+}

@@ -1,0 +1,39 @@
+{% extends "container.html" %}
+
+{% block opengraph %}
+
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="semgrep" />
+<meta property="og:description" content="content" />
+<!-- ruleid: template-unescaped-with-safe -->
+<meta property="og:image" content="{{ url_for('static', filename='picture.jpg', _external=True) | safe }}" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
+<!-- ok -->
+<meta property="not-real-only-for-testing" content="{{ safe }}" />
+
+<!-- Google OAuth sign-in -->
+<meta name="google-signin-scope" content="profile email openid">
+<!-- ruleid: template-unescaped-with-safe -->
+<meta name="google-signin-client_id" content="{{ client_id | safe }}">
+
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{ var | safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{var | safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{var| safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{var|safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{var|safe}}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{ var | safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{ var |safe }}</div>
+<!-- ruleid: template-unescaped-with-safe -->
+<div>{{ var|safe }}</div>
+
+{% endblock %}

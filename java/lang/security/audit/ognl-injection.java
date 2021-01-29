@@ -29,13 +29,13 @@ public class OgnlReflectionProviderSample {
         reflectionProvider.evaluate( input );
     }
 
-    // ok
+    // ok: ognl-injection
     public void safeOgnlReflectionProvider1(OgnlReflectionProvider reflectionProvider, Class type) throws IntrospectionException, ReflectionException {
         String input = "thisissafe";
         reflectionProvider.getGetMethod(type, input);
     }
 
-    // ok
+    // ok: ognl-injection
     public void safeOgnlReflectionProvider2(OgnlReflectionProvider reflectionProvider, Class type) throws IntrospectionException, ReflectionException {
         reflectionProvider.getField(type, "thisissafe");
     }

@@ -13,7 +13,7 @@ for k in d.keys():
     print(d[k])
     del d[k]
 
-# ok
+# ok:dict-del-while-iterate
 for k in d.keys():
     print(d[k])
     x = d[k]

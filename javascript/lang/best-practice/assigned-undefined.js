@@ -1,6 +1,6 @@
 // https://stackoverflow.com/questions/7452341/what-does-void-0-mean/7452352#7452352
 
-// ok
+// ok:assigned-undefined
 alert(undefined); //alerts "undefined"
 // ruleid:assigned-undefined
 var undefined = "new value";

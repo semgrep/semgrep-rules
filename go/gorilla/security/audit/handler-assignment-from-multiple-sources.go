@@ -57,7 +57,7 @@ func augment(user_id int, augment_string string) int {
 }
 
 func MyHandlerOK(w http.ResponseWriter, r *http.Request) {
-    // ok
+    // ok: handler-assignment-from-multiple-sources
     session, err := store.Get(r, "blah-session")
     user_id := session.Values["user_id"]
 
@@ -73,7 +73,7 @@ func MyHandlerOK(w http.ResponseWriter, r *http.Request) {
 }
 
 func (sc *http.serverConn) runHandler(rw *http.responseWriter, req *http.Request, handler func(http.ResponseWriter, *http.Request)) {
-        // ok
+        // ok: handler-assignment-from-multiple-sources
 	didPanic := true
 	defer func() {
 		rw.rws.stream.cancelCtx()
@@ -86,7 +86,7 @@ func (sc *http.serverConn) runHandler(rw *http.responseWriter, req *http.Request
 			// Same as net/http:
 			if e != nil && e != http.ErrAbortHandler {
 				const size = 64 << 10
-                                // ok
+                                // ok: handler-assignment-from-multiple-sources
 				buf := make([]byte, size)
 				buf = buf[:runtime.Stack(buf, false)]
 				sc.logf("http2: panic serving %v: %v\n%s", sc.conn.RemoteAddr(), e, buf)
@@ -104,4 +104,3 @@ func main() {
 
     http.ListenAndServe(":8080", nil)
 }
-

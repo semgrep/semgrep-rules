@@ -11,7 +11,7 @@ public class BadHexa {
         System.out.println(String.format("%s (len=%d) != %s (len=%d)", good, good.length(), bad, bad.length()));
     }
 
-    // ok
+    // ok: bad-hexa-conversion
     public static String goodHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] resultBytes = md.digest(password.getBytes("UTF-8"));

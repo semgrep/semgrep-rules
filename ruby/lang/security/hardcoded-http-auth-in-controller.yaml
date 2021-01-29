@@ -1,0 +1,19 @@
+rules:
+- id: hardcoded-http-auth-in-controller
+  pattern: |
+    class $CONTROLLER < ApplicationController
+      ...
+      http_basic_authenticate_with ..., :password => "...", ...
+    end
+  message: |
+    Detected hardcoded password used in basic authentication in a controller
+    class. Including this password in version control could expose this
+    credential. Consider refactoring to use environment variables or
+    configuration files.
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
+  languages:
+  - ruby

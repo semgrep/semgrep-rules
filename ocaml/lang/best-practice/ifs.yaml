@@ -1,0 +1,11 @@
+rules:
+- id: ocamllint-useless-else
+  pattern: if $E then $E1 else ()
+  message: Useless else. Just remove the else branch;
+  languages: [ocaml]
+  severity: WARNING
+- id: ocamllint-backwards-if
+  pattern: if $E then () else $E2
+  message: Backwards if. Rewrite the code as 'if not $E then $E2'.
+  languages: [ocaml]
+  severity: WARNING

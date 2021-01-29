@@ -4,11 +4,11 @@ from django.db.models import (
 from django.db.models.expressions import CombinedExpression, Func, Subquery
 from django.db.models.functions import Cast, Coalesce
 
-# ok
+# ok: extends-custom-expression
 class Star(CharField):
     pass
 
-# ok
+# ok: extends-custom-expression
 class MoreStar(Star):
     pass
 
@@ -17,7 +17,7 @@ class Position(Func):
     function = 'POSITION'
     template = "%(function)s('%(substring)s' in %(expressions)s)"
 
-    # todoruleid: dangerous-custom-expression-init
+    # todoruleid: extends-custom-expression
     def __init__(self, expression, substring):
         # substring=substring is a SQL injection vulnerability!
         super().__init__(expression, substring=substring)

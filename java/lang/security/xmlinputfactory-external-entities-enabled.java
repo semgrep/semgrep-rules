@@ -11,10 +11,10 @@ class GoodXMLInputFactory {
         // See
         // https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md#xmlinputfactory-a-stax-parser
         xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-        // ok
+        // ok:xmlinputfactory-external-entities-enabled
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
     }
-}           
+}
 
 class BadXMLInputFactory {
     public BadXMLInputFactory() {
@@ -22,4 +22,4 @@ class BadXMLInputFactory {
         // ruleid:xmlinputfactory-external-entities-enabled
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
     }
-}  
+}

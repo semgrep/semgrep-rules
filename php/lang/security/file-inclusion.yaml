@@ -1,0 +1,18 @@
+rules:
+- id: file-inclusion
+  patterns:
+  - pattern: $FUNC(...);
+  - pattern-not: $FUNC("...");
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: include|include_once|require|require_once
+  message: |
+    Non-constant file inclusion. This can lead to LFI or RFI if user
+    input reaches this statement.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.include.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/EasyRFISniff.php
+    - https://en.wikipedia.org/wiki/File_inclusion_vulnerability#Types_of_Inclusion
+  languages: [php]
+  severity: ERROR

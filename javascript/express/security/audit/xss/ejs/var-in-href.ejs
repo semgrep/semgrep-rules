@@ -1,0 +1,56 @@
+<!-- cf. https://github.com/caiomartini/mustache-demo/blob/97b9200ebd2d27953febff23e6718aa1aa9ee44d/demo-mustache.html -->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Demo Mustache.JS</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+    <script type="text/javascript" src="node_modules\jquery\dist\jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
+    <script type="text/javascript" src="node_modules\mustache\mustache.min.js"></script>
+    <script type="text/javascript" src="demo-mustache.js"></script>
+</head>
+
+<body onload="carregarDemo();">
+    <div class="content">
+        <div id="mustache-header"></div>
+        <div id="mustache-cards"></div>
+    </div>
+
+    <!-- ok: var-in-href -->
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= current_user.name.pluralize %> Account <b class="caret"></b></a>
+
+    <!-- ok: var-in-href -->
+    <div class="alert lead alert-<%= key %>"><%= value %> </div>
+</body>
+
+<div class="jumbotron text-center">
+    <h1 class="display-4">Oi, meu nome é <%= autor.nome %> <%= autor.sobrenome %>!</h1>
+    <p class="lead">Asso é apenas uma demonstração de como utilizar o Mustache.JS</p>
+    <!-- ruleid: var-in-href -->
+    <a href="<%= link %>" class="text-center">Click me</a>
+    <!-- ok: var-in-href -->
+    <a href="/<%= link %>" class="text-center">Click me</a>
+</div>
+
+<div class="text-center">
+    <h2>Apresentando o time da <b><%= time.nome %></b></h2>
+    <h6>Predio <%= time.predio %></h6>
+</div>
+<div class="container" style="margin-top: 30px;">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <b><%= nome %></b>
+                </div>
+                <div class="card-body">
+                    <%= template-table %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

@@ -15,7 +15,7 @@ def unsafe_dict(request):
     eval(request.POST['code'])
 
 def safe(request):
-    # ok
+    # ok: user-eval
     code = """
     print('hello')
     """

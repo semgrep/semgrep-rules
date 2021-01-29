@@ -8,11 +8,15 @@ rules:
     - https://nvd.nist.gov/vuln/detail/CVE-2017-18342
   languages:
   - python
-  message: Avoid using `load()` as `PyYAML.load` could be easily exploited.
+  message: |
+    Avoid using `load()`. `PyYAML.load` can create arbitrary Python
+    objects. A malicious actor could exploit this to run arbitrary
+    code. Use `safe_load()` instead.
   fix: yaml.safe_load($FOO)
-  severity: WARNING
+  severity: ERROR
   patterns:
-  - pattern-not-inside: |
-      yaml = $X
+  - pattern-inside: |
+      import yaml
       ...
+      yaml.load($FOO)
   - pattern: yaml.load($FOO)

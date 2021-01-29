@@ -10,7 +10,7 @@ class Engine(models.Model):
 
 class Car(models.Model):
     name = models.CharField(max_length=25)
-    # ok
+    # ok: use-onetoonefield
     engine = models.OneToOneField(Engine)
 
     def __unicode__(self):
@@ -29,4 +29,3 @@ class Car2(models.Model):
 
     def __unicode__(self):
         return self.name
-

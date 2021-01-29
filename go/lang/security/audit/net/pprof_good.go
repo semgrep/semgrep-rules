@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	// ok
+	// ok: pprof-debug-exposure
 	"net/http/pprof"
 )
 

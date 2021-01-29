@@ -14,9 +14,9 @@ import org.apache.commons.io.FilenameUtils;
 
 public class Cls extends HttpServlet
 {
-	private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
+    private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
 
-	protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String input1 = req.getParameter("input1");
         // ruleid:servletresponse-writer-xss
         resp.getWriter().write(input1);
@@ -31,7 +31,7 @@ public class Cls extends HttpServlet
 
     protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String input1 = req.getParameter("input1");
-        // ok
+        // ok:servletresponse-writer-xss
         resp.getWriter().write(Encode.forHtml(input1));
     }
-} 
+}

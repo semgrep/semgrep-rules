@@ -9,9 +9,7 @@ app.get('/', function (req, res) {
     res.set(ffff)
 });
 
-// ruleid:express_cors
 app.get('/', function (req, res) {
-    // ruleid:express_cors
     var y = 1;
     // ruleid:express_cors
     var x = '*';
@@ -33,6 +31,7 @@ app.get('/', function (req, res) {
     // ruleid:express_cors
     res.writeHead(200, { 'Access-Control-Allow-Origin': '*' })
 
+    // ruleid:express_cors
     res.set('access-control-allow-origin', x);
 
     // do not detect - sgrep bug

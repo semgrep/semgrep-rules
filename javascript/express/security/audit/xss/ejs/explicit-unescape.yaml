@@ -1,0 +1,24 @@
+rules:
+- id: template-explicit-unescape
+  message: |
+    Detected an explicit unescape in an EJS template, using
+    '<%- ... %>' If external data can reach these locations,
+    your application is exposed to a cross-site scripting (XSS)
+    vulnerability. Use '<%= ... %>' to escape this data. If you
+    need escaping, ensure no external data can reach this location.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - http://www.managerjs.com/blog/2015/05/will-ejs-escape-save-me-from-xss-sorta/
+  languages:
+  - none
+  paths:
+    include:
+    - '*.ejs'
+    - '*.html'
+  severity: WARNING
+  pattern-regex: <%-((?!include).)*?%>
+  fix-regex:
+    regex: <%-(.*?)%>
+    replacement: <%=\1%>

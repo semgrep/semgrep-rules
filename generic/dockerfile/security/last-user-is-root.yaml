@@ -1,0 +1,27 @@
+rules:
+  - id: last-user-is-root
+    patterns:
+      - pattern: USER $ROOT
+      - pattern-not-inside: |
+          USER $ROOT
+          ...
+          ...
+          USER $OTHER
+      - metavariable-regex:
+          metavariable: "$ROOT"
+          regex: "root"
+    message: >-
+      The last user in the container is 'root'. This is a security
+      hazard because if an attacker gains control of the container
+      they will have root access. Switch back to another user after
+      running commands as 'root'.
+    severity: ERROR
+    languages: [generic]
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3002
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3002
+    paths:
+      include:
+        - "*dockerfile*"
+        - "*Dockerfile*"

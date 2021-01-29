@@ -1,0 +1,22 @@
+rules:
+- id: insufficient-dsa-key-size
+  patterns:
+  - pattern-either:
+    - pattern: Crypto.PublicKey.DSA.generate(..., bits=$SIZE, ...)
+    - pattern: Crypto.PublicKey.DSA.generate($SIZE, ...)
+    - pattern: Cryptodome.PublicKey.DSA.generate(..., bits=$SIZE, ...)
+    - pattern: Cryptodome.PublicKey.DSA.generate($SIZE, ...)
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 2048
+  message: |
+    Detected an insufficient key size for DSA. NIST recommends
+    a key size of 2048 or higher.
+  metadata:
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/weak_cryptographic_key.py
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
+  languages: [python]
+  severity: WARNING

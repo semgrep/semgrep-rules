@@ -1,0 +1,331 @@
+rules:
+- id: vm_runincontext_injection
+  patterns:
+  - pattern-inside: |
+      require('vm');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
+  message: Untrusted user input in `vm.runInContext()` can result in code injection.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+- id: vm_runinnewcontext_injection
+  patterns:
+  - pattern-inside: |
+      require('vm');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $VM.runInNewContext($CODE,<... $REQ.$QUERY.$FOO ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VM.runInNewContext($CODE,<... $REQ.$BODY ...>,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.runInNewContext($CODE,<... $CONTEXT ...>,...);
+  message: >-
+    Untrusted user input in `vm.runInNewContext()` can result in code
+    injection.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+- id: vm_compilefunction_injection
+  patterns:
+  - pattern-inside: |
+      require('vm');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: >
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $REQ.$QUERY.$FOO ...>},...);
+    - pattern: >
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: |
+        $OPTS = {parsingContext: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $VAR = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: >
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $REQ.$BODY ...>},...);
+    - pattern: >
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: >
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $CONTEXT ...>},...);
+    - pattern: |
+        $OPTS = {parsingContext: <... $REQ.$BODY ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $CONTEXT = <... $REQ.$BODY ...>;
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+    - pattern: |
+        $VAR = <... $REQ.$BODY ...>;
+        ...
+        $CONTEXT = {$NAME: <... $VAR ...>};
+        ...
+        $OPTS = {parsingContext: <... $CONTEXT ...>};
+        ...
+        $VM.compileFunction($CODE,$PARAMS,$OPTS,...);
+  message: >-
+    Untrusted user input in `vm.compileFunction()` can result in code
+    injection.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+- id: vm_code_injection
+  patterns:
+  - pattern-inside: |
+      $VM = require('vm');
+      ...
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: $VM.runInContext(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $VM.runInContext(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInContext($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInContext($INPUT,...);
+    - pattern: $VM.runInNewContext(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $VM.runInNewContext(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInNewContext($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInNewContext($INPUT,...);
+    - pattern: $VM.runInThisContext(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $VM.runInThisContext(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.runInThisContext($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $VM.runInThisContext($INPUT,...);
+    - pattern: $VM.compileFunction(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: $VM.compileFunction(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        $VM.compileFunction($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        $VM.compileFunction($INPUT,...);
+    - pattern: new $VM.Script(<... $REQ.$QUERY.$FOO ...>,...)
+    - pattern: new $VM.Script(<... $REQ.$BODY ...>,...)
+    - pattern: |
+        $INPUT = <... $REQ.$QUERY.$FOO ...>;
+        ...
+        new $VM.Script($INPUT,...);
+    - pattern: |
+        $INPUT = <... $REQ.$BODY ...>;
+        ...
+        new $VM.Script($INPUT,...);
+  message: Untrusted user input reaching `vm` can result in code injection.
+  severity: ERROR
+  languages:
+  - javascript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'

@@ -1,16 +1,16 @@
 import subprocess as sub
 import subprocess
 
-# ok
+# ok: unchecked-subprocess-call
 x = sub.call('foo')
 
 # ruleid: unchecked-subprocess-call
 sub.call('foo')
 
-# OK
+# OK: unchecked-subprocess-call
 sub.check_call('foo')
 
-# OK
+# OK: unchecked-subprocess-call
 sub.check_call('foo ') == 0
 
 def foo():
@@ -21,7 +21,6 @@ def foo():
     # ruleid: unchecked-subprocess-call
     subprocess.call(['ls', '--no'])
     return True
-
 
 def foo2():
     return subprocess.call(['ls', '--no']) == 0

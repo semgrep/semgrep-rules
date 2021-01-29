@@ -1,0 +1,23 @@
+<!-- ok: var-in-script-tag -->
+<script type="text/javascript" src="whatever.js"></script>
+
+<!-- ruleid: var-in-script-tag -->
+<script>current_user_id = <%=param[:id]%></script>
+<!-- ok: var-in-script-tag -->
+<div>Hello <%=param[:id]%></div>
+
+<script type="text/javascript">
+    <!-- ruleid: var-in-script-tag -->
+    var message = <%= message %>;
+</script>
+
+<script type="text/javascript">
+    <!-- ok: var-in-script-tag -->
+    var message = <%= j message %>;
+</script>
+
+<script type="text/javascript">
+    <!-- ok: var-in-script-tag -->
+    var message = <%= escape_javascript message %>;
+    console.log(message);
+</script>

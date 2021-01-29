@@ -1,0 +1,17 @@
+rules:
+- id: avoid-content-tag
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/template_injection/index.markdown
+    - https://www.netsparker.com/blog/web-security/preventing-xss-ruby-on-rails-web-applications/
+  message: |
+    'content_tag()' bypasses HTML escaping for some portion of the content.
+    If external data can reach here, this exposes your application
+    to cross-site scripting (XSS) attacks. Ensure no external data reaches here.
+    If you must do this, create your HTML manually and use 'html_safe'. Ensure no
+    external data enters the HTML-safe string!
+  languages: [ruby]
+  severity: WARNING
+  pattern: content_tag(...)

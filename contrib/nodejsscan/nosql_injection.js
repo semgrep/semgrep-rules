@@ -1,4 +1,3 @@
-
 var MongoClient = require('mongodb').MongoClient;
 // mongo js injection https://lockmedown.com/securing-node-js-mongodb-security-injection-attacks/
 timelineRouter.route("/api/timeline")
@@ -38,11 +37,11 @@ User.find(query, function (err, users) {
     }
 });
 
-
-
-app.post('/login', function (req, res) {
-    // ruleid:node_nosqli_injection
-    User.findOne({ 'email': req.body.email, 'password': req.body.password }, function (err, data) {
+app.post('/foo', function (req, res) {
+    var query = {};
+    // ruleid:node_nosqli_js_injection
+    query['$where'] = `this.email == '${req.body.email}'`;
+    User.find(query, function (err, data) {
         if (err) {
             res.send(err);
         } else if (data) {

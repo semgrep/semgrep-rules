@@ -1,0 +1,27 @@
+rules:
+- id: header-redefinition
+  patterns:
+  - pattern-inside: |
+      server {
+        ...
+        add_header ...;
+        ...
+        ...
+      }
+  - pattern-inside: |
+      location ... {
+        ...
+        ...
+      }
+  - pattern: add_header ...;
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    The 'add_header' directive is called in a 'location' block after headers have been set
+    at the server block. Calling 'add_header' in the location block will actually overwrite the headers
+    defined in the server block, no matter which headers are set.
+    To fix this, explicitly set all headers or set all headers in the server block.
+  metadata:
+    references:
+    - https://github.com/yandex/gixy/blob/master/docs/en/plugins/addheaderredefinition.md

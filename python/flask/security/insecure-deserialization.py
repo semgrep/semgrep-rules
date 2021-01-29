@@ -11,7 +11,7 @@ class UserID:
         self.uuid = str(uuid1())
     def __str__(self):
         return self.uuid
-    
+
 # The main Flask Backend
 app = Flask(__name__)
 
@@ -31,7 +31,7 @@ def index():
 
 @app.route("/ok")
 def ok():
-    # ok
+    # ok:insecure-deserialization
     novellist = pickle.load(open('./novel/list.dat', "rb"))
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+rules:
+- id: unknown-value-in-redirect
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $UNK = query.$B;
+        ...
+    - pattern-inside: |
+        $UNK = $A.query.$B;
+        ...
+    - pattern-inside: |
+        $UNK = req.$SOMETHING;
+        ...
+  - pattern: $RES.redirect(..., <... $UNK ...>, ...)
+  message: |
+    It looks like '$UNK' is read from user input and it is used to as a redirect. Ensure
+    '$UNK' is not externally controlled, otherwise this is an open redirect.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+  severity: WARNING
+  languages:
+  - javascript

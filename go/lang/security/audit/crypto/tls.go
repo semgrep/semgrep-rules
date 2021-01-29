@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	// ruleid: tls-with-insecure-cipher
 	tr := &http.Transport{
+        // ruleid: tls-with-insecure-cipher
 		TLSClientConfig: &tls.Config{CipherSuites: []uint16{
 			tls.TLS_RSA_WITH_RC4_128_SHA,
 			tls.TLS_RSA_WITH_AES_128_CBC_SHA256,

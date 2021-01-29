@@ -1,0 +1,27 @@
+rules:
+- id: no-direct-write-to-responsewriter
+  message: |
+    Detected directly writing or similar in 'http.ResponseWriter.write()'.
+    This bypasses HTML escaping that prevents cross-site scripting
+    vulnerabilities. Instead, use the 'html/template' package
+    and render data using 'template.Execute()'.
+  metadata:
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        func $HANDLER(..., $WRITER http.ResponseWriter, ...) {
+          ...
+        }
+    - pattern-inside: |
+        func(..., $WRITER http.ResponseWriter, ...) {
+          ...
+        }
+  - pattern: $WRITER.Write(...)
+  - pattern-not: $WRITER.Write([]byte("..."))
+  languages:
+  - go

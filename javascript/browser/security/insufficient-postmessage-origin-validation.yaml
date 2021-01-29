@@ -1,0 +1,29 @@
+rules:
+- id: insufficient-postmessage-origin-validation
+  patterns:
+  - pattern-either:
+    - pattern: |
+        window.addEventListener(...)
+  - pattern-not: |
+      window.addEventListener(..., function($OBJECT){ if ($OBJ.origin == $X) {
+                  ...
+              } })
+  - pattern-not: |
+      window.addEventListener(..., function($OBJECT){ if ($REGEX.test($OBJECT.origin)){
+          ...
+      } })
+  - pattern-not: |
+      window.addEventListener(..., function($OBJECT){ if ($OBJ.origin !== $X) {
+                  ...
+              } })
+  message: |
+    No validation of origin is done by the addEventListener API. It may be possible to exploit this flaw to perform Cross Origin attacks such as Cross-Site Scripting(XSS).
+  languages:
+  - javascript
+  - typescript
+  fix: |
+
+  severity: WARNING
+  metadata:
+    owasp: 'A6: Sensitive Data Exposure'
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'

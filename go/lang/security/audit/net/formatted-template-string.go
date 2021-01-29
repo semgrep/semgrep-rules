@@ -8,12 +8,12 @@ import (
 )
 
 func Fine(r *http.Request) template.HTML {
-	// ok
+	// ok: formatted-template-string
 	return template.HTML("<html><body><h1>Hello, world</h1></body></html>")
 }
 
 func AlsoFine(r *http.Request) template.HTML {
-	// ok
+	// ok: formatted-template-string
 	return template.HTML("<html><body><h1>" + "Hello, world</h1></body></html>")
 }
 
@@ -58,7 +58,7 @@ func ConcatInlineOneside(r *http.Request) template.HTML {
 
 func Formatted(r *http.Request) template.HTML {
 	customerId := r.URL.Query().Get("id")
-	// todo: formatted-template-string
+	// ruleid: formatted-template-string
 	tmpl, err := fmt.Printf("<html><body><h1>%s</h1></body></html>", customerId)
 	if err != nil {
 		return template.HTML("")

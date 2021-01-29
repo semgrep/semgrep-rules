@@ -45,7 +45,7 @@ function test3() {
 }
 
 function testOk1() {
-    // ok
+    // ok: grpc-nodejs-insecure-connection
     var {credentials, Client} = require('grpc');
     var channel_creds = credentials.createSsl(root_certs);
     var client = new Client(address, channel_creds);

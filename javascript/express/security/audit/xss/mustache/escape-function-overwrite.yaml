@@ -1,0 +1,23 @@
+rules:
+- id: escape-function-overwrite
+  message: |
+    The Mustache escape function is being overwritten. This could bypass
+    HTML escaping safety measures built into the rendering engine, exposing
+    your application to cross-site scripting (XSS) vulnerabilities. If you
+    need unescaped HTML, use the triple brace operator in your template:
+    '{{{ ... }}}'.
+  languages: [javascript]
+  severity: WARNING
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://github.com/janl/mustache.js/#variables
+  patterns:
+  - pattern-either:
+    - pattern: Mustache.escape = ...
+    - patterns:
+      - pattern-inside: |
+          $MUSTACHE = require("mustache");
+          ...
+      - pattern: $MUSTACHE.escape = ...

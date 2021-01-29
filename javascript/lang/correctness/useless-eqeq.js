@@ -2,7 +2,7 @@
 // ruleid:eqeq-is-bad
 x == x
 
-// ok
+// ok:eqeq-is-bad
 assert(x == x)
 
 // ok, harmless

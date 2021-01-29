@@ -1,0 +1,18 @@
+rules:
+- id: avoid-latest-version
+  patterns:
+  - pattern: FROM $IMAGE:latest
+  message: >-
+    Images should be tagged with an explicit version to produce
+    deterministic container images. The 'latest' tag may change
+    the base container without warning.
+  severity: WARNING
+  languages: [generic]
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3007
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3007
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

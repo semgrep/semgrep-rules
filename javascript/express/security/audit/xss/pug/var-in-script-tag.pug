@@ -1,0 +1,23 @@
+html
+    head
+        title=title
+        body
+        h1=message
+        a(href='/' + link)='hello'
+        // ruleid: var-in-script-tag
+        script(type="text/javascript")=src
+
+        // ruleid: var-in-script-tag
+        script(type="text/javascript")="a += " + a
+
+        // ruleid: var-in-script-tag
+        script(type="text/javascript") = a + "blah"
+
+        // ruleid: var-in-script-tag
+        script="var a = " + a
+
+        // ok: var-in-script-tag
+        script="var a = 1;"
+
+        // ok: var-in-script-tag
+        script="var a = 1; a+=1"

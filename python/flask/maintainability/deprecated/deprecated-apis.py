@@ -1,5 +1,6 @@
 from flask import Flask, json_available, request, testing
 
+# ruleid: flask-deprecated-apis
 app = Flask(__name__)
 
 # ruleid: flask-deprecated-apis
