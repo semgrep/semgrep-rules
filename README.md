@@ -16,7 +16,7 @@ We recommend starting with a pre-selected subset of rules that someone has alrea
 
 The two most popular rulesets are:
 * `semgrep --config=p/ci` to find logic bugs, and high-confidence security vulnerabilities; recommended for CI
-* `semgrep --config=p/security-audit` to find security audit points; noisy, not recommended for CI
+* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans but not CI
 
 If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules specify:
 `semgrep --config=r/python.flask`
