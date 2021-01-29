@@ -8,8 +8,21 @@
 | `master` | `returntocorp/semgrep:latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep/badge.svg?branch=master)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep+branch%3Amaster) |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
+Welcome! This repository is the “standard library” for [Semgrep](https://semgrep.dev) rules, but there are many more written by [r2c](https://r2c.dev) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
 
-This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
+## How do I use these rules?
+
+We recommend starting with a pre-selected subset of rules that someone has already carefully tuned for precision. These rule packs, which may include rules not present in this repository, are available on the [Semgrep Registry](https://semgrep.dev/explore).
+
+The two most popular are:
+* `semgrep --config=p/ci` to find logic bugs, and high-confidence security vulnerabilities; recommended for CI
+* `semgrep --config=p/security-audit` to find security audit points; noisy, not recommended for CI
+
+If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the python flask rules you would specify:
+`semgrep --config=r/python.flask`
+
+Semgrep releases [new versions at a very high frequency](https://github.com/returntocorp/semgrep/releases) and the rules in this repo are always updated to take advantage of new features or fix breaking changes on new releases. For that reason, we suggest that you avoid stale copies of registry rules.
+
 
 ## Contributing
 
@@ -18,10 +31,6 @@ If you want to create your own collection of Semgrep rules, feel free to make yo
 We also welcome rule contributions directly to this repository! Since this repo is maintained by r2c, there are some extra benefits—for example, if there are bug reports for your rule, we’ll also take responsibility to help fix it. If you are submitting to the semgrep-rules repo (rather than your own, separate repository as mentioned above) we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/).
 
 If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
-
-## Running Rules in CI/Pre-Commit/Developer Workflow
-
-If you want run these rules rather than write them, [see the CI instructions on the Semgrep Registry](https://semgrep.dev/explore) (click through to any rule pack). That website is a convenient frontend for this repository.
 
 ## Help
 
