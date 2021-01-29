@@ -15,10 +15,10 @@ Welcome! This repository is the “standard library” for [Semgrep](https://sem
 We recommend starting with a pre-selected subset of rules that someone has already carefully tuned for precision. These rulesets, which may include rules not present in this repository, are available for free on the [Semgrep Registry](https://semgrep.dev/explore).
 
 The two most popular rulesets are:
-* `semgrep --config=p/ci` to find logic bugs, and high-confidence security vulnerabilities; recommended for CI
-* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans but not CI
+* `semgrep --config=p/ci` to find logic bugs and high-confidence security vulnerabilities; recommended for CI
+* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans
 
-If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules specify:
+If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules from the python/flask directory in this repo, just run:<br/>
 `semgrep --config=r/python.flask`
 
 Semgrep releases [new versions very frequently](https://github.com/returntocorp/semgrep/releases) and the rules in this repo are always updated to take advantage of new features or fix breaking changes on new releases. For that reason, we suggest that you avoid stale copies of registry rules.
