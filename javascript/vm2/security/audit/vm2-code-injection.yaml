@@ -35,16 +35,16 @@ rules:
     - pattern: |
         new VMScript($CODE,...);
   - pattern-not: |
+      $VM = new VM(...);
+      ...
+      $VM.run("...",...);
+  - pattern-not: |
       $VM = new NodeVM(...);
       ...
       $VM.run("...",...);
   - pattern-not: |
-      new VM(...).run("...",...);
+      (new VM(...)).run("...",...);
   - pattern-not: |
-      $VM = new NodeVM(...);
-      ...
-      $VM.run("...",...);
-  - pattern-not: |
-      new NodeVM(...).run("...",...);
+      (new NodeVM(...)).run("...",...);
   - pattern-not: |-
       new VMScript("...",...);
