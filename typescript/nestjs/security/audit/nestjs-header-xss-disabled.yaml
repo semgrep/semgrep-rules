@@ -1,0 +1,16 @@
+rules:
+- id: nestjs-header-xss-disabled
+  pattern: |
+    class $CN {
+        ...
+        @Header("=~/[Xx]-[Xx][Ss][Ss]-[Pp][Rr][Oo][Tt][Ee][Cc][Tt][Ii][Oo][Nn]/", '0')
+        $FN(...) {
+            ...
+        }
+        ...
+    }
+  message: |
+    X-XSS-Protection header is set to 0. This will disable the browser's XSS Filter.
+  languages:
+  - typescript
+  severity: WARNING
