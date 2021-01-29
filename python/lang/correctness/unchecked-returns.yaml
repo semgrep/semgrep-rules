@@ -1,9 +1,10 @@
 rules:
 - id: unchecked-subprocess-call
   patterns:
+  - pattern: subprocess.call(...)
   - pattern-not-inside: $S = subprocess.call(...)
   - pattern-not-inside: subprocess.call(...) == $X
-  - pattern: subprocess.call(...)
+  - pattern-not-inside: return subprocess.call(...)
   fix: subprocess.check_call(...)
   message: This is not checking the return value of this subprocess call; if it fails no exception will be raised. Consider
     subprocess.check_call() instead
