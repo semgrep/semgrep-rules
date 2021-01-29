@@ -54,18 +54,6 @@ rules:
         $QUERY[$KEY] = <... $INP ...>;
         ...
         $OBJ.findOne(<... $QUERY  ...>, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO.$BAR ...>;
-        ...
-        $QUERY[$KEY] = <... $INP ...>;
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO ...>;
-        ...
-        $QUERY[$KEY] = <... $INP ...>;
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
   message: Untrusted user input in findOne() function can result in NoSQL Injection.
   languages:
   - javascript

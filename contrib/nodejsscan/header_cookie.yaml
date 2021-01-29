@@ -146,34 +146,6 @@ rules:
       $OPTS.cookie.sameSite = 'strict';
       ...
       $SESSION($OPTS,...);
-  - pattern-not-inside: |
-      $OPTS = <... {cookie:{sameSite:'strict'}} ...>;
-      ...
-      $SESSION($OPTS,...);
-  - pattern-not-inside: |
-      $OPTS = ...;
-      ...
-      $COOKIE = <... {sameSite:'strict'} ...>;
-      ...
-      $SESSION($OPTS,...);
-  - pattern-not-inside: |
-      $OPTS = ...;
-      ...
-      $OPTS.cookie = <... {sameSite:'strict'} ...>;
-      ...
-      $SESSION($OPTS,...);
-  - pattern-not-inside: |
-      $OPTS = ...;
-      ...
-      $COOKIE.sameSite = 'strict';
-      ...
-      $SESSION($OPTS,...);
-  - pattern-not-inside: |
-      $OPTS = ...;
-      ...
-      $OPTS.cookie.sameSite = 'strict';
-      ...
-      $SESSION($OPTS,...);
   message: >-
     Default session middleware settings: `sameSite` attribute is not
     configured to strict or lax. These configurations provides protection

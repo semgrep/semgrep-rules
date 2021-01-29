@@ -30,24 +30,6 @@ rules:
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
     - pattern: |
-        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $VAR = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $CONTEXT = {$NAME: <... $VAR ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
         $CONTEXT = <... $REQ.$BODY ...>;
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
