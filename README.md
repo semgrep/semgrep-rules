@@ -8,8 +8,20 @@
 | `master` | `returntocorp/semgrep:latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep/badge.svg?branch=master)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep+branch%3Amaster) |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
+Welcome! This repository is the “standard library” for [Semgrep](https://semgrep.dev) rules, but there are many more written by [r2c](https://r2c.dev) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
 
-This repository is the “standard library” for Semgrep rules, but there are many more written by r2c and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore).
+## How do I use these rules?
+
+We recommend starting with a pre-selected subset of rules that someone has already carefully tuned for precision. These rulesets, which may include rules not present in this repository, are available for free on the [Semgrep Registry](https://semgrep.dev/explore).
+
+The two most popular rulesets are:
+* `semgrep --config=p/ci` to find logic bugs, and high-confidence security vulnerabilities; recommended for CI
+* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans but not CI
+
+If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules specify:
+`semgrep --config=r/python.flask`
+
+Semgrep releases [new versions very frequently](https://github.com/returntocorp/semgrep/releases) and the rules in this repo are always updated to take advantage of new features or fix breaking changes on new releases. For that reason, we suggest that you avoid stale copies of registry rules.
 
 ## Contributing
 
@@ -19,21 +31,30 @@ We also welcome rule contributions directly to this repository! Since this repo 
 
 If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
-### Security Coverage
-
-Semgrep features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). `security` rules in this repository should have metadata fields for `cwe` (and `owasp` when applicable). OWASP coverage for rules in this repository, organized by language, is shown below.
-
-<p align="center">
-    <img src="https://web-assets.r2c.dev/semgrep-rules-owasp-coverage-20200520.png" width="500" />
-</p>
-
-## Running Rules in CI/Pre-Commit/Developer Workflow
-
-If you want run these rules rather than write them, [see the CI instructions on the Semgrep Registry](https://semgrep.live/packs) (click through to any rule pack). That website is a convenient frontend for this repository.
-
 ## Help
 
-Join slack for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
+Join [Slack](https://r2c.dev/slack) for the fastest answers to your questions! Or contact the team at [support@r2c.dev](mailto:support@r2c.dev).
+
+## Security Coverage
+
+`semgrep` features security rules that target [common weaknesses](https://cwe.mitre.org/) and [OWASP categories](https://owasp.org/www-project-top-ten/). Each `security` rule in this repository has metadata fields for `cwe` (and `owasp` when applicable).
+
+### Rule Namespacing
+
+The namespacing format for contributing rules is `<language>.<framework>.<category>.$MORE`. If a `framework` isn't applicable, use `lang` instead.
+
+`category` is one of:
+- security
+- correctness
+- best-practice
+- maintainability
+- performance
+
+If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), it is recommended to append `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
+
+<p align="center">
+    <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
+</p>
 
 ### Github Action To Run Tests
 
