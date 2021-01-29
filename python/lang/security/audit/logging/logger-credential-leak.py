@@ -22,4 +22,3 @@ def ok(api_key):
     except:
         # this is OK
         logger.exception("api call failed.  Check your API key!")
-    
