@@ -33,7 +33,7 @@ If you have more questions, please see the [FAQ section in the Semgrep docs](htt
 
 ## Help
 
-Join [Slack](https://r2c.dev/slack) for the fastest answers to your questions! Or contact the team at [semgrep@r2c.dev](mailto:semgrep@r2c.dev).
+Join [Slack](https://r2c.dev/slack) for the fastest answers to your questions! Or contact the team at [support@r2c.dev](mailto:support@r2c.dev).
 
 ## Security Coverage
 
