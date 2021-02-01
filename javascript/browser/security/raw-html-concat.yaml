@@ -38,11 +38,17 @@ rules:
     - pattern: |
         (<... document ...>).concat(..., "...", ...);
     - pattern: |
-        [..., <... window ...>, ...].join(...);
+        ["...", <... window ...>, ...].join(...);
     - pattern: |
-        [..., <... location ...>, ...].join(...);
+        ["...", <... location ...>, ...].join(...);
     - pattern: |
-        [..., <... document ...>, ...].join(...);
+        ["...", <... document ...>, ...].join(...);
+    - pattern: |
+        [..., <... window ...>, "..."].join(...);
+    - pattern: |
+        [..., <... location ...>, "..."].join(...);
+    - pattern: |
+        [..., <... document ...>, "..."].join(...);
     - patterns:
       - pattern-either:
         - pattern-inside: |
