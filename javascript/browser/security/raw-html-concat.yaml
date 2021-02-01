@@ -37,6 +37,12 @@ rules:
         "...".concat(..., <... document ...>, ...);
     - pattern: |
         (<... document ...>).concat(..., "...", ...);
+    - pattern: |
+        [..., <... window ...>, ...].join(...);
+    - pattern: |
+        [..., <... location ...>, ...].join(...);
+    - pattern: |
+        [..., <... document ...>, ...].join(...);
     - patterns:
       - pattern-either:
         - pattern-inside: |
@@ -144,6 +150,26 @@ rules:
             (<... $X.$METHOD(...) ...>).concat(..., "...", ...);
         - pattern: |-
             (<... $X.$PROPERTY.$METHOD(...) ...>).concat(..., "...", ...);
+        - pattern: |
+            ["...", <... $X ...>, ...].join(...);
+        - pattern: |
+            ["...", <... $X[...] ...>, ...].join(...);
+        - pattern: |
+            ["...", <... $X.$PROPERTY ...>, ...].join(...);
+        - pattern: |
+            ["...", <... $X.$METHOD ...>, ...].join(...);
+        - pattern: |
+            ["...", <... $X.$PROPERTY.$METHOD(...) ...>, ...].join(...);
+        - pattern: |
+            [..., <... $X ...>, "..."].join(...);
+        - pattern: |
+            [..., <... $X[...] ...>, "..."].join(...);
+        - pattern: |
+            [..., <... $X.$PROPERTY ...>, "..."].join(...);
+        - pattern: |
+            [..., <... $X.$METHOD ...>, "..."].join(...);
+        - pattern: |
+            [..., <... $X.$PROPERTY.$METHOD(...) ...>, "..."].join(...);
   - pattern-not: |-
       $X + "";
   - pattern-not: |-
