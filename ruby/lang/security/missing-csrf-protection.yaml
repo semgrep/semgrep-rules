@@ -10,6 +10,11 @@ rules:
         ...
         protect_from_forgery :with => :exception
       end
+  - pattern-not: |
+      class $CONTROLLER < ActionController::Base
+        ...
+        protect_from_forgery prepend: true, with: :exception
+      end
   message: |
     Detected controller which does not enable cross-site request forgery
     protections using 'protect_from_forgery'. Add
