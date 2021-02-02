@@ -6,6 +6,9 @@ $(function ($) {
         .set('align', {
             html: function (element, attrs, content) {
                 // ruleid: raw-html-concat
+                var x = ['<div align="', (attrs.defaultattr || 'left'), '">', content, '</div>'].join();
+
+                // ruleid: raw-html-concat
                 return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
             },
             isInline: false
@@ -43,13 +46,22 @@ $(function ($) {
 
               if (attrs.pid)
                   // ruleid: raw-html-concat
+                  data = [data, ' data-pid="', attrs.pid,'"'].join(',');
+
+                  // ruleid: raw-html-concat
                   data += ' data-pid="' + attrs.pid + '"';
 
               if (attrs.dateline)
                   // ruleid: raw-html-concat
+                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
+
+                  // ruleid: raw-html-concat
                   data += ' data-dateline="' + attrs.dateline + '"';
 
               if (typeof attrs.defaultattr !== "undefined")
+                  // ruleid: raw-html-concat
+                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
+
                   // ruleid: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
 
@@ -105,6 +117,9 @@ var tarteaucitron = {
             for (i = 0; i < nb; i += 1) {
                 html += '<li class="tarteaucitronCookiesListMain">';
                 // ruleid: raw-html-concat
+                html =  [html, '    <div class="tarteaucitronCookiesListRight">', cookies[i].split('=').slice(1).join('='), '</div>'].join();
+
+                // ruleid: raw-html-concat
                 html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
                 html += '</li>';
             }
@@ -122,6 +137,9 @@ var DragElement = /** @class */ (function () {
     function DragElement(nodeName, offsetX, offsetY, $tree) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        // ruleid: raw-html-concat
+        this.$element = jQuery(["<span class=\"jqtree-title jqtree-dragging\">",nodeName, "</span>"].join());
+
         // ruleid: raw-html-concat
         this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
         this.$element.css("position", "absolute");
@@ -199,6 +217,9 @@ function BytesFilter($translate) {
                 number = Math.floor(Math.log(bytes) / Math.log(1024));
 
         units = units.map(function (unit) {
+            // ok: raw-html-concat
+            var x = $translate.instant(['FORM.LABELS.', unit].join());
+
             // ok: raw-html-concat
             return $translate.instant('FORM.LABELS.' + unit);
         });
