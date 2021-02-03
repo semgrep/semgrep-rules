@@ -86,6 +86,33 @@ def render_login_page5(thing):
 </form>
     '''
 
+# cf. https://raw.githubusercontent.com/Deteriorator/Python-Flask-Web-Development/53be4c48ffbe7d30a1bde5717658f6de81820360/demo/http/app.py
+@app.route('/hello')
+def hello():
+    name = request.args.get('name')
+    if name is None:
+        name = request.cookies.get('name', 'Human')
+    respones = '<h1>Hello, %s</h1>' % name
+    if 'logged_in' in session:
+        respones += '[Authenticated]'
+    else:
+        respones += '[Not Authenticated]'
+    # ruleid: directly-returned-format-string
+    return respones
+
+@app.route('/hello2')
+def hello2():
+    name = request.args.get('name')
+    if name is None:
+        name = request.cookies.get('name', 'Human')
+    respones = '<h1>Hello, {}</h1>'.format(name)
+    if 'logged_in' in session:
+        respones += '[Authenticated]'
+    else:
+        respones += '[Not Authenticated]'
+    # ruleid: directly-returned-format-string
+    return respones
+
 @app.route('/totally_not_bad')
 def totally_not_bad():
     # ok

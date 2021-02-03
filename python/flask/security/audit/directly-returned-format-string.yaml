@@ -6,8 +6,7 @@ rules:
     Consider using the template engine instead and rendering pages with
     'render_template()'.
   metadata:
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site\
-      \ Scripting')"
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
   languages:
   - python
@@ -17,14 +16,28 @@ rules:
       @$APP.route(...)
       def $FUNC(...):
         ...
+  - pattern-not-inside: return "..."
   - pattern-either:
-    - pattern: flask.make_response($X.format(...))
-    - pattern: flask.make_response($X % $Y)
-    - pattern: flask.make_response($X + $Y)
-    - pattern: flask.make_response(f"...{...}...")
     - pattern: return "...".format(...)
     - pattern: return "..." % ...
     - pattern: return "..." + ...
     - pattern: return ... + "..."
     - pattern: return f"...{...}..."
-  - pattern-not: return "..."
+    - patterns:
+      - pattern: return $X
+      - pattern-either:
+        - pattern-inside: |
+            $X = "...".format(...)
+            ...
+        - pattern-inside: |
+            $X = "..." % ...
+            ...
+        - pattern-inside: |
+            $X = "..." + ...
+            ...
+        - pattern-inside: |
+            $X = ... + "..."
+            ...
+        - pattern-inside: |
+            $X = f"...{...}..."
+            ...
