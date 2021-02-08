@@ -27,3 +27,15 @@ rules:
     - https://www.cvedetails.com/cwe-details/134/Uncontrolled-Format-String.html
   languages: [c]
   severity: WARNING
+
+- id: info-leak-vulnerability-on-non-formated-string
+  patterns:
+  - pattern-either:
+    - pattern: printf(argv[$NUM]);
+  message: |
+    Use %s, %d, %c... to format your variables.
+  metadata:
+    references:
+    - http://nebelwelt.net/files/13PPREW.pdf
+  languages: [c]
+  severity: ERROR
