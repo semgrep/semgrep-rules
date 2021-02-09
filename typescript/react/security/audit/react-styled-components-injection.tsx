@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 function Vulnerable1(userInput) {
 // ruleid: react-styled-components-injection
@@ -41,4 +41,14 @@ function OkTest(input) {
     background: ${css};
   `
   return ArbitraryComponent
+}
+
+function OkTest(input) {
+  const css = "red";
+  const anim = keyframes`from {width: 1;} to {width: 2;}`;
+  // ok: react-styled-components-injection
+  const ArbitraryComponent = styled.div`
+    animation: ${anim};
+  `;
+  return ArbitraryComponent;
 }

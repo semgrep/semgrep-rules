@@ -4,6 +4,11 @@ rules:
   - pattern-inside: |
       import styled from 'styled-components';
       ...
+  - pattern-not-inside: |
+      import { keyframes } from 'styled-components';
+      ...
+      $STYLE = keyframes(...);
+      ...
   - pattern-either:
     - pattern-inside: |
         $STYLE = $METHOD(...);
