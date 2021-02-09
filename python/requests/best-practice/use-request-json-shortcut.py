@@ -1,10 +1,10 @@
 import json
 import requests
 
-# ruleid:python.requests.best-practice.use-json-body-shortcut
+# ruleid:python.requests.best-practice.use-request-json-shortcut
 requests.put("https://example.org", body=json.dumps({"hello": True}))
 
-# ruleid:python.requests.best-practice.use-json-body-shortcut
+# ruleid:python.requests.best-practice.use-request-json-shortcut
 requests.patch("https://example.org", body=json.dumps({"hello": True}), timeout=5)
 
 # ok

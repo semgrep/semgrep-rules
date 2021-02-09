@@ -1,0 +1,17 @@
+rules:
+- id: python.requests.best-practice.use-response-json-shortcut
+  patterns:
+  - pattern-inside: import json; ...
+  - pattern-inside: import requests; ...
+  - pattern-inside: $RESP = requests.$METHOD(...); ...
+  - pattern: json.loads($RESP.text)
+  fix: $RESP.json()
+  message: |
+    The requests library has a convenient shortcut for reading JSON responses,
+    which lets you stop worrying about deserializing the response yourself.
+  severity: WARNING
+  metadata:
+    references:
+    - https://requests.readthedocs.io/en/stable/user/quickstart/#json-response-content
+  languages:
+  - python

@@ -1,5 +1,5 @@
 rules:
-- id: python.requests.best-practice.use-json-body-shortcut
+- id: python.requests.best-practice.use-request-json-shortcut
   patterns:
   - pattern-inside: import json; ...
   - pattern-inside: import requests; ...
@@ -9,7 +9,8 @@ rules:
     which lets you stop worrying about serializing the body yourself.
     To use it, replace `body=json.dumps(...)` with `json=...`.
   severity: WARNING
-  references:
-  - https://requests.readthedocs.io/en/stable/user/quickstart/#more-complicated-post-requests
+  metadata:
+    references:
+    - https://requests.readthedocs.io/en/stable/user/quickstart/#more-complicated-post-requests
   languages:
   - python
