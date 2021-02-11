@@ -9,27 +9,20 @@ rules:
   languages: [go]
   severity: WARNING
   pattern-either:
-  - pattern: |
-      import mrand "math/rand"
-      ...
-      mrand.Int()
-  - pattern: |
-      import mrand "math/rand"
-      ...
-      mrand.Read(...)
   - patterns:
-    - pattern: |
+    - pattern-inside: |
+        import mrand "math/rand"
+        ...
+    - pattern-either:
+      - pattern: mrand.Int()
+      - pattern: mrand.Read(...)
+  - patterns:
+    - pattern-inside: |
         import "math/rand"
         ...
-        rand.Int()
     - pattern-not-inside: |
         import "crypto/rand"
         ...
-  - patterns:
-    - pattern: |
-        import "math/rand"
-        ...
-        rand.Read(...)
-    - pattern-not-inside: |
-        import "crypto/rand"
-        ...
+    - pattern-either:
+      - pattern: rand.Int()
+      - pattern: rand.Read(...)
