@@ -4,7 +4,7 @@ rules:
     Detected a template variable used in an anchor tag with
     the 'href' attribute. This allows a malicious actor to
     input the 'javascript:' URI and is subject to cross-
-    site scripting (XSS) attacks. 
+    site scripting (XSS) attacks.
     If using Flask, use 'url_for()' to safely generate a URL.
     If using Django, use the 'url' filter to safely generate a URL.
     If using Mustache, use a URL encoding library, or prepend a slash '/' to the
@@ -38,4 +38,4 @@ rules:
   - pattern-not-inside: href = '{{ url_for(...) ... }}'
   # OK for all templates
   - pattern-not-inside: href = "/{{ ... }}"
-  - pattern-not-inside: href = '/{{ ... }}' 
+  - pattern-not-inside: href = '/{{ ... }}'
