@@ -1,0 +1,59 @@
+<!-- FLASK TESTS -->
+
+<h4>From: {{ from_email }}</h4>
+<h4>To:
+    {% for recipient in recipients %}
+    {{ recipient }}&nbsp;
+    {% endfor %}
+</h4>
+<h4>Subject: {{subject}}</h4>
+<div class="email" style="display: block;">
+    {{ message }}
+</div>
+<div class="email-text" style="display: none;">
+    <pre>{{ body }}</pre>
+    <!-- ruleid: var-in-href -->
+    <a href='{{ link }}'>{{ link_text }}</a>
+    <!-- ruleid: var-in-href -->
+    <a href = '{{ link }}' >{{ link_text }}</a>
+    <!-- ruleid: var-in-href -->
+    <a href = "{{ link }}" >{{ link_text }}</a>
+    <a
+        // ruleid: var-in-href
+        href = "{{ link }}"
+    >
+        {{ link_text }}
+    </a>
+    <!-- ok: var-in-href -->
+    <a href="{{ url_for('index') }}">{{ link_text }}</a>
+    <!-- ok: var-in-href -->
+    <a href="https://example.com/">{{ link_text }}</a>
+    <!-- ok: var-in-href -->
+    <a href="https://example.com/{{ link_path }}">{{ link_text }}</a>
+</div>
+<hr>
+
+<!-- DJANGO TESTS -->
+
+<h4>From: {{ from_email }}</h4>
+<h4>To:
+    {% for recipient in recipients %}
+    {{ recipient }}&nbsp;
+    {% endfor %}
+</h4>
+<h4>Subject: {{subject}}</h4>
+<div class="email" style="display: block;">
+    {{ message }}
+</div>
+<div class="email-text" style="display: none;">
+    <pre>{{ body }}</pre>
+    <!-- ruleid: var-in-href -->
+    <a href='{{ link }}'>{{ link_text }}</a>
+    <!-- ruleid: var-in-href -->
+    <a href = '{{ link }}' >{{ link_text }}</a>
+    <!-- ok: var-in-href -->
+    <a href="{% url 'login' %}">{{ link_text }}</a>
+    <!-- ok: var-in-href -->
+    <a href="https://example.com/">{{ link_text }}</a>
+</div>
+<hr>
