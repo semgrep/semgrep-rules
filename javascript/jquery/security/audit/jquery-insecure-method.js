@@ -42,4 +42,17 @@
     $( "div" ).html( '<div></div>' );
   }
 
+  function ok3(userInput) {
+    jQuery(document).ready(function($){
+      // ok: jquery-insecure-method
+      $('<input type="checkbox"/>').prependTo('.checklist-box li');
+    });
+  }
+
+  function ok4(userInput) {
+      // ok: jquery-insecure-method
+      var url = this.prependRestapi(userInput);
+      fooBar(url);
+  }
+
 })(jQUery);

@@ -17,9 +17,10 @@ rules:
     - pattern-not: $JQUERY.$METHOD("...",...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: html|append|prepend|wrap|wrapInner|wrapAll|before|after|globalEval|getScript
+        regex: ^(html|append|prepend|wrap|wrapInner|wrapAll|before|after|globalEval|getScript)$
   - patterns:
-    - pattern: $JQUERY.$METHOD($VAR,...)
+    - pattern: $JQUERY(...).$METHOD($VAR,...)
+    - pattern-not: $JQUERY("...",...).$METHOD($VAR,...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: appendTo|insertAfter|insertBefore|prependTo
+        regex: ^(appendTo|insertAfter|insertBefore|prependTo)$

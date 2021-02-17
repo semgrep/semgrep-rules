@@ -54,3 +54,13 @@ rules:
             $("..." + (<... $Y ...>))
         - pattern: |
             $((<... $Y ...>) + "...")
+      - pattern-not-inside: |
+          $JQUERY.each(function($INDEX, $Y) {
+            ...
+          })
+  - pattern-not: |
+      $(window)
+  - pattern-not: |
+      $(document)
+  - pattern-not: |
+      $(this)
