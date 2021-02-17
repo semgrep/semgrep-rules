@@ -38,6 +38,18 @@
     $('#' + somethingElse).css('z-index', '99999');
   }
 
+  function ok3() {
+    // ok: jquery-insecure-selector
+    $(window).css('z-index', '99999');
+  }
+
+  function ok4() {
+    // ok: jquery-insecure-selector
+    $( "li" ).each(function(index, el) {
+        $(el).addClass( "foo" );
+    });
+  }
+
 })(jQUery);
 
 
