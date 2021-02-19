@@ -34,19 +34,23 @@ rules:
           - pattern-inside: |
               $INTERM = <... flask.request.$W.get(...) ...>
               ...
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              eval(..., <... $INTERM ...>, ...)
+          - pattern: eval(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W[...] ...>
               ...
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              eval(..., <... $INTERM ...>, ...)
+          - pattern: eval(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W(...) ...>
               ...
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              eval(..., <... $INTERM ...>, ...)
+          - pattern: eval(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W ...>
               ...
-          - pattern: eval(..., <... $INTERM ...>, ...)
+              eval(..., <... $INTERM ...>, ...)
+          - pattern: eval(...)

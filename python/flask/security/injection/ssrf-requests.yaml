@@ -36,19 +36,23 @@ rules:
           - pattern-inside: |
               $INTERM = <... flask.request.$W.get(...) ...>
               ...
-          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+              requests.$FUNC(<... $INTERM ...>, ...)
+          - pattern: requests.$FUNC(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W[...] ...>
               ...
-          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+              requests.$FUNC(<... $INTERM ...>, ...)
+          - pattern: requests.$FUNC(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W(...) ...>
               ...
-          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+              requests.$FUNC(<... $INTERM ...>, ...)
+          - pattern: requests.$FUNC(...)
         - patterns:
           - pattern-inside: |
               $INTERM = <... flask.request.$W ...>
               ...
-          - pattern: requests.$FUNC(..., <... $INTERM ...>, ...)
+              requests.$FUNC(<... $INTERM ...>, ...)
+          - pattern: requests.$FUNC(...)

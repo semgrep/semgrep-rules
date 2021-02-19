@@ -14,6 +14,29 @@ def get_param():
     # ruleid: exec-injection
     exec(param)
 
+@app.route("/get_param_inline_concat", methods=["GET"])
+def get_param_inline_concat():
+    # ruleid: exec-injection
+    exec("import " + flask.request.args.get("param"))
+
+@app.route("/get_param_concat", methods=["GET"])
+def get_param_concat():
+    param = flask.request.args.get("param")
+    # ruleid: exec-injection
+    exec(param + "+ 'hello'")
+
+@app.route("/get_param_format", methods=["GET"])
+def get_param_format():
+    param = flask.request.args.get("param")
+    # ruleid: exec-injection
+    exec("import {}".format(param))
+
+@app.route("/get_param_percent_format", methods=["GET"])
+def get_param_percent_format():
+    param = flask.request.args.get("param")
+    # ruleid: exec-injection
+    exec("import %s" % (param,))
+
 @app.route("/post_param", methods=["POST"])
 def post_param():
     param = flask.request.form['param']
@@ -21,8 +44,8 @@ def post_param():
         # ruleid: exec-injection
         exec(param)
 
-@app.route("/subexpression", methods=["POST"])
-def subexpression():
+@app.route("/format", methods=["POST"])
+def format():
     param = "{}".format(flask.request.form['param'])
     print("do things")
     # ruleid: exec-injection
