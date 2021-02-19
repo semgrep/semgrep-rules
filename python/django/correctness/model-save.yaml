@@ -6,11 +6,15 @@ rules:
           ...
   - pattern-not: |
       def save(self, ...):
-          ...
-          super($MODEL, self).save(...)
+        ...
+        super($MODEL, self).save(...)
+  - pattern-not: |
+      def save(self, ...):
+        ...
+        super().save(...)
   - pattern: |
       def save(self, ...):
-          ...
-  message: Appears that django model `$MODEL` is not calling super().save() inside of the save method
+        ...
+  message: Detected a django model `$MODEL` is not calling super().save() inside of the save method.
   languages: [python]
   severity: WARNING
