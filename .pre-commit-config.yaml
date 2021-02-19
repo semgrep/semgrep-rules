@@ -3,10 +3,6 @@ repos:
   rev: v2.5.0
   hooks:
   - id: check-yaml
-    exclude: |
-      (?x)^(
-        .+?[.]test[.]yaml$|
-      )$
   - id: check-case-conflict
   - id: check-added-large-files
   - id: check-executables-have-shebangs
@@ -23,10 +19,6 @@ repos:
         # change the semgrep.live YAML settings, otherwise diffs will fail
         # to lint
     args: [--width, '120', --no-explicit-start, --mapping, '2', --sequence, '2', --offset, '0']
-    exclude: |
-      (?x)^(
-        .+?[.]test[.]yaml$|
-      )$
 - repo: https://github.com/Lucas-C/pre-commit-hooks
   rev: v1.1.9
   hooks:
