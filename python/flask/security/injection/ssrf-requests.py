@@ -15,6 +15,29 @@ def get_param():
     # ruleid: ssrf-requests
     requests.post(param, timeout=10)
 
+@app.route("/get_param_inline_concat", methods=["GET"])
+def get_param_inline_concat():
+    # ruleid: ssrf-requests
+    requests.get(flask.request.args.get("param") + "/id")
+
+@app.route("/get_param_concat", methods=["GET"])
+def get_param_concat():
+    param = flask.request.args.get("param")
+    # ruleid: ssrf-requests
+    requests.get(param + "/id")
+
+@app.route("/get_param_format", methods=["GET"])
+def get_param_format():
+    param = flask.request.args.get("param")
+    # ruleid: ssrf-requests
+    requests.get("{}.csv".format(param))
+
+@app.route("/get_param_percent_format", methods=["GET"])
+def get_param_percent_format():
+    param = flask.request.args.get("param")
+    # ruleid: ssrf-requests
+    requests.get("%s/id" % (param,))
+
 @app.route("/post_param", methods=["POST"])
 def post_param():
     param = flask.request.form['param']
