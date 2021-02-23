@@ -1,5 +1,5 @@
 rules:
-- id: incorrect-default-permission
+- id: incorrect-default-permission-chmod
   message: Expect permissions to be `0600` or less for os.Chmod()
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
@@ -13,7 +13,7 @@ rules:
       metavariable: $PERM
       comparison: $PERM > 0o600
       base: 8
-- id: incorrect-default-permission
+- id: incorrect-default-permission-writefile
   message: Expect permissions to be `0600` or less for ioutil.WriteFile()
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
@@ -27,8 +27,8 @@ rules:
       metavariable: $PERM
       comparison: $PERM > 0o600
       base: 8
-- id: incorrect-default-permission
-  message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+- id: incorrect-default-permission-mkdir
+  message: Expect permissions to be `0600` or less for os.Mkdir
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
@@ -41,8 +41,8 @@ rules:
       metavariable: $PERM
       comparison: $PERM > 0o600
       base: 8
-- id: incorrect-default-permission
-  message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+- id: incorrect-default-permission-mkdir
+  message: Expect permissions to be `0600` or less for os.MkdirAll
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
@@ -55,8 +55,8 @@ rules:
       metavariable: $PERM
       comparison: $PERM > 0o600
       base: 8
-- id: incorrect-default-permission
-  message: Expect permissions to be `0600` or less for ioutil.WriteFile()
+- id: incorrect-default-permission-openfile
+  message: Expect permissions to be `0600` or less for os.OpenFile
   metadata:
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
