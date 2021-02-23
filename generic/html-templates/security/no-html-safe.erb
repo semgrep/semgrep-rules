@@ -1,0 +1,33 @@
+// ruleid: no-html-safe
+<%= @email.html.html_safe %>
+
+<html>
+  <head>
+    <title><%= ENV['META_TITLE'] %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="<%= ENV['META_DESCRIPTION'] %>">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'mailbox', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= render 'layouts/fathom_track' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= render 'application/favicon' %>
+        <!-- Facebook Open Graph data -->
+    <meta property="og:title" content="<%= ENV['META_TITLE'] %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:image" content="<%= ENV['META_IMAGE'] %>" />
+    <meta property="og:description" content="<%= ENV['META_DESCRIPTION'] %>" />
+    <meta property="og:site_name" content="<%= ENV['META_TITLE'] %>" />
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= ENV['META_TITLE'] %>">
+    <meta name="twitter:description" content="<%= ENV['META_DESCRIPTION'] %>">
+    <meta name="twitter:image:src" content="<%= ENV['META_IMAGE'] %>">
+
+    // ok: no-html-safe
+    <%= @email.html %>
+  </head>

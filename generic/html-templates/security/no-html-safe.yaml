@@ -1,0 +1,13 @@
+rules:
+- id: no-html-safe
+  pattern: |
+    $VAR.html_safe
+  message: |
+    html_safe marks a string as trusted safe. This means that it'll be inserted into HTML with no additional escaping, making the application vulnerable to XSS. Don't call html_safe on user-inputted strings to prevent XSS. There is a ruby rule for this, but this is also possible in erb files.
+  metadata:
+    references:
+    - https://apidock.com/rails/String/html_safe
+    - https://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html
+  languages:
+  - generic
+  severity: WARNING
