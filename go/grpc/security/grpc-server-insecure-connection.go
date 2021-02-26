@@ -1,33 +1,34 @@
 package insecuregrpc
 
 import (
-    "crypto/x509"
-    "net/http"
-    "net/http/httptest"
+	"crypto/x509"
+	"log"
+	"net/http"
+	"net/http/httptest"
 
-    "google.golang.org/grpc"
-    "google.golang.org/grpc/credentials"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 // cf. https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption
 func unsafe() {
-    // Server
-    // ruleid:grpc-server-insecure-connection
-    s := grpc.NewServer()
-    // ... register gRPC services ...
-    if err = s.Serve(lis); err != nil {
-        log.Fatalf("failed to serve: %v", err)
-    }
+	// Server
+	// ruleid:grpc-server-insecure-connection
+	s := grpc.NewServer()
+	// ... register gRPC services ...
+	if err = s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
 
 func safe() {
-    // Server
-    // ok:grpc-server-insecure-connection
-    s := grpc.NewServer(grpc.Creds(credentials.NewClientTLSFromCert(x509.NewCertPool(), "")))
-    // ... register gRPC services ...
-    if err = s.Serve(lis); err != nil {
-        log.Fatalf("failed to serve: %v", err)
-    }
+	// Server
+	// ok:grpc-server-insecure-connection
+	s := grpc.NewServer(grpc.Creds(credentials.NewClientTLSFromCert(x509.NewCertPool(), "")))
+	// ... register gRPC services ...
+	if err = s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
 
 // False Positive test
@@ -41,8 +42,28 @@ func startServer() {
 		Handler:   Handler(subProtoServer),
 	}
 	http.Handle("/subproto", subproto)
-    // ok:grpc-server-insecure-connection
+	// ok:grpc-server-insecure-connection
 	server := httptest.NewServer(nil)
 	serverAddr = server.Listener.Addr().String()
 	log.Print("Test WebSocket server listening on ", serverAddr)
+}
+
+// False Positive test - options have grpc.Creds
+func startServerWithOpts() {
+	options := []grpc.ServerOption{
+		grpc.Creds(credentials.NewClientTLSFromCert(pool, addr)),
+	}
+	grpcServer := grpc.NewServer(options...)
+	_ = grpcServer
+}
+
+// False Positive test - options have grpc.Creds, credentials in a variable
+func startServerCredsVar() {
+	creds := credentials.NewClientTLSFromCert(xpool, xaddr)
+	options := []grpc.ServerOption{
+		creds,
+		grpc.UnaryInterceptor(auth.GRPCInterceptor),
+	}
+	grpcServer := grpc.NewServer(options...)
+	_ = grpcServer
 }
