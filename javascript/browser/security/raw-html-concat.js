@@ -9,6 +9,9 @@ $(function ($) {
                 var x = ['<div align="', (attrs.defaultattr || 'left'), '">', content, '</div>'].join();
 
                 // ruleid: raw-html-concat
+                var x = `<div align="' + (attrs.defaultattr || 'left') + '">${content}</div>`
+
+                // ruleid: raw-html-concat
                 return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
             },
             isInline: false
@@ -49,6 +52,9 @@ $(function ($) {
                   data = [data, ' data-pid="', attrs.pid,'"'].join(',');
 
                   // ruleid: raw-html-concat
+                  data = `${data} data-pid="${attrs.pid}"`;
+
+                  // ruleid: raw-html-concat
                   data += ' data-pid="' + attrs.pid + '"';
 
               if (attrs.dateline)
@@ -56,11 +62,17 @@ $(function ($) {
                   data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
 
                   // ruleid: raw-html-concat
+                  data = `${data} data-dateline="${attrs.dateline}"`;
+
+                  // ruleid: raw-html-concat
                   data += ' data-dateline="' + attrs.dateline + '"';
 
               if (typeof attrs.defaultattr !== "undefined")
                   // ruleid: raw-html-concat
                   data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
+
+                  // ruleid: raw-html-concat
+                  data = `${data} data-dateline="${attrs.dateline}"`;
 
                   // ruleid: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
@@ -120,6 +132,9 @@ var tarteaucitron = {
                 html =  [html, '    <div class="tarteaucitronCookiesListRight">', cookies[i].split('=').slice(1).join('='), '</div>'].join();
 
                 // ruleid: raw-html-concat
+                html = `${html}    <div class="tarteaucitronCookiesListRight">${cookies[i].split('=').slice(1).join('=')}'</div>'`;
+
+                // ruleid: raw-html-concat
                 html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
                 html += '</li>';
             }
@@ -139,6 +154,9 @@ var DragElement = /** @class */ (function () {
         this.offsetY = offsetY;
         // ruleid: raw-html-concat
         this.$element = jQuery(["<span class=\"jqtree-title jqtree-dragging\">",nodeName, "</span>"].join());
+
+        // ruleid: raw-html-concat
+        this.$element = `${jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>")}`;
 
         // ruleid: raw-html-concat
         this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
@@ -188,6 +206,16 @@ var DragElement = /** @class */ (function () {
         return false;
     }, '*', function () {
         // ruleid: raw-html-concat
+        var x = `<svg viewBox="-20 -20 140 140" width="100" height="100"><defs><marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">
+            <circle cx="2" cy="2" r="1.5" />
+            </marker>
+            </defs>
+            <path d="M0,100 C20,50, 40,30, 100,0" />
+            <line x1="0" y1="100" x2="20" y2="50" marker-start="url(${location.href}#prism-previewer-easing-marker)" marker-end="url(${location.href}#prism-previewer-easing-marker)" />
+            <line x1="100" y1="0" x2="40" y2="30" marker-start="url(${location.href}#prism-previewer-easing-marker)" marker-end="url(${location.href}#prism-previewer-easing-marker)" />
+            </svg>`;
+
+        // ruleid: raw-html-concat
         this._elt.innerHTML = '<svg viewBox="-20 -20 140 140" width="100" height="100">' +
             '<defs>' +
             '<marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">' +
@@ -206,6 +234,9 @@ Object.keys(queries).forEach(function someName(key) {
     if (angular.isDefined(value)) {
     // ok: raw-html-concat
     params.push(key + '=' + value.toString());
+
+    // ok: raw-html-concat
+    params.push(`${key}=${value.toString()}`);
     }
 });
 
@@ -219,6 +250,9 @@ function BytesFilter($translate) {
         units = units.map(function (unit) {
             // ok: raw-html-concat
             var x = $translate.instant(['FORM.LABELS.', unit].join());
+
+            // ok: raw-html-concat
+            var x = $translate.instant(`FORM.LABELS.${unit}`);
 
             // ok: raw-html-concat
             return $translate.instant('FORM.LABELS.' + unit);
