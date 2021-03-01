@@ -49,6 +49,12 @@ rules:
         [..., <... location ...>, "..."].join(...);
     - pattern: |
         [..., <... document ...>, "..."].join(...);
+    - pattern: |
+        `...${<... window ...>}...`
+    - pattern: |
+        `...${<... location ...>}...`
+    - pattern: |
+        `...${<... document ...>}...`
     - patterns:
       - pattern-either:
         - pattern-inside: |
@@ -176,6 +182,16 @@ rules:
             [..., <... $X.$METHOD ...>, "..."].join(...);
         - pattern: |
             [..., <... $X.$PROPERTY.$METHOD(...) ...>, "..."].join(...);
+        - pattern: |
+            `...${<... $X ...>}...`;
+        - pattern: |
+            `...${<... $X[...] ...>}...`;
+        - pattern: |
+            `...${<... $X.$PROPERTY ...>}...`;
+        - pattern: |
+            `...${<... $X.$METHOD(...) ...>}...`;
+        - pattern: |
+            `...${<... $X.$PROPERTY.$METHOD(...) ...>}...`;
   - pattern-not: |-
       $X + "";
   - pattern-not: |-
