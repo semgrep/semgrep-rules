@@ -1,8 +1,7 @@
 rules:
 - id: detect-buffer-noassert
   metadata:
-    cwe: 'CWE-119: Improper Restriction of Operations within the Bounds of a Memory
-      Buffer'
+    cwe: 'CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer'
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-buffer-noassert.js
   message: |
     Detected usage of noassert in Buffer API, which allows the offset the be beyond the
@@ -11,7 +10,7 @@ rules:
   - pattern: $OBJ.$API(..., true)
   - metavariable-regex:
       metavariable: $API
-      regex: (read|write)(U?Int8|(U?Int|Float|Double)(16|32)(LE|BE))
+      regex: (read|write)(U?Int8|(U?Int(16|32)|Float|Double)(LE|BE))
   severity: WARNING
   languages:
   - javascript

@@ -8,4 +8,4 @@ a.readUInt8(0, false)
 a.readUInt8(0, true)
 
 // ruleid:detect-buffer-noassert
-a.writeFloat16LE(0, true)
+a.writeFloatLE(0, true)
