@@ -19,3 +19,18 @@ class Bad(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+
+class ModelIssue1106(models.Model):
+
+    # ok: django-db-model-save-super
+    def save(self, *args, **kwargs):
+        print("my overriden save method")
+        super().save(*args, **kwargs)
+
+
+class ModelIssue1106_2(models.Model):
+
+    # ok: django-db-model-save-super
+    def save(self, *args, **kwargs):
+        print("my overriden save method")
+        super(ModelIssue1106_2, self).save(*args, **kwargs)
