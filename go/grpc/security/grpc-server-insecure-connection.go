@@ -53,6 +53,7 @@ func startServerWithOpts() {
 	options := []grpc.ServerOption{
 		grpc.Creds(credentials.NewClientTLSFromCert(pool, addr)),
 	}
+	// ok:grpc-server-insecure-connection
 	grpcServer := grpc.NewServer(options...)
 	_ = grpcServer
 }
@@ -64,6 +65,7 @@ func startServerCredsVar() {
 		creds,
 		grpc.UnaryInterceptor(auth.GRPCInterceptor),
 	}
+	// ok:grpc-server-insecure-connection
 	grpcServer := grpc.NewServer(options...)
 	_ = grpcServer
 }
