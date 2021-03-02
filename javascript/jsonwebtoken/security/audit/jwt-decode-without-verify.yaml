@@ -44,25 +44,32 @@ rules:
         ...
         return $FUNC({$P: $JWT.decode(...)});
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       $JWT.verify(...);
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       return $JWT.verify(...);
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       if(<... $JWT.verify(...) ...>) {
           ...
       }
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       return {$P: $JWT.verify(...)};
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       $X = {$P: $JWT.verify(...)};
   - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       $FUNC({$P: $JWT.verify(...)});
-  - pattern-not-inside: |-
+  - pattern-not-inside: |
+      var $JWT = require('jsonwebtoken');
       ...
       return $FUNC({$P: $JWT.verify(...)});
