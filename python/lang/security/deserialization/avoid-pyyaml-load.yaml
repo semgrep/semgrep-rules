@@ -12,7 +12,10 @@ rules:
     Avoid using `load()`. `PyYAML.load` can create arbitrary Python
     objects. A malicious actor could exploit this to run arbitrary
     code. Use `safe_load()` instead.
-  fix: yaml.safe_load($FOO)
+  fix-regex:
+    regex: load
+    replacement: safe_load
+    count: 1
   severity: ERROR
   patterns:
   - pattern-inside: |
