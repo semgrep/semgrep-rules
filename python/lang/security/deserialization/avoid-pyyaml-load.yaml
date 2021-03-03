@@ -12,13 +12,14 @@ rules:
     Avoid using `load()`. `PyYAML.load` can create arbitrary Python
     objects. A malicious actor could exploit this to run arbitrary
     code. Use `safe_load()` instead.
-  fix-regex:
-    regex: load
-    replacement: safe_load
+  fix: yaml.safe_load($FOO)
   severity: ERROR
   patterns:
-  - pattern-not-inside: |
-      yaml = ruamel.yaml.YAML(...)
+  - pattern-inside: |
+      import yaml
       ...
-      yaml.load(...)
+  - pattern-not-inside: |
+      $YAML = ruamel.yaml.YAML(...)
+      ...
+      $YAML.load(...)
   - pattern: yaml.load(...)
