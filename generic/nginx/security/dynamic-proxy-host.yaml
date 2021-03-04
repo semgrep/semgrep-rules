@@ -4,6 +4,12 @@ rules:
   - pattern-either:
     - pattern: proxy_pass $SCHEME://$$HOST ...;
     - pattern: proxy_pass $$SCHEME://$$HOST ...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING

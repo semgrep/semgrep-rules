@@ -2,6 +2,12 @@ rules:
 - id: dynamic-proxy-scheme
   patterns:
   - pattern: proxy_pass $$SCHEME:// ...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
