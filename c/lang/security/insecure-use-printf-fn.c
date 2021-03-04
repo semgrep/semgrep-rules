@@ -45,6 +45,9 @@ void bad_printf() {
 
     //ok: insecure-use-printf-fn
     printf("hello");
+
+    //ruleid: info-leak-vulnerability-on-non-formated-string
+    printf(argv[1]);
 }
 
 int main() {

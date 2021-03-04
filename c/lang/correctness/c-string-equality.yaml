@@ -1,0 +1,7 @@
+rules:
+- id: c-string-equality
+  pattern: (char *$X) == (char *$Y)
+  message: Using == on char* performs pointer comparison, use strcmp instead
+  fix: strcmp($X, $Y) == 0
+  languages: [c]
+  severity: ERROR

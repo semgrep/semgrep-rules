@@ -11,15 +11,34 @@ rules:
     - https://godoc.org/golang.org/x/crypto/sha3
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: |
-        md5.$FUNC(...)
-    - pattern: |
-        des.$FUNC(...)
-    - pattern: |
-        sha1.$FUNC(...)
-    - pattern: |
-        rc4.$FUNC(...)
-    - pattern: |-
-        cgi.$FUNC(...)
+  pattern-either:
+    - patterns:
+      - pattern-inside: |
+          import "crypto/md5"
+          ...
+      - pattern: |
+          md5.$FUNC(...)
+    - patterns:
+      - pattern-inside: |
+          import "crypto/des"
+          ...
+      - pattern: |
+          des.$FUNC(...)
+    - patterns:
+      - pattern-inside: |
+          import "crypto/sha1"
+          ...
+      - pattern: |
+          sha1.$FUNC(...)
+    - patterns:
+      - pattern-inside: |
+          import "crypto/rc4"
+          ...
+      - pattern: |
+          rc4.$FUNC(...)
+    - patterns:
+      - pattern-inside: |
+          import "net/http/cgi"
+          ...
+      - pattern: |
+          cgi.$FUNC(...)

@@ -1,12 +1,12 @@
 rules:
 - id: grpc-server-insecure-connection
   metadata:
-    owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-300: Channel Accessible by Non-Endpoint'
     references:
     - https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption
   message: >-
-    Found an insecure gRPC server without 'grpc.Creds()'. This allows for a connection without encryption to this server.
+    Found an insecure gRPC server without 'grpc.Creds()' or options with credentials. This allows for a connection without
+    encryption to this server.
     A malicious attacker could tamper with the gRPC message, which could compromise the machine. Include credentials derived
     from an SSL certificate in order to create a secure gRPC connection. You can create credentials using 'credentials.NewServerTLSFromFile("cert.pem",
     "cert.key")'.
@@ -15,4 +15,20 @@ rules:
   severity: ERROR
   patterns:
   - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
+  - pattern-not-inside: |
+      $OPTS := []grpc.ServerOption{
+        ...,
+        grpc.Creds(credentials.NewClientTLSFromCert(...)),
+        ...,
+      }
+      grpc.NewServer($OPTS...)
+  - pattern-not-inside: |
+      $CREDS := credentials.NewClientTLSFromCert(...)
+      ...
+      $OPTS := []grpc.ServerOption{
+        ...,
+        $CREDS,
+        ...,
+      }
+      grpc.NewServer($OPTS...)
   - pattern: grpc.NewServer(...)

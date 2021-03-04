@@ -1,21 +1,12 @@
 rules:
 - id: useless-assignment
   patterns:
-  - pattern-not: |
-      $X = $Y;
-      $X = $X.$METHOD(...);
-  - pattern-not: |
-      $X = $Y;
-      $X = $FUNC(..., <... $X ...>, ...);
-  - pattern-not: |
-      $X = $Y;
-      $X = $PREPEND + $X;
-  - pattern-not: |
-      $X = $Y;
-      $X = $X + $POSTPEND;
   - pattern: |
       $X = $Y;
       $X = $Z;
+  - pattern-not: |
+      $X = $Y;
+      $X = <... $X ...>;
   message: '`$X` is assigned twice; the first assignment is useless'
   languages:
   - javascript

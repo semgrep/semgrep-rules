@@ -1,0 +1,40 @@
+rules:
+- id: make-response-with-unknown-content
+  patterns:
+  - patterns:
+    - pattern: flask.make_response(...)
+    - pattern-not-inside: flask.make_response()
+    - pattern-not-inside: flask.make_response("...", ...)
+    - pattern-not-inside: |
+        flask.make_response({"...": "..."}, ...)
+    - pattern-not-inside: flask.make_response(flask.redirect(...), ...)
+    - pattern-not-inside: flask.make_response(flask.render_template(...), ...)
+    - pattern-not-inside: flask.make_response(flask.jsonify(...), ...)
+    - pattern-not-inside: flask.make_response(json.dumps(...), ...)
+    - pattern-not-inside: |
+        $X = flask.render_template(...)
+        ...
+        flask.make_response($X, ...)
+    - pattern-not-inside: |
+        $X = flask.jsonify(...)
+        ...
+        flask.make_response($X, ...)
+    - pattern-not-inside: |
+        $X = json.dumps(...)
+        ...
+        flask.make_response($X, ...)
+  message: >-
+    Be careful with `flask.make_response()`. If this response is rendered onto a webpage,
+    this could create a cross-site scripting (XSS) vulnerability. `flask.make_response()`
+    will not autoescape HTML. If you are rendering HTML, write your HTML in a template
+    file and
+    use `flask.render_template()` which will take care of escaping.
+    If you are returning data from an API, consider using `flask.jsonify()`.
+  severity: WARNING
+  metadata:
+    references:
+    - https://github.com/python-security/pyt//blob/093a077bcf12d1f58ddeb2d73ddc096623985fb0/examples/vulnerable_code/XSS_assign_to_other_var.py#L11
+    - https://flask.palletsprojects.com/en/1.1.x/api/#flask.Flask.make_response
+    - https://flask.palletsprojects.com/en/1.1.x/api/#response-objects
+  languages:
+  - python
