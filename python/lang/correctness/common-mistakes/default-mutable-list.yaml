@@ -199,7 +199,7 @@ rules:
               $D.insert(...)
   message: >-
     Function $F mutates default list $D. Python only instantiates default function arguments once and shares the
-    instance across the function calls. If the default function argument is mutated, that will modify the 
+    instance across the function calls. If the default function argument is mutated, that will modify the
     instance used by all future function calls. This can cause
     unexpected results, or lead to security vulnerabilities whereby one function consumer can view or modify the data
     of another function consumer. Instead, use a default argument (like None) to indicate that no argument was provided
