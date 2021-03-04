@@ -8,6 +8,12 @@ rules:
         ...
       }
   - pattern-not-inside: location /.../ { ... ... }
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   fix-regex:
     regex: location\s+([A-Za-z0-9/-_\.]+)
     replacement: location \1/
