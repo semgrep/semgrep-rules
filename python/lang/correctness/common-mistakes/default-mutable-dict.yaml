@@ -179,7 +179,8 @@ rules:
             def $F(..., $D={}, ...):
               ...
               $D.setdefault(...)
-  message: Function $F mutates default dict $D. Python only instantiates default function arguments once and shares the
+  message: >-
+    Function $F mutates default dict $D. Python only instantiates default function arguments once and shares the
     instance across the function calls. If the default function argument is mutated, that will modify the 
     instance used by all future function calls. This can cause
     unexpected results, or lead to security vulnerabilities whereby one function consumer can view or modify the data
