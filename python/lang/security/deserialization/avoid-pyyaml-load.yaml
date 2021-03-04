@@ -25,6 +25,6 @@ rules:
       $YAML = ruamel.yaml.YAML(...)
       ...
       $YAML.load(...)
-  - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader)
-  - pattern-not: yaml.load(..., Loader=yaml.SafeLoader)
+  - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader, ...)
+  - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
   - pattern: yaml.load(...)
