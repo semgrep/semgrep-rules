@@ -1,0 +1,51 @@
+rules:
+- id: hibernate-sqli
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          String $SQL = $X + $Y;
+          ...
+      - pattern-inside: |
+          String $SQL = String.format(...);
+          ...
+    - pattern-not-inside: |
+        String $SQL = "..." + "...";
+        ...
+    - pattern: org.hibernate.criterion.Restrictions.sqlRestriction($SQL,...)
+  - pattern: org.hibernate.criterion.Restrictions.sqlRestriction(String.format(...),...)
+  - patterns:
+    - pattern: org.hibernate.criterion.Restrictions.sqlRestriction($X + $Y,...)
+    - pattern-not: org.hibernate.criterion.Restrictions.sqlRestriction("..." + "...",...)
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $SESSION.$METHOD($SQL,...)
+      - pattern: |
+          $SESSION.$METHOD(String.format(...),...);
+      - pattern: |
+          $SESSION.$METHOD($X + $Y,...);
+    - pattern-inside: |
+        org.hibernate.Session $SESSION = ...;
+        ...
+    - pattern-not: |
+        $SESSION.$METHOD("..." + "...",...);
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(createQuery|createSQLQuery)$
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  severity: WARNING
