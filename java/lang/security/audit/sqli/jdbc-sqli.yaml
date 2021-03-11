@@ -1,0 +1,40 @@
+rules:
+- id: jdbc-sqli
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $S.$METHOD($SQL,...)
+      - pattern: |
+          $S.$METHOD(String.format(...),...);
+      - pattern: |
+          $S.$METHOD($X + $Y,...);
+    - pattern-inside: |
+        java.sql.Statement $S = ...;
+        ...
+    - pattern-not: |
+        $S.$METHOD("..." + "...",...);
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(executeQuery|execute|executeUpdate|executeLargeUpdate|addBatch|nativeSQL)$
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  languages: [java]
+  severity: WARNING

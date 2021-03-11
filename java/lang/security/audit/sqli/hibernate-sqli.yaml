@@ -9,6 +9,10 @@ rules:
       - pattern-inside: |
           String $SQL = String.format(...);
           ...
+      - pattern-inside: |
+          $VAL $FUNC(...,String $SQL,...) {
+          ...
+          }
     - pattern-not-inside: |
         String $SQL = "..." + "...";
         ...
@@ -27,6 +31,10 @@ rules:
           - pattern-inside: |
               String $SQL = String.format(...);
               ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+              ...
+              }
         - pattern-not-inside: |
             String $SQL = "..." + "...";
             ...
