@@ -108,6 +108,33 @@ rules:
           new PreparedStatementCreatorFactory($X + $Y,...)
     - pattern-not: |
         new PreparedStatementCreatorFactory("..." + "...",...)
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $BATCH.executeBatchUpdate($SQL,...)
+      - pattern: |
+          $BATCH.executeBatchUpdate(String.format(...),...)
+      - pattern: |
+          $BATCH.executeBatchUpdate($X + $Y,...)
+    - pattern-not: |
+        $BATCH.executeBatchUpdate("..." + "...",...)
+    - metavariable-regex:
+        metavariable: $BATCH
+        regex: ^(BatchUpdateUtils|NamedParameterBatchUpdateUtils)$
   message: |
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
