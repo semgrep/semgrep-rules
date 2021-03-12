@@ -1,5 +1,5 @@
 rules:
-- id: jdbc-sqli
+- id: jpa-sqli
   pattern-either:
   - patterns:
     - pattern-either:
@@ -12,30 +12,30 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
-              $VAL $FUNC(...,String $SQL,...) {
+              $TYPE $FUNC(...,String $SQL,...) {
                 ...
               }
         - pattern-not-inside: |
             String $SQL = "..." + "...";
             ...
-        - pattern: $S.$METHOD($SQL,...)
+        - pattern: $EM.$METHOD($SQL,...)
       - pattern: |
-          $S.$METHOD(String.format(...),...);
+          $EM.$METHOD(String.format(...),...);
       - pattern: |
-          $S.$METHOD($X + $Y,...);
+          $EM.$METHOD($X + $Y,...);
     - pattern-either:
       - pattern-inside: |
-          java.sql.Statement $S = ...;
+          EntityManager $EM = ...;
           ...
       - pattern-inside: |
-          $TYPE $FUNC(...,java.sql.Statement $S,...) {
+          $TYPE $FUNC(...,EntityManager $EM,...) {
             ...
           }
     - pattern-not: |
-        $S.$METHOD("..." + "...",...);
+        $EM.$METHOD("..." + "...",...);
     - metavariable-regex:
         metavariable: $METHOD
-        regex: ^(executeQuery|execute|executeUpdate|executeLargeUpdate|addBatch|nativeSQL)$
+        regex: ^(createQuery|createNativeQuery)$
   message: |
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.

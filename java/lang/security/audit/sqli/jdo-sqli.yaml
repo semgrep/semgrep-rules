@@ -12,7 +12,7 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
-              $VAL $FUNC(...,String $SQL,...) {
+              $TYPE $FUNC(...,String $SQL,...) {
                 ...
               }
         - pattern-not-inside: |
@@ -23,9 +23,14 @@ rules:
           $Q.$METHOD(String.format(...),...);
       - pattern: |
           $Q.$METHOD($X + $Y,...);
-    - pattern-inside: |
-        javax.jdo.Query $Q = ...;
-        ...
+    - pattern-either:
+      - pattern-inside: |
+          javax.jdo.Query $Q = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,javax.jdo.Query $Q,...) {
+            ...
+          }
     - pattern-not: |
         $Q.$METHOD("..." + "...",...);
     - metavariable-regex:
@@ -53,9 +58,14 @@ rules:
           $PM.newQuery(...,String.format(...),...);
       - pattern: |
           $PM.newQuery(...,$X + $Y,...);
-    - pattern-inside: |
-        javax.jdo.PersistenceManager $PM = ...;
-        ...
+    - pattern-either:
+      - pattern-inside: |
+          javax.jdo.PersistenceManager $PM = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,javax.jdo.PersistenceManager $PM,...) {
+            ...
+          }
     - pattern-not: |
         $PM.newQuery(...,"..." + "...",...);
   message: |

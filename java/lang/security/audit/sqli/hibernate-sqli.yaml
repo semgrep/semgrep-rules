@@ -32,8 +32,8 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
-              $VAL $FUNC(...,String $SQL,...) {
-              ...
+              $TYPE $FUNC(...,String $SQL,...) {
+                ...
               }
         - pattern-not-inside: |
             String $SQL = "..." + "...";
@@ -43,9 +43,14 @@ rules:
           $SESSION.$METHOD(String.format(...),...);
       - pattern: |
           $SESSION.$METHOD($X + $Y,...);
-    - pattern-inside: |
-        org.hibernate.Session $SESSION = ...;
-        ...
+    - pattern-either:
+      - pattern-inside: |
+          org.hibernate.Session $SESSION = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,org.hibernate.Session $SESSION,...) {
+            ...
+          }
     - pattern-not: |
         $SESSION.$METHOD("..." + "...",...);
     - metavariable-regex:

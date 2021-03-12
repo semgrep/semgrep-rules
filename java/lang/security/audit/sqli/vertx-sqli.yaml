@@ -1,5 +1,5 @@
 rules:
-- id: jdbc-sqli
+- id: vertx-sqli
   pattern-either:
   - patterns:
     - pattern-either:
@@ -12,30 +12,37 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
-              $VAL $FUNC(...,String $SQL,...) {
+              $TYPE $FUNC(...,String $SQL,...) {
                 ...
               }
         - pattern-not-inside: |
             String $SQL = "..." + "...";
             ...
-        - pattern: $S.$METHOD($SQL,...)
+        - pattern: $SC.$METHOD($SQL,...)
       - pattern: |
-          $S.$METHOD(String.format(...),...);
+          $SC.$METHOD(String.format(...),...);
       - pattern: |
-          $S.$METHOD($X + $Y,...);
+          $SC.$METHOD($X + $Y,...);
     - pattern-either:
       - pattern-inside: |
-          java.sql.Statement $S = ...;
+          SqlClient $SC = ...;
           ...
       - pattern-inside: |
-          $TYPE $FUNC(...,java.sql.Statement $S,...) {
+          SqlConnection $SC = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,SqlClient $SC,...) {
+            ...
+          }
+      - pattern-inside: |
+          $TYPE $FUNC(...,SqlConnection $SC,...) {
             ...
           }
     - pattern-not: |
-        $S.$METHOD("..." + "...",...);
+        $SC.$METHOD("..." + "...",...);
     - metavariable-regex:
         metavariable: $METHOD
-        regex: ^(executeQuery|execute|executeUpdate|executeLargeUpdate|addBatch|nativeSQL)$
+        regex: ^(query|preparedQuery|prepare)$
   message: |
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
