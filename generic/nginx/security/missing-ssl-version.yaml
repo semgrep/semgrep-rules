@@ -3,6 +3,12 @@ rules:
   patterns:
   - pattern: server { ... listen $PORT ssl; ... }
   - pattern-not-inside: server { ... ssl_protocols ... }
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING

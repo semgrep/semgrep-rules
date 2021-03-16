@@ -1,0 +1,144 @@
+rules:
+- id: spring-sqli
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $TYPE $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern-either:
+          - pattern: $JT.$METHOD($SQL,...)
+          - pattern: $JT.$METHOD(new $CALL($SQL),...)
+      - pattern: |
+          $JT.$METHOD(String.format(...),...);
+      - pattern: |
+          $JT.$METHOD($X + $Y,...);
+    - pattern-either:
+      - pattern-inside: |
+          JdbcTemplate $JT = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,JdbcTemplate $JT,...) {
+            ...
+          }
+      - pattern-inside: |
+          JdbcOperations $JT = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,JdbcOperations $JT,...) {
+            ...
+          }
+    - pattern-not: |
+        $JT.$METHOD("..." + "...",...);
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(execute|query|queryForList|queryForMap|queryForObject|queryForRowSet|queryForInt|queryForLong|update)$
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $TYPE $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $JT.batchUpdate(...,$SQL,...)
+      - pattern: |
+          $JT.batchUpdate(...,String.format(...),...);
+      - pattern: |
+          $JT.batchUpdate(...,$X + $Y,...);
+    - pattern-either:
+      - pattern-inside: |
+          JdbcTemplate $JT = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,JdbcTemplate $JT,...) {
+            ...
+          }
+      - pattern-inside: |
+          JdbcOperations $JT = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,JdbcOperations $JT,...) {
+            ...
+          }
+    - pattern-not: |
+        $JT.batchUpdate(...,"..." + "...",...);
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: new PreparedStatementCreatorFactory($SQL,...)
+      - pattern: |
+          new PreparedStatementCreatorFactory(String.format(...),...)
+      - pattern: |
+          new PreparedStatementCreatorFactory($X + $Y,...)
+    - pattern-not: |
+        new PreparedStatementCreatorFactory("..." + "...",...)
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $BATCH.executeBatchUpdate($SQL,...)
+      - pattern: |
+          $BATCH.executeBatchUpdate(String.format(...),...)
+      - pattern: |
+          $BATCH.executeBatchUpdate($X + $Y,...)
+    - pattern-not: |
+        $BATCH.executeBatchUpdate("..." + "...",...)
+    - metavariable-regex:
+        metavariable: $BATCH
+        regex: ^(BatchUpdateUtils|NamedParameterBatchUpdateUtils)$
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  languages: [java]
+  severity: WARNING

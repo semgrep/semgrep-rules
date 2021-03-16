@@ -1,6 +1,13 @@
 rules:
 - id: request-host-used
   pattern: $http_host
+  paths:
+    include:
+    - '*conf*'
+    - '*nginx*'
+    - '*vhost*'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
