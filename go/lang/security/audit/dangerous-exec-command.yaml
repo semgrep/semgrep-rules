@@ -4,8 +4,12 @@ rules:
   - pattern-either:
     - pattern: |
         exec.Command($CMD,...)
+    - pattern: |
+        exec.CommandContext($CTX,$CMD,...)
   - pattern-not: |
       exec.Command("...",...)
+  - pattern-not: |
+      exec.CommandContext($CTX,"...",...)
   - pattern-inside: |
       import "os/exec"
       ...

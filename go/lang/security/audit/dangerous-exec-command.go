@@ -35,6 +35,17 @@ func runCommand2(userInput string) {
 
 }
 
+func runCommand3(userInput string) {
+  ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+  defer cancel()
+
+  // ruleid:dangerous-exec-command
+  if err := exec.CommandContext(ctx, userInput, "5").Run(); err != nil {
+    fmt.Println( "Error:", err )
+  }
+
+}
+
 func okCommand1(userInput string) {
 
     goExec,_ := exec.LookPath("go")
