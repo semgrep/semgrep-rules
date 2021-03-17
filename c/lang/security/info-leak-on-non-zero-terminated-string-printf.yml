@@ -1,0 +1,25 @@
+rules:
+- id: info-leak-on-non-zero-terminated-string
+  patterns:
+  - pattern-either:
+  - pattern: | 
+        printf(...,$VAR, ...);
+  - pattern-not-inside: |
+        $TYPE $VAR[$N] = <... '\0' ...>;
+        ...
+  - pattern-not-inside: | 
+        $TYPE $VAR[$N] = "...";
+        ...
+  - pattern-not-inside: | 
+        $VAR[$N] = <... '\0' ...>;
+        ...
+  - pattern-not-inside: | 
+        $VAR[$N] = "...";
+        ...
+  message: |
+    Do not forget to end a string by \0 (null byte) when you use printf. It may lead to print weird chars and will permit to an attackant to bypass ASLR kernel side buffer overflow mitigation.
+  metadata:
+    references: |
+    - http://nebelwelt.net/files/13PPREW.pdf
+  languages: [c]
+  severity: WARNING
