@@ -12,36 +12,15 @@
     <script type="text/javascript" src="demo-mustache.js"></script>
 </head>
 
-<body onload="carregarDemo();">
-    <div class="content">
-        <div id="mustache-header"></div>
-        <div id="mustache-cards"></div>
-    </div>
-</body>
-
-<script type="text/javascript">
-    <!-- ruleid: var-in-script-tag -->
-    var message = <%= message %>;
-</script>
-
-<script type="text/javascript">
-    <!-- ruleid: var-in-script-tag -->
-    var message = <%= message %>;
-    console.log(message);
-    console.log("more statements here");
-    <!-- ruleid: var-in-script-tag -->
-    var message2 = <%= message2 %>;
-    var flash = document.getElementById("flash");
-    flash.text = message;
-</script>
-
+<!-- ok: var-in-script-src -->
 <script src="app.js"></script>
-<!-- ok: var-in-script-tag -->
-<%= title %>
+<!-- ok: var-in-script-src -->
 <script src="script.js"></script>
 
 <div class="text-center">
+    <!-- ok: var-in-script-src -->
     <h2>Apresentando o time da <b><%= time.nome %></b></h2>
+    <!-- ok: var-in-script-src -->
     <h6>Predio <%= time.predio %></h6>
 </div>
 <div class="container" style="margin-top: 30px;">
@@ -49,9 +28,11 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header text-center">
+                    <!-- ok: var-in-script-src -->
                     <b><%= nome %></b>
                 </div>
                 <div class="card-body">
+                    <!-- ok: var-in-script-src -->
                     <%= template-table %>
                 </div>
             </div>
@@ -59,7 +40,7 @@
     </div>
 </div>
 
-<!-- ok: var-in-script-tag -->
+<!-- ruleid: var-in-script-src -->
 <script src="./<%=reactDemoIndexBundleJs %>" crossOrigin="anonymous" integrity="<%=sri.reactDemoIndexBundleJs %>"></script>
 
 </html>

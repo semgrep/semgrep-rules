@@ -1,16 +1,13 @@
 rules:
-- id: var-in-script-tag
+- id: var-in-script-src
   message: >-
-    Detected a template variable used in a script tag.
+    Detected a template variable used as the 'src' in a script tag.
     Although template variables are HTML escaped, HTML
-    escaping does not always prevent cross-site scripting (XSS)
-    attacks when used directly in JavaScript.
-    If you need this data on the rendered page, consider placing it in the HTML
-    portion (outside of a script tag).
-    Alternatively, use a JavaScript-specific encoder, such as the one available
-    in OWASP ESAPI.
-    For Django, you may also consider using the 'json_script' template tag and
-    retrieving the data in your script by using the element ID (e.g., `document.getElementById`).
+    escaping does not always prevent malicious URLs from being injected
+    and could results in a cross-site scripting (XSS) vulnerability.
+    Prefer not to dynamically generate the 'src' attribute and use static
+    URLs instead. If you must do this, carefully check URLs against an
+    allowlist and be sure to URL-encode the result.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-site Scripting (XSS)'
@@ -27,7 +24,7 @@ rules:
     - '*.html'
   severity: WARNING
   patterns:
-  - pattern-inside: <script ...> ... </script>
-  - pattern-not-inside: <script ... $ATTR = "..." ...>
-  - pattern-not-inside: <script ... $ATTR = '...' ...>
+  - pattern-inside: <script ...>
+  - pattern-not-inside: src = '...'
+  - pattern-not-inside: src = "..."
   - pattern: '{{ ... }}'
