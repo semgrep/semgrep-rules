@@ -1,8 +1,3 @@
-// ok: sequelize-raw-query
-db.sequelize.query(
-  `INSERT INTO user (username, password) VALUES('test','test')`
-)
-
 // Case1: run query by string concatenation using template literals
 // ruleid: sequelize-raw-query
 db.sequelize.query(
