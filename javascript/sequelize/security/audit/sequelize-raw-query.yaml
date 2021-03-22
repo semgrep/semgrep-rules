@@ -1,28 +1,33 @@
+---
 rules:
   - id: sequelize-raw-query
-    message: |
-       Avoiding SQL string concatenation: untrusted input concatinated with raw SQL query can result in SQL Injection.
-       Data remplacement or data binding should be used. See https://sequelize.org/master/manual/raw-queries.html)
+    message: >
+       Avoiding SQL string concatenation: untrusted input concatinated with raw
+       SQL query can result in SQL Injection. Data remplacement or data binding
+       should be used.
+       See https://sequelize.org/master/manual/raw-queries.html
     metadata:
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      cwe: >
+        CWE-89: Improper Neutralization of Special Elements used in an SQL
+        Command ('SQL Injection')
       owasp: 'A1: Injection'
       references:
-      - https://sequelize.org/master/manual/raw-queries.html
+        - https://sequelize.org/master/manual/raw-queries.html
     severity: WARNING
     languages:
       - javascript
     pattern-either:
-      
+
       # Case1: Run query by string concatenation using template literals
       - pattern: |
           $DATABASE.sequelize.query(`...${...}...`, ...)
-      
+
       # Case 2: Build query by string concatenation using template literals
       - pattern: |
           $QUERY = `...${...}...`
           ...
           $DATABASE.sequelize.query($QUERY, ...)
-      
+
       # Case 3: Run query by string concatenation using + operator
       - pattern: |
           $DATABASE.sequelize.query($SQL + $VALUE, ...)
