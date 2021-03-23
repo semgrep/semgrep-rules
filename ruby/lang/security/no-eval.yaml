@@ -22,6 +22,14 @@ rules:
         $CLASS.instance_eval(...)
     - pattern: |
         $CLASS.module_eval(...)
+    - pattern: |
+        $VM.compile(...).eval
+    - patterns:
+      - pattern: |
+          $IS.eval
+      - pattern-inside: |
+          $IS = $VM.compile(...)
+          ...
   message: |
     Use of eval detected. This can run arbitrary code. Ensure external data
     does not reach here, otherwise this is a security vulnerability.

@@ -67,3 +67,10 @@ end
 b = get_binding("hello")
 # ruleid:ruby-eval
 b.eval("param")
+
+# ruleid:ruby-eval
+RubyVM::InstructionSequence.compile("1 + 2").eval
+
+iseq = RubyVM::InstructionSequence.compile('num = 1 + 2')
+# ruleid:ruby-eval
+iseq.eval
