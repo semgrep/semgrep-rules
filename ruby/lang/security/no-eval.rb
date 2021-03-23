@@ -59,3 +59,11 @@ a = %q{def hello() "Hello there!" end}
 # ruleid:ruby-eval
 Thing.module_eval(a)
 puts Thing.new.hello()
+
+
+def get_binding(param)
+  binding
+end
+b = get_binding("hello")
+# ruleid:ruby-eval
+b.eval("param")
