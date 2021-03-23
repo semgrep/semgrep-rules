@@ -1,0 +1,7 @@
+rules:
+- id: dangerous-syscall
+  pattern: |
+    syscall
+  message: |
+    'syscall' is essentially unsafe and unportable. The DL (https://apidock.com/ruby/Fiddle) library is preferred for safer and a bit more portable programming.
+  severity: WARNING
