@@ -14,7 +14,7 @@ rules:
       $EXEC({...},["...",...],...)
   - metavariable-regex:
       metavariable: $EXEC
-      regex: ^(system|exec|Process.exec|Process.spawn|Open3.capture2|Open3.capture2e|Open3.capture3|Open3.popen2|Open3.popen2e|Open3.popen3|IO.popen)$
+      regex: ^(system|exec|Process.exec|Process.spawn|Open3.capture2|Open3.capture2e|Open3.capture3|Open3.popen2|Open3.popen2e|Open3.popen3|IO.popen|Gem::Util.popen)$
   message: |
     Detected non-static command inside $EXEC. Audit the input to '$EXEC'.
     If unverified user data can reach this call site, this is a code injection
