@@ -7,6 +7,12 @@ def test_calls(user_input)
 # ruleid: dangerous-exec
   Process.spawn([user_input, "smth"])
 
+# ruleid: dangerous-exec
+  output = exec(["sh", "-c", user_input])
+
+# ruleid: dangerous-exec
+  pid = spawn(["bash", user_input])
+
   commands = "ls -lah /raz/dva"
 # ok: dangerous-exec
   system(commands)
