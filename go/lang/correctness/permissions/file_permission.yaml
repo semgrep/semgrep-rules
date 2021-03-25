@@ -7,13 +7,13 @@ rules:
   severity: WARNING
   languages: [go]
   patterns:
-    - pattern-either:
-      - pattern: os.Chmod($NAME, $PERM)
-      - pattern: os.Mkdir($NAME, $PERM)
-      - pattern: os.OpenFile($NAME, $FLAG, $PERM)
-      - pattern: os.MkdirAll($NAME, $PERM)
-      - pattern: ioutil.WriteFile($NAME, $DATA, $PERM)
-    - metavariable-comparison:
-        metavariable: $PERM
-        comparison: $PERM > 0o600
-        base: 8
+  - pattern-either:
+    - pattern: os.Chmod($NAME, $PERM)
+    - pattern: os.Mkdir($NAME, $PERM)
+    - pattern: os.OpenFile($NAME, $FLAG, $PERM)
+    - pattern: os.MkdirAll($NAME, $PERM)
+    - pattern: ioutil.WriteFile($NAME, $DATA, $PERM)
+  - metavariable-comparison:
+      metavariable: $PERM
+      comparison: $PERM > 0o600
+      base: 8

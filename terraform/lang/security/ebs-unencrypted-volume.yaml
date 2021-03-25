@@ -1,15 +1,15 @@
 rules:
 - id: unencrypted-ebs-volume
   patterns:
-    - pattern-either:
-      - pattern: |
-          {...}
-    - pattern-not-inside: |
-        resource "aws_ebs_volume" "..." {... encrypted=true ...}
-    - pattern-inside: |
-        resource "aws_ebs_volume" "..." {...}
+  - pattern-either:
+    - pattern: |
+        {...}
+  - pattern-not-inside: |
+      resource "aws_ebs_volume" "..." {... encrypted=true ...}
+  - pattern-inside: |
+      resource "aws_ebs_volume" "..." {...}
   languages:
-    - generic
+  - generic
   paths:
     include:
     - '*.tf'
