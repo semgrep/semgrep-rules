@@ -1,0 +1,20 @@
+rules:
+- id: dangerous-open3-pipeline
+  patterns:
+  - pattern: |
+      Open3.$PIPE(...)
+  - pattern-not: |
+      Open3.$PIPE(...,"...",...)
+  - metavariable-regex:
+      metavariable: $PIPE
+      regex: ^(pipeline|pipeline_r|pipeline_rw|pipeline_start|pipeline_w)$
+  message: |
+    Detected non-static command inside $PIPE. Audit the input to '$PIPE'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+  severity: WARNING
+  languages: [ruby]

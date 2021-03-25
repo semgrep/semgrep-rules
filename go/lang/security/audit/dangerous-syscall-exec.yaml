@@ -1,0 +1,58 @@
+rules:
+- id: dangerous-syscall-exec
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          syscall.Exec($BIN,...)
+      - pattern: |
+          syscall.ForkExec($BIN,...)
+    - pattern-not: |
+        syscall.Exec("...",...)
+    - pattern-not: |
+        syscall.ForkExec("...",...)
+    - pattern-inside: |
+        import "syscall"
+        ...
+    - pattern-not-inside: |
+        $BIN,$ERR := exec.LookPath("...");
+        ...
+    - pattern-not-inside: |
+        $BIN = "...";
+        ...
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          syscall.Exec($BIN,$ARGS,...)
+      - pattern: |
+          syscall.ForkExec($BIN,$ARGS,...)
+    - pattern-not: |
+        syscall.Exec($BIN,[]string{"...",...},...)
+    - pattern-not: |
+        syscall.ForkExec($BIN,[]string{"...",...},...)
+    - pattern-inside: |
+        import "syscall"
+        ...
+    - pattern-not-inside: |
+        $ARGS := []string{"...",...};
+        ...
+    - pattern-not-inside: |
+        $CMD = "...";
+        ...
+        $ARGS = []string{$CMD,...};
+        ...
+    - pattern-not-inside: |
+        $CMD = exec.LookPath("...");
+        ...
+        $ARGS = []string{$CMD,...};
+        ...
+  message: |
+    Detected non-static command inside Exec. Audit the input to 'syscall.Exec'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+  severity: WARNING
+  languages: [go]

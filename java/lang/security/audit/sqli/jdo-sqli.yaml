@@ -1,0 +1,77 @@
+rules:
+- id: jdo-sqli
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $TYPE $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $Q.$METHOD($SQL,...)
+      - pattern: |
+          $Q.$METHOD(String.format(...),...);
+      - pattern: |
+          $Q.$METHOD($X + $Y,...);
+    - pattern-either:
+      - pattern-inside: |
+          javax.jdo.Query $Q = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,javax.jdo.Query $Q,...) {
+            ...
+          }
+    - pattern-not: |
+        $Q.$METHOD("..." + "...",...);
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(setFilter|setGrouping)$
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              String $SQL = $X + $Y;
+              ...
+          - pattern-inside: |
+              String $SQL = String.format(...);
+              ...
+          - pattern-inside: |
+              $VAL $FUNC(...,String $SQL,...) {
+                ...
+              }
+        - pattern-not-inside: |
+            String $SQL = "..." + "...";
+            ...
+        - pattern: $PM.newQuery(...,$SQL,...)
+      - pattern: |
+          $PM.newQuery(...,String.format(...),...);
+      - pattern: |
+          $PM.newQuery(...,$X + $Y,...);
+    - pattern-either:
+      - pattern-inside: |
+          javax.jdo.PersistenceManager $PM = ...;
+          ...
+      - pattern-inside: |
+          $TYPE $FUNC(...,javax.jdo.PersistenceManager $PM,...) {
+            ...
+          }
+    - pattern-not: |
+        $PM.newQuery(...,"..." + "...",...);
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  languages: [java]
+  severity: WARNING
