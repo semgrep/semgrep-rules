@@ -11,15 +11,15 @@ rules:
   message: |
     When a Restful webservice endpoint is configured to use wildcard mediaType {*/*} as a value for the @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution when calling the $Y.getObject method.
   patterns:
-    - pattern-either: 
-      - pattern: |
-          @Consumes({"application/x-java-serialized-object"})
-      - pattern: |
-          @Consumes({"*/*"})
-      - pattern: |
-          @Consumes("*/*")
-      - pattern: |
-          @Consumes({MediaType.WILDCARD_TYPE})
+  - pattern-either:
+    - pattern: |
+        @Consumes({"application/x-java-serialized-object"})
+    - pattern: |
+        @Consumes({"*/*"})
+    - pattern: |
+        @Consumes("*/*")
+    - pattern: |
+        @Consumes({MediaType.WILDCARD_TYPE})
 
 - id: default-resteasy-provider-abuse
   severity: WARNING
@@ -33,11 +33,11 @@ rules:
   message: |
     When a Restful webservice endpoint isn't configured with a @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution.
   patterns:
-    - pattern-either: 
-      - pattern: |
-          @Path("...")
-          public $RETURNTYPE $METHOD(...) { ...}
-    - pattern-not-inside: |
+  - pattern-either:
+    - pattern: |
         @Path("...")
-        @Consumes(...)
         public $RETURNTYPE $METHOD(...) { ...}
+  - pattern-not-inside: |
+      @Path("...")
+      @Consumes(...)
+      public $RETURNTYPE $METHOD(...) { ...}
