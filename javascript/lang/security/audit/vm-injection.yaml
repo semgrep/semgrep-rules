@@ -11,7 +11,6 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern-either:
@@ -367,15 +366,32 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern: new $VM.Script($CODE,...)
-  - pattern-not-inside: new $VM.Script("...",...)
+  - pattern-not: new $VM.Script("...",...)
   - pattern-not-inside: |-
       $CODE = "...";
       ...
-      new $VM.Script($CODE,...);
+- id: vm-sourcetextmodule-code-injection
+  message: |
+    Make sure that unverified user data can not reach vm.SourceTextModule.
+  severity: WARNING
+  languages:
+  - javascript
+  - typescript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+  patterns:
+  - pattern-inside: |
+      $VM = require('vm');
+      ...
+  - pattern: new $VM.SourceTextModule($CODE,...)
+  - pattern-not: new $VM.SourceTextModule("...",...)
+  - pattern-not-inside: |-
+      $CODE = "...";
+      ...
 - id: vm-runincontext-code-injection
   message: |
     Make sure that unverified user data can not reach vm.runInContext.
@@ -388,15 +404,13 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern: $VM.runInContext($CODE,...)
-  - pattern-not-inside: $VM.runInContext("...",...)
+  - pattern-not: $VM.runInContext("...",...)
   - pattern-not-inside: |
       $CODE = "...";
       ...
-      $VM.runInContext($CODE,...);
 - id: vm-runinnewcontext-code-injection
   message: |
     Make sure that unverified user data can not reach vm.runInNewContext.
@@ -409,15 +423,13 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern: $VM.runInNewContext($CODE,...)
-  - pattern-not-inside: $VM.runInNewContext("...",...)
+  - pattern-not: $VM.runInNewContext("...",...)
   - pattern-not-inside: |
       $CODE = "...";
       ...
-      $VM.runInNewContext($CODE,...);
 - id: vm-runinthiscontext-code-injection
   message: |
     Make sure that unverified user data can not reach vm.runInThisContext.
@@ -430,15 +442,13 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern: $VM.runInThisContext($CODE,...)
-  - pattern-not-inside: $VM.runInThisContext("...",...)
+  - pattern-not: $VM.runInThisContext("...",...)
   - pattern-not-inside: |
       $CODE = "...";
       ...
-      $VM.runInThisContext($CODE,...);
 - id: vm-compilefunction-code-injection
   message: |
     Make sure that unverified user data can not reach vm.compileFunction.
@@ -451,12 +461,10 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern: $VM.compileFunction($CODE,...)
-  - pattern-not-inside: $VM.compileFunction("...",...)
+  - pattern-not: $VM.compileFunction("...",...)
   - pattern-not-inside: |-
       $CODE = "...";
       ...
-      $VM.compileFunction($CODE,...);

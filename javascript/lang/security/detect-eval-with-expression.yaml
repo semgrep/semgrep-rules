@@ -7,8 +7,18 @@ rules:
   message: |
     Detected eval(variable), which could allow a malicious actor to run arbitrary code.
   patterns:
-  - pattern: eval($OBJ)
+  - pattern-either:
+    - pattern: eval($OBJ)
+    - pattern: window.eval($OBJ)
+    - pattern: Function(...,$OBJ)
+    - pattern: new Function(...,$OBJ)
   - pattern-not: eval("...")
+  - pattern-not: window.eval("...")
+  - pattern-not: Function(...,"...")
+  - pattern-not: new Function(...,"...")
+  - pattern-not-inside: |
+      $OBJ = "..."
+      ...
   severity: WARNING
   languages:
   - javascript
