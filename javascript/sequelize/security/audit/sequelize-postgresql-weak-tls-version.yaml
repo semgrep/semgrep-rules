@@ -1,0 +1,40 @@
+---
+rules:
+  - id: sequelize-postgresql-weak-tls-version
+    message: >
+      TLS1.0 and TLS1.1 are deprecated and should be used anymore.
+      By default, NodeJS used TLSv1.2.
+      So, TLS min version must not be downgrade to TLS1.0 or TLS1.1.
+      Enforce TLS1.3 is hightly recommanded
+    metadata:
+      owasp: 'A6:2017-Security Misconfiguration'
+      references:
+        - https://node-postgres.com/features/ssl
+        - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
+        - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
+        - https://nodejs.org/api/tls.html#tls_tls_default_min_version
+    severity: WARNING
+    languages:
+      - javascript
+    patterns:
+
+      - pattern-inside: |
+         {
+           host: $HOST,
+           database: $DATABASE,
+           dialect: "postgres",
+           dialectOptions:
+             { ssl: ... }
+          }
+
+      - pattern-either:
+
+          - pattern: |
+              {
+                minVersion: 'TLSv1'
+              }
+
+          - pattern: |
+              {
+                minVersion: 'TLSv1.1'
+              }

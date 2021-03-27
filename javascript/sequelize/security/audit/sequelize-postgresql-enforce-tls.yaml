@@ -1,0 +1,47 @@
+---
+rules:
+  - id: sequelize-postgresql-enforce-tls
+    message: >
+      If TLS is disabled on server side (Postgresql server),
+      Sequelize establishes connection without TLS and no
+      error will be thrown. To prevent MITN (Man In The Middle)
+      attack, TLS must be enforce by Sequelize.
+      Set "ssl: true" or define settings "ssl: {...}"
+    metadata:
+      owasp: 'A6:2017-Security Misconfiguration'
+      references:
+        - https://node-postgres.com/features/ssl
+        - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
+        - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
+        - https://nodejs.org/api/tls.html#tls_tls_default_min_version
+    severity: WARNING
+    languages:
+      - javascript
+    patterns:
+
+      - pattern: |
+         {
+           host: $HOST,
+           database: $DATABASE,
+           dialect: "postgres"
+          }
+
+      - pattern-not: |
+           {
+             host: $HOST,
+             database: $DATABASE,
+             dialect: "postgres",
+             dialectOptions: {
+                 ssl: true
+             }
+           }
+
+      - pattern-not: |
+         {
+           host: $HOST,
+           database: $DATABASE,
+           dialect: "postgres",
+           dialectOptions: {
+             ssl: { ... }
+           }
+         }
