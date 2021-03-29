@@ -56,8 +56,6 @@ module.exports = {
   }
 };
 
-
-
 module.exports = {
   // ruleid: sequelize-enforce-tls
   local: {
@@ -70,4 +68,3 @@ module.exports = {
     }
   }
 };
-
