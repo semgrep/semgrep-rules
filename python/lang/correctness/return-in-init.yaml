@@ -4,11 +4,15 @@ rules:
   - pattern-inside: |
       class $A(...):
           ...
-          def __init__(...):
-              ...
   - pattern-either:
-    - pattern: return ...
-    - pattern: return
+    - pattern: |
+        def __init__(...):
+            ...
+            return ...
+    - pattern: |
+        def __init__(...):
+            ...
+            return
   message: '`return` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR
@@ -17,11 +21,15 @@ rules:
   - pattern-inside: |
       class $A(...):
           ...
-          def __init__(...):
-              ...
   - pattern-either:
-    - pattern: yield ...
-    - pattern: yield
+    - pattern: |
+        def __init__(...):
+            ...
+            yield ...
+    - pattern: |
+        def __init__(...):
+            ...
+            yield
   message: '`yield` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR

@@ -9,18 +9,23 @@ class B:
         # ruleid:return-in-init
         return
 
-
 class C:
+    def __init__():
+        x = 1
+    def foo():
+        # ok:return-in-init
+        return 4
+
+class D:
     def __init__(a, b, c):
         # ruleid:yield-in-init
         yield
 
 
-class D:
+class E:
     def __init__():
         # ruleid:yield-in-init
         yield 5
-
 
 def __init__(a, b, c):
     # ok:yield-in-init
@@ -44,3 +49,9 @@ class E:
             yield 5
         # ok:yield-in-init
         yield other
+
+class F:
+    def __init__():
+        x = 1
+    def func1():
+        yield
