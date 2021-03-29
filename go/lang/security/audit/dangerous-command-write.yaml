@@ -1,0 +1,30 @@
+rules:
+- id: dangerous-command-write
+  patterns:
+  - pattern: |
+      $CW.Write($BYTE)
+  - pattern-inside: |
+      $CW,$ERR := $CMD.StdinPipe()
+      ...
+  - pattern-not: |
+      $CW.Write("...")
+  - pattern-not: |
+      $CW.Write([]byte("..."))
+  - pattern-not: |
+      $CW.Write([]byte("..."+"..."))
+  - pattern-not-inside: |
+      $BYTE = []byte("...");
+      ...
+  - pattern-not-inside: |
+      $BYTE = []byte("..."+"...");
+      ...
+  - pattern-inside: |
+      import "os/exec"
+      ...
+  message: |
+    Detected non-static command inside Write. Audit the input to '$CW.Write'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  severity: WARNING
+  languages: [go]

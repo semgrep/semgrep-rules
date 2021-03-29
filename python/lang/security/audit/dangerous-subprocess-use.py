@@ -18,6 +18,11 @@ raise subprocess.SubprocessError("{}".format("foo"))
 # ruleid:dangerous-subprocess-use
 subprocess.call("grep -R {} .".format(sys.argv[1]))
 
+def foobar(user_input):
+  cmd = user_input.split()
+  # ruleid:dangerous-subprocess-use
+  subprocess.call([cmd[0], cmd[1], "some", "args"])
+
 # ruleid:dangerous-subprocess-use
 subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True)
 
