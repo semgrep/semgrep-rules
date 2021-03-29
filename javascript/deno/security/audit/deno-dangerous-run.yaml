@@ -1,0 +1,33 @@
+rules:
+- id: deno-dangerous-run
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+  message: |
+    Detected non-literal calls to Deno.run(). This could lead to a command
+    injection vulnerability.
+  pattern-either:
+  - patterns:
+    - pattern: |
+        Deno.run({cmd: [$CMD,...]},...)
+    - pattern-not-inside: |
+        $CMD = "..."
+        ...
+    - pattern-not: |
+        Deno.run({cmd: ["...",...]},...)
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          Deno.run({cmd: ["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...]},...)
+      - patterns:
+        - pattern: |
+            Deno.run({cmd: [$CMD,"-c",$ARG,...]},...)
+        - pattern-inside: |
+            $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+            ...
+    - pattern-not: |
+        Deno.run({cmd: [$CMD,"-c","...",...]},...)
+  severity: WARNING
+  languages:
+  - javascript
+  - typescript
