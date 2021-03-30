@@ -6,6 +6,37 @@ rules:
     - pattern: $RUNTIME.exec(String.format(...));
     - pattern: $RUNTIME.loadLibrary($X + $Y);
     - pattern: $RUNTIME.loadLibrary(String.format(...));
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
+        - pattern: |
+            $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
+        - pattern: |
+            $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                $RUNTIME.exec($CMD,"-c",$ARG,...)
+            - pattern: |
+                $RUNTIME.exec(Arrays.asList($CMD,"-c",$ARG,...),...)
+            - pattern: |
+                $RUNTIME.exec(new String[]{$CMD,"-c",$ARG,...},...)
+          - pattern-inside: |
+              $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+              ...
+      - pattern-not-inside: |
+          $ARG = "...";
+          ...
+      - pattern-not: |
+          $RUNTIME.exec("...","...","...",...)
+      - pattern-not: |
+          $RUNTIME.exec(new String[]{"...","...","...",...},...)
+      - pattern-not: |
+          $RUNTIME.exec(Arrays.asList("...","...","...",...),...)
+  - pattern-inside: |
+      $TYPE $RUNTIME = Runtime.getRuntime(...);
+      ...
   message: |
     A formatted or concatenated string was detected as input to a java.lang.Runtime call.
     This is dangerous if a variable is controlled by user input and could result in a
