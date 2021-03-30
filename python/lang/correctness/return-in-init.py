@@ -44,3 +44,29 @@ class E:
             yield 5
         # ok:yield-in-init
         yield other
+
+
+class F:
+    def __init__():
+        pass
+
+    def func1():
+        # ok:return-in-init
+        return 5
+
+    def func2():
+        # ok:return-in-init
+        return
+
+
+class G:
+    def __init__():
+        pass
+
+    def func1():
+        # ok:yield-in-init
+        yield 5
+
+    def func2():
+        # ok:yield-in-init
+        yield
