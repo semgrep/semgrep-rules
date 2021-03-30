@@ -13,29 +13,39 @@ class Cls {
 
     public void test2() {
         // ruleid: weak-ssl-context
-        SSLContext ctx = SSLContext.getInstance("TLS1.0");
+        SSLContext ctx = SSLContext.getInstance("TLS");
     }
 
     public void test3() {
         // ruleid: weak-ssl-context
-        SSLContext ctx = SSLContext.getInstance("TLS1.1");
+        SSLContext ctx = SSLContext.getInstance("TLSv1");
     }
 
     public void test4() {
-        // ok: weak-ssl-context
-        SSLContext ctx = SSLContext.getInstance("TLS1.2");
+        // ruleid: weak-ssl-context
+        SSLContext ctx = SSLContext.getInstance("SSLv3");
     }
 
     public void test5() {
+        // ruleid: weak-ssl-context
+        SSLContext ctx = SSLContext.getInstance("TLSv1.1");
+    }
+
+    public void test6() {
         // ok: weak-ssl-context
-        SSLContext ctx = SSLContext.getInstance("TLS1.3");
+        SSLContext ctx = SSLContext.getInstance("TLSv1.2");
+    }
+
+    public void test7() {
+        // ok: weak-ssl-context
+        SSLContext ctx = SSLContext.getInstance("TLSv1.3");
     }
 
     public String getSslContext() {
         return "Anything";
     }
 
-    public void test5() {
+    public void test8() {
         // ok: weak-ssl-context
         SSLContext ctx = SSLContext.getInstance(getSslContext());
     }
