@@ -1,0 +1,43 @@
+rules:
+- id: sequelize-tls-disabled-cert-validation
+  message: >
+    Set "rejectUnauthorized" to false is a convenient way to resolve
+    certificate error. But this method is unsafe because it disables
+    the server certificate verification, making the Node app open to
+    MITM attack.
+    "rejectUnauthorized" option must be alway set to True (default value).
+    With self -signed certificat or custom CA, use "ca" option to define
+    Root Certicate.
+    This rule checks TLS configuration only for Postgresql, MariaDB and
+    MySQL. SQLite is not really concerned by TLS configuration.
+    This rule could be extended for MSSQL, but the dialectOptions
+    is specific for Tedious.
+  metadata:
+    cwe: >
+      CWE-295: Improper Certificate Validation
+    owasp: A6:2017-Security Misconfiguration
+    references:
+    - https://node-postgres.com/features/ssl
+    - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
+    - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
+  severity: ERROR
+  languages:
+  - javascript
+  - typescript
+  patterns:
+
+  - pattern: |
+      {
+        host: $HOST,
+        database: $DATABASE,
+        dialect: $DIALECT,
+        dialectOptions: {
+          ssl: {
+            rejectUnauthorized: false
+          }
+        }
+       }
+
+  - metavariable-regex:
+      metavariable: $DIALECT
+      regex: "['\"](mariadb|mysql|postgres)['\"]"
