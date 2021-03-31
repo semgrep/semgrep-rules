@@ -1,0 +1,19 @@
+rules:
+- id: zlib-async-loop
+  patterns:
+  - pattern-inside: |
+      for (...) {
+          ...
+      }
+  - pattern: zlib.$METHOD(...);
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^.+$(?<!Sync)
+  message: |
+    Creating and using a large number of zlib objects simultaneously
+    can cause significant memory fragmentation.
+  metadata:
+    references:
+    - https://nodejs.org/api/zlib.html#zlib_threadpool_usage_and_performance_considerations
+  severity: WARNING
+  languages: [js]
