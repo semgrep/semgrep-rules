@@ -1,0 +1,31 @@
+rules:
+- id: dangerous-exec-command
+  patterns:
+  - pattern-either:
+    - pattern: |
+        exec.Command($CMD,...)
+    - pattern: |
+        exec.CommandContext($CTX,$CMD,...)
+  - pattern-not: |
+      exec.Command("...",...)
+  - pattern-not: |
+      exec.CommandContext($CTX,"...",...)
+  - pattern-inside: |
+      import "os/exec"
+      ...
+  - pattern-not-inside: |
+      $CMD,$ERR := exec.LookPath("...");
+      ...
+  - pattern-not-inside: |
+      $CMD = "...";
+      ...
+  message: |
+    Detected non-static command inside Command. Audit the input to 'exec.Command'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+  severity: WARNING
+  languages: [go]

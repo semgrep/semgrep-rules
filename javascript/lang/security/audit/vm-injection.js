@@ -122,3 +122,18 @@ function okTest6(userInput) {
 
     script.runInThisContext();
 }
+
+async function test6(userInput) {
+    const contextifiedObject = vm.createContext({ secret: 42 });
+
+    // ruleid: vm-sourcetextmodule-code-injection
+      const module = new vm.SourceTextModule(
+        `Object.getPrototypeOf(import.meta.prop).secret = ${userInput};`,
+        {
+          initializeImportMeta(meta) {
+            meta.prop = {};
+          }
+        });
+      await module.link(() => {});
+      await module.evaluate();
+}

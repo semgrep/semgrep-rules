@@ -70,3 +70,24 @@ def main_f():
 
     # ok:tempfile-without-flush
     print(fout.name)
+
+def main_g(language, rule, target_manager, rule):
+    with tempfile.NamedTemporaryFile(
+        "w", suffix=".yaml"
+    ) as rule_file, tempfile.NamedTemporaryFile("w") as target_file:
+        targets = self.get_files_for_language(language, rule, target_manager)
+        target_file.write("\n".join(map(lambda p: str(p), targets)))
+        target_file.flush()
+        yaml = YAML()
+        yaml.dump({"rules": [rule._raw]}, rule_file)
+        rule_file.flush()
+
+        cmd = [SEMGREP_PATH] + [
+            "-lang",
+            language,
+            "-fast",
+            "-json",
+            "-config",
+            # ok: tempfile-without-flush
+            rule_file.name
+        ]
