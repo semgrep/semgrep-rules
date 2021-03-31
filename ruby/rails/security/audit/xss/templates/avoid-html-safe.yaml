@@ -1,6 +1,11 @@
 rules:
 - id: avoid-html-safe
-  message: ''
+  message: |-
+    'html_safe' renders raw HTML. This means that normal
+    HTML escaping is bypassed. If user data can be controlled here, this
+    exposes your application to cross-site scripting (XSS). If you need to
+    do this, be sure to correctly sanitize the data using a library such as
+    DOMPurify
   metadata:
     references:
     - https://medium.com/sumone-technical-blog/a-pretty-way-to-unescape-html-in-a-ruby-on-rails-application-efc22b850027
