@@ -1,13 +1,20 @@
 rules:
 - id: avoid-content-tag
-  message: ''
+  message: |
+    'content_tag' exhibits unintuitive escaping behavior and may accidentally
+    expose your application to cross-site scripting. If using Rails 2, only
+    attribute values are escaped. If using Rails 3, content and attribute values
+    are escaped. Tag and attribute names are never escaped. Because of this,
+    it is recommended to use 'html_safe' if you must render raw HTML data.
   metadata:
+    source-rule-url: https://brakemanscanner.org/docs/warning_types/content_tag/
     references:
-    - https://medium.com/sumone-technical-blog/a-pretty-way-to-unescape-html-in-a-ruby-on-rails-application-efc22b850027
-    - https://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html#:~:text===
-  languages: [none]
+    - https://brakemanscanner.org/docs/warning_types/content_tag/
+  languages: [generic]
   paths:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <%=.*?content_tag.*?%>
+  patterns:
+  - pattern-inside: <%= ... %>
+  - pattern: content_tag

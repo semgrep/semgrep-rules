@@ -11,12 +11,16 @@ rules:
     - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#unquoted-attributes
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
   languages:
-  - none
+  - generic
   paths:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <[^<>]*=[^'"<>]*<%=.*?%>(\s+|>).*
+  patterns:
+  - pattern-inside: <$TAG ...>
+  - pattern-not-inside: ="..."
+  - pattern-not-inside: ='...'
+  - pattern: <%= ... %>
   fix-regex:
     regex: <%=(.*?)%>
     replacement: '"<%=\1%>"'
