@@ -2,7 +2,7 @@ rules:
 - id: seam-log-injection
   patterns:
   - pattern: |
-      $LOG.$INFO($X + $Y)
+      $LOG.$INFO($X + $Y,...)
   - pattern-either:
     - pattern-inside: |
         import org.jboss.seam.log.Log;
