@@ -24,12 +24,46 @@ func test1(userInput string) {
 
 func test2(userInput string) {
 
-    cmdPath,_ := exec.LookPath("bash");
+    cmdPath,_ := exec.LookPath("foo");
 
     // ruleid:dangerous-exec-cmd
     cmd := &exec.Cmd {
         Path: cmdPath,
         Args: []string{ userInput, "bar" },
+        Stdout: os.Stdout,
+        Stderr: os.Stdout,
+    }
+
+    cmd.Start();
+
+}
+
+func test3(userInput string) {
+
+    cmdPath,_ := exec.LookPath("bash");
+
+    // ruleid:dangerous-exec-cmd
+    cmd := &exec.Cmd {
+        Path: cmdPath,
+        Args: []string{ cmdPath, "-c", userInput },
+        Stdout: os.Stdout,
+        Stderr: os.Stdout,
+    }
+
+    cmd.Start();
+
+}
+
+func test4(userInput string) {
+
+    cmdPath,_ := exec.LookPath("bash");
+
+    args = []string{ cmdPath, "-c", userInput }
+
+    // ruleid:dangerous-exec-cmd
+    cmd := &exec.Cmd {
+        Path: cmdPath,
+        Args: args,
         Stdout: os.Stdout,
         Stderr: os.Stdout,
     }

@@ -23,7 +23,7 @@ func test1(userInput string) {
 }
 
 
-func test1(userInput string) {
+func test2(userInput string) {
 
     binary, lookErr := exec.LookPath("sh")
     if lookErr != nil {
@@ -40,6 +40,25 @@ func test1(userInput string) {
         panic(execErr)
     }
 }
+
+func test3(userInput string) {
+
+    binary, lookErr := exec.LookPath("sh")
+    if lookErr != nil {
+        panic(lookErr)
+    }
+
+    args := []string{binary, "-c", userInput}
+
+    env := os.Environ()
+
+    // ruleid:dangerous-syscall-exec
+    execErr := syscall.Exec(binary, args, env)
+    if execErr != nil {
+        panic(execErr)
+    }
+}
+
 
 
 func okTest1(userInput string) {

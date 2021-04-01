@@ -2,14 +2,26 @@ rules:
 - id: dangerous-exec-command
   patterns:
   - pattern-either:
-    - pattern: |
-        exec.Command($CMD,...)
-    - pattern: |
-        exec.CommandContext($CTX,$CMD,...)
-  - pattern-not: |
-      exec.Command("...",...)
-  - pattern-not: |
-      exec.CommandContext($CTX,"...",...)
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            exec.Command($CMD,...)
+        - pattern: |
+            exec.CommandContext($CTX,$CMD,...)
+      - pattern-not: |
+          exec.Command("...",...)
+      - pattern-not: |
+          exec.CommandContext($CTX,"...",...)
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            exec.Command("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$CMD,...)
+        - pattern: |
+            exec.CommandContext($CTX,"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$CMD,...)
+      - pattern-not: |
+          exec.Command("...","...","...",...)
+      - pattern-not: |
+          exec.CommandContext($CTX,"...","...","...",...)
   - pattern-inside: |
       import "os/exec"
       ...
