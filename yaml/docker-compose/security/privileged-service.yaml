@@ -1,0 +1,21 @@
+rules:
+- id: privileged-service
+  patterns:
+  - pattern-inside: |
+      services:
+        ...
+  - pattern: |
+      $SERVICE:
+        ...
+        privileged: true
+  message: |
+    Service '$SERVICE' is running in privileged mode. This grants the
+    container the equivalent of root capabilities on the host machine. This
+    can lead to container escapes, privilege escalation, and other security
+    concerns. Remove the 'privileged' key to disable this capability.
+  metadata:
+    references:
+    - https://www.trendmicro.com/en_us/research/19/l/why-running-a-privileged-container-in-docker-is-a-bad-idea.html
+    - https://containerjournal.com/topics/container-security/why-running-a-privileged-container-is-not-a-good-idea/
+  languages: [yaml]
+  severity: WARNING
