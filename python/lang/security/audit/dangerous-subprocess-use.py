@@ -31,3 +31,6 @@ subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True, cwd="/home/user"
 
 # ruleid:dangerous-subprocess-use
 subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True)
+
+# ruleid:dangerous-subprocess-use
+subprocess.run(["bash", "-c", sys.argv[1]], shell=True)
