@@ -8,6 +8,9 @@ rules:
     - pattern-not: subprocess.SubprocessError(...)
     - pattern: subprocess.$FUNC(...)
   - patterns:
+    - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
+    - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
+  - patterns:
     - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
     - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
   message: |
