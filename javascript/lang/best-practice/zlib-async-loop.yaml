@@ -1,10 +1,27 @@
 rules:
 - id: zlib-async-loop
   patterns:
-  - pattern-inside: |
-      for (...) {
-          ...
-      }
+  - pattern-either:
+    - pattern-inside: |
+        for (...) {
+            ...
+        }
+    - pattern-inside: |
+        while (...) {
+            ...
+        }
+    - pattern-inside: |
+        do {
+            ...
+        } while (...)
+    - pattern-inside: |
+        $SMTH.forEach(...)
+    - pattern-inside: |
+        $SMTH.map(...)
+    - pattern-inside: |
+        $SMTH.reduce(...)
+    - pattern-inside: |
+        $SMTH.reduceRight(...)
   - pattern: zlib.$METHOD(...);
   - metavariable-regex:
       metavariable: $METHOD
