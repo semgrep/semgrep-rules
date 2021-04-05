@@ -4,6 +4,11 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE
+    asvs:
+      section: "V6 Stored Cryptography Verification Requirements"
+      control_id: "6.2.5 Insecure Algorithm"
+      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms"
+      version: "4"
   message: |
     Using less than 128 bits for Blowfish is considered insecure. Use 128 bits
     or more, or switch to use AES instead.

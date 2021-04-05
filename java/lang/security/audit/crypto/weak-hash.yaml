@@ -10,6 +10,11 @@ rules:
     owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_SHA1
+    asvs:
+      section: "V6 Stored Cryptography Verification Requirements"
+      control_id: "6.2.5 Insecure Algorithm"
+      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms"
+      version: "4"
   pattern-either:
   - pattern: |
       MessageDigest $VAR = $MD.getInstance("SHA1");
@@ -26,6 +31,10 @@ rules:
     owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_MD5
+    asvs:
+      section: "V6 Stored Cryptography Verification Requirements"
+      control_id: "6.2.5 Insecure Algorithm"
+      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms"
   pattern-either:
   - pattern: |
       MessageDigest $VAR = $MD.getInstance("MD5");
