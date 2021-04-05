@@ -20,7 +20,7 @@ func() {
 func() {
     values := []string{"a", "b", "c"}
     var funcs []func()
-    // ok
+    // ok:exported_loop_pointer
     for _, val := range values {
         val := val // pin!
         funcs = append(funcs, func() {
