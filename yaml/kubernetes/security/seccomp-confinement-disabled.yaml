@@ -1,0 +1,22 @@
+rules:
+- id: seccomp-confinement-disabled
+  patterns:
+  - pattern-inside: |
+      containers:
+        ...
+  - pattern: |
+      image: ...
+      ...
+      securityContext:
+        ...
+        seccompProfile: unconfined
+  message: |
+    Container is explicitly disabling seccomp confinement. This runs the
+    service in an unrestricted state. Remove 'seccompProfile: unconfined' to
+    prevent this.
+  metadata:
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  languages: [yaml]
+  severity: WARNING

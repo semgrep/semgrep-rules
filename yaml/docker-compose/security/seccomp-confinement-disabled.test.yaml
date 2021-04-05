@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  # ok: seccomp-confinement-disabled
+  web:
+    image: nginx:alpine
+  # ok: seccomp-confinement-disabled
+  worker:
+    image: my-worker-image:latest
+    security_opt:
+    - label:user:testuser
+  # ruleid: seccomp-confinement-disabled
+  db:
+    image: mysql
+    security_opt:
+    - seccomp:unconfined

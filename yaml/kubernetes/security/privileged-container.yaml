@@ -1,0 +1,34 @@
+rules:
+- id: privileged-container
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        containers:
+          ...
+    - pattern: |
+        image: ...
+        ...
+        securityContext:
+          ...
+          privileged: true
+  - patterns:
+    - pattern-inside: |
+        spec:
+          ...
+    - pattern-not-inside: |
+        image: ...
+        ...
+    - pattern: |
+        privileged: true
+  message: |
+    Container or pod is running in privileged mode. This grants the
+    container the equivalent of root capabilities on the host machine. This
+    can lead to container escapes, privilege escalation, and other security
+    concerns. Remove the 'privileged' key to disable this capability.
+  metadata:
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#privileged
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+  languages: [yaml]
+  severity: WARNING
