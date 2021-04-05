@@ -3,28 +3,29 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-not: os.$W("...", ...)
-      - pattern-either:
-        - pattern: os.execl(...)
-        - pattern: os.execle(...)
-        - pattern: os.execlp(...)
-        - pattern: os.execlpe(...)
-        - pattern: os.execv(...)
-        - pattern: os.execve(...)
-        - pattern: os.execvp(...)
-        - pattern: os.execvpe(...)
-        - pattern: os.startfile(...)
+      - pattern-not: os.$METHOD("...", ...)
+      - pattern: os.$METHOD(...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (execl|execle|execlp|execlpe|execv|execve|execvp|execvpe|startfile)
     - patterns:
-      - pattern-not: os.$W($MODE, "...", ...)
-      - pattern-either:
-        - pattern: os.spawnl(...)
-        - pattern: os.spawnle(...)
-        - pattern: os.spawnlp(...)
-        - pattern: os.spawnlpe(...)
-        - pattern: os.spawnv(...)
-        - pattern: os.spawnve(...)
-        - pattern: os.spawnvp(...)
-        - pattern: os.spawnvpe(...)
+      - pattern-not: os.$METHOD("...", ["...","...",...],...)
+      - pattern: os.$METHOD("=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (execl|execle|execlp|execlpe|execv|execve|execvp|execvpe|startfile)
+    - patterns:
+      - pattern-not: os.$METHOD($MODE, "...", ...)
+      - pattern: os.$METHOD(...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
+    - patterns:
+      - pattern-not: os.$METHOD($MODE, "...", ["...","...",...], ...)
+      - pattern: os.$METHOD($MODE,"=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
   message: |
     Found dynamic content when spawning a process. This is dangerous if external
     data can reach this function call because it allows a malicious actor to

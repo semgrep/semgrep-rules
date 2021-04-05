@@ -21,6 +21,9 @@ from somewhere import something
 os.execl(something())
 
 # ruleid:dangerous-spawn-process
+os.execv('/bin/bash', ['-c', something()])
+
+# ruleid:dangerous-spawn-process
 os.spawnlp(os.P_WAIT, something())
 
 # ruleid:dangerous-spawn-process
@@ -31,3 +34,6 @@ os.spawnv(os.P_WAIT, something())
 
 # ruleid:dangerous-spawn-process
 os.spawnve(os.P_WAIT, something(), ["-a"], os.environ)
+
+# ruleid:dangerous-spawn-process
+os.spawnve(os.P_WAIT, "/bin/bash", ["-c", something()], os.environ)
