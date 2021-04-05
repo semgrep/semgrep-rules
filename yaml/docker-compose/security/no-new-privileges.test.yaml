@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  # ruleid: no-new-privileges
+  web:
+    image: nginx:alpine
+  # ruleid: no-new-privileges
+  worker:
+    image: my-worker-image:latest
+    security_opt:
+    - label:user:testuser
+  # ok: no-new-privileges
+  db:
+    image: mysql
+    security_opt:
+    - no-new-privileges:true

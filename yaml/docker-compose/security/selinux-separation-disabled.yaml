@@ -1,0 +1,23 @@
+rules:
+- id: selinux-separation-disabled
+  patterns:
+  - pattern-inside: |
+      services:
+        ...
+  - pattern: |
+      $SERVICE:
+        ...
+        image: ...
+        ...
+        security_opt:
+          - ...
+          - label:disable
+  message: |
+    Service '$SERVICE' is explicitly disabling SELinux separation. This runs the
+    service as an unconfined type. Remove 'label:disable' to prevent this.
+  metadata:
+    references:
+    - https://www.projectatomic.io/blog/2016/03/dwalsh_selinux_containers/
+    - https://docs.docker.com/engine/reference/run/#security-configuration
+  languages: [yaml]
+  severity: WARNING

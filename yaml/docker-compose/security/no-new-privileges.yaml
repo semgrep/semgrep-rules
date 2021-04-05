@@ -1,0 +1,28 @@
+rules:
+- id: no-new-privileges
+  patterns:
+  - pattern-inside: |
+      services:
+        ...
+  - pattern: |
+      $SERVICE:
+        ...
+        image: ...
+  - pattern-not: |
+      $SERVICE:
+        ...
+        image: ...
+        ...
+        security_opt:
+          - ...
+          - no-new-privileges:true
+  message: |
+    Service '$SERVICE' allows for privilege escalation via setuid or setgid
+    binaries. Add 'no-new-privileges:true' in 'security_opt' to prevent this.
+  metadata:
+    references:
+    - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
+    - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
+  languages: [yaml]
+  severity: WARNING
