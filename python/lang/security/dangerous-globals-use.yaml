@@ -1,0 +1,38 @@
+rules:
+- id: dangerous-globals-use
+  patterns:
+  - pattern-either:
+    - pattern: globals().get(...)
+    - pattern: locals().get(...)
+    - pattern: globals()[...]
+    - pattern: locals()[...]
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $G = globals()
+            ...
+        - pattern-inside: |
+            $G = locals()
+            ...
+      - pattern-either:
+        - pattern: $G.get(...)
+        - pattern: $G[...]
+    - pattern: $FUNC.__globals__[...]
+  - pattern-not: globals().get("...")
+  - pattern-not: locals().get("...")
+  - pattern-not: globals()["..."]
+  - pattern-not: locals()["..."]
+  - pattern-not: $G.get("...")
+  - pattern-not: $G.get["..."]
+  - pattern-not: $FUNC.__globals__["..."]
+  message: |
+    Found non static data as an index to 'globals()'. This is extremely
+    dangerous because it allows an attacker to execute arbitrary code
+    on the system. Refactor your code not to use 'globals()'.
+  metadata:
+    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://github.com/mpirnat/lets-be-bad-guys/blob/d92768fb3ade32956abd53bd6bb06e19d634a084/badguys/vulnerable/views.py#L181-L186
+  severity: WARNING
+  languages: [python]
