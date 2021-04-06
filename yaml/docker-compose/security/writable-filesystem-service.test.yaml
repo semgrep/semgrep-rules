@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  # ruleid: writable-filesystem-service
+  web:
+    image: nginx:alpine
+  # ruleid: writable-filesystem-service
+  worker:
+    image: my-worker-image:latest
+    read_only: false
+  # ok: writable-filesystem-service
+  db:
+    image: mysql
+    read_only: true

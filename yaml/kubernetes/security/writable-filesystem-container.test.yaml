@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  # ruleid: writable-filesystem-container
+  - name: nginx
+    image: nginx
+  # ruleid: writable-filesystem-container
+  - name: postgres
+    image: postgres
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      fsGroup: 2000
+  # ruleid: writable-filesystem-container
+  - name: redis
+    image: redis
+    securityContext:
+      readOnlyRootFilesystem: false
+  # ok: writable-filesystem-container
+  - name: haproxy
+    image: haproxy
+    securityContext:
+      readOnlyRootFilesystem: true

@@ -1,0 +1,24 @@
+rules:
+- id: exposing-docker-socket-hostpath
+  patterns:
+  - pattern-inside: |
+      volumes:
+        ...
+  - pattern: |
+      hostPath:
+        ...
+        path: /var/run/docker.sock
+  message: |
+    Container is running with a writable root filesystem. This may
+    allow malicious applications to download and run additional payloads, or
+    modify container files. If an application inside a container has to save
+    something temporarily consider using a tmpfs. Add 'readOnlyRootFilesystem: true'
+    to this container to prevent this.
+  metadata:
+    references:
+    - https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#volumes-and-file-systems
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-1-do-not-expose-the-docker-daemon-socket-even-to-the-containers
+  languages: [yaml]
+  severity: WARNING
