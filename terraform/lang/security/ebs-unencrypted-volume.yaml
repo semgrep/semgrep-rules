@@ -1,18 +1,16 @@
 rules:
 - id: unencrypted-ebs-volume
-  patterns:
-    - pattern-either:
-      - pattern: |
-          {...}
-    - pattern-not-inside: |
-        resource "aws_ebs_volume" "..." {... encrypted=true ...}
-    - pattern-inside: |
-        resource "aws_ebs_volume" "..." {...}
   languages:
-    - generic
+  - generic
+  message: |
+    An EBS volume is configured without encryption enabled.
   paths:
     include:
     - '*.tf'
-  message: |
-    An EBS volume is configured without encryption enabled.
+  patterns:
+  - pattern: resource "aws_ebs_volume" "..."
+  - pattern-not-inside: |
+      resource "aws_ebs_volume" "..." {... encrypted=true ...}
+  - pattern-inside: |
+      resource "aws_ebs_volume" "..." {...}
   severity: WARNING
