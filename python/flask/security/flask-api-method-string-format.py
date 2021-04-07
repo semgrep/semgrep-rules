@@ -5,7 +5,7 @@ class FOO(resource):
     # ok:flask-api-method-string-format
     def get(self, somearg):
         createRecord(somearg)
-        
+
     # ruleid:flask-api-method-string-format
     def get(self, arg1):
         print("foo")
