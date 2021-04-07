@@ -1,0 +1,23 @@
+rules:
+- id: flask-api-method-string-format
+  patterns:
+  - pattern-either:
+    - pattern: |
+        def $METHOD(...,$ARG,...):
+          ...
+          $STRING = "...".format(...,$ARG,...)
+          ...
+          ... = requests.$REQMETHOD($STRING,...)
+    - pattern: |
+        def $METHOD(...,$ARG,...):
+          ...
+          ... = requests.$REQMETHOD("...".format(...,$ARG,...),...)
+  - pattern-inside: |
+      class $CLASS(...):
+        method_decorators = ...
+        ...
+  message: |
+    Method $METHOD in API controller $CLASS provides user arg $ARG to requests method $REQMETHOD
+  severity: ERROR
+  languages:
+  - python
