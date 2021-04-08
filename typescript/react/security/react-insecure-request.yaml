@@ -7,29 +7,42 @@ rules:
         - pattern-inside: |
             import $AXIOS from 'axios';
             ...
+            $AXIOS.$METHOD(...)
         - pattern-inside: |
             $AXIOS = require('axios');
             ...
+            $AXIOS.$METHOD(...)
       - pattern-either:
-        - pattern: $AXIOS.$METHOD($URL,...)
-        - pattern: |
-            $VAR = $URL;
+        - pattern: $AXIOS.get("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.post("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.delete("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.head("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.patch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.put("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+        - pattern: $AXIOS.options("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import $AXIOS from 'axios';
             ...
-            $AXIOS.$METHOD($VAR,...);
-        - pattern: |
-            $AXIOS({url: $URL},...)
-        - pattern: |
-            $VAR = {url: $URL};
+            $AXIOS(...)
+        - pattern-inside: |
+            $AXIOS = require('axios');
             ...
-            $AXIOS($VAR,...);
-    - pattern: fetch($URL,...)
-    - pattern: |
-        $VAR = $URL;
-        ...
-        fetch($VAR,...);
-  - metavariable-regex:
-      metavariable: $URL
-      regex: "[\"'](http://).*['\"]"
+            $AXIOS(...)
+      - pattern-either:
+        - pattern: '$AXIOS({url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}, ...)'
+        - pattern: |
+            $OPTS = {url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}
+            ...
+            $AXIOS($OPTS, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: fetch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+        - pattern: |
+            $VAR = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
+            ...
+            fetch($VAR, ...)
   message: |
     Unencrypted request over HTTP detected.
   metadata:
