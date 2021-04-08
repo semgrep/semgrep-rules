@@ -27,6 +27,10 @@ jobs:
       shell: bash
       run: |
         echo "::set-output name=today::$(date +'%Y-%m-%d')"
+    - name: Display Semgrep version
+      shell: bash
+      run: |
+        pipenv run semgrep --version
     - name: Run benchmarks
       shell: bash
       run: |
