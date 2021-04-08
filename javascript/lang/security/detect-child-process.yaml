@@ -8,23 +8,16 @@ rules:
     Detected non-literal calls to $EXEC(). This could lead to a command
     injection vulnerability.
   patterns:
-  - pattern: |
-      $EXEC($CMD,...)
-  - pattern-not: |
-      $EXEC("...",...)
+  - pattern-either:
+    - pattern: exec($CMD,...)
+    - pattern: execSync($CMD,...)
+    - pattern: spawn($CMD,...)
+    - pattern: spawnSync($CMD,...)
+  - pattern-not-inside: $EXEC("...",...)
   - pattern-not-inside: |
       $CMD = "..."
       ...
-  - pattern-either:
-    - pattern-inside: |
-        require('child_process')
-        ...
-    - pattern-inside: |
-        import 'child_process'
-        ...
-  - metavariable-regex:
-      metavariable: $EXEC
-      regex: (.*)(exec|spawn|spawnSync|execSync)
+      $EXEC($CMD, ...)
   severity: WARNING
   languages:
   - javascript
