@@ -3,7 +3,7 @@ const { exec, spawn } = require('child_process');
 
 
 router.post('/ping', (req, res) => {
-    // ruleid:generic_os_command_exec2
+    // ruleid:generic_os_command_exec
     exec(`${req.body.url}`, (error) => {
         if (error) {
             return res.send('error');
@@ -14,7 +14,7 @@ router.post('/ping', (req, res) => {
 })
 
 router.post('/gzip', (req, res) => {
-    // ruleid:generic_os_command_exec2
+    // ruleid:generic_os_command_exec
     exec(
         'gzip ' + req.query.file_path,
         function (err, data) {
