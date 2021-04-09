@@ -1,4 +1,6 @@
-
+// semgrep >= 0.47 transform require() in import and correctly
+// handles aliasing, so you just need to use the pattern
+// child_process.exec(...) and it will find all its variations
 const { exec, spawn } = require('child_process');
 
 
