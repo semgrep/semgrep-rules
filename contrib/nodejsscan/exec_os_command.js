@@ -1,9 +1,11 @@
-
+// semgrep >= 0.47 transform require() in import and correctly
+// handles aliasing, so you just need to use the pattern
+// child_process.exec(...) and it will find all its variations
 const { exec, spawn } = require('child_process');
 
 
 router.post('/ping', (req, res) => {
-    // ruleid:generic_os_command_exec2
+    // ruleid:generic_os_command_exec
     exec(`${req.body.url}`, (error) => {
         if (error) {
             return res.send('error');
@@ -14,7 +16,7 @@ router.post('/ping', (req, res) => {
 })
 
 router.post('/gzip', (req, res) => {
-    // ruleid:generic_os_command_exec2
+    // ruleid:generic_os_command_exec
     exec(
         'gzip ' + req.query.file_path,
         function (err, data) {
