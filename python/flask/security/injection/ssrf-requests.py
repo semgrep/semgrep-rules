@@ -9,11 +9,23 @@ def route_param(route_param):
     # ruleid: ssrf-requests
     return requests.get(route_param)
 
+@app.route("/route_param_ok/<route_param>")
+def route_param_ok(route_param):
+    print("blah")
+    # ok: ssrf-requests
+    return requests.get("this is safe")
+
 @app.route("/get_param", methods=["GET"])
 def get_param():
     param = flask.request.args.get("param")
     # ruleid: ssrf-requests
     requests.post(param, timeout=10)
+
+@app.route("/get_param_ok", methods=["GET"])
+def get_param_ok():
+    param = flask.request.args.get("param")
+    # ok: ssrf-requests
+    requests.post("this is safe", timeout=10)
 
 @app.route("/get_param_inline_concat", methods=["GET"])
 def get_param_inline_concat():

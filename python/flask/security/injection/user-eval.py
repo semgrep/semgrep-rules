@@ -8,11 +8,23 @@ def route_param(route_param):
     # ruleid: eval-injection
     return eval(route_param)
 
+@app.route("/route_param/<route_param>")
+def route_param(route_param):
+    print("blah")
+    # ok: eval-injection
+    return eval("this is safe")
+
 @app.route("/get_param", methods=["GET"])
 def get_param():
     param = flask.request.args.get("param")
     # ruleid: eval-injection
     eval(param)
+
+@app.route("/get_param", methods=["GET"])
+def get_param():
+    param = flask.request.args.get("param")
+    # ok: eval-injection
+    eval("this is safe")
 
 @app.route("/get_param_inline_concat", methods=["GET"])
 def get_param_inline_concat():

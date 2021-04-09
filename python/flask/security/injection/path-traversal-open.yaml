@@ -14,16 +14,26 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-inside: |
-          @$APP.route($ROUTE, ...)
-          def $FUNC(..., $ROUTEVAR, ...):
-            ...
+      - pattern: open(...)
       - pattern-either:
-        - pattern: open(..., <... $ROUTEVAR ...>, ...)
-        - pattern: |
-            $INTERM = <... $ROUTEVAR ...>
-            ...
-            open(..., <... $INTERM ...>, ...)
+        - pattern-inside: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+              open(..., <... $ROUTEVAR ...>, ...)
+        - pattern-inside: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+              with open(..., <... $ROUTEVAR ...>, ...) as $FD:
+                ...
+        - pattern-inside: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+              $INTERM = <... $ROUTEVAR ...>
+              ...
+              open(..., <... $INTERM ...>, ...)
     - patterns:
       - pattern-either:
         - pattern: open(..., <... flask.request.$W.get(...) ...>, ...)
