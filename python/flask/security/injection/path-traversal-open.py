@@ -9,11 +9,24 @@ def route_param(route_param):
     # ruleid: path-traversal-open
     return open(route_param, 'r').read()
 
+@app.route("/route_param_ok/<route_param>")
+def route_param_ok(route_param):
+    print("blah")
+    # ok: path-traversal-open
+    return open("this is safe", 'r').read()
+
 @app.route("/route_param_with/<route_param>")
 def route_param_with(route_param):
     print("blah")
     # ruleid: path-traversal-open
     with open(route_param, 'r') as fout:
+        return fout.read()
+
+@app.route("/route_param_with_ok/<route_param>")
+def route_param_with_ok(route_param):
+    print("blah")
+    # ok: path-traversal-open
+    with open("this is safe", 'r') as fout:
         return fout.read()
 
 @app.route("/route_param_with_concat/<route_param>")

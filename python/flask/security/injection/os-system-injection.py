@@ -10,6 +10,12 @@ def route_param(route_param):
     # ruleid: os-system-injection
     return os.system(route_param)
 
+@app.route("/route_param_ok/<route_param>")
+def route_param_ok(route_param):
+    print("blah")
+    # ok: os-system-injection
+    return os.system("ls -la")
+
 @app.route("/route_param_concat/<route_param>")
 def route_param_concat(route_param):
     print("blah")

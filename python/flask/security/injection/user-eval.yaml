@@ -12,16 +12,20 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-inside: |
-          @$APP.route($ROUTE, ...)
-          def $FUNC(..., $ROUTEVAR, ...):
-            ...
+      - pattern: eval(...)
       - pattern-either:
-        - pattern: eval(..., <... $ROUTEVAR ...>, ...)
-        - pattern: |
-            $INTERM = <... $ROUTEVAR ...>
-            ...
-            eval(..., <... $INTERM ...>, ...)
+        - pattern-inside: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+              eval(..., <... $ROUTEVAR ...>, ...)
+        - pattern-inside: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+              $INTERM = <... $ROUTEVAR ...>
+              ...
+              eval(..., <... $INTERM ...>, ...)
     - patterns:
       - pattern-either:
         - pattern: eval(..., <... flask.request.$W.get(...) ...>, ...)
