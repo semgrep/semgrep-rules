@@ -15,7 +15,7 @@ func bad1() {
         Database: "db_name",
     })
     query = "SELECT name FROM users WHERE age=" + req.FormValue("age")
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err := db.Model(book).
         Where("id > ?", 100).
         WhereOr(query).
@@ -27,7 +27,7 @@ func bad2() {
     db := pg.Connect(opt)
     query = fmt.Sprintf("SELECT * FROM users WHERE email='%s';", email)
     story := new(Story)
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err = db.Model(story).
         Relation("Author").
         From("Hello").
@@ -48,7 +48,7 @@ func bad3() {
 
     query = "SELECT name FROM users WHERE age="
     query += req.FormValue("age")
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err := db.Model(book).
     Where(query).
     WhereGroup(func(q *pg.Query) (*pg.Query, error) {
@@ -62,7 +62,7 @@ func bad3() {
 
 func bad4(db *pg.DB) {
     query = fmt.Sprintf("SELECT * FROM users WHERE email='%s';", email)
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err := db.Model((*Book)(nil)).
     Column("author_id").
     ColumnExpr(query).
@@ -72,7 +72,7 @@ func bad4(db *pg.DB) {
 }
 
 func bad5(db *pg.DB) {
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err = db.Model((*Book)(nil)).
     Column("title", "text").
     Where("SELECT name FROM users WHERE age=" + req.FormValue("age")).
@@ -80,7 +80,7 @@ func bad5(db *pg.DB) {
 }
 
 func bad6(db *pg.DB) {
-    // ruleid: pg-sqli
+    // ruleid: pg-orm-sqli
     err = db.Model((*Book)(nil)).
     Column("title", "text").
     Where(fmt.Sprintf("SELECT * FROM users WHERE email='%s';",    email)).
@@ -89,7 +89,7 @@ func bad6(db *pg.DB) {
 
 func ok1(db *pg.DB) {
     query = fmt.Sprintf("SELECT * FROM users WHERE email=hello;")
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err = db.Model((*Book)(nil)).
     Column("title", "text").
     Where(query).
@@ -98,7 +98,7 @@ func ok1(db *pg.DB) {
 
 func ok2(db *pg.DB) {
     query = "SELECT name FROM users WHERE age=" + "3"
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err = db.Model((*Book)(nil)).
     Column("title", "text").
     ColumnExpr(query).
@@ -108,7 +108,7 @@ func ok2(db *pg.DB) {
 func ok3(db *pg.DB) {
     query = "SELECT name FROM users WHERE age="
     query += "3"
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err = db.Model((*Book)(nil)).
     Column("title", "text").
     Where(query).
@@ -116,7 +116,7 @@ func ok3(db *pg.DB) {
 }
 
 func ok4(db *pg.DB) {
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err := db.Model((*Book)(nil)).
     Column("title", "text").
     Where("id = ?", 1).
@@ -124,7 +124,7 @@ func ok4(db *pg.DB) {
 }
 
 func ok5(db *pg.DB) {
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err := db.Model((*Book)(nil)).
     Column("title", "text").
     Where("SELECT name FROM users WHERE age=" + "3").
@@ -132,7 +132,7 @@ func ok5(db *pg.DB) {
 }
 
 func ok6(db *pg.DB) {
-    // ok: pg-sqli
+    // ok: pg-orm-sqli
     err := db.Model().
     ColumnExpr(fmt.Sprintf("SELECT * FROM users WHERE email=hello;"))
 }
