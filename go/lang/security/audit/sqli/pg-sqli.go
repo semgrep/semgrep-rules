@@ -42,7 +42,7 @@ func bad3() {
     query = "SELECT name FROM users WHERE age="
     query += req.FormValue("age")
     // ruleid: pg-sqli
-    db.QueryRow(ctx, query)
+    db.QueryContext(ctx, query)
 }
 
 func bad4(db *pg.DB) {
@@ -88,7 +88,7 @@ func ok4(db *pg.DB) {
 
 func ok5(db *pg.DB) {
     // ok: pg-sqli
-    db.Exec(ctx, "SELECT name FROM users WHERE age=" + "3")
+    db.Exec("SELECT name FROM users WHERE age=" + "3")
 }
 
 func ok6(db *pg.DB) {
