@@ -1,4 +1,4 @@
-ipackage main
+package main
 
 import "database/sql"
 import "fmt"
