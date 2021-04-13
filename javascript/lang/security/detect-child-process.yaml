@@ -14,10 +14,13 @@ rules:
     - pattern: spawn($CMD,...)
     - pattern: spawnSync($CMD,...)
   - pattern-not-inside: $EXEC("...",...)
+  - pattern-not-inside: $EXEC(["...",...],...)
   - pattern-not-inside: |
       $CMD = "..."
       ...
-      $EXEC($CMD, ...)
+  - pattern-not-inside: |
+      $CMD = ["...",...]
+      ...
   severity: WARNING
   languages:
   - javascript

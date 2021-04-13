@@ -9,6 +9,11 @@ rules:
     injection vulnerability.
   patterns:
   - pattern-either:
+    - pattern: spawn(...)
+    - pattern: spawnSync(...)
+    - pattern: $CP.spawn(...)
+    - pattern: $CP.spawnSync(...)
+  - pattern-either:
     - patterns:
       - pattern-either:
         - pattern: |
@@ -41,9 +46,6 @@ rules:
     - pattern-inside: |
         import 'child_process'
         ...
-  - metavariable-regex:
-      metavariable: $EXEC
-      regex: (.*)(spawn|spawnSync)
   severity: WARNING
   languages:
   - javascript

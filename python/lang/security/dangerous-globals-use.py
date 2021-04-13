@@ -49,3 +49,23 @@ def okTest():
 
     env = {'fwd': forward}
     return render(request, 'vulnerable/redirects/forward_failed.html', env)
+
+def okTest():
+    # ok: dangerous-globals-use
+    function = locals().get("test3")
+
+    if function:
+        return function(request)
+
+    env = {'fwd': forward}
+    return render(request, 'vulnerable/redirects/forward_failed.html', env)
+
+def okTest2(data):
+    # ok: dangerous-globals-use
+    list_of_globals = globals()
+    list_of_globals["foobar"].update(data)
+
+def okTest3(data):
+    # ok: dangerous-globals-use
+    NS = globals()
+    NS['_foobar_' + data] = smth(data)
