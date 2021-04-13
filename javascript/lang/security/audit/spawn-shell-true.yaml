@@ -1,13 +1,23 @@
 rules:
 - id: spawn-shell-true
   patterns:
-  - pattern: |
-      $SPAWN(...,{shell: $SHELL})
+  - pattern-either:
+    - pattern: |
+        spawn(...,{shell: $SHELL})
+    - pattern: |
+        spawnSync(...,{shell: $SHELL})
+    - pattern: |
+        $CP.spawn(...,{shell: $SHELL})
+    - pattern: |
+        $CP.spawnSync(...,{shell: $SHELL})
   - pattern-not: |
-      $SPAWN(...,{shell: false})
-  - metavariable-regex:
-      metavariable: $SPAWN
-      regex: (.*)(spawn|spawnSync)
+      spawn(...,{shell: false})
+  - pattern-not: |
+      spawnSync(...,{shell: false})
+  - pattern-not: |
+      $CP.spawn(...,{shell: false})
+  - pattern-not: |
+      $CP.spawnSync(...,{shell: false})
   message: |
     Found '$SPAWN' with '{shell: $SHELL}'. This is dangerous because this call will spawn
     the command using a shell process. Doing so propagates current shell settings and variables, which
