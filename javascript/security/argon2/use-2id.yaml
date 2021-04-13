@@ -1,0 +1,25 @@
+rules:
+- id: unsafe-argon2-config
+  patterns:
+  - pattern-inside: $ARGON = require('argon2'); ...
+  - pattern-either:
+    - pattern: |
+        $CONFIG = {type: $ARGON.argon2i, ...}
+        ...
+        $ARGON.hash(..., $CONFIG);
+    - pattern: |
+        $ARGON.hash(..., {type: $ARGON.argon2i, ...});
+    - pattern: |
+        $CONFIG = {type: $ARGON.argon2d, ...}
+        ...
+        $ARGON.hash(..., $CONFIG);
+    - pattern: |
+        $ARGON.hash(..., {type: $ARGON.argon2d, ...});
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+  message: |
+    Use argon2id for password hashing.
+  severity: WARNING
+  languages:
+  - js
