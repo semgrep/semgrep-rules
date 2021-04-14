@@ -1,0 +1,84 @@
+rules:
+- id: pg8000-sqli
+  languages:
+  - python
+  message: >
+    Detected string concatenation with a non-literal variable in a pg8000
+
+    Python SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+    and not properly sanitized. In order to prevent SQL injection,
+
+    used parameterized queries or prepared statements instead.
+
+    You can create parameterized queries like so:
+
+    'conn.run("SELECT :value FROM table", value=myvalue)'.
+
+    You can also create prepared statements with 'conn.prepare':
+
+    'conn.prepare("SELECT (:v) FROM table")'
+
+  metadata:
+    references:
+    - https://github.com/tlocke/pg8000
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $CONN.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = '...'.format(...)
+            ...
+        - pattern-inside: |
+            $QUERY = '...' % (...)
+            ...
+        - pattern-inside: |
+            $QUERY = f'...{$USERINPUT}...'
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...'.format()
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...' % ()
+          ...
+    - pattern: $CONN.$METHOD(..., $X + $Y, ...)
+    - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
+    - pattern: $CONN.$METHOD(..., '...' % (...), ...)
+    - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CONN = pg8000.native.Connection(...)
+        ...
+    - pattern-inside: |
+        $CONN = pg8000.dhapi.connect(...)
+        ...
+    - pattern-inside: |
+        $CONN1 = pg8000.connect(...)
+        ...
+        $CONN = $CONN1.cursor(...)
+        ...
+    - pattern-inside: |
+        $CONN = pg8000.connect(...)
+        ...
+  - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
+  - pattern-not: $CONN.$METHOD(..., '...'%(), ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(run|execute|executemany|prepare)$
+  severity: WARNING
