@@ -1,9 +1,13 @@
 rules:
 - id: exposing-docker-socket-volume
-  pattern: |
-    volumes:
-      - ...
-      - /var/run/docker.sock:/var/run/docker.sock
+  patterns:
+  - pattern-inside: |
+      version: ...
+      ...
+  - pattern: |
+      volumes:
+        - ...
+        - /var/run/docker.sock:/var/run/docker.sock
   message: |
     Exposing host's Docker socket to containers via a volume. The owner of this
     socket is root. Giving someone access to it is equivalent to giving
