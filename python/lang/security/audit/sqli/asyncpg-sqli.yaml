@@ -1,0 +1,87 @@
+rules:
+- id: asyncpg-sqli
+  languages:
+  - python
+  message: >
+    Detected string concatenation with a non-literal variable in a asyncpg
+
+    Python SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+    and not properly sanitized. In order to prevent SQL injection,
+
+    used parameterized queries or prepared statements instead.
+
+    You can create parameterized queries like so:
+
+    'conn.fetch("SELECT $1 FROM table", value)'.
+
+    You can also create prepared statements with 'Connection.prepare':
+
+    'stmt = conn.prepare("SELECT $1 FROM table")
+     await stmt.fetch(user_value)'
+
+  metadata:
+    references:
+    - https://github.com/MagicStack/asyncpg
+    - https://magicstack.github.io/asyncpg/current/
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $CONN.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = '...'.format(...)
+            ...
+        - pattern-inside: |
+            $QUERY = '...' % (...)
+            ...
+        - pattern-inside: |
+            $QUERY = f'...{$USERINPUT}...'
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...'.format()
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...' % ()
+          ...
+    - pattern: $CONN.$METHOD(..., $X + $Y, ...)
+    - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
+    - pattern: $CONN.$METHOD(..., '...' % (...), ...)
+    - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CONN = await asyncpg.connect(...)
+        ...
+    - pattern-inside: |
+        async with asyncpg.create_pool(...) as $CONN:
+            ...
+    - pattern-inside: |
+        async with $POOL.acquire(...) as $CONN:
+            ...
+    - pattern-inside: |
+        $CONN = await $POOL.acquire(...)
+        ...
+    - pattern-inside: |
+        def $FUNCNAME(..., $CONN: Connection, ...):
+            ...
+  - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
+  - pattern-not: $CONN.$METHOD(..., '...'%(), ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(fetch|fetchrow|fetchval|execute|executemany|prepare|cursor|copyfromquery)$
+  severity: WARNING
