@@ -1,0 +1,96 @@
+rules:
+- id: aiopg-sqli
+  languages:
+  - python
+  message: >
+    Detected string concatenation with a non-literal variable in an aiopg
+
+    Python SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+    and not properly sanitized. In order to prevent SQL injection,
+
+    use parameterized queries instead.
+
+    You can create parameterized queries like so:
+
+    'cur.execute("SELECT %s FROM table", (user_value,))'.
+
+  metadata:
+    references:
+    - https://github.com/aio-libs/aiopg
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $CUR.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = '...'.format(...)
+            ...
+        - pattern-inside: |
+            $QUERY = '...' % (...)
+            ...
+        - pattern-inside: |
+            $QUERY = f'...{$USERINPUT}...'
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...'.format()
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...' % ()
+          ...
+    - pattern: $CUR.$METHOD(..., $X + $Y, ...)
+    - pattern: $CUR.$METHOD(..., '...'.format(...), ...)
+    - pattern: $CUR.$METHOD(..., '...' % (...), ...)
+    - pattern: $CUR.$METHOD(..., f'...{$USERINPUT}...', ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CONN = await aiopg.connect(...)
+        ...
+        $CUR = await $CONN.cursor(...)
+        ...
+    - pattern-inside: |
+        $POOL = await aiopg.create_pool(...)
+        ...
+        async with $POOL.acquire(...) as $CONN:
+          ...
+          async with $CONN.cursor(...) as $CUR:
+            ...
+    - pattern-inside: |
+        $POOL = await aiopg.create_pool(...)
+        ...
+        with (await $POOL.cursor(...)) as $CUR:
+          ...
+    - pattern-inside: |
+        $POOL = await aiopg.create_pool(...)
+        ...
+        async with $POOL as $CONN:
+          ...
+          $CUR = await $CONN.cursor(...)
+          ...
+    - pattern-inside: |
+        $POOL = await aiopg.create_pool(...)
+        ...
+        async with $POOL.cursor(...) as $CUR:
+          ...
+
+  - pattern-not: $CUR.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CUR.$METHOD(..., '...'.format(), ...)
+  - pattern-not: $CUR.$METHOD(..., '...'%(), ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(execute)$
+  severity: WARNING
