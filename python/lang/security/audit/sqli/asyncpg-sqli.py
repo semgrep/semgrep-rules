@@ -40,6 +40,7 @@ def bad6(user_input):
     pool = await asyncpg.create_pool(user='postgres', command_timeout=60)
     con = await pool.acquire()
     try:
+        # ruleid: asyncpg-sqli
         await con.execute('SELECT * FROM {}'.format(user_input))
     finally:
         await pool.release(con)
