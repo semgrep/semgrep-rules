@@ -1,0 +1,76 @@
+rules:
+- id: psycopg-sqli
+  languages:
+  - python
+  message: >
+    Detected string concatenation with a non-literal variable in a psycopg2
+
+    Python SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+    and not properly sanitized. In order to prevent SQL injection,
+
+    used parameterized queries or prepared statements instead.
+
+    You can use prepared statements by creating a 'sql.SQL' string. You can also use the pyformat binding style to create
+    parameterized queries. For example:
+
+    'cur.execute(SELECT * FROM table WHERE name=%s, user_input)'
+  metadata:
+    references:
+    - https://www.psycopg.org/docs/sql.html
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $CUR.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = '...'.format(...)
+            ...
+        - pattern-inside: |
+            $QUERY = '...' % (...)
+            ...
+        - pattern-inside: |
+            $QUERY = f'...{$USERINPUT}...'
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...'.format()
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...' % ()
+          ...
+    - pattern: $CUR.$METHOD(..., $X + $Y, ...)
+    - pattern: $CUR.$METHOD(..., '...'.format(...), ...)
+    - pattern: $CUR.$METHOD(..., '...' % (...), ...)
+    - pattern: $CUR.$METHOD(..., f'...{$USERINPUT}...', ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CONN = psycopg2.connect(...)
+        ...
+        $CUR = $CONN.cursor(...)
+        ...
+    - pattern-inside: |
+        $CONN = psycopg2.connect(...)
+        ...
+        with $CONN.cursor(...) as $CUR:
+          ...
+  - pattern-not: $CUR.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CUR.$METHOD(..., '...'.format(), ...)
+  - pattern-not: $CUR.$METHOD(..., '...'%(), ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(execute|executemany|mogrify)$
+  severity: WARNING
