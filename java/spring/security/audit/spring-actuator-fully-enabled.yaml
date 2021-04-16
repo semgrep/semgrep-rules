@@ -1,17 +1,16 @@
 rules:
 - id: spring-actuator-fully-enabled
-  pattern: management.endpoints.web.exposure.include=* 
+  pattern: management.endpoints.web.exposure.include=*
   message: |
     Spring Boot Actuator is fully enabled. This exposes sensitive endpoints such as /actuator/env, /actuator/logfile, /actuator/heapdump and others.
     Unless you have Spring Security enabled or another means to protect these endpoints, this functionality is available without authentication, causing a severe security risk.
-  metadata:
-    owasp: 'A6: Security Misconfiguration'
   severity: WARNING
   languages: [generic]
   paths:
     include:
     - '*properties'
   metadata:
+    owasp: 'A6: Security Misconfiguration'
     references:
     - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
     - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
