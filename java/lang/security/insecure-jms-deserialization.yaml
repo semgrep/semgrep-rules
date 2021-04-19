@@ -6,8 +6,13 @@ rules:
   metadata:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     owasp: 'A8: Insecure Deserialization'
+    asvs:
+      section: "V5 Validation, Sanitization and Encoding"
+      control_id: "5.5.3 Insecue Deserialization"
+      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention"
+      version: "4"    
     references:
-    - https://www.blackhat.com/docs/us-16/materials/us-16-Kaiser-Pwning-Your-Java-Messaging-With-Deserialization-Vulnerabilities-wp.pdf
+    - https://www.blackhat.com/docs/us-16/materials/us-16-Kaiser-Pwning-Your-Java-Messaging-With-Deserialization-Vulnerabilities-wp.pdf    
   message: |
     JMS Object messages depend on Java Serialization for marshalling/unmarshalling of the message payload when ObjectMessage.getObject() is called.
     Deserialization of untrusted data can lead to security flaws; a remote attacker could via a crafted JMS ObjectMessage to execute
