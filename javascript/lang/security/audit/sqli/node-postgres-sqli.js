@@ -22,17 +22,14 @@ function bad2() {
 }
 
 function bad3(userinput) {
-    const { Pool, Client } = require('pg')
-    const connectionString = 'postgresql://dbuser:secretpassword@database.server.com:3211/mydb'
-    const pool = new Pool({
-      connectionString,
-    })
+    const { Client } = require('pg')
+    const client = new Client()
+    await client.connect()
     query = "SELECT name FROM users WHERE age=".concat(userinput)
     // ruleid: node-postgres-sqli
-    pool.query(query, (err, res) => {
-      console.log(err, res)
-      pool.end()
-    })
+    const res = await client.query(query)
+    console.log(res.rows[0].message) // Hello world!
+    await client.end()
 }
 
 function bad4() {
