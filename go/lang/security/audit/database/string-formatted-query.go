@@ -166,3 +166,34 @@ func postgresBadDirectQueryFmt(r *http.Request) {
 	// ruleid: string-formatted-query
     row, _ := postgresDb.QueryRow(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
 }
+
+package main
+
+import (
+    "context"
+    "database/sql"
+    "fmt"
+    "http"
+
+    "github.com/jackc/pgx/v4"
+)
+// cf. https://github.com/returntocorp/semgrep-rules/issues/1249
+func new() {
+	// ok: string-formatted-query
+    var insertSql string = "insert into t_ad_experiment (exp_layer,buckets,opposite_buckets,is_transparent, " +
+    " description,is_full,start_time,end_time,creat_time,update_time,update_user,white_list,extra,status)" +
+    " value (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    t := time.Now().Unix()
+    InsertResult, err := DbConn.Exec(insertSql, info.Exp_layer, info.Buckets, info.Opposite_buckets,
+        info.Is_transparent, info.Description, info.Is_full, info.Start_time, info.End_time, t, t,
+        session.User, info.White_list, info.Extra, 0)
+}
+
+func new2() {
+	// ok: string-formatted-query
+    var insertSql string = "insert into t_ad_experiment (exp_layer,buckets,opposite_buckets,is_transparent, description,is_full,start_time,end_time,creat_time,update_time,update_user,white_list,extra,status) value (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    t := time.Now().Unix()
+    InsertResult, err := DbConn.Exec(insertSql, info.Exp_layer, info.Buckets, info.Opposite_buckets,
+        info.Is_transparent, info.Description, info.Is_full, info.Start_time, info.End_time, t, t,
+        session.User, info.White_list, info.Extra, 0)
+}
