@@ -11,9 +11,6 @@ rules:
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     source-rule-url: https://github.com/securego/gosec
   patterns:
-  - metavariable-regex:
-      metavariable: $SINK
-      regex: (Exec|ExecContext|Query|QueryContext|QueryRow|QueryRowContext)
   - pattern-not-inside: |
       $VAR = "..." + "..."
       ...
