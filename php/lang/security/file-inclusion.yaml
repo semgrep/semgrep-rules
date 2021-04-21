@@ -3,6 +3,7 @@ rules:
   patterns:
   - pattern: $FUNC(...);
   - pattern-not: $FUNC("...");
+  - pattern-not: $FUNC(__DIR__ . "...");
   - metavariable-regex:
       metavariable: $FUNC
       regex: include|include_once|require|require_once
