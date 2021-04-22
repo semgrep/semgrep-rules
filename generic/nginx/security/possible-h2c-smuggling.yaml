@@ -1,13 +1,25 @@
 rules:
-- id: possible-h2c-smuggling
+- id: possible-nginx-h2c-smuggling
   patterns:
     - pattern-either: 
       - pattern: |
-          proxy_http_version 1.1 ...; ... proxy_set_header Upgrade ...; ... proxy_set_header Connection ...;
+          proxy_http_version 1.1 ...; 
+          ... 
+          proxy_set_header Upgrade ...; 
+          ... 
+          proxy_set_header Connection ...;
       - pattern: |
-          proxy_set_header Upgrade ...; ... proxy_set_header Connection ...; ... proxy_http_version 1.1 ...;
+          proxy_set_header Upgrade ...; 
+          ... 
+          proxy_set_header Connection ...; 
+          ... 
+          proxy_http_version 1.1 ...;
       - pattern: |
-          proxy_set_header Upgrade ...; ... proxy_http_version 1.1 ...; ... proxy_set_header Connection ...;
+          proxy_set_header Upgrade ...; 
+          ... 
+          proxy_http_version 1.1 ...; 
+          ... 
+          proxy_set_header Connection ...;
     - pattern-inside: |
         location ... {
           ...
