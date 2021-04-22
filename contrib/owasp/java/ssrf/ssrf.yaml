@@ -3,7 +3,7 @@ rules:
   message: |
     A parameter being passed directly into java.net.URL function most likely lead to SSRF.
   metadata:
-    cwe: CWE-918: Server-Side Request Forgery (SSRF)
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
     source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
   severity: ERROR
   patterns:
@@ -14,7 +14,7 @@ rules:
           URL $URL = new URL($VAR);
           ...
         }
-# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
+      # Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
   - pattern-not: $URL = new URL("...");
   languages:
   - java
@@ -23,7 +23,7 @@ rules:
   message: |
     A parameter being passed directly into HttpClient functions most likely lead to SSRF.
   metadata:
-    cwe: CWE-918: Server-Side Request Forgery (SSRF)
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
     source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
   severity: ERROR
   patterns:
@@ -38,7 +38,7 @@ rules:
           $CLIENT.executeMethod($METHODOBJ);
           ...
         }
-# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
+      # Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
   - pattern-not: |
       $RETURN $METHOD(...,String $VAR, ...) {
         ...
@@ -56,7 +56,7 @@ rules:
   message: |
     A parameter being passed directly into CloseableHttpClient functions most likely lead to SSRF.
   metadata:
-    cwe: CWE-918: Server-Side Request Forgery (SSRF)
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
     source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
   severity: ERROR
   patterns:
@@ -71,7 +71,7 @@ rules:
           HttpResponse httpResponse = $CLIENT.execute($METHODOBJ);
           ...
         }
-# Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
+       # Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
     - pattern: |
         $RETURN $METHOD(...,String $VAR, ...) {
           ...
@@ -89,12 +89,12 @@ rules:
   message: |
     Non-exhaustive list of Libraries that provide functionality to accept URL as a parameter
   metadata:
-    cwe: CWE-918: Server-Side Request Forgery (SSRF)
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
     source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
   severity: INFO
   patterns:
   - pattern-either:
-# Some Other libraries whose import statements are worth investigating
+          # Some Other libraries whose import statements are worth investigating
     - pattern: import org.apache.commons.httpclient.HttpClient;
     - pattern: import com.squareup.okhttp.OkHttpClient;
     - pattern: import org.apache.http.client.fluent.Request;
