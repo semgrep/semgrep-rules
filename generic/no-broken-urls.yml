@@ -1,0 +1,16 @@
+rules:
+  - id: no-broken-urls
+    message: Accessing $URL did not return a successful status code.
+    languages: [generic]
+    severity: WARNING
+    patterns:
+      - pattern-inside: "[...]($URL)"
+      - pattern-regex: 'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
+      # messes with evaluation internals: https://github.com/returntocorp/semgrep/blob/9a73a142dccfa281999418510843886c3d260c71/semgrep/semgrep/evaluation.py#L218
+      - pattern-where-python: |
+          import requests
+          try:
+              success = requests.head(vars["$URL"], timeout=5).ok
+          except:
+              success = False
+          not success
