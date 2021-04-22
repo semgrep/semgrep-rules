@@ -1,0 +1,11 @@
+rules:
+  - id: metadata-cwe
+    message: |
+      The cwe tag in rule metadata should always be in the format "CWE-000: Title".
+    severity: ERROR
+    languages: [json, yaml]
+    patterns:
+      - pattern-inside: "rules: ..."
+      - pattern-inside: "metadata: ..."
+      - pattern: "cwe: ..."
+      - pattern-not: 'cwe: "=~/^CWE-[0-9]+: .+$/"'
