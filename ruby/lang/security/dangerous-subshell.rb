@@ -5,7 +5,7 @@ def test_calls(user_input)
 # ruleid: dangerous-subshell
   result2 = %{foo #{user_input} bar}
 
-# TODO: dangerous-subshell
+# ruleid: dangerous-subshell
   cmd = `foo #{user_input} bar #{smth_else}`
 
 # ok: dangerous-subshell
