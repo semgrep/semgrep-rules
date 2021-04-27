@@ -1,0 +1,50 @@
+---
+rules:
+  - id: sqlalchemy-execute-raw-query
+    message: >
+       Avoiding SQL string concatenation: untrusted input concatinated with raw
+       SQL query can result in SQL Injection. In order to execute raw query
+       safely, prepared statement should be used.
+       SQLAlchemy provides TextualSQL to easily used prepared statement with
+       named parameters. For complexe SQL composition, use SQL Expression
+       Langague or SQL Statements and Expressions API.
+    metadata:
+      cwe: >
+        CWE-89: Improper Neutralization of Special Elements used in an SQL
+        Command ('SQL Injection')
+      owasp: 'A1: Injection'
+      references:
+        - https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql
+        - https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm
+        - https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column
+    severity: ERROR
+    languages:
+      - python
+
+    pattern-either:
+
+      - pattern: |
+          $CONNECTION.execute( $SQL + ... )
+      - pattern: |
+          $CONNECTION.execute( $SQL % (...) )
+      - pattern: |
+          $CONNECTION.execute( $SQL.format(...) )
+      - pattern: |
+          $CONNECTION.execute(f"...{...}...")
+
+      - pattern: |
+          $QUERY = $SQL + ...
+          ...
+          $CONNECTION.execute($QUERY)
+      - pattern: |
+          $QUERY = $SQL % (...)
+          ...
+          $CONNECTION.execute($QUERY)
+      - pattern: |
+          $QUERY = $SQL.format(...)
+          ...
+          $CONNECTION.execute($QUERY)
+      - pattern: |
+          $QUERY = f"...{...}..."
+          ...
+          $CONNECTION.execute($QUERY)
