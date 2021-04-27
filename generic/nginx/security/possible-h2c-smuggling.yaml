@@ -1,0 +1,40 @@
+rules:
+- id: possible-nginx-h2c-smuggling
+  patterns:
+  - pattern-either:
+    - pattern: |
+        proxy_http_version 1.1 ...;
+        ...
+        proxy_set_header Upgrade ...;
+        ...
+        proxy_set_header Connection ...;
+    - pattern: |
+        proxy_set_header Upgrade ...;
+        ...
+        proxy_set_header Connection ...;
+        ...
+        proxy_http_version 1.1 ...;
+    - pattern: |
+        proxy_set_header Upgrade ...;
+        ...
+        proxy_http_version 1.1 ...;
+        ...
+        proxy_set_header Connection ...;
+  - pattern-inside: |
+      location ... {
+        ...
+      }
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    Conditions for Nginx H2C smuggling identified.
+    H2C smuggling allows upgrading HTTP/1.1 connections to lesser-known HTTP/2 over cleartext (h2c) connections
+    which can allow a bypass of reverse proxy access controls,and lead to long-lived, unrestricted HTTP traffic directly to
+    back-end servers.
+    To mitigate:
+    WebSocket support required: Allow only the value websocket for HTTP/1.1 upgrade headers (e.g., Upgrade: websocket).
+    WebSocket support not required: Do not forward Upgrade headers.
+  metadata:
+    references:
+    - https://labs.bishopfox.com/tech-blog/h2c-smuggling-request-smuggling-via-http/2-cleartext-h2c
