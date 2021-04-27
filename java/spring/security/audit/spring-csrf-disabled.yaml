@@ -6,6 +6,11 @@ rules:
     cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
     owasp: 'A6: Security Misconfiguration'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_PROTECTION_DISABLED
+    asvs:
+      section: V4 Access Control
+      control_id: 4.2.2 CSRF
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V4-Access-Control.md#v42-operation-level-access-control
+      version: '4'
   severity: WARNING
   languages: [java]
   pattern: $OBJ.csrf(...).disable(...)
