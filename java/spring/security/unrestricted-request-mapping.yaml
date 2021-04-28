@@ -5,7 +5,7 @@ rules:
       @RequestMapping(...)
       $RETURNTYPE $METHOD(...) { ... }
   - pattern-not-inside: |
-      @RequestMapping(..., method = $X)
+      @RequestMapping(..., method = $X, ...)
       $RETURNTYPE $METHOD(...) { ... }
   message: >-
     Detected a method annotated with 'RequestMapping' that does not specify
