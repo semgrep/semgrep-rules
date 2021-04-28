@@ -30,7 +30,7 @@ let notEvaluatedFunc = new Function(document.getElementById('userInput'));
  * Positive Matches
  */
 
-let dynamic = "function dynamicStrings() { return 'dynamic strings are not'; }"
+let dynamic = window.prompt() // arbitrary user input
 
 // ruleid:new-function-detected
 func = new Function(dynamic + 'possibly malicious code');
