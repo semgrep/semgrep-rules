@@ -1,0 +1,10 @@
+rules:
+- id: unsatisfiable-rule
+  message: |
+    You can not use $A and not $A together; this will always be empty
+  severity: ERROR
+  languages: [yaml]
+  patterns:
+  - pattern: $A
+  # ruleid: unsatisfiable-rule 
+  - pattern-not: $A

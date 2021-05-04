@@ -1,7 +1,6 @@
+# ruleid: no-message
 rules:
-- id: no-language-field
-  message: |
-    Please include a language field for your rule!
+- id: no-message
   languages: [yaml]
   patterns:
   - pattern-either:
@@ -10,6 +9,6 @@ rules:
   - pattern-not: |
       rules:
       - ...
-        languages: ...
+        message: ...
         ...
   severity: WARNING

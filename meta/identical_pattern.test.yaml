@@ -1,0 +1,18 @@
+rules:
+- id: identical-pattern
+  message: |
+    you use multiple times the same pattern
+  severity: ERROR
+  languages: [yaml]
+  patterns:
+  - pattern-inside: |
+      ...
+      - pattern: $X
+      ...
+      - pattern: $X
+      ...
+  # ruleid: identical-pattern
+  - pattern: $X
+  # ruleid: identical-pattern
+  - pattern: |
+     $X
