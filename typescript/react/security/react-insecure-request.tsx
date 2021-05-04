@@ -3,8 +3,8 @@ import axios from 'axios';
 // ruleid: react-insecure-request
 fetch('http://www.example.com', 'GET', {})
 
-// ruleid: react-insecure-request
 let addr = "http://www.example.com"
+// ruleid: react-insecure-request
 fetch(addr, 'POST', {})
 
 // ruleid: react-insecure-request

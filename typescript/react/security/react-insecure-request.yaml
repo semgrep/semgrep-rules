@@ -36,13 +36,7 @@ rules:
             $OPTS = {url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}
             ...
             $AXIOS($OPTS, ...)
-    - patterns:
-      - pattern-either:
-        - pattern: fetch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
-        - pattern: |
-            $VAR = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
-            ...
-            fetch($VAR, ...)
+    - pattern: fetch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
   message: |
     Unencrypted request over HTTP detected.
   metadata:
