@@ -5,9 +5,9 @@ rules:
     - patterns:
       - pattern-either:
         - pattern: |
-            $DB.$METHOD(...,$QUERY,...)
+            $DB.query(...,$QUERY,...)
         - pattern: |
-            $DB.$METHOD(..., $QUERY, ...).$INTFUNC(...)
+            $DB.query(..., $QUERY, ...).$INTFUNC(...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y
@@ -27,8 +27,8 @@ rules:
       - pattern-not-inside: |
           $QUERY = $X.concat("...")
           ...
-    - pattern: $DB.$METHOD(..., $X + $Y, ...)
-    - pattern: $DB.$METHOD(..., $X.concat($Y), ...)
+    - pattern: $DB.query(..., $X + $Y, ...)
+    - pattern: $DB.query(..., $X.concat($Y), ...)
   - pattern-either:
     - pattern-inside: |
         const { $CLIENT } = require('pg')
@@ -43,11 +43,8 @@ rules:
         $NEWPOOL.connect((..., $DB, ...) => {
             ...
         })
-  - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
-  - pattern-not: $DB.$METHOD(..., $X.concat("..."), ...)
-  - metavariable-regex:
-      metavariable: $METHOD
-      regex: ^(query)$
+  - pattern-not: $DB.query(..., "..." + "...", ...)
+  - pattern-not: $DB.query(..., $X.concat("..."), ...)
   languages:
   - js
   message: |
