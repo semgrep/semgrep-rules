@@ -3,10 +3,13 @@ rules:
   message: |
     you use multiple times the same id
   severity: ERROR
-  #TODO: can't express it yet in yaml, some ... are not parsed correctly
-  languages: [json, yaml]
+  languages: [yaml]
   patterns:
-    - pattern-inside: |
-       [{id: $X, ...}, ..., {id: $X, ...}, ...]
-    - pattern: |
-       id: $X
+  - pattern-inside: |
+      - id: $X
+        ...
+      ...
+      - id: $X
+        ...
+  - pattern: |
+      id: $X

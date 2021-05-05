@@ -1,0 +1,15 @@
+rules:
+- id: no-message
+  message: |
+    Include a message to explain what the rule does
+  languages: [yaml]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        rules: ...
+  - pattern-not: |
+      rules:
+      - ...
+        message: ...
+        ...
+  severity: WARNING

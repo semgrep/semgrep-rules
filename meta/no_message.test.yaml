@@ -1,0 +1,14 @@
+# ruleid: no-message
+rules:
+- id: no-message
+  languages: [yaml]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        rules: ...
+  - pattern-not: |
+      rules:
+      - ...
+        message: ...
+        ...
+  severity: WARNING
