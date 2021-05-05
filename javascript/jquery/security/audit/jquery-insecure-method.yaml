@@ -1,7 +1,7 @@
 rules:
 - id: jquery-insecure-method
   message: >-
-    User controlled data in a `$JQUERY.$METHOD(...)` is an anti-pattern that can lead to XSS vulnerabilities
+    User controlled data in a jQuery's `.$METHOD(...)` is an anti-pattern that can lead to XSS vulnerabilities
   languages:
   - javascript
   severity: WARNING
@@ -13,14 +13,24 @@ rules:
     - https://bugs.jquery.com/ticket/9521
   pattern-either:
   - patterns:
-    - pattern: $JQUERY.$METHOD($VAR,...)
-    - pattern-not: $JQUERY.$METHOD("...",...)
+    - pattern-either:
+      - pattern: $.$METHOD($VAR,...)
+      - pattern: $(...).$METHOD($VAR,...)
+      - pattern: jQuery.$METHOD($VAR,...)
+      - pattern: jQuery(...).$METHOD($VAR,...)
+    - pattern-not: $.$METHOD("...",...)
+    - pattern-not: $(...).$METHOD("...",...)
+    - pattern-not: jQuery.$METHOD("...",...)
+    - pattern-not: jQuery(...).$METHOD("...",...)
     - metavariable-regex:
         metavariable: $METHOD
         regex: ^(html|append|prepend|wrap|wrapInner|wrapAll|before|after|globalEval|getScript)$
   - patterns:
-    - pattern: $JQUERY(...).$METHOD($VAR,...)
-    - pattern-not: $JQUERY("...",...).$METHOD($VAR,...)
+    - pattern-either:
+      - pattern: $(...).$METHOD($VAR,...)
+      - pattern: jQuery(...).$METHOD($VAR,...)
+    - pattern-not: $("...",...).$METHOD(...)
+    - pattern-not: jQuery("...",...).$METHOD(...)
     - metavariable-regex:
         metavariable: $METHOD
         regex: ^(appendTo|insertAfter|insertBefore|prependTo)$
