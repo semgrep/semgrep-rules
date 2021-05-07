@@ -2,30 +2,30 @@ rules:
 # ruleid: identical-id
 - id: unchecked-subprocess-call
   patterns:
-    - pattern-either: 
-      - pattern: |
-          subprocess.call(...)
-      - pattern: |
-          subprocess.call(...)
-    - pattern-not-inside: |
-        $S = subprocess.call(...)
-    - pattern-not-inside: |
-        subprocess.call(...) == $X
+  - pattern-either:
+    - pattern: |
+        subprocess.call(...)
+    - pattern: |
+        subprocess.call(...)
+  - pattern-not-inside: |
+      $S = subprocess.call(...)
+  - pattern-not-inside: |
+      subprocess.call(...) == $X
   message: |
   severity: WARNING
   fix: subprocess.check_call(...)
 # ruleid: identical-id
 - id: unchecked-subprocess-call
   patterns:
-    - pattern-either: 
-      - pattern: |
-          subprocess.call(...)
-      - pattern: |
-          subprocess.call(...)
-    - pattern-not-inside: |
-        $S = subprocess.call(...)
-    - pattern-not-inside: |
-        subprocess.call(...) == $X
+  - pattern-either:
+    - pattern: |
+        subprocess.call(...)
+    - pattern: |
+        subprocess.call(...)
+  - pattern-not-inside: |
+      $S = subprocess.call(...)
+  - pattern-not-inside: |
+      subprocess.call(...) == $X
   message: |
   severity: WARNING
   fix: subprocess.check_call(...)

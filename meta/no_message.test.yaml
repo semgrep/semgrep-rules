@@ -2,12 +2,12 @@
 rules:
 - id: unchecked-subprocess-call
   patterns:
-    - pattern-either: 
-      - pattern: |
-          subprocess.call(...)
-    - pattern-not-inside: |
-        $S = subprocess.call(...)
-    - pattern-not-inside: |
-        subprocess.call(...) == $X
+  - pattern-either:
+    - pattern: |
+        subprocess.call(...)
+  - pattern-not-inside: |
+      $S = subprocess.call(...)
+  - pattern-not-inside: |
+      subprocess.call(...) == $X
   severity: WARNING
   fix: subprocess.check_call(...)

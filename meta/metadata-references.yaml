@@ -1,15 +1,15 @@
 rules:
-  - id: metadata-references
-    message: |
-      The references in rule metadata should always be a list, even if there's only one.
-    severity: ERROR
-    languages: [json, yaml]
-    patterns:
-      - pattern-inside: |
-          rules: ...
-      - pattern-inside: |
-          metadata: ...
-      - pattern: |
-          references: ...
-      - pattern-not: |
-          references: [...]
+- id: metadata-references
+  message: |
+    The references in rule metadata should always be a list, even if there's only one.
+  severity: ERROR
+  languages: [json, yaml]
+  patterns:
+  - pattern-inside: |
+      rules: ...
+  - pattern-inside: |
+      metadata: ...
+  - pattern: |
+      references: ...
+  - pattern-not: |
+      references: [...]
