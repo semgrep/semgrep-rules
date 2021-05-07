@@ -7,9 +7,10 @@ rules:
   - pattern-inside: |
       def __init__(...):
           ...
-  - pattern-either:
+  - patterns:
     - pattern: return ...
-    - pattern: return
+    - pattern-not: return
+    - pattern-not: return None
   message: '`return` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR
