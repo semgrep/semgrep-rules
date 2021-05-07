@@ -1,10 +1,16 @@
 rules:
-- id: unsatisfiable-rule
-  message: |
-    You can not use $A and not $A together; this will always be empty
-  severity: ERROR
-  languages: [yaml]
+- id: unchecked-subprocess-call
   patterns:
-  - pattern: $A
-  # ruleid: unsatisfiable-rule
-  - pattern-not: $A
+    - pattern-either: 
+      - pattern: |
+          subprocess.call(...)
+      # ruleid: unsatisfiable-rule
+      - pattern-not: |
+          subprocess.call(...)
+    - pattern-not-inside: |
+        $S = subprocess.call(...)
+    - pattern-not-inside: |
+        subprocess.call(...) == $X
+  message: |
+  severity: WARNING
+  fix: subprocess.check_call(...)

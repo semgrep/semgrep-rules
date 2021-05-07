@@ -1,31 +1,31 @@
 rules:
 # ruleid: identical-id
-- id: identical-id
-  message: |
-    you use multiple times the same id
-  severity: ERROR
-  languages: [yaml]
+- id: unchecked-subprocess-call
   patterns:
-  - pattern-inside: |
-      - id: $X
-        ...
-      ...
-      - id: $X
-        ...
-  - pattern: |
-      id: $X
+    - pattern-either: 
+      - pattern: |
+          subprocess.call(...)
+      - pattern: |
+          subprocess.call(...)
+    - pattern-not-inside: |
+        $S = subprocess.call(...)
+    - pattern-not-inside: |
+        subprocess.call(...) == $X
+  message: |
+  severity: WARNING
+  fix: subprocess.check_call(...)
 # ruleid: identical-id
-- id: identical-id
-  message: |
-    you use multiple times the same id
-  severity: ERROR
-  languages: [yaml]
+- id: unchecked-subprocess-call
   patterns:
-  - pattern-inside: |
-      - id: $X
-        ...
-      ...
-      - id: $X
-        ...
-  - pattern: |
-      id: $X
+    - pattern-either: 
+      - pattern: |
+          subprocess.call(...)
+      - pattern: |
+          subprocess.call(...)
+    - pattern-not-inside: |
+        $S = subprocess.call(...)
+    - pattern-not-inside: |
+        subprocess.call(...) == $X
+  message: |
+  severity: WARNING
+  fix: subprocess.check_call(...)
