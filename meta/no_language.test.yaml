@@ -1,15 +1,16 @@
 # ruleid: no-language-field
 rules:
-- id: no-language-field
-  message: |
-    Please include a language field for your rule!
+- id: unchecked-subprocess-call
   patterns:
   - pattern-either:
     - pattern: |
-        rules: ...
-  - pattern-not: |
-      rules:
-      - ...
-        languages: ...
-        ...
+        subprocess.call(...)
+    - pattern: |
+        subprocess.call(...)
+  - pattern-not-inside: |
+      $S = subprocess.call(...)
+  - pattern-not-inside: |
+      subprocess.call(...) == $X
+  message: |
   severity: WARNING
+  fix: subprocess.check_call(...)
