@@ -3,6 +3,8 @@ rules:
   message: |
     You have an empty message
   languages: [yaml]
-  pattern: |
-    message: ""
+  patterns:
+  - pattern-inside: 'rules: [..., $RULE, ...]'
+  - pattern: |
+      message: ""
   severity: WARNING
