@@ -1,7 +1,5 @@
 rules:
 - id: dynamic-proxy-scheme
-  patterns:
-  - pattern: proxy_pass $$SCHEME:// ...;
   paths:
     include:
     - '*.conf'
@@ -11,10 +9,12 @@ rules:
   languages:
   - generic
   severity: WARNING
-  message: >-
-    The protocol shceme for this proxy is dynamically determined. This can be dangerous if the scheme can be injected by an
+  message: |
+    The protocol scheme for this proxy is dynamically determined.
+    This can be dangerous if the scheme can be injected by an
     attacker because it may forcibly alter the connection scheme.
     Consider hardcoding a scheme for this proxy.
   metadata:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/ssrf.md
+  pattern: proxy_pass $$SCHEME:// ...;

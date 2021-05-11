@@ -2,9 +2,7 @@ rules:
 - id: prefer-copy-over-add
   severity: INFO
   languages: [generic]
-  patterns:
-  - pattern: ADD
-  message: >-
+  message: |
     The ADD command will accept and include files from a URL.
     This potentially exposes the container to a man-in-the-middle attack.
     Since ADD can have this and other unexpected side effects, the use of
@@ -16,3 +14,4 @@ rules:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern: ADD
