@@ -6,12 +6,11 @@ rules:
     source_rule_url: https://github.com/securego/gosec/issues/205
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern: |-
-      reader, $ERR := zip.OpenReader($ARCHIVE)
+  pattern: |
+    reader, $ERR := zip.OpenReader($ARCHIVE)
+    ...
+    for _, $FILE := range reader.File {
       ...
-      for _, $FILE := range reader.File {
-        ...
-        path := filepath.Join($TARGET, $FILE.Name)
-        ...
-      }
+      path := filepath.Join($TARGET, $FILE.Name)
+      ...
+    }

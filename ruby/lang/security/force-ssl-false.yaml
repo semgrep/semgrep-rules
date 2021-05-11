@@ -1,8 +1,5 @@
 rules:
 - id: force-ssl-false
-  patterns:
-  - pattern: |
-      config.force_ssl = false
   message: |
     Checks for configuration setting of force_ssl to false. Force_ssl forces usage of HTTPS, which
     could lead to network interception of unencrypted application traffic. To fix, set config.force_ssl = true.
@@ -12,3 +9,4 @@ rules:
   languages:
   - ruby
   severity: WARNING
+  pattern: config.force_ssl = false

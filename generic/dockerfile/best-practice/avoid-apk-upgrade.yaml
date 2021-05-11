@@ -1,11 +1,9 @@
 rules:
 - id: avoid-apk-upgrade
-  patterns:
-  - pattern: apk upgrade
   languages:
   - generic
   message: |
-    Packages in base images sould be up-to-date, removing the need for
+    Packages in base images should be up-to-date, removing the need for
     'apk upgrade'. If packages are out-of-date, consider contacting the
     base image maintainer.
   severity: INFO
@@ -17,3 +15,4 @@ rules:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern: apk upgrade
