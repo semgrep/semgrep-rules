@@ -1,8 +1,6 @@
 rules:
 - id: avoid-latest-version
-  patterns:
-  - pattern: FROM $IMAGE:latest
-  message: >-
+  message: |
     Images should be tagged with an explicit version to produce
     deterministic container images. The 'latest' tag may change
     the base container without warning.
@@ -16,3 +14,4 @@ rules:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern: FROM $IMAGE:latest
