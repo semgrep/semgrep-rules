@@ -1,16 +1,15 @@
 rules:
 - id: bash_reverse_shell
-  patterns:
-  - pattern-either:
-    - pattern: |
-        sh -i >& /dev/udp/.../... 0>&1
-    - pattern: |
-        <...>/dev/tcp/.../...; sh <&... >&... 2>&
-    - pattern: |
-        <...>/dev/tcp/.../...; cat <&... | while read line; do $line 2>&... >&...;done
-    - pattern: |
-        sh -i ...<...> /dev/tcp/.../... ...<&... 1>&... 2>&
   message: Semgrep found a bash reverse shell
   severity: ERROR
   languages:
   - generic
+  pattern-either:
+  - pattern: |
+      sh -i >& /dev/udp/.../... 0>&1
+  - pattern: |
+      <...>/dev/tcp/.../...; sh <&... >&... 2>&
+  - pattern: |
+      <...>/dev/tcp/.../...; cat <&... | while read line; do $line 2>&... >&...;done
+  - pattern: |
+      sh -i ...<...> /dev/tcp/.../... ...<&... 1>&... 2>&

@@ -16,40 +16,39 @@ rules:
     references:
     - https://pg.uptrace.dev/
     - https://pkg.go.dev/github.com/go-pg/pg/v10
-  pattern-either:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern: |
-            $DB.$METHOD(...,$QUERY,...)
-        - pattern-either:
-          - pattern-inside: |
-              $QUERY = $X + $Y
-              ...
-          - pattern-inside: |
-              $QUERY += $X
-              ...
-          - pattern-inside: |
-              $QUERY = fmt.Sprintf("...", $PARAM1, ...)
-              ...
-        - pattern-not-inside: |
-            $QUERY += "..."
-            ...
-        - pattern-not-inside: |
-            $QUERY = "..." + "..."
-            ...
-      - pattern: $DB.$METHOD(..., $X + $Y, ...)
-      - pattern: $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
-    - pattern-either:
-      - pattern-inside: |
-          $DB = pg.Connect(...)
-          ...
-      - pattern-inside: |
-          func $FUNCNAME(..., $DB *pg.DB, ...) {
-            ...
-          }
-    - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
-    - metavariable-regex:
-        metavariable: $METHOD
-        regex: ^(Exec|ExecContext|ExecOne|ExecOneContext|Query|QueryOne|QueryContext|QueryOneContext)$
   severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          $DB.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: $DB.$METHOD(..., $X + $Y, ...)
+    - pattern: $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+  - pattern-either:
+    - pattern-inside: |
+        $DB = pg.Connect(...)
+        ...
+    - pattern-inside: |
+        func $FUNCNAME(..., $DB *pg.DB, ...) {
+          ...
+        }
+  - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(Exec|ExecContext|ExecOne|ExecOneContext|Query|QueryOne|QueryContext|QueryOneContext)$

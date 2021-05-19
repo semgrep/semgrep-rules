@@ -1,8 +1,5 @@
 rules:
 - id: info-leak-on-non-formated-string
-  patterns:
-  - pattern-either:
-    - pattern: printf(argv[$NUM]);
   message: |
     Use %s, %d, %c... to format your variables, otherwise this could leak information.
   metadata:
@@ -10,3 +7,5 @@ rules:
     - http://nebelwelt.net/files/13PPREW.pdf
   languages: [c]
   severity: ERROR
+  pattern-either:
+  - pattern: printf(argv[$NUM]);

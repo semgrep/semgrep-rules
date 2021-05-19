@@ -1,59 +1,5 @@
 rules:
 - id: node_nosqli_injection
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $OBJ.findOne({$KEY : <... $REQ.$FOO.$BAR ...> }, ...);
-    - pattern: |
-        $OBJ.findOne({$KEY: <... $REQ.$FOO ...> }, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO.$BAR ...>;
-        ...
-        $OBJ.findOne({$KEY : <... $INP ...> }, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO ...>;
-        ...
-        $OBJ.findOne({$KEY: <... $INP ...> }, ...);
-    - pattern: |
-        $QUERY = {$KEY: <... $REQ.$FOO.$BAR ...>};
-        ...
-        $OBJ.findOne($QUERY, ...);
-    - pattern: |
-        $QUERY = {$KEY: <... $REQ.$FOO ...>};
-        ...
-        $OBJ.findOne($QUERY, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO.$BAR ...>;
-        ...
-        $QUERY = {$KEY : <... $INP ...> };
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO ...>;
-        ...
-        $QUERY = {$KEY : <... $INP ...> };
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
-    - pattern: |
-        $QUERY[$KEY] = <... $REQ.$FOO.$BAR ...>;
-        ...
-        $OBJ.findOne($QUERY, ...);
-    - pattern: |
-        $QUERY[$KEY] = <... $REQ.$FOO ...>;
-        ...
-        $OBJ.findOne($QUERY, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO.$BAR ...>;
-        ...
-        $QUERY[$KEY] = <... $INP ...>;
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
-    - pattern: |
-        $INP = <... $REQ.$FOO ...>;
-        ...
-        $QUERY[$KEY] = <... $INP ...>;
-        ...
-        $OBJ.findOne(<... $QUERY  ...>, ...);
   message: Untrusted user input in findOne() function can result in NoSQL Injection.
   languages:
   - javascript
@@ -61,3 +7,56 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+  pattern-either:
+  - pattern: |
+      $OBJ.findOne({$KEY : <... $REQ.$FOO.$BAR ...> }, ...);
+  - pattern: |
+      $OBJ.findOne({$KEY: <... $REQ.$FOO ...> }, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO.$BAR ...>;
+      ...
+      $OBJ.findOne({$KEY : <... $INP ...> }, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO ...>;
+      ...
+      $OBJ.findOne({$KEY: <... $INP ...> }, ...);
+  - pattern: |
+      $QUERY = {$KEY: <... $REQ.$FOO.$BAR ...>};
+      ...
+      $OBJ.findOne($QUERY, ...);
+  - pattern: |
+      $QUERY = {$KEY: <... $REQ.$FOO ...>};
+      ...
+      $OBJ.findOne($QUERY, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO.$BAR ...>;
+      ...
+      $QUERY = {$KEY : <... $INP ...> };
+      ...
+      $OBJ.findOne(<... $QUERY  ...>, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO ...>;
+      ...
+      $QUERY = {$KEY : <... $INP ...> };
+      ...
+      $OBJ.findOne(<... $QUERY  ...>, ...);
+  - pattern: |
+      $QUERY[$KEY] = <... $REQ.$FOO.$BAR ...>;
+      ...
+      $OBJ.findOne($QUERY, ...);
+  - pattern: |
+      $QUERY[$KEY] = <... $REQ.$FOO ...>;
+      ...
+      $OBJ.findOne($QUERY, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO.$BAR ...>;
+      ...
+      $QUERY[$KEY] = <... $INP ...>;
+      ...
+      $OBJ.findOne(<... $QUERY  ...>, ...);
+  - pattern: |
+      $INP = <... $REQ.$FOO ...>;
+      ...
+      $QUERY[$KEY] = <... $INP ...>;
+      ...
+      $OBJ.findOne(<... $QUERY  ...>, ...);

@@ -1,25 +1,5 @@
 rules:
 - id: ftp-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        ftp.Dial("=~/^[fF][tT][pP]://.*/", ...)
-    - pattern: |
-        ftp.DialTimeout("=~/^[fF][tT][pP]://.*/", ...)
-    - pattern: |
-        ftp.Connect("=~/^[fF][tT][pP]://.*/")
-    - pattern: |
-        $URL = "=~/^[fF][tT][pP]://.*/"
-        ...
-        ftp.Dial($URL, ...)
-    - pattern: |
-        $URL = "=~/^[fF][tT][pP]://.*/"
-        ...
-        ftp.DialTimeout($URL, ...)
-    - pattern: |
-        $URL = "=~/^[fF][tT][pP]://.*/"
-        ...
-        ftp.Connect($URL)
   message: |
     Checks for outgoing connections to ftp servers with the ftp package. FTP does not encrypt traffic, possibly
     leading to PII being sent plaintext over the network. Instead, connect via the SFTP protocol.
@@ -37,3 +17,22 @@ rules:
   languages:
   - go
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      ftp.Dial("=~/^[fF][tT][pP]://.*/", ...)
+  - pattern: |
+      ftp.DialTimeout("=~/^[fF][tT][pP]://.*/", ...)
+  - pattern: |
+      ftp.Connect("=~/^[fF][tT][pP]://.*/")
+  - pattern: |
+      $URL = "=~/^[fF][tT][pP]://.*/"
+      ...
+      ftp.Dial($URL, ...)
+  - pattern: |
+      $URL = "=~/^[fF][tT][pP]://.*/"
+      ...
+      ftp.DialTimeout($URL, ...)
+  - pattern: |
+      $URL = "=~/^[fF][tT][pP]://.*/"
+      ...
+      ftp.Connect($URL)

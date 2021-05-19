@@ -14,10 +14,9 @@ rules:
   languages:
   - python
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: '{..., "autoescape": False, ...}'
-    - pattern: $D["autoescape"] = False
   fix-regex:
     regex: (autoescape.*?)False
     replacement: \1True
+  pattern-either:
+  - pattern: '{..., "autoescape": False, ...}'
+  - pattern: $D["autoescape"] = False

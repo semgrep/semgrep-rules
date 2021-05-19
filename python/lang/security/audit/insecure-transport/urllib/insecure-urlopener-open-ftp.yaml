@@ -11,35 +11,34 @@ rules:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.open
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.URLopener(...).open("=~/[Ff][Tt][Pp]://.*/", ...)
-    - patterns:
-      - pattern-inside: |
-          $OPENERDIRECTOR = urllib.request.URLopener(...)
+  pattern-either:
+  - pattern: urllib.request.URLopener(...).open("=~/[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.URLopener(...)
+        ...
+    - pattern: $OPENERDIRECTOR.open("=~/[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.URLopener(...)
+        ...
+    - pattern: |
+        $URL = "=~/[Ff][Tt][Pp]://.*/"
+        ...
+        $OPENERDIRECTOR.open($URL, ...)
+  - patterns:
+    - pattern: |
+        $URL = "=~/[Ff][Tt][Pp]://.*/"
+        ...
+        urllib.request.URLopener(...).open($URL, ...)
+  - patterns:
+    - pattern-inside: |
+        def $FUNC(..., $URL = "=~/[Ff][Tt][Pp]://.*/", ...):
           ...
-      - pattern: $OPENERDIRECTOR.open("=~/[Ff][Tt][Pp]://.*/", ...)
-    - patterns:
-      - pattern-inside: |
-          $OPENERDIRECTOR = urllib.request.URLopener(...)
-          ...
-      - pattern: |
-          $URL = "=~/[Ff][Tt][Pp]://.*/"
-          ...
-          $OPENERDIRECTOR.open($URL, ...)
-    - patterns:
-      - pattern: |
-          $URL = "=~/[Ff][Tt][Pp]://.*/"
-          ...
-          urllib.request.URLopener(...).open($URL, ...)
-    - patterns:
-      - pattern-inside: |
-          def $FUNC(..., $URL = "=~/[Ff][Tt][Pp]://.*/", ...):
+    - pattern-either:
+      - pattern: urllib.request.URLopener(...).open($URL, ...)
+      - patterns:
+        - pattern-inside: |
+            $OPENERDIRECTOR = urllib.request.URLopener(...)
             ...
-      - pattern-either:
-        - pattern: urllib.request.URLopener(...).open($URL, ...)
-        - patterns:
-          - pattern-inside: |
-              $OPENERDIRECTOR = urllib.request.URLopener(...)
-              ...
-          - pattern: $OPENERDIRECTOR.open($URL, ...)
+        - pattern: $OPENERDIRECTOR.open($URL, ...)

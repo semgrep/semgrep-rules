@@ -1,15 +1,5 @@
 rules:
 - id: ftp-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        FTPClient $FTPCLIENT = new FTPClient();
-        ...
-        $FTPCLIENT.connect(...);
-    - pattern: |
-        URL $URL = new URL("=~/^[fF][tT][pP]://.*/");
-        ...
-        URLConnection $CONN = $URL.openConnection(...);
   message: |
     Checks for outgoing connections to ftp servers. FTP does not encrypt traffic, possibly
     leading to PII being sent plaintext over the network.
@@ -27,3 +17,12 @@ rules:
   languages:
   - java
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      FTPClient $FTPCLIENT = new FTPClient();
+      ...
+      $FTPCLIENT.connect(...);
+  - pattern: |
+      URL $URL = new URL("=~/^[fF][tT][pP]://.*/");
+      ...
+      URLConnection $CONN = $URL.openConnection(...);

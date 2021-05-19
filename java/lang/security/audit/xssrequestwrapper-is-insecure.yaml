@@ -11,14 +11,13 @@ rules:
     It is recommended to use a stack that automatically escapes in your view or templates
     instead of filtering yourself.
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: |
-        class XSSRequestWrapper extends HttpServletRequestWrapper {
-          ...
-        }
-    - pattern: |-
-        $P = $X.compile("</script>", $X.CASE_INSENSITIVE);
-        $V = $P.matcher(...).replaceAll("");
   languages:
   - java
+  pattern-either:
+  - pattern: |
+      class XSSRequestWrapper extends HttpServletRequestWrapper {
+        ...
+      }
+  - pattern: |-
+      $P = $X.compile("</script>", $X.CASE_INSENSITIVE);
+      $V = $P.matcher(...).replaceAll("");
