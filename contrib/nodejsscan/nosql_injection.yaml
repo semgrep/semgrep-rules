@@ -1,5 +1,51 @@
 rules:
 - id: node_nosqli_js_injection
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $OBJ.$FUNC({$where: <... $REQ.$FOO.$BAR ...>}, ...);
+    - pattern: |
+        $OBJ.$FUNC({$where: <... $REQ.$QUERY ...>}, ...);
+    - pattern: |
+        $NSQL = <... $REQ.$QUERY.$...>;
+        ...
+        $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
+    - pattern: |
+        $NSQL = <... $REQ.$QUERY ...>;
+        ...
+        $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
+    - pattern: |
+        $INP = $REQ.$FOO.$BAR;
+        ...
+        $QRY = {$where: <... $INP ...>};
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
+    - pattern: |
+        $INP = $REQ.$FOO;
+        ...
+        $QRY = {$where: <... $INP ...>};
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
+    - pattern: |
+        $QRY["$where"] = <... $REQ.$FOO ...>;
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
+    - pattern: |
+        $QRY["$where"] = <... $REQ.$FOO.$BAR ...>;
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
+    - pattern: |
+        $INP = $REQ.$FOO;
+        ...
+        $QRY["$where"] = <... $INP ...>;
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
+    - pattern: |
+        $INP = $REQ.$FOO.$BAR;
+        ...
+        $QRY["$where"] = <... $INP ...>;
+        ...
+        $OBJ.$FUNC(<... $QRY ...>, ...);
   message: >-
     Untrusted user input in MongoDB $where operator can result in NoSQL
     JavaScript Injection.
@@ -9,48 +55,3 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
-  pattern-either:
-  - pattern: |
-      $OBJ.$FUNC({$where: <... $REQ.$FOO.$BAR ...>}, ...);
-  - pattern: |
-      $OBJ.$FUNC({$where: <... $REQ.$QUERY ...>}, ...);
-  - pattern: |
-      $NSQL = <... $REQ.$QUERY.$...>;
-      ...
-      $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
-  - pattern: |
-      $NSQL = <... $REQ.$QUERY ...>;
-      ...
-      $OBJ.$FUNC({$where: <... $NSQL ...>}, ...);
-  - pattern: |
-      $INP = $REQ.$FOO.$BAR;
-      ...
-      $QRY = {$where: <... $INP ...>};
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);
-  - pattern: |
-      $INP = $REQ.$FOO;
-      ...
-      $QRY = {$where: <... $INP ...>};
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);
-  - pattern: |
-      $QRY["$where"] = <... $REQ.$FOO ...>;
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);
-  - pattern: |
-      $QRY["$where"] = <... $REQ.$FOO.$BAR ...>;
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);
-  - pattern: |
-      $INP = $REQ.$FOO;
-      ...
-      $QRY["$where"] = <... $INP ...>;
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);
-  - pattern: |
-      $INP = $REQ.$FOO.$BAR;
-      ...
-      $QRY["$where"] = <... $INP ...>;
-      ...
-      $OBJ.$FUNC(<... $QRY ...>, ...);

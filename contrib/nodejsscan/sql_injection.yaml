@@ -1,5 +1,31 @@
 rules:
 - id: node_sqli_injection
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $CON.query(<... $REQ.$QUERY.$VAR ...>, ...)
+    - pattern: |
+        $CON.query(<... $REQ.$QUERY ...>, ...)
+    - pattern: |
+        $SQL = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $CON.query(<... $SQL ...>, ...);
+    - pattern: |
+        $SQL = <... $REQ.$QUERY ...>;
+        ...
+        $CON.query(<... $SQL ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY.$VAR ...>;
+        ...
+        $SQL = <... $INP ...>;
+        ...
+        $CON.query(<... $SQL ...>, ...);
+    - pattern: |
+        $INP = <... $REQ.$QUERY ...>;
+        ...
+        $SQL = <... $INP ...>;
+        ...
+        $CON.query(<... $SQL ...>, ...);
   message: >-
     Untrusted input concatinated with raw SQL query can result in SQL
     Injection.
@@ -11,28 +37,3 @@ rules:
     cwe: >-
       CWE-89: Improper Neutralization of Special Elements used in an SQL
       Command ('SQL Injection')
-  pattern-either:
-  - pattern: |
-      $CON.query(<... $REQ.$QUERY.$VAR ...>, ...)
-  - pattern: |
-      $CON.query(<... $REQ.$QUERY ...>, ...)
-  - pattern: |
-      $SQL = <... $REQ.$QUERY.$VAR ...>;
-      ...
-      $CON.query(<... $SQL ...>, ...);
-  - pattern: |
-      $SQL = <... $REQ.$QUERY ...>;
-      ...
-      $CON.query(<... $SQL ...>, ...);
-  - pattern: |
-      $INP = <... $REQ.$QUERY.$VAR ...>;
-      ...
-      $SQL = <... $INP ...>;
-      ...
-      $CON.query(<... $SQL ...>, ...);
-  - pattern: |
-      $INP = <... $REQ.$QUERY ...>;
-      ...
-      $SQL = <... $INP ...>;
-      ...
-      $CON.query(<... $SQL ...>, ...);
