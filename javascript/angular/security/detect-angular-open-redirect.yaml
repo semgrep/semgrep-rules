@@ -1,12 +1,5 @@
 rules:
 - id: detect-angular-open-redirect
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $SOURCE = $INPUT;
-        $window.location.href = $SOURCE + $STATICVALUE;
-    - pattern: |
-        $window.location.href = $SOURCE + $STATICVALUE;
   message: |
     Use of $window.location.href can lead to open-redirect if user input is used for redirection.
   languages:
@@ -23,3 +16,9 @@ rules:
   fix: |
 
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      $SOURCE = $INPUT;
+      $window.location.href = $SOURCE + $STATICVALUE;
+  - pattern: |
+      $window.location.href = $SOURCE + $STATICVALUE;

@@ -1,9 +1,5 @@
 rules:
 - id: avoid-raw-sql
-  patterns:
-  - pattern-either:
-    - pattern: $MODEL.objects.raw($QUERY, ...)
-    - pattern: django.db.models.expressions.RawSQL(...)
   message: You should be very careful whenever you write raw SQL. Consider using Django ORM before raw SQL. See https://docs.djangoproject.com/en/3.0/topics/db/sql/#passing-parameters-into-raw
   metadata:
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
@@ -13,3 +9,6 @@ rules:
     - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: $MODEL.objects.raw($QUERY, ...)
+  - pattern: django.db.models.expressions.RawSQL(...)

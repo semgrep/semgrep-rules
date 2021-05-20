@@ -2,20 +2,6 @@ rules:
 - id: copy-from-own-alias
   severity: ERROR
   languages: [generic]
-  patterns:
-  - pattern-either:
-    - pattern: |
-        FROM $IMAGE:$TAG as $REF
-        ...
-        COPY --from=$REF
-        ...
-        FROM
-    - pattern: |
-        FROM $IMAGE:$TAG AS $REF
-        ...
-        COPY --from=$REF
-        ...
-        FROM
   message: >-
     COPY instructions cannot copy from its own alias. The '$REF' alias is used before
     switching
@@ -29,3 +15,16 @@ rules:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern-either:
+  - pattern: |
+      FROM $IMAGE:$TAG as $REF
+      ...
+      COPY --from=$REF
+      ...
+      FROM
+  - pattern: |
+      FROM $IMAGE:$TAG AS $REF
+      ...
+      COPY --from=$REF
+      ...
+      FROM

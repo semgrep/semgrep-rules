@@ -13,20 +13,19 @@ rules:
     variables in file paths are sanitized. You may aslso consider using a utility
     method such as org.apache.commons.io.FilenameUtils.getName(...) to only
     retrieve the file name from the path.
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $RETURNTYPE $FUNC (..., @PathParam(...) $TYPE $VAR, ...) {
-          ...
-          new File(..., $VAR, ...);
-          ...
-        }
-    - pattern: |-
-        $RETURNTYPE $FUNC (..., @javax.ws.rs.PathParam(...) $TYPE $VAR, ...) {
-          ...
-          new File(..., $VAR, ...);
-          ...
-        }
   severity: WARNING
   languages:
   - java
+  pattern-either:
+  - pattern: |
+      $RETURNTYPE $FUNC (..., @PathParam(...) $TYPE $VAR, ...) {
+        ...
+        new File(..., $VAR, ...);
+        ...
+      }
+  - pattern: |-
+      $RETURNTYPE $FUNC (..., @javax.ws.rs.PathParam(...) $TYPE $VAR, ...) {
+        ...
+        new File(..., $VAR, ...);
+        ...
+      }

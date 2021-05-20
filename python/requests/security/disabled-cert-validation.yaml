@@ -1,15 +1,5 @@
 rules:
 - id: disabled-cert-validation
-  patterns:
-  - pattern-either:
-    - pattern: requests.put(..., verify=False, ...)
-    - pattern: requests.patch(..., verify=False, ...)
-    - pattern: requests.delete(..., verify=False, ...)
-    - pattern: requests.head(..., verify=False, ...)
-    - pattern: requests.options(..., verify=False, ...)
-    - pattern: requests.request(..., verify=False, ...)
-    - pattern: requests.get(..., verify=False, ...)
-    - pattern: requests.post(..., verify=False, ...)
   message: |
     Certificate verification has been explicitly disabled. This
     permits insecure connections to insecure servers. Re-enable
@@ -21,3 +11,12 @@ rules:
     - https://stackoverflow.com/questions/41740361/is-it-safe-to-disable-ssl-certificate-verification-in-pythonss-requests-lib
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: requests.put(..., verify=False, ...)
+  - pattern: requests.patch(..., verify=False, ...)
+  - pattern: requests.delete(..., verify=False, ...)
+  - pattern: requests.head(..., verify=False, ...)
+  - pattern: requests.options(..., verify=False, ...)
+  - pattern: requests.request(..., verify=False, ...)
+  - pattern: requests.get(..., verify=False, ...)
+  - pattern: requests.post(..., verify=False, ...)
