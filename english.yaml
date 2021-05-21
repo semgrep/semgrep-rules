@@ -1,0 +1,15 @@
+rules:
+- id: dom_xss
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $VAR=$X.split("#")[...];
+    - pattern: |
+        document.write(...,$VAR,...);
+  - pattern-not: |
+      document.write('...');
+  message: |
+    Semgrep found a match
+  severity: WARNING
+  languages:
+  - js
