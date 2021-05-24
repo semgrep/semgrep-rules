@@ -1,9 +1,8 @@
 rules:
 - id: disallow-old-tls-versions1
   patterns:
-  - pattern-either:
-    - pattern: |
-        new SSLConnectionSocketFactory(...);
+  - pattern: |
+      new SSLConnectionSocketFactory(...);
   - pattern-not: |
       new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2", "TLSv1.3"}, ...);
   - pattern-not: |

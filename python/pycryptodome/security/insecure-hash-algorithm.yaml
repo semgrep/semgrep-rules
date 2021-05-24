@@ -1,9 +1,5 @@
 rules:
 - id: insecure-hash-algorithm-md2
-  patterns:
-  - pattern-either:
-    - pattern: Crypto.Hash.MD2.new(...)
-    - pattern: Cryptodome.Hash.MD2.new (...)
   message: |
     Detected MD2 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
@@ -18,11 +14,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Crypto.Hash.MD2.new(...)
+  - pattern: Cryptodome.Hash.MD2.new (...)
 - id: insecure-hash-algorithm-md4
-  patterns:
-  - pattern-either:
-    - pattern: Crypto.Hash.MD4.new(...)
-    - pattern: Cryptodome.Hash.MD4.new (...)
   message: |
     Detected MD4 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
@@ -36,11 +31,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Crypto.Hash.MD4.new(...)
+  - pattern: Cryptodome.Hash.MD4.new (...)
 - id: insecure-hash-algorithm-md5
-  patterns:
-  - pattern-either:
-    - pattern: Crypto.Hash.MD5.new(...)
-    - pattern: Cryptodome.Hash.MD5.new (...)
   message: |
     Detected MD5 hash algorithm which is considered insecure. MD5 is not
     collision resistant and is therefore not suitable as a cryptographic
@@ -56,11 +50,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Crypto.Hash.MD5.new(...)
+  - pattern: Cryptodome.Hash.MD5.new (...)
 - id: insecure-hash-algorithm-sha1
-  patterns:
-  - pattern-either:
-    - pattern: Crypto.Hash.SHA.new(...)
-    - pattern: Cryptodome.Hash.SHA.new (...)
   message: |
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
@@ -77,3 +70,6 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Crypto.Hash.SHA.new(...)
+  - pattern: Cryptodome.Hash.SHA.new (...)

@@ -25,35 +25,32 @@ rules:
             $INTERM = <... $ROUTEVAR ...>
             ...
             eval(..., <... $INTERM ...>, ...)
-  - patterns:
-    - pattern-either:
-      - pattern: eval(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: eval(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: eval(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: eval(..., <... flask.request.$W ...>, ...)
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W.get(...) ...>
-            ...
-            eval(..., <... $INTERM ...>, ...)
-        - pattern: eval(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W[...] ...>
-            ...
-            eval(..., <... $INTERM ...>, ...)
-        - pattern: eval(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W(...) ...>
-            ...
-            eval(..., <... $INTERM ...>, ...)
-        - pattern: eval(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W ...>
-            ...
-            eval(..., <... $INTERM ...>, ...)
-        - pattern: eval(...)
+  - pattern: eval(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: eval(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: eval(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: eval(..., <... flask.request.$W ...>, ...)
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W.get(...) ...>
+          ...
+          eval(..., <... $INTERM ...>, ...)
+      - pattern: eval(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W[...] ...>
+          ...
+          eval(..., <... $INTERM ...>, ...)
+      - pattern: eval(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W(...) ...>
+          ...
+          eval(..., <... $INTERM ...>, ...)
+      - pattern: eval(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W ...>
+          ...
+          eval(..., <... $INTERM ...>, ...)
+      - pattern: eval(...)

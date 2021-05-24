@@ -4,11 +4,10 @@ rules:
   - pattern-inside: |
       def $X(...):
         ...
-  - pattern-either:
-    - pattern: |
-        $Y = json.dumps(...)
-        ...
-        django.http.HttpResponse($Y, ...)
+  - pattern: |
+      $Y = json.dumps(...)
+      ...
+      django.http.HttpResponse($Y, ...)
   message: Use JsonResponse instead
   languages: [python]
   severity: ERROR

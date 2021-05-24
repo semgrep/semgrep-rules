@@ -27,11 +27,10 @@ rules:
         $URL = "=~/^[Ff][Tt][Pp]://.*/"
         ...
         $OPENERDIRECTOR.open($URL, ...)
-  - patterns:
-    - pattern: |
-        $URL = "=~/^[Ff][Tt][Pp]://.*/"
-        ...
-        urllib.request.OpenerDirector(...).open($URL, ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.OpenerDirector(...).open($URL, ...)
   - patterns:
     - pattern-inside: |
         def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):

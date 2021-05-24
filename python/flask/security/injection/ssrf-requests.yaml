@@ -29,35 +29,31 @@ rules:
             $INTERM = <... $ROUTEVAR ...>
             ...
             requests.$FUNC(..., <... $INTERM ...>, ...)
+  - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: requests.$FUNC(..., <... flask.request.$W ...>, ...)
   - patterns:
-    - pattern-either:
-      - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: requests.$FUNC(..., <... flask.request.$W ...>, ...)
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        requests.$FUNC(<... $INTERM ...>, ...)
+    - pattern: requests.$FUNC(...)
   - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W.get(...) ...>
-            ...
-            requests.$FUNC(<... $INTERM ...>, ...)
-        - pattern: requests.$FUNC(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W[...] ...>
-            ...
-            requests.$FUNC(<... $INTERM ...>, ...)
-        - pattern: requests.$FUNC(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W(...) ...>
-            ...
-            requests.$FUNC(<... $INTERM ...>, ...)
-        - pattern: requests.$FUNC(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W ...>
-            ...
-            requests.$FUNC(<... $INTERM ...>, ...)
-        - pattern: requests.$FUNC(...)
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        requests.$FUNC(<... $INTERM ...>, ...)
+    - pattern: requests.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        requests.$FUNC(<... $INTERM ...>, ...)
+    - pattern: requests.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        requests.$FUNC(<... $INTERM ...>, ...)
+    - pattern: requests.$FUNC(...)

@@ -29,11 +29,10 @@ rules:
         $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
         ...
         $OPENERDIRECTOR.retrieve($URL, ...)
-  - patterns:
-    - pattern: |
-        $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
-        ...
-        urllib.request.URLopener(...).retrieve($URL, ...)
+  - pattern: |
+      $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
+      ...
+      urllib.request.URLopener(...).retrieve($URL, ...)
   - patterns:
     - pattern-inside: |
         def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):

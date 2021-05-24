@@ -27,35 +27,32 @@ rules:
             $INTERM = <... $ROUTEVAR ...>
             ...
             os.system(..., <... $INTERM ...>, ...)
-  - patterns:
-    - pattern-either:
-      - pattern: os.system(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: os.system(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: os.system(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: os.system(..., <... flask.request.$W ...>, ...)
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W.get(...) ...>
-            ...
-            os.system(<... $INTERM ...>)
-        - pattern: os.system(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W[...] ...>
-            ...
-            os.system(<... $INTERM ...>)
-        - pattern: os.system(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W(...) ...>
-            ...
-            os.system(<... $INTERM ...>)
-        - pattern: os.system(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W ...>
-            ...
-            os.system(<... $INTERM ...>)
-        - pattern: os.system(...)
+  - pattern: os.system(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W ...>, ...)
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W.get(...) ...>
+          ...
+          os.system(<... $INTERM ...>)
+      - pattern: os.system(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W[...] ...>
+          ...
+          os.system(<... $INTERM ...>)
+      - pattern: os.system(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W(...) ...>
+          ...
+          os.system(<... $INTERM ...>)
+      - pattern: os.system(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W ...>
+          ...
+          os.system(<... $INTERM ...>)
+      - pattern: os.system(...)

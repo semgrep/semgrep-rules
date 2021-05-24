@@ -25,35 +25,32 @@ rules:
             $INTERM = <... $ROUTEVAR ...>
             ...
             exec(..., <... $INTERM ...>, ...)
-  - patterns:
-    - pattern-either:
-      - pattern: exec(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: exec(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: exec(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: exec(..., <... flask.request.$W ...>, ...)
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W.get(...) ...>
-            ...
-            exec(..., <... $INTERM ...>, ...)
-        - pattern: exec(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W[...] ...>
-            ...
-            exec(..., <... $INTERM ...>, ...)
-        - pattern: exec(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W(...) ...>
-            ...
-            exec(..., <... $INTERM ...>, ...)
-        - pattern: exec(...)
-      - patterns:
-        - pattern-inside: |
-            $INTERM = <... flask.request.$W ...>
-            ...
-            exec(..., <... $INTERM ...>, ...)
-        - pattern: exec(...)
+  - pattern: exec(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: exec(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: exec(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: exec(..., <... flask.request.$W ...>, ...)
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W.get(...) ...>
+          ...
+          exec(..., <... $INTERM ...>, ...)
+      - pattern: exec(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W[...] ...>
+          ...
+          exec(..., <... $INTERM ...>, ...)
+      - pattern: exec(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W(...) ...>
+          ...
+          exec(..., <... $INTERM ...>, ...)
+      - pattern: exec(...)
+    - patterns:
+      - pattern-inside: |
+          $INTERM = <... flask.request.$W ...>
+          ...
+          exec(..., <... $INTERM ...>, ...)
+      - pattern: exec(...)

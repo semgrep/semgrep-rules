@@ -1,20 +1,18 @@
 rules:
 - id: request-session-with-http
   pattern-either:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...):
-            ...
-            $SESSION = requests.Session(...)
-            ...
-            $SESSION.$W($URL, ...)
-      - pattern: |
-          def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...):
-            ...
-            $SESSION = requests.Session(...)
-            ...
-            $SESSION.request($METHOD, $URL, ...)
+  - pattern: |
+      def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...):
+        ...
+        $SESSION = requests.Session(...)
+        ...
+        $SESSION.$W($URL, ...)
+  - pattern: |
+      def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...):
+        ...
+        $SESSION = requests.Session(...)
+        ...
+        $SESSION.request($METHOD, $URL, ...)
   - patterns:
     - pattern-inside: |
         $SESSION = requests.Session(...)
@@ -40,9 +38,9 @@ rules:
     owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     asvs:
-      section: "V9 Communications Verification Requirements"
-      control_id: "9.2.1 Weak TLS"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements"
-      version: "4"
+      section: V9 Communications Verification Requirements
+      control_id: 9.2.1 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+      version: '4'
   languages: [python]
   severity: ERROR

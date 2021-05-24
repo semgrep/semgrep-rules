@@ -8,8 +8,7 @@ rules:
       @app.route(...)
       def $X(filename):
         ...
-  - pattern-either:
-    - pattern: flask.send_file(filename, ...)
+  - pattern: flask.send_file(filename, ...)
   message: Looks like `filename` could flow to `flask.send_file()` function. Make sure to properly sanitize filename or use
     `flask.send_from_directory`
   metadata:

@@ -1,15 +1,14 @@
 rules:
 - id: elastic-search-encryption-at-rest
   patterns:
-    - pattern-either:
-      - pattern: |
-          {...}
-    - pattern-not-inside: |
-        {... encrypt_at_rest{... enabled = true ...} ...}
-    - pattern-inside: |
-        resource "aws_elasticsearch_domain" "..." {...}
+  - pattern: |
+      {...}
+  - pattern-not-inside: |
+      {... encrypt_at_rest{... enabled = true ...} ...}
+  - pattern-inside: |
+      resource "aws_elasticsearch_domain" "..." {...}
   languages:
-    - generic
+  - generic
   paths:
     include:
     - '*.tf'
