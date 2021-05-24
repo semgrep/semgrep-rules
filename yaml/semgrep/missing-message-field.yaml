@@ -1,0 +1,15 @@
+rules:
+- id: missing-message-field
+  message: |
+    This rule does not have a message. Semgrep requires that
+    rules have a message. Include a message to explain what the rule does.
+    Consider writing a message that explains why this is an issue and
+    how to fix it.
+  languages: [yaml]
+  patterns:
+  - pattern-inside: 'rules: [..., $RULE, ...]'
+  - pattern: $RULE
+  - pattern-not: |
+      ...
+      message: ...
+  severity: WARNING

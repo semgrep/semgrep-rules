@@ -1,7 +1,9 @@
 rules:
-- id: identical-pattern
+- id: duplicate-pattern
   message: |
-    you use multiple times the same pattern
+    Two identical pattern clauses were detected.
+    This will cause Semgrep to run the same pattern twice.
+    Remove one of the duplicate pattern clauses.
   severity: ERROR
   languages: [yaml]
   patterns:
