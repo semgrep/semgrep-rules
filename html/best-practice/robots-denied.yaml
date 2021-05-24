@@ -1,9 +1,8 @@
 rules:
 - id: robots-denied
-  patterns:
-  - pattern-either:
-    - pattern: <meta name="robots" ...>
-    - pattern: <META NAME="ROBOTS" ...>
   message: This page denies crawlers from indexing the page. Remove the robots 'meta' tag.
   severity: INFO
   languages: [generic]
+  pattern-either:
+  - pattern: <meta name="robots" ...>
+  - pattern: <META NAME="ROBOTS" ...>

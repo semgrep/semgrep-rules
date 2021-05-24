@@ -1,11 +1,5 @@
 rules:
 - id: bypass-tls-verification
-  patterns:
-  - pattern-either:
-    - pattern: |
-        process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-    - pattern: |
-        {rejectUnauthorized:false}
   message: |
     Checks for setting the environment variable NODE_TLS_REJECT_UNAUTHORIZED to 0, which disables TLS verification.
     This should only be used for debugging purposes. Setting the option rejectUnauthorized to false bypasses verification
@@ -20,3 +14,8 @@ rules:
     - https://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100
   severity: WARNING
   languages: [javascript]
+  pattern-either:
+  - pattern: |
+      process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+  - pattern: |
+      {rejectUnauthorized:false}

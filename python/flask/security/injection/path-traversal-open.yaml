@@ -11,88 +11,87 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://owasp.org/www-community/attacks/Path_Traversal
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: open(...)
-      - pattern-either:
+  pattern-either:
+  - patterns:
+    - pattern: open(...)
+    - pattern-either:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            open(..., <... $ROUTEVAR ...>, ...)
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            with open(..., <... $ROUTEVAR ...>, ...) as $FD:
+              ...
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            open(..., <... $INTERM ...>, ...)
+  - patterns:
+    - pattern-either:
+      - pattern: open(..., <... flask.request.$W.get(...) ...>, ...)
+      - pattern: open(..., <... flask.request.$W[...] ...>, ...)
+      - pattern: open(..., <... flask.request.$W(...) ...>, ...)
+      - pattern: open(..., <... flask.request.$W ...>, ...)
+  - patterns:
+    - pattern-either:
+      - patterns:
         - pattern-inside: |
-            @$APP.route($ROUTE, ...)
-            def $FUNC(..., $ROUTEVAR, ...):
-              ...
-              open(..., <... $ROUTEVAR ...>, ...)
+            $INTERM = <... flask.request.$W.get(...) ...>
+            ...
+            open(<... $INTERM ...>, ...)
+        - pattern: open(...)
+      - patterns:
         - pattern-inside: |
-            @$APP.route($ROUTE, ...)
-            def $FUNC(..., $ROUTEVAR, ...):
-              ...
-              with open(..., <... $ROUTEVAR ...>, ...) as $FD:
-                ...
+            $INTERM = <... flask.request.$W[...] ...>
+            ...
+            open(<... $INTERM ...>, ...)
+        - pattern: open(...)
+      - patterns:
         - pattern-inside: |
-            @$APP.route($ROUTE, ...)
-            def $FUNC(..., $ROUTEVAR, ...):
+            $INTERM = <... flask.request.$W(...) ...>
+            ...
+            open(<... $INTERM ...>, ...)
+        - pattern: open(...)
+      - patterns:
+        - pattern-inside: |
+            $INTERM = <... flask.request.$W ...>
+            ...
+            open(<... $INTERM ...>, ...)
+        - pattern: open(...)
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $INTERM = <... flask.request.$W.get(...) ...>
+            ...
+            with open(<... $INTERM ...>, ...) as $F:
               ...
-              $INTERM = <... $ROUTEVAR ...>
+        - pattern: open(...)
+      - patterns:
+        - pattern-inside: |
+            $INTERM = <... flask.request.$W[...] ...>
+            ...
+            with open(<... $INTERM ...>, ...) as $F:
               ...
-              open(..., <... $INTERM ...>, ...)
-    - patterns:
-      - pattern-either:
-        - pattern: open(..., <... flask.request.$W.get(...) ...>, ...)
-        - pattern: open(..., <... flask.request.$W[...] ...>, ...)
-        - pattern: open(..., <... flask.request.$W(...) ...>, ...)
-        - pattern: open(..., <... flask.request.$W ...>, ...)
-    - patterns:
-      - pattern-either:
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
+        - pattern: open(...)
+      - patterns:
+        - pattern-inside: |
+            $INTERM = <... flask.request.$W(...) ...>
+            ...
+            with open(<... $INTERM ...>, ...) as $F:
               ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
+        - pattern: open(...)
+      - patterns:
+        - pattern-inside: |
+            $INTERM = <... flask.request.$W ...>
+            ...
+            with open(<... $INTERM ...>, ...) as $F:
               ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-    - patterns:
-      - pattern-either:
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
+        - pattern: open(...)

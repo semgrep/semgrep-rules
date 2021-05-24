@@ -2,9 +2,10 @@ rules:
 - id: paramiko-exec-command
   patterns:
   - pattern-inside: |
-      import paramiko
+      $CLIENT = paramiko.client.SSHClient(...)
       ...
   - pattern: $CLIENT.exec_command(...)
+  - pattern-not: $CLIENT.exec_command("...", ...)
   message: |
     Unverified SSL context detected. This will permit insecure connections without verifying
     SSL certificates. Use 'ssl.create_default_context()' instead.

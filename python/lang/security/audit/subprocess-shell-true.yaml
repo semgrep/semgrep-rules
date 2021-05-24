@@ -1,6 +1,8 @@
 rules:
 - id: subprocess-shell-true
-  pattern: subprocess.$FUNC(..., shell=True, ...)
+  patterns:
+  - pattern: subprocess.$FUNC(..., shell=True, ...)
+  - pattern-not: subprocess.$FUNC("...", shell=True, ...)
   message: |
     Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn
     the command using a shell process. Doing so propagates current shell settings and variables, which

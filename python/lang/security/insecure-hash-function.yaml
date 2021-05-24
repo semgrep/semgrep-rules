@@ -1,9 +1,5 @@
 rules:
 - id: insecure-hash-function
-  patterns:
-  - pattern-either:
-    - pattern: hashlib.new("=~/[M|m][D|d][4|5]/", ...)
-    - pattern: hashlib.new(..., name="=~/[M|m][D|d][4|5]/", ...)
   message: |
     Detected use of an insecure MD4 or MD5 hash function.
     These functions have known vulnerabilities and are considered deprecated.
@@ -13,13 +9,16 @@ rules:
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/hashlib_new_insecure_functions.py
     asvs:
-      section: "V6 Stored Cryptography Verification Requirements"
-      control_id: "6.2.2 Insecure Custom Algorithm"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms"
-      version: "4"
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.2 Insecure Custom Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
     references:
     - https://tools.ietf.org/html/rfc6151
     - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
     - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
   languages: [python]
   severity: WARNING
+  pattern-either:
+  - pattern: hashlib.new("=~/[M|m][D|d][4|5]/", ...)
+  - pattern: hashlib.new(..., name="=~/[M|m][D|d][4|5]/", ...)
