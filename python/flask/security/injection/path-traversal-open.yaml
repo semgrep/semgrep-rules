@@ -37,57 +37,55 @@ rules:
   - pattern: open(..., <... flask.request.$W[...] ...>, ...)
   - pattern: open(..., <... flask.request.$W(...) ...>, ...)
   - pattern: open(..., <... flask.request.$W ...>, ...)
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W.get(...) ...>
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
           ...
-          open(<... $INTERM ...>, ...)
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W[...] ...>
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
           ...
-          open(<... $INTERM ...>, ...)
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W(...) ...>
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
           ...
-          open(<... $INTERM ...>, ...)
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W ...>
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
           ...
-          open(<... $INTERM ...>, ...)
-      - pattern: open(...)
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W.get(...) ...>
-          ...
-          with open(<... $INTERM ...>, ...) as $F:
-            ...
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W[...] ...>
-          ...
-          with open(<... $INTERM ...>, ...) as $F:
-            ...
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W(...) ...>
-          ...
-          with open(<... $INTERM ...>, ...) as $F:
-            ...
-      - pattern: open(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W ...>
-          ...
-          with open(<... $INTERM ...>, ...) as $F:
-            ...
-      - pattern: open(...)
+    - pattern: open(...)
