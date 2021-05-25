@@ -27,7 +27,7 @@ jobs:
       if: always()
       with:
         name: tests
-        path: ${{ steps.test.outputs.output_dir }}
+        path: ${{ steps.test-develop.outputs.output_dir }}
     - uses: actions/upload-artifact@v2
       with:
         name: semgrep_runs
