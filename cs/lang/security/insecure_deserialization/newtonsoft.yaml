@@ -11,27 +11,27 @@ rules:
   message: |
     TypeNameHandling should be used with caution when your application deserializes JSON from an external source. Incoming types should be validated with a custom SerializationBinder when deserializing with a value other than None.
   patterns:
-    - pattern-inside: |
-        using Newtonsoft.Json;
-        ...
-    - pattern-either: 
-      - pattern: |
-          new JsonSerializerSettings
-          {
-            TypeNameHandling = TypeNameHandling.All
-          }
-      - pattern: |
-          new JsonSerializerSettings
-          {
-            TypeNameHandling = TypeNameHandling.Auto
-          }
-      - pattern: |
-          new JsonSerializerSettings
-          {
-            TypeNameHandling = TypeNameHandling.Arrays
-          }
-      - pattern: |
-          new JsonSerializerSettings
-          {
-            TypeNameHandling = TypeNameHandling.Objects
-          }
+  - pattern-inside: |
+      using Newtonsoft.Json;
+      ...
+  - pattern-either:
+    - pattern: |
+        new JsonSerializerSettings
+        {
+          TypeNameHandling = TypeNameHandling.All
+        }
+    - pattern: |
+        new JsonSerializerSettings
+        {
+          TypeNameHandling = TypeNameHandling.Auto
+        }
+    - pattern: |
+        new JsonSerializerSettings
+        {
+          TypeNameHandling = TypeNameHandling.Arrays
+        }
+    - pattern: |
+        new JsonSerializerSettings
+        {
+          TypeNameHandling = TypeNameHandling.Objects
+        }
