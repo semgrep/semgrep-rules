@@ -1,0 +1,37 @@
+rules:
+- id: insecure-newtonsoft-deserialization
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_JsonSerializer_TypeNameHandling.htm
+  message: |
+    TypeNameHandling should be used with caution when your application deserializes JSON from an external source. Incoming types should be validated with a custom SerializationBinder when deserializing with a value other than None.
+  patterns:
+    - pattern-inside: |
+        using Newtonsoft.Json;
+        ...
+    - pattern-either: 
+      - pattern: |
+          new JsonSerializerSettings
+          {
+            TypeNameHandling = TypeNameHandling.All
+          }
+      - pattern: |
+          new JsonSerializerSettings
+          {
+            TypeNameHandling = TypeNameHandling.Auto
+          }
+      - pattern: |
+          new JsonSerializerSettings
+          {
+            TypeNameHandling = TypeNameHandling.Arrays
+          }
+      - pattern: |
+          new JsonSerializerSettings
+          {
+            TypeNameHandling = TypeNameHandling.Objects
+          }

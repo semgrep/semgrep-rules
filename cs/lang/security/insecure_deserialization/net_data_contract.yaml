@@ -1,0 +1,18 @@
+rules:
+- id: insecure-netdatacontract-deserialization
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.netdatacontractserializer?view=netframework-4.8#security
+  message: |
+    The NetDataContractSerializer type is dangerous and is not recommended for data processing. Applications should stop using NetDataContractSerializer as soon as possible, even if they believe the data they're processing to be trustworthy. NetDataContractSerializer is insecure and can't be made secure
+  patterns:
+    - pattern-inside: |
+        using System.Runtime.Serialization;
+        ...
+    - pattern: |
+        new NetDataContractSerializer(); 

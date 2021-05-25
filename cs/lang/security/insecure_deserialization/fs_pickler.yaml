@@ -1,0 +1,18 @@
+rules:
+- id: insecure-fspickler-deserialization
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://mbraceproject.github.io/FsPickler/tutorial.html#Disabling-Subtype-Resolution
+  message: |
+    The FsPickler is dangerous and is not recommended for data processing. Default configuration tend to insecure deserialization vulnerability.
+  patterns:
+    - pattern-inside: |
+        using MBrace.FsPickler.Json;
+        ...
+    - pattern: |
+        FsPickler.CreateJsonSerializer();

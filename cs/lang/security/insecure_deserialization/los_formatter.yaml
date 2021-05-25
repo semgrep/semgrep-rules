@@ -1,0 +1,18 @@
+rules:
+- id: insecure-losformatter-deserialization
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.ui.losformatter?view=netframework-4.8
+  message: |
+    The LosFormatter type is dangerous and is not recommended for data processing. Applications should stop using LosFormatter as soon as possible, even if they believe the data they're processing to be trustworthy. LosFormatter is insecure and can't be made secure
+  patterns:
+  - pattern-inside: |
+      using System.Web.UI;
+      ...
+  - pattern: |
+      new LosFormatter();
