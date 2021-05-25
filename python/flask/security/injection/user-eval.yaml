@@ -29,28 +29,27 @@ rules:
   - pattern: eval(..., <... flask.request.$W[...] ...>, ...)
   - pattern: eval(..., <... flask.request.$W(...) ...>, ...)
   - pattern: eval(..., <... flask.request.$W ...>, ...)
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W.get(...) ...>
-          ...
-          eval(..., <... $INTERM ...>, ...)
-      - pattern: eval(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W[...] ...>
-          ...
-          eval(..., <... $INTERM ...>, ...)
-      - pattern: eval(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W(...) ...>
-          ...
-          eval(..., <... $INTERM ...>, ...)
-      - pattern: eval(...)
-    - patterns:
-      - pattern-inside: |
-          $INTERM = <... flask.request.$W ...>
-          ...
-          eval(..., <... $INTERM ...>, ...)
-      - pattern: eval(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        eval(..., <... $INTERM ...>, ...)
+    - pattern: eval(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        eval(..., <... $INTERM ...>, ...)
+    - pattern: eval(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        eval(..., <... $INTERM ...>, ...)
+    - pattern: eval(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        eval(..., <... $INTERM ...>, ...)
+    - pattern: eval(...)
