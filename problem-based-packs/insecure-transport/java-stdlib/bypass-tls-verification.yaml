@@ -1,13 +1,12 @@
 rules:
 - id: bypass-tls-verification
   patterns:
-  - pattern-either:
-    - pattern: |
-        new X509TrustManager() {
-          ...
-          public void checkClientTrusted(X509Certificate[] certs, String authType) {...}
-          ...
-        }
+  - pattern: |
+      new X509TrustManager() {
+        ...
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {...}
+        ...
+      }
   - pattern-not: |
       new X509TrustManager() {
         ...

@@ -1,9 +1,8 @@
 rules:
 - id: insufficient-postmessage-origin-validation
   patterns:
-  - pattern-either:
-    - pattern: |
-        window.addEventListener(...)
+  - pattern: |
+      window.addEventListener(...)
   - pattern-not: |
       window.addEventListener(..., function($OBJECT){ if ($OBJ.origin == $X) {
                   ...
