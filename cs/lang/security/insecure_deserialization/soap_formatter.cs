@@ -10,6 +10,7 @@ namespace InsecureDeserialization
             {
                 MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
 
+                // ruleid: insecure-soapformatter-deserialization
                 SoapFormatter soapFormatter = new SoapFormatter();
                 object obj = soapFormatter.Deserialize(ms);
             }

@@ -8,6 +8,7 @@ namespace InsecureDeserialization
         {
             try
             {
+                // ruleid: insecure-losformatter-deserialization
                 LosFormatter losFormatter = new LosFormatter();
                 object obj = losFormatter.Deserialize(json);
             }

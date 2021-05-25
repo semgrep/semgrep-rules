@@ -8,6 +8,7 @@ namespace InsecureDeserialization
         {
             try
             {
+                // ruleid: insecure-fspickler-deserialization
                 var fsPickler = FsPickler.CreateJsonSerializer();
                 MemoryStream memoryStream = new MemoryStream(Convert.FromBase64String(json));
                 fsPickler.Deserialize<object>(memoryStream);

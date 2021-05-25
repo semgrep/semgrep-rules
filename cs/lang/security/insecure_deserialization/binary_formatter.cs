@@ -8,6 +8,7 @@ namespace InsecureDeserialization
         {
             try
             {
+                // ruleid: insecure-binaryformatter-deserialization
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
 
                 MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));

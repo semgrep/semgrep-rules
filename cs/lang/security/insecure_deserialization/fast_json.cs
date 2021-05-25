@@ -8,6 +8,7 @@ namespace InsecureDeserialization
         {
             try
             {
+                // ruleid: insecure-fastjson-deserialization
                 var obj = JSON.ToObject(json, new JSONParameters { BadListTypeChecking = false });
             }
             catch (Exception e)

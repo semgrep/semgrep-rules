@@ -8,6 +8,7 @@ namespace InsecureDeserialization
         {
             try
             {
+                // ruleid: insecure-newtonsoft-deserialization
                 JsonConvert.DeserializeObject<object>(json, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.All
