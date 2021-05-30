@@ -1,9 +1,8 @@
 rules:
 - id: dangerous-subshell
   patterns:
-  - pattern-either:
-    - pattern: |
-        `...#{$VAL}...`
+  - pattern: |
+      `...#{$VAL}...`
   - pattern-not: |
       `...#{"..."}...`
   - pattern-not-inside: |

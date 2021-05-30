@@ -1,9 +1,5 @@
 rules:
 - id: insecure-cipher-algorithm-rc2
-  patterns:
-  - pattern-either:
-    - pattern: Cryptodome.Cipher.ARC2.new(...)
-    - pattern: Crypto.Cipher.ARC2.new
   message: |
     Detected RC2 cipher algorithm which is considered insecure. The algorithm has known vulnerabilities and is difficult to use securely. Use AES instead.
   metadata:
@@ -17,11 +13,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Cryptodome.Cipher.ARC2.new(...)
+  - pattern: Crypto.Cipher.ARC2.new
 - id: insecure-cipher-algorithm-rc4
-  patterns:
-  - pattern-either:
-    - pattern: Cryptodome.Cipher.ARC4.new(...)
-    - pattern: Crypto.Cipher.ARC4.new(...)
   message: |
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
@@ -36,11 +31,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Cryptodome.Cipher.ARC4.new(...)
+  - pattern: Crypto.Cipher.ARC4.new(...)
 - id: insecure-cipher-algorithm-blowfish
-  patterns:
-  - pattern-either:
-    - pattern: Cryptodome.Cipher.Blowfish.new(...)
-    - pattern: Crypto.Cipher.Blowfish.new(...)
   message: |
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
@@ -54,11 +48,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Cryptodome.Cipher.Blowfish.new(...)
+  - pattern: Crypto.Cipher.Blowfish.new(...)
 - id: insecure-cipher-algorithm-des
-  patterns:
-  - pattern-either:
-    - pattern: Cryptodome.Cipher.DES.new(...)
-    - pattern: Crypto.Cipher.DES.new(...)
   message: |
     Detected DES cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
@@ -72,11 +65,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Cryptodome.Cipher.DES.new(...)
+  - pattern: Crypto.Cipher.DES.new(...)
 - id: insecure-cipher-algorithm-xor
-  patterns:
-  - pattern-either:
-    - pattern: Cryptodome.Cipher.XOR.new(...)
-    - pattern: Crypto.Cipher.XOR.new(...)
   message: |
     Detected XOR cipher algorithm which is considered insecure. This algorithm
     is not cryptographically secure and can be reversed easily. Use AES instead.
@@ -90,3 +82,6 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: Cryptodome.Cipher.XOR.new(...)
+  - pattern: Crypto.Cipher.XOR.new(...)

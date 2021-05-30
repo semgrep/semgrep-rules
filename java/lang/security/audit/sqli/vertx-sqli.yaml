@@ -1,48 +1,5 @@
 rules:
 - id: vertx-sqli
-  pattern-either:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-either:
-          - pattern-inside: |
-              String $SQL = $X + $Y;
-              ...
-          - pattern-inside: |
-              String $SQL = String.format(...);
-              ...
-          - pattern-inside: |
-              $TYPE $FUNC(...,String $SQL,...) {
-                ...
-              }
-        - pattern-not-inside: |
-            String $SQL = "..." + "...";
-            ...
-        - pattern: $SC.$METHOD($SQL,...)
-      - pattern: |
-          $SC.$METHOD(String.format(...),...);
-      - pattern: |
-          $SC.$METHOD($X + $Y,...);
-    - pattern-either:
-      - pattern-inside: |
-          SqlClient $SC = ...;
-          ...
-      - pattern-inside: |
-          SqlConnection $SC = ...;
-          ...
-      - pattern-inside: |
-          $TYPE $FUNC(...,SqlClient $SC,...) {
-            ...
-          }
-      - pattern-inside: |
-          $TYPE $FUNC(...,SqlConnection $SC,...) {
-            ...
-          }
-    - pattern-not: |
-        $SC.$METHOD("..." + "...",...);
-    - metavariable-regex:
-        metavariable: $METHOD
-        regex: ^(query|preparedQuery|prepare)$
   message: |
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
@@ -50,3 +7,45 @@ rules:
     can obtain a PreparedStatement using 'connection.prepareStatement'.
   languages: [java]
   severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            String $SQL = $X + $Y;
+            ...
+        - pattern-inside: |
+            String $SQL = String.format(...);
+            ...
+        - pattern-inside: |
+            $TYPE $FUNC(...,String $SQL,...) {
+              ...
+            }
+      - pattern-not-inside: |
+          String $SQL = "..." + "...";
+          ...
+      - pattern: $SC.$METHOD($SQL,...)
+    - pattern: |
+        $SC.$METHOD(String.format(...),...);
+    - pattern: |
+        $SC.$METHOD($X + $Y,...);
+  - pattern-either:
+    - pattern-inside: |
+        SqlClient $SC = ...;
+        ...
+    - pattern-inside: |
+        SqlConnection $SC = ...;
+        ...
+    - pattern-inside: |
+        $TYPE $FUNC(...,SqlClient $SC,...) {
+          ...
+        }
+    - pattern-inside: |
+        $TYPE $FUNC(...,SqlConnection $SC,...) {
+          ...
+        }
+  - pattern-not: |
+      $SC.$METHOD("..." + "...",...);
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(query|preparedQuery|prepare)$

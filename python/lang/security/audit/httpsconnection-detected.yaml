@@ -1,10 +1,5 @@
 rules:
 - id: httpsconnection-detected
-  patterns:
-  - pattern-either:
-    - pattern: httplib.HTTPSConnection(...)
-    - pattern: http.client.HTTPSConnection(...)
-    - pattern: six.moves.http_client.HTTPSConnection(...)
   message: |
     The HTTPSConnection API has changed frequently with minor releases of Python.
     Ensure you are using the API for your version of Python securely.
@@ -19,3 +14,7 @@ rules:
   severity: WARNING
   languages:
   - python
+  pattern-either:
+  - pattern: httplib.HTTPSConnection(...)
+  - pattern: http.client.HTTPSConnection(...)
+  - pattern: six.moves.http_client.HTTPSConnection(...)

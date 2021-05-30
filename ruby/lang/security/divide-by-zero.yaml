@@ -1,13 +1,5 @@
 rules:
 - id: divide-by-zero
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $X / 0
-    - pattern: |
-        $ZERO = 0
-        ...
-        $X / $ZERO
   message: |
     Checks for divide by zero. Best practice involves not dividing a variable by zero, as this leads to a Ruby
     ZeroDivisionError.
@@ -17,3 +9,10 @@ rules:
   languages:
   - ruby
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $X / 0
+  - pattern: |
+      $ZERO = 0
+      ...
+      $X / $ZERO

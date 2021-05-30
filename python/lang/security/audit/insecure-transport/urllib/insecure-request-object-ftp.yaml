@@ -12,14 +12,13 @@ rules:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.Request("=~/^[Ff][Tt][Pp]://.*/", ...)
-    - pattern: |
-        $URL = "=~/^[Ff][Tt][Pp]://.*/"
+  pattern-either:
+  - pattern: urllib.request.Request("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.Request($URL, ...)
+  - pattern: |-
+      def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
         ...
         urllib.request.Request($URL, ...)
-    - pattern: |-
-        def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-          ...
-          urllib.request.Request($URL, ...)

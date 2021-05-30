@@ -1,15 +1,14 @@
 rules:
 - id: ecr-image-scan-on-push
   patterns:
-    - pattern-either:
-      - pattern: |
-          {...}
-    - pattern-not-inside: |
-        resource "aws_ecr_repository" "..." {... image_scanning_configuration{scan_on_push=true} ...}
-    - pattern-inside: |
-        resource "aws_ecr_repository" "..." {...}
+  - pattern: |
+      {...}
+  - pattern-not-inside: |
+      resource "aws_ecr_repository" "..." {... image_scanning_configuration{scan_on_push=true} ...}
+  - pattern-inside: |
+      resource "aws_ecr_repository" "..." {...}
   languages:
-    - generic
+  - generic
   paths:
     include:
     - '*.tf'

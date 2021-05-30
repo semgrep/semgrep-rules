@@ -4,13 +4,9 @@ rules:
   - go
   message: >
     Detected string concatenation with a non-literal variable in a pgx
-
     Go SQL statement. This could lead to SQL injection if the variable is user-controlled
-
     and not properly sanitized. In order to prevent SQL injection,
-
     used parameterized queries instead. You can use parameterized queries like so:
-
     (`SELECT $1 FROM table`, `data1)
   metadata:
     references:
@@ -19,9 +15,7 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-either:
-        - pattern: |
-            $DB.$METHOD(...,$QUERY,...)
+      - pattern: $DB.$METHOD(...,$QUERY,...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y

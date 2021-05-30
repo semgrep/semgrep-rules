@@ -1,13 +1,12 @@
 rules:
 - id: ftp-request
   patterns:
-  - pattern-either:
-    - pattern: |
-        var $X = require('ftp');
-        ...
-        let $C = new $X();
-        ...
-        $C.connect(...);
+  - pattern: |
+      var $X = require('ftp');
+      ...
+      let $C = new $X();
+      ...
+      $C.connect(...);
   - pattern-not: |
       var $X = require('ftp');
       ...

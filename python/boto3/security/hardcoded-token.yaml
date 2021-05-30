@@ -11,10 +11,9 @@ rules:
     references:
     - https://bento.dev/checks/boto3/hardcoded-access-token/
     - https://aws.amazon.com/blogs/security/what-to-do-if-you-inadvertently-expose-an-aws-access-key/
-  patterns:
-  - pattern-either:
-    - pattern: $W(..., aws_secret_access_key="=~/^[A-Za-z0-9/+=]+$/", ...)
-    - pattern: $W(..., aws_access_key_id="=~/^AKI/", ...)
-    - pattern: $W(..., aws_session_token="...", ...)
   languages: [python]
   severity: WARNING
+  pattern-either:
+  - pattern: $W(..., aws_secret_access_key="=~/^[A-Za-z0-9/+=]+$/", ...)
+  - pattern: $W(..., aws_access_key_id="=~/^AKI/", ...)
+  - pattern: $W(..., aws_session_token="...", ...)

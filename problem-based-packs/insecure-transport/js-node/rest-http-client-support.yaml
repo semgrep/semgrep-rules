@@ -1,29 +1,5 @@
 rules:
 - id: rest-http-client-support
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $CLIENT = require('node-rest-client').Client;
-        ...
-        $C = new $CLIENT();
-        ...
-        $C.$REQ("=~/http://.*/", ...);
-    - pattern: |
-        $AXIOS = require('axios');
-        ...
-        $AXIOS({url: "=~/http://.*/"});
-    - pattern: |
-        $AXIOS = require('axios');
-        ...
-        $AXIOS.$REQ("=~/http://.*/", ...);
-    - pattern: |
-        $GOT = require('got');
-        ...
-        $GOT.$REQ("=~/http://.*/", ...);
-    - pattern: |
-        $GOT = require('got');
-        ...
-        $GOT("=~/http://.*/", ...);
   message: |
     Checks for requests to http (unencrypted) sites using some of node js's most popular REST/HTTP libraries,
     including node-rest-client, axios, and got.
@@ -37,3 +13,26 @@ rules:
     - https://www.npmjs.com/package/node-rest-client
   severity: WARNING
   languages: [javascript]
+  pattern-either:
+  - pattern: |
+      $CLIENT = require('node-rest-client').Client;
+      ...
+      $C = new $CLIENT();
+      ...
+      $C.$REQ("=~/http://.*/", ...);
+  - pattern: |
+      $AXIOS = require('axios');
+      ...
+      $AXIOS({url: "=~/http://.*/"});
+  - pattern: |
+      $AXIOS = require('axios');
+      ...
+      $AXIOS.$REQ("=~/http://.*/", ...);
+  - pattern: |
+      $GOT = require('got');
+      ...
+      $GOT.$REQ("=~/http://.*/", ...);
+  - pattern: |
+      $GOT = require('got');
+      ...
+      $GOT("=~/http://.*/", ...);

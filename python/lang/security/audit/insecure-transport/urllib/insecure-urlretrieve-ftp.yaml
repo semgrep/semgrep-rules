@@ -11,14 +11,13 @@ rules:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.urlretrieve("=~/^[Ff][Tt][Pp]://.*/", ...)
-    - pattern: |
-        $URL = "=~/^[Ff][Tt][Pp]://.*/"
+  pattern-either:
+  - pattern: urllib.request.urlretrieve("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.urlretrieve($URL, ...)
+  - pattern: |-
+      def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
         ...
         urllib.request.urlretrieve($URL, ...)
-    - pattern: |-
-        def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-          ...
-          urllib.request.urlretrieve($URL, ...)
