@@ -7,7 +7,8 @@ rules:
        safely, prepared statement should be used.
        SQLAlchemy provides TextualSQL to easily used prepared statement with
        named parameters. For complexe SQL composition, use SQL Expression
-       Langague or SQL Statements and Expressions API.
+       Langague or Schema Definition Language. In most case, SQLAlchemy ORM will
+       be a better option.
     metadata:
       cwe: >
         CWE-89: Improper Neutralization of Special Elements used in an SQL
@@ -24,27 +25,27 @@ rules:
     pattern-either:
 
       - pattern: |
-          $CONNECTION.execute( $SQL + ... )
+          $CONNECTION.execute( $SQL + ..., ... )
       - pattern: |
-          $CONNECTION.execute( $SQL % (...) )
+          $CONNECTION.execute( $SQL % (...), ... )
       - pattern: |
-          $CONNECTION.execute( $SQL.format(...) )
+          $CONNECTION.execute( $SQL.format(...), ... )
       - pattern: |
-          $CONNECTION.execute(f"...{...}...")
+          $CONNECTION.execute(f"...{...}...", ...)
 
       - pattern: |
           $QUERY = $SQL + ...
           ...
-          $CONNECTION.execute($QUERY)
+          $CONNECTION.execute($QUERY, ...)
       - pattern: |
           $QUERY = $SQL % (...)
           ...
-          $CONNECTION.execute($QUERY)
+          $CONNECTION.execute($QUERY, ...)
       - pattern: |
           $QUERY = $SQL.format(...)
           ...
-          $CONNECTION.execute($QUERY)
+          $CONNECTION.execute($QUERY, ...)
       - pattern: |
           $QUERY = f"...{...}..."
           ...
-          $CONNECTION.execute($QUERY)
+          $CONNECTION.execute($QUERY, ...)
