@@ -1,0 +1,21 @@
+rules:
+- id: ec2-imdsv1-optional
+  languages:
+    - generic
+  message: |
+    AWS EC2 Instance allowing use of the IMDSv1
+  paths:
+    include:
+    - '*.tf'    
+  metadata:
+    references:
+      - https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service
+      - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options
+  paths:
+    include:
+    - '*.tf'
+  patterns:
+    - pattern-inside: metadata_options ...
+    - pattern: http_tokens = "optional"
+  severity: ERROR
+
