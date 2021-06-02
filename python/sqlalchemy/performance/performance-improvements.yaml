@@ -5,6 +5,10 @@ rules:
     server-side.
   languages: [python]
   severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - sqlalchemy
 - id: batch-import
   pattern: |
     for $X in $Y:
@@ -12,3 +16,7 @@ rules:
   message: Rather than adding one element at a time, consider batch loading to improve performance.
   languages: [python]
   severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - sqlalchemy

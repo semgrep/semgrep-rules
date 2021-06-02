@@ -20,6 +20,10 @@ rules:
       for $KEY, $VALUE in $OTHERDICT.items():
           ...
           $DICT.setdefault($KEY, {}).update(...)
+  metadata:
+    category: best-practice
+    technology:
+    - pycryptodome
 - id: manual-defaultdict-set-create
   message: manually creating a defaultdict - use collections.defaultdict(set)
   languages: [python]
@@ -41,6 +45,10 @@ rules:
       for $KEY, $VALUE in $OTHERDICT.items():
           ...
           $DICT.setdefault($KEY, set()).add(...)
+  metadata:
+    category: best-practice
+    technology:
+    - pycryptodome
 - id: manual-defaultdict-list-create
   message: manually creating a defaultdict - use collections.defaultdict(list)
   languages: [python]
@@ -62,6 +70,10 @@ rules:
       for $KEY, $VALUE in $OTHERDICT.items():
           ...
           $DICT.setdefault($KEY, []).append(...)
+  metadata:
+    category: best-practice
+    technology:
+    - pycryptodome
 - id: manual-counter-create
   pattern: |
     $DICT = {}
@@ -76,3 +88,7 @@ rules:
   message: manually creating a counter - use collections.Counter
   languages: [python]
   severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - pycryptodome
