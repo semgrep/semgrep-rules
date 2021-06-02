@@ -9,15 +9,21 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ($REQ, $RES) {...}
+    - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: |
         $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
@@ -65,15 +71,21 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ($REQ, $RES) {...}
+    - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: |
         $VM.runInNewContext($CODE,<... $REQ.$QUERY.$FOO ...>,...);
@@ -125,15 +137,21 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ($REQ, $RES) {...}
+    - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: |
         $VM.compileFunction($CODE,$PARAMS,{parsingContext: <... $REQ.$QUERY.$FOO ...>},...);
@@ -233,15 +251,21 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
   patterns:
   - pattern-inside: |
-      ...
       $VM = require('vm');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ($REQ, $RES) {...}
+    - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: $VM.runInContext(<... $REQ.$QUERY.$FOO ...>,...)
     - pattern: $VM.runInContext(<... $REQ.$BODY ...>,...)
