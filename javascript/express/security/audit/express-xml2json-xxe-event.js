@@ -1,7 +1,8 @@
+const expat = require('xml2json');
+
 function test1() {
     var winston = require('winston'),
         express = require('express'),
-        expat = require('xml2json');
 
     var xmlParsingMiddleware = function(req, res, next) {
         var buf = '';

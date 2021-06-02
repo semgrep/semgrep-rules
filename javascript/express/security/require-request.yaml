@@ -10,7 +10,9 @@ rules:
     source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html
   patterns:
   - pattern-either:
+    - pattern-inside: function ($REQ, $RES) {...}
     - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
     - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
     - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
     - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
