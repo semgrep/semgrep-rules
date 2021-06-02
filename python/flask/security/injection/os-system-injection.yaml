@@ -11,52 +11,47 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://owasp.org/www-community/attacks/Command_Injection
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: os.system(...)
-      - pattern-either:
-        - pattern-inside: |
-            @$APP.route($ROUTE, ...)
-            def $FUNC(..., $ROUTEVAR, ...):
-              ...
-              os.system(..., <... $ROUTEVAR ...>, ...)
-        - pattern-inside: |
-            @$APP.route($ROUTE, ...)
-            def $FUNC(..., $ROUTEVAR, ...):
-              ...
-              $INTERM = <... $ROUTEVAR ...>
-              ...
-              os.system(..., <... $INTERM ...>, ...)
-    - patterns:
-      - pattern-either:
-        - pattern: os.system(..., <... flask.request.$W.get(...) ...>, ...)
-        - pattern: os.system(..., <... flask.request.$W[...] ...>, ...)
-        - pattern: os.system(..., <... flask.request.$W(...) ...>, ...)
-        - pattern: os.system(..., <... flask.request.$W ...>, ...)
-    - patterns:
-      - pattern-either:
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
-              ...
-              os.system(<... $INTERM ...>)
-          - pattern: os.system(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
-              ...
-              os.system(<... $INTERM ...>)
-          - pattern: os.system(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-              os.system(<... $INTERM ...>)
-          - pattern: os.system(...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-              os.system(<... $INTERM ...>)
-          - pattern: os.system(...)
+  pattern-either:
+  - patterns:
+    - pattern: os.system(...)
+    - pattern-either:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            os.system(..., <... $ROUTEVAR ...>, ...)
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            os.system(..., <... $INTERM ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: os.system(..., <... flask.request.$W ...>, ...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        os.system(<... $INTERM ...>)
+    - pattern: os.system(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        os.system(<... $INTERM ...>)
+    - pattern: os.system(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        os.system(<... $INTERM ...>)
+    - pattern: os.system(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        os.system(<... $INTERM ...>)
+    - pattern: os.system(...)

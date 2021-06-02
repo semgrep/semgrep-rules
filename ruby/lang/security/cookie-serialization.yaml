@@ -1,11 +1,5 @@
 rules:
 - id: cookie-serialization
-  patterns:
-  - pattern-either:
-    - pattern: |
-        Rails.application.config.action_dispatch.cookies_serializer = :marshal
-    - pattern: |
-        Rails.application.config.action_dispatch.cookies_serializer = :hybrid
   message: |
     Checks if code allows cookies to be deserialized using Marshal. If the attacker can craft a valid cookie, this could lead to
     remote code execution. The hybrid check is just to warn users to migrate to :json for best practice.
@@ -16,3 +10,8 @@ rules:
   languages:
   - ruby
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      Rails.application.config.action_dispatch.cookies_serializer = :marshal
+  - pattern: |
+      Rails.application.config.action_dispatch.cookies_serializer = :hybrid

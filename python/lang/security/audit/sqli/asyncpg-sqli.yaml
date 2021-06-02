@@ -27,9 +27,7 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-either:
-        - pattern: |
-            $CONN.$METHOD(...,$QUERY,...)
+      - pattern: $CONN.$METHOD(...,$QUERY,...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y

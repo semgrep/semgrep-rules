@@ -10,13 +10,11 @@ x2 = 2;
 x3 = 1;
 x3 = 2;
 
-// https://github.com/returntocorp/semgrep/issues/2552
-// todook:useless-assignment
+// ok:useless-assignment
 x4 = {value1: 42};
 x4 = {x4, value2: 43};
 
-// https://github.com/returntocorp/semgrep/issues/2552
-// todook:useless-assignment
+// ok:useless-assignment
 x5 = {value1: 42};
 x5 = {...x5, value2: 43};
 

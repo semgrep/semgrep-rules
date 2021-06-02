@@ -1,19 +1,5 @@
 rules:
 - id: openuri-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        URI.open('=~/[hH][tT][tT][pP]://.*/', ...)
-    - pattern: |
-        $URI = URI.parse('=~/[hH][tT][tT][pP]://.*/', ...)
-        ...
-        $URI.open
-    - pattern: |
-        URI.open('=~/^[fF][tT][pP]://.*/', ...)
-    - pattern: |
-        $URI = URI.parse('=~/^[fF][tT][pP]://.*/', ...)
-        ...
-        $URI.open
   message: |
     Checks for requests to http and ftp (unencrypted) sites using OpenURI.
   metadata:
@@ -25,3 +11,16 @@ rules:
   severity: WARNING
   languages:
   - ruby
+  pattern-either:
+  - pattern: |
+      URI.open('=~/[hH][tT][tT][pP]://.*/', ...)
+  - pattern: |
+      $URI = URI.parse('=~/[hH][tT][tT][pP]://.*/', ...)
+      ...
+      $URI.open
+  - pattern: |
+      URI.open('=~/^[fF][tT][pP]://.*/', ...)
+  - pattern: |
+      $URI = URI.parse('=~/^[fF][tT][pP]://.*/', ...)
+      ...
+      $URI.open

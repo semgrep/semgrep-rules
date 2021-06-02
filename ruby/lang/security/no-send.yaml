@@ -1,23 +1,5 @@
 rules:
 - id: bad-send
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $PARAM = params[...]
-        ...
-        $RES = $MOD.send($PARAM.$FUNC)
-    - pattern: |
-        $PARAM = params[...]
-        ...
-        $RES = $MOD.try($PARAM.$FUNC)
-    - pattern: |
-        $PARAM = params[...]
-        ...
-        $RES = $MOD.__send__($PARAM.$FUNC)
-    - pattern: |
-        $PARAM = params[...]
-        ...
-        $RES = $MOD.public_send($PARAM.$FUNC)
   message: |
     Checks for unsafe use of Object#send, try, __send__, and public_send. These only account for unsafe
     use of a method, not target. This can lead to arbitrary calling of exit, along with arbitrary code     execution.
@@ -29,3 +11,20 @@ rules:
   languages:
   - ruby
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      $PARAM = params[...]
+      ...
+      $RES = $MOD.send($PARAM.$FUNC)
+  - pattern: |
+      $PARAM = params[...]
+      ...
+      $RES = $MOD.try($PARAM.$FUNC)
+  - pattern: |
+      $PARAM = params[...]
+      ...
+      $RES = $MOD.__send__($PARAM.$FUNC)
+  - pattern: |
+      $PARAM = params[...]
+      ...
+      $RES = $MOD.public_send($PARAM.$FUNC)

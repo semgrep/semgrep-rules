@@ -11,18 +11,17 @@ rules:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.Request("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
-    - pattern: |
-        $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
-        ...
-        urllib.request.Request($URL, ...)
-    - pattern: |
-        def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
-          ...
-          urllib.request.Request($URL, ...)
   fix-regex:
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://
     count: 1
+  pattern-either:
+  - pattern: urllib.request.Request("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+  - pattern: |
+      $URL = "=~/[Hh][Tt][Tt][Pp]://.*/"
+      ...
+      urllib.request.Request($URL, ...)
+  - pattern: |
+      def $FUNC(..., $URL = "=~/[Hh][Tt][Tt][Pp]://.*/", ...):
+        ...
+        urllib.request.Request($URL, ...)

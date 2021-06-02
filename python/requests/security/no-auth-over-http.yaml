@@ -1,12 +1,5 @@
 rules:
 - id: no-auth-over-http
-  patterns:
-  - pattern-either:
-    - pattern: requests.$W("=~/http:\/\/.*/", ..., auth=$X, ...)
-    - pattern: |
-        $URL = "=~/http:\/\/.../"
-        ...
-        requests.$W($URL, ..., auth=$X, ...)
   fix-regex:
     regex: http:\/\/
     replacement: https://
@@ -25,3 +18,9 @@ rules:
     - https://bento.dev/checks/requests/no-auth-over-http/
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: requests.$W("=~/http:\/\/.*/", ..., auth=$X, ...)
+  - pattern: |
+      $URL = "=~/http:\/\/.../"
+      ...
+      requests.$W($URL, ..., auth=$X, ...)

@@ -1,9 +1,8 @@
 rules:
 - id: detect-bracket-object-injection
   patterns:
-  - pattern-either:
-    - pattern: |
-        const $VAR = $OBJ[$FIELD];
+  - pattern: |
+      const $VAR = $OBJ[$FIELD];
   - pattern-not: |
       const $VAR = $OBJ["..."];
   - pattern-not-inside: |

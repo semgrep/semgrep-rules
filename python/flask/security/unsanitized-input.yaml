@@ -1,23 +1,5 @@
 rules:
 - id: response-contains-unsanitized-input
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $X = flask.request.args.get(...)
-        ...
-        flask.make_response("...".format($X))
-    - pattern: |
-        $X = flask.request.args.get(...)
-        ...
-        flask.make_response(f"...{$X}...")
-    - pattern: |
-        $X = flask.request.args.get(...)
-        ...
-        flask.make_response(f"...{$X}")
-    - pattern: |
-        $X = flask.request.args.get(...)
-        ...
-        flask.make_response(f"{$X}...")
   message: |
     Flask response reflects unsanitized user input. This could lead to a
     cross-site scripting vulnerability (https://owasp.org/www-community/attacks/xss/)
@@ -32,3 +14,20 @@ rules:
     - https://owasp.org/www-community/attacks/xss/
   languages: [python]
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $X = flask.request.args.get(...)
+      ...
+      flask.make_response("...".format($X))
+  - pattern: |
+      $X = flask.request.args.get(...)
+      ...
+      flask.make_response(f"...{$X}...")
+  - pattern: |
+      $X = flask.request.args.get(...)
+      ...
+      flask.make_response(f"...{$X}")
+  - pattern: |
+      $X = flask.request.args.get(...)
+      ...
+      flask.make_response(f"{$X}...")

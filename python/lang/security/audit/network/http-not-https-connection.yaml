@@ -1,9 +1,5 @@
 rules:
 - id: http-not-https-connection
-  patterns:
-  - pattern-either:
-    - pattern: urllib3.HTTPConnectionPool(...)
-    - pattern: urllib3.connectionpool.HTTPConnectionPool(...)
   message: |
     Detected HTTPConnectionPool. This will transmit data in cleartext.
     It is recommended to use HTTPSConnectionPool instead for to encrypt
@@ -15,3 +11,6 @@ rules:
     - https://urllib3.readthedocs.io/en/1.2.1/pools.html#urllib3.connectionpool.HTTPSConnectionPool
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: urllib3.HTTPConnectionPool(...)
+  - pattern: urllib3.connectionpool.HTTPConnectionPool(...)

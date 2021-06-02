@@ -1,12 +1,5 @@
 rules:
 - id: angular-bypasssecuritytrust
-  patterns:
-  - pattern-either:
-    - pattern: $X.bypassSecurityTrustHtml(...)
-    - pattern: $X.bypassSecurityTrustStyle(...)
-    - pattern: $X.bypassSecurityTrustScript(...)
-    - pattern: $X.bypassSecurityTrustUrl(...)
-    - pattern: $X.bypassSecurityTrustResourceUrl(...)
   message: >-
     Bypassing the built-in sanitization could expose the application to cross-site scripting (XSS).
   languages:
@@ -15,9 +8,14 @@ rules:
   metadata:
     references:
     - https://angular.io/api/platform-browser/DomSanitizer
+  pattern-either:
+  - pattern: $X.bypassSecurityTrustHtml(...)
+  - pattern: $X.bypassSecurityTrustStyle(...)
+  - pattern: $X.bypassSecurityTrustScript(...)
+  - pattern: $X.bypassSecurityTrustUrl(...)
+  - pattern: $X.bypassSecurityTrustResourceUrl(...)
 - id: angular-sanitize-none-context
-  patterns:
-  - pattern: $X.sanitize(SecurityContext.NONE, ...)
+  pattern: $X.sanitize(SecurityContext.NONE, ...)
   message: >-
     The output is not sanitized when calling with SecurityContext.NONE.
   languages:
