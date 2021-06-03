@@ -8,9 +8,17 @@ rules:
       {..., $X: $A, ..., $X: $B, ...}
   - pattern: |
       dict(..., ($X, $A), ..., ($X, $B), ...)
+  metadata:
+    category: maintainability
+    technology:
+    - pycryptodome
 - id: useless-literal-set
   pattern: |
     set(..., ($X, $A), ..., ($X, $B), ...)
   message: '`$X` is uselessly assigned twice inside the creation of the set'
   languages: [python]
   severity: ERROR
+  metadata:
+    category: maintainability
+    technology:
+    - pycryptodome

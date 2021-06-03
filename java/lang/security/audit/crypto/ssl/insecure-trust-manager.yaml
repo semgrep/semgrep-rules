@@ -5,12 +5,15 @@ rules:
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_TRUST_MANAGER
     asvs:
-      section: "V9 Communications Verification Requirements"
-      control_id: "9.2.1 Weak TLS"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements"
-      version: "4"
+      section: V9 Communications Verification Requirements
+      control_id: 9.2.1 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+      version: '4'
     references:
     - https://stackoverflow.com/questions/2642777/trusting-all-certificates-using-httpclient-over-https
+    category: security
+    technology:
+    - spring
   message: |
     Detected empty trust manager implementations. This is dangerous because it accepts any
     certificate, enabling man-in-the-middle attacks. Consider using a KeyStore
