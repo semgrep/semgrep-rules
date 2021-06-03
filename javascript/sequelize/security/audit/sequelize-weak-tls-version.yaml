@@ -32,18 +32,15 @@ rules:
         dialectOptions:
           { ssl: ... }
        }
-
   - pattern-either:
     - pattern: |
         {
           minVersion: 'TLSv1'
         }
-
     - pattern: |
         {
           minVersion: 'TLSv1.1'
         }
-
   - metavariable-regex:
       metavariable: $DIALECT
       regex: "['\"](mariadb|mysql|postgres)['\"]"

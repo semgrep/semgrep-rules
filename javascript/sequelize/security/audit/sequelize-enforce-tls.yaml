@@ -27,7 +27,6 @@ rules:
         database: $DATABASE,
         dialect: $DIALECT
        }
-
   - pattern-not: |
       {
         host: $HOST,
@@ -37,7 +36,6 @@ rules:
             ssl: true
         }
       }
-
   - pattern-not: |
       {
         host: $HOST,
@@ -47,7 +45,6 @@ rules:
           ssl: { ... }
         }
       }
-
   - metavariable-regex:
       metavariable: $DIALECT
       regex: "['\"](mariadb|mysql|postgres)['\"]"
