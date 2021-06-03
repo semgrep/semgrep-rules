@@ -6,6 +6,8 @@
 engine = create_engine('postgresql://user@localhost/database')
 echo("database connexion: ok")
 # ruleid: sqlalchemy-execute-raw-query
+engine.execute("INSERT INTO person (name) VALUES ('" + name + "')")
+# ruleid: sqlalchemy-execute-raw-query
 engine.execute("INSERT INTO person (name) VALUES ('" + name + "')", multi=False)
 
 # String concatenation using + operator
@@ -196,13 +198,13 @@ conn.execute(query, {"x":"%@aol.com", "y":"%@msn.com"}).fetchall()
 
 
 # SQL Composition using SQL Expression
-# ok: sqlalchemy-execute-raw-query
 connection_string = 'sqlite:///db.sqlite'
 engine = create_engine(connection_string, echo=True)
 with engine.connect() as connection:
   meta = MetaData()
   meta.reflect(bind=connection)
   product_table = meta.tables['product']
+  # ok: sqlalchemy-execute-raw-query
   stmt = (
     select(product_table)
     .where(product_table.columns[field_name] == value_name)
@@ -210,13 +212,13 @@ with engine.connect() as connection:
   result = connection.execute(stmt)
 
 # Insert multi data record using SQL Expression
-# ok: sqlalchemy-execute-raw-query
 connection_string = 'sqlite:///db.sqlite'
 engine = create_engine(connection_string, echo=True)
 with engine.connect() as connection:
   meta = MetaData()
   meta.reflect(bind=connection)
   product_table = meta.tables['product']
+  # ok: sqlalchemy-execute-raw-query
   stmt = insert(product_table)
   values = [
       {field_name: 'hazelnut', field_price: 5},
@@ -224,3 +226,20 @@ with engine.connect() as connection:
   ]
   print(stmt)
   connection.execute(stmt, values)
+  
+  
+# Insert multi data record using SQL Expression
+connection_string = 'sqlite:///db.sqlite'
+engine = create_engine(connection_string, echo=True)
+with engine.connect() as connection:
+  meta = MetaData()
+  meta.reflect(bind=connection)
+  product_table = meta.tables['product']
+  # ruleid: sqlalchemy-execute-raw-query
+  stmt = insert(product_table) + 'test'
+  values = [
+      {field_name: 'hazelnut', field_price: 5},
+      {field_name: 'banana', field_price: 8}
+  ]
+  connection.execute(stmt, values)
+
