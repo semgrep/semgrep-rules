@@ -226,8 +226,7 @@ with engine.connect() as connection:
   ]
   print(stmt)
   connection.execute(stmt, values)
-  
-  
+
 # Insert multi data record using SQL Expression
 connection_string = 'sqlite:///db.sqlite'
 engine = create_engine(connection_string, echo=True)
@@ -242,4 +241,3 @@ with engine.connect() as connection:
       {field_name: 'banana', field_price: 8}
   ]
   connection.execute(stmt, values)
-
