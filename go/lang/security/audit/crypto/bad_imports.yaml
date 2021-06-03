@@ -9,36 +9,39 @@ rules:
     source-rule-url: https://github.com/securego/gosec
     references:
     - https://godoc.org/golang.org/x/crypto/sha3
+    category: security
+    technology:
+    - otto
   languages: [go]
   severity: WARNING
   pattern-either:
-    - patterns:
-      - pattern-inside: |
-          import "crypto/md5"
-          ...
-      - pattern: |
-          md5.$FUNC(...)
-    - patterns:
-      - pattern-inside: |
-          import "crypto/des"
-          ...
-      - pattern: |
-          des.$FUNC(...)
-    - patterns:
-      - pattern-inside: |
-          import "crypto/sha1"
-          ...
-      - pattern: |
-          sha1.$FUNC(...)
-    - patterns:
-      - pattern-inside: |
-          import "crypto/rc4"
-          ...
-      - pattern: |
-          rc4.$FUNC(...)
-    - patterns:
-      - pattern-inside: |
-          import "net/http/cgi"
-          ...
-      - pattern: |
-          cgi.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/md5"
+        ...
+    - pattern: |
+        md5.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/des"
+        ...
+    - pattern: |
+        des.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/sha1"
+        ...
+    - pattern: |
+        sha1.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/rc4"
+        ...
+    - pattern: |
+        rc4.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "net/http/cgi"
+        ...
+    - pattern: |
+        cgi.$FUNC(...)

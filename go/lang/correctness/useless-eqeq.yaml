@@ -9,6 +9,10 @@ rules:
   message: useless comparison operation `$X == $X` or `$X != $X`
   languages: [go]
   severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - otto
 - id: hardcoded-eq-true-or-false
   message: useless if statement, always the same behavior
   languages: [go]
@@ -16,3 +20,7 @@ rules:
   pattern-either:
   - pattern: if (true) { ... }
   - pattern: if (false) { ... }
+  metadata:
+    category: correctness
+    technology:
+    - otto
