@@ -36,13 +36,16 @@ rules:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'
     asvs:
-      section: "V3: Session Management Verification Requirements"
-      control_id: "3.4 Missing Cookie Attributes"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v34-cookie-based-session-management"
-      version: "4"
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.4 Missing Cookie Attributes
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v34-cookie-based-session-management
+      version: '4'
     references:
     - https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponse.set_cookie
     - https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/
     - https://bento.dev/checks/flask/secure-set-cookie/
+    category: security
+    technology:
+    - django
   languages: [python]
   severity: WARNING

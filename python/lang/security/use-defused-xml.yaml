@@ -9,6 +9,9 @@ rules:
     references:
     - https://docs.python.org/3/library/xml.html
     - https://github.com/tiran/defusedxml
+    category: security
+    technology:
+    - pycryptodome
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the 'defusedxml' library instead. Use 'defusedxml'.

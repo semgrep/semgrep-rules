@@ -5,10 +5,13 @@ rules:
     owasp: 'A1: Injection'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION_SPRING_JDBC
     asvs:
-      section: "V5: Validation, Sanitization and Encoding Verification Requirements"
-      control_id: "5.3.5 Injection"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements"
-      version: "4"
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.3.5 Injection
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
+      version: '4'
+    category: security
+    technology:
+    - spring
   message: |
     Possible JDBC injection detected. Use the parameterized query
     feature available in queryForObject instead of concatenating or formatting strings:

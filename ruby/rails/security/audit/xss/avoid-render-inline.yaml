@@ -5,6 +5,9 @@ rules:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     references:
     - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#inline-renders---even-worse-than-xss
+    category: security
+    technology:
+    - rails
   message: |
     'render inline: ...' renders an entire ERB template inline and is dangerous.
     If external data can reach here, this exposes your application
