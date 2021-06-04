@@ -6,6 +6,9 @@ rules:
   metadata:
     cwe: 'CWE-377: Insecure Temporary File'
     source_rule_url: https://github.com/securego/gosec
+    category: security
+    technology:
+    - otto
   pattern-either:
   - pattern: ioutil.WriteFile("=~//tmp/.*$/", ...)
   - pattern: os.Create("=~//tmp/.*$/", ...)

@@ -8,6 +8,10 @@ rules:
   pattern-either:
   - pattern: alert()
   - pattern: alert($X)
+  metadata:
+    category: best-practice
+    technology:
+    - wkhtmltopdf
 - id: javascript-debugger
   pattern: debugger;
   message: found debugger call; should this be in production code?
@@ -15,6 +19,10 @@ rules:
   - javascript
   - typescript
   severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - wkhtmltopdf
 - id: javascript-confirm
   pattern: confirm(...)
   message: found conform() call; should this be in production code?
@@ -22,6 +30,10 @@ rules:
   - javascript
   - typescript
   severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - wkhtmltopdf
 - id: javascript-prompt
   message: found prompt() call; should this be in production code?
   languages:
@@ -32,3 +44,7 @@ rules:
   - pattern: prompt()
   - pattern: prompt($X)
   - pattern: prompt($X, $Y)
+  metadata:
+    category: best-practice
+    technology:
+    - wkhtmltopdf

@@ -5,10 +5,13 @@ rules:
     owasp: 'A9: Using Components with Known Vulnerabilities'
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-pseudoRandomBytes.js
     asvs:
-      section: "V6: Stored Cryptography Verification Requirements"
-      control_id: "6.3.1 Insecure Randomness"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v63-random-values"
-      version: "4"
+      section: 'V6: Stored Cryptography Verification Requirements'
+      control_id: 6.3.1 Insecure Randomness
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v63-random-values
+      version: '4'
+    category: security
+    technology:
+    - wkhtmltopdf
   message: |
     Detected usage of crypto.pseudoRandomBytes, which does not produce secure random numbers.
   pattern: crypto.pseudoRandomBytes

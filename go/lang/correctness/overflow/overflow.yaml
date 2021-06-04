@@ -12,6 +12,10 @@ rules:
       metavariable: $NUM
       comparison: $NUM > 32767 or $NUM < -32768
       strip: true
+  metadata:
+    category: correctness
+    technology:
+    - otto
 - id: integer-overflow-int32
   message: Potential Integer overflow made by strconv.Atoi result conversion to int32
   languages: [go]
@@ -25,3 +29,7 @@ rules:
       metavariable: $NUM
       comparison: $NUM > 2147483647 or $NUM < -2147483648
       strip: true
+  metadata:
+    category: correctness
+    technology:
+    - otto
