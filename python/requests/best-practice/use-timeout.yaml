@@ -3,6 +3,8 @@ rules:
   patterns:
   - pattern-not: requests.$W(..., timeout=$N, ...)
   - pattern-not: requests.$W(..., **$KWARGS)
+  - pattern-not: session.$W(..., **$KWARGS)
+  - pattern-not: session.$W(..., **$KWARGS)  
   - pattern-either:
     - pattern: requests.request(...)
     - pattern: requests.get(...)
@@ -11,6 +13,12 @@ rules:
     - pattern: requests.delete(...)
     - pattern: requests.head(...)
     - pattern: requests.patch(...)
+    - pattern: session.get(...)
+    - pattern: session.post(...)
+    - pattern: session.put(...)
+    - pattern: session.delete(...)
+    - pattern: session.head(...)
+    - pattern: session.patch(...)    
   fix-regex:
     regex: (.*)\)
     replacement: \1, timeout=30)
