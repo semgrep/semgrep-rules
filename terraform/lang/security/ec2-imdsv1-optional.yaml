@@ -12,7 +12,7 @@ rules:
       include:
         - '*.tf'
     patterns:
-      - pattern-inside: metadata_options ...
       - pattern: http_tokens = "optional"
+      - pattern-inside: '{ ... metadata_options { ... } ... }'
     severity: ERROR
 
