@@ -1,0 +1,965 @@
+rules:
+- id: bandit.B104
+  languages:
+  - python
+  message: |
+    Running `socket.bind` to 0.0.0.0, ::, or empty string could unexpectedly
+    expose the server publicly as it binds to all available interfaces. Consider
+    instead getting correct address from an environment variable or
+    configuration file.
+  metadata:
+    category: security
+    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp: 'A6: Security Misconfiguration'
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("0.0.0.0", ...))
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("::", ...))
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("", ...))
+  severity: INFO
+- id: bandit.B107
+  languages:
+  - python
+  message: |
+    Hardcoded password is used as a default argument to '$FUNC'. This could be dangerous if
+    a real password is not supplied.
+  metadata:
+    category: security
+    technology:
+    - pycryptodome
+  pattern: |
+    def $FUNC(..., password="...", ...):
+      ...
+  severity: WARNING
+- id: bandit.B108-1
+  languages:
+  - python
+  message: |
+    Detected hardcoded temp directory. Consider using 'tempfile.TemporaryFile' instead.
+  metadata:
+    category: best-practice
+    references:
+    - https://docs.python.org/3/library/tempfile.html#tempfile.TemporaryFile
+    technology:
+    - pycryptodome
+  pattern: open("=~/^\/tmp.*/", ...)
+  severity: WARNING
+- id: bandit.B201
+  languages:
+  - python
+  message: |
+    Detected Flask app with debug=True. Do not deploy to production with this flag enabled
+    as it will leak sensitive information. Instead, consider using Flask configuration
+    variables or setting 'debug' using system environment variables.
+  metadata:
+    category: security
+    cwe: 'CWE-489: Active Debug Code'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://labs.detectify.com/2015/10/02/how-patreon-got-hacked-publicly-exposed-werkzeug-debugger/
+    technology:
+    - flask
+  patterns:
+  - pattern-inside: |
+      import flask
+      ...
+  - pattern: $APP.run(..., debug=True, ...)
+  severity: WARNING
+- id: bandit.B301-1
+  languages:
+  - python
+  message: |
+    Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: pickle.$FUNC(...)
+  - pattern: _pickle.$FUNC(...)
+  severity: WARNING
+- id: bandit.B301-2
+  languages:
+  - python
+  message: |
+    Avoid using `cPickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    technology:
+    - pycryptodome
+  pattern: cPickle.$FUNC(...)
+  severity: WARNING
+- id: bandit.B301-3
+  languages:
+  - python
+  message: |
+    Avoid using `dill`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    technology:
+    - pycryptodome
+  pattern: dill.$FUNC(...)
+  severity: WARNING
+- id: bandit.B301-4
+  languages:
+  - python
+  message: |
+    Avoid using `shelve`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    technology:
+    - pycryptodome
+  pattern: shelve.$FUNC(...)
+  severity: WARNING
+- id: bandit.B302
+  languages:
+  - python
+  message: |
+    The marshal module is not intended to be secure against erroneous or maliciously constructed data.
+    Never unmarshal data received from an untrusted or unauthenticated source.
+    See more details: https://docs.python.org/3/library/marshal.html?highlight=security
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owasp: 'A8: Insecure Deserialization'
+    references:
+    - https://docs.python.org/3/library/marshal.html?highlight=security
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: marshal.dump(...)
+  - pattern: marshal.dumps(...)
+  - pattern: marshal.load(...)
+  - pattern: marshal.loads(...)
+  severity: WARNING
+- id: bandit.B303-1
+  languages:
+  - python
+  message: |
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    asvs:
+      control_id: 6.2.2 Insecure Custom Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      section: V6 Stored Cryptography Verification Requirements
+      version: '4'
+    bandit-code: B303
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6151
+    - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern: hashlib.md5(...)
+  severity: WARNING
+- id: bandit.B303-2
+  languages:
+  - python
+  message: |
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    asvs:
+      control_id: 6.2.2 Insecure Custom Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      section: V6 Stored Cryptography Verification Requirements
+      version: '4'
+    bandit-code: B303
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
+    - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
+    - http://2012.sharcs.org/slides/stevens.pdf
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern: hashlib.sha1(...)
+  severity: WARNING
+- id: bandit.B303-3
+  languages:
+  - python
+  message: |
+    Detected MD2 hash algorithm which is considered insecure. This algorithm
+    has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6149
+    - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-2409
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD2.new(...)
+  - pattern: Cryptodome.Hash.MD2.new (...)
+  severity: WARNING
+- id: bandit.B303-4
+  languages:
+  - python
+  message: |
+    Detected MD4 hash algorithm which is considered insecure. This algorithm
+    has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6150
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD4.new(...)
+  - pattern: Cryptodome.Hash.MD4.new (...)
+  severity: WARNING
+- id: bandit.B303-5
+  languages:
+  - python
+  message: |
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6151
+    - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD5.new(...)
+  - pattern: Cryptodome.Hash.MD5.new (...)
+  severity: WARNING
+- id: bandit.B303-6
+  languages:
+  - python
+  message: |
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
+    - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
+    - http://2012.sharcs.org/slides/stevens.pdf
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.SHA.new(...)
+  - pattern: Cryptodome.Hash.SHA.new (...)
+  severity: WARNING
+- id: bandit.B303-7
+  languages:
+  - python
+  message: |
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    bandit-code: B303
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6151
+    - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.hashes.MD5(...)
+  severity: WARNING
+- id: bandit.B303-8
+  languages:
+  - python
+  message: |
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    bandit-code: B303
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
+    - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
+    - http://2012.sharcs.org/slides/stevens.pdf
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.hashes.SHA1(...)
+  severity: WARNING
+- id: bandit.B304-1
+  languages:
+  - python
+  message: |
+    Detected MD2 hash algorithm which is considered insecure. This algorithm
+    has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6149
+    - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-2409
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD2.new(...)
+  - pattern: Cryptodome.Hash.MD2.new (...)
+  severity: WARNING
+- id: bandit.B304-10
+  languages:
+  - python
+  message: |
+    Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
+    known vulnerabilities. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L94
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
+  severity: WARNING
+- id: bandit.B304-11
+  languages:
+  - python
+  message: |
+    Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
+    known vulnerabilities. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L96
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
+  severity: WARNING
+- id: bandit.B304-12
+  languages:
+  - python
+  message: |
+    Detected IDEA cipher algorithm which is considered insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc5469
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
+  severity: WARNING
+- id: bandit.B304-2
+  languages:
+  - python
+  message: |
+    Detected MD4 hash algorithm which is considered insecure. This algorithm
+    has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6150
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD4.new(...)
+  - pattern: Cryptodome.Hash.MD4.new (...)
+  severity: WARNING
+- id: bandit.B304-3
+  languages:
+  - python
+  message: |
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc6151
+    - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.MD5.new(...)
+  - pattern: Cryptodome.Hash.MD5.new (...)
+  severity: WARNING
+- id: bandit.B304-4
+  languages:
+  - python
+  message: |
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
+    - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
+    - http://2012.sharcs.org/slides/stevens.pdf
+    - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Crypto.Hash.SHA.new(...)
+  - pattern: Cryptodome.Hash.SHA.new (...)
+  severity: WARNING
+- id: bandit.B304-5
+  languages:
+  - python
+  message: |
+    Detected RC2 cipher algorithm which is considered insecure. The algorithm has known vulnerabilities and is difficult to use securely. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://security.stackexchange.com/questions/93924/is-rc2-cbc-at-all-secure
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Cryptodome.Cipher.ARC2.new(...)
+  - pattern: Crypto.Cipher.ARC2.new
+  severity: WARNING
+- id: bandit.B304-6
+  languages:
+  - python
+  message: |
+    Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
+    known vulnerabilities. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Cryptodome.Cipher.ARC4.new(...)
+  - pattern: Crypto.Cipher.ARC4.new(...)
+  severity: WARNING
+- id: bandit.B304-7
+  languages:
+  - python
+  message: |
+    Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
+    known vulnerabilities. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://sweet32.info/
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Cryptodome.Cipher.Blowfish.new(...)
+  - pattern: Crypto.Cipher.Blowfish.new(...)
+  severity: WARNING
+- id: bandit.B304-8
+  languages:
+  - python
+  message: |
+    Detected DES cipher algorithm which is considered insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc5469
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Cryptodome.Cipher.DES.new(...)
+  - pattern: Crypto.Cipher.DES.new(...)
+  severity: WARNING
+- id: bandit.B304-9
+  languages:
+  - python
+  message: |
+    Detected XOR cipher algorithm which is considered insecure. This algorithm
+    is not cryptographically secure and can be reversed easily. Use AES instead.
+  metadata:
+    bandit-code: B304
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://stackoverflow.com/questions/1135186/whats-wrong-with-xor-encryption
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: Cryptodome.Cipher.XOR.new(...)
+  - pattern: Crypto.Cipher.XOR.new(...)
+  severity: WARNING
+- id: bandit.B305
+  languages:
+  - python
+  message: |
+    Detected ECB cipher mode which is considered insecure. The algorithm can
+    potentially leak information about the plaintext. Use CBC mode instead.
+  metadata:
+    bandit-code: B305
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://crypto.stackexchange.com/questions/20941/why-shouldnt-i-use-ecb-encryption
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
+    technology:
+    - cryptography
+  pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
+  severity: WARNING
+- id: bandit.B306
+  languages:
+  - python
+  message: 'Use tempfile.NamedTemporaryFile instead. From the official Python documentation: THIS FUNCTION IS UNSAFE AND SHOULD
+    NOT BE USED. The file name may refer to a file that did not exist at some point, but by the time you get around to creating
+    it, someone else may have beaten you to the punch.'
+  metadata:
+    category: correctness
+    technology:
+    - pycryptodome
+  pattern: tempfile.mktemp(...)
+  severity: ERROR
+- id: bandit.B309
+  languages:
+  - python
+  message: |
+    The HTTPSConnection API has changed frequently with minor releases of Python.
+    Ensure you are using the API for your version of Python securely.
+    For example, Python 3 versions prior to 3.4.3 will not verify SSL certificates by default.
+    See https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+    for more information.
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: httplib.HTTPSConnection(...)
+  - pattern: http.client.HTTPSConnection(...)
+  - pattern: six.moves.http_client.HTTPSConnection(...)
+  severity: WARNING
+- id: bandit.B310-1
+  languages:
+  - python
+  message: Detected a dynamic value being used with urllib. urllib supports 'file://' schemes, so a dynamic value controlled
+    by a malicious actor may allow them to read arbitrary files. Audit uses of urllib calls to ensure user data cannot control
+    the URLs, or consider using the 'requests' library instead.
+  metadata:
+    asvs:
+      control_id: 5.2.4 Dyanmic Code Execution Features
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      version: '4'
+    bandit-code: B310
+    category: security
+    cwe: 'CWE-939: Improper Authorization in Handler for Custom URL Scheme'
+    owasp: 'A1: Injection'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/blacklists/calls.py#L163
+    technology:
+    - pycryptodome
+  patterns:
+  - pattern-not: urllib.$W("...")
+  - pattern-not: urllib.request.$W("...")
+  - pattern-not: $OPENER.$W("...")
+  - pattern-either:
+    - pattern: urllib.urlopen(...)
+    - pattern: urllib.request.urlopen(...)
+    - pattern: urllib.urlretrieve(...)
+    - pattern: urllib.request.urlretrieve(...)
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $OPENER = urllib.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.FancyURLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.FancyURLopener(...)
+            ...
+      - pattern-either:
+        - pattern: $OPENER.open(...)
+        - pattern: $OPENER.retrieve(...)
+  severity: WARNING
+- id: bandit.B312
+  languages:
+  - python
+  message: |
+    Telnet does not encrypt communications. Use SSH instead.
+  metadata:
+    bandit-code: B312
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://docs.python.org/3/library/telnetlib.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L208
+    technology:
+    - pycryptodome
+  pattern: telnetlib.$ANYTHING(...)
+  severity: WARNING
+- id: bandit.B317
+  languages:
+  - python
+  message: Insecure XML parsing functionality, prefer 'defusedxml'
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+  pattern-either:
+  - patterns:
+    - pattern: xml.$ANYTHING
+    - pattern-not: xml.sax.saxutils
+    - pattern-not: xml.etree.ElementTree.Element
+    - pattern-not: xml.etree.ElementTree.SubElement
+  - pattern: lxml.$ANYTHING
+  - pattern: xmlrpclib.$ANYTHING
+  severity: WARNING
+- id: bandit.B321
+  languages:
+  - python
+  message: |
+    FTP does not encrypt communications by default. This can lead to sensitive
+    data being exposed. Ensure use of FTP here does not expose sensitive data.
+  metadata:
+    bandit-code: B321
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://docs.python.org/3/library/telnetlib.html
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L265
+    technology:
+    - pycryptodome
+  pattern: ftplib.$ANYTHING(...)
+  severity: WARNING
+- id: bandit.B323
+  languages:
+  - python
+  message: |
+    Unverified SSL context detected. This will permit insecure connections without verifying
+    SSL certificates. Use 'ssl.create_default_context()' instead.
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://docs.python.org/3/library/ssl.html#ssl-security
+    - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+    technology:
+    - pycryptodome
+  pattern: ssl._create_unverified_context(...)
+  severity: ERROR
+- id: bandit.B325
+  languages:
+  - python
+  message: The Python 'os' tempnam|tmpnam functions are vulnerable to symlink attacks
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+  pattern-either:
+  - pattern: os.tempnam(...)
+  - pattern: os.tmpnam(...)
+  severity: WARNING
+- id: bandit.B501
+  languages:
+  - python
+  message: |
+    Certificate verification has been explicitly disabled. This
+    permits insecure connections to insecure servers. Re-enable
+    certification validation.
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://stackoverflow.com/questions/41740361/is-it-safe-to-disable-ssl-certificate-verification-in-pythonss-requests-lib
+    technology:
+    - requests
+  pattern-either:
+  - pattern: requests.put(..., verify=False, ...)
+  - pattern: requests.patch(..., verify=False, ...)
+  - pattern: requests.delete(..., verify=False, ...)
+  - pattern: requests.head(..., verify=False, ...)
+  - pattern: requests.options(..., verify=False, ...)
+  - pattern: requests.request(..., verify=False, ...)
+  - pattern: requests.get(..., verify=False, ...)
+  - pattern: requests.post(..., verify=False, ...)
+  severity: ERROR
+- id: bandit.B502.B503
+  languages:
+  - python
+  message: |
+    An insecure SSL version was detected. TLS versions 1.0, 1.1, and all SSL versions
+    are considered weak encryption and are deprecated.
+    Use 'ssl.PROTOCOL_TLSv1_2' or higher.
+  metadata:
+    asvs:
+      control_id: 9.1.3 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v91-client-communications-security-requirements
+      section: V9 Communications Verification Requirements
+      version: '4'
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://tools.ietf.org/html/rfc7568
+    - https://tools.ietf.org/id/draft-ietf-tls-oldversions-deprecate-02.html
+    - https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLSv1_2
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/insecure_ssl_tls.py#L30
+    technology:
+    - pycryptodome
+  pattern-either:
+  - pattern: ssl.PROTOCOL_SSLv2
+  - pattern: ssl.PROTOCOL_SSLv3
+  - pattern: ssl.PROTOCOL_TLSv1
+  - pattern: ssl.PROTOCOL_TLSv1_1
+  - pattern: pyOpenSSL.SSL.SSLv2_METHOD
+  - pattern: pyOpenSSL.SSL.SSLv23_METHOD
+  - pattern: pyOpenSSL.SSL.SSLv3_METHOD
+  - pattern: pyOpenSSL.SSL.TLSv1_METHOD
+  - pattern: pyOpenSSL.SSL.TLSv1_1_METHOD
+  severity: WARNING
+- id: bandit.B507
+  languages:
+  - python
+  message: |
+    Detected a paramiko host key policy that implicitly trusts a server's
+    host key. Host keys should be verified to ensure the connection
+    is not to a malicious server. Use RejectPolicy or a custom subclass
+    instead.
+  metadata:
+    category: security
+    cwe: 'CWE-322: Key Exchange without Entity Authentication'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - http://docs.paramiko.org/en/stable/api/client.html#paramiko.client.AutoAddPolicy
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/ssh_no_host_key_verification.py
+    technology:
+    - pycryptodome
+  patterns:
+  - pattern-inside: |
+      $CLIENT = paramiko.client.SSHClient(...)
+      ...
+      $CLIENT.set_missing_host_key_policy(...)
+  - pattern-either:
+    - pattern: paramiko.client.AutoAddPolicy
+    - pattern: paramiko.client.WarningPolicy
+  severity: WARNING
+- id: bandit.B609
+  languages:
+  - python
+  message: |
+    Detected use of the wildcard character in a system call that spawns a shell.
+    This subjects the wildcard to normal shell expansion, which can have unintended consequences
+    if there exist any non-standard file names. Consider a file named '-e sh script.sh' -- this
+    will execute a script when 'rsync' is called. See
+    https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt
+    for more information.
+  metadata:
+    category: security
+    cwe: 'CWE-155: Improper Neutralization of Wildcards or Matching Symbols'
+    owasp: 'A1: Injection'
+    references:
+    - https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt
+    source-url-open: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/injection_wildcard.py
+    technology:
+    - pycryptodome
+  patterns:
+  - pattern-either:
+    - pattern-inside: os.system("...")
+    - pattern-inside: os.popen("...")
+    - pattern-inside: os.popen2("...")
+    - pattern-inside: os.popen3("...")
+    - pattern-inside: os.popen4("...")
+    - pattern-inside: subprocess.$W(..., shell=True, ...)
+  - pattern-regex: (tar|chmod|chown|rsync)(.*?)\*
+  severity: WARNING
+- id: bandit.B610
+  languages:
+  - python
+  message: This is a last resort. You should be careful when using QuerySet.extra due to SQLi https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra
+  metadata:
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra
+    - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
+    technology:
+    - django
+  pattern-either:
+  - pattern: $X.objects.$FUNC(...).extra(...)
+  - pattern: $X.objects.$FUNC(...).$FILTER(...).extra(...)
+  - pattern: $X.objects.$FUNC(...).$FILTER(...).$UPDATE(...).extra(...)
+  severity: ERROR
+- id: bandit.B611
+  languages:
+  - python
+  message: You should be very careful whenever you write raw SQL. Consider using Django ORM before raw SQL. See https://docs.djangoproject.com/en/3.0/topics/db/sql/#passing-parameters-into-raw
+  metadata:
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#raw-sql-expressions
+    - https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/
+    technology:
+    - django
+  pattern-either:
+  - pattern: $MODEL.objects.raw($QUERY, ...)
+  - pattern: django.db.models.expressions.RawSQL(...)
+  severity: ERROR
+- fix-regex:
+    regex: (.*)\)
+    replacement: \1, autoescape=True)
+  id: bandit.B701
+  languages:
+  - python
+  message: Detected a Jinja2 environment without autoescaping. Jinja2 does not autoescape by default. This is dangerous if
+    you are rendering to a browser because this allows for cross-site scripting (XSS) attacks. If you are in a web context,
+    enable autoescaping by setting 'autoescape=True.' You may also consider using 'jinja2.select_autoescape()' to only enable
+    automatic escaping for certain file extensions.
+  metadata:
+    category: security
+    cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://jinja.palletsprojects.com/en/2.11.x/api/#basics
+    technology:
+    - jinja2
+  patterns:
+  - pattern-not: jinja2.Environment(..., autoescape=True, ...)
+  - pattern-not: jinja2.Environment(..., autoescape=jinja2.select_autoescape(...), ...)
+  - pattern: jinja2.Environment(...)
+  severity: WARNING
+- id: bandit.B702
+  languages:
+  - python
+  message: |
+    Mako templates do not provide a global HTML escaping mechanism.
+    This means you must escape all sensitive data in your templates
+    using '| u' for URL escaping or '| h' for HTML escaping.
+    If you are using Mako to serve web content, consider using
+    a system such as Jinja2 which enables global escaping.
+  metadata:
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://docs.makotemplates.org/en/latest/syntax.html#expression-escaping
+    - https://jinja.palletsprojects.com/en/2.11.x/intro/#
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/mako_templates.py
+    technology:
+    - pycryptodome
+  pattern: mako.template.Template(...)
+  severity: INFO

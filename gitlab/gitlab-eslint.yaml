@@ -1,0 +1,151 @@
+rules:
+- id: eslint.detect-disable-mustache-escape
+  languages:
+  - javascript
+  - typescript
+  message: |
+    Markup escaping disabled. This can be used with some template engines to escape
+    disabling of HTML entities, which can lead to XSS attacks.
+  metadata:
+    category: security
+    cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    owasp: 'A7: Cross-Site Scripting XSS'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-disable-mustache-escape.js
+    technology:
+    - wkhtmltopdf
+  pattern: $OBJ.escapeMarkup = false
+  severity: WARNING
+- id: eslint.detect-no-csrf-before-method-override
+  languages:
+  - javascript
+  - typescript
+  message: |
+    Detected use of express.csrf() middleware before express.methodOverride(). This can
+    allow GET requests (which are not checked by csrf) to turn into POST requests later.
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    references:
+    - https://github.com/nodesecurity/eslint-plugin-security/blob/master/docs/bypass-connect-csrf-protection-by-abusing.md
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-no-csrf-before-method-override.js
+    technology:
+    - wkhtmltopdf
+  pattern: |
+    express.csrf();
+    ...
+    express.methodOverride();
+  severity: WARNING
+- id: eslint.detect-non-literal-require
+  languages:
+  - javascript
+  - typescript
+  message: |
+    Detected the use of require(variable). Calling require with a non-literal argument might
+    allow an attacker to load an run arbitrary code, or access arbitrary files.
+  metadata:
+    category: security
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-require.js
+    technology:
+    - wkhtmltopdf
+  patterns:
+  - pattern: require($OBJ)
+  - pattern-not: require('...')
+  severity: WARNING
+- id: eslint.detect-pseudoRandomBytes
+  languages:
+  - javascript
+  - typescript
+  message: |
+    Detected usage of crypto.pseudoRandomBytes, which does not produce secure random numbers.
+  metadata:
+    asvs:
+      control_id: 6.3.1 Insecure Randomness
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v63-random-values
+      section: 'V6: Stored Cryptography Verification Requirements'
+      version: '4'
+    category: security
+    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-pseudoRandomBytes.js
+    technology:
+    - wkhtmltopdf
+  pattern: crypto.pseudoRandomBytes
+  severity: WARNING
+- id: eslint.react-dangerouslysetinnerhtml
+  languages:
+  - typescript
+  - javascript
+  message: "Setting HTML from code is risky because it’s easy to inadvertently expose your users to a cross-site scripting\
+    \ (XSS) attack.\n"
+  metadata:
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-site Scripting (XSS)'
+    references:
+    - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+    technology:
+    - react
+  pattern-either:
+  - pattern: |
+      <$X dangerouslySetInnerHTML=... />
+  - pattern: |
+      {dangerouslySetInnerHTML: ...}
+  severity: WARNING
+- id: eslint.react-missing-noopener
+  languages:
+  - typescript
+  - javascript
+  message: |
+    Missing 'noopener' on an anchor tag where target='_blank'. This could introduce
+    a reverse tabnabbing vulnerability. Include 'noopener' when using target='_blank'.
+  metadata:
+    category: security
+    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp: 'A3: Sensitive Data Exposure'
+    references:
+    - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
+    - https://web.dev/external-anchors-use-rel-noopener/
+    - https://owasp.org/www-community/attacks/Reverse_Tabnabbing
+    technology:
+    - react
+  pattern-either:
+  - patterns:
+    - pattern: |
+        <$X target="_blank" />
+    - pattern-not: |
+        <$X target="_blank" rel="..." />
+  - patterns:
+    - pattern-inside: |
+        <$X target="_blank" rel=... />
+    - pattern-regex: rel=["']((?!noopener).)*?["']
+  - patterns:
+    - pattern: |
+        React.createElement($A, {target: '_blank'},...)
+    - pattern-not: |
+        React.createElement($A, {rel: '...'},...)
+  - patterns:
+    - pattern: |
+        React.createElement($A, {target: '_blank', rel: $REL},...)
+    - metavariable-regex:
+        metavariable: $REL
+        regex: "[\"']((?!noopener).)*?['\"]"
+  - patterns:
+    - pattern: |
+        $P = {target: '_blank'};
+        ...
+        React.createElement($A, $P,...);
+    - pattern-not: |
+        $P = {rel: '...'};
+        ...
+        React.createElement($A, $P,...);
+  - patterns:
+    - pattern: |
+        $P = {target: '_blank', rel: $REL};
+        ...
+        React.createElement($A, $P,...);
+    - metavariable-regex:
+        metavariable: $REL
+        regex: "[\"']((?!noopener).)*?['\"]"
+  severity: WARNING
