@@ -17,8 +17,6 @@ rules:
     - https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard
     - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
     category: security
-    technology:
-    - spring
   severity: WARNING
   pattern: $CIPHER.getInstance("=~/DES/.*/");
   fix: $CIPHER.getInstance("AES/GCM/NoPadding");
