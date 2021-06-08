@@ -4,12 +4,19 @@ namespace Injections
 {
     public class OsCommandInjection
     {
+        // ruleid: os-command-injection
         public void RunOsCommand(string command)
         {
-            // ruleid: os-command-injection
             var process = Process.Start(command);
         }
 
+        // ok: os-command-injection
+        public void RunOsCommand(string command)
+        {
+            var process = Process.Start("constant");
+        }
+
+        // ruleid: os-command-injection
         public void RunOsCommandWithStartInfo(string command)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -17,10 +24,21 @@ namespace Injections
                 FileName = command
             };
 
-            // ruleid: os-command-injection
             var process = Process.Start(processStartInfo);
         }
 
+        // ok: os-command-injection
+        public void RunOsCommandWithStartInfo(string command)
+        {
+            ProcessStartInfo processStartInfo = new ProcessStartInfo()
+            {
+                FileName = "constant"
+            };
+
+            var process = Process.Start(processStartInfo);
+        }
+
+        // ruleid: os-command-injection
         public void RunPythonWithArgs(string args)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -30,7 +48,19 @@ namespace Injections
                 UseShellExecute = false
             };
 
-            // ruleid: os-command-injection
+            var process = Process.Start(processStartInfo);
+        }
+
+        // ok: os-command-injection
+        public void RunPythonWithArgs(string args)
+        {
+            ProcessStartInfo processStartInfo = new ProcessStartInfo()
+            {
+                FileName = @"python.exe",
+                Arguments = "constant",
+                UseShellExecute = false
+            };
+
             var process = Process.Start(processStartInfo);
         }
     }
