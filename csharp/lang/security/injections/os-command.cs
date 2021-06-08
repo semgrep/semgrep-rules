@@ -16,7 +16,7 @@ namespace Injections
             {
                 FileName = command
             };
-            
+
             // ruleid: os-command-injection
             var process = Process.Start(processStartInfo);
         }
