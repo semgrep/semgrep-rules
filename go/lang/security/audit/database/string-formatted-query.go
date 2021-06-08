@@ -20,6 +20,14 @@ func dbExec(r *http.Request) {
 	row, _ := db.Exec(query)
 }
 
+func dbQuery(r *http.Request) {
+    // ruleid: string-formatted-query
+    _, err = db.Exec("INSERT into users (username, password) VALUES(" + username + ", " + password)
+    if err != nil {
+        http.Error("mistake")
+    }
+}
+
 
 func dbExecContext(r *http.Request) {
 	ctx := context.Background()
