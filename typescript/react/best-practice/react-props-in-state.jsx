@@ -1,6 +1,6 @@
 class Test1 extends React.Component {
   constructor() {
-    // todo:react-props-in-state
+    // todoruleid:react-props-in-state
     this.state = {
           foo: 'bar',
           color: this.props.color,
@@ -20,7 +20,7 @@ class Test1 extends React.Component {
 
 class Test2 extends React.Component {
   constructor() {
-    // todo:react-props-in-state
+    // todoruleid:react-props-in-state
     this.state = {
       textColor: slowlyCalculateTextColor(this.props.color)
     };
