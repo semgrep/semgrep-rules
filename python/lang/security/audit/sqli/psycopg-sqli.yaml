@@ -4,16 +4,11 @@ rules:
   - python
   message: >
     Detected string concatenation with a non-literal variable in a psycopg2
-
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-
     and not properly sanitized. In order to prevent SQL injection,
-
     used parameterized queries or prepared statements instead.
-
     You can use prepared statements by creating a 'sql.SQL' string. You can also use the pyformat binding style to create
     parameterized queries. For example:
-
     'cur.execute(SELECT * FROM table WHERE name=%s, user_input)'
   metadata:
     references:

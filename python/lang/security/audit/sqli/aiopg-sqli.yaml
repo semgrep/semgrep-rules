@@ -4,17 +4,11 @@ rules:
   - python
   message: >
     Detected string concatenation with a non-literal variable in an aiopg
-
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-
     and not properly sanitized. In order to prevent SQL injection,
-
     use parameterized queries instead.
-
     You can create parameterized queries like so:
-
     'cur.execute("SELECT %s FROM table", (user_value,))'.
-
   metadata:
     references:
     - https://github.com/aio-libs/aiopg
