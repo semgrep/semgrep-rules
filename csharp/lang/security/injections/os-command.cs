@@ -17,6 +17,24 @@ namespace Injections
         }
 
         // ruleid: os-command-injection
+        public void RunOsCommandWithProcessParam(string command)
+        {
+            Process process = new Process();
+
+            process.StartInfo.FileName = command;
+            process.Start();
+        }
+
+        // ok: os-command-injection
+        public void RunOsCommandWithProcessParam(string command)
+        {
+            Process process = new Process();
+
+            process.StartInfo.FileName = "constant";
+            process.Start();
+        }
+
+        // ruleid: os-command-injection
         public void RunOsCommandWithStartInfo(string command)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
