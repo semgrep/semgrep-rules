@@ -20,6 +20,14 @@ func dbExec(r *http.Request) {
 	row, _ := db.Exec(query)
 }
 
+func okDbExec(r *http.Request) {
+	customerId := r.URL.Query().Get("id")
+	// ok: string-formatted-query
+	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = customerId"
+
+	row, _ := db.Exec(query)
+}
+
 func dbQuery1(r *http.Request) {
     // ruleid: string-formatted-query
     _, err = db.Query("INSERT into users (username, password) VALUES(" + username + ", " + password)
