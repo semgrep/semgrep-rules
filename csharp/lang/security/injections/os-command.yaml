@@ -22,6 +22,16 @@ rules:
           ... Process.Start($X);
         }
     - pattern: |
+        public $T $F($X)
+        {
+          ...
+          Process $Y = new Process();
+
+          $Y.StartInfo.FileName = $X;
+          $Y.Start();
+          ...
+        }
+    - pattern: |
         public $T $F($Y)
         {
           ...
