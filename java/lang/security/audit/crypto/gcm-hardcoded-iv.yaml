@@ -1,22 +1,22 @@
 rules:
-  - id: gcm-nonce-reuse
-    languages:
-      - java
-    message: "GCM IV/nonce is reused: encryption can be totally useless, cf https://www.youtube.com/watch?v=r1awgAl90wM"
+- id: gcm-nonce-reuse
+  languages:
+  - java
+  message: 'GCM IV/nonce is reused: encryption can be totally useless, cf https://www.youtube.com/watch?v=r1awgAl90wM'
 #   NB: constants are automatically propagated so easy to define hard coded strings with "..."
 #   but what about static byte arrays ? there seems to be no native support in semgrep
-    patterns:
-      - pattern-either:
-        - pattern: new GCMParameterSpec(..., "...".getBytes(...), ...);
-        - pattern: byte[] $NONCE = "...".getBytes(...); ... new GCMParameterSpec(..., $NONCE, ...);
-    severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: new GCMParameterSpec(..., "...".getBytes(...), ...);
+    - pattern: byte[] $NONCE = "...".getBytes(...); ... new GCMParameterSpec(..., $NONCE, ...);
+  severity: ERROR
 
-  - id: gcm-detection
-    languages:
-      - java
-    message: "GCM detected, please check that IV/nonce is not reused"
-    patterns:
-      - pattern-either:
-        - pattern: $METHOD.getInstance("AES/GCM/NoPadding",...);
-        - pattern: new GCMParameterSpec(...);
-    severity: INFO
+- id: gcm-detection
+  languages:
+  - java
+  message: GCM detected, please check that IV/nonce is not reused
+  patterns:
+  - pattern-either:
+    - pattern: $METHOD.getInstance("AES/GCM/NoPadding",...);
+    - pattern: new GCMParameterSpec(...);
+  severity: INFO
