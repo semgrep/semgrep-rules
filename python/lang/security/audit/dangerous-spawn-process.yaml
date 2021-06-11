@@ -35,10 +35,10 @@ rules:
     - pattern: os.$METHOD(...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
+        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
   - patterns:
     - pattern-not: os.$METHOD($MODE, "...", ["...","...",...], ...)
     - pattern: os.$METHOD($MODE,"=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
+        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
