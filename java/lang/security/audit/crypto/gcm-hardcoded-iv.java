@@ -40,6 +40,7 @@ public class GcmHardcodedIV
         byte[] theBadIV = BAD_IV.getBytes();
 
         //ruleid: gcm-nonce-reuse
+        //ruleid: gcm-detection
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, theBadIV);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmParameterSpec);
 
@@ -54,6 +55,7 @@ public class GcmHardcodedIV
 
         //Hard to detect that theIV is indeed built from a hardcoded string
         //todoruleid: gcm-nonce-reuse
+        //ruleid: gcm-detection
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, theIV);
         cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmParameterSpec);
 
