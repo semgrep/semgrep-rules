@@ -37,10 +37,9 @@ public class GcmHardcodedIV
     public static String encrypt(String clearText) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         SecretKeySpec keySpec = new SecretKeySpec(theKey.getEncoded(), "AES");
+        //ruleid: gcm-nonce-reuse
         byte[] theBadIV = BAD_IV.getBytes();
 
-        //ruleid: gcm-nonce-reuse
-        //ruleid: gcm-detection
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, theBadIV);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmParameterSpec);
 
@@ -55,7 +54,6 @@ public class GcmHardcodedIV
 
         //Hard to detect that theIV is indeed built from a hardcoded string
         //todoruleid: gcm-nonce-reuse
-        //ruleid: gcm-detection
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, theIV);
         cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmParameterSpec);
 

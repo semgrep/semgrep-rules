@@ -1,0 +1,12 @@
+rules:
+- id: gcm-detection
+  metadata:
+    category: security
+  languages:
+  - java
+  message: GCM detected, please check that IV/nonce is not reused
+  patterns:
+  - pattern-either:
+    - pattern: $METHOD.getInstance("AES/GCM/NoPadding",...);
+    - pattern: new GCMParameterSpec(...);
+  severity: INFO
