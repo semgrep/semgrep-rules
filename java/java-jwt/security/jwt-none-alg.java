@@ -49,21 +49,3 @@ public class App
         ok1(args[0]);
     }
 }
-
-abstract class App2
-{
-
-    static String secret = "secret";
-
-    public void bad2() {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                .withIssuer("auth0")
-                .sign(algorithm);
-        } catch (JWTCreationException exception){
-            //Invalid Signing configuration / Couldn't convert Claims.
-        }
-    }
-
-}
