@@ -17,6 +17,11 @@ rules:
         helmet.contentSecurityPolicy({directives: ...})
     - pattern: |
         csp({directives: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_check_crossdomain
   message: >-
     X-Permitted-Cross-Domain-Policies header set to off. More information:
@@ -38,6 +43,11 @@ rules:
         helmet({permittedCrossDomainPolicies: { permittedPolicies: ... }})
     - pattern: |
         helmet.permittedCrossDomainPolicies()
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_check_expect_ct
   message: >-
     Expect-CT header is present. More information:
@@ -59,6 +69,11 @@ rules:
         hemlet.expectCt({enforce: ...,})
     - pattern: |
         helmet({expectCt: { enforce: ... }})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_feature_policy
   message: >-
     Feature-Policy header is present. More information:
@@ -76,6 +91,11 @@ rules:
         helmet.featurePolicy(..., {features: ...}, ...)
     - pattern: |
         helmet({featurePolicy: {features: ...}})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_frame_guard
   message: >-
     X-Frame-Options header is present. More information:
@@ -95,6 +115,11 @@ rules:
         frameguard(...)
     - pattern: |
         helmet({frameguard: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_dns_prefetch
   message: >-
     X-DNS-Prefetch-Control header is present and DNS Prefetch Control is
@@ -119,6 +144,11 @@ rules:
         helmet({dnsPrefetchControl: {allow: false}})
     - pattern: |
         dnsPrefetchControl({ allow: false })
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_x_powered_by
   message: >-
     Default X-Powered-By is removed or modified. More information:
@@ -140,6 +170,11 @@ rules:
         hidePoweredBy(...)
     - pattern: |
         helmet({hidePoweredBy: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_hsts
   message: >-
     HSTS header is present. More information:
@@ -159,6 +194,11 @@ rules:
         hsts({ maxAge: ...})
     - pattern: |
         helmet({hsts: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_ienoopen
   message: >-
     X-Download-Options header is present. More information:
@@ -178,6 +218,11 @@ rules:
         ieNoOpen()
     - pattern: |
         helmet({ieNoOpen: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_nosniff
   message: >-
     Content-Type-Options header is present. More information:
@@ -197,6 +242,11 @@ rules:
         noSniff()
     - pattern: |
         helmet({noSniff: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_referrer_policy
   message: >-
     Referrer-Policy header is present. More information:
@@ -214,6 +264,11 @@ rules:
         referrerPolicy(...)
     - pattern: |
         helmet({referrerPolicy: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express
 - id: helmet_header_xss_filter
   message: >-
     X-XSS-Protection header is present. More information:
@@ -233,3 +288,8 @@ rules:
         xssFilter(...)
     - pattern: |
         helmet({xssFilter: ...})
+  metadata:
+    category: security
+    technology:
+    - node.js
+    - express

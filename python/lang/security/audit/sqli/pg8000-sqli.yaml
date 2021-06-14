@@ -4,27 +4,17 @@ rules:
   - python
   message: >
     Detected string concatenation with a non-literal variable in a pg8000
-
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-
     and not properly sanitized. In order to prevent SQL injection,
-
     used parameterized queries or prepared statements instead.
-
     You can create parameterized queries like so:
-
     'conn.run("SELECT :value FROM table", value=myvalue)'.
-
     You can also create prepared statements with 'conn.prepare':
-
     'conn.prepare("SELECT (:v) FROM table")'
-
   metadata:
     references:
     - https://github.com/tlocke/pg8000
     category: security
-    technology:
-    - pycryptodome
   patterns:
   - pattern-either:
     - patterns:

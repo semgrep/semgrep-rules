@@ -1,6 +1,6 @@
 class Test1 extends React.Component {
-// TODO: react-props-in-state
   constructor() {
+    // todoruleid:react-props-in-state
     this.state = {
           foo: 'bar',
           color: this.props.color,
@@ -19,8 +19,8 @@ class Test1 extends React.Component {
 }
 
 class Test2 extends React.Component {
-// TODO: react-props-in-state
   constructor() {
+    // todoruleid:react-props-in-state
     this.state = {
       textColor: slowlyCalculateTextColor(this.props.color)
     };
@@ -38,14 +38,34 @@ class Test2 extends React.Component {
   }
 }
 
+class OkTest extends React.Component {
+// ok: react-props-in-state
+  constructor() {
+    this.state = {
+          foo: 'bar',
+          initialColor: this.props.color,
+          one: 1
+    };
+  }
+
+  render() {
+    const { color } = this.state;
+    return (
+      <button className={'Button-' + color}>
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
 function Test3({ text }) {
-// ruleid: react-props-in-state
+  // ruleid:react-props-in-state
   const [buttonText] = useState(text)
   return <button>{buttonText}</button>
 }
 
 function Test4(props) {
-// ruleid: react-props-in-state
+  // ruleid:react-props-in-state
   const [formattedText] = useState(() => slowlyFormatText(props.text))
   return <button>{formattedText}</button>
 }
