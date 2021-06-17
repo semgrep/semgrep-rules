@@ -5,6 +5,7 @@ rules:
   patterns:
   - pattern: zypper $COMMAND
   - pattern-not-inside: RUN ... && zypper clean
+  - pattern-not-inside: RUN ... && \ zypper clean
   message: |
     This zypper command does not end with '&& zypper clean'. Running 'zypper clean' will remove cached data and reduce package size. (This must be performed in the same RUN step.)
   metadata:
