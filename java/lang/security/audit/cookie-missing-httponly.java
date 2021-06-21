@@ -34,7 +34,7 @@ public class CookieController {
         response.addCookie(cookie);
     }
 
-    // test case cf. https://github.com/Dreampie/Resty//blob/9ef059c065d1894c79e7d69c150e588a61eb1cd5/resty-common/src/main/java/cn/dreampie/common/http/HttpResponse.java#L69
+    // test case cf. https://github.com/Dreampie/Resty/blob/9ef059c065d1894c79e7d69c150e588a61eb1cd5/resty-common/src/main/java/cn/dreampie/common/http/HttpResponse.java#L69
     public Response addCookie(String name, String value, int expiration, boolean httpOnly) {
     Cookie existingCookie = HttpRequest.getCookie(request.getCookies(), name);
     if (existingCookie != null) {
