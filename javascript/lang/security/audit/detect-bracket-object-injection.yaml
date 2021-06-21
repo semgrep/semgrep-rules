@@ -4,14 +4,12 @@ rules:
   - pattern: |
       const $VAR = $OBJ[$FIELD];
   - pattern-not: |
+      const $VAR = $OBJ[($FIELD : float)]
+  - pattern-not: |
       const $VAR = $OBJ["..."];
   - pattern-not-inside: |
       const $FIELD = ...;
       ...
-  - metavariable-regex:
-      metavariable: $FIELD
-      regex: >-
-        .*[^0-9].*
   message: |
     Object injection via bracket notation via $FIELD
   severity: WARNING
