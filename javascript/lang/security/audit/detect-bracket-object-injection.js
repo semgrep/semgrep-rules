@@ -11,14 +11,16 @@ const validate = function() {
   }
   // ruleid:detect-bracket-object-injection
   const badField = formData[formData["foo"]];
-  // ok
+  // ok:detect-bracket-object-injection
   const goodField = formData[someOtherField];
-  // ok
+  // ok:detect-bracket-object-injection
   const someField = formData["bar"]
-  // ok
+  // ok:detect-bracket-object-injection
   const email = formData.split("@")[0];
   // ruleid:detect-bracket-object-injection
   const email = formData.split("@")[0 + a];
+  // ruleid:detect-bracket-object-injection
+  const email = formData.split("@")[a + 0];
   return {
     name: fieldName,
     value: '',
