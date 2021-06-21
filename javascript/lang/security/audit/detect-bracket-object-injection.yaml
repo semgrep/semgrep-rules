@@ -8,6 +8,10 @@ rules:
   - pattern-not-inside: |
       const $FIELD = ...;
       ...
+  - metavariable-regex:
+      metavariable: $FIELD
+      regex: >-
+        .*[^0-9].*
   message: |
     Object injection via bracket notation via $FIELD
   severity: WARNING

@@ -15,6 +15,10 @@ const validate = function() {
   const goodField = formData[someOtherField];
   // ok
   const someField = formData["bar"]
+  // ok
+  const email = formData.split("@")[0];
+  // ruleid:detect-bracket-object-injection
+  const email = formData.split("@")[0 + a];
   return {
     name: fieldName,
     value: '',
