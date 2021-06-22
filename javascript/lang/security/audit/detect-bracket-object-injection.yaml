@@ -4,6 +4,8 @@ rules:
   - pattern: |
       const $VAR = $OBJ[$FIELD];
   - pattern-not: |
+      const $VAR = $OBJ[($FIELD : float)]
+  - pattern-not: |
       const $VAR = $OBJ["..."];
   - pattern-not-inside: |
       const $FIELD = ...;
