@@ -5,22 +5,31 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - express
   severity: ERROR
   languages: [javascript]
   patterns:
   - pattern-inside: |
-      ...
       require('phantom');
       ...
   - pattern-inside: |
-      ...
       require('express');
       ...
   - pattern-either:
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ($REQ, $RES) {...}
+    - pattern-inside: function $FUNC($REQ, $RES) {...}
+    - pattern-inside: function ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: $PAGE.open(<... $REQ.$QUERY.$FOO ...>,...)
     - pattern: $PAGE.setContent(<... $REQ.$QUERY.$FOO ...>,...)

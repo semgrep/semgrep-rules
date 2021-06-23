@@ -1,9 +1,10 @@
 rules:
 - id: assignment-comparison
-  patterns:
-  - pattern-either:
-    - pattern: if ($X=true) { ... }
-    - pattern: if ($X=false) { ... }
   message: The value of `$X` is being ignored and will be used in the conditional test
   languages: [java]
   severity: ERROR
+  pattern-either:
+  - pattern: if ($X=true) { ... }
+  - pattern: if ($X=false) { ... }
+  metadata:
+    category: correctness

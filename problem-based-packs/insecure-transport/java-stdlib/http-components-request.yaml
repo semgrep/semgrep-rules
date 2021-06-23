@@ -1,17 +1,5 @@
 rules:
 - id: http-components-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $HTTPCLIENT = HttpClients.$CREATE(...);
-        ...
-        $HTTPREQ = new $HTTPFUNC("=~/[hH][tT][tT][pP]://.*/");
-        ...
-        $RESPONSE = $HTTPCLIENT.execute($HTTPREQ);
-    - pattern: |
-        $HTTPCLIENT = HttpClients.$CREATE(...);
-        ...
-        $RESPONSE = $HTTPCLIENT.execute(new $HTTPFUNC("=~/[hH][tT][tT][pP]://.*/"));
   message: |
     Checks for requests sent via Apache HTTP Components to http:// URLS. This is dangerous because
     the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
@@ -26,6 +14,18 @@ rules:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
     - https://hc.apache.org/httpcomponents-client-ga/quickstart.html
+    category: security
   languages:
   - java
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $HTTPCLIENT = HttpClients.$CREATE(...);
+      ...
+      $HTTPREQ = new $HTTPFUNC("=~/[hH][tT][tT][pP]://.*/");
+      ...
+      $RESPONSE = $HTTPCLIENT.execute($HTTPREQ);
+  - pattern: |
+      $HTTPCLIENT = HttpClients.$CREATE(...);
+      ...
+      $RESPONSE = $HTTPCLIENT.execute(new $HTTPFUNC("=~/[hH][tT][tT][pP]://.*/"));

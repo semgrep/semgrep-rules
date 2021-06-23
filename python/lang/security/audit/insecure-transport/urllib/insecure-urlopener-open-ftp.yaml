@@ -5,41 +5,42 @@ rules:
     being used with 'ftp://'. Use SFTP instead. urllib does not support
     SFTP, so consider using a library which supports SFTP.
   metadata:
-    owasp: 'A3: Sensitve Data Exposure'
+    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener.open
+    category: security
+    technology:
+    - urllib
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.URLopener(...).open("=~/[Ff][Tt][Pp]://.*/", ...)
-    - patterns:
-      - pattern-inside: |
-          $OPENERDIRECTOR = urllib.request.URLopener(...)
+  pattern-either:
+  - pattern: urllib.request.URLopener(...).open("=~/[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.URLopener(...)
+        ...
+    - pattern: $OPENERDIRECTOR.open("=~/[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.URLopener(...)
+        ...
+    - pattern: |
+        $URL = "=~/[Ff][Tt][Pp]://.*/"
+        ...
+        $OPENERDIRECTOR.open($URL, ...)
+  - pattern: |
+      $URL = "=~/[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.URLopener(...).open($URL, ...)
+  - patterns:
+    - pattern-inside: |
+        def $FUNC(..., $URL = "=~/[Ff][Tt][Pp]://.*/", ...):
           ...
-      - pattern: $OPENERDIRECTOR.open("=~/[Ff][Tt][Pp]://.*/", ...)
-    - patterns:
-      - pattern-inside: |
-          $OPENERDIRECTOR = urllib.request.URLopener(...)
-          ...
-      - pattern: |
-          $URL = "=~/[Ff][Tt][Pp]://.*/"
-          ...
-          $OPENERDIRECTOR.open($URL, ...)
-    - patterns:
-      - pattern: |
-          $URL = "=~/[Ff][Tt][Pp]://.*/"
-          ...
-          urllib.request.URLopener(...).open($URL, ...)
-    - patterns:
-      - pattern-inside: |
-          def $FUNC(..., $URL = "=~/[Ff][Tt][Pp]://.*/", ...):
+    - pattern-either:
+      - pattern: urllib.request.URLopener(...).open($URL, ...)
+      - patterns:
+        - pattern-inside: |
+            $OPENERDIRECTOR = urllib.request.URLopener(...)
             ...
-      - pattern-either:
-        - pattern: urllib.request.URLopener(...).open($URL, ...)
-        - patterns:
-          - pattern-inside: |
-              $OPENERDIRECTOR = urllib.request.URLopener(...)
-              ...
-          - pattern: $OPENERDIRECTOR.open($URL, ...)
+        - pattern: $OPENERDIRECTOR.open($URL, ...)

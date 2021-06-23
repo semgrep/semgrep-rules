@@ -6,6 +6,7 @@ rules:
     references:
     - https://docs.python.org/3/library/pickle.html
     - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
+    category: security
   languages:
   - python
   message: |
@@ -23,6 +24,7 @@ rules:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     references:
     - https://docs.python.org/3/library/pickle.html
+    category: security
   languages:
   - python
   message: |
@@ -38,6 +40,7 @@ rules:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     references:
     - https://docs.python.org/3/library/pickle.html
+    category: security
   languages:
   - python
   message: |
@@ -46,14 +49,14 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   severity: WARNING
-  pattern-either:
-  - pattern: dill.$FUNC(...)
+  pattern: dill.$FUNC(...)
 - id: avoid-shelve
   metadata:
     owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     references:
     - https://docs.python.org/3/library/pickle.html
+    category: security
   languages:
   - python
   message: |
@@ -62,5 +65,4 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   severity: WARNING
-  pattern-either:
-  - pattern: shelve.$FUNC(...)
+  pattern: shelve.$FUNC(...)

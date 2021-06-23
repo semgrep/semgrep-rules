@@ -1,23 +1,5 @@
 rules:
 - id: telnet-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $TEL = require('telnet-client');
-        ...
-        $SERVER = new $TEL();
-        ...
-        $SERVER.on(...);
-    - pattern: |
-        $TEL = require('telnet-client');
-        ...
-        $SERVER = new $TEL();
-        ...
-        $SERVER.connect(...);
-    - pattern: |
-        $TEL = require('telnet');
-        ...
-        $TEL.createServer(...);
   message: |
     Checks for creation of telnet servers or attempts to connect through telnet. This is insecure as the telnet protocol supports
     no encryption, and data passes through unencrypted.
@@ -28,6 +10,26 @@ rules:
     references:
     - https://www.npmjs.com/package/telnet
     - https://www.npmjs.com/package/telnet-client
+    category: security
+    technology:
+    - node.js
   languages:
   - javascript
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $TEL = require('telnet-client');
+      ...
+      $SERVER = new $TEL();
+      ...
+      $SERVER.on(...);
+  - pattern: |
+      $TEL = require('telnet-client');
+      ...
+      $SERVER = new $TEL();
+      ...
+      $SERVER.connect(...);
+  - pattern: |
+      $TEL = require('telnet');
+      ...
+      $TEL.createServer(...);

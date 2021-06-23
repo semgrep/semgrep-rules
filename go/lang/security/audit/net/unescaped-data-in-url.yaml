@@ -9,33 +9,33 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://golang.org/pkg/html/template/#URL
+    category: security
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: template.URL($T + $X, ...)
-    - pattern: template.URL(fmt.$P("...", ...), ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $T = $FXN(..., $T, ...)
-        ...
-        template.URL($T, ...)
-    - pattern: |
-        $T = fmt.$P("...", ...)
-        ...
-        template.URL($T, ...)
-    - pattern: |
-        $T, $ERR = fmt.$P("...", ...)
-        ...
-        template.URL($T, ...)
-    - pattern: |
-        $T = $X + $Y
-        ...
-        template.URL($T, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $OTHER, $ERR = fmt.$P(..., $T, ...)
-        ...
-        template.URL($OTHER, ...)
+  pattern-either:
+  - pattern: template.URL($T + $X, ...)
+  - pattern: template.URL(fmt.$P("...", ...), ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $T = $FXN(..., $T, ...)
+      ...
+      template.URL($T, ...)
+  - pattern: |
+      $T = fmt.$P("...", ...)
+      ...
+      template.URL($T, ...)
+  - pattern: |
+      $T, $ERR = fmt.$P("...", ...)
+      ...
+      template.URL($T, ...)
+  - pattern: |
+      $T = $X + $Y
+      ...
+      template.URL($T, ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $OTHER, $ERR = fmt.$P(..., $T, ...)
+      ...
+      template.URL($OTHER, ...)

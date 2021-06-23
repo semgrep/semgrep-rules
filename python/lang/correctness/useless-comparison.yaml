@@ -1,20 +1,5 @@
 rules:
 - id: no-strings-as-booleans
-  patterns:
-  - pattern-either:
-    - pattern: |
-        if <... "..." and ... ...>:
-            ...
-    - pattern: |
-        if <... "..." or ... ...>:
-            ...
-    - patterns:
-      - pattern-not: |
-          if $X in "...":
-            ...
-      - pattern: |
-          if "...":
-              ...
   message: |
     Using strings as booleans in Python has unexpected results.
     `"one" and "two"` will return "two".
@@ -22,3 +7,19 @@ rules:
      In Python, strings are truthy, and strings with a non-zero length evaluate to True.
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      if <... "..." and ... ...>:
+          ...
+  - pattern: |
+      if <... "..." or ... ...>:
+          ...
+  - patterns:
+    - pattern-not: |
+        if $X in "...":
+          ...
+    - pattern: |
+        if "...":
+            ...
+  metadata:
+    category: correctness

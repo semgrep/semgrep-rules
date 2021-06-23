@@ -3,9 +3,7 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-either:
-        - pattern: |
-            $DB.$METHOD(...,$QUERY,...)
+      - pattern: $DB.$METHOD(...,$QUERY,...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y
@@ -47,4 +45,5 @@ rules:
   metadata:
     references:
     - https://golang.org/pkg/database/sql/
+    category: security
   severity: WARNING

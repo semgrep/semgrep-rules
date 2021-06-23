@@ -11,25 +11,45 @@ rules:
           state = {$NAME: <... this.props.$PROP ...>}
       - pattern: |
           this.state = {$NAME: <... this.props.$PROP ...>}
+    - metavariable-regex:
+        metavariable: $NAME
+        regex: ^(?!default|initial).*$
   - patterns:
-    - pattern-inside: |
-        function $FN({$PROP},...) {
-          ...
-        }
-    - pattern-inside: useState(...)
-    - pattern: $PROP
-  - patterns:
-    - pattern-inside: |
-        function $FN($PROP,...) {
-          ...
-        }
-    - pattern-inside: useState(...)
-    - pattern: $PROP
+    - pattern-either:
+      - pattern-inside: |
+          function $FN({$PROP},...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FN($PROP,...) {
+            ...
+          }
+    - pattern-either:
+      - pattern: useState(<... $PROP ...>)
+      - pattern: useState(<... $PROP.$KEY ...>)
+      - pattern: |
+          useState(function $X(...) {
+            ...
+            <... $PROP ...>
+            ...
+          })
+      - pattern: |
+          useState(function $X(...) {
+            ...
+            <... $PROP.$KEY ...>
+            ...
+          })
+    - metavariable-regex:
+        metavariable: $PROP
+        regex: ^(?!default|initial).*$
   message: |
     It is a bad practice to stop the data flow in rendering by copying props into state.
   metadata:
     references:
     - https://overreacted.io/writing-resilient-components/#principle-1-dont-stop-the-data-flow
+    category: best-practice
+    technology:
+    - react
   languages:
   - typescript
   - javascript

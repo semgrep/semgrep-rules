@@ -3,9 +3,7 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern-either:
-        - pattern: |
-            $DB.$METHOD(...,$QUERY,...)
+      - pattern: $DB.$METHOD(...,$QUERY,...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y
@@ -49,4 +47,5 @@ rules:
   metadata:
     references:
     - https://pg.uptrace.dev/queries/
+    category: security
   severity: WARNING

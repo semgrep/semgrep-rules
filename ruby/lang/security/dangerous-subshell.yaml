@@ -1,9 +1,8 @@
 rules:
 - id: dangerous-subshell
   patterns:
-  - pattern-either:
-    - pattern: |
-        `...#{$VAL}...`
+  - pattern: |
+      `...#{$VAL}...`
   - pattern-not: |
       `...#{"..."}...`
   - pattern-not-inside: |
@@ -17,5 +16,6 @@ rules:
   metadata:
     cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp: 'A1: Injection'
+    category: security
   severity: WARNING
   languages: [ruby]

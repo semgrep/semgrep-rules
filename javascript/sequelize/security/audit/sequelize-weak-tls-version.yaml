@@ -10,18 +10,20 @@ rules:
     This rule could be extended for MSSQL, but the dialectOptions
     is specific for Tedious.
   metadata:
-    owasp: A6:2017-Security Misconfiguration
+    owasp: 'A6: Security Misconfiguration'
     references:
     - https://node-postgres.com/features/ssl
     - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
     - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
     - https://nodejs.org/api/tls.html#tls_tls_default_min_version
+    category: security
+    technology:
+    - sequelize
   severity: WARNING
   languages:
   - javascript
   - typescript
   patterns:
-
   - pattern-inside: |
       {
         host: $HOST,
@@ -30,19 +32,15 @@ rules:
         dialectOptions:
           { ssl: ... }
        }
-
   - pattern-either:
-
     - pattern: |
         {
           minVersion: 'TLSv1'
         }
-
     - pattern: |
         {
           minVersion: 'TLSv1.1'
         }
-
   - metavariable-regex:
       metavariable: $DIALECT
       regex: "['\"](mariadb|mysql|postgres)['\"]"

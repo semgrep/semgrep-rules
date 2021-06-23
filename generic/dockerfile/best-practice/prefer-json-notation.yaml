@@ -2,14 +2,6 @@ rules:
 - id: prefer-json-notation
   severity: INFO
   languages: [generic]
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: CMD $WORD
-      - pattern-not-inside: CMD [...]
-    - patterns:
-      - pattern: ENTRYPOINT $WORD
-      - pattern-not-inside: ENTRYPOINT [...]
   message: >-
     Prefer JSON notation when using CMD or ENTRYPOINT. This allows signals to be passed
     from the OS.
@@ -18,7 +10,17 @@ rules:
     references:
     - https://github.com/hadolint/hadolint/wiki/DL3024
     - https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#cmd
+    category: best-practice
+    technology:
+    - dockerfile
   paths:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern-either:
+  - patterns:
+    - pattern: CMD $WORD
+    - pattern-not-inside: CMD [...]
+  - patterns:
+    - pattern: ENTRYPOINT $WORD
+    - pattern-not-inside: ENTRYPOINT [...]

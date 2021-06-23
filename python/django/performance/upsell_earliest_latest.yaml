@@ -1,11 +1,14 @@
 rules:
 - id: use-earliest-or-latest
-  patterns:
-  - pattern-either:
-    - pattern: $X.objects.order_by(...)[0]
-    - pattern: $X.objects.$FUNC(...).order_by(...)[0]
-    - pattern: $X.objects.$FUNC(...).$FILTER(...).order_by(...)[0]
   message: Looks like you are only accessing first element of an ordered QuerySet. Use `latest()` or `earliest()` instead.
     See https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.latest
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: $X.objects.order_by(...)[0]
+  - pattern: $X.objects.$FUNC(...).order_by(...)[0]
+  - pattern: $X.objects.$FUNC(...).$FILTER(...).order_by(...)[0]
+  metadata:
+    category: performance
+    technology:
+    - django

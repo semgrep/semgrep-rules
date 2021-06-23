@@ -11,29 +11,32 @@ rules:
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
     asvs:
-      section: "V3: Session Management Verification Requirements"
-      control_id: "3.5.3 Insecue Stateless Session Tokens"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management"
-      version: "4"
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.5.3 Insecue Stateless Session Tokens
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+      version: '4'
+    category: security
+    technology:
+    - jose
+    - jwt
   languages: [javascript]
   severity: ERROR
-  patterns:
-  - pattern-either:
-    - pattern: |
-        var $JOSE = require("jose");
-        ...
-        var { JWK, JWT } = $JOSE;
-        ...
-        var $T = JWT.verify($P, JWK.None,...);
-    - pattern: |
-        var $JOSE = require("jose");
-        ...
-        var { JWK, JWT } = $JOSE;
-        ...
-        $T = JWT.verify($P, JWK.None,...);
-    - pattern: |
-        var $JOSE = require("jose");
-        ...
-        var { JWK, JWT } = $JOSE;
-        ...
-        JWT.verify($P, JWK.None,...);
+  pattern-either:
+  - pattern: |
+      var $JOSE = require("jose");
+      ...
+      var { JWK, JWT } = $JOSE;
+      ...
+      var $T = JWT.verify($P, JWK.None,...);
+  - pattern: |
+      var $JOSE = require("jose");
+      ...
+      var { JWK, JWT } = $JOSE;
+      ...
+      $T = JWT.verify($P, JWK.None,...);
+  - pattern: |
+      var $JOSE = require("jose");
+      ...
+      var { JWK, JWT } = $JOSE;
+      ...
+      JWT.verify($P, JWK.None,...);

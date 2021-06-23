@@ -1,13 +1,12 @@
 rules:
 - id: bypass-tls-verification
   patterns:
-  - pattern-either:
-    - pattern: |
-        new X509TrustManager() {
-          ...
-          public void checkClientTrusted(X509Certificate[] certs, String authType) {...}
-          ...
-        }
+  - pattern: |
+      new X509TrustManager() {
+        ...
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {...}
+        ...
+      }
   - pattern-not: |
       new X509TrustManager() {
         ...
@@ -38,5 +37,6 @@ rules:
     references:
     - https://riptutorial.com/java/example/16517/temporarily-disable-ssl-verification--for-testing-purposes-
     - https://stackoverflow.com/questions/35530558/how-to-fix-unsafe-implementation-of-x509trustmanager-in-android-app?rq=1
+    category: security
   languages: [java]
   severity: WARNING

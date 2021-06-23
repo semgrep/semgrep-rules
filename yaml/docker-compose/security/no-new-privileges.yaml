@@ -2,6 +2,8 @@ rules:
 - id: no-new-privileges
   patterns:
   - pattern-inside: |
+      version: ...
+      ...
       services:
         ...
   - pattern: |
@@ -24,5 +26,8 @@ rules:
     - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
     - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
     - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
+    category: security
+    technology:
+    - docker-compose
   languages: [yaml]
   severity: WARNING

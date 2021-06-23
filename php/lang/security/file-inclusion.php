@@ -23,3 +23,9 @@ require_once($user_input);
 
 // ok: file-inclusion
 require_once('constant.php');
+
+// ruleid: file-inclusion
+include(__DIR__ . $user_input);
+
+// ok: file-inclusion
+include(__DIR__ . 'constant.php');

@@ -5,6 +5,9 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO103.md
+    category: security
+    technology:
+    - pickle
   pattern-either:
   - pattern: pickle.loads(...)
   - pattern: pickle.load(...)
@@ -18,6 +21,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO104.md
+    category: security
   patterns:
   - pattern: eval(...)
   - pattern-not: eval("...")
@@ -27,6 +31,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO105.md
+    category: security
   patterns:
   - pattern: exec(...)
   - pattern-not: exec("...")
@@ -36,6 +41,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+    category: security
   pattern-either:
   - patterns:
     - pattern: os.popen(...)
@@ -58,6 +64,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+    category: security
   pattern-either:
   - pattern: os.tempnam(...)
   - pattern: os.tmpnam(...)
@@ -67,6 +74,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+    category: security
   pattern-either:
   - patterns:
     - pattern: xml.$ANYTHING
@@ -81,6 +89,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO109.md
+    category: security
   patterns:
   - pattern: import yaml
   - pattern-either:
@@ -94,6 +103,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO110.md
+    category: security
   patterns:
   - pattern: compile(...)
   - pattern-not: compile("...")
@@ -103,6 +113,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO112.md
+    category: security
   pattern-either:
   - pattern: |
       $ZF = zipfile.ZipFile(...)
@@ -118,6 +129,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO115.md
+    category: security
   pattern-either:
   - pattern: |
       $TF = tarfile.TarFile(...)
@@ -157,6 +169,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO116.md
+    category: security
   pattern-either:
   - patterns:
     - pattern: subprocess.call(..., shell=True, ...)
@@ -179,6 +192,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO117.md
+    category: security
   pattern: dl.$ANYTHING
 - id: insecure-gl-use
   message: The Python 'gl' module may cause core dumps or other unsafe behavior
@@ -186,6 +200,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO118.md
+    category: security
   pattern: gl.$ANYTHING
 - id: insecure-shelve-use
   message: The Python 'shelve' module is not secure against maliciously constructed input
@@ -193,6 +208,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO119.md
+    category: security
   pattern: shelve.$ANYTHING
 - id: insecure-marshal-use
   message: The Python 'marshal' module is not secure against maliciously constructed input
@@ -200,6 +216,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO120.md
+    category: security
   pattern: marshal.$ANYTHING
 - id: insecure-tempfile-use
   message: The Python 'tempfile.mktemp' function allows for race conditions
@@ -207,6 +224,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO121.md
+    category: security
   pattern: tempfile.mktemp(...)
 - id: insecure-ssl-use
   message: Weak or insecure 'ssl' module usage
@@ -214,6 +232,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO122.md
+    category: security
   pattern-either:
   - pattern: ssl._create_unverified_context(...)
   - pattern: ssl._https_verify_certificates(enable=False)
@@ -229,6 +248,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO123.md
+    category: security
   pattern-either:
   - pattern: requests.request(..., verify=False, ...)
   - pattern: requests.get(..., verify=False, ...)
@@ -244,6 +264,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO124.md
+    category: security
   pattern-either:
   - pattern: xmlrpc.server.register_instance(..., allow_dotted_names=True, ...) # Python 3
   - pattern: SimpleXMLRPCServer.register_instance(..., allow_dotted_names=True, ...) # Python 2
@@ -253,6 +274,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO125.md
+    category: security
   patterns:
   - pattern: commands.$ANYTHING(...)
   - pattern-not: commands.$ANYTHING("...")
@@ -262,6 +284,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO126.md
+    category: security
   patterns:
   - pattern: popen2.$ANYTHING(...)
   - pattern-not: popen2.$ANYTHING("...")
@@ -271,6 +294,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO127.md
+    category: security
   pattern-either:
   - pattern: duo_client.Client(..., ca_certs="HTTP", ...)
   - pattern: duo_client.Client(..., ca_certs="DISABLE", ...)
@@ -294,6 +318,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO129.md
+    category: security
   pattern-either:
   - pattern: onelogin.saml2.utils.OneLogin_Saml2_Constants.SHA1
   - pattern: onelogin.saml2.utils.OneLogin_Saml2_Constants.RSA_SHA1
@@ -305,6 +330,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO130.md
+    category: security
   pattern-either:
   - pattern: hashlib.md5(...)
   - pattern: hashlib.sha1(...)
@@ -314,6 +340,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO131.md
+    category: security
   pattern: urllib3.disable_warnings(...)
 - id: insecure-urllib3-connections-use
   message: The Python 'urllib3' module used with SSL verfication disabled
@@ -321,6 +348,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO132.md
+    category: security
   pattern-either:
   - pattern: urllib3.PoolManager(..., cert_reqs="CERT_NONE", ...)
   - pattern: urllib3.PoolManager(..., cert_reqs="NONE", ...)
@@ -343,6 +371,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO133.md
+    category: security
   pattern: Crypto.$ANYTHING
 - id: insecure-cryptography-attribute-use
   message: Weak or insecure 'cryptography' module attribute usage
@@ -350,6 +379,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO134.md
+    category: security
   pattern-either:
   - pattern: cryptography.hazmat.primitives.hashes.MD5
   - pattern: cryptography.hazmat.primitives.hashes.SHA1
@@ -364,6 +394,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO136.md
+    category: security
   pattern-either:
   - pattern: xmlsec.constants.TransformDes3Cbc
   - pattern: xmlsec.constants.TransformKWDes3
@@ -382,6 +413,7 @@ rules:
   severity: WARNING
   metadata:
     source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO137.md
+    category: security
   pattern-either:
   - pattern: itsdangerous.signer.Signer(..., algorithm=itsdangerous.signer.NoneAlgorithm, ...)
   - pattern: itsdangerous.signer.Signer(..., algorithm=itsdangerous.NoneAlgorithm, ...)

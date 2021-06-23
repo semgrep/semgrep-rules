@@ -9,22 +9,22 @@ rules:
     owasp: 'A6: Security Misconfiguration'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_HOSTNAME_VERIFIER
     asvs:
-      section: "V9 Communications Verification Requirements"
-      control_id: "9.2.1 Weak TLS"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements"
-      version: "4"
+      section: V9 Communications Verification Requirements
+      control_id: 9.2.1 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+      version: '4'
+    category: security
   severity: WARNING
   languages: [java]
-  patterns:
-  - pattern-either:
-    - pattern: |
-        class $CLASS implements HostnameVerifier {
-          ...
-          public boolean verify(...) { return true; }
+  pattern-either:
+  - pattern: |
+      class $CLASS implements HostnameVerifier {
+        ...
+        public boolean verify(...) { return true; }
+      }
+  - pattern: |-
+      new HostnameVerifier(...){
+        public boolean verify(...) {
+          return true;
         }
-    - pattern: |-
-        new HostnameVerifier(...){
-          public boolean verify(...) {
-            return true;
-          }
-        }
+      }

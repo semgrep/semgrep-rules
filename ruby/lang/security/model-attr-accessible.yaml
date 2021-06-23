@@ -1,25 +1,5 @@
 rules:
 - id: model-attr-accessible
-  patterns:
-  - pattern-either:
-    - pattern: |
-        ....permit(..., :admin, ...)
-    - pattern: |
-        ....permit(..., :role, ...)
-    - pattern: |
-        ....permit(..., :banned, ...)
-    - pattern: |
-        ....permit(..., :account_id, ...)
-    - pattern: |
-        attr_accessible ..., :admin, ...
-    - pattern: |
-        attr_accessible ..., :role, ...
-    - pattern: |
-        attr_accessible ..., :banned, ...
-    - pattern: |
-        attr_accessible ..., :account_id, ...
-    - pattern: |
-        params.permit!
   message: |
     Checks for dangerous permitted attributes that can lead to mass assignment vulnerabilities. Query parameters allowed using permit
     and attr_accessible are checked for allowance of dangerous attributes admin, banned, role, and account_id. Also checks for usages of
@@ -27,6 +7,26 @@ rules:
   metadata:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_model_attr_accessible.rb
+    category: security
   languages:
   - ruby
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      ....permit(..., :admin, ...)
+  - pattern: |
+      ....permit(..., :role, ...)
+  - pattern: |
+      ....permit(..., :banned, ...)
+  - pattern: |
+      ....permit(..., :account_id, ...)
+  - pattern: |
+      attr_accessible ..., :admin, ...
+  - pattern: |
+      attr_accessible ..., :role, ...
+  - pattern: |
+      attr_accessible ..., :banned, ...
+  - pattern: |
+      attr_accessible ..., :account_id, ...
+  - pattern: |
+      params.permit!

@@ -24,7 +24,7 @@ eval(constVar + secondConstVar);
  * Positive Matches
  */
 
-let dynamic = "function dynamicStrings() { return 'dynamic strings are not'; }"
+let dynamic = window.prompt() // arbitrary user input
 
 // ruleid:eval-detected
 eval(dynamic + 'possibly malicious code');

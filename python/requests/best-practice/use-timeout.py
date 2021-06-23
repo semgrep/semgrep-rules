@@ -27,3 +27,11 @@ def test2():
         url, headers=headers, params=params, **{"timeout": TIMEOUT, **kwargs}
     )
     return r
+
+def test3():
+    # ruleid: use-timeout
+    session = requests.Session()
+    r = session.get(url)
+
+    # ok: use-timeout
+    r = session.get(url, timeout=3)

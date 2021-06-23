@@ -2,6 +2,8 @@ rules:
 - id: seccomp-confinement-disabled
   patterns:
   - pattern-inside: |
+      version: ...
+      ...
       services:
         ...
   - pattern: |
@@ -18,5 +20,8 @@ rules:
   metadata:
     references:
     - https://docs.docker.com/engine/security/seccomp/
+    category: security
+    technology:
+    - docker-compose
   languages: [yaml]
   severity: WARNING

@@ -1,26 +1,27 @@
 rules:
 - id: useless-if-conditional
-  patterns:
-  - pattern-either:
-    - pattern: |-
-        if ($X) {
-            ...
-        } else if ($X) {
-            ...
-        }
   message: |
     Detected an if block that checks for the same condition on both branches (`$X`)
   languages: [go]
   severity: WARNING
+  pattern: |
+    if ($X) {
+        ...
+    } else if ($X) {
+        ...
+    }
+  metadata:
+    category: maintainability
 - id: useless-if-body
-  patterns:
-  - pattern: |-
-      if ($X) {
-          $S
-      } else {
-          $S
-      }
+  pattern: |
+    if ($X) {
+        $S
+    } else {
+        $S
+    }
   message: |
     Detected identical if-statement bodies. Is this intentional?
   languages: [go]
   severity: WARNING
+  metadata:
+    category: maintainability

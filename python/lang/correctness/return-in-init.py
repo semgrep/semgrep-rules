@@ -6,7 +6,7 @@ class A:
 
 class B:
     def __init__(a, b, c):
-        # ruleid:return-in-init
+        # ok:return-in-init
         return
 
 
@@ -70,3 +70,8 @@ class G:
     def func2():
         # ok:yield-in-init
         yield
+
+class H:
+    def __init__(self, x):
+        # ok:return-in-init
+        return None
