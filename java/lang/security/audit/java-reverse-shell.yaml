@@ -1,0 +1,25 @@
+rules:
+- id: java-reverse-shell
+  patterns:
+  - pattern-either:
+    - pattern: |
+        Socket $S=new Socket(...);
+        ...
+        InputStream $SI = $S.getInputStream();
+        ...
+        while(!$S.isClosed())
+        {
+          ...
+          while($SI.available()>0)$PO.write($SI.read());
+          ...
+          $SO.flush();
+          ...
+        }
+  - pattern-inside: |
+      Process $P=new ProcessBuilder(...).redirectErrorStream(true).start();
+      ...
+      $P.destroy();
+  message: Semgrep found potential reverse shell behavior
+  severity: WARNING
+  languages:
+  - java
