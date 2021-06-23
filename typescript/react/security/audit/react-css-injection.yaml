@@ -16,16 +16,20 @@ rules:
         function $FUNC(...,$STYLE,...) {
           ...
         }
-  - pattern-inside: |
-      <$EL style={$STYLE} />
-  - pattern-not-inside: |
+  - pattern-either:
+    - pattern: |
+        <$EL style={$STYLE} />
+    - pattern: |
+        $R.createElement($EL, {style: $STYLE}, ...)
+  - pattern-not: |
       <$EL style={{$X:...}} />
-  - pattern: $STYLE
+  - pattern-not: |
+      $R.createElement($EL, {style: {...}}, ...)
   message: |
     User controlled data in a `style` attribute is an anti-pattern that can lead to XSS vulnerabilities
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     category: security
     technology:
     - react

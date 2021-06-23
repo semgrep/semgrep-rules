@@ -13,8 +13,6 @@ rules:
       control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
       version: '4'
     category: security
-    technology:
-    - pycryptodome
   languages: [python]
   severity: WARNING
   pattern-either:
@@ -35,10 +33,10 @@ rules:
     - pattern: os.$METHOD(...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
+        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
   - patterns:
     - pattern-not: os.$METHOD($MODE, "...", ["...","...",...], ...)
     - pattern: os.$METHOD($MODE,"=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe)
+        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)

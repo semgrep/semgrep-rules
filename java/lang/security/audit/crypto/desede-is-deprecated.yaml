@@ -15,8 +15,6 @@ rules:
     references:
     - https://csrc.nist.gov/News/2017/Update-to-Current-Use-and-Deprecation-of-TDEA
     category: security
-    technology:
-    - spring
   severity: WARNING
   pattern: $CIPHER.getInstance("=~/DESede.*/");
   fix: Cipher.getInstance("AES/GCM/NoPadding");
