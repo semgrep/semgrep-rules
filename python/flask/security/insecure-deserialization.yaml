@@ -5,6 +5,9 @@ rules:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     references:
     - https://docs.python.org/3/library/pickle.html
+    category: security
+    technology:
+    - flask
   message: |
     Detected the use of an insecure deserizliation library in a Flask route. These libraries
     are prone to code execution vulnerabilities. Ensure user data does not enter this function.

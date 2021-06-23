@@ -13,11 +13,13 @@ rules:
     owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://github.com/janl/mustache.js/#variables
-  patterns:
-  - pattern-either:
-    - pattern: Mustache.escape = ...
-    - patterns:
-      - pattern-inside: |
-          $MUSTACHE = require("mustache");
-          ...
-      - pattern: $MUSTACHE.escape = ...
+    category: security
+    technology:
+    - express
+  pattern-either:
+  - pattern: Mustache.escape = ...
+  - patterns:
+    - pattern-inside: |
+        $MUSTACHE = require("mustache");
+        ...
+    - pattern: $MUSTACHE.escape = ...

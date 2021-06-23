@@ -8,47 +8,54 @@ rules:
     cwe: 'CWE-522: Insufficiently Protected Credentials'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-  patterns:
-  - pattern-either:
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $T = $JWT.sign($P, "...", ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $T = $JWT.verify($P, "...", ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        $JWT.sign($P, "...", ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        $JWT.verify($P, "...", ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $SECRET = "...";
-        ...
-        var $T = $JWT.sign($P, $SECRET, ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $SECRET = "...";
-        ...
-        var $T = $JWT.verify($P, $SECRET, ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $SECRET = "...";
-        ...
-        $JWT.sign($P, $SECRET, ...);
-    - pattern: |
-        var $JWT = require("jsonwebtoken");
-        ...
-        var $SECRET = "...";
-        ...
-        $JWT.verify($P, $SECRET, ...);
+    asvs:
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.5.2 Static API keys or secret
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+      version: '4'
+    category: security
+    technology:
+    - jwt
   languages: [javascript]
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $T = $JWT.sign($P, "...", ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $T = $JWT.verify($P, "...", ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      $JWT.sign($P, "...", ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      $JWT.verify($P, "...", ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $SECRET = "...";
+      ...
+      var $T = $JWT.sign($P, $SECRET, ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $SECRET = "...";
+      ...
+      var $T = $JWT.verify($P, $SECRET, ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $SECRET = "...";
+      ...
+      $JWT.sign($P, $SECRET, ...);
+  - pattern: |
+      var $JWT = require("jsonwebtoken");
+      ...
+      var $SECRET = "...";
+      ...
+      $JWT.verify($P, $SECRET, ...);

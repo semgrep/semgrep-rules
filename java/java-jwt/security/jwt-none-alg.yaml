@@ -10,25 +10,27 @@ rules:
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp: 'A2: Broken Authentication'
     source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    category: security
+    technology:
+    - jwt
   languages: [java]
   severity: ERROR
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $JWT.sign(com.auth0.jwt.algorithms.Algorithm.none());
-    - pattern: |
-        $NONE = com.auth0.jwt.algorithms.Algorithm.none();
+  pattern-either:
+  - pattern: |
+      $JWT.sign(com.auth0.jwt.algorithms.Algorithm.none());
+  - pattern: |
+      $NONE = com.auth0.jwt.algorithms.Algorithm.none();
+      ...
+      $JWT.sign($NONE);
+  - pattern: |-
+      class $CLASS {
         ...
-        $JWT.sign($NONE);
-    - pattern: |-
-        class $CLASS {
+        $TYPE $NONE = com.auth0.jwt.algorithms.Algorithm.none();
+        ...
+        $RETURNTYPE $FUNC (...) {
           ...
-          $TYPE $NONE = com.auth0.jwt.algorithms.Algorithm.none();
-          ...
-          $RETURNTYPE $FUNC (...) {
-            ...
-            $JWT.sign($NONE);
-            ...
-          }
+          $JWT.sign($NONE);
           ...
         }
+        ...
+      }

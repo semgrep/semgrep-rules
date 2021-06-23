@@ -1,0 +1,85 @@
+rules:
+- id: dangerous-syscall-exec
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          syscall.$METHOD($BIN,...)
+      - pattern-not: |
+          syscall.$METHOD("...",...)
+      - pattern-not-inside: |
+          $BIN,$ERR := exec.LookPath("...");
+          ...
+      - pattern-not-inside: |
+          $BIN = "...";
+          ...
+    - patterns:
+      - pattern: |
+          syscall.$METHOD($BIN,$ARGS,...)
+      - pattern-not: |
+          syscall.$METHOD($BIN,[]string{"...",...},...)
+      - pattern-not-inside: |
+          $ARGS := []string{"...",...};
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+          $ARGS = []string{$CMD,...};
+          ...
+      - pattern-not-inside: |
+          $CMD,$ERR := exec.LookPath("...");
+          ...
+          $ARGS = []string{$CMD,...};
+          ...
+    - patterns:
+      - pattern: |
+          syscall.$METHOD($BIN,[]string{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$EXE,...},...)
+      - pattern-not: |
+          syscall.$METHOD($BIN,[]string{"...","...","...",...},...)
+    - patterns:
+      - pattern: |
+          syscall.$METHOD($BIN,$ARGS,...)
+      - pattern-either:
+        - pattern-inside: |
+            $ARGS := []string{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$EXE,...};
+            ...
+        - pattern-inside: |
+            $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+            ...
+            $ARGS = []string{$CMD,"-c",$EXE,...};
+            ...
+        - pattern-inside: |
+            $CMD,$ERR := exec.LookPath("=~/(sh|bash|ksh|csh|tcsh|zsh)/");
+            ...
+            $ARGS = []string{$CMD,"-c",$EXE,...};
+            ...
+      - pattern-not-inside: |
+          $ARGS := []string{"...","...","...",...};
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+          $ARGS = []string{$CMD,"...","...",...};
+          ...
+      - pattern-not-inside: |
+          $CMD,$ERR := exec.LookPath("...");
+          ...
+          $ARGS = []string{$CMD,"...","...",...};
+          ...
+  - pattern-inside: |
+      import "syscall"
+      ...
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: (Exec|ForkExec)
+  message: |
+    Detected non-static command inside Exec. Audit the input to 'syscall.Exec'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+    category: security
+  severity: WARNING
+  languages: [go]

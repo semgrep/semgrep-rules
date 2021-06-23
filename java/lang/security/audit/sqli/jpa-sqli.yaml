@@ -1,0 +1,46 @@
+rules:
+- id: jpa-sqli
+  message: |
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  languages: [java]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            String $SQL = $X + $Y;
+            ...
+        - pattern-inside: |
+            String $SQL = String.format(...);
+            ...
+        - pattern-inside: |
+            $TYPE $FUNC(...,String $SQL,...) {
+              ...
+            }
+      - pattern-not-inside: |
+          String $SQL = "..." + "...";
+          ...
+      - pattern: $EM.$METHOD($SQL,...)
+    - pattern: |
+        $EM.$METHOD(String.format(...),...);
+    - pattern: |
+        $EM.$METHOD($X + $Y,...);
+  - pattern-either:
+    - pattern-inside: |
+        EntityManager $EM = ...;
+        ...
+    - pattern-inside: |
+        $TYPE $FUNC(...,EntityManager $EM,...) {
+          ...
+        }
+  - pattern-not: |
+      $EM.$METHOD("..." + "...",...);
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(createQuery|createNativeQuery)$
+  metadata:
+    category: security

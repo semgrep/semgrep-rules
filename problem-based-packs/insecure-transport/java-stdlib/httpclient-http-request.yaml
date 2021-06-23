@@ -2,9 +2,8 @@ rules:
 - id: httpclient-http-request
   pattern-either:
   - patterns:
-    - pattern-either:
-      - pattern: |
-          URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern: |
+        URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
     - pattern-inside: |
         HttpClient $CLIENT = ...;
         ...
@@ -12,9 +11,8 @@ rules:
         ...
         $CLIENT.sendAsync(...);
   - patterns:
-    - pattern-either:
-      - pattern: |
-          URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
+    - pattern: |
+        URI.create("=~/[hH][tT][tT][pP]://.*/", ...)
     - pattern-inside: |
         HttpClient $CLIENT = ...;
         ...
@@ -22,9 +20,8 @@ rules:
         ...
         $CLIENT.send(...);
   - patterns:
-    - pattern-either:
-      - pattern: |
-          URI.create($URI)
+    - pattern: |
+        URI.create($URI)
     - pattern-inside: |
         String $URI = "=~/[hH][tT][tT][pP]://.*/";
         ...
@@ -58,6 +55,7 @@ rules:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
     - https://openjdk.java.net/groups/net/httpclient/intro.html
+    category: security
   languages:
   - java
   severity: WARNING

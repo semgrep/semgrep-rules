@@ -1,13 +1,22 @@
 rules:
 - id: grpc-client-insecure-connection
   metadata:
-    owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-300: Channel Accessible by Non-Endpoint'
     references:
     - https://blog.gopheracademy.com/advent-2019/go-grps-and-tls/#connection-without-encryption
-  message: Found an insecure gRPC connection. This creates a connection without encryption to a gRPC server. A malicious attacker
-    could tamper with the gRPC message, which could compromise the machine.
+    category: security
+    technology:
+    - grpc
+  message: >-
+    Found an insecure gRPC connection using 'grpc.WithInsecure()'. This creates a connection without encryption to a gRPC
+    server. A malicious attacker could tamper with the gRPC message, which could compromise the machine. Instead, establish
+    a secure connection with an
+    SSL certificate using the 'grpc.WithTransportCredentials()' function. You can create a create credentials using a 'tls.Config{}'
+    struct with 'credentials.NewTLS()'. The final fix looks like this: 'grpc.WithTransportCredentials(credentials.NewTLS(<config>))'.
   languages:
   - go
   severity: ERROR
   pattern: $GRPC.Dial($ADDR, ..., $GRPC.WithInsecure(...), ...)
+  fix-regex:
+    regex: (.*)WithInsecure\(.*?\)
+    replacement: \1WithTransportCredentials(credentials.NewTLS(<your_tls_config_here>))

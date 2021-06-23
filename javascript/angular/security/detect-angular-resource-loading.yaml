@@ -3,13 +3,16 @@ rules:
   pattern: |
     $sceDelegateProvider.resourceUrlWhitelist([...,'**' ]);
   message: |
-    $sceDelegateProvider whitelisting can be introduce security issues if wildcards are used.
+    $sceDelegateProvider allowlisting can be introduce security issues if wildcards are used.
   languages:
   - javascript
   metadata:
     references:
     - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
     - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    category: security
+    technology:
+    - angular
   fix: |
 
   severity: WARNING

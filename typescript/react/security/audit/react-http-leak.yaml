@@ -27,12 +27,15 @@ rules:
         <$EL longdesc="..." />
   - patterns:
     - pattern: |
-        <$EL src=... />
+        <$EL src={$INJECT} />
     - metavariable-regex:
         metavariable: $EL
         regex: frame|iframe|img|input|script|audio|source|track|embed|video
     - pattern-not: |
         <$EL src="..." />
+    - pattern-not-inside: |
+        import $INJECT from "...";
+        ...
   - patterns:
     - pattern: |
         <$EL usemap=... />
@@ -108,10 +111,22 @@ rules:
         <meta content=... />
     - pattern-not: |
         <meta content="..." />
-  message: |
-    User-controlled input may trigger an unintended request to an external resource
+  message: >-
+    This HTML element '$EL' and attribute '$ATTR' together may load an external
+    resource. This means that if dynamic content can enter this attribute it may
+    be possible for an attacker to send HTTP requests to unintended locations which
+    may leak data about your users. If this element is reaching out to a known host,
+    consider hardcoding the host (or loading from a configuration) and appending the
+    dynamic path. See https://github.com/cure53/HTTPLeaks for more information.
   metadata:
+    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    references:
+    - https://github.com/cure53/HTTPLeaks
+    category: security
+    technology:
+    - react
   languages:
   - typescript
+  - javascript
   severity: WARNING

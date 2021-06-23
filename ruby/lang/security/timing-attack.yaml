@@ -1,8 +1,5 @@
 rules:
 - id: timing-attack
-  patterns:
-  - pattern: |
-      http_basic_authenticate_with ...
   message: |
     Checks for unsafe use of method http_basic_authenticate_with, which is vulnerable to timing attacks as it
     does not use constant-time checking when comparing passwords. Affected Rails versions include:
@@ -11,6 +8,8 @@ rules:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_basic_auth_timing_attack.rb
     - https://groups.google.com/g/rubyonrails-security/c/ANv0HDHEC3k/m/mt7wNGxbFQAJ
+    category: security
   languages:
   - ruby
   severity: ERROR
+  pattern: http_basic_authenticate_with ...

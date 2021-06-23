@@ -6,6 +6,9 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - phantom
   languages: [javascript]
   patterns:
   - pattern-inside: |
@@ -13,7 +16,6 @@ rules:
       $PHANTOM = require('phantom');
       ...
   - pattern-not-inside: |
-      ...
       var $INPUT = "...";
       ...
   - pattern-either:

@@ -14,6 +14,7 @@ def test2():
     od = URLopener()
     # ruleid: insecure-urlopener-open-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-urlopener-open-ftp
     od.open(url)
 
 def test2_ok():
@@ -33,6 +34,7 @@ def test3_ok():
 def test4():
     # ruleid: insecure-urlopener-open-ftp
     url = "ftp://example.com"
+    # ruleid: insecure-urlopener-open-ftp
     URLopener().open(url)
 
 def test4_ok():

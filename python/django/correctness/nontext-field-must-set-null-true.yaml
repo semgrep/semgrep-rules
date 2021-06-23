@@ -8,6 +8,8 @@ rules:
   - pattern-not: $F = django.db.models.TextField(...)
   - pattern-not: $F = django.db.models.SlugField(...)
   - pattern-not: $F = django.db.models.EmailField(...)
+  - pattern-not: $F = django.db.models.FileField(...)
+  - pattern-not: $F = django.db.models.ImageField(...)
   - pattern-not: $F = django.db.models.URLField(...)
   - pattern-not: $F = django.db.models.UUIDField(...)
   - pattern-not: $F = django.db.models.ManyToManyField(...)
@@ -17,3 +19,7 @@ rules:
   message: null=True should be set if blank=True is set on non-text fields.
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - django

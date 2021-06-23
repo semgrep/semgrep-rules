@@ -4,11 +4,23 @@ rules:
     cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
     owasp: 'A1: Injection'
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-eval-with-expression.js
+    category: security
   message: |
     Detected eval(variable), which could allow a malicious actor to run arbitrary code.
   patterns:
-  - pattern: eval($OBJ)
+  - pattern-either:
+    - pattern: eval($OBJ)
+    - pattern: window.eval($OBJ)
+    - pattern: Function(...,$OBJ)
+    - pattern: new Function(...,$OBJ)
   - pattern-not: eval("...")
+  - pattern-not: window.eval("...")
+  - pattern-not: Function(...,"...")
+  - pattern-not: new Function(...,"...")
+  - pattern-not-inside: |
+      $OBJ = "..."
+      ...
+      $SOMETHING(..., $OBJ, ...)
   severity: WARNING
   languages:
   - javascript

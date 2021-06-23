@@ -1,0 +1,56 @@
+rules:
+- id: pgx-sqli
+  languages:
+  - go
+  message: >
+    Detected string concatenation with a non-literal variable in a pgx
+    Go SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries instead. You can use parameterized queries like so:
+    (`SELECT $1 FROM table`, `data1)
+  metadata:
+    references:
+    - https://github.com/jackc/pgx
+    - https://pkg.go.dev/github.com/jackc/pgx/v4#hdr-Connection_Pool
+    category: security
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $DB.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: $DB.$METHOD(..., $X + $Y, ...)
+    - pattern: $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+  - pattern-either:
+    - pattern-inside: |
+        $DB, ... = pgx.Connect(...)
+        ...
+    - pattern-inside: |
+        $DB, ... = pgx.NewConnPool(...)
+        ...
+    - pattern-inside: |
+        $DB, ... = pgx.ConnectConfig(...)
+        ...
+    - pattern-inside: |
+        func $FUNCNAME(..., $DB *pgx.Conn, ...) {
+          ...
+        }
+  - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(Exec|ExecEx|Query|QueryEx|QueryRow|QueryRowEx)$
+  severity: WARNING

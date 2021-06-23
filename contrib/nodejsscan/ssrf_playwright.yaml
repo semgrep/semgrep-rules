@@ -86,16 +86,16 @@ rules:
         $INPUT = <... $REQ.$BODY ...>;
         ...
         $CONTEXT.addInitScript($INPUT,...);
-    - pattern: |
-        $INPUT = <... $REQ.$BODY ...>;
-        ...
-        $CONTEXT.addInitScript($INPUT,...);
   message: >-
     If unverified user data can reach the `puppeteer` methods it can result in
     Server-Side Request Forgery vulnerabilities.
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - node.js
+    - express
   severity: ERROR
   languages:
   - javascript

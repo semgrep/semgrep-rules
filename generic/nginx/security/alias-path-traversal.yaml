@@ -8,6 +8,12 @@ rules:
         ...
       }
   - pattern-not-inside: location /.../ { ... ... }
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   fix-regex:
     regex: location\s+([A-Za-z0-9/-_\.]+)
     replacement: location \1/
@@ -21,3 +27,6 @@ rules:
   metadata:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/aliastraversal.md
+    category: security
+    technology:
+    - nginx

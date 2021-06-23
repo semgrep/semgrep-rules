@@ -1,0 +1,22 @@
+rules:
+- id: prohibit-jquery-html
+  patterns:
+  - pattern: |
+      $X.html(...)
+  - pattern-not: |
+      $X.html("...",...)
+  message: |
+    JQuery's html function can lead to XSS. If the string is plain test, use the text function instead.
+    Otherwise, use a function that escapes html such as edx's HtmlUtils.setHtml.
+  metadata:
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://edx.readthedocs.io/projects/edx-developer-guide/en/latest/preventing_xss/preventing_xss.html#javascript-concat-html
+    - https://stackoverflow.com/questions/8318581/html-vs-innerhtml-jquery-javascript-xss-attacks
+    category: security
+    technology:
+    - jquery
+  languages:
+  - js
+  severity: WARNING

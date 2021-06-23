@@ -6,6 +6,12 @@ rules:
   - pattern-not: ssl_protocols TLSv1.2;
   - pattern-not: ssl_protocols TLSv1.3;
   - pattern: ssl_protocols ...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
@@ -17,3 +23,6 @@ rules:
     references:
     - https://www.acunetix.com/blog/web-security-zone/hardening-nginx/
     - https://www.acunetix.com/blog/articles/tls-ssl-cipher-hardening/
+    category: security
+    technology:
+    - nginx

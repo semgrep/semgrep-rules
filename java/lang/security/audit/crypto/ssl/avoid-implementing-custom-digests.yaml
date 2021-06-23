@@ -4,8 +4,14 @@ rules:
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CUSTOM_MESSAGE_DIGEST
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.2 Insecure Custom Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#custom-algorithms
+    category: security
   message: |
     Cryptographic algorithms are notoriously difficult to get right. By implementing
     a custom message digest, you risk introducing security issues into your program.

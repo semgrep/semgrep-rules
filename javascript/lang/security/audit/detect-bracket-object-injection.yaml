@@ -1,0 +1,20 @@
+rules:
+- id: detect-bracket-object-injection
+  patterns:
+  - pattern: |
+      const $VAR = $OBJ[$FIELD];
+  - pattern-not: |
+      const $VAR = $OBJ[($FIELD : float)]
+  - pattern-not: |
+      const $VAR = $OBJ["..."];
+  - pattern-not-inside: |
+      const $FIELD = ...;
+      ...
+  message: |
+    Object injection via bracket notation via $FIELD
+  severity: WARNING
+  languages:
+  - javascript
+  - typescript
+  metadata:
+    category: security

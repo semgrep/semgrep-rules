@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  # ok: privileged-service
+  web:
+    image: nginx:alpine
+  # ruleid: privileged-service
+  worker:
+    image: my-worker-image:latest
+    privileged: true
+  # ok: privileged-service
+  db:
+    image: mysql

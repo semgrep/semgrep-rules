@@ -20,6 +20,12 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Priority**
+How important is this to you?
+- [ ] P0: blocking me from making progress
+- [ ] P1: this will block me in the near future
+- [ ] P2: annoying but not blocking me
+
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 

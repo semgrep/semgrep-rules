@@ -1,16 +1,5 @@
 rules:
 - id: net-ftp-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $FTP = Net::FTP.new('...')
-        ...
-        $FTP.login
-    - pattern: |
-        Net::FTP.open('...') do |ftp|
-          ...
-          ftp.login
-        end
   message: |
     Checks for outgoing connections to ftp servers with the 'net/ftp' package. FTP does not encrypt traffic,   possibly
     leading to PII being sent plaintext over the network. Instead, connect via the SFTP protocol.
@@ -20,6 +9,17 @@ rules:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
     - https://docs.ruby-lang.org/en/2.0.0/Net/FTP.html
+    category: security
   languages:
   - ruby
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $FTP = Net::FTP.new('...')
+      ...
+      $FTP.login
+  - pattern: |
+      Net::FTP.open('...') do |ftp|
+        ...
+        ftp.login
+      end

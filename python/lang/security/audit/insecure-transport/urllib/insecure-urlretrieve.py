@@ -11,6 +11,7 @@ def test1_ok():
 def test2():
     # ruleid: insecure-urlretrieve
     url = "http://example.com"
+    # ruleid: insecure-urlretrieve
     urlretrieve(url)
 
 def test2_ok():

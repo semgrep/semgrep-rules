@@ -12,7 +12,13 @@ rules:
         internal;
         ...
       }
-  - pattern: proxy_pass ...;
+  - pattern: proxy_pass ...$...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
@@ -25,3 +31,6 @@ rules:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/ssrf.md
     - https://nginx.org/en/docs/http/ngx_http_core_module.html#internal
+    category: security
+    technology:
+    - nginx

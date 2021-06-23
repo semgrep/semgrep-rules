@@ -1,21 +1,45 @@
 rules:
 - id: insecure-module-used
-  message: Insecure module used.
+  message: >-
+    Detected use of an insecure cryptographic hashing method. This method is known
+    to be broken and easily compromised. Use SHA256 or SHA3 instead.
   metadata:
     owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     source-rule-url: https://github.com/securego/gosec
+    references:
+    - https://godoc.org/golang.org/x/crypto/sha3
+    category: security
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern-either:
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        import "crypto/md5"
+        ...
     - pattern: |
         md5.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/des"
+        ...
     - pattern: |
         des.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/sha1"
+        ...
     - pattern: |
         sha1.$FUNC(...)
+  - patterns:
+    - pattern-inside: |
+        import "crypto/rc4"
+        ...
     - pattern: |
         rc4.$FUNC(...)
-    - pattern: |-
+  - patterns:
+    - pattern-inside: |
+        import "net/http/cgi"
+        ...
+    - pattern: |
         cgi.$FUNC(...)

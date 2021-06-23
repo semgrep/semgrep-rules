@@ -1,0 +1,19 @@
+rules:
+- id: incorrect-use-sscanf-fn
+  patterns:
+  - pattern: sscanf($STR, $FMT, $PTR);
+  - metavariable-regex:
+      metavariable: $FMT
+      regex: '"%(l{0,2}|L)([fegEa]|[dDiouxX])"'
+  message: |
+    Avoid 'sscanf()' for number conversions. Its use can lead to undefined
+    behavior, slow processing, and integer overflows. Instead prefer the
+    'strto*()' family of functions.
+  metadata:
+    references:
+    - https://stackoverflow.com/q/22865622
+    - https://stackoverflow.com/q/7021725
+    - https://www.mattkeeter.com/blog/2021-03-01-happen/
+    category: correctness
+  languages: [c]
+  severity: WARNING

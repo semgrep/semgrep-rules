@@ -5,9 +5,17 @@ rules:
   patterns:
   - pattern: yum $COMMAND
   - pattern-not-inside: RUN ... && yum clean all
+  - pattern-not-inside: RUN ... && \ yum clean all
   message: |
     This yum command does not end with '&& yum clean all'. Running 'yum clean all' will remove cached data and reduce package size. (This must be performed in the same RUN step.)
   metadata:
     source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3032
     references:
     - https://github.com/hadolint/hadolint/wiki/DL3032
+    category: best-practice
+    technology:
+    - dockerfile
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

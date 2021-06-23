@@ -1,0 +1,49 @@
+rules:
+- id: gosql-sqli
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $DB.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: $DB.$METHOD(..., $X + $Y, ...)
+    - pattern: $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+  - pattern-either:
+    - pattern-inside: |
+        $DB, ... = sql.Open(...)
+        ...
+    - pattern-inside: |
+        func $FUNCNAME(..., $DB *sql.DB, ...) {
+          ...
+        }
+  - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(Exec|ExecContent|Query|QueryContext|QueryRow|QueryRowContext)$
+  languages:
+  - go
+  message: |
+    Detected string concatenation with a non-literal variable in a "database/sql"
+    Go SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use prepared statements with the 'Prepare' and 'PrepareContext' calls.
+  metadata:
+    references:
+    - https://golang.org/pkg/database/sql/
+    category: security
+  severity: WARNING

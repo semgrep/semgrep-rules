@@ -1,0 +1,21 @@
+rules:
+- id: hostipc-pod
+  patterns:
+  - pattern-inside: |
+      spec:
+        ...
+  - pattern: |
+      hostIPC: true
+  message: |
+    Pod is sharing the host IPC namespace. This allows container processes
+    to communicate with processes on the host which reduces isolation and
+    bypasses container protection models. Remove the 'hostIPC' key to disable
+    this functionality.
+  metadata:
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
+    category: security
+    technology:
+    - kubernetes
+  languages: [yaml]
+  severity: WARNING

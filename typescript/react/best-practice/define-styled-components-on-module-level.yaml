@@ -1,0 +1,32 @@
+rules:
+- id: define-styled-components-on-module-level
+  patterns:
+  - pattern-inside: |
+      import styled from 'styled-components';
+      ...
+  - pattern-either:
+    - pattern-inside: |
+        function $FUNC(...) {
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+        }
+  - pattern-either:
+    - pattern: |
+        styled.$EL`...`;
+    - pattern: |
+        styled($EL)`...`;
+  message: |
+    By declaring a styled component inside the render method of a react component, you are dynamically creating a new component on every render. This means that React will have to discard and re-calculate that part of the DOM subtree on each subsequent render, instead of just calculating the difference of what changed between them. This leads to performance bottlenecks and unpredictable behavior.
+  metadata:
+    references:
+    - https://styled-components.com/docs/faqs#why-should-i-avoid-declaring-styled-components-in-the-render-method
+    category: best-practice
+    technology:
+    - react
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING

@@ -1,8 +1,12 @@
 rules:
 - id: tempfile-without-flush
+  languages:
+  - python
+  message: Using '$F.name' without '.flush()' or '.close()' may cause an error because the file may not exist when '$F.name'
+    is used. Use '.flush()' or close the file before using '$F.name'.
   pattern-either:
   - patterns:
-    - pattern-not: |
+    - pattern-not-inside: |
         $F = tempfile.NamedTemporaryFile(...)
         ...
         $F.write(...)
@@ -10,7 +14,7 @@ rules:
         $F.flush()
         ...
         $F.name
-    - pattern-not: |
+    - pattern-not-inside: |
         $F = tempfile.NamedTemporaryFile(...)
         ...
         $F.write(...)
@@ -18,12 +22,19 @@ rules:
         $F.close()
         ...
         $F.name
-    - pattern: |
-        $F = tempfile.NamedTemporaryFile(...)
+    - pattern-not-inside: |
+        $F = tempfile.NamedTemporaryFile(..., delete=False, ...)
+        ...
+        $F.close()
         ...
         $F.name
+    - pattern-inside: |
+        $F = tempfile.NamedTemporaryFile(...)
+        ...
+    - pattern: |
+        $F.name
   - patterns:
-    - pattern-not: |
+    - pattern-not-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
             $F.write(...)
@@ -31,7 +42,7 @@ rules:
             $F.flush()
             ...
             $F.name
-    - pattern-not: |
+    - pattern-not-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
             $F.write(...)
@@ -39,10 +50,27 @@ rules:
             $F.close()
             ...
             $F.name
-    - pattern: |
+    - pattern-not-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
+            $MODULE.dump(..., $F, ...)
+            ...
+            $F.flush()
+            ...
             $F.name
-  message: possibly missing a .flush() or .close() call to temporary file $F; file may or may not exist when $F.name is used
-  languages: [python]
+    - pattern-not-inside: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $MODULE.dump(..., $F, ...)
+            ...
+            $F.close()
+            ...
+            $F.name
+    - pattern-inside: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+    - pattern: |
+        $F.name
   severity: ERROR
+  metadata:
+    category: correctness

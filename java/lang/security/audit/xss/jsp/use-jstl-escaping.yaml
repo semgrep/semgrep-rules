@@ -9,15 +9,16 @@ rules:
     See https://www.tutorialspoint.com/jsp/jstl_core_out_tag.htm
     for more information.
   metadata:
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     cwe: 'CWE-116: Improper Encoding or Escaping of Output'
     references:
     - https://www.tutorialspoint.com/jsp/jstl_core_out_tag.htm
     - https://stackoverflow.com/a/4948856
     - https://stackoverflow.com/a/3180202
+    category: security
   pattern-regex: <(?![A-Za-z0-9]+:out).*?\$\{.*?\}.*>
   paths:
     include:
     - '*.jsp'
-  languages: [none]
+  languages: [regex]
   severity: WARNING

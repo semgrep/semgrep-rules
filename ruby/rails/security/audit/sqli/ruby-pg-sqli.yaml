@@ -1,0 +1,67 @@
+rules:
+- id: ruby-pg-sqli
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $CON.$METHOD($QUERY)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY.concat(..., $X, ...)
+            ...
+        - pattern-inside: |
+            $QUERY << $X
+            ...
+      - pattern-not-inside: |
+          $QUERY << '...'
+          ...
+      - pattern-not-inside: |
+          $QUERY.concat("...")
+          ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: $CON.$METHOD(..., $X + $Y, ...)
+    - pattern: $CON.$METHOD(..., $X.concat($Y), ...)
+    - pattern: $CON.$METHOD(..., $X << $Y, ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CON = PG.connect(...)
+        ...
+    - pattern-inside: |
+        $CON = PG::Connection.open(...)
+        ...
+    - pattern-inside: |
+        $CON = PG::Connection.new(...)
+        ...
+  - pattern-not: $CON.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CON.$METHOD(..., "...".concat("..."), ...)
+  - pattern-not: $CON.$METHOD(..., "..." << "...", ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(exec|exec_params|exec_prepared)$
+  languages:
+  - ruby
+  message: |
+    Detected string concatenation with a non-literal variable in a pg
+    Ruby SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized queries like so:
+        `conn.exec_params('SELECT $1 AS a, $2 AS b, $3 AS c', [1, 2, nil])`
+    And you can use prepared statements with `exec_prepared`.
+  metadata:
+    references:
+    - https://www.rubydoc.info/gems/pg/PG/Connection
+    category: security
+    technology:
+    - rails
+  severity: WARNING

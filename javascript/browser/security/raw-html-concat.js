@@ -6,6 +6,12 @@ $(function ($) {
         .set('align', {
             html: function (element, attrs, content) {
                 // ruleid: raw-html-concat
+                var x = ['<div align="', (attrs.defaultattr || 'left'), '">', content, '</div>'].join();
+
+                // ruleid: raw-html-concat
+                var x = `<div align="' + (attrs.defaultattr || 'left') + '">${content}</div>`
+
+                // ruleid: raw-html-concat
                 return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
             },
             isInline: false
@@ -43,13 +49,31 @@ $(function ($) {
 
               if (attrs.pid)
                   // ruleid: raw-html-concat
+                  data = [data, ' data-pid="', attrs.pid,'"'].join(',');
+
+                  // ruleid: raw-html-concat
+                  data = `${data} data-pid="${attrs.pid}"`;
+
+                  // ruleid: raw-html-concat
                   data += ' data-pid="' + attrs.pid + '"';
 
               if (attrs.dateline)
                   // ruleid: raw-html-concat
+                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
+
+                  // ruleid: raw-html-concat
+                  data = `${data} data-dateline="${attrs.dateline}"`;
+
+                  // ruleid: raw-html-concat
                   data += ' data-dateline="' + attrs.dateline + '"';
 
               if (typeof attrs.defaultattr !== "undefined")
+                  // ruleid: raw-html-concat
+                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
+
+                  // ruleid: raw-html-concat
+                  data = `${data} data-dateline="${attrs.dateline}"`;
+
                   // ruleid: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
 
@@ -105,6 +129,12 @@ var tarteaucitron = {
             for (i = 0; i < nb; i += 1) {
                 html += '<li class="tarteaucitronCookiesListMain">';
                 // ruleid: raw-html-concat
+                html =  [html, '    <div class="tarteaucitronCookiesListRight">', cookies[i].split('=').slice(1).join('='), '</div>'].join();
+
+                // ruleid: raw-html-concat
+                html = `${html}    <div class="tarteaucitronCookiesListRight">${cookies[i].split('=').slice(1).join('=')}'</div>'`;
+
+                // ruleid: raw-html-concat
                 html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
                 html += '</li>';
             }
@@ -122,6 +152,12 @@ var DragElement = /** @class */ (function () {
     function DragElement(nodeName, offsetX, offsetY, $tree) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        // ruleid: raw-html-concat
+        this.$element = jQuery(["<span class=\"jqtree-title jqtree-dragging\">",nodeName, "</span>"].join());
+
+        // ruleid: raw-html-concat
+        this.$element = `${jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>")}`;
+
         // ruleid: raw-html-concat
         this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
         this.$element.css("position", "absolute");
@@ -170,6 +206,16 @@ var DragElement = /** @class */ (function () {
         return false;
     }, '*', function () {
         // ruleid: raw-html-concat
+        var x = `<svg viewBox="-20 -20 140 140" width="100" height="100"><defs><marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">
+            <circle cx="2" cy="2" r="1.5" />
+            </marker>
+            </defs>
+            <path d="M0,100 C20,50, 40,30, 100,0" />
+            <line x1="0" y1="100" x2="20" y2="50" marker-start="url(${location.href}#prism-previewer-easing-marker)" marker-end="url(${location.href}#prism-previewer-easing-marker)" />
+            <line x1="100" y1="0" x2="40" y2="30" marker-start="url(${location.href}#prism-previewer-easing-marker)" marker-end="url(${location.href}#prism-previewer-easing-marker)" />
+            </svg>`;
+
+        // ruleid: raw-html-concat
         this._elt.innerHTML = '<svg viewBox="-20 -20 140 140" width="100" height="100">' +
             '<defs>' +
             '<marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">' +
@@ -182,3 +228,41 @@ var DragElement = /** @class */ (function () {
             '</svg>';
     });
 }());
+
+Object.keys(queries).forEach(function someName(key) {
+    value = queries[key];
+    if (angular.isDefined(value)) {
+    // ok: raw-html-concat
+    params.push(key + '=' + value.toString());
+
+    // ok: raw-html-concat
+    params.push(`${key}=${value.toString()}`);
+    }
+});
+
+function BytesFilter($translate) {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) { return '-'; }
+        if (typeof precision === 'undefined') { precision = 1; }
+        var units = ['SIZE_BYTES', 'SIZE_KB', 'SIZE_MB', 'SIZE_GB', 'SIZE_TB', 'SIZE_TB'],
+                number = Math.floor(Math.log(bytes) / Math.log(1024));
+
+        units = units.map(function (unit) {
+            // ok: raw-html-concat
+            var x = $translate.instant(['FORM.LABELS.', unit].join());
+
+            // ok: raw-html-concat
+            var x = $translate.instant(`FORM.LABELS.${unit}`);
+
+            // ok: raw-html-concat
+            return $translate.instant('FORM.LABELS.' + unit);
+        });
+
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+    };
+}
+
+function urldecode(str) {
+    // ok: raw-html-concat
+    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}

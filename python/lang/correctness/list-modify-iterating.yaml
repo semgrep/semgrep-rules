@@ -1,25 +1,26 @@
 rules:
 - id: list-modify-while-iterate
-  patterns:
-  - pattern-either:
-    - pattern: |
-        for $ELEMENT in $LIST:
-          ...
-          $LIST.pop(...)
-    - pattern: |
-        for $ELEMENT in $LIST:
-          ...
-          $LIST.push(...)
-    - pattern: |
-        for $ELEMENT in $LIST:
-          ...
-          $LIST.append(...)
-    - pattern: |
-        for $ELEMENT in $LIST:
-          ...
-          $LIST.extend(...)
   message: |
     It appears that `$LIST` is a list that is being modified while in a for loop.
     This will likely cause a runtime error or an infinite loop.
   languages: [python]
   severity: ERROR
+  pattern-either:
+  - pattern: |
+      for $ELEMENT in $LIST:
+        ...
+        $LIST.pop(...)
+  - pattern: |
+      for $ELEMENT in $LIST:
+        ...
+        $LIST.push(...)
+  - pattern: |
+      for $ELEMENT in $LIST:
+        ...
+        $LIST.append(...)
+  - pattern: |
+      for $ELEMENT in $LIST:
+        ...
+        $LIST.extend(...)
+  metadata:
+    category: correctness

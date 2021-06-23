@@ -1,11 +1,5 @@
 rules:
 - id: json-encoding
-  patterns:
-  - pattern-either:
-    - pattern: |
-        params[$VAR].to_json
-    - pattern: |
-        JSON.encode(params[$VAR])
   message: |
     When a 'Hash' with user-supplied input is encoded in JSPN, Rails doesn't provide adequate escaping.
     If the JSON string is supplied into HTML, the page will be vulnerable to XXS attacks.
@@ -15,6 +9,12 @@ rules:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_encoding.rb
     - https://groups.google.com/g/rubyonrails-security/c/7VlB_pck3hU/m/3QZrGIaQW6cJ
+    category: security
   languages:
   - ruby
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      params[$VAR].to_json
+  - pattern: |
+      JSON.encode(params[$VAR])

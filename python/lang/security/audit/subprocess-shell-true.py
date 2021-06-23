@@ -1,17 +1,20 @@
-# cf. https://github.com/returntocorp/semgrep/blob/develop/docs/writing_rules/examples.md#auditing-dangerous-function-use
-
 import subprocess
 import sys
 
-subprocess.call("echo 'hello'") # Doesn't match
+# ok:subprocess-shell-true
+subprocess.call("echo 'hello'")
 
-subprocess.call("grep -R {} .".format(sys.argv[1])) # Doesn't match
+# ok:subprocess-shell-true
+subprocess.call("grep -R {} .".format(sys.argv[1]))
+
+# ok:subprocess-shell-true
+subprocess.call("echo 'hello'", shell=True)
 
 # ruleid:subprocess-shell-true
-subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True) # Matches here
+subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True)
 
 # ruleid:subprocess-shell-true
-subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True, cwd="/home/user") # Matches here
+subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True, cwd="/home/user")
 
 # ruleid:subprocess-shell-true
-subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True) # Matches here too!
+subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True)

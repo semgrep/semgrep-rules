@@ -13,8 +13,7 @@ func main() {
 }
 
 func main0() {
-	// pending https://github.com/returntocorp/semgrep/issues/411
-	// todo: math-random-used
+	// ruleid: math-random-used
 	bad, _ := mrand.Read(nil)
 	println(bad)
 }
@@ -26,14 +25,13 @@ func main1() {
 }
 
 func main2() {
-	// pending https://github.com/returntocorp/semgrep/issues/411
-	// todo: math-random-used
+	// ruleid: math-random-used
 	bad := mrand.Int()
 	println(bad)
 }
 
 func main3() {
-	// ok: math-random-used; because we only care about Read or Int
+	// ok: math-random-used
 	good, _ := rand.Read(nil)
 	println(good)
 	i := mrand.Int31()

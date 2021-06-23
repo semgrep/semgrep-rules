@@ -1,10 +1,21 @@
 rules:
 - id: missing-noreferrer
+  metadata:
+    category: security
+    technology:
+    - html
   patterns:
   - pattern: |
       <a ... target="_blank" ...>
   - pattern-not-inside: |
       <a ... rel="... noreferrer ..." ... >
-  message: Missing 'noreferrer' on an anchor tag where target='_blank'.
+  paths:
+    include:
+    - '*.html'
+  message: >-
+    This anchor tag with 'target="_blank"' is missing 'noreferrer'.
+    A page opened with 'target="_blank"' can access the window object of the origin page.
+    This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
+    This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
   severity: WARNING
   languages: [generic]

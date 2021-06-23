@@ -1,9 +1,8 @@
 rules:
 - id: insufficient-postmessage-origin-validation
   patterns:
-  - pattern-either:
-    - pattern: |
-        window.addEventListener(...)
+  - pattern: |
+      window.addEventListener(...)
   - pattern-not: |
       window.addEventListener(..., function($OBJECT){ if ($OBJ.origin == $X) {
                   ...
@@ -25,5 +24,8 @@ rules:
 
   severity: WARNING
   metadata:
-    owasp: 'A6: Sensitive Data Exposure'
+    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
+    category: security
+    technology:
+    - browser

@@ -3,52 +3,56 @@ rules:
   languages:
   - python
   severity: ERROR
-  message: |
-    Found user data in a call to 'exec'. This is extremely dangerous because
-    it can enable an attacker to execute remote code.
+  message: Detected user data flowing into exec. This is code injection and should be avoided.
   metadata:
     cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
     owasp: 'A1: Injection'
     references:
-    - https://owasp.org/www-community/attacks/Code_Injection
-  patterns:
-  - pattern-either:
-    - patterns:
+    - https://nedbatchelder.com/blog/201206/exec_really_is_dangerous.html
+    category: security
+    technology:
+    - flask
+  pattern-either:
+  - patterns:
+    - pattern: exec(...)
+    - pattern-either:
       - pattern-inside: |
           @$APP.route($ROUTE, ...)
           def $FUNC(..., $ROUTEVAR, ...):
             ...
-      - pattern-either:
-        - pattern: exec(..., <... $ROUTEVAR ...>, ...)
-        - pattern: |
+            exec(..., <... $ROUTEVAR ...>, ...)
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
             $INTERM = <... $ROUTEVAR ...>
             ...
             exec(..., <... $INTERM ...>, ...)
-    - patterns:
-      - pattern-either:
-        - pattern: exec(..., <... flask.request.$W.get(...) ...>, ...)
-        - pattern: exec(..., <... flask.request.$W[...] ...>, ...)
-        - pattern: exec(..., <... flask.request.$W(...) ...>, ...)
-        - pattern: exec(..., <... flask.request.$W ...>, ...)
-    - patterns:
-      - pattern-either:
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
-              ...
-          - pattern: exec(..., <... $INTERM ...>, ...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
-              ...
-          - pattern: exec(..., <... $INTERM ...>, ...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-          - pattern: exec(..., <... $INTERM ...>, ...)
-        - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-          - pattern: exec(..., <... $INTERM ...>, ...)
+  - pattern: exec(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: exec(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: exec(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: exec(..., <... flask.request.$W ...>, ...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        exec(..., <... $INTERM ...>, ...)
+    - pattern: exec(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        exec(..., <... $INTERM ...>, ...)
+    - pattern: exec(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        exec(..., <... $INTERM ...>, ...)
+    - pattern: exec(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        exec(..., <... $INTERM ...>, ...)
+    - pattern: exec(...)

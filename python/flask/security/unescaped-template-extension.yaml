@@ -14,6 +14,9 @@ rules:
     - https://flask.palletsprojects.com/en/1.1.x/templating/#jinja-setup
     - https://blog.r2c.dev/2020/bento-check-unescaped-template-extensions-in-flask/
     - https://bento.dev/checks/flask/unescaped-file-extension/
+    category: security
+    technology:
+    - flask
   patterns:
   - pattern-not: flask.render_template("=~/.+\.html$/", ...)
   - pattern-not: flask.render_template("=~/.+\.xml$/", ...)

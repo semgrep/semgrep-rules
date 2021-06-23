@@ -1,18 +1,20 @@
 rules:
 - id: useless-literal-dict
-  patterns:
-  - pattern-either:
-    - pattern: |
-        {..., $X: $A, ..., $X: $B, ...}
-    - pattern: |
-        dict(..., ($X, $A), ..., ($X, $B), ...)
   message: key `$X` is uselessly assigned twice
   languages: [python]
   severity: WARNING
-- id: useless-literal-set
-  patterns:
+  pattern-either:
   - pattern: |
-      set(..., ($X, $A), ..., ($X, $B), ...)
+      {..., $X: $A, ..., $X: $B, ...}
+  - pattern: |
+      dict(..., ($X, $A), ..., ($X, $B), ...)
+  metadata:
+    category: maintainability
+- id: useless-literal-set
+  pattern: |
+    set(..., ($X, $A), ..., ($X, $B), ...)
   message: '`$X` is uselessly assigned twice inside the creation of the set'
   languages: [python]
   severity: ERROR
+  metadata:
+    category: maintainability

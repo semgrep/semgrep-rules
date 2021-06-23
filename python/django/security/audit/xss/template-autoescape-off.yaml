@@ -7,11 +7,14 @@ rules:
     If you must do this, consider instead, using `mark_safe` in Python code.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#autoescape
+    category: security
+    technology:
+    - django
   languages:
-  - none
+  - regex
   paths:
     include:
     - '*.html'

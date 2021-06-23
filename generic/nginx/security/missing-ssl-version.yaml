@@ -3,6 +3,12 @@ rules:
   patterns:
   - pattern: server { ... listen $PORT ssl; ... }
   - pattern-not-inside: server { ... ssl_protocols ... }
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
@@ -15,3 +21,6 @@ rules:
     references:
     - https://www.acunetix.com/blog/web-security-zone/hardening-nginx/
     - https://nginx.org/en/docs/http/configuring_https_servers.html
+    category: security
+    technology:
+    - nginx

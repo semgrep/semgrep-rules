@@ -1,0 +1,21 @@
+rules:
+- id: dangerous-open
+  patterns:
+  - pattern: |
+      open($CMD,...)
+  - pattern-not: |
+      open("...",...)
+  - metavariable-regex:
+      metavariable: $CMD
+      regex: '|'
+  message: |
+    Detected non-static command inside 'open'. Audit the input to 'open'.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+    category: security
+  severity: WARNING
+  languages: [ruby]

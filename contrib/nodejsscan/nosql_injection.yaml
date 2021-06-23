@@ -46,18 +46,6 @@ rules:
         $QRY["$where"] = <... $INP ...>;
         ...
         $OBJ.$FUNC(<... $QRY ...>, ...);
-    - pattern: |
-        $INP = $REQ.$FOO;
-        ...
-        $QRY["$where"] = <... $INP ...>;
-        ...
-        $OBJ.$FUNC(<... $QRY ...>, ...);
-    - pattern: |
-        $INP = $REQ.$FOO.$BAR;
-        ...
-        $QRY["$where"] = <... $INP ...>;
-        ...
-        $OBJ.$FUNC(<... $QRY ...>, ...);
   message: >-
     Untrusted user input in MongoDB $where operator can result in NoSQL
     JavaScript Injection.
@@ -67,3 +55,7 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+    category: security
+    technology:
+    - node.js
+    - express

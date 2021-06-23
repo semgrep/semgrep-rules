@@ -6,6 +6,9 @@ rules:
   metadata:
     owasp: 'A4: XML External Entities (XXE)'
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    category: security
+    technology:
+    - node-expat
   severity: WARNING
   languages: [javascript]
   patterns:
@@ -58,30 +61,6 @@ rules:
       new Parser(...);
       ...
       $PARSER.write("...");
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PARSER.parse($X);
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PARSER.write($X);
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PARSER.parse($X);
-  - pattern-not: |
-      var $X = "...";
-      ...
-      $PARSER.write($X);
-  - pattern-not: |
-      $X = "...";
-      ...
-      $PARSER.parse($X);
-  - pattern-not: |
-      $X = "...";
-      ...
-      $PARSER.write($X);
   - pattern-not: |
       $X = "...";
       ...

@@ -11,17 +11,7 @@ rules:
     - pattern: |
         $JWT = require("jsonwebtoken");
         ...
-        $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
-    - pattern: |
-        $JWT = require("jsonwebtoken");
-        ...
         $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
-    - pattern: |
-        $JOSE = require("jose");
-        ...
-        var { JWK, JWT } = $JOSE;
-        ...
-        $T = JWT.verify($P, JWK.None,...);
     - pattern: |
         $JOSE = require("jose");
         ...
@@ -43,3 +33,7 @@ rules:
   metadata:
     owasp: 'A9: Using Components with Known Vulnerabilities'
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    category: security
+    technology:
+    - node.js
+    - jwt

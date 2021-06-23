@@ -30,24 +30,6 @@ rules:
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
     - pattern: |
-        $CONTEXT = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = <... {$NAME:$REQ.$QUERY.$FOO} ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = {$NAME: <... $REQ.$QUERY.$FOO ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $VAR = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $CONTEXT = {$NAME: <... $VAR ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
         $CONTEXT = <... $REQ.$BODY ...>;
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
@@ -90,6 +72,10 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - node.js
+    - express
 - id: vm_runinnewcontext_injection
   patterns:
   - pattern-inside: |
@@ -151,6 +137,10 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - node.js
+    - express
 - id: vm_compilefunction_injection
   patterns:
   - pattern-inside: |
@@ -260,6 +250,10 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - node.js
+    - express
 - id: vm_code_injection
   patterns:
   - pattern-inside: |
@@ -329,3 +323,7 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - node.js
+    - express

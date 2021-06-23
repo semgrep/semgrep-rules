@@ -10,6 +10,11 @@ rules:
         ...
         protect_from_forgery :with => :exception
       end
+  - pattern-not: |
+      class $CONTROLLER < ActionController::Base
+        ...
+        protect_from_forgery prepend: true, with: :exception
+      end
   message: |
     Detected controller which does not enable cross-site request forgery
     protections using 'protect_from_forgery'. Add
@@ -19,5 +24,6 @@ rules:
     cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
     owasp: 'A6: Security Misconfiguration'
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/cross-site_request_forgery/index.markdown
+    category: security
   languages:
   - ruby

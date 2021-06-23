@@ -6,6 +6,12 @@ rules:
     - pattern: rewrite ... permanent
   - pattern-not-inside: rewrite ... https ... $host ... redirect
   - pattern-not-inside: rewrite ... https ... $host ... permanent
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   message: |
     Detected an insecure redirect in this nginx configuration.
     If no scheme is specified, nginx will forward the request with the
@@ -13,3 +19,7 @@ rules:
     To fix this, include the 'https' scheme.
   languages: [generic]
   severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - nginx

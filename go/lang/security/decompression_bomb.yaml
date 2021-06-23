@@ -1,50 +1,54 @@
 rules:
 - id: potential-dos-via-decompression-bomb
-  message: Potential DOS via zip bomb attack. You cau use `io.CopyN()` to prevent it. Refer to https://bomb.codes/ to learn
-    more about this attack and other ways to mitigate it.
-  metadata:
-    cwe: 'CWE-400: Uncontrolled Resource Consumption'
-    source_rule_url: https://github.com/securego/gosec
+  message: >-
+    Detected a possible denial-of-service via a zip bomb attack. By limiting the max bytes read, you can mitigate this attack.
+    `io.CopyN()` can specify a size. Refer to https://bomb.codes/ to learn more about this attack and other ways to mitigate
+    it.
   severity: WARNING
   languages: [go]
-  pattern-either:
-  - pattern: |
-      gzip.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      zlib.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      zlib.NewReaderDict(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      bzip2.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      flate.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      flate.NewReaderDict(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      lzw.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      tar.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      zip.NewReader(...)
-      ...
-      io.Copy(...)
-  - pattern: |
-      zip.OpenReader(...)
-      ...
-      io.Copy(...)
+  patterns:
+  - pattern-either:
+    - pattern: io.Copy(...)
+    - pattern: io.CopyBuffer(...)
+  - pattern-either:
+    - pattern-inside: |
+        gzip.NewReader(...)
+        ...
+    - pattern-inside: |
+        zlib.NewReader(...)
+        ...
+    - pattern-inside: |
+        zlib.NewReaderDict(...)
+        ...
+    - pattern-inside: |
+        bzip2.NewReader(...)
+        ...
+    - pattern-inside: |
+        flate.NewReader(...)
+        ...
+    - pattern-inside: |
+        flate.NewReaderDict(...)
+        ...
+    - pattern-inside: |
+        lzw.NewReader(...)
+        ...
+    - pattern-inside: |
+        tar.NewReader(...)
+        ...
+    - pattern-inside: |
+        zip.NewReader(...)
+        ...
+    - pattern-inside: |
+        zip.OpenReader(...)
+        ...
+  fix-regex:
+    regex: (.*)(Copy|CopyBuffer)\((.*?),(.*?)(\)|,.*\))
+    replacement: \1CopyN(\3, \4, 1024*1024*256)
+  metadata:
+    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    source-rule-url: https://github.com/securego/gosec
+    references:
+    - https://bomb.codes/
+    - https://golang.org/pkg/io/#CopyN
+    - https://github.com/securego/gosec/blob/master/rules/decompression-bomb.go
+    category: security

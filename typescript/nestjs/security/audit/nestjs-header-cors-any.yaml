@@ -1,0 +1,32 @@
+rules:
+- id: nestjs-header-cors-any
+  pattern-either:
+  - pattern: |
+      class $CN {
+          @Header("=~/[Aa][Cc][Cc][Ee][Ss][Ss]-[Cc][Oo][Nn][Tt][Rr][Oo][Ll]-[Aa][Ll][Ll][Oo][Ww]-[Oo][Rr][Ii][Gg][Ii][Nn]/", '*')
+          $FN(...) {
+              ...
+          }
+      }
+  - pattern: |
+      NestFactory.create($MODULE, {cors: true})
+  - pattern: |
+      NestFactory.create($MODULE, {cors: {origin: '*'}})
+  - pattern: |
+      $APP.enableCors()
+  - pattern: |
+      $APP.enableCors({origin: '*'})
+  message: |
+    Access-Control-Allow-Origin response header is set to "*". This will disable CORS Same Origin Policy restrictions.
+  metadata:
+    asvs:
+      section: 'V14: Configuration Verification Requirements'
+      control_id: 14.4.8 Permissive CORS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x22-V14-Config.md#v144-http-security-headers-requirements
+      version: '4'
+    category: security
+    technology:
+    - nestjs
+  languages:
+  - typescript
+  severity: WARNING

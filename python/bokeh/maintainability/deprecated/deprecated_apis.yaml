@@ -1,12 +1,15 @@
 rules:
 - id: bokeh-deprecated-apis
-  patterns:
-  - pattern-either:
-    - pattern: |
-        import bokeh.layouts.widgetbox
-    - pattern: |
-        import bokeh.models.graphs.from_networkx
   message: |
     These APIs are deprecated in Bokeh see https://docs.bokeh.org/en/latest/docs/releases.html#api-deprecations
   languages: [python]
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      import bokeh.layouts.widgetbox
+  - pattern: |
+      import bokeh.models.graphs.from_networkx
+  metadata:
+    category: maintainability
+    technology:
+    - bokeh

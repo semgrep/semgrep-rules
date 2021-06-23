@@ -14,6 +14,12 @@ rules:
         ...
       }
   - pattern: add_header ...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
@@ -25,3 +31,6 @@ rules:
   metadata:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/addheaderredefinition.md
+    category: security
+    technology:
+    - nginx

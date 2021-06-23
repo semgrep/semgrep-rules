@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script>
+            // ruleid: var-in-script-tag
+            const mydata = {{ mydata_json|safe }};
+            // ruleid: var-in-script-tag
+            const moredata = {{ mydata_json }};
+        </script>
+        <div>
+            <!-- ok: var-in-script-tag -->
+            <p>{{ this_is_fine }}</p>
+        </div>
+    </body>
+
+    <!-- ok: var-in-script-tag -->
+    <script src="./{{ reactDemoIndexBundleJs }}" crossOrigin="anonymous" integrity="{{ sri.reactDemoIndexBundleJs }}"></script>
+
+</html>

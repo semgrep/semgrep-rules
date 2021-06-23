@@ -4,10 +4,12 @@ rules:
   - pattern-inside: |
       import styled from 'styled-components';
       ...
+  - pattern-not-inside: |
+      import { keyframes } from 'styled-components';
+      ...
+      $STYLE = keyframes(...);
+      ...
   - pattern-either:
-    - pattern-inside: |
-        import $STYLE from "...";
-        ...
     - pattern-inside: |
         $STYLE = $METHOD(...);
         ...
@@ -34,12 +36,15 @@ rules:
   - pattern: |
       styled.$EL`...${$STYLE}...`
   message: |
-    User controlled data in a styled component's css is an anti-pattern than can lead to XSS vulnerabilities
+    User controlled data in a styled component's css is an anti-pattern that can lead to XSS vulnerabilities
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://styled-components.com/docs/advanced#security
+    category: security
+    technology:
+    - react
   languages:
   - typescript
   - javascript

@@ -6,6 +6,9 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - wkhtmltoimage
   languages: [javascript]
   patterns:
   - pattern-inside: |
@@ -13,7 +16,6 @@ rules:
       $WK = require('wkhtmltoimage');
       ...
   - pattern-not-inside: |
-      ...
       var $INPUT = "...";
       ...
   - pattern: $WK.generate($INPUT,...)

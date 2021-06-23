@@ -7,13 +7,15 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - vm2
   patterns:
   - pattern-inside: |
       ...
       require('vm2');
       ...
   - pattern-not-inside: |
-      ...
       $CODE = "...";
       ...
   - pattern-not-inside: |
@@ -36,16 +38,16 @@ rules:
     - pattern: |
         new VMScript($CODE,...);
   - pattern-not: |
+      $VM = new VM(...);
+      ...
+      $VM.run("...",...);
+  - pattern-not: |
       $VM = new NodeVM(...);
       ...
       $VM.run("...",...);
   - pattern-not: |
-      new VM(...).run("...",...);
+      (new VM(...)).run("...",...);
   - pattern-not: |
-      $VM = new NodeVM(...);
-      ...
-      $VM.run("...",...);
-  - pattern-not: |
-      new NodeVM(...).run("...",...);
+      (new NodeVM(...)).run("...",...);
   - pattern-not: |-
       new VMScript("...",...);

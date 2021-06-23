@@ -13,6 +13,10 @@ class FakeModel(models.Model):
     # ok: nontext-field-must-set-null-true
     fieldEmail = models.EmailField(blank=True)
     # ok: nontext-field-must-set-null-true
+    fieldFile = models.FileField(blank=True)
+    # ok: nontext-field-must-set-null-true
+    fieldImage = models.ImageField(blank=True)
+    # ok: nontext-field-must-set-null-true
     fieldURL = models.URLField(blank=True)
     # ok: nontext-field-must-set-null-true
     fieldUUID = models.UUIDField(blank=True)

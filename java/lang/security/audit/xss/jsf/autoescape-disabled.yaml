@@ -6,15 +6,16 @@ rules:
     vulnerability. Ensure no external data can reach here, or
     remove 'escape=false' from this element.
   metadata:
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     cwe: 'CWE-150: Improper Neutralization of Escape, Meta, or Control Sequences'
     references:
     - https://stackoverflow.com/a/7442668
+    category: security
   pattern-regex: |-
     .*escape.*?=.*?false.*
   paths:
     include:
     - '*.html'
     - '*.xhtml'
-  languages: [none]
+  languages: [regex]
   severity: WARNING

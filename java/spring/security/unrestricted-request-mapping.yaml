@@ -5,7 +5,7 @@ rules:
       @RequestMapping(...)
       $RETURNTYPE $METHOD(...) { ... }
   - pattern-not-inside: |
-      @RequestMapping(..., method = $X)
+      @RequestMapping(..., method = $X, ...)
       $RETURNTYPE $METHOD(...) { ... }
   message: >-
     Detected a method annotated with 'RequestMapping' that does not specify
@@ -21,4 +21,7 @@ rules:
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING
     references:
     - https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING
+    category: security
+    technology:
+    - spring
   languages: [java]

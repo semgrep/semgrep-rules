@@ -1,21 +1,35 @@
 rules:
 - id: dangerous-subprocess-use
-  patterns:
-  - pattern-not: subprocess.$FUNC("...", ...)
-  - pattern-not: subprocess.$FUNC([...], ...)
-  - pattern-not: subprocess.CalledProcessError(...)
-  - pattern-not: subprocess.SubprocessError(...)
-  - pattern: subprocess.$FUNC(...)
+  pattern-either:
+  - patterns:
+    - pattern-not: subprocess.$FUNC("...", ...)
+    - pattern-not: subprocess.$FUNC(["...",...], ...)
+    - pattern-not: subprocess.CalledProcessError(...)
+    - pattern-not: subprocess.SubprocessError(...)
+    - pattern: subprocess.$FUNC(...)
+  - patterns:
+    - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
+    - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
+  - patterns:
+    - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
+    - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
   message: |
-    Detected subprocess function '$FUNC' without a static string. Audit the use of this
-    call to ensure it is not vulnerable to a command injection. You may consider using
-    shlex.escape.
+    Detected subprocess function '$FUNC' without a static string. If this data can be
+    controlled by a malicious actor, it may be an instance of command injection.
+    Audit the use of this call to ensure it is not controllable by an external resource.
+    You may consider using 'shlex.escape()'.
   metadata:
     owasp: 'A1: Injection'
     cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    asvs:
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.3.8 OS Command Injection
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
+      version: '4'
     references:
     - https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess
     - https://docs.python.org/3/library/subprocess.html
     - https://docs.python.org/3/library/shlex.html
+    category: security
   languages: [python]
   severity: WARNING

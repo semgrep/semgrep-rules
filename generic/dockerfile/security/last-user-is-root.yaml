@@ -6,7 +6,7 @@ rules:
       USER root
       ...
       ...
-      USER $OTHER
+      USER
   message: >-
     The last user in the container is 'root'. This is a security
     hazard because if an attacker gains control of the container
@@ -18,3 +18,10 @@ rules:
     source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3002
     references:
     - https://github.com/hadolint/hadolint/wiki/DL3002
+    category: security
+    technology:
+    - dockerfile
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

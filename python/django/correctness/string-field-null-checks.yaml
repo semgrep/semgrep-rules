@@ -16,6 +16,10 @@ rules:
     use the empty string, not NULL.
   languages: [python]
   severity: WARNING
+  metadata:
+    category: correctness
+    technology:
+    - django
 - id: string-field-must-set-null-true
   patterns:
   - pattern-inside: |
@@ -30,3 +34,7 @@ rules:
     when saving multiple objects with blank values.
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - django

@@ -1,0 +1,31 @@
+rules:
+- id: jjwt-none-alg
+  message: |
+    Detected use of the 'none' algorithm in a JWT token.
+    The 'none' algorithm assumes the integrity of the token has already
+    been verified. This would allow a malicious actor to forge a JWT token
+    that will automatically be verified. Do not explicitly use the 'none'
+    algorithm. Instead, use an algorithm such as 'HS256'.
+  metadata:
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    asvs:
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.5.3 Insecue Stateless Session Tokens
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+      version: '4'
+    category: security
+    technology:
+    - jwt
+  languages: [java]
+  severity: ERROR
+  patterns:
+  - pattern: |
+      io.jsonwebtoken.Jwts.builder();
+  - pattern-not-inside: |-
+      $RETURNTYPE $FUNC(...) {
+        ...
+        $JWTS.signWith(...);
+        ...
+      }

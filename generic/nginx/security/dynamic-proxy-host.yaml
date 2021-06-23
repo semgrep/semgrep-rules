@@ -1,9 +1,11 @@
 rules:
 - id: dynamic-proxy-host
-  patterns:
-  - pattern-either:
-    - pattern: proxy_pass $SCHEME://$$HOST ...;
-    - pattern: proxy_pass $$SCHEME://$$HOST ...;
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
   languages:
   - generic
   severity: WARNING
@@ -15,3 +17,9 @@ rules:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/ssrf.md
     - https://nginx.org/en/docs/http/ngx_http_map_module.html
+    category: security
+    technology:
+    - nginx
+  pattern-either:
+  - pattern: proxy_pass $SCHEME://$$HOST ...;
+  - pattern: proxy_pass $$SCHEME://$$HOST ...;

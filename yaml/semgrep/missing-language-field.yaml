@@ -1,0 +1,15 @@
+rules:
+- id: missing-language-field
+  message: |
+    Please include a language field for your rule!
+  languages: [yaml]
+  patterns:
+  - pattern-inside: 'rules: [..., $RULE, ...]'
+  - pattern: $RULE
+  - pattern-not: |
+      ...
+      languages: ...
+  severity: WARNING
+  metadata:
+    technology:
+    - semgrep

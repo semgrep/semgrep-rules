@@ -1,16 +1,19 @@
 rules:
 - id: jquery-insecure-selector
   message: >-
-    User controlled data in a `$(...)` is an anti-pattern than can lead to XSS vulnerabilities
+    User controlled data in a `$(...)` is an anti-pattern that can lead to XSS vulnerabilities
   languages:
   - javascript
   severity: WARNING
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://owasp.org/www-community/attacks/xss/
     - https://bugs.jquery.com/ticket/9521
+    category: security
+    technology:
+    - jquery
   patterns:
   - pattern-either:
     - pattern: |
@@ -54,3 +57,13 @@ rules:
             $("..." + (<... $Y ...>))
         - pattern: |
             $((<... $Y ...>) + "...")
+      - pattern-not-inside: |
+          $JQUERY.each(function($INDEX, $Y) {
+            ...
+          })
+  - pattern-not: |
+      $(window)
+  - pattern-not: |
+      $(document)
+  - pattern-not: |
+      $(this)

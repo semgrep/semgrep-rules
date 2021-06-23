@@ -1,0 +1,61 @@
+rules:
+- id: node-postgres-sqli
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $DB.query(...,$QUERY,...)
+        - pattern: |
+            $DB.query(..., $QUERY, ...).$INTFUNC(...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = $X.concat($Y)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = $X.concat("...")
+          ...
+    - pattern: $DB.query(..., $X + $Y, ...)
+    - pattern: $DB.query(..., $X.concat($Y), ...)
+  - pattern-either:
+    - pattern-inside: |
+        const { $CLIENT } = require('pg')
+        ...
+        $DB = new $CLIENT(...)
+        ...
+    - pattern-inside: |
+        const { $POOL } = require('pg')
+        ...
+        const $NEWPOOL = new $POOL(...)
+        ...
+        $NEWPOOL.connect((..., $DB, ...) => {
+            ...
+        })
+  - pattern-not: $DB.query(..., "..." + "...", ...)
+  - pattern-not: $DB.query(..., $X.concat("..."), ...)
+  languages:
+  - js
+  message: |
+    Detected string concatenation with a non-literal variable in a node-postgres
+    JS SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `client.query('SELECT $1 from table', [userinput])`
+  metadata:
+    references:
+    - https://node-postgres.com/features/queries
+    category: security
+  severity: WARNING

@@ -9,11 +9,14 @@ rules:
     can reach this location.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://github.com/janl/mustache.js/#variables
+    category: security
+    technology:
+    - express
   languages:
-  - none
+  - regex
   paths:
     include:
     - '*.mustache'
@@ -22,4 +25,4 @@ rules:
   severity: WARNING
   pattern-either:
   - pattern-regex: '{{{((?!include).)*?}}}'
-  - pattern-regex: '{{.*&.*}}'
+  - pattern-regex: '{{[^}&]*&[^}&]*}}'

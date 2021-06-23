@@ -5,12 +5,10 @@ rules:
   - pattern-not: urllib.request.$W("...")
   - pattern-not: $OPENER.$W("...")
   - pattern-either:
-    - patterns:
-      - pattern-either:
-        - pattern: urllib.urlopen(...)
-        - pattern: urllib.request.urlopen(...)
-        - pattern: urllib.urlretrieve(...)
-        - pattern: urllib.request.urlretrieve(...)
+    - pattern: urllib.urlopen(...)
+    - pattern: urllib.request.urlopen(...)
+    - pattern: urllib.urlretrieve(...)
+    - pattern: urllib.request.urlretrieve(...)
     - patterns:
       - pattern-either:
         - pattern-inside: |
@@ -28,8 +26,9 @@ rules:
       - pattern-either:
         - pattern: $OPENER.open(...)
         - pattern: $OPENER.retrieve(...)
-  message: |
-    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes.
+  message: >-
+    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes,
+    so a dynamic value controlled by a malicious actor may allow them to read arbitrary files.
     Audit uses of urllib calls to ensure user data cannot control the URLs, or consider
     using the 'requests' library instead.
   metadata:
@@ -37,5 +36,11 @@ rules:
     owasp: 'A1: Injection'
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/blacklists/calls.py#L163
     bandit-code: B310
+    asvs:
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.2.4 Dyanmic Code Execution Features
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements
+      version: '4'
+    category: security
   languages: [python]
   severity: WARNING

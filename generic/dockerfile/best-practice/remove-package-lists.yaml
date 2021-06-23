@@ -6,7 +6,8 @@ rules:
   message: >-
     The package lists were not deleted after running 'apt-get update', which
     increases the size of the image.
-    Remove the package lists by appending '&& rm -rf /var/lib/apt/lists/*' at the end
+    Remove the package lists by appending '&& rm -rf /var/lib/apt/lists/*' at the
+    end
     of apt-get command chain.
   severity: WARNING
   languages: [generic]
@@ -14,3 +15,10 @@ rules:
     source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3009
     references:
     - https://github.com/hadolint/hadolint/wiki/DL3009
+    category: best-practice
+    technology:
+    - dockerfile
+  paths:
+    include:
+    - '*dockerfile*'
+    - '*Dockerfile*'

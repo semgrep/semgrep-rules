@@ -5,19 +5,19 @@ from paramiko import client
 
 
 client = paramiko.client.SSHClient()
-# this is safe
+client.connect("somehost")
+
 # ok:paramiko-exec-command
-client.connect('somehost')
+client.exec_command("ls -r /")
 
-# this is not safe
 # ruleid:paramiko-exec-command
-client.exec_command('something; really; unsafe')
-
-
-
-
+client.exec_command(user_input)
 
 client2 = client.SSHClient()
-client2.connect("somewhere-out-there")
-# ruleid:paramiko-exec-command
+client2.connect("somehost")
+
+# ok:paramiko-exec-command
 client2.exec_command("ls -r /")
+
+# ruleid:paramiko-exec-command
+client2.exec_command(user_input)
