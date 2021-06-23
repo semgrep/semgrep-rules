@@ -1,0 +1,16 @@
+rules:
+- id: cors_regex_wildcard
+  languages:
+  - ts
+  message: 'Unescaped ''.'' character in CORS domain regex $CORS: $PATTERN'
+  patterns:
+  - pattern-either:
+    - pattern: const $CORS = [...,$PATTERN,...]
+    - pattern: const $CORS = $PATTERN
+  - metavariable-regex:
+      metavariable: $PATTERN
+      regex: .+?(?<!\\).\..+(?<!\\)\..+
+  - metavariable-regex:
+      metavariable: $CORS
+      regex: (?i)cors
+  severity: WARNING
