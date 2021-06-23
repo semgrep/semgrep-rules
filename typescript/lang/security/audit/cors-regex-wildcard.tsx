@@ -1,4 +1,4 @@
-// ruleid: cors_regex_wildcard
+// ruleid: cors-regex-wildcard
 const corsDomains = [
     /localhost\:/,
     /(.+\.)*foo\.com$/,
@@ -8,7 +8,7 @@ const corsDomains = [
     /^(http|https):\/\/www.foo.com$/,
 ];
 
-// ruleid: cors_regex_wildcard
+// ruleid: cors-regex-wildcard
 const CORS = [
     /localhost\:/,
     /(.+\.)*foo\.com$/,
@@ -18,7 +18,7 @@ const CORS = [
     /^(http|https):\/\/www.foo.com$/,
 ];
 
-// ruleid: cors_regex_wildcard
+// ruleid: cors-regex-wildcard
 const corsOrigin = /^(http|https):\/\/www.foo.com$/;
 
 const urls = [
