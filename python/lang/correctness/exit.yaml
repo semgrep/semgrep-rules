@@ -4,7 +4,7 @@ rules:
   - python
   message: Use `sys.exit` over the python shell `exit` built-in. `exit` is a helper for the interactive shell and may not
     be available on all Python implementations. https://stackoverflow.com/questions/6501121/difference-between-exit-and-sys-exit-in-python
-  patterns: exit($X)
+  pattern: exit($X)
   severity: WARNING
   fix: sys.exit($X)
   metadata:
