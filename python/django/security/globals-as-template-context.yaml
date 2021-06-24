@@ -1,0 +1,32 @@
+rules:
+- id: globals-as-template-context
+  languages:
+  - python
+  message: >-
+    Using 'globals()' as a context to 'render(...)' is extremely dangerous.
+    This exposes Python functions to the template that were not meant to be exposed.
+    An attacker could use these functions to execute code that was not intended to run
+    and could compromise the application. (This is server-side template injection (SSTI)).
+    Do not use 'globals()'. Instead, specify each variable in a dictionary or
+    'django.template.Context' object, like '{"var1": "hello"}' and use that instead.
+  metadata:
+    category: security
+    cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.djangoproject.com/en/3.2/ref/settings/#templates
+    - https://docs.djangoproject.com/en/3.2/topics/templates/#django.template.backends.django.DjangoTemplates
+    - https://docs.djangoproject.com/en/3.2/ref/templates/api/#rendering-a-context
+    technology:
+    - django
+  pattern-either:
+  - pattern: django.shortcuts.render(..., globals(...), ...)
+  - pattern: django.template.Template.render(..., globals(...), ...)
+  - patterns:
+    - pattern-inside: |
+        $CONTEXT = globals(...)
+        ...
+    - pattern-either:
+      - pattern: django.shortcuts.render(..., $CONTEXT, ...)
+      - pattern: django.template.Template.render(..., $CONTEXT, ...)
+  severity: ERROR
