@@ -1,0 +1,21 @@
+rules:
+- id: dangerous-annotations-usage
+  patterns:
+  - pattern: |
+      $C.__annotations__[$NAME] = $X
+  - pattern-not: |
+      $C.__annotations__[$NAME] = "..."
+  - pattern-not: |
+      $C.__annotations__[$NAME] = typing.$Y
+  - metavariable-regex:
+      metavariable: $X
+      regex: (?!(int|float|complex|list|tuple|range|str|bytes|bytearray|memoryview|set|frozenset|dict))
+  message: Annotations passed to `typing.get_type_hints` are evaluated in `globals` and `locals` namespaces. Make sure that
+    no arbitrary value can be written as the annotation and passed to `typing.get_type_hints` function.
+  severity: INFO
+  metadata:
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp: 'A1: Injection'
+    category: security
+  languages:
+  - python
