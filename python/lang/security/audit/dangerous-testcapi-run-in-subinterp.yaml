@@ -1,10 +1,15 @@
 rules:
 - id: dangerous-testcapi-run-in-subinterp
   patterns:
-  - pattern: |
-      _testcapi.run_in_subinterp($PAYLOAD, ...)
+  - pattern-either:
+    - pattern: |
+        _testcapi.run_in_subinterp($PAYLOAD, ...)
+    - pattern: |
+        test.support.run_in_subinterp($PAYLOAD, ...)
   - pattern-not: |
       _testcapi.run_in_subinterp("...", ...)
+  - pattern-not: |
+      test.support.run_in_subinterp("...", ...)
   message: |
     Found dynamic content in `run_in_subinterp`.
     This is dangerous if external data can reach this function call because it allows a malicious actor to run arbitrary Python code.
