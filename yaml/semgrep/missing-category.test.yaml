@@ -1,4 +1,5 @@
 rules:
+# ruleid: missing-category
 - id: unchecked-subprocess-call
   patterns:
   - pattern-either:
@@ -10,7 +11,6 @@ rules:
       $S = subprocess.call(...)
   - pattern-not-inside: |
       subprocess.call(...) == $X
-  # ruleid: empty-message
   message: |
     bad stuff
   severity: WARNING
