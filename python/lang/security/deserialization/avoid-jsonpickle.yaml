@@ -1,0 +1,21 @@
+rules:
+- id: avoid-jsonpickle
+  patterns:
+  - pattern: |
+      jsonpickle.decode($PAYLOAD,...)
+  - pattern-not: |
+      jsonpickle.decode("...",...)
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://github.com/jsonpickle/jsonpickle#jsonpickle
+    - https://www.exploit-db.com/exploits/49585
+    category: security
+  message: |
+    Avoid using `jsonpickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  languages: [python]
+  severity: WARNING
