@@ -25,6 +25,20 @@ app.get('/test2', async (req, res) => {
     res.send('Hello World!')
 })
 
+const test3 = function func3(req, res) {
+    var parser = new expat.Parser('UTF-8')
+    // ruleid: express-expat-xxe
+    parser.parse(req.body)
+    res.send('Hello World!')
+}
+
+const test4 = function (req, res) {
+    var parser = new expat.Parser('UTF-8')
+    // ruleid: express-expat-xxe
+    parser.parse(req.body)
+    res.send('Hello World!')
+}
+
 app.get('/okTest1', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
     // ok: express-expat-xxe
