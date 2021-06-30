@@ -1,0 +1,14 @@
+rules:
+- id: non-literal-import
+  patterns:
+  - pattern: |
+      importlib.import_module($NAME, ...)
+  - pattern-not: |
+      importlib.import_module("...", ...)
+  message: Untrusted user input in `importlib.import_module()` function allows an attacker to load arbitrary code.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-706: Use of Incorrectly-Resolved Name or Reference'
+    category: security
+  languages: [python]
+  severity: WARNING
