@@ -11,6 +11,12 @@ rules:
       $S = subprocess.call(...)
   - pattern-not-inside: |
       subprocess.call(...) == $X
-  message: |
+  message: ''
   severity: WARNING
   fix: subprocess.check_call(...)
+  # ok: missing-language-field
+- id: other-rule
+  languages: [generic]
+  message: ''
+  severity: INFO
+  pattern: <div>hello</div>

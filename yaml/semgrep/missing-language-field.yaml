@@ -1,14 +1,14 @@
 rules:
 - id: missing-language-field
   message: |
-    Please include a language field for your rule!
+    Please include a 'languages' field for your rule!
   languages: [yaml]
   patterns:
   - pattern-inside: 'rules: [..., $RULE, ...]'
-  - pattern: $RULE
-  - pattern-not: |
-      ...
-      languages: ...
+  - pattern: 'id: $RULEID'
+  - pattern-not-inside: |
+      - ...
+        languages: ...
   severity: WARNING
   metadata:
     category: correctness
