@@ -1,0 +1,15 @@
+rules:
+- id: missing-template-string-indicator
+  patterns:
+  - pattern: '`... {...} ...`'
+  - pattern-not-inside: '`... ${...} ...`'
+  languages: [generic]
+  message: >-
+    This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?
+  paths:
+    include:
+    - '*.js'
+    - '*.ts'
+    - '*.jsx'
+    - '*.tsx'
+  severity: ERROR

@@ -13,9 +13,13 @@ rules:
       $SANDBOX = require('sandbox');
       ...
   - pattern-either:
+    # ok: slow-pattern-general-property
     - pattern-inside: function ($REQ, $RES, ...) {...}
+    # ok: slow-pattern-general-property
     - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    # ok: slow-pattern-general-property
     - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    # ok: slow-pattern-general-property
     - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
     # ruleid: slow-pattern-general-property
     - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})

@@ -3,7 +3,7 @@ def test_calls(user_input)
   result = `foo #{user_input} bar`
 
 # ruleid: dangerous-subshell
-  result2 = %{foo #{user_input} bar}
+  result2 = %x{foo #{user_input} bar}
 
 # ruleid: dangerous-subshell
   cmd = `foo #{user_input} bar #{smth_else}`
