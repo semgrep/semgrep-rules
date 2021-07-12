@@ -8,10 +8,10 @@ rules:
   languages: [yaml]
   patterns:
   - pattern-inside: 'rules: [..., $RULE, ...]'
-  - pattern: $RULE
-  - pattern-not: |
-      ...
-      message: ...
+  - pattern: 'id: $RULEID'
+  - pattern-not-inside: |
+      - ...
+        message: ...
   severity: WARNING
   metadata:
     category: correctness

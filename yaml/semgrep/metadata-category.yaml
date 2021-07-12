@@ -7,11 +7,12 @@ rules:
   severity: INFO
   patterns:
   - pattern-inside: 'rules: [..., $RULE, ...]'
-  - pattern: $RULE
-  - pattern-not: |
-      metadata:
-        ...
-        category: $CATEGORY
+  - pattern: 'id: $RULEID'
+  - pattern-not-inside: |
+      - ...
+        metadata:
+          ...
+          category: $CATEGORY
   languages: [yaml]
   metadata:
     category: best-practice
