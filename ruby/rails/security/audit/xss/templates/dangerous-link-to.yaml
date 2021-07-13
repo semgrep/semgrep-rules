@@ -11,14 +11,21 @@ rules:
     setting the Content Security Policy (CSP) header.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html#cross-site-scripting-xss
     - https://brakemanscanner.org/docs/warning_types/link_to_href/
+    category: security
+    technology:
+    - rails
   languages:
-  - none
+  - generic
   paths:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <%.*?link_to(?!.*\+).*?\@.*?%>
+  patterns:
+  - pattern-inside: <%= ... %>
+  - pattern-not-inside: link_to ... "/" + ... @$VAR
+  - pattern-not-inside: link_to ... '/' + ... @$VAR
+  - pattern: link_to ... @$VAR

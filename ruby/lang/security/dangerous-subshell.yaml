@@ -1,0 +1,21 @@
+rules:
+- id: dangerous-subshell
+  patterns:
+  - pattern: |
+      `...#{$VAL}...`
+  - pattern-not: |
+      `...#{"..."}...`
+  - pattern-not-inside: |
+      $VAL = "..."
+      ...
+  message: |
+    Detected non-static command inside `...`.
+    If unverified user data can reach this call site, this is a code injection
+    vulnerability. A malicious actor can inject a malicious script to execute
+    arbitrary code.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: 'A1: Injection'
+    category: security
+  severity: WARNING
+  languages: [ruby]

@@ -4,6 +4,12 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#DEFAULT_HTTP_CLIENT
+    asvs:
+      section: V9 Communications Verification Requirements
+      control_id: 9.1.3 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v91-client-communications-security-requirements
+      version: '4'
+    category: security
   message: |
     DefaultHttpClient is deprecated. Further, it does not support connections
     using TLS1.2, which makes using DefaultHttpClient a security hazard.

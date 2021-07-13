@@ -9,33 +9,33 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://golang.org/pkg/html/template/#JS
+    category: security
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: template.JS($T + $X, ...)
-    - pattern: template.JS(fmt.$P("...", ...), ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $T = $FXN(..., $T, ...)
-        ...
-        template.JS($T, ...)
-    - pattern: |
-        $T = fmt.$P("...", ...)
-        ...
-        template.JS($T, ...)
-    - pattern: |
-        $T, $ERR = fmt.$P("...", ...)
-        ...
-        template.JS($T, ...)
-    - pattern: |
-        $T = $X + $Y
-        ...
-        template.JS($T, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $OTHER, $ERR = fmt.$P(..., $T, ...)
-        ...
-        template.JS($OTHER, ...)
+  pattern-either:
+  - pattern: template.JS($T + $X, ...)
+  - pattern: template.JS(fmt.$P("...", ...), ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $T = $FXN(..., $T, ...)
+      ...
+      template.JS($T, ...)
+  - pattern: |
+      $T = fmt.$P("...", ...)
+      ...
+      template.JS($T, ...)
+  - pattern: |
+      $T, $ERR = fmt.$P("...", ...)
+      ...
+      template.JS($T, ...)
+  - pattern: |
+      $T = $X + $Y
+      ...
+      template.JS($T, ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $OTHER, $ERR = fmt.$P(..., $T, ...)
+      ...
+      template.JS($OTHER, ...)

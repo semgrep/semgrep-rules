@@ -6,17 +6,24 @@ rules:
     add quotes around the template expression, like this: "<%= expr %>".
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-site Scripting (XSS)'
+    owasp: 'A7: Cross-Site Scripting (XSS)'
     references:
     - https://brakemanpro.com/2017/09/08/cross-site-scripting-in-rails#unquoted-attributes
     - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+    category: security
+    technology:
+    - rails
   languages:
-  - none
+  - generic
   paths:
     include:
     - '*.erb'
   severity: WARNING
-  pattern-regex: <[^<>]*=[^'"<>]*<%=.*?%>(\s+|>).*
+  patterns:
+  - pattern-inside: <$TAG ...>
+  - pattern-not-inside: ="..."
+  - pattern-not-inside: ='...'
+  - pattern: <%= ... %>
   fix-regex:
     regex: <%=(.*?)%>
     replacement: '"<%=\1%>"'

@@ -1,5 +1,9 @@
 rules:
 - id: tempfile-without-flush
+  languages:
+  - python
+  message: Using '$F.name' without '.flush()' or '.close()' may cause an error because the file may not exist when '$F.name'
+    is used. Use '.flush()' or close the file before using '$F.name'.
   pattern-either:
   - patterns:
     - pattern-not-inside: |
@@ -46,13 +50,27 @@ rules:
             $F.close()
             ...
             $F.name
+    - pattern-not-inside: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $MODULE.dump(..., $F, ...)
+            ...
+            $F.flush()
+            ...
+            $F.name
+    - pattern-not-inside: |
+        with tempfile.NamedTemporaryFile(...) as $F:
+            ...
+            $MODULE.dump(..., $F, ...)
+            ...
+            $F.close()
+            ...
+            $F.name
     - pattern-inside: |
         with tempfile.NamedTemporaryFile(...) as $F:
             ...
     - pattern: |
         $F.name
-  message: >-
-    Using '$F.name' without '.flush()' or '.close()' may cause an error because the file may not exist
-    when '$F.name' is used. Use '.flush()' or close the file before using '$F.name'.
-  languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness

@@ -8,8 +8,16 @@ rules:
   metadata:
     owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-326: Inadequate Encryption Strength'
+    asvs:
+      section: V9 Communications Verification Requirements
+      control_id: 9.1.3 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v91-client-communications-security-requirements
+      version: '4'
     references:
     - https://docs.python.org/3/library/ssl.html#cipher-selection
     - https://docs.python.org/3/library/ssl.html#ssl.SSLContext.set_ciphers
+    category: security
+    technology:
+    - ssl
   languages: [python]
   severity: WARNING

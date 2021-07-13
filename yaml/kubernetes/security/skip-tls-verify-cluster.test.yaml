@@ -1,0 +1,24 @@
+apiVersion: v1
+clusters:
+# ruleid: skip-tls-verify-cluster
+- cluster:
+    server: https://192.168.0.100:8443
+    insecure-skip-tls-verify: true
+  name: minikube1
+# ok: skip-tls-verify-cluster
+- cluster:
+    server: https://192.168.0.101:8443
+  name: minikube2
+contexts:
+- context:
+    cluster: minikube
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: client.crt
+    client-key: client.key

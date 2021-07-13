@@ -5,20 +5,22 @@ rules:
     encrypted. Consider using SFTP instead. urllib does not support SFTP,
     so consider switching to a library which supports SFTP.
   metadata:
-    owasp: 'A3: Sensitve Data Exposure'
+    owasp: 'A3: Sensitive Data Exposure'
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
     - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen
+    category: security
+    technology:
+    - urllib
   severity: WARNING
   languages: [python]
-  patterns:
-  - pattern-either:
-    - pattern: urllib.request.urlopen("=~/^[Ff][Tt][Pp]://.*/", ...)
-    - pattern: |
-        $URL = "=~/^[Ff][Tt][Pp]://.*/"
+  pattern-either:
+  - pattern: urllib.request.urlopen("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.urlopen($URL, ...)
+  - pattern: |-
+      def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
         ...
         urllib.request.urlopen($URL, ...)
-    - pattern: |-
-        def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-          ...
-          urllib.request.urlopen($URL, ...)

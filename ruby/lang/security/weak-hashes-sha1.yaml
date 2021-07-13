@@ -1,12 +1,5 @@
 rules:
 - id: weak-hashes-sha1
-  patterns:
-  - pattern-either:
-    - pattern: Digest::SHA1.$FUNC $X
-    - pattern: Digest::SHA1.$FUNC
-    - pattern: OpenSSL::Digest::SHA1.$FUNC $X
-    - pattern: OpenSSL::Digest::SHA1.$FUNC
-    - pattern: OpenSSL::HMAC.$FUNC("sha1",...)
   message: |
     Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision by Google, which could lead to vulnerabilities.
     Use SHA256, SHA3 or other hashing functions instead.
@@ -14,6 +7,13 @@ rules:
     references:
     - https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html
     - https://shattered.io/
+    category: security
   languages:
   - ruby
   severity: WARNING
+  pattern-either:
+  - pattern: Digest::SHA1.$FUNC $X
+  - pattern: Digest::SHA1.$FUNC
+  - pattern: OpenSSL::Digest::SHA1.$FUNC $X
+  - pattern: OpenSSL::Digest::SHA1.$FUNC
+  - pattern: OpenSSL::HMAC.$FUNC("sha1",...)

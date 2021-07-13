@@ -3,7 +3,11 @@ rules:
   metadata:
     owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references: https://docs.python.org/3/library/pickle.html
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    category: security
+    technology:
+    - django
   message: Avoid using insecure deserialization library, backed by `pickle`, `_pickle`, `cpickle`, `dill`, `shelve`, or `yaml`,
     which are known to lead to remote code execution vulnerabilities.
   languages:

@@ -6,29 +6,37 @@ rules:
   metadata:
     owasp: 'A4: XML External Entities (XXE)'
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    category: security
+    technology:
+    - express
   severity: ERROR
   languages: [javascript]
   patterns:
   - pattern-inside: |
-      ...
       require('node-expat');
       ...
   - pattern-inside: |
-      ...
       require('express');
       ...
   - pattern-either:
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ... ($REQ, $RES) {...}
+    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern-inside: |
-        ...
         $PARSER = new $EXPAT.Parser(...);
         ...
     - pattern-inside: |
-        ...
         $PARSER = new Parser(...);
         ...
   - pattern-either:

@@ -46,6 +46,20 @@ func runCommand3(userInput string) {
 
 }
 
+func runCommand4(userInput string) {
+
+    // ruleid:dangerous-exec-command
+    cmd := exec.Command( "bash", "-c", userInput )
+
+    cmd.Stdout = os.Stdout
+    cmd.Stderr = os.Stdout
+
+    if err := cmd.Run(); err != nil {
+        fmt.Println( "Error:", err )
+    }
+
+}
+
 func okCommand1(userInput string) {
 
     goExec,_ := exec.LookPath("go")
@@ -62,7 +76,7 @@ func okCommand1(userInput string) {
 
 }
 
-func runCommand1(userInput string) {
+func okCommand2(userInput string) {
     // ok:dangerous-exec-command
     cmd := exec.Command( "go", "version" )
 

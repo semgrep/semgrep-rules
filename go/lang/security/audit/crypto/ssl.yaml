@@ -11,11 +11,10 @@ rules:
     references:
     - https://golang.org/doc/go1.14#crypto/tls
     - https://www.us-cert.gov/ncas/alerts/TA14-290A
+    category: security
   languages: [go]
   severity: ERROR
-  patterns:
-  - pattern: |-
-      tls.Config{..., MinVersion: $TLS.VersionSSL30, ...}
   fix-regex:
     regex: VersionSSL30
     replacement: VersionTLS13
+  pattern: 'tls.Config{..., MinVersion: $TLS.VersionSSL30, ...}'

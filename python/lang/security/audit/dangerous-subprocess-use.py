@@ -31,3 +31,18 @@ subprocess.call("grep -R {} .".format(sys.argv[1]), shell=True, cwd="/home/user"
 
 # ruleid:dangerous-subprocess-use
 subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True)
+
+# ruleid:dangerous-subprocess-use
+subprocess.run(["bash", "-c", sys.argv[1]], shell=True)
+
+def vuln_payload(payload: str) -> None:
+  with tempfile.TemporaryDirectory() as directory:
+    python_file = Path(directory) / "hello_world.py"
+    python_file.write_text(textwrap.dedent("""
+        print("What is your name?")
+        name = input()
+        print("Hello " + name)
+    """))
+    # ruleid:dangerous-subprocess-use
+    program = subprocess.Popen(['python2', str(python_file)], stdin=subprocess.PIPE, text=True)
+    program.communicate(input=payload, timeout=1)

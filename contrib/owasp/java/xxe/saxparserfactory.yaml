@@ -4,11 +4,12 @@ rules:
     SAXParserFactory being instantiated without calling the setFeature functions that are generally used for disabling entity processing
   metadata:
     cwe: CWE-611
-    owasp: A4:2017-XML External Entities (XXE)
+    owasp: 'A4: XML External Entities (XXE)'
     source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    category: security
   severity: ERROR
   patterns:
-# Reference : https://www.programcreek.com/java-api-examples/?api=javax.xml.parsers.SAXParserFactory
+      # Reference : https://www.programcreek.com/java-api-examples/?api=javax.xml.parsers.SAXParserFactory
   - pattern-either:
     - pattern: |
         SAXParserFactory $SPF =  ... ;

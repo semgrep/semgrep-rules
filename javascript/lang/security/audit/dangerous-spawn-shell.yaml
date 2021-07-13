@@ -1,0 +1,53 @@
+rules:
+- id: dangerous-spawn-shell
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-child-process.js
+    category: security
+  message: |
+    Detected non-literal calls to $EXEC(). This could lead to a command
+    injection vulnerability.
+  patterns:
+  - pattern-either:
+    - pattern: spawn(...)
+    - pattern: spawnSync(...)
+    - pattern: $CP.spawn(...)
+    - pattern: $CP.spawnSync(...)
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",["-c", $ARG, ...],...)
+        - patterns:
+          - pattern: $EXEC($CMD,["-c", $ARG, ...],...)
+          - pattern-inside: |
+              $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+              ...
+      - pattern-not: |
+          $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",["-c", "...", ...],...)
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",[$ARG, ...],...)
+        - patterns:
+          - pattern: $EXEC($CMD,[$ARG, ...],...)
+          - pattern-inside: |
+              $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+              ...
+      - pattern-not: |
+          $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",["...", ...],...)
+  - pattern-not-inside: |
+      $ARG = "..."
+      ...
+  - pattern-either:
+    - pattern-inside: |
+        require('child_process')
+        ...
+    - pattern-inside: |
+        import 'child_process'
+        ...
+  severity: WARNING
+  languages:
+  - javascript
+  - typescript

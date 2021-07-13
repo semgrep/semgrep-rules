@@ -1,35 +1,5 @@
 rules:
 - id: httpurlconnection-http-request
-  patterns:
-  - pattern-either:
-    - pattern: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = (HttpURLConnection) $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
-    - pattern: |
-        String $STRURL = "=~/[Hh][Tt][Tt][Pp]://.*/";
-        ...
-        URL $URL = new URL ($STRURL, ...);
-        ...
-        $CON = (HttpURLConnection) $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
-    - pattern: |
-        String $STRURL = "=~/[Hh][Tt][Tt][Pp]://.*/";
-        ...
-        URL $URL = new URL ($STRURL, ...);
-        ...
-        $CON = $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
-    - pattern: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
   message: |
     Checks for requests sent via HttpURLConnection and URLObj to http:// URLS. This is dangerous because
     the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
@@ -45,6 +15,36 @@ rules:
     references:
     - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLConnection.html
     - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URL.html#openConnection()
+    category: security
   languages:
   - java
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
+      ...
+      $CON = (HttpURLConnection) $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);
+  - pattern: |
+      String $STRURL = "=~/[Hh][Tt][Tt][Pp]://.*/";
+      ...
+      URL $URL = new URL ($STRURL, ...);
+      ...
+      $CON = (HttpURLConnection) $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);
+  - pattern: |
+      String $STRURL = "=~/[Hh][Tt][Tt][Pp]://.*/";
+      ...
+      URL $URL = new URL ($STRURL, ...);
+      ...
+      $CON = $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);
+  - pattern: |
+      URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
+      ...
+      $CON = $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);

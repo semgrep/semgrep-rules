@@ -1,0 +1,51 @@
+rules:
+- id: pg-orm-sqli
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $DB.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: |
+        $DB.$INTFUNC1(...).$METHOD(..., $X + $Y, ...).$INTFUNC2(...)
+    - pattern: |
+        $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+    - pattern-inside: |
+        $DB = pg.Connect(...)
+        ...
+    - pattern-inside: |
+        func $FUNCNAME(..., $DB *pg.DB, ...) {
+          ...
+        }
+  - pattern-not: |
+      $DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(Where|WhereOr|Join|GroupExpr|OrderExpr|ColumnExpr)$
+  languages:
+  - go
+  message: |
+    Detected string concatenation with a non-literal variable in a go-pg ORM
+    SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    do not use strings concatenated with user-controlled input.
+    Instead, use parameterized statements.
+  metadata:
+    references:
+    - https://pg.uptrace.dev/queries/
+    category: security
+  severity: WARNING

@@ -2,8 +2,6 @@ rules:
 - id: avoid-zypper-update
   severity: INFO
   languages: [generic]
-  patterns:
-  - pattern: zypper update
   message: |
     Packages in base images should be up-to-date, removing the need for
     'zypper update'. If packages are out-of-date, consider contacting the
@@ -12,7 +10,11 @@ rules:
     source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3035
     references:
     - https://github.com/hadolint/hadolint/wiki/DL3035
+    category: best-practice
+    technology:
+    - dockerfile
   paths:
     include:
     - '*dockerfile*'
     - '*Dockerfile*'
+  pattern: zypper update

@@ -1,0 +1,20 @@
+rules:
+- id: hostpid-pod
+  patterns:
+  - pattern-inside: |
+      spec:
+        ...
+  - pattern: |
+      hostPID: true
+  message: |
+    Pod is sharing the host process ID namespace. When paired with ptrace
+    this can be used to escalate privileges outside of the container. Remove
+    the 'hostPID' key to disable this functionality.
+  metadata:
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
+    category: security
+    technology:
+    - kubernetes
+  languages: [yaml]
+  severity: WARNING

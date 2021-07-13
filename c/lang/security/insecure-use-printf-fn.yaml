@@ -1,22 +1,5 @@
 rules:
 - id: insecure-use-printf-fn
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $FUNC($BUFFER, argv[$NUM], ...);
-        ...
-        vsprintf(..., $BUFFER, ...);
-    - pattern: vsprintf(..., argv[$NUM], ...)
-    - pattern: |
-        $FUNC($BUFFER, argv[$NUM], ...);
-        ...
-        sprintf(..., $BUFFER, ...);
-    - pattern: sprintf(...,argv[$NUM],...)
-    - pattern: |
-        $FUNC($BUFFER, argv[$NUM], ...);
-        ...
-        printf(..., $BUFFER, ...);
-    - pattern: printf(...,argv[$NUM],...)
   message: |
     Avoid using user-controlled format strings passed into 'sprintf', 'printf' and 'vsprintf'.
     These functions put you at risk of buffer overflow vulnerabilities through the use of format string exploits.
@@ -25,5 +8,22 @@ rules:
     references:
     - https://doc.castsoftware.com/display/SBX/Never+use+sprintf%28%29+or+vsprintf%28%29+functions
     - https://www.cvedetails.com/cwe-details/134/Uncontrolled-Format-String.html
+    category: security
   languages: [c]
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      vsprintf(..., $BUFFER, ...);
+  - pattern: vsprintf(..., argv[$NUM], ...)
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      sprintf(..., $BUFFER, ...);
+  - pattern: sprintf(...,argv[$NUM],...)
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      printf(..., $BUFFER, ...);
+  - pattern: printf(...,argv[$NUM],...)

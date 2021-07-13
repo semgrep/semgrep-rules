@@ -4,6 +4,8 @@ rules:
   message: Found identical comparison using is. Ensure this is what you intended.
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness
 - id: string-is-comparison
   patterns:
   - pattern-not: $S is None
@@ -22,3 +24,5 @@ rules:
     https://github.com/satwikkansal/wtfpython#-how-not-to-use-is-operator"
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness

@@ -1,9 +1,8 @@
 rules:
 - id: detect-angular-translateprovider-useStrategy-method
   patterns:
-  - pattern-either:
-    - pattern: |
-        $translateSanitization.useStrategy();
+  - pattern: |
+      $translateSanitization.useStrategy();
   - pattern-inside: |
       app.controller(..., function($scope,$sce){
       ...
@@ -17,11 +16,13 @@ rules:
     references:
     - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
     - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    category: security
+    technology:
+    - angular
 - id: detect-angular-translateprovider-translations-method
   patterns:
-  - pattern-either:
-    - pattern: |
-        $translateProvider.translations(...,$SOURCE);
+  - pattern: |
+      $translateProvider.translations(...,$SOURCE);
   - pattern-inside: |
       app.controller(..., function($scope,$sce){
       ...
@@ -35,3 +36,6 @@ rules:
     references:
     - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
     - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    category: security
+    technology:
+    - angular

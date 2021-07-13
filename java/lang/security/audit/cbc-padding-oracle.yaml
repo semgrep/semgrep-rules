@@ -11,9 +11,9 @@ rules:
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PADDING_ORACLE
     references:
     - https://capec.mitre.org/data/definitions/463.html
+    category: security
   severity: WARNING
-  patterns:
-  - pattern: $CIPHER.getInstance("=~/.*\/CBC\/PKCS5Padding/");
   fix: $CIPHER.getInstance("AES/GCM/NoPadding");
   languages:
   - java
+  pattern: $CIPHER.getInstance("=~/.*\/CBC\/PKCS5Padding/");

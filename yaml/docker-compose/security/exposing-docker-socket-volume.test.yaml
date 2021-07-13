@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  web:
+    image: nginx:alpine
+  worker:
+    image: my-worker-image:latest
+  db:
+    image: mysql
+# ruleid: exposing-docker-socket-volume
+volumes:
+- /tmp/foo:/tmp/foo
+- /var/run/docker.sock:/var/run/docker.sock

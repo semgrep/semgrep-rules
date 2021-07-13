@@ -1,0 +1,27 @@
+rules:
+- id: seccomp-confinement-disabled
+  patterns:
+  - pattern-inside: |
+      version: ...
+      ...
+      services:
+        ...
+  - pattern: |
+      $SERVICE:
+        ...
+        image: ...
+        ...
+        security_opt:
+          - ...
+          - seccomp:unconfined
+  message: |
+    Service '$SERVICE' is explicitly disabling seccomp confinement. This runs
+    the service in an unrestricted state. Remove 'seccomp:unconfined' to prevent this.
+  metadata:
+    references:
+    - https://docs.docker.com/engine/security/seccomp/
+    category: security
+    technology:
+    - docker-compose
+  languages: [yaml]
+  severity: WARNING

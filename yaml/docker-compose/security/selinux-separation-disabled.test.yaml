@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  # ok: selinux-separation-disabled
+  web:
+    image: nginx:alpine
+  # ok: selinux-separation-disabled
+  worker:
+    image: my-worker-image:latest
+    security_opt:
+    - label:user:testuser
+  # ruleid: selinux-separation-disabled
+  db:
+    image: mysql
+    security_opt:
+    - label:disable

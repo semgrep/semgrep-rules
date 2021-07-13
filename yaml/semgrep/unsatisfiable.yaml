@@ -1,0 +1,18 @@
+rules:
+- id: unsatisfiable-rule
+  message: |
+    You can not use 'pattern' $A and 'pattern-not' $A together; this will always be empty.
+  severity: ERROR
+  languages: [yaml]
+  patterns:
+  - pattern-inside: 'rules: [..., $RULE, ...]'
+  - pattern-inside: |
+      ...
+      - pattern: $A
+      ...
+  - pattern: |
+      pattern-not: $A
+  metadata:
+    category: correctness
+    technology:
+    - semgrep

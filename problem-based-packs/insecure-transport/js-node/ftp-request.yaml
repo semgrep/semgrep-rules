@@ -1,13 +1,12 @@
 rules:
 - id: ftp-request
   patterns:
-  - pattern-either:
-    - pattern: |
-        var $X = require('ftp');
-        ...
-        let $C = new $X();
-        ...
-        $C.connect(...);
+  - pattern: |
+      var $X = require('ftp');
+      ...
+      let $C = new $X();
+      ...
+      $C.connect(...);
   - pattern-not: |
       var $X = require('ftp');
       ...
@@ -32,6 +31,9 @@ rules:
     references:
     - https://www.npmjs.com/package/ftp
     - https://openbase.io/js/ftp
+    category: security
+    technology:
+    - node.js
   languages:
   - javascript
   severity: WARNING

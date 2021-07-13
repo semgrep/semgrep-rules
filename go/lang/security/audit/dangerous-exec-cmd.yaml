@@ -1,55 +1,65 @@
 rules:
 - id: dangerous-exec-cmd
-  pattern-either:
-  - patterns:
-    - pattern-either:
+  patterns:
+  - pattern-either:
+    - patterns:
       - pattern: |
           exec.Cmd {...,Path: $CMD,...}
-    - pattern-not: |
-        exec.Cmd {...,Path: "...",...}
-    - pattern-inside: |
-        import "os/exec"
-        ...
-    - pattern-not-inside: |
-        $CMD,$ERR := exec.LookPath("...");
-        ...
-    - pattern-not-inside: |
-        $CMD = "...";
-        ...
-  - patterns:
-    - pattern-either:
-      - patterns:
+      - pattern-not: |
+          exec.Cmd {...,Path: "...",...}
+      - pattern-not-inside: |
+          $CMD,$ERR := exec.LookPath("...");
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+    - patterns:
+      - pattern: |
+          exec.Cmd {...,Args: $ARGS,...}
+      - pattern-not: |
+          exec.Cmd {...,Args: []string{...},...}
+      - pattern-not-inside: |
+          $ARGS = []string{"...",...};
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+          $ARGS = []string{$CMD,...};
+          ...
+      - pattern-not-inside: |
+          $CMD = exec.LookPath("...");
+          ...
+          $ARGS = []string{$CMD,...};
+          ...
+    - patterns:
+      - pattern: |
+          exec.Cmd {...,Args: []string{$CMD,...},...}
+      - pattern-not: |
+          exec.Cmd {...,Args: []string{"...",...},...}
+      - pattern-not-inside: |
+          $CMD,$ERR := exec.LookPath("...");
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+    - patterns:
+      - pattern-either:
         - pattern: |
-            exec.Cmd {...,Args: $ARGS,...}
-        - pattern-not: |
-            exec.Cmd {...,Args: []string{...},...}
-        - pattern-not-inside: |
-            $ARGS = []string{"...",...};
-            ...
-        - pattern-not-inside: |
-            $CMD = "...";
-            ...
-            $ARGS = []string{$CMD,...};
-            ...
-        - pattern-not-inside: |
-            $CMD = exec.LookPath("...");
-            ...
-            $ARGS = []string{$CMD,...};
-            ...
-      - patterns:
-        - pattern: |
-            exec.Cmd {...,Args: []string{$CMD,...},...}
-        - pattern-not: |
-            exec.Cmd {...,Args: []string{"...",...},...}
-        - pattern-not-inside: |
-            $CMD,$ERR := exec.LookPath("...");
-            ...
-        - pattern-not-inside: |
-            $CMD = "...";
-            ...
-    - pattern-inside: |
-        import "os/exec"
-        ...
+            exec.Cmd {...,Args: []string{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$EXE,...},...}
+        - patterns:
+          - pattern: |
+              exec.Cmd {...,Args: []string{$CMD,"-c",$EXE,...},...}
+          - pattern-inside: |
+              $CMD,$ERR := exec.LookPath("=~/(sh|bash|ksh|csh|tcsh|zsh)/");
+              ...
+      - pattern-not: |
+          exec.Cmd {...,Args: []string{"...","...","...",...},...}
+      - pattern-not-inside: |
+          $EXE = "...";
+          ...
+  - pattern-inside: |
+      import "os/exec"
+      ...
   message: |
     Detected non-static command inside exec.Cmd. Audit the input to 'exec.Cmd'.
     If unverified user data can reach this call site, this is a code injection
@@ -58,5 +68,6 @@ rules:
   metadata:
     cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp: 'A1: Injection'
+    category: security
   severity: WARNING
   languages: [go]

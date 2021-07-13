@@ -9,33 +9,33 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://golang.org/pkg/html/template/#HTMLAttr
+    category: security
   languages: [go]
   severity: WARNING
-  patterns:
-  - pattern-either:
-    - pattern: template.HTMLAttr($T + $X, ...)
-    - pattern: template.HTMLAttr(fmt.$P("...", ...), ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $T = $FXN(..., $T, ...)
-        ...
-        template.HTMLAttr($T, ...)
-    - pattern: |
-        $T = fmt.$P("...", ...)
-        ...
-        template.HTMLAttr($T, ...)
-    - pattern: |
-        $T, $ERR = fmt.$P("...", ...)
-        ...
-        template.HTMLAttr($T, ...)
-    - pattern: |
-        $T = $X + $Y
-        ...
-        template.HTMLAttr($T, ...)
-    - pattern: |
-        $T = "..."
-        ...
-        $OTHER, $ERR = fmt.$P(..., $T, ...)
-        ...
-        template.HTMLAttr($OTHER, ...)
+  pattern-either:
+  - pattern: template.HTMLAttr($T + $X, ...)
+  - pattern: template.HTMLAttr(fmt.$P("...", ...), ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $T = $FXN(..., $T, ...)
+      ...
+      template.HTMLAttr($T, ...)
+  - pattern: |
+      $T = fmt.$P("...", ...)
+      ...
+      template.HTMLAttr($T, ...)
+  - pattern: |
+      $T, $ERR = fmt.$P("...", ...)
+      ...
+      template.HTMLAttr($T, ...)
+  - pattern: |
+      $T = $X + $Y
+      ...
+      template.HTMLAttr($T, ...)
+  - pattern: |
+      $T = "..."
+      ...
+      $OTHER, $ERR = fmt.$P(..., $T, ...)
+      ...
+      template.HTMLAttr($OTHER, ...)

@@ -1,0 +1,22 @@
+rules:
+  # ruleid: missing-language-field
+- id: unchecked-subprocess-call
+  patterns:
+  - pattern-either:
+    - pattern: |
+        subprocess.call(...)
+    - pattern: |
+        subprocess.call(...)
+  - pattern-not-inside: |
+      $S = subprocess.call(...)
+  - pattern-not-inside: |
+      subprocess.call(...) == $X
+  message: ''
+  severity: WARNING
+  fix: subprocess.check_call(...)
+  # ok: missing-language-field
+- id: other-rule
+  languages: [generic]
+  message: ''
+  severity: INFO
+  pattern: <div>hello</div>

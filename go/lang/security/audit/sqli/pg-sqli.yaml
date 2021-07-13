@@ -1,0 +1,55 @@
+rules:
+- id: pg-sqli
+  languages:
+  - go
+  message: >
+    Detected string concatenation with a non-literal variable in a go-pg
+
+    SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+    and not properly sanitized. In order to prevent SQL injection,
+
+    used parameterized queries instead of string concatenation. You can use parameterized queries like so:
+
+    '(SELECT ? FROM table, data1)'
+  metadata:
+    references:
+    - https://pg.uptrace.dev/
+    - https://pkg.go.dev/github.com/go-pg/pg/v10
+    category: security
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          $DB.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+    - pattern: $DB.$METHOD(..., $X + $Y, ...)
+    - pattern: $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+  - pattern-either:
+    - pattern-inside: |
+        $DB = pg.Connect(...)
+        ...
+    - pattern-inside: |
+        func $FUNCNAME(..., $DB *pg.DB, ...) {
+          ...
+        }
+  - pattern-not: $DB.$METHOD(..., "..." + "...", ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(Exec|ExecContext|ExecOne|ExecOneContext|Query|QueryOne|QueryContext|QueryOneContext)$

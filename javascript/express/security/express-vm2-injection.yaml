@@ -7,17 +7,22 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - express
   patterns:
   - pattern-inside: |
-      ...
       require('vm2');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ... ($REQ, $RES) {...}
+    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: |
         $VM = new VM(...);
@@ -123,17 +128,22 @@ rules:
   metadata:
     owasp: 'A1: Injection'
     cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    category: security
+    technology:
+    - express
   patterns:
   - pattern-inside: |
-      ...
       require('vm2');
       ...
   - pattern-either:
-    - pattern-inside: function ($REQ, $RES, ...) {...}
-    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+    - pattern-inside: function ... ($REQ, $RES) {...}
+    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
   - pattern-either:
     - pattern: |
         new VM({sandbox: <... $REQ.$QUERY.$FOO ...>},...);

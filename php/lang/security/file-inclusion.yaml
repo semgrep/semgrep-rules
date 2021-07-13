@@ -3,6 +3,7 @@ rules:
   patterns:
   - pattern: $FUNC(...);
   - pattern-not: $FUNC("...");
+  - pattern-not: $FUNC(__DIR__ . "...");
   - metavariable-regex:
       metavariable: $FUNC
       regex: include|include_once|require|require_once
@@ -14,5 +15,6 @@ rules:
     - https://www.php.net/manual/en/function.include.php
     - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/EasyRFISniff.php
     - https://en.wikipedia.org/wiki/File_inclusion_vulnerability#Types_of_Inclusion
+    category: security
   languages: [php]
   severity: ERROR

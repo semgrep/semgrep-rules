@@ -1,19 +1,19 @@
 rules:
 - id: dict-del-while-iterate
-  patterns:
-  - pattern-either:
-    - pattern: |
-        for $KEY, $VALUE in $DICT.items():
-            ...
-            del $DICT[$KEY]
-    - pattern: |
-        for $KEY in $DICT.keys():
-            ...
-            del $DICT[$KEY]
   message: 'It appears that `$DICT[$KEY]` is a dict with items being deleted while in a for loop. This is usually a bad idea
     and will likely lead to a RuntimeError: dictionary changed size during iteration'
   metadata:
     references:
     - https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects
+    category: correctness
   languages: [python]
   severity: WARNING
+  pattern-either:
+  - pattern: |
+      for $KEY, $VALUE in $DICT.items():
+          ...
+          del $DICT[$KEY]
+  - pattern: |
+      for $KEY in $DICT.keys():
+          ...
+          del $DICT[$KEY]

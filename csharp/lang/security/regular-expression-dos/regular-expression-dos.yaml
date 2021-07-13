@@ -1,0 +1,43 @@
+rules:
+- id: regular-expression-dos
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe: 'CWE-1333: Inefficient Regular Expression Complexity'
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+    - https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions#regular-expression-examples
+    category: security
+  message: |
+    An attacker can then cause a program using a regular expression to enter these extreme situations and then hang for a very long time.
+  patterns:
+  - pattern-inside: |
+      using System.Text.RegularExpressions;
+      ...
+  - pattern-either:
+    - pattern: |
+        public $T $F($X)
+        {
+          Regex $Y = new Regex($P);
+          ...
+          $Y.Match($X)
+        }
+    - pattern: |
+        public $T $F($X)
+        {
+          Regex $Y = new Regex($P, $O);
+          ...
+          $Y.Match($X)
+        }
+    - pattern: |
+        public $T $F($X)
+        {
+          ... Regex.Match($X, $P);
+        }
+    - pattern: |
+        public $T $F($X)
+        {
+          ... Regex.Match($X, $P, $O);
+        }

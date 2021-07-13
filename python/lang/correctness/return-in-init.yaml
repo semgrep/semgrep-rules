@@ -2,14 +2,20 @@ rules:
 - id: return-in-init
   patterns:
   - pattern-inside: |
-      class A(...):
+      class $A(...):
           ...
-          def __init__(...):
-              ...
-  - pattern: return ...
+  - pattern-inside: |
+      def __init__(...):
+          ...
+  - patterns:
+    - pattern: return ...
+    - pattern-not: return
+    - pattern-not: return None
   message: '`return` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness
 - id: yield-in-init
   patterns:
   - pattern-inside: |
@@ -19,10 +25,10 @@ rules:
       def __init__(...):
           ...
   - pattern-either:
-    - pattern: |
-        yield ...
-    - pattern: |
-        yield
+    - pattern: yield ...
+    - pattern: yield
   message: '`yield` should never appear inside a class __init__ function. This will cause a runtime error.'
   languages: [python]
   severity: ERROR
+  metadata:
+    category: correctness
