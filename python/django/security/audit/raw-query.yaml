@@ -15,3 +15,5 @@ rules:
   pattern-either:
   - pattern: $MODEL.objects.raw($QUERY, ...)
   - pattern: django.db.models.expressions.RawSQL(...)
+  - pattern-not: $MODEL.objects.raw("...")
+  - pattern-not: django.db.models.expressions.RawSQL("...")
