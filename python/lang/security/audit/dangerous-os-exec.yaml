@@ -1,5 +1,5 @@
 rules:
-- id: dangerous-spawn-process
+- id: dangerous-os-exec
   message: |
     Found dynamic content when spawning a process. This is dangerous if external
     data can reach this function call because it allows a malicious actor to
@@ -17,26 +17,26 @@ rules:
   severity: WARNING
   pattern-either:
   - patterns:
-    - pattern-not: os.$METHOD($MODE, "...", ...)
+    - pattern-not: os.$METHOD("...", ...)
     - pattern: os.$METHOD(...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp|startfile)
+        regex: (execl|execle|execlp|execlpe|execv|execve|execvp|execvpe)
   - patterns:
-    - pattern-not: os.$METHOD($MODE, "...", ["...","...",...], ...)
-    - pattern: os.$METHOD($MODE, $BASH, ["-c",$CMD,...],...)
+    - pattern-not: os.$METHOD("...", [$PATH,"...","...",...],...)
+    - pattern: os.$METHOD($BASH,[$PATH,"-c",$CMD,...],...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
+        regex: (execv|execve|execvp|execvpe)
     - metavariable-regex:
         metavariable: $BASH
         regex: (.*)(sh|bash|ksh|csh|tcsh|zsh)
   - patterns:
-    - pattern-not: os.$METHOD($MODE, "...", "...", "...", ...)
-    - pattern: os.$METHOD($MODE, $BASH, "-c", $CMD,...)
+    - pattern-not: os.$METHOD("...", $PATH, "...", "...",...)
+    - pattern: os.$METHOD($BASH, $PATH, "-c", $CMD,...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe)
+        regex: (execl|execle|execlp|execlpe)
     - metavariable-regex:
         metavariable: $BASH
         regex: (.*)(sh|bash|ksh|csh|tcsh|zsh)
