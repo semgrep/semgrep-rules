@@ -17,18 +17,6 @@ rules:
   severity: WARNING
   pattern-either:
   - patterns:
-    - pattern-not: os.$METHOD("...", ...)
-    - pattern: os.$METHOD(...)
-    - metavariable-regex:
-        metavariable: $METHOD
-        regex: (execl|execle|execlp|execlpe|execv|execve|execvp|execvpe|startfile)
-  - patterns:
-    - pattern-not: os.$METHOD("...", ["...","...",...],...)
-    - pattern: os.$METHOD("=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
-    - metavariable-regex:
-        metavariable: $METHOD
-        regex: (execl|execle|execlp|execlpe|execv|execve|execvp|execvpe|startfile)
-  - patterns:
     - pattern-not: os.$METHOD($MODE, "...", ...)
     - pattern: os.$METHOD(...)
     - metavariable-regex:
@@ -36,7 +24,19 @@ rules:
         regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
   - patterns:
     - pattern-not: os.$METHOD($MODE, "...", ["...","...",...], ...)
-    - pattern: os.$METHOD($MODE,"=~/(.*)(sh|bash|ksh|csh|tcsh|zsh)/",["-c",$CMD,...],...)
+    - pattern: os.$METHOD($MODE, $BASH, ["-c",$CMD,...],...)
     - metavariable-regex:
         metavariable: $METHOD
-        regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
+        regex: (spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp)
+    - metavariable-regex:
+        metavariable: $BASH
+        regex: (.*)(sh|bash|ksh|csh|tcsh|zsh)
+  - patterns:
+    - pattern-not: os.$METHOD($MODE, "...", "...", "...", ...)
+    - pattern: os.$METHOD($MODE, $BASH, "-c", $CMD,...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: (spawnl|spawnle|spawnlp|spawnlpe)
+    - metavariable-regex:
+        metavariable: $BASH
+        regex: (.*)(sh|bash|ksh|csh|tcsh|zsh)
