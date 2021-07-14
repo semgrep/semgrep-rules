@@ -1,14 +1,14 @@
 rules:
 - id: metadata-cwe
   message: |
-    The cwe tag in rule metadata should always be in the format "CWE-000: Title".
+    $...CWE The cwe tag in rule metadata should always be in the format "CWE-000: Title".
   severity: ERROR
   languages: [yaml]
   patterns:
   - pattern-inside: 'rules: ...'
   - pattern-inside: 'metadata: ...'
   - pattern: 'cwe: ...'
-  - pattern-not-regex: CWE-[\d]+:\s+.+
+  - pattern-not-regex: CWE-[\d]+:\s+\w
   metadata:
     category: best-practice
     technology:
