@@ -1,17 +1,17 @@
 const config = require('./config')
 
 function example1() {
-  // ruleid: hardcoded-jwt-secret
   const jsonwt = require('jsonwebtoken')
   const payload = {foo: 'bar'}
   const secret = 'shhhhh'
+  // ruleid: hardcoded-jwt-secret
   const token1 = jsonwt.sign(payload, secret)
 }
 
 function example2() {
-  // ruleid: hardcoded-jwt-secret
   const jsonwt = require('jsonwebtoken')
   const payload = {foo: 'bar'}
+  // ruleid: hardcoded-jwt-secret
   const token2 = jsonwt.sign(payload, 'some-secret')
 }
 
