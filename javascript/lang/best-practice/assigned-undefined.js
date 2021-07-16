@@ -1,4 +1,6 @@
-// https://stackoverflow.com/questions/7452341/what-does-void-0-mean/7452352#7452352
+// 'undefined' is "assignable" syntactically but it's read-only (since
+// ECMAScript 5), so its value will remain 'undefined'.
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
 // ok:assigned-undefined
 alert(undefined); //alerts "undefined"
