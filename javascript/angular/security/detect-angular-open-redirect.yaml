@@ -16,12 +16,9 @@ rules:
     category: security
     technology:
     - angular
-  fix: |
-
   severity: ERROR
-  pattern-either:
+  patterns:
   - pattern: |
-      $SOURCE = $INPUT;
-      $window.location.href = $SOURCE + $STATICVALUE;
-  - pattern: |
-      $window.location.href = $SOURCE + $STATICVALUE;
+      $window.location.href = ...
+  - pattern-not: |
+      $window.location.href = "..."
