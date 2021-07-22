@@ -28,4 +28,8 @@ rules:
       $YAML.load(...)
   - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader, ...)
   - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
-  - pattern: yaml.load(...)
+  - pattern-not: yaml.load_all(..., Loader=yaml.CSafeLoader, ...)
+  - pattern-not: yaml.load_all(..., Loader=yaml.SafeLoader, ...)
+  - pattern-either:
+    - pattern: yaml.load(...)
+    - pattern: yaml.load_all(...)
