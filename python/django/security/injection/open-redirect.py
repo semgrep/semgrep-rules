@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.http import is_safe_url
+from django.utils.http import is_safe_url, url_has_allowed_host_and_scheme
 
 def unsafe(request):
     url = request.headers.get('referrer')
@@ -50,4 +50,12 @@ def url_validation2(request):
     else:
         # ok: open-redirect
         response = HttpResponseRedirect("index")
+    return response
+
+def url_validation(request):
+    next = request.POST.get('next', request.GET.get('next'))
+    if (next or not request.is_ajax()) and not url_has_allowed_host_and_scheme(url=next, allowed_hosts=request.get_host()):
+        next = "/index"
+    # ok: open-redirect
+    response = HttpResponseRedirect(next) if next else HttpResponse(status=204)
     return response
