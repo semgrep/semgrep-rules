@@ -1,0 +1,72 @@
+rules:
+- id: scala-jwt-hardcoded-secret
+  languages:
+  - scala
+  message: |
+    Hardcoded JWT secret or private key is used.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
+  metadata:
+    category: security
+    cwe: 'CWE-522: Insufficiently Protected Credentials'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    owasp: 'A2: Broken Authentication'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    technology:
+    - jwt
+  pattern-either:
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC256("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $TYPE $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
+          ...
+          com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
+          ...
+        }
+        ...
+      }
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC384("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $TYPE $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
+          ...
+          com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
+          ...
+        }
+        ...
+      }
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC512("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $TYPE $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
+          ...
+          com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
+          ...
+        }
+        ...
+      }
+  severity: ERROR
