@@ -10,61 +10,34 @@ rules:
     category: security
     technology:
     - express
-  patterns:
-  - pattern-inside: |
-      $SANDBOX = require('sandbox');
-      ...
-  - pattern-either:
-    - pattern-inside: function ... ($REQ, $RES) {...}
-    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-  - pattern-either:
-    - pattern: |
-        $S = new $SANDBOX(...);
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
+    - pattern-either:
+      - pattern: $REQ
+      - pattern: $REQ.$QUERY
+      - pattern: $REQ.$BODY.$PARAM
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: |
+        $SANDBOX = require('sandbox');
         ...
-        $S.run(<... $REQ.$QUERY.$FOO ...>,...);
-    - pattern: |
-        $S = new $SANDBOX(...);
-        ...
-        $CODE = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $S.run(<... $CODE ...>,...);
-    - pattern: |
-        $CODE = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $S = new $SANDBOX(...);
-        ...
-        $S.run(<... $CODE ...>,...);
-    - pattern: |
-        new $SANDBOX(...).run(<... $REQ.$QUERY.$FOO ...>,...);
-    - pattern: |
-        $CODE = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        new $SANDBOX(...).run(<... $CODE ...>,...);
-    - pattern: |
-        $S = new $SANDBOX(...);
-        ...
-        $S.run(<... $REQ.$BODY ...>,...);
-    - pattern: |
-        $S = new $SANDBOX(...);
-        ...
-        $CODE = <... $REQ.$BODY ...>;
-        ...
-        $S.run(<... $CODE ...>,...);
-    - pattern: |
-        $CODE = <... $REQ.$BODY ...>;
-        ...
-        $S = new $SANDBOX(...);
-        ...
-        $S.run(<... $CODE ...>,...);
-    - pattern: |
-        new $SANDBOX(...).run(<... $REQ.$BODY ...>,...);
-    - pattern: |-
-        $CODE = <... $REQ.$BODY ...>;
-        ...
-        new $SANDBOX(...).run(<... $CODE ...>,...);
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $S = new $SANDBOX(...);
+            ...
+        - pattern: |
+            $S.run(...)
+      - pattern: |
+          new $SANDBOX($OPTS).run(...)
+      - pattern: |
+          new $SANDBOX().run(...)

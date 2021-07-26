@@ -16,44 +16,33 @@ rules:
     - express
   severity: ERROR
   languages: [javascript]
-  patterns:
-  - pattern-inside: |
-      require('node-expat');
-      ...
-  - pattern-either:
-    - pattern-inside: function ... ($REQ, $RES) {...}
-    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-  - pattern-either:
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
+    - pattern-either:
+      - pattern: $REQ
+      - pattern: $REQ.$QUERY
+      - pattern: $REQ.$BODY.$PARAM
+  pattern-sinks:
+  - patterns:
     - pattern-inside: |
-        $PARSER = new $EXPAT.Parser(...);
+        require('node-expat');
         ...
-    - pattern-inside: |
-        $PARSER = new Parser(...);
-        ...
-  - pattern-either:
-    - pattern: $PARSER.parse(<... $REQ.$QUERY.$FOO ...>,...)
-    - pattern: $PARSER.parse(<... $REQ.$BODY ...>,...)
-    - pattern: |
-        $INPUT = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $PARSER.parse(<... $INPUT ...>,...);
-    - pattern: |
-        $INPUT = <... $REQ.$BODY ...>;
-        ...
-        $PARSER.parse(<... $INPUT ...>,...);
-    - pattern: $PARSER.write(<... $REQ.$QUERY.$FOO ...>,...)
-    - pattern: $PARSER.write(<... $REQ.$BODY ...>,...)
-    - pattern: |
-        $INPUT = <... $REQ.$QUERY.$FOO ...>;
-        ...
-        $PARSER.write(<... $INPUT ...>,...);
-    - pattern: |-
-        $INPUT = <... $REQ.$BODY ...>;
-        ...
-        $PARSER.write(<... $INPUT ...>,...);
+    - pattern-either:
+      - pattern-inside: |
+          $PARSER = new $EXPAT.Parser(...);
+          ...
+      - pattern-inside: |
+          $PARSER = new Parser(...);
+          ...
+    - pattern-either:
+      - pattern: $PARSER.parse(...)
+      - pattern: $PARSER.write(...)
