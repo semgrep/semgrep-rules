@@ -1,70 +1,3 @@
-//https://github.com/mybb/mybb/blob/897593d36d2db00ac09dd0c0379595354538b85a/jscripts/bbcodes_sceditor.js
-$(function ($) {
-    'use strict';
-
-    $.sceditor.formats.bbcode
-        .set('align', {
-            html: function (element, attrs, content) {
-                var x = `<div align="left">${content}</div>`
-
-                // ruleid: raw-html-concat
-                return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
-            },
-            isInline: false
-        });
-
-      $.sceditor.formats.bbcode.set('quote', {
-          format: function (element, content) {
-              var author = '',
-                  $elm = $(element),
-                  $cite = $elm.children('cite').first();
-              $cite.html($cite.text());
-
-              if ($cite.length === 1 || $elm.data('author')) {
-                  author = $cite.text() || $elm.data('author');
-
-                  $elm.data('author', author);
-                  $cite.remove();
-
-                  content = this.elementToBbcode(element);
-                  author = '=' + author.replace(/(^\s+|\s+$)/g, '');
-
-                  $elm.prepend($cite);
-              }
-
-              if ($elm.data('pid'))
-                  author += " pid='" + $elm.data('pid') + "'";
-
-              if ($elm.data('dateline'))
-                  author += " dateline='" + $elm.data('dateline') + "'";
-
-              return '[quote' + author + ']' + content + '[/quote]';
-          },
-          html: function (token, attrs, content) {
-              var data = '';
-
-              if (attrs.pid)
-                  data += ' data-pid="' + attrs.pid + '"';
-              if (attrs.dateline)
-                  data += ' data-dateline="' + attrs.dateline + '"';
-              if (typeof attrs.defaultattr !== "undefined")
-                  // ruleid: raw-html-concat
-                  content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
-
-              // ruleid: raw-html-concat
-              return '<blockquote' + data + '>' + content + '</blockquote>';
-          },
-          quoteType: function (val, name) {
-              var quoteChar = val.indexOf('"') !== -1 ? "'" : '"';
-
-              return quoteChar + val + quoteChar;
-          },
-          breakStart: true,
-          breakEnd: true
-      });
-
-});
-
 //https://github.com/AmauriC/tarteaucitron.js/blob/92d0af3a93ed807f711862830bc4ead3d84a0752/tarteaucitron.js
 
 var tarteaucitron = {
@@ -102,21 +35,15 @@ var tarteaucitron = {
 
         if (document.cookie !== '') {
             for (i = 0; i < nb; i += 1) {
-                // ruleid: raw-html-concat
                 html += '<li class="tarteaucitronCookiesListMain">';
-                // ruleid: raw-html-concat
-                html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
-                // ruleid: raw-html-concat
+                // ruleid: raw-html-join
+                html =  [html, '    <div class="tarteaucitronCookiesListRight">', cookies[i].split('=').slice(1).join('='), '</div>'].join();
                 html += '</li>';
             }
         } else {
-            // ruleid: raw-html-concat
             html += '<div class="tarteaucitronCookiesListMain">';
-            // ruleid: raw-html-concat
             html += '    <div class="tarteaucitronCookiesListLeft"><strong>-</strong></div>';
-            // ruleid: raw-html-concat
             html += '    <div class="tarteaucitronCookiesListRight"></div>';
-            // ruleid: raw-html-concat
             html += '</div>';
         }
     }
@@ -127,8 +54,8 @@ var DragElement = /** @class */ (function () {
     function DragElement(nodeName, offsetX, offsetY, $tree) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
-        // ruleid: raw-html-concat
-        this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
+        // ruleid: raw-html-join
+        this.$element = jQuery(["<span class=\"jqtree-title jqtree-dragging\">",nodeName, "</span>"].join());
         this.$element.css("position", "absolute");
         $tree.append(this.$element);
     }
@@ -183,7 +110,6 @@ var DragElement = /** @class */ (function () {
             <line x1="100" y1="0" x2="40" y2="30" marker-start="url(${location.href}#prism-previewer-easing-marker)" marker-end="url(${location.href}#prism-previewer-easing-marker)" />
             </svg>`;
 
-        // ruleid: raw-html-concat
         this._elt.innerHTML = '<svg viewBox="-20 -20 140 140" width="100" height="100">' +
             '<defs>' +
             '<marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">' +
@@ -200,10 +126,10 @@ var DragElement = /** @class */ (function () {
 Object.keys(queries).forEach(function someName(key) {
     value = queries[key];
     if (angular.isDefined(value)) {
-    // ok: raw-html-concat
+    // ok: raw-html-join
     params.push(key + '=' + value.toString());
 
-    // ok: raw-html-concat
+    // ok: raw-html-join
     params.push(`${key}=${value.toString()}`);
     }
 });
@@ -216,14 +142,8 @@ function BytesFilter($translate) {
                 number = Math.floor(Math.log(bytes) / Math.log(1024));
 
         units = units.map(function (unit) {
-            // ok: raw-html-concat
+            // ok: raw-html-join
             var x = $translate.instant(['FORM.LABELS.', unit].join());
-
-            // ok: raw-html-concat
-            var x = $translate.instant(`FORM.LABELS.${unit}`);
-
-            // ok: raw-html-concat
-            return $translate.instant('FORM.LABELS.' + unit);
         });
 
         return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
@@ -231,6 +151,6 @@ function BytesFilter($translate) {
 }
 
 function urldecode(str) {
-    // ok: raw-html-concat
+    // ok: raw-html-join
     return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }

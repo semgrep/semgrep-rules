@@ -1,5 +1,5 @@
 rules:
-- id: raw-html-concat
+- id: raw-html-join
   message: >-
     User controlled data in a HTML string may result in XSS
   languages:
@@ -17,22 +17,6 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern: $STRING + $EXPR
-      - pattern-not: $STRING + "..."
-      - metavariable-pattern:
-          metavariable: $STRING
-          language: generic
-          patterns:
-          - pattern: <$TAG ...
-    - patterns:
-      - pattern: $EXPR + $STRING
-      - pattern-not: '"..." + $STRING'
-      - metavariable-pattern:
-          metavariable: $STRING
-          language: generic
-          patterns:
-          - pattern: '... </$TAG'
-    - patterns:
       - pattern: '[..., $STRING, ...].join(...)'
       - metavariable-pattern:
           metavariable: $STRING
@@ -41,20 +25,6 @@ rules:
           - pattern: <$TAG ...
     - patterns:
       - pattern: '[..., $STRING, ...].join(...)'
-      - metavariable-pattern:
-          metavariable: $STRING
-          language: generic
-          patterns:
-          - pattern: '... </$TAG'
-    - patterns:
-      - pattern: $VAR += $STRING
-      - metavariable-pattern:
-          metavariable: $STRING
-          language: generic
-          patterns:
-          - pattern: <$TAG ...
-    - patterns:
-      - pattern: $VAR += $STRING
       - metavariable-pattern:
           metavariable: $STRING
           language: generic
