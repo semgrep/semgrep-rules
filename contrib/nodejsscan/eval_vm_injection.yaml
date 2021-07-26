@@ -47,24 +47,6 @@ rules:
         $CONTEXT = {$NAME: <... $VAR ...>};
         ...
         $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = <... $REQ.$BODY ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = <... {$NAME:$REQ.$BODY} ...>;
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $CONTEXT = {$NAME: <... $REQ.$BODY ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
-    - pattern: |
-        $VAR = <... $REQ.$BODY ...>;
-        ...
-        $CONTEXT = {$NAME: <... $VAR ...>};
-        ...
-        $VM.runInContext($CODE,<... $CONTEXT ...>,...);
   message: Untrusted user input in `vm.runInContext()` can result in code injection.
   severity: ERROR
   languages:
