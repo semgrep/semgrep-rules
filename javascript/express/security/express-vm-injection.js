@@ -96,9 +96,9 @@ app.get('/', function okTest4(req,res) {
 })
 
 app.get('/', (req,res) => {
-    // ruleid:express-vm-injection
     const context = vm.createContext({name: req.query.userInput})
     let code = `return 'hello ' name`
+    // ruleid:express-vm-injection
     const fn = vm.compileFunction(code, [], { parsingContext: context })
     res.send('hello world')
 })
@@ -115,6 +115,7 @@ app.get('/', function (req,res) {
     // ruleid:express-vm-injection
     const script = new vm.Script(`
         function add(a, b) {
+          // ruleid:express-vm-injection
           return a + ${req.query.userInput};
         }
 
