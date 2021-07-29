@@ -1,0 +1,18 @@
+rules:
+- id: detect-non-literal-regexp
+  patterns:
+  - pattern-either:
+    - pattern: new RegExp($ARG, ...)
+    - pattern: RegExp($ARG, ...)
+  - pattern-not: RegExp("...", ...)
+  - pattern-not: new RegExp("...", ...)
+  message: |
+    RegExp() called with a variable, this might allow an attacker to DOS your application with a long-running regular expression.
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-185: Incorrect Regular Expression'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-regexp.js
+    category: security
