@@ -18,18 +18,10 @@ rules:
     category: security
     technology:
     - jwt
-  languages: [javascript]
+  languages: [javascript, typescript]
   severity: ERROR
-  pattern-either:
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
+  patterns:
+  - pattern-inside: |
+      $JWT = require("jsonwebtoken");
       ...
-      var $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      $T = $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
-  - pattern: |-
-      var $JWT = require("jsonwebtoken");
-      ...
-      $JWT.verify($P, $X, {algorithms:[...,'none',...]},...);
+  - pattern: $JWT.verify($P, $X, {algorithms:[...,'none',...]},...)

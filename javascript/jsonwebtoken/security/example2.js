@@ -1,7 +1,6 @@
 (()=> {
 
   'use strict';
-  // ruleid: hardcoded-jwt-secret
   let User = require('./user'),
   jwt      = require('jsonwebtoken');
 
@@ -13,6 +12,7 @@
       name:req.body.name,
       password:req.body.password
     });
+    // ruleid: hardcoded-jwt-secret
     var token = jwt.sign(user, "hardcoded-secret", {expiresIn: 60*60*10});
     res.send({success:true, token: token});
   });

@@ -9,7 +9,7 @@ rules:
     category: security
     technology:
     - playwright
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
       ...
@@ -26,4 +26,3 @@ rules:
   - pattern: $CONTEXT.addInitScript($INPUT,...)
   - pattern-not: $CONTEXT.addInitScript("...",...)
   - pattern-not: $CONTEXT.addInitScript(function(...){...},...)
-  - pattern-not: $CONTEXT.addInitScript(function $FNAME(...){...},...)

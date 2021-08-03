@@ -16,46 +16,21 @@ rules:
     category: security
     technology:
     - jwt
-  languages: [javascript]
+  languages: [javascript, typescript]
   severity: ERROR
-  pattern-either:
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
+  patterns:
+  - pattern-inside: |
+      $JWT = require("jsonwebtoken");
       ...
-      var $T = $JWT.sign($P, "...", ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      var $T = $JWT.verify($P, "...", ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      $JWT.sign($P, "...", ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      $JWT.verify($P, "...", ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      var $SECRET = "...";
-      ...
-      var $T = $JWT.sign($P, $SECRET, ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      var $SECRET = "...";
-      ...
-      var $T = $JWT.verify($P, $SECRET, ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      var $SECRET = "...";
-      ...
-      $JWT.sign($P, $SECRET, ...);
-  - pattern: |
-      var $JWT = require("jsonwebtoken");
-      ...
-      var $SECRET = "...";
-      ...
-      $JWT.verify($P, $SECRET, ...);
+  - pattern-either:
+    - pattern: |
+        $JWT.sign($P, "...", ...);
+    - pattern: |
+        $JWT.verify($P, "...", ...);
+    - patterns:
+      - pattern-inside: |
+          $SECRET = "...";
+          ...
+      - pattern-either:
+        - pattern: $JWT.sign($P, $SECRET, ...)
+        - pattern: $JWT.verify($P, $SECRET, ...)
