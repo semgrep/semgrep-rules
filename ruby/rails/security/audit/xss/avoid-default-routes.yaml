@@ -1,0 +1,22 @@
+rules:
+- id: avoid-default-routes
+  metadata:
+    owasp: Not sure :(
+    cwe: Not sure :(
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/default_routes/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    When default routes are enabled, any public method on a controller can be called as an
+    action.
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: map.connect ":controller/:action/:id"
+    - pattern: match ':controller(/:action(/:id(.:format)))'
+  paths:
+    include:
+    - config/routes.rb
