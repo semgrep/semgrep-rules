@@ -11,11 +11,8 @@ rules:
   - pattern-inside: |
       $HTTPS = require('https');
       ...
-  - pattern-either:
-    - pattern: |
-        $HTTPS.createServer(...).$FUNC(...);
-    - pattern: |
-        $HTTPS.createServer(...).$FUNC(...);
+  - pattern: |
+      $HTTPS.createServer(...).$FUNC(...);
   - pattern-not: |
       $HTTPS.createServer({secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 }, ...).$FUNC(...);
   - pattern-not: |
