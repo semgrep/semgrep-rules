@@ -1,0 +1,61 @@
+rules:
+- id: avoid-tainted-file-access
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    Using user input when accessing files is potentially dangerous. A malicious actor could use this to modify or access files they have no right to. [Not sure what to say for how to fix it]
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: Dir.$X($STR)
+    - pattern: File.$X($STR)
+    - pattern: IO.$X($STR)
+    - pattern: Kernel.$X($STR)
+    - pattern: Net::FTP.$X($STR)
+    - pattern: NET::HTTP.$X($STR)
+    - pattern: PStore.$X($STR)
+    - pattern: Pathname.$X($STR)
+    - pattern: Shell.$X($STR)
+  - metavariable-pattern:
+      metavariable: $X
+      patterns:
+      - pattern-either:
+        - pattern: chdir
+        - pattern: chroot
+        - pattern: delete
+        - pattern: entries
+        - pattern: foreach
+        - pattern: glob
+        - pattern: install
+        - pattern: lchmod
+        - pattern: lchown
+        - pattern: link
+        - pattern: load
+        - pattern: load_file
+        - pattern: makedirs
+        - pattern: move
+        - pattern: new
+        - pattern: open
+        - pattern: read
+        - pattern: readlines
+        - pattern: rename
+        - pattern: rmdir
+        - pattern: safe_unlink
+        - pattern: symlink
+        - pattern: syscopy
+        - pattern: sysopen
+        - pattern: truncate
+        - pattern: unlink
+  - metavariable-pattern:
+      metavariable: $STR
+      patterns:
+      - pattern: '...'
+      - pattern-not: |
+          "..."
