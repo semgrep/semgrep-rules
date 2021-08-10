@@ -1,0 +1,16 @@
+name: semgrep-rule-lints
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    name: semgrep-rule-lints
+    steps:
+    - uses: actions/checkout@master
+    - uses: returntocorp/semgrep-action@v1
+      with:
+        config: p/semgrep-rule-lints

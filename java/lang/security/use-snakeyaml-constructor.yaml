@@ -1,0 +1,19 @@
+rules:
+- id: use-snakeyaml-constructor
+  languages:
+  - java
+  metadata:
+    owasp: 'A8: Insecure Deserialization'
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://securitylab.github.com/research/swagger-yaml-parser-vulnerability/#snakeyaml-deserialization-vulnerability
+    category: security
+  message: >
+    Used SnakeYAML org.yaml.snakeyaml.Yaml() constructor with no arguments, which is vulnerable to deserialization attacks.
+    Use the one-argument Yaml(...) constructor instead, with SafeConstructor or a custom Constructor as the argument.
+  patterns:
+  - pattern: |
+      $Y = new org.yaml.snakeyaml.Yaml();
+      ...
+      $Y.load(...);
+  severity: WARNING
