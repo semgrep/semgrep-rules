@@ -20,64 +20,15 @@ rules:
   languages: [javascript, typescript]
   severity: WARNING
   patterns:
+  - pattern-inside: |
+      $JWT = require('jsonwebtoken');
+      ...
   - pattern-either:
     - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        $JWT.decode(...);
+        $JWT.decode(...)
     - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        return $JWT.decode(...);
-    - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        if(<... $JWT.decode(...) ...>) {
-            ...
-        }
-    - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        return {$P: $JWT.decode(...)};
-    - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        $X = {$P: $JWT.decode(...)};
-    - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        $FUNC({$P: $JWT.decode(...)});
-    - pattern: |
-        var $JWT = require('jsonwebtoken');
-        ...
-        return $FUNC({$P: $JWT.decode(...)});
+        $JWT.decode(...).$PARAM
   - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
       ...
-      $JWT.verify(...);
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
+      $JWT.verify(...)
       ...
-      return $JWT.verify(...);
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
-      ...
-      if(<... $JWT.verify(...) ...>) {
-          ...
-      }
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
-      ...
-      return {$P: $JWT.verify(...)};
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
-      ...
-      $X = {$P: $JWT.verify(...)};
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
-      ...
-      $FUNC({$P: $JWT.verify(...)});
-  - pattern-not-inside: |
-      var $JWT = require('jsonwebtoken');
-      ...
-      return $FUNC({$P: $JWT.verify(...)});
