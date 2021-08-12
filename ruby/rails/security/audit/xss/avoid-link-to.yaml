@@ -1,0 +1,21 @@
+rules:
+- id: avoid-link-to
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: "CWE-279: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://brakemanscanner.org/docs/warning_types/link_to/
+    - https://brakemanscanner.org/docs/warning_types/link_to_href/
+    category: security
+    technology:
+    - rails
+  message: |
+    `link_to(body, url, ...)` creates an HTML link. In Rails 2.x, the body is not escaped.
+    This means that user input which reaches the body will be executed when the HTML is rendered.
+    Even in other versions, values starting with `javascript:` or `data:` are not escaped.
+    It is better to create and use a safer function which checks the body argument.
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern: link_to(...)
+  - pattern-not: link_to("...", ...)
