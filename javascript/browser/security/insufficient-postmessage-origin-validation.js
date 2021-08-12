@@ -3,11 +3,11 @@ window.addEventListener("message", function (evt) {
   console.log('Inline without origin check!');
 });
 
-// ruleid: insufficient-postmessage-origin-validation
 function oldHandler(evt) {
   console.log('Normal function handler without origin check!');
 };
 
+// ruleid: insufficient-postmessage-origin-validation
 window.addEventListener("message", oldHandler, false);
 
 // ruleid: insufficient-postmessage-origin-validation
@@ -20,11 +20,11 @@ window.addEventListener('message', evt => {
   console.log('Inline arrow function without parenthesis & origin check!');
 });
 
-// ruleid: insufficient-postmessage-origin-validation
 const handler = (evt) => {
   console.log('Arrow function handler without origin check!');
 };
 
+// ruleid: insufficient-postmessage-origin-validation
 window.addEventListener("message", handler, false);
 
 // ok: insufficient-postmessage-origin-validation
