@@ -13,14 +13,14 @@ rules:
             function($OBJ) { ... if (<... $OBJ.origin ...>) { ... } ... }
   - patterns:
     - pattern-either:
-      - pattern: |
+      - pattern-inside: |
           function $FNAME($OBJ) { $CONTEXT }
           ...
-          window.addEventListener('message', $FNAME,...)
-      - pattern: |
+      - pattern-inside: |
           $FNAME = (...) => { $CONTEXT }
           ...
-          window.addEventListener('message', $FNAME,...)
+    - pattern: |
+        window.addEventListener('message', $FNAME,...)
     - metavariable-pattern:
         metavariable: $CONTEXT
         patterns:
@@ -31,8 +31,6 @@ rules:
   languages:
   - javascript
   - typescript
-  fix: |
-
   severity: WARNING
   metadata:
     owasp: 'A3: Sensitive Data Exposure'
