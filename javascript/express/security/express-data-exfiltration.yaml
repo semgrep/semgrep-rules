@@ -1,16 +1,20 @@
 rules:
-- id: express-vm-injection
+- id: express-data-exfiltration
   mode: taint
   message: |
-    Make sure that unverified user data can not reach `$VM`.
-  severity: ERROR
-  languages: [javascript, typescript]
+    Depending on the context, user control data in `Object.assign` can cause web response to include data that it should not have or can lead to a mass assignment vulnerability.
   metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-94: Improper Control of Generation of Code (Code Injection)'
+    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    references:
+    - https://nodesecroadmap.fyi/chapter-1/threat-EXF.html
+    - https://en.wikipedia.org/wiki/Mass_assignment_vulnerability
     category: security
     technology:
     - express
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -23,21 +27,8 @@ rules:
       - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
       - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
     - pattern-either:
+      - pattern: $REQ
       - pattern: $REQ.$QUERY
       - pattern: $REQ.$BODY.$PARAM
   pattern-sinks:
-  - patterns:
-    - pattern-inside: |
-        $VM = require('vm');
-        ...
-    - pattern-either:
-      - pattern: |
-          $VM.runInContext(...)
-      - pattern: |
-          $VM.runInNewContext(...)
-      - pattern: |
-          $VM.compileFunction(...)
-      - pattern: |
-          $VM.runInThisContext(...)
-      - pattern: |
-          new $VM.Script(...)
+  - pattern: Object.assign(...)

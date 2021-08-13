@@ -1,28 +1,28 @@
 const vm = require('vm')
 
 let ctrl1 = function test1(req,res) {
-    // ruleid:express-vm-runincontext-context-injection
     var input = req.query.something || ''
     var sandbox = {
         foo: input
     }
     vm.createContext(sandbox)
+    // ruleid:express-vm-injection
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
     res.send('hello world')
 }
 app.get('/', ctrl1)
 
 app.get('/', (req,res) => {
-    // ruleid:express-vm-runincontext-context-injection
     var sandbox = {
         foo: req.query.userInput
     }
     vm.createContext(sandbox)
+    // ruleid:express-vm-injection
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
     res.send('hello world')
 })
 
-// ok:express-vm-runincontext-context-injection
+// ok:express-vm-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -33,11 +33,11 @@ function testOk1(userInput) {
 
 var ctrl2 = null;
 ctrl2 = function test2(req,res) {
-    // ruleid:express-vm-runinnewcontext-context-injection
     var input = req.query.something || ''
     var sandbox = {
         foo: input
     }
+    // ruleid:express-vm-injection
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
     res.send('hello world')
 }
@@ -45,15 +45,15 @@ app.get('/', ctrl2)
 
 
 app.get('/', function (req,res) {
-    // ruleid:express-vm-runinnewcontext-context-injection
     var sandbox = {
         foo: req.query.userInput
     }
+    // ruleid:express-vm-injection
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
     res.send('hello world')
 })
 
-// ok:express-vm-runinnewcontext-context-injection
+// ok:express-vm-injection
 app.get('/', function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -63,15 +63,15 @@ app.get('/', function testOk1(userInput) {
 })
 
 app.get('/', function(req,res) {
-    // ruleid:express-vm-code-injection
     const code = `
         var x = ${req.query.userInput};
     `
+    // ruleid:express-vm-injection
     vm.runInThisContext(code)
     res.send('hello world')
 })
 
-// ok:express-vm-code-injection
+// ok:express-vm-injection
 app.get('/', function okTest3(req,res) {
     const code = `
         var x = 1;
@@ -82,13 +82,13 @@ app.get('/', function okTest3(req,res) {
 
 app.get('/', function test4(req,res) {
     const parsingContext = vm.createContext({name: 'world'})
-    // ruleid:express-vm-code-injection
     const code = `return 'hello ' + ${req.query.userInput}`
+    // ruleid:express-vm-injection
     let fn = vm.compileFunction(code, [], { parsingContext })
     res.send('hello world')
 })
 
-// ok:express-vm-code-injection
+// ok:express-vm-injection
 app.get('/', function okTest4(req,res) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
@@ -96,14 +96,14 @@ app.get('/', function okTest4(req,res) {
 })
 
 app.get('/', (req,res) => {
-    // ruleid:express-vm-compilefunction-context-injection
     const context = vm.createContext({name: req.query.userInput})
     let code = `return 'hello ' name`
+    // ruleid:express-vm-injection
     const fn = vm.compileFunction(code, [], { parsingContext: context })
     res.send('hello world')
 })
 
-// ok:express-vm-compilefunction-context-injection
+// ok:express-vm-injection
 app.get('/', function okTest5(req, res) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
@@ -112,9 +112,10 @@ app.get('/', function okTest5(req, res) {
 })
 
 app.get('/', function (req,res) {
-    // ruleid:express-vm-code-injection
+    // ruleid:express-vm-injection
     const script = new vm.Script(`
         function add(a, b) {
+          // ruleid:express-vm-injection
           return a + ${req.query.userInput};
         }
 
@@ -125,7 +126,7 @@ app.get('/', function (req,res) {
     res.send('hello world')
 })
 
-//ok:express-vm-code-injection
+//ok:express-vm-injection
 app.get('/', function okTest6(req, res) {
     const script = new vm.Script(`
         function add(a, b) {
