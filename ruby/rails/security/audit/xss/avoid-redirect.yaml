@@ -1,0 +1,49 @@
+rules:
+- id: avoid-redirect
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    references:
+    - https://brakemanscanner.org/docs/warning_types/redirect/
+    category: security
+    technology:
+    - rails
+  message: |
+    `link_to(body, url, ...)` creates an HTML link. In Rails 2.x, the body is not escaped.
+    This means that user input which reaches the body will be executed when the HTML is rendered.
+    Even in other versions, values starting with `javascript:` or `data:` are not escaped.
+    It is better to create and use a safer function which checks the body argument.
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: redirect_to(<... params ...>, ...)
+      - pattern-not: redirect_to(params.merge(:only_path => true), ...)
+      - pattern-not: redirect_to(params.merge(:host => ...), ...)
+    - patterns:
+      - pattern: redirect_to($MODEL.$X(...), ...)
+      - pattern-not: redirect_to($MODEL.$X("..."), ...)
+      - metavariable-pattern:
+          metavariable: $X
+          pattern-either:
+          - pattern: all
+          - pattern: create
+          - pattern: create!
+          - pattern: find
+          - pattern: find_by_sql
+          - pattern: first
+          - pattern: last
+          - pattern: new
+          - pattern: from
+          - pattern: group
+          - pattern: having
+          - pattern: joins
+          - pattern: lock
+          - pattern: order
+          - pattern: reorder
+          - pattern: select
+          - pattern: where
+          - pattern: find_by
+          - pattern: find_by!
+          - pattern: take
