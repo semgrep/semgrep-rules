@@ -1,0 +1,16 @@
+rules:
+- id: lazy-load-module
+  patterns:
+  - pattern: require(...)
+  - pattern-inside: |
+      function $NAME(...) {
+          ...
+      }
+  message: |
+    Lazy loading can complicate code bundling if care is not taken.
+  languages: [js, ts]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    references:
+    - https://nodesecroadmap.fyi/chapter-2/dynamism.html
