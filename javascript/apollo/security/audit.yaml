@@ -1,0 +1,22 @@
+rules:
+- id: apollo_axios_ssrf
+  patterns:
+  - pattern: const $RESPONSE = await axios.request($INNERARG,...)
+  - pattern-inside: |
+      Query: {
+        $METHOD(parent, args, context, info) {
+          ...
+          $DATA = args.$DATAVAL
+          ...
+          async function $INNERFUNC(...,$INNERARG,...){
+            ...
+          }
+          ...javascript.apollo.security.audit
+          return $INNERFUNC(...,$DATA,...)
+          }
+        }
+  message: User-controllable argument $DATAVAL to $METHOD passed to Axios via internal
+    handler $INNERFUNC
+  languages:
+  - js
+  severity: WARNING
