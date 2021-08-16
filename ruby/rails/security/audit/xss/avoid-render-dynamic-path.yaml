@@ -1,0 +1,27 @@
+rules:
+- id: avoid-render-dynamic-path
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    references:
+    - https://brakemanscanner.org/docs/warning_types/dynamic_render_paths/
+    category: security
+    technology:
+    - rails
+  message: |
+    Avoid rendering user input. It may be possible for a malicious user to input a path that lets them access a template they shouldn't. [Not sure about solution]
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: render($X => <... params ...>, ...)
+    - pattern: render($X => <... cookies ...>, ...)
+    - pattern: render($X => <... request.env ...>, ...)
+  - pattern-not: render($X => "...", ...)
+  - metavariable-pattern:
+      metavariable: $X
+      pattern-either:
+      - pattern: action
+      - pattern: template
+      - pattern: partial
+      - pattern: file
