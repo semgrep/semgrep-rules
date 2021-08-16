@@ -9,10 +9,7 @@ rules:
     technology:
     - rails
   message: |
-    `link_to(body, url, ...)` creates an HTML link. In Rails 2.x, the body is not escaped.
-    This means that user input which reaches the body will be executed when the HTML is rendered.
-    Even in other versions, values starting with `javascript:` or `data:` are not escaped.
-    It is better to create and use a safer function which checks the body argument.
+    When a redirect uses user input, a malicious user can spoof a website under a trusted URL or access restricted parts of a site. When using user-supplied values, sanitize the value before using it for the redirect.
   languages: [ruby]
   severity: WARNING
   patterns:

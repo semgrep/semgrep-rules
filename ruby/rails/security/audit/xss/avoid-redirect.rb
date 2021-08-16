@@ -12,4 +12,4 @@ redirect_to(User.where(x))
 redirect_to params.merge(:only_path => true)
 
 # ok: avoid-redirect
-redirect_to params.merge(:host => 'myhost.com')
+redirect_to params.merge(:host => 'example_host.com')
