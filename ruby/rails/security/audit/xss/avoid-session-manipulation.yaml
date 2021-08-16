@@ -1,0 +1,22 @@
+rules:
+- id: avoid-session-manipulation
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    references:
+    - https://brakemanscanner.org/docs/warning_types/session_manipulation/
+    category: security
+    technology:
+    - rails
+  message: |
+    [Sorry I'm really confused about why this is actually a vulnerability. It looks like a read, but the description sounds like it's a write]
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: params[...]
+  - pattern: cookies[...]
+  - pattern: request.env[...]
+  pattern-sinks:
+  - pattern: session[...]
