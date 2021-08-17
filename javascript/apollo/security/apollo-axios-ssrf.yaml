@@ -1,0 +1,37 @@
+rules:
+- id: apollo-axios-ssrf
+  languages:
+  - js
+  message: >-
+    User-controllable argument $DATAVAL to $METHOD passed to Axios
+    via internal handler $INNERFUNC.
+    This could be a server-side request forgery. A user could call
+    a restricted API or leak internal headers to an unauthorized party.
+    Validate your user arguments against an allowlist of known URLs, or
+    consider refactoring so that user-controlled data is not necessary.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - apollo
+    - axios
+    references:
+    - https://www.cvedetails.com/cve/CVE-2020-28168/
+    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+  patterns:
+  - pattern: const $RESPONSE = await axios.request($INNERARG,...)
+  - pattern-inside: |
+      Query: {
+        $METHOD(parent, args, context, info) {
+          ...
+          $DATA = args.$DATAVAL
+          ...
+          async function $INNERFUNC(...,$INNERARG,...){
+            ...
+          }
+          ...
+          return $INNERFUNC(...,$DATA,...)
+          }
+        }
+  severity: WARNING
