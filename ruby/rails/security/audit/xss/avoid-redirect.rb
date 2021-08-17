@@ -5,7 +5,6 @@ redirect_to(url_for(params))
 redirect_to(params[:t])
 
 # ruleid: avoid-redirect
-redirect_to(User.where(:stuff => 1))
 redirect_to(User.where(x))
 
 # ok: avoid-redirect
