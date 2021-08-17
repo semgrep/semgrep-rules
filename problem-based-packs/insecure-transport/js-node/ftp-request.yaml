@@ -1,25 +1,18 @@
 rules:
 - id: ftp-request
   patterns:
-  - pattern: |
-      var $X = require('ftp');
+  - pattern-inside: |
+      $X = require('ftp');
       ...
-      let $C = new $X();
+      $C = new $X();
       ...
-      $C.connect(...);
-  - pattern-not: |
-      var $X = require('ftp');
-      ...
-      let $C = new $X();
-      ...
-      $C.connect({secure: true});
-  - pattern-not: |
-      var $X = require('ftp');
-      ...
-      let $C = new $X();
-      ...
+  - pattern-not-inside: |
       $OPTIONS = {secure: true};
-      $C.connect($OPTIONS);
+      ...
+  - pattern: |
+      $C.connect($OPTIONS,...);
+  - pattern-not: |
+      $C.connect({...,secure: true});
   message: |
     Checks for lack of usage of the "secure: true" option when sending ftp requests through the nodejs ftp module.
     This leads to unencrypted traffic being sent to the ftp server. There are other options
@@ -36,4 +29,5 @@ rules:
     - node.js
   languages:
   - javascript
+  - typescript
   severity: WARNING

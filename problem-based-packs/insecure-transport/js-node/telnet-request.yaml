@@ -16,20 +16,20 @@ rules:
   languages:
   - javascript
   severity: WARNING
-  pattern-either:
-  - pattern: |
-      $TEL = require('telnet-client');
-      ...
-      $SERVER = new $TEL();
-      ...
-      $SERVER.on(...);
-  - pattern: |
-      $TEL = require('telnet-client');
-      ...
-      $SERVER = new $TEL();
-      ...
-      $SERVER.connect(...);
-  - pattern: |
-      $TEL = require('telnet');
-      ...
-      $TEL.createServer(...);
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $TEL = require('telnet-client');
+        ...
+        $SERVER = new $TEL();
+        ...
+    - pattern-inside: |
+        $SERVER = require('telnet');
+        ...
+  - pattern-either:
+    - pattern: |
+        $SERVER.on(...)
+    - pattern: |
+        $SERVER.connect(...)
+    - pattern: |
+        $SERVER.createServer(...)

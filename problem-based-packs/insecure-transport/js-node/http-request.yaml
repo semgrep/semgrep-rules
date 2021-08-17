@@ -1,23 +1,30 @@
 rules:
 - id: http-request
   patterns:
+  - pattern-inside: |
+      $HTTP = require('http');
+      ...
   - pattern-either:
     - pattern: |
-        http.get("=~/http://.*/", ...)
+        $HTTP.request("=~/http://.*/",...);
     - pattern: |
-        $VAR = {hostname: "..."};
-        ...
-        http.request(..., $VAR, ...);
+        $HTTP.get("=~/http://.*/", ...)
     - pattern: |
         $VAR = new URL("=~/http://.*/");
         ...
-        http.request(..., $VAR, ...);
+        $HTTP.request($VAR, ...);
     - pattern: |
-        http.request("=~/http://.*/",...);
+        $VAR = {...,hostname: "..."};
+        ...
+        $HTTP.request(..., $VAR, ...);
+    - pattern: |
+        $HTTP.request(..., {...,hostname: "..."}, ...);
   - pattern-not: |
-      $VAR = {protocol: "https"};
+      $VAR = {...,protocol: "https"};
       ...
-      http.request(..., $VAR, ...);
+      $HTTP.request(..., $VAR, ...);
+  - pattern-not: |
+      $HTTP.request(..., {...,protocol: "https"}, ...);
   message: |
     Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
     that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.

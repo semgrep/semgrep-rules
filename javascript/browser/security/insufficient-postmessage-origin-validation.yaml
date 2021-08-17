@@ -1,27 +1,36 @@
 rules:
 - id: insufficient-postmessage-origin-validation
-  patterns:
-  - pattern: |
-      window.addEventListener(...)
-  - pattern-not: |
-      window.addEventListener(..., function($OBJECT){ if ($OBJ.origin == $X) {
-                  ...
-              } })
-  - pattern-not: |
-      window.addEventListener(..., function($OBJECT){ if ($REGEX.test($OBJECT.origin)){
+  pattern-either:
+  - patterns:
+    - pattern: |
+        window.addEventListener('message', $FUNC, ...)
+    - metavariable-pattern:
+        metavariable: $FUNC
+        patterns:
+        - pattern: |
+            function($OBJ) { ... }
+        - pattern-not: |
+            function($OBJ) { ... if (<... $OBJ.origin ...>) { ... } ... }
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          function $FNAME($OBJ) { $CONTEXT }
           ...
-      } })
-  - pattern-not: |
-      window.addEventListener(..., function($OBJECT){ if ($OBJ.origin !== $X) {
-                  ...
-              } })
+      - pattern-inside: |
+          $FNAME = (...) => { $CONTEXT }
+          ...
+    - pattern: |
+        window.addEventListener('message', $FNAME,...)
+    - metavariable-pattern:
+        metavariable: $CONTEXT
+        patterns:
+        - pattern-not: |
+            ... if (<... $OBJ.origin ...>) { ... } ...
   message: |
     No validation of origin is done by the addEventListener API. It may be possible to exploit this flaw to perform Cross Origin attacks such as Cross-Site Scripting(XSS).
   languages:
   - javascript
   - typescript
-  fix: |
-
   severity: WARNING
   metadata:
     owasp: 'A3: Sensitive Data Exposure'
