@@ -1,7 +1,7 @@
 module.exports = {
     Query: {
-        requestStatus(parent, args, context, info) 
-        { 
+        requestStatus(parent, args, context, info)
+        {
             url = args.url
             const axios = require('axios');
 
@@ -11,7 +11,7 @@ module.exports = {
             console.log(url)
             async function getStatus(url) {
                 try {
-                  // ruleid: apollo_axios_ssrf
+                  // ruleid: apollo-axios-ssrf
                   const response = await axios.request(url);
                   console.log(response);
                   var s = response.status;
@@ -20,13 +20,13 @@ module.exports = {
                   var s = error.code;
                 }
                 return s;
-              }    
-            return getStatus(url);  
-              
+              }
+            return getStatus(url);
+
         },
 
-        requestResponse(parent, args, context, info) 
-        { 
+        requestResponse(parent, args, context, info)
+        {
             url = args.url
             verb = args.verb
             payload = args.payload
@@ -48,10 +48,10 @@ module.exports = {
 
             console.log(url)
             console.log(payload)
- 
+
             async function getResponse(url) {
                 try {
-                    // ruleid: apollo_axios_ssrf
+                    // ruleid: apollo-axios-ssrf
                     const response = await axios.request(url);
                     console.log(response);
                     var s = response.status;
@@ -62,10 +62,10 @@ module.exports = {
                 return s;
             }
 
-            
+
             async function getResponseWithPayload(url, payload) {
                 try {
-                  // ruleid: apollo_axios_ssrf
+                  // ruleid: apollo-axios-ssrf
                   const response = await axios.request(url);
                   console.log(response);
                   var s = response.status;
@@ -75,16 +75,15 @@ module.exports = {
                 }
                 return s;
             }
-        
+
             if (payload !== null || payload !== "") {
                 return getResponse(url);
             }
             else {
                 return getResponseWithPayload(url, payload)
             }
-                           
+
         }
 
       }
   };
-  

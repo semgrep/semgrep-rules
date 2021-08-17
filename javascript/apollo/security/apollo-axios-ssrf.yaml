@@ -1,9 +1,8 @@
 rules:
-- id: apollo_axios_ssrf
+- id: apollo-axios-ssrf
   languages:
   - js
-  message: User-controllable argument $DATAVAL to $METHOD passed to Axios via internal
-    handler $INNERFUNC
+  message: User-controllable argument $DATAVAL to $METHOD passed to Axios via internal handler $INNERFUNC
   patterns:
   - pattern: const $RESPONSE = await axios.request($INNERARG,...)
   - pattern-inside: |
