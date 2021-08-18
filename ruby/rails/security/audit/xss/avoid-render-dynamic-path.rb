@@ -5,7 +5,7 @@ render(action => params[:action], {})
 render(action => cookies[:name], {})
 
 #ruleid: avoid-render-dynamic-path
-render(action => request.env['HTTP_REFERRER'], {})
+render(action => h(request.env['HTTP_REFERRER']), {})
 
 #ok: avoid-render-dynamic-path
 render(inline => params[:action], {})
