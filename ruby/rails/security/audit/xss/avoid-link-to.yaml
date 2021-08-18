@@ -10,12 +10,29 @@ rules:
     technology:
     - rails
   message: |
+    This code uses user input in
     `link_to(body, url, ...)` creates an HTML link. In Rails 2.x, the body is not escaped.
     This means that user input which reaches the body will be executed when the HTML is rendered.
     Even in other versions, values starting with `javascript:` or `data:` are not escaped.
     It is better to create and use a safer function which checks the body argument.
   languages: [ruby]
   severity: WARNING
-  patterns:
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  - pattern-either:
+    - pattern: $MODEL.url(...)
+    - pattern: $MODEL.uri(...)
+    - pattern: $MODEL.link(...)
+    - pattern: $MODEL.page(...)
+    - pattern: $MODEL.site(...)
+  pattern-sinks:
   - pattern: link_to(...)
-  - pattern-not: link_to("...", ...)
+  pattern-sanitizers:
+  - patterns:
+    - pattern: |
+        "...#{...}..."
+    - pattern-not: |
+        "#{...}..."
