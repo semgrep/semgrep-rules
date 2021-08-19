@@ -1,0 +1,23 @@
+name: registry-twitter-bot
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  twitter_bot_action:
+    runs-on: ubuntu-latest
+    name: Tweet about new semgrep rules
+    steps:
+    - name: tweet tweet
+      id: tweet-tweet
+      uses: returntocorp/semgrep-rules-twitter-bot-action@master
+      with:
+        event-data: ${{ toJSON(github.event) }}
+        github-api-token: ${{ secrets.GH_API_TOKEN }}
+        twitter-api-token: ${{ secrets.IFTT_KEY }}
+        web-app: ${{ secrets.WEB_APP }}
+        web-app-key: ${{ secrets.WEB_APP_KEY }}
+      # Use the output from the `hello` step
+    - name: Get the output time
+      run: echo "The time was ${{ steps.hello.outputs.time }}"
