@@ -1,0 +1,34 @@
+rules:
+- id: code-string-concat
+  message: >-
+    User controlled data in eval() or similar functions may result in Code Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    category: security
+    technology:
+    - node.js
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $STRING + $EXPR
+        - pattern-not: $STRING + "..."
+      - patterns:
+        - pattern: $EXPR + $STRING
+        - pattern-not: '"..." + $STRING'
+      - patterns:
+        - pattern: '[..., $STRING, ...].join(...)'
+      - patterns:
+        - pattern: $VAR += $STRING
+    - metavariable-regex:
+        metavariable: $STRING
+        regex: .*(function|Function|eval|\([^\(\)]*\)\s*=>).*
+  - patterns:
+    - pattern-inside: |
+        `...${...}...`
+    - pattern-regex: function|Function|eval|\([^\(\)]*\)\s*=>
