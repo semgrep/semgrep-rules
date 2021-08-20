@@ -17,5 +17,14 @@ rules:
   message: |
     IAM policies that allow full "*-*" admin privileges should most likely
     not be created. This violates the principle of least privilege.
+  metadata:
+    references:
+    - https://github.com/bridgecrewio/checkov/blob/master/checkov/terraform/checks/data/aws/AdminPolicyDocument.py
+    category: security
+    technology:
+    - terraform
+  paths:
+    include:
+    - '*.tf'
   languages: [generic]
   severity: WARNING
