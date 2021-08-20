@@ -9,7 +9,9 @@ rules:
     technology:
     - rails
   message: |
-    [Sorry I'm really confused about why this is actually a vulnerability. It looks like a read, but the description sounds like it's a write]
+    This gets data from session using user inputs. A malicious user may be able to retrieve
+    information from your session that you didn't intend them to. Do not use user input as
+    a session key.
   languages: [ruby]
   severity: WARNING
   mode: taint
