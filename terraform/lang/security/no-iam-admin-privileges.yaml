@@ -1,0 +1,21 @@
+rules:
+- id: no-iam-admin-privileges.yaml
+  patterns:
+  - patterns:
+    - pattern-inside: |
+        data "..." "..." {
+          ...
+          statement {
+            ...
+          }
+          ...
+        }
+    - pattern: |
+        actions   = ["*"]
+        resources = ["*"]
+        effect = "Allow"
+  message: |
+    IAM policies that allow full "*-*" admin privileges should most likely
+    not be created. This violates the principle of least privilege.
+  languages: [generic]
+  severity: WARNING
