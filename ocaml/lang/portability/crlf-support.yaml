@@ -2,7 +2,7 @@ rules:
 - id: broken-input-line
   pattern: |
     input_line
-  message: |
+  message: >-
     'input_line' leaves a '\r' (CR) character when reading lines from
     a Windows text file, whose lines end in "\r\n" (CRLF). This is a
     problem for any Windows file that is being read either on a Unix-like
@@ -17,7 +17,7 @@ rules:
 - id: prefer-read-in-binary-mode
   pattern: open_in
   fix: open_in_bin
-  message: |
+  message: >-
     'open_in' behaves differently on Windows and on Unix-like
     systems with respect to line endings. To get the same behavior
     everywhere, use 'open_in_bin' or 'open_in_gen [Open_binary]'.
@@ -31,7 +31,7 @@ rules:
 - id: prefer-write-in-binary-mode
   pattern: open_out
   fix: open_out_bin
-  message: |
+  message: >-
     'open_out' behaves differently on Windows and on Unix-like
     systems with respect to line endings. To get the same behavior
     everywhere, use 'open_out_bin' or 'open_out_gen [Open_binary]'.

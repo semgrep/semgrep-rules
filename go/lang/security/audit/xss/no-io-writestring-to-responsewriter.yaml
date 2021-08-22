@@ -1,6 +1,6 @@
 rules:
 - id: no-io-writestring-to-responsewriter
-  message: |
+  message: >-
     Detected 'io.WriteString()' writing directly to 'http.ResponseWriter'.
     This bypasses HTML escaping that prevents cross-site scripting
     vulnerabilities. Instead, use the 'html/template' package

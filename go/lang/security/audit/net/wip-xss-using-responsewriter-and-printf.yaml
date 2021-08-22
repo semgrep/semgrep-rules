@@ -45,7 +45,7 @@ rules:
         $DATA, $ERR := $PARAMS[...]
         ...
         $W.Write([]byte(fmt.$PRINTF(..., $DATA, ...)))
-  message: |
+  message: >-
     Found data going from url query parameters into formatted data written to ResponseWriter.
     This could be XSS and should not be done. If you must do this, ensure your data is
     sanitized or escaped.

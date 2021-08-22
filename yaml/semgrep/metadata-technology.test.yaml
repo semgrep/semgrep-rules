@@ -11,7 +11,7 @@ rules:
       $S = subprocess.call(...)
   - pattern-not-inside: |
       subprocess.call(...) == $X
-  message: |
+  message: >-
     bad stuff
   severity: WARNING
   fix: subprocess.check_call(...)
@@ -20,7 +20,7 @@ rules:
 # ok: metadata-technology
 - id: subprocess-run
   patterns: subprocess.run(...)
-  message: |
+  message: >-
     bad stuff
   severity: WARNING
   fix: subprocess.check_call(...)
@@ -35,7 +35,7 @@ rules:
     - semgrep
   id: subprocess-run-2
   patterns: subprocess.run(...)
-  message: |
+  message: >-
     bad stuff
   severity: WARNING
   fix: subprocess.check_call(...)

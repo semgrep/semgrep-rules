@@ -3,7 +3,7 @@ rules:
   patterns:
   - pattern: mb_ereg_replace($PATTERN, $REPL, $STR, $OPTIONS);
   - pattern-not: mb_ereg_replace($PATTERN, $REPL, $STR, "...");
-  message: |
+  message: >-
     Calling mb_ereg_replace with user input in the options can lead to arbitrary
     code execution. The eval modifier (`e`) evaluates the replacement argument
     as code.

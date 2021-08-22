@@ -5,7 +5,7 @@ rules:
       importlib.import_module($NAME, ...)
   - pattern-not: |
       importlib.import_module("...", ...)
-  message: |
+  message: >-
     Untrusted user input in `importlib.import_module()` function allows an attacker to load arbitrary code.
     Avoid dynamic values in `importlib.import_module()` or use a whitelist to prevent running untrusted code.
   metadata:

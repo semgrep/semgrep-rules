@@ -24,7 +24,7 @@ rules:
   - metavariable-regex:
       metavariable: $FORMATFUNC
       regex: (?!bindparams)
-  message: |
+  message: >-
     Distinct, Having, Group_by, Order_by, and Filter in SQLAlchemy can cause sql injections
     if the developer inputs raw SQL into the before-mentioned clauses.
     This pattern captures relevant cases in which the developer inputs raw SQL into the distinct, having, group_by, order_by or filter clauses and

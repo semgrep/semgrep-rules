@@ -2,7 +2,7 @@ rules:
 - id: no-direct-write-to-responsewriter
   languages:
   - go
-  message: |
+  message: >-
     Detected directly writing or similar in 'http.ResponseWriter.write()'.
     This bypasses HTML escaping that prevents cross-site scripting
     vulnerabilities. Instead, use the 'html/template' package

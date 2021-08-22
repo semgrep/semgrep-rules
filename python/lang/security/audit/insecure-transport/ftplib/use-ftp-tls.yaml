@@ -4,7 +4,7 @@ rules:
   fix-regex:
     regex: FTP(.*)\)
     replacement: FTP_TLS\1, context=ssl.create_default_context())
-  message: |
+  message: >-
     The 'FTP' class sends information unencrypted. Consider using
     the 'FTP_TLS' class instead.
   metadata:

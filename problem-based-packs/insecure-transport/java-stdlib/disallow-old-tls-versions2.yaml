@@ -11,7 +11,7 @@ rules:
       java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
   - pattern-not: |
       java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
-  message: |
+  message: >-
     Detects setting client protocols to insecure versions of TLS and SSL.
     These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
   metadata:
