@@ -1,0 +1,36 @@
+rules:
+- id: ssrf
+  severity: WARNING
+  languages:
+  - csharp
+  message: >
+    The web server receives a URL or similar request from an upstream component and retrieves the contents of this URL, but
+    it does not sufficiently ensure that the request is being sent to the expected destination.
+  metadata:
+    category: security
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    owasp: ''
+    references:
+    - https://cwe.mitre.org/data/definitions/918.html
+  patterns:
+  - pattern-either:
+    - pattern: |
+        public $T $F($X)
+        {
+        ...
+        Uri $Z = new Uri($X.$Y,...);
+        ... WebRequest.Create($Z,...);
+        }
+    - pattern: |
+        public $T $F($X)
+        {
+        ...
+        Uri $Z = new Uri($X,...);
+        ... WebRequest.Create($Z,...);
+        }
+    - pattern: |
+        public $T $F($X)
+        {
+        ... WebRequest.Create($X,...);
+        }
