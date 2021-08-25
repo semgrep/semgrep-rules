@@ -1,8 +1,20 @@
-function merge1(dst, src) {
+const merge1 = (dst, src) => {
     for (let key in src) {
         if (!src.hasOwnProperty(key)) continue;
         if (isObject(dst[key])) {
             merge1(dst[key], src[key]);
+        } else {
+            // ruleid: prototype-pollution-function
+            dst[key] = src[key];
+        }
+    }
+}
+
+function merge2(dst, src) {
+    for (let key in src) {
+        if (!src.hasOwnProperty(key)) continue;
+        if (isObject(dst[key])) {
+            merge2(dst[key], src[key]);
         } else {
             // ruleid: prototype-pollution-function
             dst[key] = src[key];
