@@ -1,73 +1,27 @@
-# Push Semgrep Docker Image
-name: docker
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-    - develop
-  pull_request:
-    paths-ignore:
-    - '**.md'
-
-jobs:
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Pull previous image for caching purposes
-      run: |
-        docker pull returntocorp/semgrep:develop || :
-
-    - name: Build semgrep image with default Dockerfile
-      run: docker build -t returntocorp/semgrep:develop .
-
-    - name: Check the semgrep Docker image
-      run: ./scripts/validate-docker-build.sh returntocorp/semgrep:develop
-
-    - name: Login to DockerHub
-      env:
-        DOCKERHUB_USER: ${{ secrets.DOCKER_USERNAME }}
-        DOCKERHUB_PASS: ${{ secrets.DOCKER_PASSWORD }}
-      run: ./.github/docker-login
-
-    - name: Push semgrep image if on develop branch
-      if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-      run: docker push returntocorp/semgrep:develop
-
-    - name: Push commit hash if PR
-        # Don't run when PR is from a fork
-        # For security, we do not autopush to docker when from PRs
-        # said PRs do not have access to secrets so will fail anyway but
-        # nicer to not have a "failing" CI job in the PR so don't even
-        # try if we can detect is coming from a fork
-      if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-      run: |
-        # ok: run-shell-injection
-        tag=returntocorp/semgrep:${{ github.sha }}
-        docker build -t "$tag" .
-        docker push "$tag"
-
-      # Extend the semgrep image, changing the entry point to bash and
-      # adding some utilities. This image is meant for internal uses
-      # such as benchmarks.
-    - name: Build and push semgrep-dev image if on develop branch
-      if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-      run: |
-        docker build \
-          -f dockerfiles/semgrep-dev.Dockerfile \
-          -t returntocorp/semgrep-dev:develop .
-        docker push returntocorp/semgrep-dev:develop
-
-    - name: Check PR title
-      run: |
-        # ruleid: run-shell-injection
-        title="${{ github.event.pull_request.title }}"
-        if [[ $title =~ ^octocat ]]; then
-        echo "PR title starts with 'octocat'"
-        exit 0
-        else
-        echo "PR title did not start with 'octocat'"
-        exit 1
-        fi
+rules:
+- id: run-shell-injection
+  languages:
+  - yaml
+  message: 'Using variable interpolation `${{...}}` with `github` context data in a `run:` step could allow an attacker to
+    inject their own code into the runner. This would allow them to steal secrets and code. `github` context data can have
+    atrbitrary user input and should be treated as untrusted. Instead, use an intermediate environment variable with `env:`
+    to store the data and use the enviornment variable in the `run:` script. Be sure to use double-quotes the environment
+    variable, like this: "$ENVVAR".'
+  metadata:
+    category: security
+    cwe: CWE-78
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#understanding-the-risk-of-script-injections
+    technology:
+    - github-actions
+  patterns:
+  - pattern-inside: 'steps: [...]'
+  - pattern-inside: |
+      - name: ...
+        ...
+        run: ...
+  - pattern: 'run: $SHELL'
+  - pattern-regex: \${{.*?}}
+  - pattern-not-regex: github\.sha
+  severity: ERROR
