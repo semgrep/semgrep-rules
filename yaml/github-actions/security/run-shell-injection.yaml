@@ -22,6 +22,6 @@ rules:
         ...
         run: ...
   - pattern: 'run: $SHELL'
-  - pattern-regex: \${{.*?}}
-  - pattern-not-regex: github\.sha
+  - pattern-regex: \${{\s*github.*?\s*}}
+  - pattern-not-regex: github\..*?\.?sha
   severity: ERROR
