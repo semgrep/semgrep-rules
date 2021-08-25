@@ -1,0 +1,46 @@
+rules:
+- id: prototype-pollution-function
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  metadata:
+    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    category: security
+  severity: WARNING
+  message: |
+    Possibility of prototype polluting function detected.
+    By adding or modifying attributes of an object prototype, it is possible to create attributes that exist on every object, or replace critical attributes with malicious ones.
+    This can be problematic if the software depends on existence or non-existence of certain attributes, or uses pre-defined attributes of object prototype (such as hasOwnProperty, toString or valueOf).
+    Possible mitigations might be: freezing the object prototype, using an object without prototypes (via Object.create(null) ), blocking modifications of attributes that resolve to object prototype, using Map instead of object.
+  pattern-sources:
+  - patterns:
+    - pattern: $SOURCE[$B]
+    - pattern-not: $SOURCE["..."]
+  pattern-sinks:
+  - patterns:
+    - pattern: $TARGET[$A] = ...
+    - pattern-not: $TARGET["..."] = ...
+    - pattern-inside: |
+        function $NAME(...) {
+          ...
+          $NAME(...)
+          ...
+        }
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: |
+        if (<... $TARGET.hasOwnProperty($A) ...>) {
+          ...
+        }
+    - patterns:
+      - pattern: |
+          if (<...'constructor' ...>) {
+            ...
+          }
+          ...
+      - pattern: |
+          if (<...'__proto__' ...>) {
+            ...
+          }
+          ...
