@@ -1,5 +1,5 @@
 rules:
-- id: no-iam-data-exfiltration.yaml
+- id: no-iam-data-exfiltration
   patterns:
   - pattern-inside: |
       resource "..." "..." {
@@ -31,7 +31,8 @@ rules:
     Instead, make sure that the user granted these privileges are given these permissions on specific resources.
   metadata:
     references:
-    - https://github.com/bridgecrewio/checkov/blob/master/checkov/terraform/checks/data/aws/AdminPolicyDocument.py
+    - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/IAMDataExfiltration.py
+    - https://cloudsplaining.readthedocs.io/en/latest/glossary/data-exfiltration/
     category: security
     technology:
     - terraform
