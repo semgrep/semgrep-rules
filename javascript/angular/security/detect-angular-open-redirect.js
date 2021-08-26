@@ -5,7 +5,7 @@ $scope.userInput = 'foo';
     $scope.sayHello = function() {
      // ruleid:detect-angular-open-redirect
      $window.location.href = input + '/app/logout';
-     // ruleid:detect-angular-open-redirect
+
      input = $scope.input;
      // ruleid:detect-angular-open-redirect
      $window.location.href = input + '/app/logout';
