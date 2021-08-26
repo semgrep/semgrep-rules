@@ -1,0 +1,27 @@
+rules:
+- id: run-shell-injection
+  languages:
+  - yaml
+  message: 'Using variable interpolation `${{...}}` with `github` context data in a `run:` step could allow an attacker to
+    inject their own code into the runner. This would allow them to steal secrets and code. `github` context data can have
+    atrbitrary user input and should be treated as untrusted. Instead, use an intermediate environment variable with `env:`
+    to store the data and use the enviornment variable in the `run:` script. Be sure to use double-quotes the environment
+    variable, like this: "$ENVVAR".'
+  metadata:
+    category: security
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#understanding-the-risk-of-script-injections
+    technology:
+    - github-actions
+  patterns:
+  - pattern-inside: 'steps: [...]'
+  - pattern-inside: |
+      - name: ...
+        ...
+        run: ...
+  - pattern: 'run: $SHELL'
+  - pattern-regex: \${{\s*github.*?\s*}}
+  - pattern-not-regex: github\..*?\.?sha
+  severity: ERROR
