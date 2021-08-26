@@ -1,0 +1,59 @@
+rules:
+- id: node-mssql-sqli
+  languages:
+  - js
+  - typescript
+  message: >
+    Detected string concatenation with a non-literal variable in a
+    node-postgres JS SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `$REQ.query('SELECT $1 from table', [userinput])`
+  metadata:
+    category: security
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    references:
+    - https://node-postgres.com/features/queries
+  patterns:
+  - pattern-inside: |
+      require('mssql')
+      ...
+  - pattern-inside: |
+      $REQ = $POOL.request(...)
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $REQ.query($QUERY,...)
+        - pattern: |
+            $REQ.query($QUERY, ...).$INTFUNC(...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = $X.concat($Y)
+            ...
+        - pattern-inside: |
+            $QUERY = `...${...}...`
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = $X.concat("...")
+          ...
+    - pattern: $REQ.query($X + $Y, ...)
+    - pattern: $REQ.query($X.concat($Y), ...)
+    - pattern: $REQ.query(`...${...}...`, ...)
+  - pattern-not: $REQ.query("..." + "...", ...)
+  - pattern-not: $REQ.query($X.concat("..."), ...)
+  severity: WARNING
