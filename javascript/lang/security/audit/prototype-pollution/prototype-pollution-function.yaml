@@ -14,13 +14,19 @@ rules:
     This can be problematic if the software depends on existence or non-existence of certain attributes, or uses pre-defined attributes of object prototype (such as hasOwnProperty, toString or valueOf).
     Possible mitigations might be: freezing the object prototype, using an object without prototypes (via Object.create(null) ), blocking modifications of attributes that resolve to object prototype, using Map instead of object.
   pattern-sources:
-  - patterns:
-    - pattern: $SOURCE[$B]
-    - pattern-not: $SOURCE["..."]
+  - pattern-either:
+    - patterns:
+      - pattern: $SOURCE[$B]
+      - pattern-not: $SOURCE["..."]
+    - pattern: function $X(..., $SOURCE, ...) { ... }
   pattern-sinks:
   - patterns:
     - pattern: $TARGET[$A] = ...
     - pattern-not: $TARGET["..."] = ...
+    - pattern-not-inside: |
+        if (<... $TARGET.hasOwnProperty($A) ...>) {
+          ...
+        }
     - pattern-either:
       - pattern-inside: |
           $NAME = function $F(...) {
@@ -34,20 +40,27 @@ rules:
             $NAME(...)
             ...
           }
+      - pattern-inside: |
+          function $NAME(...) {
+            ...
+            $THIS.$NAME(...)
+            ...
+          }
+      - pattern-inside: |
+          function $NAME(...) {
+            ...
+            $NAME.call(...)
+            ...
+          }
   pattern-sanitizers:
-  - pattern-either:
+  - patterns:
     - pattern: |
-        if (<... $TARGET.hasOwnProperty($A) ...>) {
+        if (<...'constructor' ...>) {
           ...
         }
-    - patterns:
-      - pattern: |
-          if (<...'constructor' ...>) {
-            ...
-          }
+        ...
+    - pattern: |
+        if (<...'__proto__' ...>) {
           ...
-      - pattern: |
-          if (<...'__proto__' ...>) {
-            ...
-          }
-          ...
+        }
+        ...
