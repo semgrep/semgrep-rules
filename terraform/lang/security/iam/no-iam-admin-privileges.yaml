@@ -1,0 +1,37 @@
+rules:
+- id: no-iam-admin-privileges.yaml
+  patterns:
+  - pattern-inside: |
+      resource "..." "..." {
+        ...
+        policy = jsonencode({
+          ...
+          Statement = [
+            ...
+          ]
+          ...
+        })
+        ...
+      }
+  - pattern: |
+      Action = "*"
+      ...
+      Effect = "Allow"
+      ...
+      Resource = "*"
+  message: |
+    IAM policies that allow full "*-*" admin privileges should most likely
+    not be created. This violates the principle of least privilege. Instead, give each user
+    more fine-grained control with only the privileges they need.
+  metadata:
+    references:
+    - https://github.com/bridgecrewio/checkov/blob/master/checkov/terraform/checks/data/aws/AdminPolicyDocument.py
+    category: security
+    technology:
+    - terraform
+    - aws
+  paths:
+    include:
+    - '*.tf'
+  languages: [generic]
+  severity: WARNING

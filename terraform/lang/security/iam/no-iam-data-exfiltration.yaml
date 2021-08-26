@@ -1,0 +1,43 @@
+rules:
+- id: no-iam-data-exfiltration.yaml
+  patterns:
+  - pattern-inside: |
+      resource "..." "..." {
+        ...
+        policy = jsonencode({
+          ...
+          Statement = [
+            ...
+            Resource = "*"
+            ...
+          ]
+          ...
+        })
+        ...
+      }
+  - pattern: |
+      Action = $...ACTION
+  - metavariable-pattern:
+      metavariable: $...ACTION
+      pattern-either:
+      - pattern: s3:GetObject
+      - pattern: ssm:GetParameter*
+      - pattern: secretsmanager:GetSecretValue
+      - pattern: rds:CopyDBSnapshot
+      - pattern: rds:CreateDBSnapshot
+  message: |
+    Ensure that IAM policies don't allow data exfiltration actions that are not resource-constrained.
+    This can allow the user to read sensitive data they don't need to read.
+    Instead, make sure that the user granted these privileges are given these permissions on specific resources.
+  metadata:
+    references:
+    - https://github.com/bridgecrewio/checkov/blob/master/checkov/terraform/checks/data/aws/AdminPolicyDocument.py
+    category: security
+    technology:
+    - terraform
+    - aws
+  paths:
+    include:
+    - '*.tf'
+  languages: [generic]
+  severity: WARNING
