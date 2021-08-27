@@ -2,7 +2,7 @@ rules:
 - id: no-iam-data-exfiltration
   patterns:
   - pattern-inside: |
-      resource "..." "..." {
+      resource "$TYPE" "..." {
         ...
         policy = jsonencode({
           ...
@@ -25,6 +25,13 @@ rules:
       - pattern: secretsmanager:GetSecretValue
       - pattern: rds:CopyDBSnapshot
       - pattern: rds:CreateDBSnapshot
+  - metavariable-pattern:
+      metavariable: $TYPE
+      pattern-either:
+      - pattern: aws_iam_role_policy
+      - pattern: aws_iam_policy
+      - pattern: aws_iam_user_policy
+      - pattern: aws_iam_group_policy
   message: |
     Ensure that IAM policies don't allow data exfiltration actions that are not resource-constrained.
     This can allow the user to read sensitive data they don't need to read.

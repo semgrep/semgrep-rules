@@ -2,7 +2,7 @@ rules:
 - id: no-iam-admin-privileges
   patterns:
   - pattern-inside: |
-      resource "..." "..." {
+      resource "$TYPE" "..." {
         ...
         policy = jsonencode({
           ...
@@ -19,6 +19,13 @@ rules:
       Effect = "Allow"
       ...
       Resource = "*"
+  - metavariable-pattern:
+      metavariable: $TYPE
+      pattern-either:
+      - pattern: aws_iam_role_policy
+      - pattern: aws_iam_policy
+      - pattern: aws_iam_user_policy
+      - pattern: aws_iam_group_policy
   message: |
     IAM policies that allow full "*-*" admin privileges should most likely
     not be created. This violates the principle of least privilege. Instead, give each user

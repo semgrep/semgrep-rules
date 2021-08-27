@@ -8,7 +8,7 @@ resource "aws_iam_user_policy" "lb_ro" {
     Version = "2012-10-17"
     Statement = [
       {
-        # ok: no-iam-creds-exposure
+        # ok: no-iam-resource-exposure
         Action = [
           "ec2:Describe*",
         ]
@@ -19,7 +19,7 @@ resource "aws_iam_user_policy" "lb_ro" {
   })
 }
 
-resource "aws_iam_policy" "policy" {
+resource "aws_iam_group_policy" "policy" {
   name        = "test_policy"
   path        = "/"
   description = "My test policy"
@@ -31,7 +31,7 @@ resource "aws_iam_policy" "policy" {
     Statement = [
       {
         # ruleid: no-iam-creds-exposure
-        Action = "sts:GetSessionToken"
+        Action = "backup:DeleteBackupVaultAccessPolicy"
         Effect   = "Allow"
         Resource = "*"
       },
@@ -50,8 +50,8 @@ resource "aws_iam_policy" "policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        # ruleid: no-iam-creds-exposure
-        Action = ["ec2:GetPasswordData"]
+        # ruleid: no-iam-resource-exposure
+        Action = ["ecr:SetRepositoryPolicy"]
         Effect   = "Allow"
         Resource = "*"
       },
