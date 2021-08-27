@@ -16,10 +16,13 @@ rules:
     - angular
   mode: taint
   pattern-sinks:
-  - pattern: |
-      $SOURCE = $scope.$INPUT;
-      ...
-      $X.trustAsJs($SOURCE);
+  - patterns:
+    - pattern-inside: |
+        $SOURCE = $scope.$INPUT;
+        ...
+        $X.trustAsJs($SOURCE);
+    - pattern: |
+        $X.trustAsJs($SOURCE);
   - pattern: |
       $X.trustAsJs($scope.$INPUT);
   pattern-sources:

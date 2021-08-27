@@ -5,14 +5,15 @@ $scope.userInput = 'foo';
     $scope.sayHello = function() {
      // ruleid:detect-angular-trust-as-js-method
      $scope.trustedurl = $sce.trustAsJs($scope.html);
-     // ruleid:detect-angular-trust-as-js-method
+
      input = $scope.html
-     $scope.trustedurl = $sce.trustAsJs(input);
      // ruleid:detect-angular-trust-as-js-method
-     input = $scope.html
-     sce_alias = $sce
      $scope.trustedurl = $sce.trustAsJs(input);
 
+     input = $scope.html
+     sce_alias = $sce
+     // ruleid:detect-angular-trust-as-js-method
+     $scope.trustedurl = $sce.trustAsJs(input);
 
      //Data is not coming from user input
      $scope.trustedurl = $sce.trustAsJs('stringLiteral');
@@ -21,10 +22,10 @@ $scope.userInput = 'foo';
 });
 
 var app1 = angular.module('MyApp', []);
-app1.controller('myCtrl', function() {
+app1.some_other_function('myCtrl', function() {
 
 $scope.userInput = 'foo';
-    $scope.sayHello = function() {
+    $scope.sayHello = function($scope, $sce) {
      // $sce is present but not in the function args
      $scope.trustedurl = $sce.trustAsJs($scope.html);
 
@@ -40,12 +41,14 @@ $scope.userInput = 'foo';
     $scope.sayHello = function() {
      // ruleid:detect-angular-trust-as-js-method
      $scope.trustedurl = $sce.trustAsJs($scope.html);
-     // ruleid:detect-angular-trust-as-js-method
+
      input = $scope.html
-     $scope.trustedurl = $sce.trustAsJs(input);
      // ruleid:detect-angular-trust-as-js-method
+     $scope.trustedurl = $sce.trustAsJs(input);
+
      input = $scope.html
      sce_alias = $sce
+     // ruleid:detect-angular-trust-as-js-method
      $scope.trustedurl = $sce.trustAsJs(input);
 
 
