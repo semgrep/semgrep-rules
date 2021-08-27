@@ -1,0 +1,60 @@
+rules:
+- id: pull-request-target-code-checkout
+  languages:
+  - yaml
+  message: >-
+    This GitHub Actions workflow file uses `pull_request_target` and checks out code
+    from the incoming pull request. When using `pull_request_target`, the Action
+    runs in the context of the target repository, which includes access to all repository
+    secrets. Normally, this is safe because the Action only runs code from the target
+    repository, not the incoming PR. However, by checking out the incoming PR code, you're now using
+    the incoming code for the rest of the action. You may be inadvertently executing arbitrary code
+    from the incoming PR with access to repository secrets, which would let an attacker steal repository secrets.
+    This normally happens by running build scripts (e.g., `npm build` and `make`) or dependency installation
+    scripts (e.g., `python setup.py install`).
+    Audit your workflow file to make sure no code from the incoming PR is executed.
+    Please see https://securitylab.github.com/research/github-actions-preventing-pwn-requests/ for additional
+    mitigations.
+  metadata:
+    category: security
+    owasp: 'A1: Injection'
+    cwe: 'CWE-913: Improper Control of Dynamically-Managed Code Resources'
+    references:
+    - https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+    technology:
+    - github-actions
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        on:
+          ...
+          pull_request_target: ...
+          ...
+        ...
+    - pattern-inside: |
+        on: [..., pull_request_target, ...]
+        ...
+    - pattern-inside: |
+        on: pull_request_target
+        ...
+  - pattern-inside: |
+      jobs:
+        ...
+        $JOBNAME:
+          ...
+          steps:
+            ...
+  - pattern: |
+      uses: "$ACTION"
+      with:
+        ...
+        ref: $EXPR
+  - metavariable-regex:
+      metavariable: $ACTION
+      regex: actions/checkout@.*
+  - metavariable-pattern:
+      language: generic
+      metavariable: $EXPR
+      patterns:
+      - pattern: ${{ github.event.pull_request ... }}
+  severity: WARNING
