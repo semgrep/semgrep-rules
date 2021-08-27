@@ -1,27 +1,33 @@
 rules:
-- id: detect-angular-trust-as-js-method
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $SOURCE = $scope.$INPUT;
-        $sce.trustAsJs($SOURCE);
-    - pattern: |
-        $sce.trustAsJs($scope.$INPUT);
-  - pattern-inside: |
-      app.controller(..., function($scope,$sce){
-      ...
-      });
-  message: |
-    The use of $sce.trustAsJs can be dangerous if unsantiized user input flows through this API.
-  severity: WARNING
+- fix: ''
+  id: detect-angular-trust-as-js-method
   languages:
   - javascript
   - typescript
+  message: >
+    The use of $sce.trustAsJs can be dangerous if unsantiized user input flows
+    through this API.
   metadata:
+    category: security
     references:
     - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
     - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-    category: security
     technology:
     - angular
-  fix: |
+  mode: taint
+  pattern-sinks:
+  - pattern: |
+      $SOURCE = $scope.$INPUT;
+      ...
+      $X.trustAsJs($SOURCE);
+  - pattern: |
+      $X.trustAsJs($scope.$INPUT);
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $APP.controller(..., <... function(...){
+        ...
+        } ...>);
+    - pattern: |
+        $sce
+  severity: WARNING
