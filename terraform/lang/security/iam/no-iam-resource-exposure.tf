@@ -30,7 +30,7 @@ resource "aws_iam_group_policy" "policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        # ruleid: no-iam-creds-exposure
+        # ruleid: no-iam-resource-exposure
         Action = "backup:DeleteBackupVaultAccessPolicy"
         Effect   = "Allow"
         Resource = "*"
