@@ -32,13 +32,11 @@ rules:
       metavariable: $A
       patterns:
       - pattern-not: '"..."'
+      - pattern-not: |
+          ($A: float)
   - metavariable-pattern:
       metavariable: $B
       patterns:
       - pattern-not: '"..."'
-  - metavariable-regex:
-      metavariable: $A
-      regex: (?![0-9]+)
-  - metavariable-regex:
-      metavariable: $B
-      regex: (?![0-9]+)
+      - pattern-not: |
+          ($B: float)
