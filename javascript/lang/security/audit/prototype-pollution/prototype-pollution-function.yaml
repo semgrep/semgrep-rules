@@ -20,11 +20,15 @@ rules:
     - patterns:
       - pattern: $SOURCE[$B]
       - pattern-not: $SOURCE["..."]
+      - pattern-not: |
+          $SOURCE[($B: float)]
     - pattern: function $X(..., $SOURCE, ...) { ... }
   pattern-sinks:
   - patterns:
     - pattern: $TARGET[$A] = ...
     - pattern-not: $TARGET["..."] = ...
+    - pattern-not: |
+        $TARGET[($A: float)] = ...
     - pattern-not-inside: |
         if (<... $TARGET.hasOwnProperty($A) ...>) {
           ...
