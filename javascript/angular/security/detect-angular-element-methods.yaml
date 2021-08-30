@@ -1,5 +1,6 @@
 rules:
 - id: detect-angular-element-methods
+  mode: taint
   message: >-
     Use of angular.element can lead to XSS if after,append,html,prepend,replaceWith,wrap are used with user-input.
   languages:
@@ -12,19 +13,19 @@ rules:
     category: security
     technology:
     - angular
-  fix: |
-
   severity: WARNING
-  pattern-either:
+  pattern-sources:
+  - pattern: angular.element(...)
+  pattern-sinks:
   - pattern: |
-      angular.element($SOURCE).html(...);
+      $SINK.html(...);
   - pattern: |
-      angular.element($SOURCE).append(...);
+      $SINK.append(...);
   - pattern: |
-      angular.element($SOURCE).prepend(...);
+      $SINK.prepend(...);
   - pattern: |
-      angular.element($SOURCE).replaceWith(...);
+      $SINK.replaceWith(...);
   - pattern: |
-      angular.element($SOURCE).wrap(...);
+      $SINK.wrap(...);
   - pattern: |
-      angular.element($SOURCE).after(...);
+      $SINK.after(...);
