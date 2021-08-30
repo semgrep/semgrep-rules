@@ -43,6 +43,9 @@ rules:
       for($A = $S; ...; ...) {...}
   - pattern-not-inside: |
       $X.forEach(function $NAME($OBJ, $A,...) {...})
-  - metavariable-regex:
+  - metavariable-pattern:
       metavariable: $A
-      regex: (?![0-9]+)
+      patterns:
+      - pattern-not: '"..."'
+      - pattern-not: |
+          ($A: float)
