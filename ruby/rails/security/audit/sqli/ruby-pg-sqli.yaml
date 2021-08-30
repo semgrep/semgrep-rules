@@ -55,8 +55,7 @@ rules:
     Ruby SQL statement. This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
     used parameterized queries or prepared statements instead.
-    You can use parameterized queries like so:
-        `conn.exec_params('SELECT $1 AS a, $2 AS b, $3 AS c', [1, 2, nil])`
+    You can use parameterized queries like so: `conn.exec_params('SELECT $1 AS a, $2 AS b, $3 AS c', [1, 2, nil])`
     And you can use prepared statements with `exec_prepared`.
   metadata:
     references:
