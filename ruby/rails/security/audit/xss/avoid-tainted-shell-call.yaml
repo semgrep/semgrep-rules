@@ -1,0 +1,68 @@
+rules:
+- id: avoid-tainted-file-access
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    Using user input when accessing files is potentially dangerous. A malicious actor could use this to modify or access files they have no right to. [Not sure what to say for how to fix it]
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: Kernel.$X(...)
+          - pattern: $X(...)
+      - patterns:
+        - pattern-either:
+          - pattern: Shell.$X(...)
+          - patterns:
+            - pattern-inside: |
+                $SHELL = Shell.$ANY(...)
+                ...
+                $SHELL.$X(...)
+            - pattern: $SHELL.$X(...)
+    - metavariable-pattern:
+        metavariable: $X
+        patterns:
+        - pattern-either:
+          - pattern: cat
+          - pattern: chdir
+          - pattern: chroot
+          - pattern: delete
+          - pattern: entries
+          - pattern: exec
+          - pattern: foreach
+          - pattern: glob
+          - pattern: install
+          - pattern: lchmod
+          - pattern: lchown
+          - pattern: link
+          - pattern: load
+          - pattern: load_file
+          - pattern: makedirs
+          - pattern: move
+          - pattern: new
+          - pattern: open
+          - pattern: read
+          - pattern: readlines
+          - pattern: rename
+          - pattern: rmdir
+          - pattern: safe_unlink
+          - pattern: symlink
+          - pattern: syscopy
+          - pattern: sysopen
+          - pattern: system
+          - pattern: truncate
+          - pattern: unlink
