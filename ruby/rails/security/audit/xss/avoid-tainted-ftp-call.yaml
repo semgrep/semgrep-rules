@@ -1,0 +1,28 @@
+rules:
+- id: avoid-tainted-ftp-call
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    Using user input when accessing files is potentially dangerous. A malicious actor could use this to modify or access files they have no right to. [Not sure what to say for how to fix it]
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  pattern-sinks:
+  - pattern-either:
+    - pattern: Net::FTP.$X(...)
+    - patterns:
+      - pattern-inside: |
+          $FTP = Net::FTP.$OPEN(...)
+          ...
+          $FTP.$METHOD(...)
+      - pattern: $FTP.$METHOD(...)
