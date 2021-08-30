@@ -6,7 +6,6 @@ namespace Ssrf
     public class Ssrf
     {
         // ruleid: ssrf
-        // ko
         public void ssrf1(string ssrf)
         {
             Uri uri = new Uri(ssrf);
@@ -15,14 +14,12 @@ namespace Ssrf
         }
 
         // ruleid: ssrf
-        // ko
         public void ssrf2(string ssrf)
         {
             WebRequest webRequest = WebRequest.Create(ssrf);
 
         }
         // ruleid: ssrf
-        // ko
         public void ssrf3(string ssrf)
         {
 
@@ -34,8 +31,8 @@ namespace Ssrf
 
 
         }
-        // ruleid: ssrf
-        // ok
+
+        // ok: ssrf
         public void ssrf4(string ssrf)
         {
 
@@ -45,8 +42,8 @@ namespace Ssrf
 
 
         }
-        // ruleid: ssrf
-        // ok
+
+        // ok: ssrf
         public void ssrf5(string ssrf)
         {
 
