@@ -1,8 +1,8 @@
 rules:
 - id: avoid-tainted-file-access
   metadata:
-    owasp: 'A6: Security Misconfiguration'
-    cwe: 'CWE-276: Incorrect Default Permissions'
+    owasp: 'A1: Injection'
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
     category: security
@@ -24,11 +24,8 @@ rules:
       - pattern: File.$X(...)
       - pattern: IO.$X(...)
       - pattern: Kernel.$X(...)
-      - pattern: Net::FTP.$X(...)
-      - pattern: Net::HTTP.$X(...)
       - pattern: PStore.$X(...)
       - pattern: Pathname.$X(...)
-      - pattern: Shell.$X(...)
     - metavariable-pattern:
         metavariable: $X
         patterns:

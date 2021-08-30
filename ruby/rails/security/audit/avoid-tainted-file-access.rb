@@ -26,16 +26,6 @@ def foo
     Kernel.open("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.open("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.open("/tmp/usr/bin")
@@ -44,11 +34,6 @@ def foo
     Pathname.open("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.open("/tmp/usr/bin")
 
     #
     # Test bad chdir combinations
@@ -74,16 +59,6 @@ def foo
     Kernel.chdir("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.chdir("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.chdir("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.chdir("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.chdir("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.chdir("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.chdir("/tmp/usr/bin")
@@ -92,11 +67,6 @@ def foo
     Pathname.chdir("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.chdir("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.chdir("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.chdir("/tmp/usr/bin")
 
     #
     # Test bad chroot combinations
@@ -122,16 +92,6 @@ def foo
     Kernel.chroot("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.chroot("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.chroot("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.chroot("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.chroot("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.chroot("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.chroot("/tmp/usr/bin")
@@ -140,11 +100,6 @@ def foo
     Pathname.chroot("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.chroot("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.chroot("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.chroot("/tmp/usr/bin")
 
     #
     # Test bad delete combinations
@@ -170,16 +125,6 @@ def foo
     Kernel.delete("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.delete("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.delete("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.delete("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.delete("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.delete("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.delete("/tmp/usr/bin")
@@ -188,11 +133,6 @@ def foo
     Pathname.delete("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.delete("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.delete("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.delete("/tmp/usr/bin")
 
     #
     # Test bad lchmod combinations
@@ -218,16 +158,6 @@ def foo
     Kernel.lchmod("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.lchmod("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.lchmod("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.lchmod("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.lchmod("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.lchmod("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.lchmod("/tmp/usr/bin")
@@ -236,11 +166,6 @@ def foo
     Pathname.lchmod("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.lchmod("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.lchmod("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.lchmod("/tmp/usr/bin")
 
     #
     # Test bad open combinations
@@ -266,16 +191,6 @@ def foo
     Kernel.open("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.open("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     PStore.open("/tmp/usr/bin")
@@ -284,11 +199,6 @@ def foo
     Pathname.open("/tmp/#{params[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.open("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.open("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.open("/tmp/usr/bin")
 
     #
     # Test bad readlines combinations
@@ -314,16 +224,6 @@ def foo
     Kernel.readlines("/tmp/usr/bin")
 
     # ruleid: avoid-tainted-file-access
-    Net::FTP.readlines("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::FTP.readlines("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Net::HTTP.readlines("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Net::HTTP.readlines("/tmp/usr/bin")
-
-    # ruleid: avoid-tainted-file-access
     PStore.readlines("/tmp/#{cookies[:name]}")
     # ok: avoid-tainted-file-access
     PStore.readlines("/tmp/#{anything}/bin")
@@ -332,11 +232,6 @@ def foo
     Pathname.readlines("/tmp/#{request.env[:name]}")
     # ok: avoid-tainted-file-access
     Pathname.readlines("/tmp/#{anything}/bin")
-
-    # ruleid: avoid-tainted-file-access
-    Shell.readlines("/tmp/#{params[:name]}")
-    # ok: avoid-tainted-file-access
-    Shell.readlines(something_else)
 
 
     #
