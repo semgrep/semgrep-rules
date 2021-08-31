@@ -92,5 +92,4 @@ def foo
   # ok: avoid-tainted-ftp-call
   ftp.retrlines("ls -al")
 
-  # ruleid: avoid-tainted-ftp-call
-  ftp.retrbinary(params[:cmd], 1024)
+end

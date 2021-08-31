@@ -37,3 +37,5 @@ def foo
   uri = URI("example.com/index.html")
   # ok: avoid-tainted-http-request
   Net::HTTP::Get.new(uri)
+
+end
