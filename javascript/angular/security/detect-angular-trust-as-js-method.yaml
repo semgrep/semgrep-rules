@@ -16,14 +16,22 @@ rules:
   mode: taint
   pattern-sinks:
   - patterns:
-    - pattern-inside: |
-        $SOURCE = $scope.$INPUT;
-        ...
-        $X.trustAsJs($SOURCE);
-    - pattern: |
-        $X.trustAsJs($SOURCE);
-  - pattern: |
-      $X.trustAsJs($scope.$INPUT);
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $SCE_ALIAS = $sce;
+            ...
+            $SCE_ALIAS.$FUNC(...);
+        - pattern: |
+            $SCE_ALIAS.$FUNC(...);
+      - pattern: |
+          $sce.$FUNC(...);
+    - metavariable-pattern:
+        metavariable: $FUNC
+        pattern-either:
+        - pattern: trustAsJs
+        - pattern: trustAsCss
+        - pattern: trustAsHtml
   pattern-sources:
   - patterns:
     - pattern-inside: |
@@ -31,5 +39,5 @@ rules:
         ...
         } ...>);
     - pattern: |
-        $sce
+        $scope.$INPUT
   severity: WARNING
