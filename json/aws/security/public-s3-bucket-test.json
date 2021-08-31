@@ -1,0 +1,27 @@
+
+  {
+    "Resources": {
+      "MyBucketF68F3FF0": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+              {
+                "ServerSideEncryptionByDefault": {
+                  "SSEAlgorithm": "aws:kms"
+                }
+              }
+            ]
+          },
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": false,
+            "RestrictPublicBuckets": true
+          }
+        },
+        "UpdateReplacePolicy": "Delete",
+        "DeletionPolicy": "Delete"
+      }
+    }
+  }
