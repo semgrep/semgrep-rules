@@ -18,6 +18,9 @@ def foo
 
   uri = URI(params[:server])
   # ruleid: avoid-tainted-http-request
+  req = Net::HTTP::Get.new uri
+
+  # ruleid: avoid-tainted-http-request
   Net::HTTP.start(uri.host, uri.port) do |http|
     # ruleid: avoid-tainted-http-request
     req = Net::HTTP::Get.new uri
