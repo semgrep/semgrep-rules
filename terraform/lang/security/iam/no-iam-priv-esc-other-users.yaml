@@ -1,0 +1,52 @@
+rules:
+- id: no-iam-priv-esc-other-users
+  patterns:
+  - pattern-inside: |
+      resource "$TYPE" "..." {
+        ...
+        policy = jsonencode({
+          ...
+          Statement = [
+            ...
+            Resource = $...RESOURCE
+            ...
+          ]
+          ...
+        })
+        ...
+      }
+  - pattern: |
+      Action = $...ACTION
+  - metavariable-pattern:
+      metavariable: $...RESOURCE
+      patterns:
+      - pattern: '*'
+  - metavariable-pattern:
+      metavariable: $TYPE
+      pattern-either:
+      - pattern: aws_iam_role_policy
+      - pattern: aws_iam_policy
+      - pattern: aws_iam_user_policy
+      - pattern: aws_iam_group_policy
+  - metavariable-pattern:
+      metavariable: $...ACTION
+      pattern-either:
+      - pattern: iam:CreateAccessKey
+      - pattern: iam:CreateLoginProfile
+      - pattern: iam:UpdateLoginProfile
+  message: |
+    Ensure that IAM policies with permission on other users don't allow for privilege escalation. Instead, specify which
+    user the permission should be used on or do not use the listed actions.
+  metadata:
+    references:
+    - https://cloudsplaining.readthedocs.io/en/latest/glossary/privilege-escalation/
+    - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/IAMPrivilegeEscalation.py
+    category: security
+    technology:
+    - terraform
+    - aws
+  paths:
+    include:
+    - '*.tf'
+  languages: [generic]
+  severity: WARNING
