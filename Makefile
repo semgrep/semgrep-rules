@@ -8,6 +8,4 @@ test:
 	semgrep --test --strict --test-ignore-todo --quiet $$PWD
 
 output:
-	echo "Working directory is:"
-	echo $$PWD
 	semgrep --test --strict --test-ignore-todo --quiet --save-test-output-tar $$PWD
