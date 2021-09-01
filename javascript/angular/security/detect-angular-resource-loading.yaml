@@ -1,9 +1,16 @@
 rules:
 - id: detect-angular-resource-loading
-  pattern: |
-    $sceDelegateProvider.resourceUrlWhitelist([...,'**' ]);
+  pattern-either:
+  - pattern: |
+      $sceDelegateProvider.resourceUrlWhitelist([...,'**',...]);
+  - patterns:
+    - pattern: |
+        $sceDelegateProvider.resourceUrlWhitelist([...,$DOM,...]);
+    - metavariable-regex:
+        metavariable: $DOM
+        regex: "^'.*\\*\\*.+'$"
   message: |
-    $sceDelegateProvider allowlisting can be introduce security issues if wildcards are used.
+    $sceDelegateProvider allowlisting can introduce security issues if wildcards are used.
   languages:
   - javascript
   - typescript
@@ -14,6 +21,4 @@ rules:
     category: security
     technology:
     - angular
-  fix: |
-
   severity: WARNING

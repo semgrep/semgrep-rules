@@ -115,7 +115,6 @@ app.get('/', function (req,res) {
     // ruleid:express-vm-injection
     const script = new vm.Script(`
         function add(a, b) {
-          // ruleid:express-vm-injection
           return a + ${req.query.userInput};
         }
 
