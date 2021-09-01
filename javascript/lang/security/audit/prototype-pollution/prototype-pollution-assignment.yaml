@@ -39,10 +39,14 @@ rules:
       patterns:
       - pattern-not: '"..."'
       - pattern-not: |
+          `...${...}...`
+      - pattern-not: |
           ($A: float)
   - metavariable-pattern:
       metavariable: $B
       patterns:
       - pattern-not: '"..."'
+      - pattern-not: |
+          `...${...}...`
       - pattern-not: |
           ($B: float)

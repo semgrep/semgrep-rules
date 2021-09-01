@@ -20,6 +20,7 @@ rules:
     - patterns:
       - pattern: $SOURCE[$B]
       - pattern-not: $SOURCE["..."]
+      - pattern-not: $SOURCE[`...${...}...`]
       - pattern-not: |
           $SOURCE[($B: float)]
     - pattern: function $X(..., $SOURCE, ...) { ... }
