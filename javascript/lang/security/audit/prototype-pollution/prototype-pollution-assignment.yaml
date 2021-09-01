@@ -28,6 +28,12 @@ rules:
       if (<...'__proto__' ...>) {
         ...
       }
+  - pattern-not-inside: |
+      for(var $B = $S; ...; ...) {...}
+  - pattern-not-inside: |
+      for($B = $S; ...; ...) {...}
+  - pattern-not-inside: |
+      $X.forEach(function $NAME($OBJ, $B,...) {...})
   - metavariable-pattern:
       metavariable: $A
       patterns:

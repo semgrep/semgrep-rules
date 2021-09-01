@@ -60,3 +60,16 @@ function ok4(req, res) {
     items[0] = req.query.text;
     res.end(200);
 }
+
+app.get('/testOk5/:id', (req, res) => {
+    let id = req.params.id;
+    let items = req.session.todos[id];
+    if (!items) {
+        items = req.session.todos[id] = [];
+    }
+    // ok: prototype-pollution-assignment
+    for (let i = 0; i < items.length; i++) {
+        items[i] = req.query.text;
+    }
+    res.end(200);
+});
