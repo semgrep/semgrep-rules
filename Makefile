@@ -5,7 +5,9 @@ test:
 	semgrep --validate --config=$$PWD/java $$PWD
 	semgrep --validate --config=$$PWD/go $$PWD
 	semgrep --validate --config=$$PWD/ocaml $$PWD
-	semgrep --test --strict --test-ignore-todo $$PWD
+	semgrep --test --strict --test-ignore-todo --quiet $$PWD
 
 output:
-	semgrep --test --strict --test-ignore-todo --save-test-output-tar $$PWD
+	echo "Working directory is:"
+	echo $$PWD
+	semgrep --test --strict --test-ignore-todo --quiet --save-test-output-tar $$PWD
