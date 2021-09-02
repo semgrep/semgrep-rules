@@ -1,0 +1,14 @@
+rules:
+- id: html-raw-json
+  patterns:
+    - pattern-either:
+      - pattern: "@Html.Raw(Json.Encode(...))"
+      - pattern: "@Html.Raw(JsonConvert.SerializeObject(...))"
+      - pattern: "@Html.Raw(...ToJson(...))"
+  message: Unencoded JSON in HTML context is vulnerable to cross-site scripting, because `</script>` is not properly encoded.
+  languages:
+  - generic
+  paths:
+    include:
+      - "*.cshtml"
+  severity: ERROR

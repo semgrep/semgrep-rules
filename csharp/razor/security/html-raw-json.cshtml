@@ -1,0 +1,20 @@
+<script>
+    // ruleid: html-raw-json
+    var a = @Html.Raw(SomeFunc(Model).ToJson());
+</script>
+<script type="text/javascript">
+    SomeOtherCall();
+    // ruleid: html-raw-json
+    var obj = @Html.Raw(Json.Encode(Model));
+    alert("hello world");
+</script>
+<script>
+    // ruleid: html-raw-json
+    var obj = @Html.Raw(JsonConvert.SerializeObject(Model));
+</script>
+<script>
+    // ok: html-raw-json
+    var obj = @Html.Raw(Model.HtmlField);
+</script>
+// ok: html-raw-json
+<div data-json="@Json.Encode(Model)"></div>
