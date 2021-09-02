@@ -1,0 +1,51 @@
+rules:
+- id: public-s3-bucket
+  languages:
+  - json
+  message: |
+    Detected public s3 bucket. This policy allows anyone to have some kind of access to the bucket. The exact level of access and types of actions allowed will depend on the configuration of
+    bucket policy and ACLs. Please review the bucket configuration to make sure they are set with intended values.
+  metadata:
+    category: security
+    cwe: 'CWE-264: Permissions, Privileges, and Access Controls'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+    technology:
+    - aws
+  patterns:
+  - pattern-inside: |
+      $BUCKETNAME: {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+        ...,
+        },
+        ...,
+      }
+  - pattern-either:
+    - pattern: |
+        "PublicAccessBlockConfiguration": {
+             ...,
+             "RestrictPublicBuckets": false,
+             ...,
+           },
+    - pattern: |
+        "PublicAccessBlockConfiguration": {
+             ...,
+             "IgnorePublicAcls": false,
+             ...,
+           },
+    - pattern: |
+        "PublicAccessBlockConfiguration": {
+             ...,
+             "BlockPublicAcls": false,
+             ...,
+           },
+    - pattern: |
+        "PublicAccessBlockConfiguration": {
+             ...,
+             "BlockPublicPolicy": false,
+             ...,
+           },
+  severity: WARNING
