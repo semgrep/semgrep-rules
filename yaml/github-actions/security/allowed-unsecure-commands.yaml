@@ -1,0 +1,26 @@
+rules:
+- id: allowed-unsecure-commands
+  languages: [yaml]
+  severity: WARNING
+  message: >-
+    The environment variable `ACTIONS_ALLOW_UNSECURE_COMMANDS` grants this workflow permissions
+    to use the `set-env` and `add-path` commands. There is a vulnerability in these commands
+    that could result in environment variables being modified by an attacker. Depending on the
+    use of the environment variable, this could enable an attacker to, at worst,
+    modify the system path to run a different command than intended, resulting in arbitary
+    code exuction. This could result in stolen code or secrets.
+    Don't use `ACTIONS_ALLOW_UNSECURE_COMMANDS`. Instead, use Environment Files. See
+    https://github.com/actions/toolkit/blob/main/docs/commands.md#environment-files for
+    more information.
+  metadata:
+    cwe: 'CWE-749: Exposed Dangerous Method or Function'
+    owasp: 'A6: Security Misconfiguration'
+    references:
+    - https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
+    - https://github.com/actions/toolkit/security/advisories/GHSA-mfwh-5m23-j46w
+    - https://github.com/actions/toolkit/blob/main/docs/commands.md#environment-files
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: '{env: ...}'
+      - pattern: 'ACTIONS_ALLOW_UNSECURE_COMMANDS: true'
