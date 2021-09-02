@@ -1,0 +1,53 @@
+rules:
+- id: prototype-pollution-loop
+  languages:
+  - typescript
+  - javascript
+  message: |
+    Possibility of prototype polluting function detected.
+    By adding or modifying attributes of an object prototype, it is possible to create attributes that exist on every object, or replace critical attributes with malicious ones.
+    This can be problematic if the software depends on existence or non-existence of certain attributes, or uses pre-defined attributes of object prototype (such as hasOwnProperty, toString or valueOf).
+    Possible mitigations might be: freezing the object prototype, using an object without prototypes (via Object.create(null) ), blocking modifications of attributes that resolve to object prototype, using Map instead of object.
+  metadata:
+    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    category: security
+    references:
+    - https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $SMTH = $SMTH[$A]
+    - pattern: |
+        $SMTH = $SMTH[$A] = ...
+    - pattern: |
+        $SMTH = $SMTH[$A] && $Z
+    - pattern: |
+        $SMTH = $SMTH[$A] || $Z
+  - pattern-either:
+    - pattern-inside: |
+        for(...) {
+          ...
+        }
+    - pattern-inside: |
+        while(...) {
+          ...
+        }
+    - pattern-inside: |
+        $X.forEach(function $NAME(...) {
+          ...
+        })
+  - pattern-not-inside: |
+      for(var $A = $S; ...; ...) {...}
+  - pattern-not-inside: |
+      for($A = $S; ...; ...) {...}
+  - pattern-not-inside: |
+      $X.forEach(function $NAME($OBJ, $A,...) {...})
+  - metavariable-pattern:
+      metavariable: $A
+      patterns:
+      - pattern-not: '"..."'
+      - pattern-not: |
+          `...${...}...`
+      - pattern-not: |
+          ($A: float)
