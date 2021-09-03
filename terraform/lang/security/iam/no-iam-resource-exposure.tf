@@ -58,3 +58,15 @@ resource "aws_iam_policy" "policy" {
     ]
   })
 }
+
+data aws_iam_policy_document "policy" {
+   statement {
+     # ruleid: no-iam-resource-exposure
+     actions = ["es:*"]
+     principals {
+       type        = "AWS"
+       identifiers = ["*"]
+     }
+     resources = ["*"]
+   }
+}

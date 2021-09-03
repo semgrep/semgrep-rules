@@ -1,27 +1,40 @@
 rules:
 - id: no-iam-resource-exposure
   patterns:
-  - pattern-inside: |
-      resource "$TYPE" "..." {
-        ...
-        policy = jsonencode({
-          ...
-          Statement = [
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
             ...
-          ]
-          ...
-        })
-        ...
-      }
-  - pattern: |
-      Action = $...ACTION
-  - metavariable-pattern:
-      metavariable: $TYPE
-      pattern-either:
-      - pattern: aws_iam_role_policy
-      - pattern: aws_iam_policy
-      - pattern: aws_iam_user_policy
-      - pattern: aws_iam_group_policy
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern: |
+          Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
   - metavariable-pattern:
       metavariable: $...ACTION
       pattern-either:
@@ -319,10 +332,67 @@ rules:
       - pattern: workmail:ResetPassword
       - pattern: workmail:ResetUserPassword
       - pattern: xray:PutEncryptionConfig
+      - pattern: worklink:*
+      - pattern: route53resolver:*
+      - pattern: es:*
+      - pattern: greengrass:*
+      - pattern: redshift:*
+      - pattern: license-manager:*
+      - pattern: rds:*
+      - pattern: lambda:*
+      - pattern: elasticfilesystem:*
+      - pattern: logs:*
+      - pattern: sso:*
+      - pattern: waf:*
+      - pattern: mediastore:*
+      - pattern: acm-pca:*
+      - pattern: sso-directory:*
+      - pattern: imagebuilder:*
+      - pattern: sqs:*
+      - pattern: codeguru-profiler:*
+      - pattern: wafv2:*
+      - pattern: cloudformation:*
+      - pattern: xray:*
+      - pattern: codeartifact:*
+      - pattern: iotsitewise:*
+      - pattern: workmail:*
+      - pattern: glue:*
+      - pattern: deeplens:*
+      - pattern: chime:*
+      - pattern: mediapackage:*
+      - pattern: opsworks:*
+      - pattern: ds:*
+      - pattern: ram:*
+      - pattern: iam:*
+      - pattern: waf-regional:*
+      - pattern: glacier:*
+      - pattern: cloudsearch:*
+      - pattern: lakeformation:*
+      - pattern: elasticmapreduce:*
+      - pattern: quicksight:*
+      - pattern: sns:*
+      - pattern: ec2:*
+      - pattern: health:*
+      - pattern: lightsail:*
+      - pattern: codestar:*
+      - pattern: kms:*
+      - pattern: codebuild:*
+      - pattern: s3:*
+      - pattern: cognito-identity:*
+      - pattern: apigateway:*
+      - pattern: rds-db:*
+      - pattern: iot:*
+      - pattern: backup:*
+      - pattern: secretsmanager:*
+      - pattern: servicecatalog:*
+      - pattern: ssm:*
+      - pattern: storagegateway:*
+      - pattern: ecr:*
   message: |
     Ensure IAM policies don't allow resource exposure. These actions can expose AWS resources to the public.
     For example `ecr:SetRepositoryPolicy` could let an attacker retrieve container images. Instead,
     use another action that doesn't expose AWS resources.
+    $...ACTION
   metadata:
     references:
     - https://cloudsplaining.readthedocs.io/en/latest/glossary/resource-exposure/
