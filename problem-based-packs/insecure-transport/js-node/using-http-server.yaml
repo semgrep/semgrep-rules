@@ -17,8 +17,12 @@ rules:
   languages:
   - javascript
   severity: WARNING
-  pattern-either:
-  - pattern: |
-      http.$FUNC(...);
-  - pattern: |
-      new http.$FUNC2(...);
+  patterns:
+  - pattern-inside: |
+      $HTTP = require('http');
+      ...
+  - pattern-either:
+    - pattern: |
+        $HTTP.$FUNC(...);
+    - pattern: |
+        new $HTTP.$FUNC2(...);

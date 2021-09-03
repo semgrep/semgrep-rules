@@ -10,8 +10,8 @@ class Bad {
     }
 
     private static void sendbad2() throws IOException {
-            // ruleid: httpurlconnection-http-request
             String url = "http://example.com";
+            // ruleid: httpurlconnection-http-request
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("GET");
@@ -21,8 +21,8 @@ class Bad {
     }
 
     public static void sendbad3() throws IOException {
-            // ruleid: httpurlconnection-http-request
             String url = "http://example.com";
+            // ruleid: httpurlconnection-http-request
             URL urlObj = new URL(url);
             URLConnection urlCon = urlObj.openConnection();
             InputStream inputStream = urlCon.getInputStream();
@@ -48,8 +48,8 @@ public class Ok {
     }
 
     private static void sendok2() throws IOException {
-            // ok: httpurlconnection-http-request
             String url = "https://example.com";
+            // ok: httpurlconnection-http-request
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("GET");
@@ -59,8 +59,8 @@ public class Ok {
     }
 
     public static void sendok3() throws IOException {
-            // ok: httpurlconnection-http-request
             String url = "https://example.com";
+            // ok: httpurlconnection-http-request
             URL urlObj = new URL(url);
             URLConnection urlCon = urlObj.openConnection();
             InputStream inputStream = urlCon.getInputStream();

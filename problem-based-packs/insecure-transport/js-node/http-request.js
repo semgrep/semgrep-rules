@@ -1,3 +1,5 @@
+const http = require('http');
+
 function bad_http() {
     // ruleid: http-request
     http.get('http://nodejs.org/dist/index.json', (res) => {
