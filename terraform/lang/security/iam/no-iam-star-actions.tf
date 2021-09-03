@@ -19,6 +19,18 @@ resource "aws_iam_user_policy" "lb_ro" {
   })
 }
 
+data aws_iam_policy_document "policy" {
+   statement {
+     # ok: no-iam-star-actions
+     actions = ["ec2:Describe"]
+     principals {
+       type        = "AWS"
+       identifiers = ["*"]
+     }
+     resources = ["*"]
+   }
+}
+
 resource "aws_iam_policy" "policy" {
   name        = "test_policy"
   path        = "/"
@@ -57,4 +69,16 @@ resource "aws_iam_policy" "policy" {
       },
     ]
   })
+}
+
+data aws_iam_policy_document "policy" {
+   statement {
+     # ruleid: no-iam-star-actions
+     actions = ["*"]
+     principals {
+       type        = "AWS"
+       identifiers = ["*"]
+     }
+     resources = ["someResource"]
+   }
 }

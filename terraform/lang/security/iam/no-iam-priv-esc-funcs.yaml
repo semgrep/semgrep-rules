@@ -1,23 +1,39 @@
 rules:
 - id: no-iam-priv-esc-funcs
   patterns:
-  - pattern-inside: |
-      resource "$TYPE" "..." {
-        ...
-        policy = jsonencode({
-          ...
-          Statement = [
-            ...
-          ]
-          ...
-        })
-        ...
-      }
   - pattern-either:
-    - pattern: |
-        Action = ["iam:UpdateAssumeRolePolicy", "sts:AssumeRole"]
-    - pattern: |
-        Action = $...ACTION
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern: Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
   - metavariable-pattern:
       metavariable: $...ACTION
       pattern-either:
@@ -31,13 +47,8 @@ rules:
       - pattern: iam:PutGroupPolicy
       - pattern: iam:PutRolePolicy
       - pattern: glue:UpdateDevEndpoint
-  - metavariable-pattern:
-      metavariable: $TYPE
-      pattern-either:
-      - pattern: aws_iam_role_policy
-      - pattern: aws_iam_policy
-      - pattern: aws_iam_user_policy
-      - pattern: aws_iam_group_policy
+      - pattern: iam:*
+      - pattern: glue:*
   message: |
     Ensure that actions that can result in privilege escalation are not used.
     These actions could potentially result in an attacker gaining full administrator access of an AWS account.

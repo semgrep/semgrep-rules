@@ -1,39 +1,55 @@
 rules:
 - id: no-iam-priv-esc-other-users
   patterns:
-  - pattern-inside: |
-      resource "$TYPE" "..." {
-        ...
-        policy = jsonencode({
-          ...
-          Statement = [
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
             ...
-            Resource = $...RESOURCE
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+                Resource = $...RESOURCE
+                ...
+              ]
+              ...
+            })
             ...
-          ]
-          ...
-        })
-        ...
-      }
-  - pattern: |
-      Action = $...ACTION
+          }
+      - pattern: |
+          Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              resources = [$...RESOURCE]
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
   - metavariable-pattern:
       metavariable: $...RESOURCE
       patterns:
       - pattern: '*'
-  - metavariable-pattern:
-      metavariable: $TYPE
-      pattern-either:
-      - pattern: aws_iam_role_policy
-      - pattern: aws_iam_policy
-      - pattern: aws_iam_user_policy
-      - pattern: aws_iam_group_policy
   - metavariable-pattern:
       metavariable: $...ACTION
       pattern-either:
       - pattern: iam:CreateAccessKey
       - pattern: iam:CreateLoginProfile
       - pattern: iam:UpdateLoginProfile
+      - pattern: iam:*
   message: |
     Ensure that IAM policies with permissions on other users don't allow for privilege escalation. This
     can lead to an attacker gaining full administrator access of AWS accounts. Instead, specify which

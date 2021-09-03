@@ -1,27 +1,40 @@
 rules:
 - id: no-iam-creds-exposure
   patterns:
-  - pattern-inside: |
-      resource "$TYPE" "..." {
-        ...
-        policy = jsonencode({
-          ...
-          Statement = [
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
             ...
-          ]
-          ...
-        })
-        ...
-      }
-  - pattern: |
-      Action = $...ACTION
-  - metavariable-pattern:
-      metavariable: $TYPE
-      pattern-either:
-      - pattern: aws_iam_role_policy
-      - pattern: aws_iam_policy
-      - pattern: aws_iam_user_policy
-      - pattern: aws_iam_group_policy
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern: |
+          Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
   - metavariable-pattern:
       metavariable: $...ACTION
       pattern-either:
@@ -52,6 +65,20 @@ rules:
       - pattern: sts:AssumeRoleWithWebIdentity
       - pattern: sts:GetFederationToken
       - pattern: sts:GetSessionToken
+      - pattern: ec2:*
+      - pattern: codepipeline:*
+      - pattern: rds-db:*
+      - pattern: connect:*
+      - pattern: iam:*
+      - pattern: ecr:*
+      - pattern: sts:*
+      - pattern: chime:*
+      - pattern: mediapackage:*
+      - pattern: redshift:*
+      - pattern: gamelift:*
+      - pattern: cognito-identity:*
+      - pattern: lightsail:*
+      - pattern: sso:*
   message: |
     Ensure IAM policies don't allow credentials exposure. Credentials exposure actions return credentials
     as part of the API response, and can possibly lead to leaking important credentials. Instead,

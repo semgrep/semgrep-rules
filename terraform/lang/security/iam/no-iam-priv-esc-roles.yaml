@@ -1,20 +1,40 @@
 rules:
 - id: no-iam-priv-esc-roles
   patterns:
-  - pattern-inside: |
-      resource "$TYPE" "..." {
-        ...
-        policy = jsonencode({
-          ...
-          Statement = [
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
             ...
-          ]
-          ...
-        })
-        ...
-      }
-  - pattern: |
-      Action = $...ACTION
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern: |
+          Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
   - metavariable-pattern:
       metavariable: $...ACTION
       pattern-either:
@@ -27,13 +47,6 @@ rules:
       - pattern-regex: ^(?=.*iam:PassRole)(?=.*glue:CreateDevEndpoint).+
       - pattern-regex: ^(?=.*iam:PassRole)(?=.*cloudformation:CreateStack).+
       - pattern-regex: ^(?=.*iam:PassRole)(?=.*datapipeline:CreatePipeline)(?=.*datapipeline:PutPipelineDefinition).+
-  - metavariable-pattern:
-      metavariable: $TYPE
-      pattern-either:
-      - pattern: aws_iam_role_policy
-      - pattern: aws_iam_policy
-      - pattern: aws_iam_user_policy
-      - pattern: aws_iam_group_policy
   message: |
     Ensure that groups of actions that include iam:PassRole and could result in privilege escalation
     are not all allowed for the same user. These actions could result in an attacker gaining full admin

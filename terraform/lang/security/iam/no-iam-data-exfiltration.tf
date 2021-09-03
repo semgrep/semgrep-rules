@@ -19,6 +19,18 @@ resource "aws_iam_user_policy" "lb_ro" {
   })
 }
 
+data aws_iam_policy_document "policy" {
+   statement {
+     # ok: no-iam-data-exfiltration
+     actions = ["rds:*"]
+     principals {
+       type        = "AWS"
+       identifiers = ["*"]
+     }
+     resources = ["someResource"]
+   }
+}
+
 resource "aws_iam_policy" "policy" {
   name        = "test_policy"
   path        = "/"
@@ -37,4 +49,16 @@ resource "aws_iam_policy" "policy" {
       },
     ]
   })
+}
+
+data aws_iam_policy_document "policy" {
+   statement {
+     # ruleid: no-iam-data-exfiltration
+     actions = ["ssm:*"]
+     principals {
+       type        = "AWS"
+       identifiers = ["*"]
+     }
+     resources = ["*"]
+   }
 }
