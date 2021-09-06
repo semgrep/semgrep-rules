@@ -75,3 +75,9 @@ class H:
     def __init__(self, x):
         # ok:return-in-init
         return None
+
+class I:
+    def __init__(self, x):
+        def internal_func():
+          # ok:return-in-init
+          return 5
