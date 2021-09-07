@@ -1,0 +1,13 @@
+rules:
+- id: hardcoded-conditional
+  languages:
+  - java
+  message: |
+    useless if statement, always the same behavior
+  patterns:
+  - pattern-either:
+    - pattern: |
+        if (true) { ... }
+    - pattern: |
+        if (false) { ... }
+  severity: ERROR
