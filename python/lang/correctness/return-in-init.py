@@ -75,3 +75,41 @@ class H:
     def __init__(self, x):
         # ok:return-in-init
         return None
+
+class Odd:
+    def __init__(self, numbers):
+        def is_odd(n):
+            # ok:return-in-init
+            return n % 2 == 1
+        self.numbers = filter(is_odd, numbers)
+
+        # ruleid:return-in-init
+        return self.numbers
+
+class Even:
+    def __init__(self):
+        class EvenNumber:
+            def __init__(self, n):
+                self.n = n
+                # ruleid:return-in-init
+                return n
+
+            def is_even(self):
+                # ok:return-in-init
+                return self.n % 2 == 0
+
+        self.number = EvenNumber()
+
+    def not_init(self):
+        class EvenNumber:
+            def __init__(self, n):
+                self.n = n
+                # ruleid:return-in-init
+                return n
+
+            def is_even(self):
+                # ok:return-in-init
+                return self.n % 2 == 0
+
+        # ok:return-in-init
+        return EvenNumber()
