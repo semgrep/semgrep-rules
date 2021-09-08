@@ -1,0 +1,40 @@
+rules:
+- id: unsafe-dynamic-method
+  patterns:
+  - pattern-either:
+    - pattern: $OBJ[$X](...)
+    - pattern: |
+        $Y = $OBJ[$X]
+        ...
+        $Y(...)
+  - metavariable-pattern:
+      metavariable: $X
+      patterns:
+      - pattern-not: |
+          "..."
+      - pattern-not: |
+          ($X: float)
+  - pattern-not-inside: |
+      for (...) {...}
+  - pattern-not-inside: |
+      $SMTH.forEach(...)
+  - pattern-not-inside: |
+      $SMTH.map(...)
+  - pattern-not-inside: |
+      $SMTH.reduce(...)
+  - pattern-not-inside: |
+      $SMTH.reduceRight(...)
+  - pattern-not-inside: |
+      if (<... $OBJ.hasOwnProperty(...) ...>) {
+        ...
+      }
+      ...
+  message: |
+    Using non-static data to retrieve and run functions from the object is dangerous.
+    If the data is user-controlled, it may allow executing arbitrary code.
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    category: security
+  languages: [js, ts]
+  severity: WARNING
