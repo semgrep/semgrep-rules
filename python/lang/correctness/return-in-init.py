@@ -83,7 +83,7 @@ class Odd:
             return n % 2 == 1
         self.numbers = filter(is_odd, numbers)
 
-        # ruleid:return-in-init
+        # todoruleid:return-in-init
         return self.numbers
 
 class Even:
@@ -91,7 +91,7 @@ class Even:
         class EvenNumber:
             def __init__(self, n):
                 self.n = n
-                # ruleid:return-in-init
+                # todoruleid:return-in-init
                 return n
 
             def is_even(self):
