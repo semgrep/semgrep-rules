@@ -1,0 +1,41 @@
+rules:
+- id: cors-misconfiguration
+  mode: taint
+  languages:
+  - js
+  - typescript
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-346: Origin Validation Error'
+    category: security
+  message: >
+    By letting user input control CORS parameters, there is a risk that software does not properly verify that the source
+    of data or communication is valid. Use literal values for CORS settings.
+  severity: WARNING
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $RES.set($HEADER, ...)
+      - pattern: $RES.header($HEADER, ...)
+      - pattern: $RES.setHeader($HEADER, ...)
+      - pattern: |
+          $RES.set({$HEADER: ...}, ...)
+      - pattern: |
+          $RES.writeHead($STATUS, {$HEADER: ...}, ...)
+    - metavariable-regex:
+        metavariable: $HEADER
+        regex: .*(Access-Control-Allow-Origin|access-control-allow-origin).*
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+      - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
+    - pattern-either:
+      - pattern: $REQ.$QUERY
+      - pattern: $REQ.$BODY.$PARAM
