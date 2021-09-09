@@ -1,12 +1,10 @@
 name: rule-benchmarks
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [develop]
   push:
-    branches:
-    - develop
-  schedule:
-  - cron: 0 0 * * MON
+    branches: [develop]
 
 jobs:
   run_benchmarks:
