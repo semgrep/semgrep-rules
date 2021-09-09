@@ -1,0 +1,33 @@
+rules:
+- id: unsafe-formatstring
+  mode: taint
+  languages:
+  - js
+  - typescript
+  message: >
+    Detected string concatenation with a non-literal variable in a util.format / console.log function. If an attacker injects
+    a format specifier in the string, it will forge the log message. Try to use constant values for the format string.
+  severity: WARNING
+  pattern-sinks:
+  - patterns:
+    - pattern: $STR
+    - pattern-either:
+      - pattern-inside: |
+          console.$LOG($STR,$PARAM,...)
+      - patterns:
+        - pattern-inside: |
+            $UTIL = require('util')
+            ...
+        - pattern-inside: |
+            $UTIL.format($STR,$PARAM,...)
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $X + $Y
+      - pattern: $X.concat($Y)
+      - pattern: |
+          `...${...}...`
+    - pattern-not: |
+        "..." + "..."
+    - pattern-not: |
+        $X.concat("...")
