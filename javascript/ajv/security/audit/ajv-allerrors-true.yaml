@@ -1,0 +1,20 @@
+rules:
+- id: ajv-allerrors-true
+  pattern-either:
+  - pattern: |
+      new Ajv({allErrors: true},...)
+  - patterns:
+    - pattern: |
+        new Ajv($SETTINGS,...)
+    - pattern-inside: |
+        $SETTINGS = {allErrors: true}
+        ...
+  metadata:
+    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    category: security
+    references:
+    - https://ajv.js.org/options.html#allerrors
+  message: |
+    By setting `allerrors: true` in `ajv` library, all error objects will be allocated without limit. This allows the attacker to produce a huge number of errors which can lead to denial of service. Do not use `allerrors: true` in production.
+  languages: [js, ts]
+  severity: WARNING
