@@ -14,36 +14,25 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: 3.9.2
-    - name: Install pipenv
+    - name: Install latest semgrep
       shell: bash
       run: |
-        pip3 install pipenv
-    - name: Install pipenv dev dependencies
-      shell: bash
-      run: |
-        pipenv install -d
-    - name: Get formatted date
-      id: vars
-      shell: bash
-      run: |
-        echo "::set-output name=today::$(date +'%Y-%m-%d')"
+        pip3 install semgrep
     - name: Display Semgrep version
       shell: bash
       run: |
-        pipenv run semgrep --version
+        semgrep --version
+    - name: Clone semgrep directory for perf scripts
+      shell: bash
+      run: |
+        git clone https://github.com/returntocorp/semgrep.git
     - name: Run benchmarks
       shell: bash
       run: |
-        pipenv run pytest --timeout=60 --benchmark-only --benchmark-min-rounds=2 --benchmark-json=${{ steps.vars.outputs.today }}.json tests/performance/ | tee test-logs.txt
-    - name: Upload text log
+        python3 semgrep/perf/run-benchmarks --small-only --std-only --output-time-per-rule-json rule_times.json
+    - name: Upload rule time JSON
       uses: actions/upload-artifact@v1
       if: ${{ always() }}
       with:
-        name: test-logs.txt
-        path: test-logs.txt
-    - name: Upload JSON results
-      uses: actions/upload-artifact@v1
-      if: ${{ always() }}
-      with:
-        name: ${{ steps.vars.outputs.today }}.json
-        path: ${{ steps.vars.outputs.today }}.json
+        name: rule_times.json
+        path: rule_times.json
