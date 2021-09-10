@@ -2,13 +2,13 @@ rules:
 - id: detect-bracket-object-injection
   patterns:
   - pattern: |
-      const $VAR = $OBJ[$FIELD];
+      $VAR = $OBJ[$FIELD];
   - pattern-not: |
-      const $VAR = $OBJ[($FIELD : float)]
+      $VAR = $OBJ[($FIELD : float)]
   - pattern-not: |
-      const $VAR = $OBJ["..."];
+      $VAR = $OBJ["..."];
   - pattern-not-inside: |
-      const $FIELD = ...;
+      $FIELD = ...;
       ...
   message: |
     Object injection via bracket notation via $FIELD
