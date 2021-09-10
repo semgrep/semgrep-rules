@@ -21,7 +21,7 @@ rules:
   - pattern-not: $WRITER.$WRITE("...", ...)
   - pattern-not: $WRITER.flush(...)
   - pattern-not: $WRITER.close(...)
-  message: |
+  message: >-
     Detected a direct write to the HTTP response. This bypasses any
     view or template environments, including HTML escaping, which may
     expose this application to cross-site scripting (XSS) vulnerabilities.

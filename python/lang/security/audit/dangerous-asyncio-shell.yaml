@@ -11,7 +11,7 @@ rules:
   - pattern-not: $LOOP.subprocess_shell($PROTOCOL, "...")
   - pattern-not: asyncio.subprocess.create_subprocess_shell("...", ...)
   - pattern-not: asyncio.create_subprocess_shell("...", ...)
-  message: |
+  message: >-
     Detected asyncio subprocess function without a static string. If this data can be
     controlled by a malicious actor, it may be an instance of command injection.
     Audit the use of this call to ensure it is not controllable by an external resource.

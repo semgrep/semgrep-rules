@@ -14,7 +14,7 @@ rules:
     references:
     - https://www.blackhat.com/docs/us-16/materials/us-16-Kaiser-Pwning-Your-Java-Messaging-With-Deserialization-Vulnerabilities-wp.pdf
     category: security
-  message: |
+  message: >-
     JMS Object messages depend on Java Serialization for marshalling/unmarshalling of the message payload when ObjectMessage.getObject() is called.
     Deserialization of untrusted data can lead to security flaws; a remote attacker could via a crafted JMS ObjectMessage to execute
     arbitrary code with the permissions of the application listening/consuming JMS Messages.

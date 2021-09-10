@@ -12,7 +12,7 @@ rules:
       $S = subprocess.call(...)
   - pattern-not-inside: |
       subprocess.call(...) == $X
-  message: |
+  message: >-
     This is not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call() instead
   severity: WARNING
   fix: subprocess.check_call(...)

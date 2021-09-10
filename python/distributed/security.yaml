@@ -6,7 +6,7 @@ rules:
   - pattern: |
       distributed.security.Security(...)
   fix: distributed.security.Security(..., require_encryption=True, ...)
-  message: |
+  message: >-
     Initializing the a security context for Dask (`distributed`) without "require_encription" keyword argument may silently fail to provide security. See https://distributed.dask.org/en/latest/tls.html?highlight=require_encryption#parameters
   severity: WARNING
   metadata:

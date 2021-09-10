@@ -5,7 +5,7 @@ rules:
       $FUNC.create_with($PARAMSB.permit(...))
   - pattern: |
       $FUNC.create_with($PARAMSA)
-  message: |
+  message: >-
     Checks for strong parameter bypass through usage of create_with. Create_with bypasses strong parameter protection, which
     could allow attackers to set arbitrary attributes on models. To fix this vulnerability, either remove all create_with calls
     or use the permit function to specify tags that are allowed to be set.

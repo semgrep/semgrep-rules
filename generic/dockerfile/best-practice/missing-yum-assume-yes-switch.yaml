@@ -9,7 +9,7 @@ rules:
       RUN ... yum install ... -y
   - pattern-not-inside: |
       RUN ... yum ... --assumeyes
-  message: |
+  message: >-
     This 'yum install' is missing the '-y' switch. This might stall
     builds because it requires human intervention. Add the '-y' switch.
   metadata:

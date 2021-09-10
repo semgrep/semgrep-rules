@@ -5,7 +5,7 @@ rules:
   - metavariable-regex:
       metavariable: $FMT
       regex: '"%(l{0,2}|L)([fegEa]|[dDiouxX])"'
-  message: |
+  message: >-
     Avoid 'sscanf()' for number conversions. Its use can lead to undefined
     behavior, slow processing, and integer overflows. Instead prefer the
     'strto*()' family of functions.
