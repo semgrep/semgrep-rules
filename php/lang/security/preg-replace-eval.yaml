@@ -3,7 +3,7 @@ rules:
   patterns:
   - pattern: preg_replace(...);
   - pattern-not: preg_replace("...", ...);
-  message: |
+  message: >-
     Calling preg_replace with user input in the pattern can lead to arbitrary
     code execution. The eval modifier (`/e`) evaluates the replacement argument
     as code.

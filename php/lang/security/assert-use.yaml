@@ -4,7 +4,7 @@ rules:
   - pattern: assert($ASSERT, ...);
   # - pattern-not: assert(<... $ASSERT ...>, ...); - https://github.com/returntocorp/semgrep/issues/2035
   - pattern-not: assert("...", ...);
-  message: |
+  message: >-
     Calling assert with user input is equivalent to eval'ing.
   metadata:
     references:

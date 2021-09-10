@@ -22,7 +22,7 @@ rules:
     - pattern-not: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", "...", ...],
         ...)
     - pattern: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", ...], ...)
-  message: |
+  message: >-
     Detected 'create_subprocess_exec' function without a static string. If this data can be
     controlled by a malicious actor, it may be an instance of command injection.
     Audit the use of this call to ensure it is not controllable by an external resource.

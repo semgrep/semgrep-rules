@@ -6,7 +6,7 @@ rules:
   - pattern-inside: $RESP = requests.$METHOD(...); ...
   - pattern: json.loads($RESP.text)
   fix: $RESP.json()
-  message: |
+  message: >-
     The requests library has a convenient shortcut for reading JSON responses,
     which lets you stop worrying about deserializing the response yourself.
   severity: WARNING

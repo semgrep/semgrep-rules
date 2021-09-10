@@ -1,7 +1,7 @@
 rules:
 - id: mass-assignment-protection-disabled
   pattern: $MODEL.new(params[...], ..., :without_protection => true, ...)
-  message: |
+  message: >-
     Mass assignment protection disabled for '$MODEL'. This could
     permit assignment to sensitive model fields without intention. Instead,
     use 'attr_accessible' for the model or disable mass assigment using

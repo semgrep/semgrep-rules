@@ -2,7 +2,7 @@ rules:
 - id: asyncpg-sqli
   languages:
   - python
-  message: >
+  message: >-
     Detected string concatenation with a non-literal variable in a asyncpg
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
@@ -10,8 +10,7 @@ rules:
     You can create parameterized queries like so:
     'conn.fetch("SELECT $1 FROM table", value)'.
     You can also create prepared statements with 'Connection.prepare':
-    'stmt = conn.prepare("SELECT $1 FROM table")
-     await stmt.fetch(user_value)'
+    'stmt = conn.prepare("SELECT $1 FROM table"); await stmt.fetch(user_value)'
   metadata:
     references:
     - https://github.com/MagicStack/asyncpg

@@ -9,7 +9,7 @@ rules:
       RUN ... dnf install ... -y
   - pattern-not-inside: |
       RUN ... dnf ... --assumeyes
-  message: |
+  message: >-
     This 'dnf install' is missing the '-y' switch. This might stall
     builds because it requires human intervention. Add the '-y' switch.
   metadata:

@@ -1,6 +1,6 @@
 rules:
 - id: insecure-hash-algorithm-md2
-  message: |
+  message: >-
     Detected MD2 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
@@ -21,7 +21,7 @@ rules:
   - pattern: Crypto.Hash.MD2.new(...)
   - pattern: Cryptodome.Hash.MD2.new (...)
 - id: insecure-hash-algorithm-md4
-  message: |
+  message: >-
     Detected MD4 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
@@ -41,7 +41,7 @@ rules:
   - pattern: Crypto.Hash.MD4.new(...)
   - pattern: Cryptodome.Hash.MD4.new (...)
 - id: insecure-hash-algorithm-md5
-  message: |
+  message: >-
     Detected MD5 hash algorithm which is considered insecure. MD5 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
@@ -63,7 +63,7 @@ rules:
   - pattern: Crypto.Hash.MD5.new(...)
   - pattern: Cryptodome.Hash.MD5.new (...)
 - id: insecure-hash-algorithm-sha1
-  message: |
+  message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.

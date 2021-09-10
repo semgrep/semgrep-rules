@@ -2,7 +2,7 @@ rules:
 - id: unverified-jwt-decode
   pattern: |
     jwt.decode(..., verify=False, ...)
-  message: |
+  message: >-
     Detected JWT token decoded with 'verify=False'. This bypasses any integrity
     checks for the token which means the token could be tampered with by
     malicious actors. Ensure that the JWT token is verified.

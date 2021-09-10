@@ -1,7 +1,7 @@
 rules:
 - id: insecure-use-strtok-fn
   pattern: strtok(...)
-  message: |
+  message: >-
     Avoid using 'strtok()'. This function directly modifies the first argument buffer, permanently erasing the
     delimiter character. Use 'strtok_r()' instead.
   metadata:

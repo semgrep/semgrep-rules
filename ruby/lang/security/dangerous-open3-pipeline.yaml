@@ -8,7 +8,7 @@ rules:
   - metavariable-regex:
       metavariable: $PIPE
       regex: ^(pipeline|pipeline_r|pipeline_rw|pipeline_start|pipeline_w)$
-  message: |
+  message: >-
     Detected non-static command inside $PIPE. Audit the input to '$PIPE'.
     If unverified user data can reach this call site, this is a code injection
     vulnerability. A malicious actor can inject a malicious script to execute

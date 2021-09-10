@@ -1,7 +1,7 @@
 rules:
 - id: insecure-use-gets-fn
   pattern: gets(...)
-  message: |
+  message: >-
     Avoid 'gets()'. This function does not consider buffer boundaries and can lead
     to buffer overflows. Use 'fgets()' or 'gets_s()' instead.
   metadata:

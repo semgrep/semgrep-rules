@@ -12,7 +12,7 @@ rules:
   - pattern-not: |
       $EL.outerHTML = "...";
   - pattern-not: document.write("...")
-  message: |
+  message: >-
     User controlled data in methods like `innerHTML`, `outerHTML` or `document.write` is an anti-pattern that can lead to XSS vulnerabilities
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
