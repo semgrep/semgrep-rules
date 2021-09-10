@@ -1,58 +1,58 @@
 rules:
 - id: csharp-sqli
   patterns:
-    - metavariable-regex:
-        metavariable: $PATTERN
-        regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
-    - pattern-either:
-      - pattern: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $S.$PATTERN = $SB.ToString();
-      - pattern: |
-          $S.$PATTERN = string.Format(...);
-      - pattern: |
-          $S.$PATTERN = string.Concat(...);
-      - pattern: |
-          $S.$PATTERN  = String.Format(...);
-      - pattern: |
-          $S.$PATTERN  = String.Concat(...);
-      - pattern: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $PATTERN $X = new $PATTERN($SB.ToString(),...);
-      - pattern: |
-          $S  = string.Format(...);
-          ...
-          $PATTERN $SQL = new $PATTERN(...);
-      - pattern: |
-          $S = string.Concat(...);
-          ...
-          $PATTERN $SQL = new $PATTERN($S,...);
-      - pattern: |
-          $S  = String.Format(...);
-          ...
-          $PATTERN $SQL = new PATTERN($S,...);
-      - pattern: |
-          $S = String.Concat(...);
-          ...
-          $PATTERN $SQL = new $PATTERN($S,...);
-      - pattern: |
-         $T $X(...,$SQL,...)
-         {
-          ...
-          $S.$PATTERN = $SQL;
-          ...
-         }
-      - pattern: |
-         $T $X(...,$SQL,...)
-         {
-          ...
-          $PATTERN $SQL = new $PATTERN($S,...);
-          ...
-         }
-    - pattern-not: |
-        $S.$PATTERN = "..." + "...";
+  - metavariable-regex:
+      metavariable: $PATTERN
+      regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
+  - pattern-either:
+    - pattern: |
+        StringBuilder $SB = new StringBuilder(...);
+        ...
+        $S.$PATTERN = $SB.ToString();
+    - pattern: |
+        $S.$PATTERN = string.Format(...);
+    - pattern: |
+        $S.$PATTERN = string.Concat(...);
+    - pattern: |
+        $S.$PATTERN  = String.Format(...);
+    - pattern: |
+        $S.$PATTERN  = String.Concat(...);
+    - pattern: |
+        StringBuilder $SB = new StringBuilder(...);
+        ...
+        $PATTERN $X = new $PATTERN($SB.ToString(),...);
+    - pattern: |
+        $S  = string.Format(...);
+        ...
+        $PATTERN $SQL = new $PATTERN(...);
+    - pattern: |
+        $S = string.Concat(...);
+        ...
+        $PATTERN $SQL = new $PATTERN($S,...);
+    - pattern: |
+        $S  = String.Format(...);
+        ...
+        $PATTERN $SQL = new PATTERN($S,...);
+    - pattern: |
+        $S = String.Concat(...);
+        ...
+        $PATTERN $SQL = new $PATTERN($S,...);
+    - pattern: |
+        $T $X(...,$SQL,...)
+        {
+         ...
+         $S.$PATTERN = $SQL;
+         ...
+        }
+    - pattern: |
+        $T $X(...,$SQL,...)
+        {
+         ...
+         $PATTERN $SQL = new $PATTERN($S,...);
+         ...
+        }
+  - pattern-not: |
+      $S.$PATTERN = "..." + "...";
 
 
   message: |
