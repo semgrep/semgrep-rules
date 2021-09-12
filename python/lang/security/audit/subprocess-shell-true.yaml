@@ -3,7 +3,7 @@ rules:
   patterns:
   - pattern: subprocess.$FUNC(..., shell=True, ...)
   - pattern-not: subprocess.$FUNC("...", shell=True, ...)
-  message: |
+  message: >-
     Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn
     the command using a shell process. Doing so propagates current shell settings and variables, which
     makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.

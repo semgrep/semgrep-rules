@@ -72,7 +72,7 @@ rules:
   - metavariable-regex:
       metavariable: $METHOD
       regex: (Exec|ForkExec)
-  message: |
+  message: >-
     Detected non-static command inside Exec. Audit the input to 'syscall.Exec'.
     If unverified user data can reach this call site, this is a code injection
     vulnerability. A malicious actor can inject a malicious script to execute
