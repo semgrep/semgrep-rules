@@ -1,0 +1,68 @@
+rules:
+- id: no-iam-data-exfiltration
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+                Resource = "*"
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern: |
+          Action = $...ACTION
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              resources = ["*"]
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = [$...ACTION]
+  - metavariable-pattern:
+      metavariable: $...ACTION
+      pattern-either:
+      - pattern: s3:GetObject
+      - pattern: ssm:GetParameter*
+      - pattern: secretsmanager:GetSecretValue
+      - pattern: rds:CopyDBSnapshot
+      - pattern: rds:CreateDBSnapshot
+      - pattern: ssm:*
+      - pattern: s3:*
+      - pattern: rds:*
+      - pattern: secretsmanager:*
+  message: |
+    Ensure that IAM policies don't allow data exfiltration actions that are not resource-constrained.
+    This can allow the user to read sensitive data they don't need to read.
+    Instead, make sure that the user granted these privileges are given these permissions on specific resources.
+  metadata:
+    references:
+    - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/IAMDataExfiltration.py
+    - https://cloudsplaining.readthedocs.io/en/latest/glossary/data-exfiltration/
+    category: security
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  paths:
+    include:
+    - '*.tf'
+  languages: [generic]
+  severity: WARNING
