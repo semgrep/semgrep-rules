@@ -62,9 +62,9 @@ rules:
         actions = ["*"]
         ...
         resources = ["*"]
-  message: |
-    IAM policies that allow full "*-*" admin privileges should most likely
-    not be created. This violates the principle of least privilege. Instead, give each user
+  message: >-
+    IAM policies that allow full "*-*" admin privileges violates the principle of least privilege.
+    This allows an attacker to take full control over all AWS account resources. Instead, give each user
     more fine-grained control with only the privileges they need.
   metadata:
     references:
