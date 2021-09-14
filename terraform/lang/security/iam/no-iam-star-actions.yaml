@@ -1,0 +1,54 @@
+rules:
+- id: no-iam-star-actions
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          resource "$TYPE" "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-either:
+        - pattern: Action = "*"
+        - pattern: Action = ["*"]
+      - metavariable-pattern:
+          metavariable: $TYPE
+          pattern-either:
+          - pattern: aws_iam_role_policy
+          - pattern: aws_iam_policy
+          - pattern: aws_iam_user_policy
+          - pattern: aws_iam_group_policy
+    - patterns:
+      - pattern-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          actions = ["*"]
+  message: |
+    Ensure that no IAM policies allow "*" as a statement's actions. This allows all actions
+    to be performed on the specified resources, and is a violation of the principle of least privilege.
+    Instead, specify the actions that a certain user or policy is allowed to take.
+  metadata:
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy
+    - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/StarActionPolicyDocument.py
+    category: security
+    cwe: 'CWE-269: Improper Privilege Management'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  paths:
+    include:
+    - '*.tf'
+  languages: [generic]
+  severity: WARNING
