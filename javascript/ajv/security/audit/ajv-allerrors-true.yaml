@@ -12,9 +12,11 @@ rules:
   metadata:
     cwe: 'CWE-400: Uncontrolled Resource Consumption'
     category: security
+    technology:
+    - ajv
     references:
     - https://ajv.js.org/options.html#allerrors
-  message: |
+  message: >-
     By setting `allerrors: true` in `ajv` library, all error objects will be allocated without limit. This allows the attacker to produce a huge number of errors which can lead to denial of service. Do not use `allerrors: true` in production.
   languages: [js, ts]
   severity: WARNING
