@@ -1,0 +1,58 @@
+rules:
+- id: avoid-tainted-file-access
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    Using user input when accessing files is potentially dangerous. A malicious actor could use this to modify or access files they have no right to. [Not sure what to say for how to fix it]
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: Dir.$X(...)
+      - pattern: File.$X(...)
+      - pattern: IO.$X(...)
+      - pattern: Kernel.$X(...)
+      - pattern: PStore.$X(...)
+      - pattern: Pathname.$X(...)
+    - metavariable-pattern:
+        metavariable: $X
+        patterns:
+        - pattern-either:
+          - pattern: chdir
+          - pattern: chroot
+          - pattern: delete
+          - pattern: entries
+          - pattern: foreach
+          - pattern: glob
+          - pattern: install
+          - pattern: lchmod
+          - pattern: lchown
+          - pattern: link
+          - pattern: load
+          - pattern: load_file
+          - pattern: makedirs
+          - pattern: move
+          - pattern: new
+          - pattern: open
+          - pattern: read
+          - pattern: readlines
+          - pattern: rename
+          - pattern: rmdir
+          - pattern: safe_unlink
+          - pattern: symlink
+          - pattern: syscopy
+          - pattern: sysopen
+          - pattern: truncate
+          - pattern: unlink

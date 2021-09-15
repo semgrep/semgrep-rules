@@ -1,0 +1,67 @@
+rules:
+- id: avoid-tainted-http-request
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/file_access/index.markdown
+    category: security
+    technology:
+    - rails
+  message: |
+    Using user input when accessing files is potentially dangerous. A malicious actor could use this to modify or access files they have no right to. [Not sure what to say for how to fix it]
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  pattern-sinks:
+  - pattern-either:
+    - patterns:
+      - pattern: Net::HTTP::$METHOD.new(...)
+      - metavariable-pattern:
+          metavariable: $METHOD
+          patterns:
+          - pattern-either:
+            - pattern: Copy
+            - pattern: Delete
+            - pattern: Get
+            - pattern: Head
+            - pattern: Lock
+            - pattern: Mkcol
+            - pattern: Move
+            - pattern: Options
+            - pattern: Patch
+            - pattern: Post
+            - pattern: Propfind
+            - pattern: Proppatch
+            - pattern: Put
+            - pattern: Trace
+            - pattern: Unlock
+    - patterns:
+      - pattern: Net::HTTP.$X(...)
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+          - pattern-either:
+            - pattern: get
+            - pattern: get2
+            - pattern: head
+            - pattern: head2
+            - pattern: options
+            - pattern: patch
+            - pattern: post
+            - pattern: post2
+            - pattern: post_form
+            - pattern: put
+            - pattern: request
+            - pattern: request_get
+            - pattern: request_head
+            - pattern: request_post
+            - pattern: send_request
+            - pattern: trace
+            - pattern: get_print
+            - pattern: get_response
+            - pattern: start
