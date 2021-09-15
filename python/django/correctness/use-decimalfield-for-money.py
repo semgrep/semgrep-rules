@@ -13,6 +13,8 @@ class Product(models.Model):
     image = models.CharField(max_length=256)
     stock = models.IntegerField(null=True)
     date_added = models.DateTimeField(default=timezone.now)
+    # ruleid:use-decimalfield-for-money
+    orignalPrice = models.FloatField(verbose_name=u"smth")
 
 class User(models.Model):
     email = models.EmailField()
