@@ -22,7 +22,7 @@ def foo
 
   # ruleid: avoid-tainted-http-request
   Net::HTTP.start(uri.host, uri.port) do |http|
-    # ruleid: avoid-tainted-http-request
+    # todoruleid: avoid-tainted-http-request
     req = Net::HTTP::Get.new uri
     resp = http.request request
   end
