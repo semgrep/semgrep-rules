@@ -43,8 +43,8 @@ jobs:
         # nicer to not have a "failing" CI job in the PR so don't even
         # try if we can detect is coming from a fork
       if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+      # ok: run-shell-injection
       run: |
-        # ok: run-shell-injection
         tag=returntocorp/semgrep:${{ github.sha }}
         docker build -t "$tag" .
         docker push "$tag"
@@ -61,8 +61,8 @@ jobs:
         docker push returntocorp/semgrep-dev:develop
 
     - name: Check PR title
+      # ruleid: run-shell-injection
       run: |
-        # ruleid: run-shell-injection
         title="${{ github.event.pull_request.title }}"
         if [[ $title =~ ^octocat ]]; then
         echo "PR title starts with 'octocat'"
@@ -72,7 +72,33 @@ jobs:
         exit 1
         fi
 
-    run: |
+    - name: Show author email
+      # ruleid: run-shell-injection
+      run: |
+        echo "${{ github.event.commits.fix-bug.author.email }}"
+
+    - name: Show issue title
+      # ruleid: run-shell-injection
+      run: |
+        echo "${{ github.event.issue.title }}"
+
+    - name: benign
       # ok: run-shell-injection
-      AUTH_HEADER="Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}";
-      HEADER="Accept: application/vnd.github.v3+json";
+      run: |
+        AUTH_HEADER="Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}";
+        HEADER="Accept: application/vnd.github.v3+json";
+
+    # cf. https://github.com/magma/magma/blob/5caf0cb5151a9b0dce05985e6cb2cdcf70b94af5/.github/workflows/unit-test-workflow.yml
+    - name: Download and Extract Artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # ok: run-shell-injection
+      run: |
+        mkdir -p artifacts && cd artifacts
+        artifacts_url=${{ github.event.workflow_run.artifacts_url }}
+        gh api "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
+        do
+          IFS=$'\t' read name url <<< "$artifact"
+          gh api $url > "$name.zip"
+          unzip -d "$name" "$name.zip"
+        done
