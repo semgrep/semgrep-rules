@@ -59,3 +59,15 @@ jobs:
     - name: echo
       run: |
         echo "Hello, world"
+
+  # cf. https://github.com/justinsteven/advisories/blob/master/2021_github_actions_checkspelling_token_leak_via_advice_symlink.md
+  spelling:
+    name: Spell checking
+    runs-on: ubuntu-latest
+    steps:
+    # ruleid: pull-request-target-code-checkout
+    - name: checkout-merge
+      if: contains(github.event_name, 'pull_request')
+      uses: actions/checkout@v2
+      with:
+        ref: refs/pull/${{github.event.pull_request.number}}/merge
