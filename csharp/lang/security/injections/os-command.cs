@@ -16,6 +16,20 @@ namespace Injections
             var process = Process.Start("constant");
         }
 
+
+        // ruleid: os-command-injection
+        public void RunOsCommandWithArgs(string command, string arguments)
+        {
+            var process = Process.Start(command, arguments);
+        }
+
+        // ok: os-command-injection
+        public void RunOsCommandWithArgs(string command, string arguments)
+        {
+            var process = Process.Start("constant", "constant");
+        }
+
+
         // ruleid: os-command-injection
         public void RunOsCommandWithProcessParam(string command)
         {
@@ -33,6 +47,28 @@ namespace Injections
             process.StartInfo.FileName = "constant";
             process.Start();
         }
+
+
+        // ruleid: os-command-injection
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process();
+
+            process.StartInfo.FileName = command;
+            process.StartInfo.Arguments = arguments;
+            process.Start();
+        }
+
+        // ok: os-command-injection
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process();
+
+            process.StartInfo.FileName = "constant";
+            process.StartInfo.Arguments = "constant";
+            process.Start();
+        }
+
 
         // ruleid: os-command-injection
         public void RunOsCommandWithStartInfo(string command)
@@ -56,27 +92,26 @@ namespace Injections
             var process = Process.Start(processStartInfo);
         }
 
+
         // ruleid: os-command-injection
-        public void RunPythonWithArgs(string args)
+        public void RunConstantAppWithArgs(string args)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
             {
-                FileName = @"python.exe",
-                Arguments = args,
-                UseShellExecute = false
+                FileName = "constant",
+                Arguments = args
             };
 
             var process = Process.Start(processStartInfo);
         }
 
         // ok: os-command-injection
-        public void RunPythonWithArgs(string args)
+        public void RunConstantAppWithArgs(string args)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
             {
-                FileName = @"python.exe",
-                Arguments = "constant",
-                UseShellExecute = false
+                FileName = "constant",
+                Arguments = "constant"
             };
 
             var process = Process.Start(processStartInfo);
