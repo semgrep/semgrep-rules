@@ -1,0 +1,50 @@
+rules:
+- id: avoid-redirect
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    references:
+    - https://brakemanscanner.org/docs/warning_types/redirect/
+    category: security
+    technology:
+    - rails
+  message: |
+    When a redirect uses user input, a malicious user can spoof a website under a trusted URL or access restricted parts of a site. When using user-supplied values, sanitize the value before using it for the redirect.
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  - patterns:
+    - pattern: $MODEL.$X(...)
+    - pattern-not: $MODEL.$X("...")
+    - metavariable-pattern:
+        metavariable: $X
+        pattern-either:
+        - pattern: all
+        - pattern: create
+        - pattern: create!
+        - pattern: find
+        - pattern: find_by_sql
+        - pattern: first
+        - pattern: last
+        - pattern: new
+        - pattern: from
+        - pattern: group
+        - pattern: having
+        - pattern: joins
+        - pattern: lock
+        - pattern: order
+        - pattern: reorder
+        - pattern: select
+        - pattern: where
+        - pattern: find_by
+        - pattern: find_by!
+        - pattern: take
+  pattern-sinks:
+  - pattern: redirect_to(...)
+  pattern-sanitizers:
+  - pattern: params.merge(:only_path => true)
+  - pattern: params.merge(:host => ...)

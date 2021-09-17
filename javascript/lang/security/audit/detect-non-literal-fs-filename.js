@@ -43,3 +43,14 @@ async function okTest2() {
       await filehandle.close();
   }
 }
+
+async function okTest3() {
+  let filehandle;
+  try {
+    // ok:detect-non-literal-fs-filename
+    filehandle = await this.open();
+  } finally {
+    if (filehandle !== undefined)
+      await filehandle.close();
+  }
+}
