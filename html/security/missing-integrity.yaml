@@ -5,15 +5,15 @@ rules:
     technology:
     - html
   patterns:
-    - pattern-either:
-      - pattern: |
-          <script ... src="http..." ...>
-      - pattern: |
-          <link ... href="http..." ...>
-    - pattern-not: |
-          <script ... integrity="..." ...>
-    - pattern-not: |
-          <link ... integrity="..." ...>
+  - pattern-either:
+    - pattern: |
+        <script ... src="http..." ...>
+    - pattern: |
+        <link ... href="http..." ...>
+  - pattern-not: |
+      <script ... integrity="..." ...>
+  - pattern-not: |
+      <link ... integrity="..." ...>
   paths:
     include:
     - '*.html'
