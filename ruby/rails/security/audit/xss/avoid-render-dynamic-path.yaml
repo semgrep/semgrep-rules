@@ -1,0 +1,30 @@
+rules:
+- id: avoid-render-dynamic-path
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    references:
+    - https://brakemanscanner.org/docs/warning_types/dynamic_render_paths/
+    category: security
+    technology:
+    - rails
+  message: |
+    Avoid rendering user input. It may be possible for a malicious user to input a path that lets them access a template they shouldn't. To prevent this, check dynamic template paths against a predefined allowlist to make sure it's an allowed template.
+  languages: [ruby]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: params
+  - pattern: cookies
+  - pattern: request.env
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: render($X => $INPUT, ...)
+    - pattern: $INPUT
+    - metavariable-pattern:
+        metavariable: $X
+        pattern-either:
+        - pattern: action
+        - pattern: template
+        - pattern: partial
+        - pattern: file
