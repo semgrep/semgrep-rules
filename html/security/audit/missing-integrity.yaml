@@ -6,15 +6,18 @@ rules:
     - html
   patterns:
   - pattern-either:
-    - pattern: <script ... src= "http:// ... " ...>
-    - pattern: <script ... src= "https:// ... " ...>
-    - pattern: <script ... src= 'http:// ... ' ...>
-    - pattern: <script ... src= 'https:// ... ' ...>
+    - pattern: <script ... src= "http:// ... " > ... </script>
+    - pattern: <script ... src= "https:// ... " > ... </script>
+    - pattern: <script ... src= 'http:// ... ' > ... </script>
+    - pattern: <script ... src= 'https:// ... ' > ... </script>
     - pattern: <link ... href= "http:// ... " ...>
     - pattern: <link ... href= "https:// ... " ...>
     - pattern: <link ... href= 'http:// ... ' ...>
     - pattern: <link ... href= 'https:// ... ' ...>
-  - pattern-not: < ... integrity=  ...>
+  - pattern-not: <script ... integrity= ...> ... </script>
+  - pattern-not: <link ... integrity= ...>
+  - pattern-not: <link ... rel="preconnect" ...>
+  - pattern-not: <link ... rel='preconnect' ...>
   paths:
     include:
     - '*.html'
