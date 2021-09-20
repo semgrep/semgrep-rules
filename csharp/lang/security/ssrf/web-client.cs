@@ -67,7 +67,7 @@ namespace ServerSideRequestForgery
 
             return result;
         }
-    
+
         #endregion
 
         #region Pattern 2
@@ -184,7 +184,7 @@ namespace ServerSideRequestForgery
 
             return result;
         }
-        
+
         #endregion
 
         #region Pattern 3
@@ -300,10 +300,10 @@ namespace ServerSideRequestForgery
 
             return result;
         }
-    
+
         #endregion
 
-        #region Pattern 5  
+        #region Pattern 5
         // ruleid: ssrf
         public string WebClientDownloadString(string host)
         {

@@ -16,7 +16,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
@@ -80,7 +80,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
@@ -101,7 +101,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
@@ -122,7 +122,7 @@ namespace ServerSideRequestForgery
                 var response = client.Get(request);
 
                 result = response.Content;
-                
+
             }
             catch (Exception e)
             {
