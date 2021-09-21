@@ -1,0 +1,74 @@
+rules:
+- id: ssrf
+  severity: WARNING
+  languages:
+  - csharp
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: 'A1: Injection'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    category: security
+    technology:
+    - .net
+  message: >-
+    SSRF is an attack vector that abuses an application to interact with the internal/external network or the machine itself.
+  patterns:
+  - pattern-inside: |
+      using System.Net;
+      ...
+  - pattern-either:
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.OpenRead(<... $X ...>)
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        $A $B = <... $X ...>;
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.OpenRead($B)
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.OpenReadAsync(<... $X ...>, ...)
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        $A $B = <... $X ...>;
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.OpenReadAsync($B, ...)
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString(<... $X ...>)
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        $A $B = <... $X ...>;
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString($B)
+        }

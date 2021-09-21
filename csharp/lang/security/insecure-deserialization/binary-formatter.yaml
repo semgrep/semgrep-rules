@@ -9,8 +9,12 @@ rules:
     references:
     - https://docs.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide
     category: security
+    technology:
+    - .net
   message: >-
-    The BinaryFormatter type is dangerous and is not recommended for data processing. Applications should stop using BinaryFormatter as soon as possible, even if they believe the data they're processing to be trustworthy. BinaryFormatter is insecure and can't be made secure
+    The BinaryFormatter type is dangerous and is not recommended for data processing. Applications should stop using BinaryFormatter
+    as soon as possible, even if they believe the data they're processing to be trustworthy. BinaryFormatter is insecure and
+    can't be made secure
   patterns:
   - pattern-inside: |
       using System.Runtime.Serialization.Formatters.Binary;

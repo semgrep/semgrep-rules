@@ -9,48 +9,146 @@ rules:
     references:
     - https://owasp.org/www-community/attacks/Command_Injection
     category: security
+    technology:
+    - .net
   message: >-
-    The software constructs all or part of an OS command using externally-influenced input from an upstream component, but it does not neutralize or incorrectly neutralizes special elements that could modify the intended OS command when it is sent to a downstream component.
+    The software constructs all or part of an OS command using externally-influenced input from an upstream component, but
+    it does not neutralize or incorrectly neutralizes special elements that could modify the intended OS command when it is
+    sent to a downstream component.
   patterns:
   - pattern-inside: |
       using System.Diagnostics;
       ...
   - pattern-either:
     - pattern: |
-        public $T $F($X)
+        public $T $F(..., $X, ...)
         {
-          ... Process.Start($X);
+          ... Process.Start($X, ...);
         }
     - pattern: |
-        public $T $F($X)
+        public $T $F(..., $X, ...)
+        {
+          ... Process.Start(..., $X);
+        }
+    - pattern: |
+        public $T $F(..., $X, ...)
         {
           ...
           Process $Y = new Process();
-
+          ...
           $Y.StartInfo.FileName = $X;
+          ...
           $Y.Start();
           ...
         }
     - pattern: |
-        public $T $F($Y)
+        public $T $F(..., $X, ...)
+        {
+          ...
+          Process $Y = new Process();
+          ...
+          $Y.StartInfo.Arguments = $X;
+          ...
+          $Y.Start();
+          ...
+        }
+    - pattern: |
+        public $T $F(..., $X, ...)
+        {
+          ...
+          Process $Y = new Process();
+          ...
+          $Y.StartInfo.Arguments = ... + $X;
+          ...
+          $Y.Start();
+          ...
+        }
+    - pattern: |
+        public $T $F(..., $X, ...)
+        {
+          ...
+          Process $Y = new Process();
+          ...
+          $Y.StartInfo.Arguments = $X + ...;
+          ...
+          $Y.Start();
+          ...
+        }
+    - pattern: |
+        public $T $F(..., $X, ...)
+        {
+          ...
+          Process $Y = new Process();
+          ...
+          $Y.StartInfo.Arguments = ... + $X + ...;
+          ...
+          $Y.Start();
+          ...
+        }
+    - pattern: |
+        public $T $F(..., $X, ...)
+        {
+          ...
+          string $Z = ... + $X;
+          ...
+          Process $Y = new Process();
+          ...
+          $Y.StartInfo.Arguments = $Z;
+          ...
+          $Y.Start();
+          ...
+        }
+    - pattern: |
+        public $T $F(..., $Y, ...)
         {
           ...
           ProcessStartInfo $X = new ProcessStartInfo()
           {
-            FileName = $Y
+            ..., FileName = $Y, ...
           };
           ...
           Process.Start($X);
         }
     - pattern: |
-        public $T $F($Y)
+        public $T $F(..., $Y, ...)
         {
           ...
           ProcessStartInfo $X = new ProcessStartInfo()
           {
-            FileName = @"python.exe",
-            Arguments = $Y,
-            UseShellExecute = false
+            ..., Arguments = $Y, ...
+          };
+          ...
+          Process.Start($X);
+        }
+    - pattern: |
+        public $T $F(..., $Y, ...)
+        {
+          ...
+          ProcessStartInfo $X = new ProcessStartInfo()
+          {
+            ..., Arguments = ... + $Y, ...
+          };
+          ...
+          Process.Start($X);
+        }
+    - pattern: |
+        public $T $F(..., $Y, ...)
+        {
+          ...
+          ProcessStartInfo $X = new ProcessStartInfo()
+          {
+            ..., Arguments = $Y + ..., ...
+          };
+          ...
+          Process.Start($X);
+        }
+    - pattern: |
+        public $T $F(..., $Y, ...)
+        {
+          ...
+          ProcessStartInfo $X = new ProcessStartInfo()
+          {
+            ..., Arguments = ... + $Y + ..., ...
           };
           ...
           Process.Start($X);
