@@ -8,7 +8,7 @@ rules:
   - pattern-not: $CONNECTION->prepare("...",...)
   - pattern-not: $CONNECTION->createQuery("...",...)
   - pattern-not: $CONNECTION->executeQuery("...",...)
-  message: |
+  message: >-
     Detected string concatenation with a non-literal variable in a Doctrine DBAL query method.
     This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
