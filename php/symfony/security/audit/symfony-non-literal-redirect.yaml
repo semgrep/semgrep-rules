@@ -1,0 +1,19 @@
+rules:
+- id: symfony-non-literal-redirect
+  patterns:
+  - pattern: $this->redirect(...)
+  - pattern-not: $this->redirect("...")
+  message: |
+    The `redirect()` method does not check its destination in any way. If you redirect to a URL provided by end-users, your application may be open to the unvalidated redirects security vulnerability.
+    Consider using literal values or an allowlist to validate URLs.
+  languages: [php]
+  metadata:
+    references:
+    - https://symfony.com/doc/current/controller.html#redirecting
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    owasp: 'A1: Injection'
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    category: security
+    technology:
+    - symfony
+  severity: WARNING
