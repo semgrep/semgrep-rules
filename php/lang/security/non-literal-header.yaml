@@ -1,0 +1,16 @@
+rules:
+- id: non-literal-header
+  patterns:
+  - pattern: header(...)
+  - pattern-not: header("...",...)
+  message: >-
+    Using user input when deleting files with `unlink()` is potentially dangerous. A malicious actor could use this to modify
+    or access files they have no right to.
+  metadata:
+    references:
+    - https://www.php.net/manual/ru/function.header.php
+    - https://owasp.org/www-community/attacks/HTTP_Response_Splitting
+    category: security
+    cwe: "CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')"
+  languages: [php]
+  severity: WARNING
