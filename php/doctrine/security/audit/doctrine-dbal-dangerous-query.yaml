@@ -1,0 +1,26 @@
+rules:
+- id: doctrine-dbal-dangerous-query
+  patterns:
+  - pattern-either:
+    - pattern: $CONNECTION->prepare($QUERY,...)
+    - pattern: $CONNECTION->createQuery($QUERY,...)
+    - pattern: $CONNECTION->executeQuery($QUERY,...)
+  - pattern-not: $CONNECTION->prepare("...",...)
+  - pattern-not: $CONNECTION->createQuery("...",...)
+  - pattern-not: $CONNECTION->executeQuery("...",...)
+  message: >-
+    Detected string concatenation with a non-literal variable in a Doctrine DBAL query method.
+    This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+  languages: [php]
+  metadata:
+    references:
+    - https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/security.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    owasp: 'A1: Injection'
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    category: security
+    technology:
+    - doctrine
+  severity: WARNING
