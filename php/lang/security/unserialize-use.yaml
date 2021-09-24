@@ -3,7 +3,7 @@ rules:
   patterns:
   - pattern: unserialize(...)
   - pattern-not: unserialize("...",...)
-  message: |
+  message: >-
     Calling `unserialize()` with user input in the pattern can lead to arbitrary code execution.
     Consider using JSON or structured data approaches (e.g. Google Protocol Buffers).
   metadata:
@@ -11,6 +11,7 @@ rules:
     - https://www.php.net/manual/ru/function.unserialize.php
     - https://owasp.org/www-project-top-ten/2017/A8_2017-Insecure_Deserialization.html
     category: security
+    technology: php
     owasp: 'A8: Insecure Deserialization'
     cwe: 'CWE-502: Deserialization of Untrusted Data'
   languages: [php]
