@@ -9,6 +9,7 @@ example.is_positive()
 # ruleid:is-function-without-parentheses
 if (example.is_positive):
   do_something()
+# ok
 elif (example.some_attr):
   do_something_else()
 else:
