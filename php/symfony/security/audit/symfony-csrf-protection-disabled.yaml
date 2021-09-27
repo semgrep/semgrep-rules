@@ -1,0 +1,30 @@
+rules:
+- id: symfony-csrf-protection-disabled
+  patterns:
+  - pattern-either:
+    - pattern: $X->createForm($TYPE, $TASK, [..., 'csrf_protection' => false, ...], ...)
+    - pattern: $X->prependExtensionConfig('framework', [..., 'csrf_protection' => false, ...], ...)
+    - pattern: $X->loadFromExtension('framework', [..., 'csrf_protection' => false, ...], ...)
+    - pattern: $X->setDefaults([..., 'csrf_protection' => false, ...], ...)
+    - patterns:
+      - pattern-either:
+        - pattern: $X->createForm($TYPE, $TASK, [..., 'csrf_protection' => $VAL, ...], ...)
+        - pattern: $X->prependExtensionConfig('framework', [..., 'csrf_protection' => $VAL, ...], ...)
+        - pattern: $X->loadFromExtension('framework', [..., 'csrf_protection' => $VAL, ...], ...)
+        - pattern: $X->setDefaults([..., 'csrf_protection' => $VAL, ...], ...)
+      - pattern-inside: |
+          $VAL = false;
+          ...
+  message: >-
+    CSRF is disabled for this configuration. This is a security risk.
+    Make sure that it is safe or consider setting `csrf_protection` property to `true`.
+  metadata:
+    references:
+    - https://symfony.com/doc/current/security/csrf.html
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp: 'A6: Security Misconfiguration'
+    category: security
+    technology:
+    - symfony
+  languages: [php]
+  severity: WARNING
