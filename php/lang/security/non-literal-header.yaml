@@ -4,8 +4,10 @@ rules:
   - pattern: header(...)
   - pattern-not: header("...",...)
   message: >-
-    Using user input when deleting files with `unlink()` is potentially dangerous. A malicious actor could use this to modify
-    or access files they have no right to.
+    Using user input when setting headers with `header()` is potentially dangerous.
+    This could allow an attacker to inject a new line and add a new header into the response.
+    This is called HTTP response splitting.
+    To fix, do not allow whitespace inside `header()`: '[^\s]+'.
   metadata:
     references:
     - https://www.php.net/manual/ru/function.header.php
