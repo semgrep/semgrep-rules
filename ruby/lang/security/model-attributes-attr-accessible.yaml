@@ -4,7 +4,7 @@ rules:
   - pattern-not: |
       class $CLASS
       ...
-      attr_accessible
+      attr_accessible :$XXX
       ...
       end
       ...
@@ -23,6 +23,8 @@ rules:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_model_attributes.rb
     category: security
+    technology:
+    - rails
   languages:
   - ruby
   severity: ERROR
