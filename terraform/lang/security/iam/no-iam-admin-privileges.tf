@@ -62,8 +62,8 @@ resource "aws_iam_policy" "policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      #ruleid: no-iam-admin-privileges
       {
-        #ruleid: no-iam-admin-privileges
         Resource = "*"
         Action = "*"
       },
@@ -81,8 +81,8 @@ resource "aws_iam_policy" "policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      #ruleid: no-iam-admin-privileges
       {
-        #ruleid: no-iam-admin-privileges
         Action = "*"
         Effect = "Allow"
         Resource = "*"
@@ -92,8 +92,8 @@ resource "aws_iam_policy" "policy" {
 }
 
 data aws_iam_policy_document "policy" {
+   #ruleid: no-iam-admin-privileges
    statement {
-     #ruleid: no-iam-admin-privileges
      resources = ["*"]
      actions = ["*"]
      principals {

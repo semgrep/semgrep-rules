@@ -742,7 +742,7 @@ rules:
           "storagegateway:*"
       - pattern: |
           "ecr:*"
-  message: |
+  message: >-
     Ensure IAM policies don't allow resource exposure. These actions can expose AWS resources to the public.
     For example `ecr:SetRepositoryPolicy` could let an attacker retrieve container images. Instead,
     use another action that doesn't expose AWS resources.

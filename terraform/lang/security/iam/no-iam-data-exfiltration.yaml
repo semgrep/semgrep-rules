@@ -64,7 +64,7 @@ rules:
           "rds:*"
       - pattern: |
           "rn: secretsmanager:*"
-  message: |
+  message: >-
     Ensure that IAM policies don't allow data exfiltration actions that are not resource-constrained.
     This can allow the user to read sensitive data they don't need to read.
     Instead, make sure that the user granted these privileges are given these permissions on specific resources.

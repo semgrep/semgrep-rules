@@ -28,9 +28,11 @@ rules:
           })
           ...
         }
-    - pattern: |
-        Action = "*"
-        Resource = "*"
+    - patterns:
+      - pattern: |
+          {..., Action = "*", ...}
+      - pattern: |
+          {..., Resource = "*", ...}
     - metavariable-pattern:
         metavariable: $TYPE
         pattern-either:
@@ -61,9 +63,11 @@ rules:
           }
           ...
         }
-    - pattern: |
-        actions = ["*"]
-        resources = ["*"]
+    - patterns:
+      - pattern: |
+          {..., resources = ["*"], ...}
+      - pattern: |
+          {..., actions = ["*"], ...}
   message: >-
     IAM policies that allow full "*-*" admin privileges violates the principle of least privilege.
     This allows an attacker to take full control over all AWS account resources. Instead, give each user

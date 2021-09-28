@@ -82,7 +82,7 @@ rules:
             [..., "datapipeline:CreatePipeline", ...]
         - pattern: |
             [..., "datapipeline:PutPipelineDefinition", ...]
-  message: |
+  message: >-
     Ensure that groups of actions that include iam:PassRole and could result in privilege escalation
     are not all allowed for the same user. These actions could result in an attacker gaining full admin
     access of an AWS account. Try not to use these actions in conjuction.

@@ -58,7 +58,7 @@ rules:
           "iam:UpdateLoginProfile"
       - pattern: |
           "iam:*"
-  message: |
+  message: >-
     Ensure that IAM policies with permissions on other users don't allow for privilege escalation. This
     can lead to an attacker gaining full administrator access of AWS accounts. Instead, specify which
     user the permission should be used on or do not use the listed actions. $RESOURCE
