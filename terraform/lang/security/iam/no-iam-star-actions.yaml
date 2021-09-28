@@ -4,7 +4,7 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-inside: |
-          resource "$TYPE" "..." {
+          resource $TYPE "..." {
             ...
             policy = jsonencode({
               ...
@@ -21,10 +21,14 @@ rules:
       - metavariable-pattern:
           metavariable: $TYPE
           pattern-either:
-          - pattern: aws_iam_role_policy
-          - pattern: aws_iam_policy
-          - pattern: aws_iam_user_policy
-          - pattern: aws_iam_group_policy
+          - pattern: |
+              "aws_iam_role_policy"
+          - pattern: |
+              "aws_iam_policy"
+          - pattern: |
+              "aws_iam_user_policy"
+          - pattern: |
+              "aws_iam_group_policy"
     - patterns:
       - pattern-inside: |
           data aws_iam_policy_document "..." {
@@ -47,8 +51,5 @@ rules:
     category: security
     cwe: 'CWE-269: Improper Privilege Management'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  paths:
-    include:
-    - '*.tf'
-  languages: [generic]
+  languages: [hcl]
   severity: WARNING

@@ -4,7 +4,7 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-inside: |
-          resource "$TYPE" "..." {
+          resource $TYPE "..." {
             ...
             policy = jsonencode({
               ...
@@ -16,14 +16,18 @@ rules:
             ...
           }
       - pattern: |
-          Action = $...ACTION
+          Action = $ACTION
       - metavariable-pattern:
           metavariable: $TYPE
           pattern-either:
-          - pattern: aws_iam_role_policy
-          - pattern: aws_iam_policy
-          - pattern: aws_iam_user_policy
-          - pattern: aws_iam_group_policy
+          - pattern: |
+              "aws_iam_role_policy"
+          - pattern: |
+              "aws_iam_policy"
+          - pattern: |
+              "aws_iam_user_policy"
+          - pattern: |
+              "aws_iam_group_policy"
     - patterns:
       - pattern-inside: |
           data aws_iam_policy_document "..." {
@@ -34,373 +38,719 @@ rules:
             ...
           }
       - pattern: |
-          actions = [$...ACTION]
+          actions = [..., $ACTION, ...]
   - metavariable-pattern:
-      metavariable: $...ACTION
+      metavariable: $ACTION
       pattern-either:
-      - pattern: acm-pca:CreatePermission
-      - pattern: acm-pca:DeletePermission
-      - pattern: acm-pca:DeletePolicy
-      - pattern: acm-pca:PutPolicy
-      - pattern: apigateway:UpdateRestApiPolicy
-      - pattern: backup:DeleteBackupVaultAccessPolicy
-      - pattern: backup:PutBackupVaultAccessPolicy
-      - pattern: chime:DeleteVoiceConnectorTerminationCredentials
-      - pattern: chime:PutVoiceConnectorTerminationCredentials
-      - pattern: cloudformation:SetStackPolicy
-      - pattern: cloudsearch:UpdateServiceAccessPolicies
-      - pattern: codeartifact:DeleteDomainPermissionsPolicy
-      - pattern: codeartifact:DeleteRepositoryPermissionsPolicy
-      - pattern: codebuild:DeleteResourcePolicy
-      - pattern: codebuild:DeleteSourceCredentials
-      - pattern: codebuild:ImportSourceCredentials
-      - pattern: codebuild:PutResourcePolicy
-      - pattern: codeguru-profiler:PutPermission
-      - pattern: codeguru-profiler:RemovePermission
-      - pattern: codestar:AssociateTeamMember
-      - pattern: codestar:CreateProject
-      - pattern: codestar:DeleteProject
-      - pattern: codestar:DisassociateTeamMember
-      - pattern: codestar:UpdateTeamMember
-      - pattern: cognito-identity:CreateIdentityPool
-      - pattern: cognito-identity:DeleteIdentities
-      - pattern: cognito-identity:DeleteIdentityPool
-      - pattern: cognito-identity:GetId
-      - pattern: cognito-identity:MergeDeveloperIdentities
-      - pattern: cognito-identity:SetIdentityPoolRoles
-      - pattern: cognito-identity:UnlinkDeveloperIdentity
-      - pattern: cognito-identity:UnlinkIdentity
-      - pattern: cognito-identity:UpdateIdentityPool
-      - pattern: deeplens:AssociateServiceRoleToAccount
-      - pattern: ds:CreateConditionalForwarder
-      - pattern: ds:CreateDirectory
-      - pattern: ds:CreateMicrosoftAD
-      - pattern: ds:CreateTrust
-      - pattern: ds:ShareDirectory
-      - pattern: ec2:CreateNetworkInterfacePermission
-      - pattern: ec2:DeleteNetworkInterfacePermission
-      - pattern: ec2:ModifySnapshotAttribute
-      - pattern: ec2:ModifyVpcEndpointServicePermissions
-      - pattern: ec2:ResetSnapshotAttribute
-      - pattern: ecr:DeleteRepositoryPolicy
-      - pattern: ecr:SetRepositoryPolicy
-      - pattern: elasticfilesystem:DeleteFileSystemPolicy
-      - pattern: elasticfilesystem:PutFileSystemPolicy
-      - pattern: elasticmapreduce:PutBlockPublicAccessConfiguration
-      - pattern: es:CreateElasticsearchDomain
-      - pattern: es:UpdateElasticsearchDomainConfig
-      - pattern: glacier:AbortVaultLock
-      - pattern: glacier:CompleteVaultLock
-      - pattern: glacier:DeleteVaultAccessPolicy
-      - pattern: glacier:InitiateVaultLock
-      - pattern: glacier:SetDataRetrievalPolicy
-      - pattern: glacier:SetVaultAccessPolicy
-      - pattern: glue:DeleteResourcePolicy
-      - pattern: glue:PutResourcePolicy
-      - pattern: greengrass:AssociateServiceRoleToAccount
-      - pattern: health:DisableHealthServiceAccessForOrganization
-      - pattern: health:EnableHealthServiceAccessForOrganization
-      - pattern: iam:AddClientIDToOpenIDConnectProvider
-      - pattern: iam:AddRoleToInstanceProfile
-      - pattern: iam:AddUserToGroup
-      - pattern: iam:AttachGroupPolicy
-      - pattern: iam:AttachRolePolicy
-      - pattern: iam:AttachUserPolicy
-      - pattern: iam:ChangePassword
-      - pattern: iam:CreateAccessKey
-      - pattern: iam:CreateAccountAlias
-      - pattern: iam:CreateGroup
-      - pattern: iam:CreateInstanceProfile
-      - pattern: iam:CreateLoginProfile
-      - pattern: iam:CreateOpenIDConnectProvider
-      - pattern: iam:CreatePolicy
-      - pattern: iam:CreatePolicyVersion
-      - pattern: iam:CreateRole
-      - pattern: iam:CreateSAMLProvider
-      - pattern: iam:CreateServiceLinkedRole
-      - pattern: iam:CreateServiceSpecificCredential
-      - pattern: iam:CreateUser
-      - pattern: iam:CreateVirtualMFADevice
-      - pattern: iam:DeactivateMFADevice
-      - pattern: iam:DeleteAccessKey
-      - pattern: iam:DeleteAccountAlias
-      - pattern: iam:DeleteAccountPasswordPolicy
-      - pattern: iam:DeleteGroup
-      - pattern: iam:DeleteGroupPolicy
-      - pattern: iam:DeleteInstanceProfile
-      - pattern: iam:DeleteLoginProfile
-      - pattern: iam:DeleteOpenIDConnectProvider
-      - pattern: iam:DeletePolicy
-      - pattern: iam:DeletePolicyVersion
-      - pattern: iam:DeleteRole
-      - pattern: iam:DeleteRolePermissionsBoundary
-      - pattern: iam:DeleteRolePolicy
-      - pattern: iam:DeleteSAMLProvider
-      - pattern: iam:DeleteSSHPublicKey
-      - pattern: iam:DeleteServerCertificate
-      - pattern: iam:DeleteServiceLinkedRole
-      - pattern: iam:DeleteServiceSpecificCredential
-      - pattern: iam:DeleteSigningCertificate
-      - pattern: iam:DeleteUser
-      - pattern: iam:DeleteUserPermissionsBoundary
-      - pattern: iam:DeleteUserPolicy
-      - pattern: iam:DeleteVirtualMFADevice
-      - pattern: iam:DetachGroupPolicy
-      - pattern: iam:DetachRolePolicy
-      - pattern: iam:DetachUserPolicy
-      - pattern: iam:EnableMFADevice
-      - pattern: iam:PassRole
-      - pattern: iam:PutGroupPolicy
-      - pattern: iam:PutRolePermissionsBoundary
-      - pattern: iam:PutRolePolicy
-      - pattern: iam:PutUserPermissionsBoundary
-      - pattern: iam:PutUserPolicy
-      - pattern: iam:RemoveClientIDFromOpenIDConnectProvider
-      - pattern: iam:RemoveRoleFromInstanceProfile
-      - pattern: iam:RemoveUserFromGroup
-      - pattern: iam:ResetServiceSpecificCredential
-      - pattern: iam:ResyncMFADevice
-      - pattern: iam:SetDefaultPolicyVersion
-      - pattern: iam:SetSecurityTokenServicePreferences
-      - pattern: iam:UpdateAccessKey
-      - pattern: iam:UpdateAccountPasswordPolicy
-      - pattern: iam:UpdateAssumeRolePolicy
-      - pattern: iam:UpdateGroup
-      - pattern: iam:UpdateLoginProfile
-      - pattern: iam:UpdateOpenIDConnectProviderThumbprint
-      - pattern: iam:UpdateRole
-      - pattern: iam:UpdateRoleDescription
-      - pattern: iam:UpdateSAMLProvider
-      - pattern: iam:UpdateSSHPublicKey
-      - pattern: iam:UpdateServerCertificate
-      - pattern: iam:UpdateServiceSpecificCredential
-      - pattern: iam:UpdateSigningCertificate
-      - pattern: iam:UpdateUser
-      - pattern: iam:UploadSSHPublicKey
-      - pattern: iam:UploadServerCertificate
-      - pattern: iam:UploadSigningCertificate
-      - pattern: imagebuilder:PutComponentPolicy
-      - pattern: imagebuilder:PutImagePolicy
-      - pattern: imagebuilder:PutImageRecipePolicy
-      - pattern: iot:AttachPolicy
-      - pattern: iot:AttachPrincipalPolicy
-      - pattern: iot:DetachPolicy
-      - pattern: iot:DetachPrincipalPolicy
-      - pattern: iot:SetDefaultAuthorizer
-      - pattern: iot:SetDefaultPolicyVersion
-      - pattern: iotsitewise:CreateAccessPolicy
-      - pattern: iotsitewise:DeleteAccessPolicy
-      - pattern: iotsitewise:UpdateAccessPolicy
-      - pattern: kms:CreateGrant
-      - pattern: kms:PutKeyPolicy
-      - pattern: kms:RetireGrant
-      - pattern: kms:RevokeGrant
-      - pattern: lakeformation:BatchGrantPermissions
-      - pattern: lakeformation:BatchRevokePermissions
-      - pattern: lakeformation:GrantPermissions
-      - pattern: lakeformation:PutDataLakeSettings
-      - pattern: lakeformation:RevokePermissions
-      - pattern: lambda:AddLayerVersionPermission
-      - pattern: lambda:AddPermission
-      - pattern: lambda:DisableReplication
-      - pattern: lambda:EnableReplication
-      - pattern: lambda:RemoveLayerVersionPermission
-      - pattern: lambda:RemovePermission
-      - pattern: license-manager:UpdateServiceSettings
-      - pattern: lightsail:GetRelationalDatabaseMasterUserPassword
-      - pattern: logs:DeleteResourcePolicy
-      - pattern: logs:PutResourcePolicy
-      - pattern: mediapackage:RotateIngestEndpointCredentials
-      - pattern: mediastore:DeleteContainerPolicy
-      - pattern: mediastore:PutContainerPolicy
-      - pattern: opsworks:SetPermission
-      - pattern: opsworks:UpdateUserProfile
-      - pattern: quicksight:CreateAdmin
-      - pattern: quicksight:CreateGroup
-      - pattern: quicksight:CreateGroupMembership
-      - pattern: quicksight:CreateIAMPolicyAssignment
-      - pattern: quicksight:CreateUser
-      - pattern: quicksight:DeleteGroup
-      - pattern: quicksight:DeleteGroupMembership
-      - pattern: quicksight:DeleteIAMPolicyAssignment
-      - pattern: quicksight:DeleteUser
-      - pattern: quicksight:DeleteUserByPrincipalId
-      - pattern: quicksight:RegisterUser
-      - pattern: quicksight:UpdateDashboardPermissions
-      - pattern: quicksight:UpdateGroup
-      - pattern: quicksight:UpdateIAMPolicyAssignment
-      - pattern: quicksight:UpdateTemplatePermissions
-      - pattern: quicksight:UpdateUser
-      - pattern: ram:AcceptResourceShareInvitation
-      - pattern: ram:AssociateResourceShare
-      - pattern: ram:CreateResourceShare
-      - pattern: ram:DeleteResourceShare
-      - pattern: ram:DisassociateResourceShare
-      - pattern: ram:EnableSharingWithAwsOrganization
-      - pattern: ram:RejectResourceShareInvitation
-      - pattern: ram:UpdateResourceShare
-      - pattern: rds:AuthorizeDBSecurityGroupIngress
-      - pattern: rds-db:connect
-      - pattern: redshift:AuthorizeSnapshotAccess
-      - pattern: redshift:CreateClusterUser
-      - pattern: redshift:CreateSnapshotCopyGrant
-      - pattern: redshift:JoinGroup
-      - pattern: redshift:ModifyClusterIamRoles
-      - pattern: redshift:RevokeSnapshotAccess
-      - pattern: route53resolver:PutResolverRulePolicy
-      - pattern: s3:BypassGovernanceRetention
-      - pattern: s3:DeleteAccessPointPolicy
-      - pattern: s3:DeleteBucketPolicy
-      - pattern: s3:ObjectOwnerOverrideToBucketOwner
-      - pattern: s3:PutAccessPointPolicy
-      - pattern: s3:PutAccountPublicAccessBlock
-      - pattern: s3:PutBucketAcl
-      - pattern: s3:PutBucketPolicy
-      - pattern: s3:PutBucketPublicAccessBlock
-      - pattern: s3:PutObjectAcl
-      - pattern: s3:PutObjectVersionAcl
-      - pattern: secretsmanager:DeleteResourcePolicy
-      - pattern: secretsmanager:PutResourcePolicy
-      - pattern: secretsmanager:ValidateResourcePolicy
-      - pattern: servicecatalog:CreatePortfolioShare
-      - pattern: servicecatalog:DeletePortfolioShare
-      - pattern: sns:AddPermission
-      - pattern: sns:CreateTopic
-      - pattern: sns:RemovePermission
-      - pattern: sns:SetTopicAttributes
-      - pattern: sqs:AddPermission
-      - pattern: sqs:CreateQueue
-      - pattern: sqs:RemovePermission
-      - pattern: sqs:SetQueueAttributes
-      - pattern: ssm:ModifyDocumentPermission
-      - pattern: sso:AssociateDirectory
-      - pattern: sso:AssociateProfile
-      - pattern: sso:CreateApplicationInstance
-      - pattern: sso:CreateApplicationInstanceCertificate
-      - pattern: sso:CreatePermissionSet
-      - pattern: sso:CreateProfile
-      - pattern: sso:CreateTrust
-      - pattern: sso:DeleteApplicationInstance
-      - pattern: sso:DeleteApplicationInstanceCertificate
-      - pattern: sso:DeletePermissionSet
-      - pattern: sso:DeletePermissionsPolicy
-      - pattern: sso:DeleteProfile
-      - pattern: sso:DisassociateDirectory
-      - pattern: sso:DisassociateProfile
-      - pattern: sso:ImportApplicationInstanceServiceProviderMetadata
-      - pattern: sso:PutPermissionsPolicy
-      - pattern: sso:StartSSO
-      - pattern: sso:UpdateApplicationInstanceActiveCertificate
-      - pattern: sso:UpdateApplicationInstanceDisplayData
-      - pattern: sso:UpdateApplicationInstanceResponseConfiguration
-      - pattern: sso:UpdateApplicationInstanceResponseSchemaConfiguration
-      - pattern: sso:UpdateApplicationInstanceSecurityConfiguration
-      - pattern: sso:UpdateApplicationInstanceServiceProviderConfiguration
-      - pattern: sso:UpdateApplicationInstanceStatus
-      - pattern: sso:UpdateDirectoryAssociation
-      - pattern: sso:UpdatePermissionSet
-      - pattern: sso:UpdateProfile
-      - pattern: sso:UpdateSSOConfiguration
-      - pattern: sso:UpdateTrust
-      - pattern: sso-directory:AddMemberToGroup
-      - pattern: sso-directory:CreateAlias
-      - pattern: sso-directory:CreateGroup
-      - pattern: sso-directory:CreateUser
-      - pattern: sso-directory:DeleteGroup
-      - pattern: sso-directory:DeleteUser
-      - pattern: sso-directory:DisableUser
-      - pattern: sso-directory:EnableUser
-      - pattern: sso-directory:RemoveMemberFromGroup
-      - pattern: sso-directory:UpdateGroup
-      - pattern: sso-directory:UpdatePassword
-      - pattern: sso-directory:UpdateUser
-      - pattern: sso-directory:VerifyEmail
-      - pattern: storagegateway:DeleteChapCredentials
-      - pattern: storagegateway:SetLocalConsolePassword
-      - pattern: storagegateway:SetSMBGuestPassword
-      - pattern: storagegateway:UpdateChapCredentials
-      - pattern: waf:DeletePermissionPolicy
-      - pattern: waf:PutPermissionPolicy
-      - pattern: waf-regional:DeletePermissionPolicy
-      - pattern: waf-regional:PutPermissionPolicy
-      - pattern: wafv2:CreateWebACL
-      - pattern: wafv2:DeletePermissionPolicy
-      - pattern: wafv2:DeleteWebACL
-      - pattern: wafv2:PutPermissionPolicy
-      - pattern: wafv2:UpdateWebACL
-      - pattern: worklink:UpdateDevicePolicyConfiguration
-      - pattern: workmail:ResetPassword
-      - pattern: workmail:ResetUserPassword
-      - pattern: xray:PutEncryptionConfig
-      - pattern: worklink:*
-      - pattern: route53resolver:*
-      - pattern: es:*
-      - pattern: greengrass:*
-      - pattern: redshift:*
-      - pattern: license-manager:*
-      - pattern: rds:*
-      - pattern: lambda:*
-      - pattern: elasticfilesystem:*
-      - pattern: logs:*
-      - pattern: sso:*
-      - pattern: waf:*
-      - pattern: mediastore:*
-      - pattern: acm-pca:*
-      - pattern: sso-directory:*
-      - pattern: imagebuilder:*
-      - pattern: sqs:*
-      - pattern: codeguru-profiler:*
-      - pattern: wafv2:*
-      - pattern: cloudformation:*
-      - pattern: xray:*
-      - pattern: codeartifact:*
-      - pattern: iotsitewise:*
-      - pattern: workmail:*
-      - pattern: glue:*
-      - pattern: deeplens:*
-      - pattern: chime:*
-      - pattern: mediapackage:*
-      - pattern: opsworks:*
-      - pattern: ds:*
-      - pattern: ram:*
-      - pattern: iam:*
-      - pattern: waf-regional:*
-      - pattern: glacier:*
-      - pattern: cloudsearch:*
-      - pattern: lakeformation:*
-      - pattern: elasticmapreduce:*
-      - pattern: quicksight:*
-      - pattern: sns:*
-      - pattern: ec2:*
-      - pattern: health:*
-      - pattern: lightsail:*
-      - pattern: codestar:*
-      - pattern: kms:*
-      - pattern: codebuild:*
-      - pattern: s3:*
-      - pattern: cognito-identity:*
-      - pattern: apigateway:*
-      - pattern: rds-db:*
-      - pattern: iot:*
-      - pattern: backup:*
-      - pattern: secretsmanager:*
-      - pattern: servicecatalog:*
-      - pattern: ssm:*
-      - pattern: storagegateway:*
-      - pattern: ecr:*
+      - pattern: |
+          "acm-pca:CreatePermission"
+      - pattern: |
+          "acm-pca:DeletePermission"
+      - pattern: |
+          "acm-pca:DeletePolicy"
+      - pattern: |
+          "acm-pca:PutPolicy"
+      - pattern: |
+          "apigateway:UpdateRestApiPolicy"
+      - pattern: |
+          "backup:DeleteBackupVaultAccessPolicy"
+      - pattern: |
+          "backup:PutBackupVaultAccessPolicy"
+      - pattern: |
+          "chime:DeleteVoiceConnectorTerminationCredentials"
+      - pattern: |
+          "chime:PutVoiceConnectorTerminationCredentials"
+      - pattern: |
+          "cloudformation:SetStackPolicy"
+      - pattern: |
+          "cloudsearch:UpdateServiceAccessPolicies"
+      - pattern: |
+          "codeartifact:DeleteDomainPermissionsPolicy"
+      - pattern: |
+          "codeartifact:DeleteRepositoryPermissionsPolicy"
+      - pattern: |
+          "codebuild:DeleteResourcePolicy"
+      - pattern: |
+          "codebuild:DeleteSourceCredentials"
+      - pattern: |
+          "codebuild:ImportSourceCredentials"
+      - pattern: |
+          "codebuild:PutResourcePolicy"
+      - pattern: |
+          "codeguru-profiler:PutPermission"
+      - pattern: |
+          "codeguru-profiler:RemovePermission"
+      - pattern: |
+          "codestar:AssociateTeamMember"
+      - pattern: |
+          "codestar:CreateProject"
+      - pattern: |
+          "codestar:DeleteProject"
+      - pattern: |
+          "codestar:DisassociateTeamMember"
+      - pattern: |
+          "codestar:UpdateTeamMember"
+      - pattern: |
+          "cognito-identity:CreateIdentityPool"
+      - pattern: |
+          "cognito-identity:DeleteIdentities"
+      - pattern: |
+          "cognito-identity:DeleteIdentityPool"
+      - pattern: |
+          "cognito-identity:GetId"
+      - pattern: |
+          "cognito-identity:MergeDeveloperIdentities"
+      - pattern: |
+          "cognito-identity:SetIdentityPoolRoles"
+      - pattern: |
+          "cognito-identity:UnlinkDeveloperIdentity"
+      - pattern: |
+          "cognito-identity:UnlinkIdentity"
+      - pattern: |
+          "cognito-identity:UpdateIdentityPool"
+      - pattern: |
+          "deeplens:AssociateServiceRoleToAccount"
+      - pattern: |
+          "ds:CreateConditionalForwarder"
+      - pattern: |
+          "ds:CreateDirectory"
+      - pattern: |
+          "ds:CreateMicrosoftAD"
+      - pattern: |
+          "ds:CreateTrust"
+      - pattern: |
+          "ds:ShareDirectory"
+      - pattern: |
+          "ec2:CreateNetworkInterfacePermission"
+      - pattern: |
+          "ec2:DeleteNetworkInterfacePermission"
+      - pattern: |
+          "ec2:ModifySnapshotAttribute"
+      - pattern: |
+          "ec2:ModifyVpcEndpointServicePermissions"
+      - pattern: |
+          "ec2:ResetSnapshotAttribute"
+      - pattern: |
+          "ecr:DeleteRepositoryPolicy"
+      - pattern: |
+          "ecr:SetRepositoryPolicy"
+      - pattern: |
+          "elasticfilesystem:DeleteFileSystemPolicy"
+      - pattern: |
+          "elasticfilesystem:PutFileSystemPolicy"
+      - pattern: |
+          "elasticmapreduce:PutBlockPublicAccessConfiguration"
+      - pattern: |
+          "es:CreateElasticsearchDomain"
+      - pattern: |
+          "es:UpdateElasticsearchDomainConfig"
+      - pattern: |
+          "glacier:AbortVaultLock"
+      - pattern: |
+          "glacier:CompleteVaultLock"
+      - pattern: |
+          "glacier:DeleteVaultAccessPolicy"
+      - pattern: |
+          "glacier:InitiateVaultLock"
+      - pattern: |
+          "glacier:SetDataRetrievalPolicy"
+      - pattern: |
+          "glacier:SetVaultAccessPolicy"
+      - pattern: |
+          "glue:DeleteResourcePolicy"
+      - pattern: |
+          "glue:PutResourcePolicy"
+      - pattern: |
+          "greengrass:AssociateServiceRoleToAccount"
+      - pattern: |
+          "health:DisableHealthServiceAccessForOrganization"
+      - pattern: |
+          "health:EnableHealthServiceAccessForOrganization"
+      - pattern: |
+          "iam:AddClientIDToOpenIDConnectProvider"
+      - pattern: |
+          "iam:AddRoleToInstanceProfile"
+      - pattern: |
+          "iam:AddUserToGroup"
+      - pattern: |
+          "iam:AttachGroupPolicy"
+      - pattern: |
+          "iam:AttachRolePolicy"
+      - pattern: |
+          "iam:AttachUserPolicy"
+      - pattern: |
+          "iam:ChangePassword"
+      - pattern: |
+          "iam:CreateAccessKey"
+      - pattern: |
+          "iam:CreateAccountAlias"
+      - pattern: |
+          "iam:CreateGroup"
+      - pattern: |
+          "iam:CreateInstanceProfile"
+      - pattern: |
+          "iam:CreateLoginProfile"
+      - pattern: |
+          "iam:CreateOpenIDConnectProvider"
+      - pattern: |
+          "iam:CreatePolicy"
+      - pattern: |
+          "iam:CreatePolicyVersion"
+      - pattern: |
+          "iam:CreateRole"
+      - pattern: |
+          "iam:CreateSAMLProvider"
+      - pattern: |
+          "iam:CreateServiceLinkedRole"
+      - pattern: |
+          "iam:CreateServiceSpecificCredential"
+      - pattern: |
+          "iam:CreateUser"
+      - pattern: |
+          "iam:CreateVirtualMFADevice"
+      - pattern: |
+          "iam:DeactivateMFADevice"
+      - pattern: |
+          "iam:DeleteAccessKey"
+      - pattern: |
+          "iam:DeleteAccountAlias"
+      - pattern: |
+          "iam:DeleteAccountPasswordPolicy"
+      - pattern: |
+          "iam:DeleteGroup"
+      - pattern: |
+          "iam:DeleteGroupPolicy"
+      - pattern: |
+          "iam:DeleteInstanceProfile"
+      - pattern: |
+          "iam:DeleteLoginProfile"
+      - pattern: |
+          "iam:DeleteOpenIDConnectProvider"
+      - pattern: |
+          "iam:DeletePolicy"
+      - pattern: |
+          "iam:DeletePolicyVersion"
+      - pattern: |
+          "iam:DeleteRole"
+      - pattern: |
+          "iam:DeleteRolePermissionsBoundary"
+      - pattern: |
+          "iam:DeleteRolePolicy"
+      - pattern: |
+          "iam:DeleteSAMLProvider"
+      - pattern: |
+          "iam:DeleteSSHPublicKey"
+      - pattern: |
+          "iam:DeleteServerCertificate"
+      - pattern: |
+          "iam:DeleteServiceLinkedRole"
+      - pattern: |
+          "iam:DeleteServiceSpecificCredential"
+      - pattern: |
+          "iam:DeleteSigningCertificate"
+      - pattern: |
+          "iam:DeleteUser"
+      - pattern: |
+          "iam:DeleteUserPermissionsBoundary"
+      - pattern: |
+          "iam:DeleteUserPolicy"
+      - pattern: |
+          "iam:DeleteVirtualMFADevice"
+      - pattern: |
+          "iam:DetachGroupPolicy"
+      - pattern: |
+          "iam:DetachRolePolicy"
+      - pattern: |
+          "iam:DetachUserPolicy"
+      - pattern: |
+          "iam:EnableMFADevice"
+      - pattern: |
+          "iam:PassRole"
+      - pattern: |
+          "iam:PutGroupPolicy"
+      - pattern: |
+          "iam:PutRolePermissionsBoundary"
+      - pattern: |
+          "iam:PutRolePolicy"
+      - pattern: |
+          "iam:PutUserPermissionsBoundary"
+      - pattern: |
+          "iam:PutUserPolicy"
+      - pattern: |
+          "iam:RemoveClientIDFromOpenIDConnectProvider"
+      - pattern: |
+          "iam:RemoveRoleFromInstanceProfile"
+      - pattern: |
+          "iam:RemoveUserFromGroup"
+      - pattern: |
+          "iam:ResetServiceSpecificCredential"
+      - pattern: |
+          "iam:ResyncMFADevice"
+      - pattern: |
+          "iam:SetDefaultPolicyVersion"
+      - pattern: |
+          "iam:SetSecurityTokenServicePreferences"
+      - pattern: |
+          "iam:UpdateAccessKey"
+      - pattern: |
+          "iam:UpdateAccountPasswordPolicy"
+      - pattern: |
+          "iam:UpdateAssumeRolePolicy"
+      - pattern: |
+          "iam:UpdateGroup"
+      - pattern: |
+          "iam:UpdateLoginProfile"
+      - pattern: |
+          "iam:UpdateOpenIDConnectProviderThumbprint"
+      - pattern: |
+          "iam:UpdateRole"
+      - pattern: |
+          "iam:UpdateRoleDescription"
+      - pattern: |
+          "iam:UpdateSAMLProvider"
+      - pattern: |
+          "iam:UpdateSSHPublicKey"
+      - pattern: |
+          "iam:UpdateServerCertificate"
+      - pattern: |
+          "iam:UpdateServiceSpecificCredential"
+      - pattern: |
+          "iam:UpdateSigningCertificate"
+      - pattern: |
+          "iam:UpdateUser"
+      - pattern: |
+          "iam:UploadSSHPublicKey"
+      - pattern: |
+          "iam:UploadServerCertificate"
+      - pattern: |
+          "iam:UploadSigningCertificate"
+      - pattern: |
+          "imagebuilder:PutComponentPolicy"
+      - pattern: |
+          "imagebuilder:PutImagePolicy"
+      - pattern: |
+          "imagebuilder:PutImageRecipePolicy"
+      - pattern: |
+          "iot:AttachPolicy"
+      - pattern: |
+          "iot:AttachPrincipalPolicy"
+      - pattern: |
+          "iot:DetachPolicy"
+      - pattern: |
+          "iot:DetachPrincipalPolicy"
+      - pattern: |
+          "iot:SetDefaultAuthorizer"
+      - pattern: |
+          "iot:SetDefaultPolicyVersion"
+      - pattern: |
+          "iotsitewise:CreateAccessPolicy"
+      - pattern: |
+          "iotsitewise:DeleteAccessPolicy"
+      - pattern: |
+          "iotsitewise:UpdateAccessPolicy"
+      - pattern: |
+          "kms:CreateGrant"
+      - pattern: |
+          "kms:PutKeyPolicy"
+      - pattern: |
+          "kms:RetireGrant"
+      - pattern: |
+          "kms:RevokeGrant"
+      - pattern: |
+          "lakeformation:BatchGrantPermissions"
+      - pattern: |
+          "lakeformation:BatchRevokePermissions"
+      - pattern: |
+          "lakeformation:GrantPermissions"
+      - pattern: |
+          "lakeformation:PutDataLakeSettings"
+      - pattern: |
+          "lakeformation:RevokePermissions"
+      - pattern: |
+          "lambda:AddLayerVersionPermission"
+      - pattern: |
+          "lambda:AddPermission"
+      - pattern: |
+          "lambda:DisableReplication"
+      - pattern: |
+          "lambda:EnableReplication"
+      - pattern: |
+          "lambda:RemoveLayerVersionPermission"
+      - pattern: |
+          "lambda:RemovePermission"
+      - pattern: |
+          "license-manager:UpdateServiceSettings"
+      - pattern: |
+          "lightsail:GetRelationalDatabaseMasterUserPassword"
+      - pattern: |
+          "logs:DeleteResourcePolicy"
+      - pattern: |
+          "logs:PutResourcePolicy"
+      - pattern: |
+          "mediapackage:RotateIngestEndpointCredentials"
+      - pattern: |
+          "mediastore:DeleteContainerPolicy"
+      - pattern: |
+          "mediastore:PutContainerPolicy"
+      - pattern: |
+          "opsworks:SetPermission"
+      - pattern: |
+          "opsworks:UpdateUserProfile"
+      - pattern: |
+          "quicksight:CreateAdmin"
+      - pattern: |
+          "quicksight:CreateGroup"
+      - pattern: |
+          "quicksight:CreateGroupMembership"
+      - pattern: |
+          "quicksight:CreateIAMPolicyAssignment"
+      - pattern: |
+          "quicksight:CreateUser"
+      - pattern: |
+          "quicksight:DeleteGroup"
+      - pattern: |
+          "quicksight:DeleteGroupMembership"
+      - pattern: |
+          "quicksight:DeleteIAMPolicyAssignment"
+      - pattern: |
+          "quicksight:DeleteUser"
+      - pattern: |
+          "quicksight:DeleteUserByPrincipalId"
+      - pattern: |
+          "quicksight:RegisterUser"
+      - pattern: |
+          "quicksight:UpdateDashboardPermissions"
+      - pattern: |
+          "quicksight:UpdateGroup"
+      - pattern: |
+          "quicksight:UpdateIAMPolicyAssignment"
+      - pattern: |
+          "quicksight:UpdateTemplatePermissions"
+      - pattern: |
+          "quicksight:UpdateUser"
+      - pattern: |
+          "ram:AcceptResourceShareInvitation"
+      - pattern: |
+          "ram:AssociateResourceShare"
+      - pattern: |
+          "ram:CreateResourceShare"
+      - pattern: |
+          "ram:DeleteResourceShare"
+      - pattern: |
+          "ram:DisassociateResourceShare"
+      - pattern: |
+          "ram:EnableSharingWithAwsOrganization"
+      - pattern: |
+          "ram:RejectResourceShareInvitation"
+      - pattern: |
+          "ram:UpdateResourceShare"
+      - pattern: |
+          "rds:AuthorizeDBSecurityGroupIngress"
+      - pattern: |
+          "rds-db:connect"
+      - pattern: |
+          "redshift:AuthorizeSnapshotAccess"
+      - pattern: |
+          "redshift:CreateClusterUser"
+      - pattern: |
+          "redshift:CreateSnapshotCopyGrant"
+      - pattern: |
+          "redshift:JoinGroup"
+      - pattern: |
+          "redshift:ModifyClusterIamRoles"
+      - pattern: |
+          "redshift:RevokeSnapshotAccess"
+      - pattern: |
+          "route53resolver:PutResolverRulePolicy"
+      - pattern: |
+          "s3:BypassGovernanceRetention"
+      - pattern: |
+          "s3:DeleteAccessPointPolicy"
+      - pattern: |
+          "s3:DeleteBucketPolicy"
+      - pattern: |
+          "s3:ObjectOwnerOverrideToBucketOwner"
+      - pattern: |
+          "s3:PutAccessPointPolicy"
+      - pattern: |
+          "s3:PutAccountPublicAccessBlock"
+      - pattern: |
+          "s3:PutBucketAcl"
+      - pattern: |
+          "s3:PutBucketPolicy"
+      - pattern: |
+          "s3:PutBucketPublicAccessBlock"
+      - pattern: |
+          "s3:PutObjectAcl"
+      - pattern: |
+          "s3:PutObjectVersionAcl"
+      - pattern: |
+          "secretsmanager:DeleteResourcePolicy"
+      - pattern: |
+          "secretsmanager:PutResourcePolicy"
+      - pattern: |
+          "secretsmanager:ValidateResourcePolicy"
+      - pattern: |
+          "servicecatalog:CreatePortfolioShare"
+      - pattern: |
+          "servicecatalog:DeletePortfolioShare"
+      - pattern: |
+          "sns:AddPermission"
+      - pattern: |
+          "sns:CreateTopic"
+      - pattern: |
+          "sns:RemovePermission"
+      - pattern: |
+          "sns:SetTopicAttributes"
+      - pattern: |
+          "sqs:AddPermission"
+      - pattern: |
+          "sqs:CreateQueue"
+      - pattern: |
+          "sqs:RemovePermission"
+      - pattern: |
+          "sqs:SetQueueAttributes"
+      - pattern: |
+          "ssm:ModifyDocumentPermission"
+      - pattern: |
+          "sso:AssociateDirectory"
+      - pattern: |
+          "sso:AssociateProfile"
+      - pattern: |
+          "sso:CreateApplicationInstance"
+      - pattern: |
+          "sso:CreateApplicationInstanceCertificate"
+      - pattern: |
+          "sso:CreatePermissionSet"
+      - pattern: |
+          "sso:CreateProfile"
+      - pattern: |
+          "sso:CreateTrust"
+      - pattern: |
+          "sso:DeleteApplicationInstance"
+      - pattern: |
+          "sso:DeleteApplicationInstanceCertificate"
+      - pattern: |
+          "sso:DeletePermissionSet"
+      - pattern: |
+          "sso:DeletePermissionsPolicy"
+      - pattern: |
+          "sso:DeleteProfile"
+      - pattern: |
+          "sso:DisassociateDirectory"
+      - pattern: |
+          "sso:DisassociateProfile"
+      - pattern: |
+          "sso:ImportApplicationInstanceServiceProviderMetadata"
+      - pattern: |
+          "sso:PutPermissionsPolicy"
+      - pattern: |
+          "sso:StartSSO"
+      - pattern: |
+          "sso:UpdateApplicationInstanceActiveCertificate"
+      - pattern: |
+          "sso:UpdateApplicationInstanceDisplayData"
+      - pattern: |
+          "sso:UpdateApplicationInstanceResponseConfiguration"
+      - pattern: |
+          "sso:UpdateApplicationInstanceResponseSchemaConfiguration"
+      - pattern: |
+          "sso:UpdateApplicationInstanceSecurityConfiguration"
+      - pattern: |
+          "sso:UpdateApplicationInstanceServiceProviderConfiguration"
+      - pattern: |
+          "sso:UpdateApplicationInstanceStatus"
+      - pattern: |
+          "sso:UpdateDirectoryAssociation"
+      - pattern: |
+          "sso:UpdatePermissionSet"
+      - pattern: |
+          "sso:UpdateProfile"
+      - pattern: |
+          "sso:UpdateSSOConfiguration"
+      - pattern: |
+          "sso:UpdateTrust"
+      - pattern: |
+          "sso-directory:AddMemberToGroup"
+      - pattern: |
+          "sso-directory:CreateAlias"
+      - pattern: |
+          "sso-directory:CreateGroup"
+      - pattern: |
+          "sso-directory:CreateUser"
+      - pattern: |
+          "sso-directory:DeleteGroup"
+      - pattern: |
+          "sso-directory:DeleteUser"
+      - pattern: |
+          "sso-directory:DisableUser"
+      - pattern: |
+          "sso-directory:EnableUser"
+      - pattern: |
+          "sso-directory:RemoveMemberFromGroup"
+      - pattern: |
+          "sso-directory:UpdateGroup"
+      - pattern: |
+          "sso-directory:UpdatePassword"
+      - pattern: |
+          "sso-directory:UpdateUser"
+      - pattern: |
+          "sso-directory:VerifyEmail"
+      - pattern: |
+          "storagegateway:DeleteChapCredentials"
+      - pattern: |
+          "storagegateway:SetLocalConsolePassword"
+      - pattern: |
+          "storagegateway:SetSMBGuestPassword"
+      - pattern: |
+          "storagegateway:UpdateChapCredentials"
+      - pattern: |
+          "waf:DeletePermissionPolicy"
+      - pattern: |
+          "waf:PutPermissionPolicy"
+      - pattern: |
+          "waf-regional:DeletePermissionPolicy"
+      - pattern: |
+          "waf-regional:PutPermissionPolicy"
+      - pattern: |
+          "wafv2:CreateWebACL"
+      - pattern: |
+          "wafv2:DeletePermissionPolicy"
+      - pattern: |
+          "wafv2:DeleteWebACL"
+      - pattern: |
+          "wafv2:PutPermissionPolicy"
+      - pattern: |
+          "wafv2:UpdateWebACL"
+      - pattern: |
+          "worklink:UpdateDevicePolicyConfiguration"
+      - pattern: |
+          "workmail:ResetPassword"
+      - pattern: |
+          "workmail:ResetUserPassword"
+      - pattern: |
+          "xray:PutEncryptionConfig"
+      - pattern: |
+          "worklink:*"
+      - pattern: |
+          "route53resolver:*"
+      - pattern: |
+          "es:*"
+      - pattern: |
+          "greengrass:*"
+      - pattern: |
+          "redshift:*"
+      - pattern: |
+          "license-manager:*"
+      - pattern: |
+          "rds:*"
+      - pattern: |
+          "lambda:*"
+      - pattern: |
+          "elasticfilesystem:*"
+      - pattern: |
+          "logs:*"
+      - pattern: |
+          "sso:*"
+      - pattern: |
+          "waf:*"
+      - pattern: |
+          "mediastore:*"
+      - pattern: |
+          "acm-pca:*"
+      - pattern: |
+          "sso-directory:*"
+      - pattern: |
+          "imagebuilder:*"
+      - pattern: |
+          "sqs:*"
+      - pattern: |
+          "codeguru-profiler:*"
+      - pattern: |
+          "wafv2:*"
+      - pattern: |
+          "cloudformation:*"
+      - pattern: |
+          "xray:*"
+      - pattern: |
+          "codeartifact:*"
+      - pattern: |
+          "iotsitewise:*"
+      - pattern: |
+          "workmail:*"
+      - pattern: |
+          "glue:*"
+      - pattern: |
+          "deeplens:*"
+      - pattern: |
+          "chime:*"
+      - pattern: |
+          "mediapackage:*"
+      - pattern: |
+          "opsworks:*"
+      - pattern: |
+          "ds:*"
+      - pattern: |
+          "ram:*"
+      - pattern: |
+          "iam:*"
+      - pattern: |
+          "waf-regional:*"
+      - pattern: |
+          "glacier:*"
+      - pattern: |
+          "cloudsearch:*"
+      - pattern: |
+          "lakeformation:*"
+      - pattern: |
+          "elasticmapreduce:*"
+      - pattern: |
+          "quicksight:*"
+      - pattern: |
+          "sns:*"
+      - pattern: |
+          "ec2:*"
+      - pattern: |
+          "health:*"
+      - pattern: |
+          "lightsail:*"
+      - pattern: |
+          "codestar:*"
+      - pattern: |
+          "kms:*"
+      - pattern: |
+          "codebuild:*"
+      - pattern: |
+          "s3:*"
+      - pattern: |
+          "cognito-identity:*"
+      - pattern: |
+          "apigateway:*"
+      - pattern: |
+          "rds-db:*"
+      - pattern: |
+          "iot:*"
+      - pattern: |
+          "backup:*"
+      - pattern: |
+          "secretsmanager:*"
+      - pattern: |
+          "servicecatalog:*"
+      - pattern: |
+          "ssm:*"
+      - pattern: |
+          "storagegateway:*"
+      - pattern: |
+          "ecr:*"
   message: |
     Ensure IAM policies don't allow resource exposure. These actions can expose AWS resources to the public.
     For example `ecr:SetRepositoryPolicy` could let an attacker retrieve container images. Instead,
     use another action that doesn't expose AWS resources.
-    $...ACTION
   metadata:
     references:
     - https://cloudsplaining.readthedocs.io/en/latest/glossary/resource-exposure/
     - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/IAMPermissionsManagement.py
     category: security
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  paths:
-    include:
-    - '*.tf'
-  languages: [generic]
+  languages: [hcl]
   severity: WARNING

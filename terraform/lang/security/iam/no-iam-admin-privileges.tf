@@ -32,6 +32,26 @@ data aws_iam_policy_document "policy" {
    }
 }
 
+resource "aws_iam_user_policy" "policy" {
+  name        = "test_policy"
+  path        = "/"
+  description = "My test policy"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        #ok: no-iam-admin-privileges
+        Resource = "*"
+        Action = "*"
+        Effect = "Deny"
+      },
+    ]
+  })
+}
+
 resource "aws_iam_policy" "policy" {
   name        = "test_policy"
   path        = "/"
@@ -44,8 +64,8 @@ resource "aws_iam_policy" "policy" {
     Statement = [
       {
         #ruleid: no-iam-admin-privileges
-        Action = "*"
         Resource = "*"
+        Action = "*"
       },
     ]
   })
@@ -73,12 +93,12 @@ resource "aws_iam_policy" "policy" {
 
 data aws_iam_policy_document "policy" {
    statement {
-     # ruleid: no-iam-admin-privileges
+     #ruleid: no-iam-admin-privileges
+     resources = ["*"]
      actions = ["*"]
      principals {
        type        = "AWS"
        identifiers = ["*"]
      }
-     resources = ["*"]
    }
 }
