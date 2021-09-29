@@ -2,20 +2,26 @@ rules:
 - id: eks-public-endpoint-enabled
   patterns:
   - pattern: |
-      {...}
+      resource
   - pattern-inside: |
       resource "aws_eks_cluster" "..." {...}
   - pattern-not-inside: |
-      {... vpc_config{... endpoint_public_access = false ...} ...}
+      resource "aws_eks_cluster" "..."{
+        ...
+        vpc_config{
+          ...
+          endpoint_public_access = false
+          ...
+        }
+        ...
+      }
   languages:
-  - generic
-  paths:
-    include:
-    - '*.tf'
+  - hcl
   message: >-
     The vpc_config resource inside the eks cluster has not explicitly disabled public endpoint access
   severity: WARNING
   metadata:
     category: security
+    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
     technology:
     - terraform

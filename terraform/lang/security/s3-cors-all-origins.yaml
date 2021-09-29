@@ -4,15 +4,13 @@ rules:
   - pattern-inside: cors_rule { ... }
   - pattern: allowed_origins = ["*"]
   languages:
-  - generic
-  paths:
-    include:
-    - '*.tf'
+  - hcl
   severity: WARNING
   message: CORS rule on bucket permits any origin
   metadata:
     references:
     - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#using-cors
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
     category: security
     technology:
     - terraform

@@ -1,7 +1,7 @@
 rules:
 - id: ec2-imdsv1-optional
   languages:
-  - generic
+  - hcl
   message: >-
     AWS EC2 Instance allowing use of the IMDSv1
   metadata:
@@ -11,10 +11,8 @@ rules:
     category: security
     technology:
     - terraform
-  paths:
-    include:
-    - '*.tf'
   patterns:
   - pattern: http_tokens = "optional"
-  - pattern-inside: '{ ... metadata_options { ... } ... }'
+  - pattern-inside: |
+      metadata_options { ... }
   severity: ERROR
