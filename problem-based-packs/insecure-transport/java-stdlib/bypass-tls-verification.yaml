@@ -28,7 +28,8 @@ rules:
         ...
       }
   message: >-
-    Checks for redefinitions of the checkServerTrusted function in the X509TrustManager class that disables TLS/SSL certificate verification.
+    Checks for redefinitions of the checkServerTrusted function in the X509TrustManager class that disables TLS/SSL certificate
+    verification.
     This should only be used for debugging purposes because it leads to vulnerability to MTM attacks.
   metadata:
     vulnerability: Insecure Transport
@@ -38,5 +39,7 @@ rules:
     - https://riptutorial.com/java/example/16517/temporarily-disable-ssl-verification--for-testing-purposes-
     - https://stackoverflow.com/questions/35530558/how-to-fix-unsafe-implementation-of-x509trustmanager-in-android-app?rq=1
     category: security
+    technology:
+    - java
   languages: [java]
   severity: WARNING
