@@ -6,6 +6,8 @@ rules:
     - pattern: RegExp($ARG, ...)
   - pattern-not: RegExp("...", ...)
   - pattern-not: new RegExp("...", ...)
+  - pattern-not: RegExp(/.../, ...)
+  - pattern-not: new RegExp(/.../, ...)
   message: >-
     RegExp() called with a variable, this might allow an attacker to DOS your application with a long-running regular expression.
   languages:
