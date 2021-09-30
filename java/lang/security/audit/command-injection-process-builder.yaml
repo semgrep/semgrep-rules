@@ -101,12 +101,16 @@ rules:
         $PB.command(Arrays.asList("...","...","...",...),...)
   message: >-
     A formatted or concatenated string was detected as input to a ProcessBuilder call.
-    This is dangerous if a variable is controlled by user input and could result in a
-    command injection. Ensure your variables are not controlled by users or sufficiently sanitized.
+    This is dangerous if a variable is controlled by user input and could result in
+    a
+    command injection. Ensure your variables are not controlled by users or sufficiently
+    sanitized.
   metadata:
     cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     owasp: 'A1: Injection'
     category: security
+    technology:
+    - java
   severity: WARNING
   languages:
   - java

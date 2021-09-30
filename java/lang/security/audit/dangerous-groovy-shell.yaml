@@ -22,11 +22,14 @@ rules:
   - pattern-not: |
       $SHELL.parseClass("...",...)
   message: >-
-    A expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation.
+    A expression is built with a dynamic value. The source of the value(s) should
+    be verified to avoid that unfiltered values fall into this risky code evaluation.
   metadata:
     cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp: 'A1: Injection'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#GROOVY_SHELL
     category: security
+    technology:
+    - groovy
   languages: [java]
   severity: WARNING
