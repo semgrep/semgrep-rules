@@ -1,15 +1,21 @@
 rules:
 - id: nested-attributes-bypass
   message: >-
-    Checks for nested attributes vulnerability (CVE-2015-7577). Setting allow_destroy: false in
-    accepts_nested_attributes_for can lead to attackers setting attributes to invalid values and clearing all attributes.
-    This affects versions 3.1.0 and newer, with fixed versions 5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1.
-    To fix, upgrade to a newer version or use the initializer specified in the google groups.
+    Checks for nested attributes vulnerability (CVE-2015-7577). Setting allow_destroy:
+    false in
+    accepts_nested_attributes_for can lead to attackers setting attributes to invalid
+    values and clearing all attributes.
+    This affects versions 3.1.0 and newer, with fixed versions 5.0.0.beta1.1, 4.2.5.1,
+    4.1.14.1, 3.2.22.1.
+    To fix, upgrade to a newer version or use the initializer specified in the google
+    groups.
   metadata:
     references:
     - https://groups.google.com/g/rubyonrails-security/c/cawsWcQ6c8g/m/tegZtYdbFQAJ
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_nested_attributes_bypass.rb
     category: security
+    technology:
+    - ruby
   languages:
   - ruby
   severity: WARNING
