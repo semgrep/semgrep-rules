@@ -1,20 +1,18 @@
 rules:
 - id: unencrypted-ebs-volume
   languages:
-  - generic
+  - hcl
   message: >-
     An EBS volume is configured without encryption enabled.
-  paths:
-    include:
-    - '*.tf'
   patterns:
-  - pattern: resource "aws_ebs_volume" "..."
+  - pattern: resource
   - pattern-not-inside: |
       resource "aws_ebs_volume" "..." {... encrypted=true ...}
   - pattern-inside: |
       resource "aws_ebs_volume" "..." {...}
   severity: WARNING
   metadata:
+    cwe: 'CWE-311: Missing Encryption of Sensitive Data'
     category: security
     technology:
     - terraform
