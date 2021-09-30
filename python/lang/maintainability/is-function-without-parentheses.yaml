@@ -2,8 +2,8 @@ rules:
 - id: is-function-without-parentheses
   languages:
   - python
-  message: Is "$FUNC" a function or an attribute? If it is a function, you may have
-    meant $X.$FUNC() because $X.$FUNC is always true.
+  message: Is "$FUNC" a function or an attribute? If it is a function, you may have meant $X.$FUNC() because $X.$FUNC is always
+    true.
   patterns:
   - pattern: $X.$FUNC
   - pattern-not-inside: $X.$FUNC(...)
@@ -12,6 +12,6 @@ rules:
       regex: is_.*
   severity: WARNING
   metadata:
-    category: correctness
+    category: maintainability
     technology:
     - python
