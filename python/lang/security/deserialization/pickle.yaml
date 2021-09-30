@@ -7,6 +7,8 @@ rules:
     - https://docs.python.org/3/library/pickle.html
     - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
     category: security
+    technology:
+    - python
   languages:
   - python
   message: >-
@@ -25,6 +27,8 @@ rules:
     references:
     - https://docs.python.org/3/library/pickle.html
     category: security
+    technology:
+    - python
   languages:
   - python
   message: >-
@@ -41,10 +45,13 @@ rules:
     references:
     - https://docs.python.org/3/library/pickle.html
     category: security
+    technology:
+    - python
   languages:
   - python
   message: >-
-    Avoid using `dill`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    Avoid using `dill`, which uses `pickle`, which is known to lead to code execution
+    vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
@@ -57,10 +64,13 @@ rules:
     references:
     - https://docs.python.org/3/library/pickle.html
     category: security
+    technology:
+    - python
   languages:
   - python
   message: >-
-    Avoid using `shelve`, which uses `pickle`, which is known to lead to code execution vulnerabilities.
+    Avoid using `shelve`, which uses `pickle`, which is known to lead to code execution
+    vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.

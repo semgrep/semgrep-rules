@@ -12,7 +12,8 @@ rules:
   - pattern-not: asyncio.subprocess.create_subprocess_shell("...", ...)
   - pattern-not: asyncio.create_subprocess_shell("...", ...)
   message: >-
-    Detected asyncio subprocess function without a static string. If this data can be
+    Detected asyncio subprocess function without a static string. If this data can
+    be
     controlled by a malicious actor, it may be an instance of command injection.
     Audit the use of this call to ensure it is not controllable by an external resource.
     You may consider using 'shlex.escape()'.
@@ -28,6 +29,8 @@ rules:
     - https://docs.python.org/3/library/asyncio-subprocess.html
     - https://docs.python.org/3/library/shlex.html
     category: security
+    technology:
+    - python
   languages:
   - python
   severity: WARNING
