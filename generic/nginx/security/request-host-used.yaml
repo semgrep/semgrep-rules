@@ -1,6 +1,8 @@
 rules:
 - id: request-host-used
-  pattern: $http_host
+  pattern-either:
+  - pattern: $http_host
+  - pattern: $host
   paths:
     include:
     - '*conf*'
@@ -12,11 +14,12 @@ rules:
   - generic
   severity: WARNING
   message: >-
-    '$http_host' uses the 'Host' request header which could be controlled by an attacker. Use the '$host'
-    variable instead, which will use server names listed in the 'server_name' directive.
+    '$http_host' and '$host' variables may contain a malicious value from attacker controlled 'Host' request header.
+    Use an explicitly configured host value or a allowlist for validation.
   metadata:
     references:
     - https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md
+    - https://portswigger.net/web-security/host-header
     category: security
     technology:
     - nginx
