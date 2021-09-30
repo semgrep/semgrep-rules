@@ -1,15 +1,15 @@
 rules:
 - id: hardcoded-conditional
   patterns:
-    - pattern-either:
-      - pattern: if (true) { ... }
-      - pattern: if (false) { ... }
-      - pattern: if ($VAR = true) { ... }
-      - pattern: if ($VAR = false) { ... }
-      - pattern: if ($EXPR && false) { ... }
-      - pattern: if (false && $EXPR) { ... }
-      - pattern: if ($EXPR || true) { ... }
-      - pattern: if (true || $EXPR) { ... }
+  - pattern-either:
+    - pattern: if (true) { ... }
+    - pattern: if (false) { ... }
+    - pattern: if ($VAR = true) { ... }
+    - pattern: if ($VAR = false) { ... }
+    - pattern: if ($EXPR && false) { ... }
+    - pattern: if (false && $EXPR) { ... }
+    - pattern: if ($EXPR || true) { ... }
+    - pattern: if (true || $EXPR) { ... }
   message: This if statement will always have the same behavior and is therefore unnecessary.
   languages: [java]
   severity: ERROR
@@ -17,4 +17,3 @@ rules:
     category: correctness
     technology:
     - java
-
