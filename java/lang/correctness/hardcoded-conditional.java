@@ -38,5 +38,11 @@ class Bar {
             continue;
         }
 
+        // ok:hardcoded-conditional
+        if (moveToChild(curs, index, false, false))
+        {
+            removeToken(curs);
+        }
+
     }
 }
