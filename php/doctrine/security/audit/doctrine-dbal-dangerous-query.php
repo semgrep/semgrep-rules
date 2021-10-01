@@ -35,4 +35,15 @@ class ProductRepository extends ServiceEntityRepository
         return $resultSet;
     }
 
+    public function okTest2(int $price): array
+    {
+        $conn = $this->foobar();
+        $sql = "SELECT * FROM users WHERE username = ?";
+        // ok: doctrine-dbal-dangerous-query
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1, $_GET['username']);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet;
+    }
+
 }
