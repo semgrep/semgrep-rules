@@ -12,12 +12,13 @@ rules:
   languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       require('playwright');
       ...
   - pattern-not-inside: |
+      require('playwright');
       ...
       var $INPUT = "...";
       ...
+      $PAGE.setContent($INPUT,...)
   - pattern: $PAGE.setContent($INPUT,...)
   - pattern-not: $PAGE.setContent("...",...)
