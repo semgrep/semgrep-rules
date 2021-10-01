@@ -2,6 +2,8 @@
 
 function test1($input)
 {
+    $queryBuilder = $conn->createQueryBuilder();
+
     $queryBuilder
         ->select('id', 'name')
         ->from('users')
@@ -12,6 +14,8 @@ function test1($input)
 
 function test2($email, $input)
 {
+    $queryBuilder = new QueryBuilder($this->connection);
+
     $queryBuilder
         ->select('id', 'name')
         ->from('users')
@@ -24,6 +28,8 @@ function test2($email, $input)
 
 function okTest1($input)
 {
+    $queryBuilder = $conn->createQueryBuilder();
+
     $queryBuilder
         ->select('id', 'name')
         ->from('users')

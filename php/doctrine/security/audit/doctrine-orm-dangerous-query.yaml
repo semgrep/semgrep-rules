@@ -1,5 +1,22 @@
 rules:
 - id: doctrine-orm-dangerous-query
+  languages:
+  - php
+  message: >-
+    `$QUERY` Detected string concatenation with a non-literal variable in a Doctrine
+    QueryBuilder method. This could lead to SQL injection if the variable is
+    user-controlled and not properly sanitized. In order to prevent SQL
+    injection, used parameterized queries or prepared statements instead.
+  metadata:
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    owasp: 'A1: Injection'
+    references:
+    - https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/query-builder.html#security-safely-preventing-sql-injection
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    technology:
+    - doctrine
   mode: taint
   pattern-sinks:
   - patterns:
@@ -28,25 +45,17 @@ rules:
       - pattern-inside: $QUERY->addOrderBy(...,$SINK,...)
       - pattern-inside: $QUERY->set($SINK,...)
       - pattern-inside: $QUERY->setValue($SINK,...)
+    - pattern-either:
+      - pattern-inside: |
+          $Q = $X->createQueryBuilder();
+          ...
+      - pattern-inside: |
+          $Q = new QueryBuilder(...);
+          ...
   pattern-sources:
   - patterns:
     - pattern-either:
       - pattern: sprintf(...)
       - pattern: |
           "...".$SMTH
-  message: >-
-    Detected string concatenation with a non-literal variable in a Doctrine QueryBuilder method.
-    This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
-  metadata:
-    references:
-    - https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/query-builder.html#security-safely-preventing-sql-injection
-    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-    owasp: 'A1: Injection'
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    category: security
-    technology:
-    - doctrine
-  languages: [php]
   severity: WARNING
