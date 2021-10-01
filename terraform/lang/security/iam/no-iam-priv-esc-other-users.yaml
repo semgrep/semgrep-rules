@@ -4,13 +4,13 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-inside: |
-          resource "$TYPE" "..." {
+          resource $TYPE "..." {
             ...
             policy = jsonencode({
               ...
               Statement = [
-                ...
-                Resource = $...RESOURCE
+                ...,
+                {... Resource = $RESOURCE ...},
                 ...
               ]
               ...
@@ -18,42 +18,50 @@ rules:
             ...
           }
       - pattern: |
-          Action = $...ACTION
+          Action = $ACTION
       - metavariable-pattern:
           metavariable: $TYPE
           pattern-either:
-          - pattern: aws_iam_role_policy
-          - pattern: aws_iam_policy
-          - pattern: aws_iam_user_policy
-          - pattern: aws_iam_group_policy
+          - pattern: |
+              "aws_iam_role_policy"
+          - pattern: |
+              "aws_iam_policy"
+          - pattern: |
+              "aws_iam_user_policy"
+          - pattern: |
+              "aws_iam_group_policy"
     - patterns:
       - pattern-inside: |
           data aws_iam_policy_document "..." {
             ...
             statement {
               ...
-              resources = [$...RESOURCE]
+              resources = $RESOURCE
               ...
             }
             ...
           }
       - pattern: |
-          actions = [$...ACTION]
+          actions = [..., $ACTION, ...]
   - metavariable-pattern:
-      metavariable: $...RESOURCE
-      patterns:
-      - pattern: '*'
-  - metavariable-pattern:
-      metavariable: $...ACTION
+      metavariable: $RESOURCE
       pattern-either:
-      - pattern: iam:CreateAccessKey
-      - pattern: iam:CreateLoginProfile
-      - pattern: iam:UpdateLoginProfile
-      - pattern: iam:*
-  message: |
+      - pattern-regex: .*\*.*
+  - metavariable-pattern:
+      metavariable: $ACTION
+      pattern-either:
+      - pattern: |
+          "iam:CreateAccessKey"
+      - pattern: |
+          "iam:CreateLoginProfile"
+      - pattern: |
+          "iam:UpdateLoginProfile"
+      - pattern: |
+          "iam:*"
+  message: >-
     Ensure that IAM policies with permissions on other users don't allow for privilege escalation. This
     can lead to an attacker gaining full administrator access of AWS accounts. Instead, specify which
-    user the permission should be used on or do not use the listed actions.
+    user the permission should be used on or do not use the listed actions. $RESOURCE
   metadata:
     references:
     - https://cloudsplaining.readthedocs.io/en/latest/glossary/privilege-escalation/
@@ -61,8 +69,7 @@ rules:
     category: security
     cwe: 'CWE-269: Improper Privilege Management'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  paths:
-    include:
-    - '*.tf'
-  languages: [generic]
+    technology:
+    - terraform
+  languages: [hcl]
   severity: WARNING

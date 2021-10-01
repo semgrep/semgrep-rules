@@ -4,7 +4,7 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-inside: |
-          resource "$TYPE" "..." {
+          resource $TYPE "..." {
             ...
             policy = jsonencode({
               ...
@@ -16,14 +16,18 @@ rules:
             ...
           }
       - pattern: |
-          Action = $...ACTION
+          Action = $ACTION
       - metavariable-pattern:
           metavariable: $TYPE
           pattern-either:
-          - pattern: aws_iam_role_policy
-          - pattern: aws_iam_policy
-          - pattern: aws_iam_user_policy
-          - pattern: aws_iam_group_policy
+          - pattern: |
+              "aws_iam_role_policy"
+          - pattern: |
+              "aws_iam_policy"
+          - pattern: |
+              "aws_iam_user_policy"
+          - pattern: |
+              "aws_iam_group_policy"
     - patterns:
       - pattern-inside: |
           data aws_iam_policy_document "..." {
@@ -34,20 +38,51 @@ rules:
             ...
           }
       - pattern: |
-          actions = [$...ACTION]
+          actions = $ACTION
   - metavariable-pattern:
-      metavariable: $...ACTION
+      metavariable: $ACTION
       pattern-either:
       # TODO: this is a hack because generic currently doesn't work with [..., $ACTION, ...]
       # we will replace this once full support for terraform gets released.
-      - pattern-regex: ^(?=.*iam:UpdateAssumeRolePolicy)(?=.*sts:AssumeRole).+
-      - pattern-regex: ^(?=.*iam:PassRole)(?=.*lambda:CreateFunction)(?=.*lambda:InvokeFunction).+
-      - pattern-regex: ^(?=.*iam:PassRole)(?=.*lambda:CreateFunction)(?=.*lambda:CreateEventSourceMapping).+
-      - pattern: lambda:UpdateFunctionCode
-      - pattern-regex: ^(?=.*iam:PassRole)(?=.*glue:CreateDevEndpoint).+
-      - pattern-regex: ^(?=.*iam:PassRole)(?=.*cloudformation:CreateStack).+
-      - pattern-regex: ^(?=.*iam:PassRole)(?=.*datapipeline:CreatePipeline)(?=.*datapipeline:PutPipelineDefinition).+
-  message: |
+      - patterns:
+        - pattern: |
+            [..., "sts:AssumeRole", ...]
+        - pattern: |
+            [..., "iam:UpdateAssumeRolePolicy", ...]
+      - patterns:
+        - pattern: |
+            [..., "iam:PassRole", ...]
+        - pattern: |
+            [..., "lambda:CreateFunction", ...]
+        - pattern: |
+            [..., "lambda:InvokeFunction", ...]
+      - patterns:
+        - pattern: |
+            [..., "iam:PassRole", ...]
+        - pattern: |
+            [..., "lambda:CreateFunction", ...]
+        - pattern: |
+            [..., "lambda:CreateEventSourceMapping", ...]
+      - pattern: |
+          "lambda:UpdateFunctionCode"
+      - patterns:
+        - pattern: |
+            [..., "iam:PassRole", ...]
+        - pattern: |
+            [..., "glue:CreateDevEndpoint", ...]
+      - patterns:
+        - pattern: |
+            [..., "iam:PassRole", ...]
+        - pattern: |
+            [..., "cloudformation:CreateStack", ...]
+      - patterns:
+        - pattern: |
+            [..., "iam:PassRole", ...]
+        - pattern: |
+            [..., "datapipeline:CreatePipeline", ...]
+        - pattern: |
+            [..., "datapipeline:PutPipelineDefinition", ...]
+  message: >-
     Ensure that groups of actions that include iam:PassRole and could result in privilege escalation
     are not all allowed for the same user. These actions could result in an attacker gaining full admin
     access of an AWS account. Try not to use these actions in conjuction.
@@ -56,9 +91,9 @@ rules:
     - https://cloudsplaining.readthedocs.io/en/latest/glossary/privilege-escalation/
     - https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/
     category: security
+    cwe: 'CWE-269: Improper Privilege Management'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  paths:
-    include:
-    - '*.tf'
-  languages: [generic]
+    technology:
+    - terraform
+  languages: [hcl]
   severity: WARNING

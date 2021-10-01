@@ -13,7 +13,7 @@ resource "aws_iam_user_policy" "lb_ro" {
           "std:AssumeRole",
         ]
         Effect   = "Allow"
-        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws:username}"]
+        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws.username}"]
       },
     ]
   })
@@ -85,7 +85,27 @@ resource "aws_iam_user_policy" "policy" {
     Statement = [
       {
         # ruleid: no-iam-priv-esc-roles
-        Action = ["ec2:Describe", "sts:AssumeRole", "iam:UpdateAssumeRolePolicy"]
+        Action = ["ec2:Describe", "sts:AssumeRole", "ec2:Test", "iam:UpdateAssumeRolePolicy"]
+        Effect   = "Allow"
+        Resource = "arn:aws:iam::account:user/*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user_policy" "policy" {
+  name        = "test_policy"
+  path        = "/"
+  description = "My test policy"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        # ruleid: no-iam-priv-esc-roles
+        Action = "lambda:UpdateFunctionCode"
         Effect   = "Allow"
         Resource = "arn:aws:iam::account:user/*"
       },
@@ -125,7 +145,27 @@ resource "aws_iam_policy" "policy" {
     Statement = [
       {
         # ruleid: no-iam-priv-esc-roles
-        Action = ["datapipeline:CreatePipeline, datapipeline:PutPipelineDefinition, iam:PassRole"]
+        Action = ["datapipeline:PutPipelineDefinition", "datapipeline:CreatePipeline", "iam:PassRole"]
+        Effect   = "Allow"
+        Resource = "arn:aws:iam::*:user/*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test_policy"
+  path        = "/"
+  description = "My test policy"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        # ok: no-iam-priv-esc-roles
+        Action = "datapipeline:CreatePipeline"
         Effect   = "Allow"
         Resource = "arn:aws:iam::*:user/*"
       },
@@ -136,7 +176,7 @@ resource "aws_iam_policy" "policy" {
 data aws_iam_policy_document "policy" {
    statement {
      # ruleid: no-iam-priv-esc-roles
-     actions = ["cloudformation:CreateStack, iam:PassRole"]
+     actions = ["cloudformation:CreateStack", "iam:PassRole"]
      principals {
        type        = "AWS"
        identifiers = ["*"]

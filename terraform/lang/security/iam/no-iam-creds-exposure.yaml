@@ -4,7 +4,7 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-inside: |
-          resource "$TYPE" "..." {
+          resource $TYPE "..." {
             ...
             policy = jsonencode({
               ...
@@ -16,14 +16,18 @@ rules:
             ...
           }
       - pattern: |
-          Action = $...ACTION
+          Action = $ACTION
       - metavariable-pattern:
           metavariable: $TYPE
           pattern-either:
-          - pattern: aws_iam_role_policy
-          - pattern: aws_iam_policy
-          - pattern: aws_iam_user_policy
-          - pattern: aws_iam_group_policy
+          - pattern: |
+              "aws_iam_role_policy"
+          - pattern: |
+              "aws_iam_policy"
+          - pattern: |
+              "aws_iam_user_policy"
+          - pattern: |
+              "aws_iam_group_policy"
     - patterns:
       - pattern-inside: |
           data aws_iam_policy_document "..." {
@@ -34,52 +38,93 @@ rules:
             ...
           }
       - pattern: |
-          actions = [$...ACTION]
+          actions = [..., $ACTION, ...]
   - metavariable-pattern:
-      metavariable: $...ACTION
+      metavariable: $ACTION
       pattern-either:
-      - pattern: chime:CreateApiKey
-      - pattern: codepipeline:PollForJobs
-      - pattern: cognito-identity:GetOpenIdToken
-      - pattern: cognito-identity:GetOpenIdTokenForDeveloperEdentity
-      - pattern: cognito-identity:GetCredentialsForIdentity
-      - pattern: connect:GetFederationToken
-      - pattern: connect:GetFederationTokens
-      - pattern: ec2:GetPasswordData
-      - pattern: ecr:GetAuthorizationToken
-      - pattern: gamelift:RequestUploadCredentials
-      - pattern: iam:CreateAccessKey
-      - pattern: iam:CreateLoginProfile
-      - pattern: iam:CreateServiceSpecificCredential
-      - pattern: iam:ResetServiceSpecificCredential
-      - pattern: iam:UpdateAccessKey
-      - pattern: lightsail:GetInstanceAccessDetails
-      - pattern: lightsail:GetRelationalDatabaseMasterUserPassword
-      - pattern: rds-db:Connect
-      - pattern: redshift:GetClusterCredentials
-      - pattern: sso:GetRoleCredentials
-      - pattern: mediapackage:RotateChannelCredentials
-      - pattern: mediapackage:RotateIngestEndpointCredentials
-      - pattern: sts:AssumeRole
-      - pattern: sts:AssumeRoleWithSaml
-      - pattern: sts:AssumeRoleWithWebIdentity
-      - pattern: sts:GetFederationToken
-      - pattern: sts:GetSessionToken
-      - pattern: ec2:*
-      - pattern: codepipeline:*
-      - pattern: rds-db:*
-      - pattern: connect:*
-      - pattern: iam:*
-      - pattern: ecr:*
-      - pattern: sts:*
-      - pattern: chime:*
-      - pattern: mediapackage:*
-      - pattern: redshift:*
-      - pattern: gamelift:*
-      - pattern: cognito-identity:*
-      - pattern: lightsail:*
-      - pattern: sso:*
-  message: |
+      - pattern: |
+          "chime:CreateApiKey"
+      - pattern: |
+          "codepipeline:PollForJobs"
+      - pattern: |
+          "cognito-identity:GetOpenIdToken"
+      - pattern: |
+          "cognito-identity:GetOpenIdTokenForDeveloperEdentity"
+      - pattern: |
+          "cognito-identity:GetCredentialsForIdentity"
+      - pattern: |
+          "connect:GetFederationToken"
+      - pattern: |
+          "connect:GetFederationTokens"
+      - pattern: |
+          "ec2:GetPasswordData"
+      - pattern: |
+          "ecr:GetAuthorizationToken"
+      - pattern: |
+          "gamelift:RequestUploadCredentials"
+      - pattern: |
+          "iam:CreateAccessKey"
+      - pattern: |
+          "iam:CreateLoginProfile"
+      - pattern: |
+          "iam:CreateServiceSpecificCredential"
+      - pattern: |
+          "iam:ResetServiceSpecificCredential"
+      - pattern: |
+          "iam:UpdateAccessKey"
+      - pattern: |
+          "lightsail:GetInstanceAccessDetails"
+      - pattern: |
+          "lightsail:GetRelationalDatabaseMasterUserPassword"
+      - pattern: |
+          "rds-db:Connect"
+      - pattern: |
+          "redshift:GetClusterCredentials"
+      - pattern: |
+          "sso:GetRoleCredentials"
+      - pattern: |
+          "mediapackage:RotateChannelCredentials"
+      - pattern: |
+          "mediapackage:RotateIngestEndpointCredentials"
+      - pattern: |
+          "sts:AssumeRole"
+      - pattern: |
+          "sts:AssumeRoleWithSaml"
+      - pattern: |
+          "sts:AssumeRoleWithWebIdentity"
+      - pattern: |
+          "sts:GetFederationToken"
+      - pattern: |
+          "sts:GetSessionToken"
+      - pattern: |
+          "ec2:*"
+      - pattern: |
+          "codepipeline:*"
+      - pattern: |
+          "rds-db:*"
+      - pattern: |
+          "connect:*"
+      - pattern: |
+          "iam:*"
+      - pattern: |
+          "ecr:*"
+      - pattern: |
+          "sts:*"
+      - pattern: |
+          "chime:*"
+      - pattern: |
+          "mediapackage:*"
+      - pattern: |
+          "redshift:*"
+      - pattern: |
+          "gamelift:*"
+      - pattern: |
+          "cognito-identity:*"
+      - pattern: |
+          "lightsail:*"
+      - pattern: |
+          "sso:*"
+  message: >-
     Ensure IAM policies don't allow credentials exposure. Credentials exposure actions return credentials
     as part of the API response, and can possibly lead to leaking important credentials. Instead,
     use another action that doesn't return sensitive data as part of the API response.
@@ -88,9 +133,9 @@ rules:
     - https://cloudsplaining.readthedocs.io/en/latest/glossary/credentials-exposure/
     - https://github.com/bridgecrewio/checkov/blob/ca830e14745c2c8e1b941985f305abe985d7f1f9/checkov/terraform/checks/data/aws/IAMCredentialsExposure.py
     category: security
+    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  paths:
-    include:
-    - '*.tf'
-  languages: [generic]
+    technology:
+    - terraform
+  languages: [hcl]
   severity: WARNING
