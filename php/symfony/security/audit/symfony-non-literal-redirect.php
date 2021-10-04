@@ -30,4 +30,10 @@ class WebAppController
         return $this->redirect('http://symfony.com/doc');
     }
 
+    public function okTest3(): RedirectResponse
+    {
+        // ok: symfony-non-literal-redirect
+        return $this->redirect();
+    }
+
 }
