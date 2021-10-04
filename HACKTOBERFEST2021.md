@@ -1,4 +1,4 @@
-<img src="https://hacktoberfest.digitalocean.com/_nuxt/img/logo-hacktoberfest-full.f42e3b1.svg" width="500px" />
+<p align="center"><img src="https://hacktoberfest.digitalocean.com/_nuxt/img/logo-hacktoberfest-full.f42e3b1.svg" width="500px" /></p>
 
 We're participating in Hacktoberfest! This is our first year participating, and we hope it's a tradition for many years go come!
 
