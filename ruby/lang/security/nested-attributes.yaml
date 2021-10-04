@@ -1,14 +1,18 @@
 rules:
 - id: nested-attributes
   message: >-
-    Checks for models that enable nested attributes. A vulnerability in nested_attributes_for results in an attacker
-    begin able to change parameters apart from the ones intended by the developer. Affected Ruby versions: 3.0.0, 2.3.9.
+    Checks for models that enable nested attributes. A vulnerability in nested_attributes_for
+    results in an attacker
+    begin able to change parameters apart from the ones intended by the developer.
+    Affected Ruby versions: 3.0.0, 2.3.9.
     Fix: don't use accepts_nested_attributes_for or upgrade Ruby version.
   metadata:
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_nested_attributes.rb
     - https://groups.google.com/g/rubyonrails-security/c/-fkT0yja_gw/discussion
     category: security
+    technology:
+    - ruby
   languages:
   - ruby
   severity: WARNING

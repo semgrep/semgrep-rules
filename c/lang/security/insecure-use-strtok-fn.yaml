@@ -2,7 +2,8 @@ rules:
 - id: insecure-use-strtok-fn
   pattern: strtok(...)
   message: >-
-    Avoid using 'strtok()'. This function directly modifies the first argument buffer, permanently erasing the
+    Avoid using 'strtok()'. This function directly modifies the first argument buffer,
+    permanently erasing the
     delimiter character. Use 'strtok_r()' instead.
   metadata:
     references:
@@ -10,5 +11,7 @@ rules:
     - https://man7.org/linux/man-pages/man3/strtok.3.html#BUGS
     - https://stackoverflow.com/a/40335556
     category: security
+    technology:
+    - c
   languages: [c]
   severity: ERROR

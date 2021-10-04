@@ -11,8 +11,10 @@ rules:
   - pattern-regex: (tar|chmod|chown|rsync)(.*?)\*
   message: >-
     Detected use of the wildcard character in a system call that spawns a shell.
-    This subjects the wildcard to normal shell expansion, which can have unintended consequences
-    if there exist any non-standard file names. Consider a file named '-e sh script.sh' -- this
+    This subjects the wildcard to normal shell expansion, which can have unintended
+    consequences
+    if there exist any non-standard file names. Consider a file named '-e sh script.sh'
+    -- this
     will execute a script when 'rsync' is called. See
     https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt
     for more information.
@@ -23,5 +25,7 @@ rules:
     references:
     - https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt
     category: security
+    technology:
+    - python
   languages: [python]
   severity: WARNING

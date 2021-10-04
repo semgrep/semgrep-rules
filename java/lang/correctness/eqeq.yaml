@@ -9,9 +9,12 @@ rules:
     - pattern: $X != $X
   - pattern-not: 1 == 1
   message: >-
-    `$X == $X` or `$X != $X` is always true. (Unless the value compared is a float or double).
+    `$X == $X` or `$X != $X` is always true. (Unless the value compared is a float
+    or double).
     To test if `$X` is not-a-number, use `Double.isNaN($X)`.
   languages: [java]
   severity: ERROR
   metadata:
     category: correctness
+    technology:
+    - java

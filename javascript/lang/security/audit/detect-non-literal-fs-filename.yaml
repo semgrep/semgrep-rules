@@ -56,7 +56,8 @@ rules:
     - pattern: $FS.writeFile($FILE,...)
     - pattern: $FS.writeFileSync($FILE,...)
   message: >-
-    A variable is present in the filename argument of fs calls, this might allow an attacker to access anything on your system.
+    A variable is present in the filename argument of fs calls, this might allow an
+    attacker to access anything on your system.
   languages:
   - typescript
   - javascript
@@ -65,3 +66,5 @@ rules:
     cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-fs-filename.js
     category: security
+    technology:
+    - typescript
