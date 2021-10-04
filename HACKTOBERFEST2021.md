@@ -1,10 +1,10 @@
 <p align="center"><img src="https://hacktoberfest.digitalocean.com/_nuxt/img/logo-hacktoberfest-full.f42e3b1.svg" width="500px" /></p>
 
-We're participating in Hacktoberfest! This is our first year participating, and we hope it's a tradition for many years go come!
+We're participating in Hacktoberfest 2021! This is our first year participating, and we hope it's a tradition for many years to come!
 
 We want your help securing software everywhere. One of the best ways to do that is to leverage your expertise developing novel [Semgrep rules](https://semgrep.dev/r) for anyone to use. If you want to help, consider making a pull request to this repository with a new Semgrep rule. We accept rule contributions year-round, so feel free to make a PR at any time!
 
-We will be active in our [Slack channel](https://r2c.dev/slack). Come hang out in the `#rules` channel! Ask questions, collaborate, or whatever!
+We will be active in our [Slack group](https://r2c.dev/slack). Come hang out in the `#rules` channel! Ask questions, collaborate, or just say hi!
 
 ## The Hacktoberfest Project
 
@@ -20,7 +20,7 @@ There are two main ways you can particpate:
 
 ### Triage sources and sinks
 
-We have [lists of sources and sinks](https://docs.google.com/spreadsheets/d/1k-VGANT6q-zbQVmvkLFpXvUiATyYzIA0xUbNPA_BwXo/edit) generated from open source code. These are found using a generic taint rule that will enumerate all functions that are touched by user input. An example of a generic taint rule is listed below. This rule will report every function touched by `flask.request.args`, which is one way which query parameters are accessed in Flask. You can also see it work in the [live editor](https://semgrep.dev/s/Ev48)
+We have [lists of sources and sinks](https://docs.google.com/spreadsheets/d/1k-VGANT6q-zbQVmvkLFpXvUiATyYzIA0xUbNPA_BwXo/edit) generated from open source code. These are found using a generic taint rule that will enumerate all functions that are touched by user input. An example of a generic taint rule is listed below. This rule will find every function touched by `flask.request.args`, one way in which query parameters are accessed in Flask. You can also play with it in the [Semgrep Playground](https://semgrep.dev/s/Ev48).
 
 ```yaml
 rules:
@@ -46,7 +46,7 @@ If you're investigating a finding, mark the row as "taken". See https://docs.goo
 
 **Writing a new Semgrep rule**
 
-If you discover a pattern that you think will make a good Semgrep rule, follow the guidelines in [CONTRIBUTING.md](https://github.com/returntocorp/semgrep-rules/blob/develop/CONTRIBUTING.md) for making a PR to this repository. You can use any IDE to develop Semgrep rules, or you can use our [live web editor](https://semgrep.dev/editor).
+If you discover a pattern that you think will make a good Semgrep rule, follow the guidelines in [CONTRIBUTING.md](https://github.com/returntocorp/semgrep-rules/blob/develop/CONTRIBUTING.md) for making a PR to this repository. You can use any IDE to develop Semgrep rules, or you can use the [Semgrep Playground](https://semgrep.dev/editor).
 
 ### Create a new list of sources and sinks
 
