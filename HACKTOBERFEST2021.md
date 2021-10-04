@@ -20,9 +20,23 @@ There are two main ways you can particpate:
 
 ### Triage sources and sinks
 
-We have [lists of sources and sinks](https://docs.google.com/spreadsheets/d/1k-VGANT6q-zbQVmvkLFpXvUiATyYzIA0xUbNPA_BwXo/edit) generated from open source code. These are found using a generic taint rule that will enumerate all functions that are touched by user input. An example of a generic taint rule is listed below. This rule will report every function touched by `flask.request.args`, which is one way which query parameters are accessed in Flask.
+We have [lists of sources and sinks](https://docs.google.com/spreadsheets/d/1k-VGANT6q-zbQVmvkLFpXvUiATyYzIA0xUbNPA_BwXo/edit) generated from open source code. These are found using a generic taint rule that will enumerate all functions that are touched by user input. An example of a generic taint rule is listed below. This rule will report every function touched by `flask.request.args`, which is one way which query parameters are accessed in Flask. You can also see it work in the [live editor](https://semgrep.dev/s/Ev48)
 
-<iframe src="https://semgrep.dev/embed/editor?snippet=Ev48" width="600px"></iframe>
+```yaml
+rules:
+  - id: generic-sinks-flask
+    languages:
+      - python
+    message: $SINK
+    mode: taint
+    pattern-sinks:
+      - pattern: $SINK(...)
+    pattern-sources:
+      - pattern-either:
+          - pattern: flask.request.args.get(...)
+          - pattern: flask.request.args[...]
+    severity: INFO
+```
 
 Most of the sinks will be unintersting. However, some of them may have security implications - we want your help finding these!
 
