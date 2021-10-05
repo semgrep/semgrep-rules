@@ -3,12 +3,14 @@ rules:
   patterns:
   - pattern-inside: |
       @$APP.route(...)
-      def $X():
+      def $X(...):
         ...
   - pattern-not-inside: |
-      ...
-      if <... werkzeug.urls.url_parse($V) ...>:
+      @$APP.route(...)
+      def $X(...):
         ...
+        if <... werkzeug.urls.url_parse($V) ...>:
+          ...
   - pattern-either:
     - pattern: flask.redirect(<... flask.request.$W.get(...) ...>, ...)
     - pattern: flask.redirect(<... flask.request.$W[...] ...>, ...)

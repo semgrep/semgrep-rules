@@ -23,12 +23,7 @@ rules:
   - pattern-inside: |
       $JWT = require('jsonwebtoken');
       ...
-  - pattern-either:
-    - pattern: |
-        $JWT.decode(...)
-    - pattern: |
-        $JWT.decode(...).$PARAM
   - pattern-not-inside: |
+      $JWT.verify($TOKEN, ...)
       ...
-      $JWT.verify(...)
-      ...
+  - pattern: $JWT.decode($TOKEN, ...)

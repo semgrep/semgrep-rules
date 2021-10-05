@@ -21,11 +21,11 @@ rules:
     - go
   patterns:
   - pattern-not-inside: |
+      package $PACKAGE
       ...
       &httptrace.ClientTrace { ... }
       ...
   - pattern: httptrace.WithClientTrace($ANY, $TRACE)
-
   severity: WARNING
   languages:
   - go
