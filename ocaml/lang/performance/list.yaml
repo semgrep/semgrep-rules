@@ -17,3 +17,48 @@ rules:
     category: performance
     technology:
     - ocaml
+- id: ocamllint-length-list-compare-length
+  pattern-either:
+  - pattern: List.length $X = List.length $Y
+  - pattern: List.length $X <= List.length $Y
+  - pattern: List.length $X >= List.length $Y
+  - pattern: List.length $X < List.length $Y
+  - pattern: List.length $X > List.length $Y
+  - pattern: List.length $X <> List.length $Y
+  message: You probably want to use List.compare_lengths $X $Y, which is faster.
+  languages: [ocaml]
+  severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - ocaml
+- id: ocamllint-length-list-compare
+  pattern-either:
+  - pattern: List.length $X = $Y
+  - pattern: List.length $X <= $Y
+  - pattern: List.length $X >= $Y
+  - pattern: List.length $X < $Y
+  - pattern: List.length $X > $Y
+  - pattern: List.length $X <> $Y
+  message: You probably want to use List.compare_length_with $X $Y, which is faster.
+  languages: [ocaml]
+  severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - ocaml
+- id: ocamllint-length-list-compare
+  pattern-either:
+  - pattern: $X = List.length $Y
+  - pattern: $X <= List.length $Y
+  - pattern: $X >= List.length $Y
+  - pattern: $X < List.length $Y
+  - pattern: $X > List.length $Y
+  - pattern: $X <> List.length $Y
+  message: You probably want to use List.compare_length_with $X $Y, which is faster.
+  languages: [ocaml]
+  severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - ocaml
