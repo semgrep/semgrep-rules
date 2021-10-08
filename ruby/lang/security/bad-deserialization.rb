@@ -23,5 +23,9 @@
  def ok_deserialization
     o = Klass.new("hello\n")
     data = YAML.dump(o)
+    # ok: bad-deserialization
     obj = YAML.load(data, safe: true)
+  
+    # ok: bad-deserialization
+    obj = YAML.load("path/to/file")
  end
