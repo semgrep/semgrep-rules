@@ -14,6 +14,12 @@ rules:
         $OBJ.object_load(...)
   - pattern-not: |
       YAML.load(..., safe: true, ...)
+  - pattern-not: |
+      $MODULE.load("...", ...)
+  - pattern-not: |
+      Marshal.resotre("...", ...)
+  - pattern-not: |
+      $OBJ.object_load("...", ...)
   message: >-
     Checks for unsafe deserialization. Objects in Ruby can be serialized into strings,
     then later loaded from strings. However, uses of load and object_load can cause
