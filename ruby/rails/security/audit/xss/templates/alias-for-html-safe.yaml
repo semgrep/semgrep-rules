@@ -1,21 +1,23 @@
 rules:
-- id: alias-for-html-safe
-  message: >-
-    The syntax `<%== ... %>` is an alias for `html_safe`. This means the
-    content inside these tags will be rendered as raw HTML. This may expose
-    your application to cross-site scripting. If you need raw HTML, prefer
-    using the more explicit `html_safe` and be sure to correctly sanitize
-    variables using a library such as DOMPurify.
-  metadata:
-    references:
-    - https://medium.com/sumone-technical-blog/a-pretty-way-to-unescape-html-in-a-ruby-on-rails-application-efc22b850027
-    - https://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html#:~:text===
-    category: security
-    technology:
-    - rails
-  languages: [generic]
-  paths:
-    include:
-    - '*.erb'
-  severity: WARNING
-  pattern: <%== ... %>
+  - id: alias-for-html-safe
+    message: >-
+      The syntax `<%== ... %>` is an alias for `html_safe`. This means the
+      content inside these tags will be rendered as raw HTML. This may expose
+      your application to cross-site scripting. If you need raw HTML, prefer
+      using the more explicit `html_safe` and be sure to correctly sanitize
+      variables using a library such as DOMPurify.
+    metadata:
+      references:
+        - https://medium.com/sumone-technical-blog/a-pretty-way-to-unescape-html-in-a-ruby-on-rails-application-efc22b850027
+        - https://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html#:~:text===
+      category: security
+      technology:
+        - rails
+    languages: [generic]
+    paths:
+      include:
+        - "*.erb"
+    severity: WARNING
+    patterns:
+      - pattern: <%== ... %>
+      - pattern-not: <%== $...A.to_json %>
