@@ -80,5 +80,5 @@ def load_model(model):
 
 @app.route("/ok")
 def ok():
-    # ok: raw-html-format 
+    # ok: raw-html-format
     return "<a href='https://example.com'>Click me!</a>"

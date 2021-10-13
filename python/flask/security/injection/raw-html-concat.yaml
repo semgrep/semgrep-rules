@@ -3,15 +3,12 @@ rules:
   languages:
   - python
   severity: WARNING
-  message: Detected user input flowing into a manually constructed HTML string. You
-    may be accidentally bypassing secure methods of rendering HTML by manually constructing
-    HTML and this could create a cross-site scripting vulnerability, which could let
-    attackers steal sensitive user data. To be sure this is safe, check that the HTML
-    is rendered safely. Otherwise, use templates (`flask.render_template`) which will
-    safely render HTML instead.
+  message: Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
+    let attackers steal sensitive user data. To be sure this is safe, check that the HTML is rendered safely. Otherwise, use
+    templates (`flask.render_template`) which will safely render HTML instead.
   metadata:
-    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp:
     - A07:2017
     - A03:2021
