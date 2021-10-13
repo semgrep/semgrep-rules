@@ -24,6 +24,17 @@ class FalsePositiveCheck499View(VulnerableTemplateView):
 
         return render(request, self.template_name, context)
 
+    def getB(self, request, *args, **kwds):
+        context = self.get_context_data()
+
+        text = request.GET['text']
+        text = text.replace('"', '')
+
+        # ruleid: raw-html-format
+        context['html'] = '<a href="http://external/abc/' + text + '">Check link href</a>'
+
+        return render(request, self.template_name, context)
+
     def get2(self, request, *args, **kwds):
         context = self.get_context_data()
 
