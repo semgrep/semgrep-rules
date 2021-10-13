@@ -10,6 +10,16 @@ rules:
     this code can access. (This is called server-side request forgery, or SSRF.) Do
     not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
     the correct host.
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp:
+    - A10:2021
+    - A01:2017
+    references:
+    - https://goteleport.com/blog/ssrf-attacks/
+    category: security
+    technology:
+    - go
   mode: taint
   pattern-sinks:
   - patterns:
