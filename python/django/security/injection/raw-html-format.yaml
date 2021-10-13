@@ -1,0 +1,49 @@
+rules:
+- id: raw-html-format
+  languages:
+  - python
+  severity: WARNING
+  message: Detected user input flowing into a manually constructed HTML string. You
+    may be accidentally bypassing secure methods of rendering HTML by manually constructing
+    HTML and this could create a cross-site scripting vulnerability, which could let
+    attackers steal sensitive user data. To be sure this is safe, check that the HTML
+    is rendered safely. Otherwise, use templates (`django.shortcuts.render`) which
+    will safely render HTML instead.
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017
+    - A03:2021
+    category: security
+    technology:
+    - django
+    references:
+    - https://docs.djangoproject.com/en/3.2/topics/http/shortcuts/#render
+    - https://docs.djangoproject.com/en/3.2/topics/security/#cross-site-scripting-xss-protection
+  mode: taint
+  pattern-sanitizers:
+  - pattern: django.utils.html.escape(...)
+  pattern-sources:
+  - patterns:
+    - pattern: request.$ANYTHING
+    - pattern-not: request.build_absolute_uri
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: '"$HTMLSTR" % ...'
+          - pattern: '"$HTMLSTR".format(...)'
+          - pattern: f"$HTMLSTR{...}..."
+      - patterns:
+        - pattern-inside: |
+            $HTML = "$HTMLSTR"
+            ...
+        - pattern-either:
+          - pattern: $HTML % ...
+          - pattern: $HTML.format(...)
+    - metavariable-pattern:
+        metavariable: $HTMLSTR
+        language: generic
+        pattern: <$TAG ...
