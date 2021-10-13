@@ -3,8 +3,7 @@ rules:
   languages:
   - python
   severity: WARNING
-  message: >-
-    Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+  message: Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
     of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
     let attackers steal sensitive user data. To be sure this is safe, check that the HTML is rendered safely. Otherwise, use
     templates (`django.shortcuts.render`) which will safely render HTML instead.
@@ -19,6 +18,7 @@ rules:
     references:
     - https://docs.djangoproject.com/en/3.2/topics/http/shortcuts/#render
     - https://docs.djangoproject.com/en/3.2/topics/security/#cross-site-scripting-xss-protection
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
   mode: taint
   pattern-sanitizers:
   - pattern: django.utils.html.escape(...)
@@ -33,6 +33,7 @@ rules:
         - pattern-either:
           - pattern: '"$HTMLSTR" % ...'
           - pattern: '"$HTMLSTR".format(...)'
+          - pattern: '"$HTMLSTR" + ...'
           - pattern: f"$HTMLSTR{...}..."
       - patterns:
         - pattern-inside: |
@@ -41,6 +42,7 @@ rules:
         - pattern-either:
           - pattern: $HTML % ...
           - pattern: $HTML.format(...)
+          - pattern: $HTML + ...
     - metavariable-pattern:
         metavariable: $HTMLSTR
         language: generic
