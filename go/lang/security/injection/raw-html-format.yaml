@@ -1,9 +1,9 @@
 rules:
 - id: raw-html-format
-  languages:
-  - go
+  languages: [go]
   severity: WARNING
-  message: Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+  message: >-
+    Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
     of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
     let attackers steal sensitive user data. Use the `html/template` package which will safely render HTML instead, or inspect
     that the HTML is rendered safely.
@@ -16,7 +16,7 @@ rules:
     technology:
     - go
     references:
-    - blah
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
   mode: taint
   pattern-sanitizers:
