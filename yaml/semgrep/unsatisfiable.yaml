@@ -5,13 +5,20 @@ rules:
   severity: ERROR
   languages: [yaml]
   patterns:
-  - pattern-inside: 'rules: [..., $RULE, ...]'
-  - pattern-inside: |
-      ...
-      - pattern: $A
-      ...
-  - pattern: |
-      pattern-not: $A
+  - pattern-inside: 'patterns: [...]'
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          - pattern: $A
+          ...
+      - pattern: |
+          - pattern-not: $A
+    - patterns:
+      - pattern-inside: |
+          - pattern-not: $A
+          ...
+      - pattern: |
+          - pattern: $A
   metadata:
     category: correctness
     technology:

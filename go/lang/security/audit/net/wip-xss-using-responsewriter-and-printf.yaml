@@ -3,13 +3,12 @@ rules:
   patterns:
   - pattern-inside: |
       func $FUNC(..., $W http.ResponseWriter, ...) {
-          ...
+        ...
+        var $TEMPLATE = "..."
+        ...
+        $W.Write([]byte(fmt.$PRINTF($TEMPLATE, ...)), ...)
+        ...
       }
-  - pattern-inside: |
-      ...
-      var $T = "..."
-      ...
-      $W.Write([]byte(fmt.$PRINTF($T, ...)), ...)
   - pattern-either:
     - pattern: |
         $PARAMS = r.URL.Query()
@@ -47,12 +46,15 @@ rules:
         $W.Write([]byte(fmt.$PRINTF(..., $DATA, ...)))
   message: >-
     Found data going from url query parameters into formatted data written to ResponseWriter.
-    This could be XSS and should not be done. If you must do this, ensure your data is
+    This could be XSS and should not be done. If you must do this, ensure your data
+    is
     sanitized or escaped.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-Site Scripting (XSS)'
     category: security
+    technology:
+    - go
   severity: WARNING
   languages:
   - go

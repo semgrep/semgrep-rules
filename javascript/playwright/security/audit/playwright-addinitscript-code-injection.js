@@ -6,7 +6,7 @@ async function test4(userInput) {
   const page = await browser.newPage();
   const context = await browser.newContext();
 
-// ok
+  // ok:playwright-addinitscript-code-injection
   await context.addInitScript(x => console.log(x), 5);
 
   // ruleid:playwright-addinitscript-code-injection

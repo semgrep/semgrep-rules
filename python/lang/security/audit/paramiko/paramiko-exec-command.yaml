@@ -7,7 +7,8 @@ rules:
   - pattern: $CLIENT.exec_command(...)
   - pattern-not: $CLIENT.exec_command("...", ...)
   message: >-
-    Unverified SSL context detected. This will permit insecure connections without verifying
+    Unverified SSL context detected. This will permit insecure connections without
+    verifying
     SSL certificates. Use 'ssl.create_default_context()' instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/plugins/injection_paramiko.py

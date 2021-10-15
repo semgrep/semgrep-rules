@@ -2,7 +2,8 @@ rules:
 - id: unverified-ssl-context
   pattern: ssl._create_unverified_context(...)
   message: >-
-    Unverified SSL context detected. This will permit insecure connections without verifying
+    Unverified SSL context detected. This will permit insecure connections without
+    verifying
     SSL certificates. Use 'ssl.create_default_context()' instead.
   metadata:
     owasp: 'A6: Security Misconfiguration'
@@ -11,6 +12,8 @@ rules:
     - https://docs.python.org/3/library/ssl.html#ssl-security
     - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
     category: security
+    technology:
+    - python
   severity: ERROR
   languages:
   - python

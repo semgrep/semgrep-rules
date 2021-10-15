@@ -1,0 +1,55 @@
+rules:
+- id: raw-html-format
+  languages:
+  - python
+  severity: WARNING
+  message: >-
+    Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
+    let attackers steal sensitive user data. To be sure this is safe, check that the HTML is rendered safely. Otherwise, use
+    templates (`flask.render_template`) which will safely render HTML instead.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017
+    - A03:2021
+    category: security
+    technology:
+    - flask
+    references:
+    - https://flask.palletsprojects.com/en/2.0.x/security/#cross-site-scripting-xss
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  mode: taint
+  pattern-sanitizers:
+  - pattern: jinja2.escape(...)
+  - pattern: flask.escape(...)
+  - pattern: flask.render_template("~=/.*\.html", ...)
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: flask.request.$ANYTHING
+      - pattern: |
+          @$APP.route(...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: '"$HTMLSTR" % ...'
+          - pattern: '"$HTMLSTR".format(...)'
+          - pattern: '"$HTMLSTR" + ...'
+          - pattern: f"$HTMLSTR{...}..."
+      - patterns:
+        - pattern-inside: |
+            $HTML = "$HTMLSTR"
+            ...
+        - pattern-either:
+          - pattern: $HTML % ...
+          - pattern: $HTML.format(...)
+          - pattern: $HTML + ...
+    - metavariable-pattern:
+        metavariable: $HTMLSTR
+        language: generic
+        pattern: <$TAG ...

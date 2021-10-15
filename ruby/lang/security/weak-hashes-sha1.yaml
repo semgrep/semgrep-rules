@@ -1,13 +1,16 @@
 rules:
 - id: weak-hashes-sha1
   message: >-
-    Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision by Google, which could lead to vulnerabilities.
+    Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision
+    by Google, which could lead to vulnerabilities.
     Use SHA256, SHA3 or other hashing functions instead.
   metadata:
     references:
     - https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html
     - https://shattered.io/
     category: security
+    technology:
+    - ruby
   languages:
   - ruby
   severity: WARNING

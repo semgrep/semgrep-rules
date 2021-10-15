@@ -4,7 +4,8 @@ rules:
     http.NewRequest(..., "=~/[hH][tT][tT][pP]://.*/", ...)
   message: >-
     Checks for requests sent via http.NewRequest to http:// URLS. This is dangerous because
-    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,    send requests only to
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,    send requests only
+    to
     https:// URLS.
   fix-regex:
     regex: '[Hh][Tt][Tt][Pp]://'
@@ -17,6 +18,8 @@ rules:
     references:
     - https://golang.org/pkg/net/http/#NewRequest
     category: security
+    technology:
+    - go
   languages:
   - go
   severity: WARNING

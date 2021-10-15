@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-All rules on `master` are supported.
+All rules on `develop` are supported.
 
 ## Reporting a Vulnerability
 
