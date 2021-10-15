@@ -14,6 +14,8 @@ rules:
         $OBJ.object_load(...)
   - pattern-not: |
       YAML.load(..., safe: true, ...)
+  - pattern-not: |
+      YAML.load("...", ...)
   - pattern-not-inside: |
       $FILE = File.read("...", ...)
       ...
