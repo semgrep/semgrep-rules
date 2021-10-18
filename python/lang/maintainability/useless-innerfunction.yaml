@@ -19,15 +19,19 @@ rules:
         def $FF(...):
            ...
         ...
-  # We want to report where the inner function is defined, so
-  # we add a "pattern" match for the inner function only
   - pattern: |
       def $FF(...):
         ...
+  - pattern-not: |
+      @$DECORATOR
+      def $FF(...):
+        ...
   message: function `$FF` is defined inside a function but never used
-  languages: [python]
+  languages:
+  - python
   severity: ERROR
   metadata:
     category: maintainability
     technology:
     - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
