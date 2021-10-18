@@ -3,15 +3,12 @@ rules:
   languages:
   - ruby
   severity: WARNING
-  message: Detected user input flowing into a manually constructed HTML string. You
-    may be accidentally bypassing secure methods of rendering HTML by manually constructing
-    HTML and this could create a cross-site scripting vulnerability, which could let
-    attackers steal sensitive user data. Use the `render template` and make template
-    files which will safely render HTML instead, or inspect that the HTML is absolutely
-    rendered safely with a function like `sanitize`.
+  message: Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
+    let attackers steal sensitive user data. Use the `render template` and make template files which will safely render HTML
+    instead, or inspect that the HTML is absolutely rendered safely with a function like `sanitize`.
   metadata:
-    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp:
     - A07:2017
     - A03:2021
