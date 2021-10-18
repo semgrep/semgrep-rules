@@ -21,6 +21,11 @@ def A():
     def C():
         print_error('another')
 
+    # ok:useless-inner-function
+    @something
+    def D():
+        print_error('with decorator')
+
     return B(), C()
 
 def foo():
@@ -44,7 +49,6 @@ def create_decorating_metaclass(decorators, prefix='test_'):
     return DecoratingMethodsMetaclass
 
 def dec(f):
-    @functools.wraps(f)
     # ok:useless-inner-function
     def inner(*args, **kwargs):
         return f(*args, **kwargs)
