@@ -1,0 +1,51 @@
+rules:
+- id: raw-html-format
+  languages:
+  - ruby
+  severity: WARNING
+  message: Detected user input flowing into a manually constructed HTML string. You
+    may be accidentally bypassing secure methods of rendering HTML by manually constructing
+    HTML and this could create a cross-site scripting vulnerability, which could let
+    attackers steal sensitive user data. Use the `render template` and make template
+    files which will safely render HTML instead, or inspect that the HTML is absolutely
+    rendered safely with a function like `sanitize`.
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017
+    - A03:2021
+    category: security
+    technology:
+    - rails
+    references:
+    - https://www.netsparker.com/blog/web-security/preventing-xss-ruby-on-rails-web-applications/
+    - https://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html
+  mode: taint
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: sanitize(...)
+    - pattern: strip_tags(...)
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: params
+      - pattern: request
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            $HTMLSTR
+        - pattern-regex: <\w+.*
+      - patterns:
+        - pattern-either:
+          - pattern: Kernel::sprintf("$HTMLSTR", ...)
+          - pattern: |
+              "$HTMLSTR" + $EXPR
+          - pattern: |
+              "$HTMLSTR" % $EXPR
+        - metavariable-pattern:
+            metavariable: $HTMLSTR
+            language: generic
+            pattern: <$TAG ...
