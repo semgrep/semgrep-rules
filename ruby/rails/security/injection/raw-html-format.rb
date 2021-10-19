@@ -72,3 +72,4 @@ class ActionPackAssertionsController < ActionController::Base
     # ok: raw-html-format
     render plain: sanitize("<h1>request method: %s</h1>" % request.env['REQUEST_METHOD'])
   end
+end
