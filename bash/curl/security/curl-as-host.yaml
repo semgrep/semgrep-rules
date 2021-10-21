@@ -1,0 +1,27 @@
+rules:
+- id: curl-as-host
+  severity: WARNING
+  languages: [bash]
+  message: >-
+    The host of a `curl` command is created by `curl`'ing to another server.
+    An attacker with control over this server could inject their own host into
+    the first curl command, which could expose any sensitive data, such as authorization
+    headers, in the command, or could allow the attaker to enumerate private resources
+    that this script can access (this is called server-side request forgery, or SSRF).
+    Use a hardcoded host if possible. If dynamic hosts are needed, consider deploying
+    the script alongside an environment variable that contains the correct host.
+  metadata:
+    owasp:
+    - A01:2021 - Injection
+    - A01:2017 - Injection
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - bash
+    - curl
+  patterns:
+  - pattern: curl ... $URL
+  - metavariable-regex:
+      metavariable: $URL
+      regex: |
+        .*?http(s?)://\$\(.*?curl.*?\)

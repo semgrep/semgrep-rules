@@ -1,0 +1,26 @@
+rules:
+- id: curl-eval
+  severity: WARNING
+  languages: [bash]
+  message: >-
+    Data is being eval'd from a `curl` command. An attacker with control of the server
+    in the `curl` command could inject malicious code into the `eval`, resulting in a
+    system comrpomise. Avoid eval'ing untrusted data if you can. If you must do this,
+    consider checking the SHA sum of the content returned by the server to verify its
+    integrity.
+  metadata:
+    owasp:
+    - A01:2021 - Injection
+    - A01:2017 - Injection
+    cwe: " CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    category: security
+    technology:
+    - bash
+    - curl
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: $DATA=$(curl ...)
+    - pattern: eval $(curl ...)
+  pattern-sinks:
+  - pattern: eval ...

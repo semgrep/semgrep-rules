@@ -1,0 +1,15 @@
+rules:
+- id: curl-pipe-bash
+  languages: [bash]
+  severity: WARNING
+  message: >-
+    Data is being piped into `bash` from a `curl` command. An attacker with control of the server
+    in the `curl` command could inject malicious code into the pipe, resulting in a
+    system comrpomise. Avoid piping untrusted data into `bash` or any other shell if you can.
+    If you must do this, consider checking the SHA sum of the content returned by the server to verify its
+    integrity.
+  patterns:
+  - pattern-either:
+    - pattern: curl ... | bash ...
+    - pattern: curl ... | /bin/bash ...
+    - pattern: bash <(curl ...)
