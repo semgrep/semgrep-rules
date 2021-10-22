@@ -17,12 +17,12 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        ... ${VAR} ...
+        ... ${$VAR} ...
        # The following pattern should be sufficient but doesn't work
        # for now due to bug
        # https://github.com/returntocorp/semgrep/issues/4121
     - pattern: |
-        ... ...${VAR}... ...
+        ... ...${$VAR}... ...
   - pattern-not-inside: |
       "..."
   - metavariable-regex:
