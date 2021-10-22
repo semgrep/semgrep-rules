@@ -142,7 +142,7 @@ def const_prop():
 @app.route("/const_prop")
 def const_prop():
     url = "https://"
-    # todoruleid: tainted-url-host
+    # ruleid: tainted-url-host
     url += flask.request.args.get("param")
 
     requests.get(url)
