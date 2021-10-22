@@ -16,11 +16,12 @@ rules:
     - bash
   patterns:
   - pattern-either:
+    # This is subtle (and not great): ...${$VAR}... is a concatenation,
+    # which is interpreted as concatenate(..., expand($VAR), ...)
+    # and won't match a simple variable expansion.
+    # This is why we need two patterns below.
     - pattern: |
         ... ${$VAR} ...
-       # The following pattern should be sufficient but doesn't work
-       # for now due to bug
-       # https://github.com/returntocorp/semgrep/issues/4121
     - pattern: |
         ... ...${$VAR}... ...
   - pattern-not-inside: |
@@ -30,6 +31,6 @@ rules:
         # generally safe: $# $? $$ $! $-
         # unsafe: $* $@ $0 $15 $_ $foo $FOO
         # unsafe but tolerated: $_foo $_FOO $_42
-      regex: '[*@0-9]|[A-Za-z].*|_.+'
+      regex: '[*@0-9]|[A-Za-z].*'
 
 # TODO: check for unquoted command substitutions $(...) and `...`

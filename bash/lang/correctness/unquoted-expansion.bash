@@ -13,11 +13,11 @@ exec $1
 # ruleid: unquoted-variable-expansion-in-command
 exec ${foo%.bar}
 
-# ruleidXXX: unquoted-variable-expansion-in-command
-#exec $foo.bar
+# ruleid: unquoted-variable-expansion-in-command
+exec $foo.bar
 
-# ruleidXXX: unquoted-variable-expansion-in-command
-#exec ${foo}.bar
+# ruleid: unquoted-variable-expansion-in-command
+exec ${foo}.bar
 
 # ok: unquoted-variable-expansion-in-command
 exec "$foo"
