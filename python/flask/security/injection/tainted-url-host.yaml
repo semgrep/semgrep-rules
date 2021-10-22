@@ -1,60 +1,68 @@
 rules:
-- id: tainted-url-host
-  languages:
-  - python
-  message: User data flows into the host portion of this manually-constructed URL.
-    This could allow an attacker to send data to their own server, potentially exposing
-    sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
-    this code can access. (This is called server-side request forgery, or SSRF.) Do
-    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
-    the correct host.
-  metadata:
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-    owasp:
-    - A10:2021
-    - A01:2017
-    references:
-    - https://goteleport.com/blog/ssrf-attacks/
-    category: security
-    technology:
-    - flask
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  mode: taint
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
+  - id: tainted-url-host
+    languages:
+      - python
+    message: User data flows into the host portion of this manually-constructed URL.
+      This could allow an attacker to send data to their own server, potentially
+      exposing sensitive data such as cookies or authorization information sent
+      with this request. They could also probe internal servers or other
+      resources that the server runnig this code can access. (This is called
+      server-side request forgery, or SSRF.) Do not allow arbitrary hosts.
+      Instead, create an allowlist for approved hosts hardcode the correct host.
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp:
+        - A10:2021
+        - A01:2017
+      references:
+        - https://goteleport.com/blog/ssrf-attacks/
+      category: security
+      technology:
+        - flask
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    mode: taint
+    pattern-sinks:
       - patterns:
-        - pattern: '"$URLSTR" % ...'
-        - metavariable-pattern:
-            metavariable: $URLSTR
-            language: generic
-            patterns:
-            - pattern-either:
-              - pattern: $SCHEME://%s
-              - pattern: $SCHEME://%r
+          - pattern-either:
+              - patterns:
+                  - pattern: '"$URLSTR" % ...'
+                  - metavariable-pattern:
+                      metavariable: $URLSTR
+                      language: generic
+                      patterns:
+                        - pattern-either:
+                            - pattern: $SCHEME://%s
+                            - pattern: $SCHEME://%r
+              - patterns:
+                  - pattern: '"$URLSTR".format(...)'
+                  - metavariable-pattern:
+                      metavariable: $URLSTR
+                      language: generic
+                      pattern: $SCHEME:// { ... }
+              - patterns:
+                  - pattern: '"$URLSTR" + ...'
+                  - metavariable-regex:
+                      metavariable: $URLSTR
+                      regex: .*://$
+              - patterns:
+                  - pattern: f"$URLSTR{...}..."
+                  - metavariable-regex:
+                      metavariable: $URLSTR
+                      regex: .*://$
+              - patterns:
+                  - pattern-inside: |
+                      $URL = "$URLSTR"
+                      ...
+                  - pattern: $URL += ...
+                  - metavariable-regex:
+                      metavariable: $URLSTR
+                      regex: .*://$
+    pattern-sources:
       - patterns:
-        - pattern: '"$URLSTR".format(...)'
-        - metavariable-pattern:
-            metavariable: $URLSTR
-            language: generic
-            pattern: $SCHEME:// { ... }
-      - patterns:
-        - pattern: '"$URLSTR" + ...'
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: .*://$
-      - patterns:
-        - pattern: f"$URLSTR{...}..."
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: .*://$
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: flask.request.$ANYTHING
-      - pattern: |
-          @$APP.route(...)
-          def $FUNC(..., $ROUTEVAR, ...):
-            ...
-  severity: WARNING
+          - pattern-either:
+              - pattern: flask.request.$ANYTHING
+              - pattern: |
+                  @$APP.route(...)
+                  def $FUNC(..., $ROUTEVAR, ...):
+                    ...
+    severity: WARNING
