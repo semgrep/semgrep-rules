@@ -24,8 +24,6 @@ rules:
         ... ${$VAR} ...
     - pattern: |
         ... ...${$VAR}... ...
-  - pattern-not-inside: |
-      "..."
   - metavariable-regex:
       metavariable: $VAR
         # generally safe: $# $? $$ $! $-
@@ -33,4 +31,21 @@ rules:
         # unsafe but tolerated: $_foo $_FOO $_42
       regex: '[*@0-9]|[A-Za-z].*'
 
-# TODO: check for unquoted command substitutions $(...) and `...`
+- id: unquoted-command-substitution-in-command
+  languages: [bash]
+  severity: WARNING
+  message: >-
+    The result of command substitution $(...) or `...`, if unquoted,
+    is split on whitespace or other separators specified by the IFS
+    variable. You should surround it with double quotes to avoid
+    splitting the result.
+  metadata:
+    category: correctness
+    technology:
+    - bash
+  patterns:
+  - pattern-either:
+    - pattern: |
+        ... $(...) ...
+    - pattern: |
+        ... ...$(...)... ...

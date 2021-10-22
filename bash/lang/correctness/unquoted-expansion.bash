@@ -1,3 +1,5 @@
+##################### Variable expansion #############################
+
 # ruleid: unquoted-variable-expansion-in-command
 exec $foo
 
@@ -56,3 +58,35 @@ echo $$
 # Special exception for semgrep users: $_foo is tolerated.
 # ok: unquoted-variable-expansion-in-command
 echo $_foo
+
+##################### Command substitution #############################
+
+# ruleid: unquoted-command-substitution-in-command
+exec $(foo)
+
+# ruleid: unquoted-command-substitution-in-command
+exec `foo`
+
+# ruleid: unquoted-command-substitution-in-command
+exec $(foo)bar
+
+# ruleid: unquoted-command-substitution-in-command
+exec bar$(foo)
+
+# ruleid: unquoted-command-substitution-in-command
+exec bar$(foo)bar
+
+# ruleid: unquoted-command-substitution-in-command
+exec bar`foo`bar
+
+# ok: unquoted-command-substitution-in-command
+exec "$(foo)"
+
+# ok: unquoted-command-substitution-in-command
+exec "`foo`"
+
+# ok: unquoted-command-substitution-in-command
+exec "bar$(foo)bar"
+
+# ok: unquoted-command-substitution-in-command
+x=$(foo)
