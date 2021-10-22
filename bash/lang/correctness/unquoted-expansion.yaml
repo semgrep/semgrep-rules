@@ -2,6 +2,18 @@ rules:
 - id: unquoted-variable-expansion-in-command
   languages: [bash]
   severity: WARNING
+  message: >-
+    Variable expansions must be double-quoted so as to prevent
+    being split into multiple pieces according to whitespace or
+    whichever separator is specified by the IFS variable.
+    If you really wish to split the variable's contents,
+    you may use a variable that starts with an underscore e.g.
+    $_X instead of $X, and semgrep will ignore it. If what you need
+    is an array, consider using a proper bash array.
+  metadata:
+    category: correctness
+    technology:
+    - bash
   patterns:
   - pattern-either:
     - pattern: |
@@ -19,13 +31,5 @@ rules:
         # unsafe: $* $@ $0 $15 $_ $foo $FOO
         # unsafe but tolerated: $_foo $_FOO $_42
       regex: '[*@0-9]|[A-Za-z].*|_.+'
-  message: >-
-    Variable expansions must be double-quoted so as to prevent
-    being split into multiple pieces according to whitespace or
-    whichever separator is specified by the IFS variable.
-    If you really wish to split the variable's contents,
-    you may use a variable that starts with an underscore e.g.
-    $_X instead of $X, and semgrep will ignore it. If what you need
-    is an array, consider using a proper bash array.
 
 # TODO: check for unquoted command substitutions $(...) and `...`
