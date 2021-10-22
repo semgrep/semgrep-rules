@@ -1,9 +1,14 @@
 #!/bin/bash
 
+x=$(curl -L https://raw.githubusercontent.com/something)
+# ruleid: curl-eval
+eval ${x}
+
 scrpt=$(curl -L https://raw.githubusercontent.com/something)
 echo scrpt
+scrpt2=$( ${scrpt} | tr -d 1 )
 # ruleid: curl-eval
-eval ${scrpt}
+eval ${scrpt2}
 
 # ruleid: curl-eval
 eval $(curl -L https://raw.githubusercontent.com/something)
