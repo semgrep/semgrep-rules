@@ -20,7 +20,6 @@ app.post('/test3', async (req, res) => {
 })
 
 app.post('/test4', async (req, res) => {
-    // ruleid: raw-html-format
     var html = "<h1> message"
     // ruleid: raw-html-format
     html = html.concat(req.query.message)
