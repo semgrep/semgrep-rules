@@ -50,18 +50,6 @@ class ActionPackAssertionsController < ActionController::Base
     render html: "boo, %s" % params[:name]
   end
 
-  def raise_exception_on_get
-    raise "get" if request.get?
-    # ruleid: tainted-url-host
-    render text: "<h1>request method: #{request.env['REQUEST_METHOD']}</h1>"
-  end
-
-  def raise_exception_on_post
-    raise "post" if request.post?
-    # ruleid: tainted-url-host
-    render plain: "<h1>request method: %s</h1>" % request.env['REQUEST_METHOD']
-  end
-
   def raise_exception_on_post_ok
     raise "post" if request.post?
     # ok: tainted-url-host
@@ -75,6 +63,7 @@ class ActionPackAssertionsController < ActionController::Base
   end
 
   def sanitized
+    # ok: tainted-url-host
     response = SsrfFilter.get(params[:url])
     response
   end
