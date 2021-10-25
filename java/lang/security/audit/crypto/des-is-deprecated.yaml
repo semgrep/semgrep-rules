@@ -3,7 +3,8 @@ rules:
   message: >-
     DES is considered deprecated. AES is the recommended cipher.
     Upgrade to use AES.
-    See https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard for more information.
+    See https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard
+    for more information.
   metadata:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     owasp: 'A3: Sensitive Data Exposure'
@@ -17,6 +18,8 @@ rules:
     - https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard
     - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
     category: security
+    technology:
+    - java
   severity: WARNING
   pattern: $CIPHER.getInstance("=~/DES/.*/");
   fix: $CIPHER.getInstance("AES/GCM/NoPadding");

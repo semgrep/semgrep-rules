@@ -1,0 +1,33 @@
+on:
+  pull_request: {}
+  push:
+    // ok: semgrep-github-action-push-without-branches
+    branches:
+    - main
+name: Semgrep
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: returntocorp/semgrep-action@v1
+      with:
+        publishToken: abc
+
+
+on:
+  pull_request: {}
+  push:
+    // ruleid: semgrep-github-action-push-without-branches
+    branches:
+name: Semgrep
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: returntocorp/semgrep-action@v1
+      with:
+        publishToken: abc

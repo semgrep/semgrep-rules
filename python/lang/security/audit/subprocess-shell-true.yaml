@@ -4,9 +4,12 @@ rules:
   - pattern: subprocess.$FUNC(..., shell=True, ...)
   - pattern-not: subprocess.$FUNC("...", shell=True, ...)
   message: >-
-    Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn
-    the command using a shell process. Doing so propagates current shell settings and variables, which
-    makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.
+    Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because
+    this call will spawn
+    the command using a shell process. Doing so propagates current shell settings
+    and variables, which
+    makes it much easier for a malicious actor to execute commands. Use 'shell=False'
+    instead.
   fix-regex:
     regex: (shell\s*=\s*)True
     replacement: \1False
@@ -17,5 +20,7 @@ rules:
     - https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess
     - https://docs.python.org/3/library/subprocess.html
     category: security
+    technology:
+    - python
   languages: [python]
   severity: ERROR

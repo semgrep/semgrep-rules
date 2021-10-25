@@ -1,0 +1,48 @@
+rules:
+  - id: semgrep-github-action-push-without-branches
+    message: The 'branches' field (in the push event configuration) contains no
+      branches. This causes all branches to be scanned and may result in
+      unneccessary duplicate findings across the entire codebase.
+    severity: WARNING
+    languages:
+      - yaml
+    paths:
+      include:
+        - ".github/workflows/semgrep.yml"
+        - "*.test.yml"
+    patterns:
+      - pattern-either:
+          - pattern: |
+              on: [..., push, ...]
+              ...
+          - pattern: |
+              on: push
+              ...
+          - pattern: |
+              on:
+                ...
+                push: ""
+                ...
+              ...
+          - pattern: |
+              on:
+                ...
+                push: {}
+                ...
+              ...
+          - patterns:
+              - pattern-inside: |
+                  on:
+                    ...
+                    push: ...
+                    ...
+                  ...
+              - pattern-either:
+                  - pattern: |
+                      branches: ""
+                  - pattern: |
+                      branches: []
+    metadata:
+      category: correctness
+      technology:
+        - github-action

@@ -1,7 +1,8 @@
 rules:
 - id: json-encoding
   message: >-
-    When a 'Hash' with user-supplied input is encoded in JSPN, Rails doesn't provide adequate escaping.
+    When a 'Hash' with user-supplied input is encoded in JSPN, Rails doesn't provide
+    adequate escaping.
     If the JSON string is supplied into HTML, the page will be vulnerable to XXS attacks.
     The affected ruby versions are 3.0.x, 3.1.x, 3.2.x, 4.1.x, 4.2.x.
     To fix, either upgrade or add an initializer.
@@ -10,6 +11,8 @@ rules:
     - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_encoding.rb
     - https://groups.google.com/g/rubyonrails-security/c/7VlB_pck3hU/m/3QZrGIaQW6cJ
     category: security
+    technology:
+    - ruby
   languages:
   - ruby
   severity: WARNING

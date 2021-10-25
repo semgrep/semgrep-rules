@@ -12,7 +12,8 @@ rules:
     - pattern-not: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", "...", ...], ...)
     - pattern: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", ...], ...)
   message: >-
-    Detected subprocess function '$LOOP.subprocess_exec' without a static string. If this data can be
+    Detected subprocess function '$LOOP.subprocess_exec' without a static string.
+    If this data can be
     controlled by a malicious actor, it may be an instance of command injection.
     Audit the use of this call to ensure it is not controllable by an external resource.
     You may consider using 'shlex.escape()'.
@@ -28,5 +29,7 @@ rules:
     - https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.loop.subprocess_exec
     - https://docs.python.org/3/library/shlex.html
     category: security
+    technology:
+    - python
   languages: [python]
   severity: WARNING

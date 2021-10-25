@@ -7,7 +7,8 @@ rules:
       _xxsubinterpreters.run_string($ID, "...", ...)
   message: >-
     Found dynamic content in `run_string`.
-    This is dangerous if external data can reach this function call because it allows a malicious actor to run arbitrary Python code.
+    This is dangerous if external data can reach this function call because it allows
+    a malicious actor to run arbitrary Python code.
     Ensure no external data reaches here.
   metadata:
     cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
@@ -15,6 +16,8 @@ rules:
     references:
     - https://bugs.python.org/issue43472
     category: security
+    technology:
+    - python
   severity: WARNING
   languages:
   - python

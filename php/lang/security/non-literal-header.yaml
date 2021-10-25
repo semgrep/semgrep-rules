@@ -5,7 +5,8 @@ rules:
   - pattern-not: header("...",...)
   message: >-
     Using user input when setting headers with `header()` is potentially dangerous.
-    This could allow an attacker to inject a new line and add a new header into the response.
+    This could allow an attacker to inject a new line and add a new header into the
+    response.
     This is called HTTP response splitting.
     To fix, do not allow whitespace inside `header()`: '[^\s]+'.
   metadata:

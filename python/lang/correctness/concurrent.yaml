@@ -20,7 +20,8 @@ rules:
         ...
   - pattern: $EXECUTOR.map(...)
   message: >-
-    Values returned by thread pool map must be read in order to raise exceptions. Consider using `for _ in $EXECUTOR.map(...): pass`.
+    Values returned by thread pool map must be read in order to raise exceptions.
+    Consider using `for _ in $EXECUTOR.map(...): pass`.
   fix: |
 
   severity: WARNING
@@ -28,3 +29,5 @@ rules:
   - python
   metadata:
     category: correctness
+    technology:
+    - python

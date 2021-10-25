@@ -2,7 +2,6 @@ rules:
 - id: path-join-resolve-traversal
   patterns:
   - pattern-inside: |
-      ...
       $PATH = require('path');
       ...
   - pattern-either:
@@ -49,4 +48,6 @@ rules:
     owasp: 'A5: Broken Access Control'
     cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (Path Traversal)'
     category: security
+    technology:
+    - javascript
   severity: WARNING
