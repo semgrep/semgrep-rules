@@ -1,0 +1,50 @@
+rules:
+- id: tainted-url-host
+  languages: [ruby]
+  severity: WARNING
+  message: >-
+    User data flows into the host portion of this manually-constructed URL.
+    This could allow an attacker to send data to their own server, potentially
+    exposing sensitive data such as cookies or authorization information sent
+    with this request. They could also probe internal servers or other resources
+    that the server runnig this code can access. (This is called server-side
+    request forgery, or SSRF.) Do not allow arbitrary hosts. Use the `ssrf_filter`
+    gem and guard the url construction with `SsrfFilter(...)`, or create
+    an allowlist for approved hosts.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017
+    - A03:2021
+    category: security
+    technology:
+    - rails
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    - https://github.com/arkadiyt/ssrf_filter
+  mode: taint
+  pattern-sanitizers:
+  - pattern: SsrfFilter
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: params
+      - pattern: request
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            $URLSTR
+        - pattern-regex: \w+:\/\/#{.*}
+      - patterns:
+        - pattern-either:
+          - pattern: Kernel::sprintf("$URLSTR", ...)
+          - pattern: |
+              "$URLSTR" + $EXPR
+          - pattern: |
+              "$URLSTR" % $EXPR
+        - metavariable-pattern:
+            metavariable: $URLSTR
+            language: generic
+            pattern: $SCHEME:// ...
