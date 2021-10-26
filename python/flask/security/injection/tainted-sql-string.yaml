@@ -1,0 +1,52 @@
+rules:
+- id: tainted-sql-string
+  message: >-
+    Detected user input used to manually construct a SQL string. This is usually
+    bad practice because manual construction could accidentally result in a SQL
+    injection. An attacker could use a SQL injection to steal or modify contents
+    of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using an
+    object-relational mapper (ORM) such as SQLAlchemy which will protect your queries.
+  metadata:
+    cwe: >
+      CWE-89: Improper Neutralization of Special Elements used in an SQL
+      Command ('SQL Injection')
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql
+    - https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm
+    - https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column
+    category: security
+    technology:
+    - sqlalchemy
+    - flask
+  severity: WARNING
+  languages:
+  - python
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: flask.request.$ANYTHING
+      - patterns:
+        - pattern-inside: |
+            @$APP.route(...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+        - pattern: $ROUTEVAR
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          "$SQLSTR" + ...
+      - pattern: |
+          "$SQLSTR" % ...
+      - pattern: |
+          "$SQLSTR".format(...)
+      - pattern: |
+          f"$SQLSTR{...}..."
+    - metavariable-regex:
+        metavariable: $SQLSTR
+        regex: (?i)(select|delete|insert|create|update|alter|drop)\b.*
