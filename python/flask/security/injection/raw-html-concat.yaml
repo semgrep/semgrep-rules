@@ -28,10 +28,12 @@ rules:
   - patterns:
     - pattern-either:
       - pattern: flask.request.$ANYTHING
-      - pattern: |
-          @$APP.route(...)
-          def $FUNC(..., $ROUTEVAR, ...):
-            ...
+      - patterns:
+        - pattern-inside: |
+            @$APP.route(...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+        - pattern: $ROUTEVAR
   pattern-sinks:
   - patterns:
     - pattern-either:
