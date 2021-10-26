@@ -1,0 +1,23 @@
+rules:
+- id: gcm-detection
+  metadata:
+    category: security
+    cwe: 'CWE-323: Reusing a Nonce, Key Pair in Encryption'
+    references:
+    - https://cwe.mitre.org/data/definitions/323.html
+    technology:
+    - kotlin
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  languages:
+  - kt
+  message: GCM detected, please check that IV/nonce is not reused,an Initialization Vector (IV) is a nonce used to randomize
+    the encryption,so that even  if multiple messages with identical plaintext are encrypted, the generated corresponding
+    ciphertexts are different.Unlike the Key, the IV usually does not need to be secret, rather it is important that it is
+    random and unique.Certain encryption schemes the IV is exchanged in public as part of the ciphertext. Reusing same Initialization
+    Vector with the same Key to encrypt multiple plaintext blocks allows an attacker to compare the ciphertexts and then,
+    with some  assumptions on the content of the messages, to gain important information about the data being encrypted.
+  patterns:
+  - pattern-either:
+    - pattern: $METHOD.getInstance("AES/GCM/NoPadding",...)
+    - pattern: GCMParameterSpec(...)
+  severity: INFO

@@ -1,0 +1,23 @@
+rules:
+- id: unencrypted-socket
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A3: Sensitive Data Exposure'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNENCRYPTED_SOCKET
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.5 Insecure Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
+    category: security
+    technology:
+    - kotlin
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  message: This socket is not encrypted. The traffic could be read by an attacker intercepting the network traffic. Use an
+    SSLSocket created by 'SSLSocketFactory' or 'SSLServerSocketFactory' instead
+  severity: WARNING
+  languages:
+  - kt
+  pattern-either:
+  - pattern: ServerSocket(...)
+  - pattern: Socket(...)

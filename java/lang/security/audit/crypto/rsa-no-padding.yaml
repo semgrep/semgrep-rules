@@ -14,8 +14,11 @@ rules:
     category: security
     technology:
     - java
+    - kotlin
   message: >-
     Using RSA without OAEP mode weakens the encryption.
   severity: WARNING
-  languages: [java]
+  languages:
+  - java
+  - kotlin
   pattern: $CIPHER.getInstance("RSA/NONE/NoPadding")
