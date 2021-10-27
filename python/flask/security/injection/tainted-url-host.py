@@ -5,20 +5,18 @@ import requests
 
 app = flask.Flask(__name__)
 
-@app.route("/route_param/<env>")
+@app.route("/route_param/<route_param>")
 def route_param(route_param):
     print("blah")
     # ruleid: tainted-url-host
-    url = "https://%s/path" % env
+    url = "https://%s/path" % route_param
     requests.get(url)
 
     # ruleid: tainted-url-host
-    url = "http://%r/path" % env
+    url = "http://%r/path" % route_param
     requests.get(url)
 
     return True
-
-
 
 @app.route("/route_param_ok/<route_param>")
 def route_param_ok(route_param):
@@ -32,8 +30,8 @@ def route_param_format(route_param):
     # ruleid: tainted-url-host
     return "<a href='https://{}/path'>Click me!</a>".format(route_param)
 
-@app.route("/route_param_format_ok/<route_param>")
-def route_param_format(route_param):
+@app.route("/route_param_format_ok_in_path/<route_param>")
+def route_param_format_ok_in_path(route_param):
     print("blah")
     # ok: tainted-url-host
     return "<a href='https://example.com/{}/path'>Click me!</a>".format(route_param)
@@ -44,8 +42,8 @@ def route_param_percent_format(route_param):
     # ruleid: tainted-url-host
     return "<a href='https://%s/path'>Click me!</a>" % route_param
 
-@app.route("/route_param_percent_format/<route_param>")
-def route_param_percent_format(route_param):
+@app.route("/route_param_percent_format_ok_in_path/<route_param>")
+def route_param_percent_format_ok_in_path(route_param):
     print("blah")
     # ok: tainted-url-host
     return "<a href='https://example.com/%s/path'>Click me!</a>" % route_param
@@ -60,8 +58,8 @@ def get_param_inline_concat():
     # ruleid: tainted-url-host
     return "<a href='http://" + flask.request.args.get("param") + "'>Click me!</a>"
 
-@app.route("/get_param_inline_concat_ok", methods=["GET"])
-def get_param_inline_concat():
+@app.route("/get_param_inline_concat_ok_in_path", methods=["GET"])
+def get_param_inline_concat_ok_in_path():
     # ok: tainted-url-host
     return "<a href='http://example.com/" + flask.request.args.get("param") + "'>Click me!</a>"
 
@@ -70,8 +68,8 @@ def get_param_template():
     # ruleid: tainted-url-host
     return f"<a href='https://{flask.request.args.get('param')}/path'>Click me!</a>"
 
-@app.route("/get_param_template_ok", methods=["GET"])
-def get_param_template():
+@app.route("/get_param_template_ok_in_path", methods=["GET"])
+def get_param_template_ok_in_path():
     # ok: tainted-url-host
     return f"<a href='https://example.com/{flask.request.args.get('param')}/path'>Click me!</a>"
 
@@ -139,8 +137,8 @@ def const_prop():
     requests.get(url)
     return True
 
-@app.route("/const_prop")
-def const_prop():
+@app.route("/add_equals")
+def add_equals():
     url = "https://"
     # ruleid: tainted-url-host
     url += flask.request.args.get("param")
@@ -148,8 +146,15 @@ def const_prop():
     requests.get(url)
     return True
 
-
-@app.route("/ok")
-def ok():
+@app.route("/route_param/<route_param>")
+def doesnt_use_the_route_param(route_param):
+    not_the_route_param = "hello.com"
     # ok: tainted-url-host
-    return "<a href='https://example.com'>Click me!</a>"
+    url = "https://%s/path" % not_the_route_param
+    requests.get(url)
+
+    # ok: tainted-url-host
+    url = "http://%r/path" % not_the_route_param
+    requests.get(url)
+
+    return True
