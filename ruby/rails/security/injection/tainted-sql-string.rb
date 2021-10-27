@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   def update1
     message = false
+    # ruleid:tainted-sql-string
     user = User.find(:first, :conditions => "user_id = '#{params[:user][:user_id]}'")
     user.skip_user_id_assign = true
     user.update_attributes(params[:user].reject { |k| k == ("password" || "password_confirmation") || "user_id" })
@@ -25,6 +26,7 @@ class UsersController < ApplicationController
   def update2
     message = false
 
+    # ruleid:tainted-sql-string
     user = User.where("user_id = '#{params[:user][:id]}'")[0]
 
     if user
@@ -44,33 +46,40 @@ class UsersController < ApplicationController
   end
 
   def test3
+    # ruleid:tainted-sql-string
     records = ActiveRecord::Base.connection.execute("INSERT INTO person (name) VALUES ('%s')" % params[:user])
     redirect_to '/'
   end
 
   def test4
+    # ruleid:tainted-sql-string
     records = ActiveRecord::Base.connection.execute(Kernel::sprintf("SELECT FROM person WHERE name='%s'", params[:user]))
     redirect_to '/'
   end
 
   def test5
+    # ruleid:tainted-sql-string
     records = ActiveRecord::Base.connection.execute("SELECT FROM person WHERE name='" + params[:user] + "'")
     redirect_to '/'
   end
 
   def ok_test1
+    # ok:tainted-sql-string
     message = "this is just a message ! %s" % params[:user]
     redirect_to '/'
   end
 
   def ok_test2
+    # ok:tainted-sql-string
     message = Kernel::sprintf("this message is ok: '%s'", params[:user])
     redirect_to '/'
   end
 
   def ok_test3
+    # ok:tainted-sql-string
     records = "this is ok!" + params[:user] + "'"
     redirect_to '/'
   end
+
 
 end
