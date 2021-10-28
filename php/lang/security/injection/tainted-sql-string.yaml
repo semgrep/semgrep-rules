@@ -34,9 +34,9 @@ rules:
   - pattern-either:
     - patterns:
       - pattern: |
-          sprintf($URLSTR, ...)
+          sprintf($SQLSTR, ...)
       - metavariable-regex:
-          metavariable: $URLSTR
+          metavariable: $SQLSTR
           regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
     - patterns:
       - pattern: |
