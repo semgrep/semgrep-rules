@@ -44,7 +44,7 @@ def get_user_age5(request):
 
 def get_user_age6(request):
   query = "SELECT user_age FROM myapp_person where user_name = {}"
-  # todoruleid: tainted-sql-string
+  # ruleid: tainted-sql-string
   user_age = Person.objects.raw(query.format(request.GET.get('user_name')))
   html = "<html><body>User Age %s.</body></html>" % user_age
   return HttpResponse(html)
