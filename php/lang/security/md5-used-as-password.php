@@ -7,8 +7,8 @@ function test1($value) {
 }
 
 function test2($value) {
-    // ruleid: md5-used-as-password
     $pass = hash('md5', $value);
+    // ruleid: md5-used-as-password
     $user->setPassword($pass);
 }
 
