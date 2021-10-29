@@ -15,7 +15,7 @@ public class WeakHashes {
   public fun md5(password: String): ByteArray {
     // ruleid: use-of-md5
     val md5Digest: MessageDigest = MessageDigest.getInstance("MD5")
-    md5Digest.update(password.getBytes());
+    md5Digest.update(password.getBytes())
     val hashValue: ByteArray = md5Digest.digest()
     return hashValue
   }
