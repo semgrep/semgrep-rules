@@ -1,0 +1,34 @@
+rules:
+- id: temporary-cd
+  patterns:
+  - pattern: |
+      cd $DIR
+      ...
+      cd ..
+  - pattern-not-inside: |
+      cd $DIR
+      ...
+      $VAR=...
+      ...
+      cd ..
+      ...
+      ... <... $VAR ...> ...
+  # TODO: autofix, once we have support for $...FOO
+  message: >-
+    Don't use 'cd ..' to get back where you come from. The parent directory
+    may be gone or its permissions may have changed. More generally,
+    using parentheses to create a subshell makes the code clearer.
+    The recommended alternative is to use parentheses to
+    create a subshell, which is a subprocess. For example, do
+    '(cd dir; do_something)' instead of 'cd dir; do_something; cd ..'.
+    As an exception, you can't use a subshell if it sets variables
+    that are needed later because they would be lost when the subshell exits.
+  metadata:
+    references:
+    - https://github.com/koalaman/shellcheck/wiki/SC2103
+    category: best-practice
+    technology:
+    - bash
+  severity: WARNING
+  languages:
+  - bash
