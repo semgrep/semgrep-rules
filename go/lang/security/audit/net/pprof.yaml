@@ -25,6 +25,10 @@ rules:
       func $ANY(...) {
         ...
       }
+  - pattern-not-inside: |
+      $MUX = http.NewServeMux(...)
+      ...
+      http.ListenAndServe($ADDR, $MUX)
   - pattern-not: http.ListenAndServe("=~/^localhost.*/", ...)
   - pattern-not: http.ListenAndServe("=~/^127[.]0[.]0[.]1.*/", ...)
   - pattern: http.ListenAndServe(...)

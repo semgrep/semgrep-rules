@@ -24,6 +24,16 @@ func ok2() {
 	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
 
+func ok3() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello World!")
+	})
+
+	mux := http.NewServeMux()
+    // ok: pprof-debug-exposure
+	log.Fatal(http.ListenAndServe(":8080", mux))
+}
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello World!")
