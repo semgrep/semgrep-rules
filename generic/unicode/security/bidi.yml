@@ -12,7 +12,7 @@ rules:
         - pattern-regex: "\u2068"  # first strong isolate (FSI)
         - pattern-regex: "\u202c"  # pop directional formatting (PDF)
         - pattern-regex: "\u2069"  # pop directional isolate (PDI)
-    message: >
+    message: >-
       This code contains bidirectional (bidi) characters. While this is useful for support
       of right-to-left languages such as Arabic or Hebrew, it can also be used to trick
       language parsers into executing code in a manner that is different from how it is
@@ -20,6 +20,12 @@ rules:
 
       If this is not what you were expecting, please review this code in an editor that
       can reveal hidden Unicode characters.
+    metadata:
+      category: security
+      technology:
+      - unicode
+      references:
+      - https://trojansource.codes/
     languages:
       - bash
       - c
