@@ -4,10 +4,10 @@ from types import SimpleNamespace
 # A useful lookup table for the bidirectional (bidi) characters
 bidi = SimpleNamespace(
     **{
-        "LRE": "\u202A",  # left-to-right embedding (LRE)
-        "RLE": "\u202B",  # right-to-left embedding (RLE)
-        "LRO": "\u202D",  # left-to-right override (LRO)
-        "RLO": "\u202E",  # right-to-left override (RLO)
+        "LRE": "\u202a",  # left-to-right embedding (LRE)
+        "RLE": "\u202b",  # right-to-left embedding (RLE)
+        "LRO": "\u202d",  # left-to-right override (LRO)
+        "RLO": "\u202e",  # right-to-left override (RLO)
         "LRI": "\u2066",  # left-to-right isolate (LRI)
         "RLI": "\u2067",  # right-to-left isolate (RLI)
         "FSI": "\u2068",  # first strong isolate (FSI)
