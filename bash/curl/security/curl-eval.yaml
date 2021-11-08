@@ -21,6 +21,8 @@ rules:
   pattern-sources:
   - pattern-either:
     - pattern: $DATA=$(curl ...)
+    - pattern: $DATA="$(curl ...)"
     - pattern: eval $(curl ...)
+    - pattern: eval "$(curl ...)"
   pattern-sinks:
   - pattern: eval ...
