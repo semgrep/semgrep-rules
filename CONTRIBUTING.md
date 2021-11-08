@@ -4,7 +4,7 @@ We welcome contributions to this repo! Please fork and make a pull request; we'l
 
 We're happy to help!
 
-- Email us: [semgrep@r2c.dev](mailto:semgrep@r2c.dev)
+- Email us: [support@r2c.dev](mailto:support@r2c.dev)
 - [Join our Slack](https://r2c.dev/slack)
 
 ## Development Workflow
@@ -46,7 +46,7 @@ Once `pre-commit` is set up you may commit code and create pull requests as you 
 
 ### Tests
 
-Test files should always accompany new rules. Test file names must match the rule file name, except for the extension. For example, if the rule is in `my-rule.yaml`, the tests should be in `my-rule.js` (or another valid extension for the target language). Inside the test file, expected findings should be marked with a comment that reads `ruleid: my-rule` on the line directly above. You can also include code that should **not** be detected with `ok: my-rule`. Use the appropriate single-line comment syntax for the target language (`#` for Python, `//` for JavaScript, etc.). An example is listed below.
+Test files should always accompany new rules. A good test file should include at least one test that the rule should flag on, and at least one test that the rule should not flag on. Test file names must match the rule file name, except for the extension. For example, if the rule is in `my-rule.yaml`, the tests should be in `my-rule.js` (or another valid extension for the target language). Inside the test file, expected findings should be marked with a comment that reads `ruleid: my-rule` on the line directly above. Include code that should **not** be detected with `ok: my-rule`. Use the appropriate single-line comment syntax for the target language (`#` for Python, `//` for JavaScript, etc.). An example is listed below.
 
 ```yaml
 rules:
@@ -71,9 +71,12 @@ We use Semgrep to [scan semgrep-rules](https://r2c.dev/blog/2021/how-we-made-sem
 We have developed a few best-practices for rules submitted to this repository based on how Semgrep CLI users want to interact with the data. The `semgrep-rule-lints` job will check for the following metadata:
 
 - The presence of a `category` metadata field. This is one of {security, best-practice, correctness, maintainability, performance}.
-- The presence of a `technology` metadata field. This is usually the library or framework the rule is targeting. If it's for the language itself, just use the language name, e.g., `python`.
+- The presence of a `technology` metadata field. This is usually the library or framework the rule is targeting, e.g., `django`. If it's for the language itself, just use the language name, e.g., `python`.
 - The use of the YAML multiline string operator `>-` when rule messages span multiple lines. This presents the best-looking rule message in the terminal.
-- For `security` rules, the presence of `owasp` and `cwe` metadata tags. This lets users group Semgrep results by familiar security tags.
+- For `security` category rules, the presence of `owasp` and `cwe` metadata tags. This lets users group Semgrep results by familiar security tags. An example of an `owasp` tag is: <br>
+`owasp: 'A9: Using Components with Known Vulnerabilities'` <br>
+and an example of a `cwe` tag is: <br>
+`cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'`
 
 ### Rule Messages
 
@@ -112,7 +115,7 @@ java/rmi/security/server-dangerous-class-deserizaliation.yaml
 
 ### Rule Metadata
 
-Rules may contain a `metadata` key. You can put anything in the `metadata` section. The [Semgrep registry](https://semgrep.dev/r) will use the some special keys as described below.
+Rules may contain a `metadata` key. You can put anything in the `metadata` section. The `metalinter` section has descriptions of the metadata keys we expect in a good rule, but here are a few more key descriptions:
 
 ### References
 
