@@ -38,6 +38,8 @@ rules:
         ...
         $PATTERN $SQL = new $PATTERN($S,...);
     - pattern: |
+        $PATTERN $S = new $PATTERN(...);
+    - pattern: |
         $T $X(...,$SQL,...)
         {
          ...
@@ -48,15 +50,18 @@ rules:
         $T $X(...,$SQL,...)
         {
          ...
-         $PATTERN $SQL = new $PATTERN($S,...);
+         $PATTERN $S = new $PATTERN($SQL,...);
          ...
         }
+
   - pattern-not: |
       $S.$PATTERN = "..." + "...";
-
+  - pattern-not-inside: |
+      ...
+      $S.Parameters
 
   message: |
     Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized.
     Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'.
   languages: [csharp]
-  severity: WARNING
+  severity: ERROR
