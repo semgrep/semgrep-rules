@@ -79,13 +79,12 @@ namespace Sqli
         public void sqli5(string sqli)
         {
 
-           using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
+        using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
          connection.Open();
          SqlCommand command= connection.CreateCommand();
          command.CommandText = String.Concat(new string[]
 			{
-			"UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
-		   });
+         "UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"});
          command.CommandTimeout = 15;
          command.CommandType = CommandType.Text;
       }
@@ -122,7 +121,7 @@ namespace Sqli
 
          using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
          connection.Open();
-         SqlCommand command = new SqlCommand(String.Format("SELECT c.name AS column_name,t.name AS type_name,c.max_length,c.precision,c.scale,             CAST(CASE WHEN EXISTS(SELECT * FROM sys.index_columns AS i WHERE i.object_id=c.object_id AND i.column_id=c.column_id) THEN 1 ELSE 0 END AS BIT) AS column_indexed             FROM sys.columns AS c              JOIN sys.types AS t ON c.user_type_id=t.user_type_id              WHERE c.object_id = OBJECT_ID('{0}')              ORDER BY c.column_id;", sqli));
+         SqlCommand command = new SqlCommand(String.Format("SELECT c.name AS column_name,t.name AS type_name,c.max_length,c.precision,c.scale,CAST(CASE WHEN EXISTS(SELECT * FROM sys.index_columns AS i WHERE i.object_id=c.object_id AND i.column_id=c.column_id) THEN 1 ELSE 0 END AS BIT) AS column_indexed             FROM sys.columns AS c              JOIN sys.types AS t ON c.user_type_id=t.user_type_id              WHERE c.object_id = OBJECT_ID('{0}')              ORDER BY c.column_id;", sqli));
 
       }
 
@@ -149,13 +148,10 @@ namespace Sqli
          connection.Open();
          String sqlcommand = String.Concat(new string[]
 			{
-			"UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
+       "UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
 			});
          SqlCommand command= new SqlCommand(sqlcommand);
-
       }
-
-
         }
 
 
@@ -165,7 +161,6 @@ namespace Sqli
       // rule-id: csharp-sqli
       public void sqli11(string sqli)
         {
-
          using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
          connection.Open();
          SqlCommand command= new SqlCommand(sqli);
