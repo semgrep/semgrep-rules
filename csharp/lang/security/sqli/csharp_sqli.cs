@@ -63,9 +63,9 @@ namespace Sqli
          connection.Open();
          SqlCommand command= connection.CreateCommand();
          command.CommandText = string.Concat(new string[]
-			{
-			"UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
-		   });
+          {
+          "UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
+          });
          command.CommandTimeout = 15;
          command.CommandType = CommandType.Text;
       }
@@ -83,7 +83,7 @@ namespace Sqli
          connection.Open();
          SqlCommand command= connection.CreateCommand();
          command.CommandText = String.Concat(new string[]
-			{
+            {
          "UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"});
          command.CommandTimeout = 15;
          command.CommandType = CommandType.Text;
@@ -147,9 +147,9 @@ namespace Sqli
          using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
          connection.Open();
          String sqlcommand = String.Concat(new string[]
-			{
+            {
        "UPDATE [dbo].[tblBigTableReference] SET tblBigTableReference.PropertyName = @NewPropertyName FROM [dbo].[tblBigTableReference] INNER JOIN [dbo].[",sqli,"] ON ",sqli,".pkId = tblBigTableReference.pkId WHERE ", sqli, ".StoreName = @storeName AND tblBigTableReference.PropertyName = @OldPropertyName"
-			});
+            });
          SqlCommand command= new SqlCommand(sqlcommand);
       }
         }
