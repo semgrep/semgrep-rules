@@ -1,0 +1,11 @@
+rules:
+- id: gitlab_never_run_changes
+  pattern: |
+    - changes:
+      - ...
+      when: never
+  message: This Gitlab CI YAML will never run on default branches due to a changes
+    rule with when:never.  See https://docs.gitlab.com/ee/ci/yaml/index.html#ruleschanges
+  languages:
+  - yaml
+  severity: WARNING
