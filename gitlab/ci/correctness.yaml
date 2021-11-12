@@ -1,11 +1,25 @@
-rules:
-- id: gitlab_never_run_changes
-  pattern: |
+.bad_sast_template_cz_rules:
+  rules:
+      #ruleid: gitlab_never_run_changes
     - changes:
-      - ...
+        - .somefile
       when: never
-  message: This Gitlab CI YAML will never run on default branches due to a changes
-    rule with when:never.  See https://docs.gitlab.com/ee/ci/yaml/index.html#ruleschanges
-  languages:
-  - yaml
-  severity: WARNING
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+    - if: '$CI_MERGE_REQUEST_IID'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: always
+
+.good_sast_template_cz_rules:
+  rules:
+    - if: '$CI_MERGE_REQUEST_IID'
+      changes:
+        - .somefile
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+    - if: '$CI_MERGE_REQUEST_IID'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: always
