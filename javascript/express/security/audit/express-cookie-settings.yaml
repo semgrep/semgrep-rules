@@ -1,6 +1,6 @@
 rules:
 - id: express-cookie-session-default-name
-  message: |
+  message: >-
     Don’t use the default session cookie name
     Using the default session cookie name can open your app to attacks.
     The security issue posed is similar to X-Powered-By: a potential attacker can use it to fingerprint the server and target attacks accordingly.
@@ -34,7 +34,7 @@ rules:
       ...
       $SESSION($OPTS,...);
 - id: express-cookie-session-no-secure
-  message: |
+  message: >-
     Default session middleware settings: `secure` not set.
     It ensures the browser only sends the cookie over HTTPS.
   severity: WARNING
@@ -85,7 +85,7 @@ rules:
       ...
       $SESSION($OPTS,...);
 - id: express-cookie-session-no-httponly
-  message: |
+  message: >-
     Default session middleware settings: `httpOnly` not set.
     It ensures the cookie is sent only over HTTP(S), not client JavaScript, helping to protect against cross-site scripting attacks.
   severity: WARNING
@@ -136,7 +136,7 @@ rules:
       ...
       $SESSION($OPTS,...);
 - id: express-cookie-session-no-domain
-  message: |
+  message: >-
     Default session middleware settings: `domain` not set.
     It indicates the domain of the cookie; use it to compare against the domain of the server in which the URL is being requested.
     If they match, then check the path attribute next.
@@ -188,7 +188,7 @@ rules:
       ...
       $SESSION($OPTS,...);
 - id: express-cookie-session-no-path
-  message: |
+  message: >-
     Default session middleware settings: `path` not set.
     It indicates the path of the cookie; use it to compare against the request path. If this and domain match, then send the cookie in the request.
   severity: WARNING
@@ -239,7 +239,7 @@ rules:
       ...
       $SESSION($OPTS,...);
 - id: express-cookie-session-no-expires
-  message: |
+  message: >-
     Default session middleware settings: `expires` not set.
     Use it to set expiration date for persistent cookies.
   severity: WARNING

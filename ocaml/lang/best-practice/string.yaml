@@ -6,6 +6,8 @@ rules:
   severity: WARNING
   metadata:
     category: best-practice
+    technology:
+    - ocaml
 - id: ocamllint-str-string-after
   pattern: String.sub $S $N (String.length $S - $N)
   message: Use instead `Str.string_after`
@@ -13,6 +15,8 @@ rules:
   severity: WARNING
   metadata:
     category: best-practice
+    technology:
+    - ocaml
 - id: ocamllint-str-last-chars
   pattern: String.sub $S (String.length $S - $N) $N
   message: Use instead `Str.last_chars`
@@ -20,6 +24,8 @@ rules:
   severity: WARNING
   metadata:
     category: best-practice
+    technology:
+    - ocaml
 - id: ocamllint-useless-sprintf
   pattern-either:
   - pattern: Printf.sprintf "..."
@@ -29,3 +35,5 @@ rules:
   severity: WARNING
   metadata:
     category: best-practice
+    technology:
+    - ocaml

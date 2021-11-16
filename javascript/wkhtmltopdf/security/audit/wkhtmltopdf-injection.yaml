@@ -1,6 +1,6 @@
 rules:
 - id: wkhtmltopdf-injection
-  message: |
+  message: >-
     If unverified user data can reach the `wkhtmltopdf` it can result in Server-Side Request Forgery vulnerabilities
   severity: WARNING
   metadata:
@@ -12,7 +12,6 @@ rules:
   languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       $WK = require('wkhtmltopdf');
       ...
   - pattern-not-inside: |

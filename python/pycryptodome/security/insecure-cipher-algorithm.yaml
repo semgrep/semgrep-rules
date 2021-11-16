@@ -1,6 +1,6 @@
 rules:
 - id: insecure-cipher-algorithm-rc2
-  message: |
+  message: >-
     Detected RC2 cipher algorithm which is considered insecure. The algorithm has known vulnerabilities and is difficult to use securely. Use AES instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L84
@@ -20,7 +20,7 @@ rules:
   - pattern: Cryptodome.Cipher.ARC2.new(...)
   - pattern: Crypto.Cipher.ARC2.new
 - id: insecure-cipher-algorithm-rc4
-  message: |
+  message: >-
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
@@ -41,7 +41,7 @@ rules:
   - pattern: Cryptodome.Cipher.ARC4.new(...)
   - pattern: Crypto.Cipher.ARC4.new(...)
 - id: insecure-cipher-algorithm-blowfish
-  message: |
+  message: >-
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
@@ -61,7 +61,7 @@ rules:
   - pattern: Cryptodome.Cipher.Blowfish.new(...)
   - pattern: Crypto.Cipher.Blowfish.new(...)
 - id: insecure-cipher-algorithm-des
-  message: |
+  message: >-
     Detected DES cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
   metadata:
@@ -81,7 +81,7 @@ rules:
   - pattern: Cryptodome.Cipher.DES.new(...)
   - pattern: Crypto.Cipher.DES.new(...)
 - id: insecure-cipher-algorithm-xor
-  message: |
+  message: >-
     Detected XOR cipher algorithm which is considered insecure. This algorithm
     is not cryptographically secure and can be reversed easily. Use AES instead.
   metadata:

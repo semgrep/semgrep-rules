@@ -6,7 +6,7 @@ rules:
       ...
       $OTHERFUNC(..., <... $UNK ...>, ...);
   - pattern: $OTHERFUNC(..., <... "=~/.*<script.*/" ...>, ...)
-  message: |
+  message: >-
     Cannot determine what '$UNK' is and it is used with a '<script>' tag. This
     could be susceptible to cross-site scripting (XSS). Ensure '$UNK' is not
     externally controlled, or sanitize this data.
@@ -15,8 +15,10 @@ rules:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     references:
     - https://www.developsec.com/2017/11/09/xss-in-a-script-tag/
-    - https://github.com/bkimminich/juice-shop/blob/master/routes/videoHandler.js#L64
+    - https://github.com/juice-shop/juice-shop/blob/master/routes/videoHandler.ts#L64
     category: security
+    technology:
+    - javascript
   severity: WARNING
   languages:
   - javascript

@@ -1,0 +1,25 @@
+rules:
+- id: php-permissive-cors
+  patterns:
+  - pattern: header($VALUE,...)
+  - pattern-either:
+    - pattern: header("...",...)
+    - pattern-inside: |
+        $VALUE = "...";
+        ...
+  - metavariable-regex:
+      metavariable: $VALUE
+      regex: (\'|\")\s*(Access-Control-Allow-Origin|access-control-allow-origin)\s*:\s*(\*)\s*(\'|\")
+  message: >-
+    Access-Control-Allow-Origin response header is set to "*".
+    This will disable CORS Same Origin Policy restrictions.
+  metadata:
+    references:
+    - https://developer.mozilla.org/ru/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-346: Origin Validation Error'
+    category: security
+    technology:
+    - php
+  languages: [php]
+  severity: WARNING

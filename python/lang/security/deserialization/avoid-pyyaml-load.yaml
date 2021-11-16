@@ -7,9 +7,11 @@ rules:
     - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
     - https://nvd.nist.gov/vuln/detail/CVE-2017-18342
     category: security
+    technology:
+    - pyyaml
   languages:
   - python
-  message: |
+  message: >-
     Avoid using `load()`. `PyYAML.load` can create arbitrary Python
     objects. A malicious actor could exploit this to run arbitrary
     code. Use `safe_load()` instead.

@@ -30,7 +30,7 @@ rules:
   - pattern-not-inside: locals()[...] = ...
   - pattern-not-inside: $G[...] = ...
   - pattern-not-inside: $FUNC.__globals__[...] = ...
-  message: |
+  message: >-
     Found non static data as an index to 'globals()'. This is extremely
     dangerous because it allows an attacker to execute arbitrary code
     on the system. Refactor your code not to use 'globals()'.
@@ -40,5 +40,7 @@ rules:
     references:
     - https://github.com/mpirnat/lets-be-bad-guys/blob/d92768fb3ade32956abd53bd6bb06e19d634a084/badguys/vulnerable/views.py#L181-L186
     category: security
+    technology:
+    - python
   severity: WARNING
   languages: [python]

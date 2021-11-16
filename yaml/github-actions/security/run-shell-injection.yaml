@@ -4,8 +4,8 @@ rules:
   - yaml
   message: 'Using variable interpolation `${{...}}` with `github` context data in a `run:` step could allow an attacker to
     inject their own code into the runner. This would allow them to steal secrets and code. `github` context data can have
-    atrbitrary user input and should be treated as untrusted. Instead, use an intermediate environment variable with `env:`
-    to store the data and use the enviornment variable in the `run:` script. Be sure to use double-quotes the environment
+    arbitrary user input and should be treated as untrusted. Instead, use an intermediate environment variable with `env:`
+    to store the data and use the environment variable in the `run:` script. Be sure to use double-quotes the environment
     variable, like this: "$ENVVAR".'
   metadata:
     category: security
@@ -13,15 +13,35 @@ rules:
     owasp: 'A1: Injection'
     references:
     - https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#understanding-the-risk-of-script-injections
+    - https://securitylab.github.com/research/github-actions-untrusted-input/
     technology:
     - github-actions
   patterns:
   - pattern-inside: 'steps: [...]'
   - pattern-inside: |
-      - name: ...
+      - run: ...
         ...
-        run: ...
   - pattern: 'run: $SHELL'
-  - pattern-regex: \${{\s*github.*?\s*}}
-  - pattern-not-regex: github\..*?\.?sha
+  - metavariable-pattern:
+      language: generic
+      metavariable: $SHELL
+      patterns:
+      - pattern-either:
+        - pattern: ${{ github.event.issue.title }}
+        - pattern: ${{ github.event.issue.body }}
+        - pattern: ${{ github.event.pull_request.title }}
+        - pattern: ${{ github.event.pull_request.body }}
+        - pattern: ${{ github.event.comment.body }}
+        - pattern: ${{ github.event.review.body }}
+        - pattern: ${{ github.event.review_comment.body }}
+        - pattern: ${{ github.event.pages. ... .page_name}}
+        - pattern: ${{ github.event.head_commit.message }}
+        - pattern: ${{ github.event.head_commit.author.email }}
+        - pattern: ${{ github.event.head_commit.author.name }}
+        - pattern: ${{ github.event.commits ... .author.email }}
+        - pattern: ${{ github.event.commits ... .author.name }}
+        - pattern: ${{ github.event.pull_request.head.ref }}
+        - pattern: ${{ github.event.pull_request.head.label }}
+        - pattern: ${{ github.event.pull_request.head.repo.default_branch }}
+        - pattern: ${{ github.head_ref }}
   severity: ERROR

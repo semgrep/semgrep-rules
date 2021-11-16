@@ -9,7 +9,7 @@ rules:
       RUN ... zypper install ... -y
   - pattern-not-inside: |
       RUN ... zypper install ... --no-confirm
-  message: |
+  message: >-
     This 'zypper install' is missing the '-y' switch. This might stall
     builds because it requires human intervention. Add the '-y' switch.
   metadata:

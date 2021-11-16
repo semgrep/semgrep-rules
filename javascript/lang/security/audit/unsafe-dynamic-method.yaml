@@ -29,12 +29,14 @@ rules:
         ...
       }
       ...
-  message: |
+  message: >-
     Using non-static data to retrieve and run functions from the object is dangerous.
     If the data is user-controlled, it may allow executing arbitrary code.
   metadata:
     owasp: 'A1: Injection'
     cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     category: security
+    technology:
+    - javascript
   languages: [js, ts]
   severity: WARNING

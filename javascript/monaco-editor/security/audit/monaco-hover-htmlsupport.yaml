@@ -1,0 +1,33 @@
+rules:
+- id: monaco-hover-htmlsupport
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        import "monaco-editor"
+        ...
+    - pattern-inside: |
+        require("monaco-editor")
+        ...
+  - pattern-either:
+    - pattern: |
+        {value: $VAL, supportHtml: true}
+    - pattern: |
+        {value: $VAL, isTrusted: true}
+  - pattern-inside: |
+      {range: $R, contents: [...]}
+  - pattern-not: |
+      {..., value: "...", ...}
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: 'A7: Cross-Site Scripting (XSS)'
+    references:
+    - https://github.com/microsoft/monaco-editor/issues/801
+    category: security
+    technology:
+    - monaco
+    - monaco-editor
+  message: >-
+    If user input reaches `HoverProvider` while `supportHml` is set to `true` it may introduce an XSS vulnerability.
+    Do not produce HTML for hovers with dynamically generated input.
+  languages: [typescript, javascript]
+  severity: WARNING

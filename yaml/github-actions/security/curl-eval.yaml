@@ -1,0 +1,32 @@
+rules:
+- id: curl-eval
+  languages:
+  - yaml
+  message: Data is being eval'd from a `curl` command. An attacker with control of the server in the `curl` command could
+    inject malicious code into the `eval`, resulting in a system comrpomise. Avoid eval'ing untrusted data if you can. If
+    you must do this, consider checking the SHA sum of the content returned by the server to verify its integrity.
+  metadata:
+    category: security
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: 'A1: Injection'
+    references:
+    - https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#understanding-the-risk-of-script-injections
+    technology:
+    - github-actions
+    - bash
+    - curl
+  patterns:
+  - pattern-inside: 'steps: [...]'
+  - pattern-inside: |
+      - run: ...
+        ...
+  - pattern: 'run: $SHELL'
+  - metavariable-pattern:
+      language: bash
+      metavariable: $SHELL
+      patterns:
+      - pattern: |
+          $DATA=<... curl ... >
+          ...
+          eval <... $DATA ...>
+  severity: ERROR

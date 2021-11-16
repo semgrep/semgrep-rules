@@ -1,7 +1,7 @@
 rules:
 - id: insecure-cipher-algorithm-rc4
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
-  message: |
+  message: >-
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
@@ -20,7 +20,7 @@ rules:
   - python
 - id: insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
-  message: |
+  message: >-
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
@@ -38,7 +38,7 @@ rules:
   - python
 - id: insecure-cipher-algorithm-idea
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
-  message: |
+  message: >-
     Detected IDEA cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
   metadata:

@@ -1,6 +1,6 @@
 rules:
 - id: jwt-decode-without-verify
-  message: |
+  message: >-
     Detected the decoding of a JWT token without a verify step.
     JWT tokens must be verified before use, otherwise the token's
     integrity is unknown. This means a malicious actor could forge
@@ -23,12 +23,12 @@ rules:
   - pattern-inside: |
       $JWT = require('jsonwebtoken');
       ...
-  - pattern-either:
-    - pattern: |
-        $JWT.decode(...)
-    - pattern: |
-        $JWT.decode(...).$PARAM
-  - pattern-not-inside: |
+  - pattern-not-inside: | # nosemgrep: slow-pattern-top-ellipsis
       ...
-      $JWT.verify(...)
+      $JWT.verify($TOKEN, ...)
       ...
+  - pattern-not-inside: | # nosemgrep: slow-pattern-top-ellipsis
+      ...
+      if (<... $JWT.verify($TOKEN, ...) ...>) { ... }
+      ...
+  - pattern: $JWT.decode($TOKEN, ...)

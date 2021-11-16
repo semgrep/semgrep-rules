@@ -25,7 +25,7 @@ rules:
       $HTTP.request(..., $VAR, ...);
   - pattern-not: |
       $HTTP.request(..., {...,protocol: "https"}, ...);
-  message: |
+  message: >-
     Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
     that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.
   metadata:

@@ -21,7 +21,7 @@ rules:
   - pattern-not: $WRITER.$WRITE("...", ...)
   - pattern-not: $WRITER.flush(...)
   - pattern-not: $WRITER.close(...)
-  message: |
+  message: >-
     Detected a direct write to the HTTP response. This bypasses any
     view or template environments, including HTML escaping, which may
     expose this application to cross-site scripting (XSS) vulnerabilities.
@@ -33,5 +33,7 @@ rules:
     references:
     - https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaServerFaces.html
     category: security
+    technology:
+    - java
   severity: WARNING
   languages: [java]

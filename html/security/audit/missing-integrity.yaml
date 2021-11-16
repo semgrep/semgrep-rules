@@ -1,0 +1,34 @@
+rules:
+- id: missing-integrity
+  metadata:
+    category: security
+    technology:
+    - html
+  patterns:
+  - pattern-either:
+    - pattern: <script ... src= "http:// ... " > ... </script>
+    - pattern: <script ... src= "https:// ... " > ... </script>
+    - pattern: <script ... src= 'http:// ... ' > ... </script>
+    - pattern: <script ... src= 'https:// ... ' > ... </script>
+    - pattern: <link ... rel="stylesheet" ... href="http:// ... " ...>
+    - pattern: <link ... rel="stylesheet" ... href="https:// ... " ...>
+    - pattern: <link ... rel='stylesheet' ... href='http:// ... ' ...>
+    - pattern: <link ... rel='stylesheet' ... href='https:// ... ' ...>
+    - pattern: <link ... href="http:// ... " ... rel="stylesheet" ...>
+    - pattern: <link ... href="https:// ... " ... rel="stylesheet" ...>
+    - pattern: <link ... href='http:// ... ' ... rel='stylesheet' ...>
+    - pattern: <link ... href='https:// ... ' ... rel='stylesheet' ...>
+  - pattern-not: <script ... integrity= ...> ... </script>
+  - pattern-not: <link ... integrity= ...>
+  paths:
+    include:
+    - '*.html'
+  message: >-
+    This tag is missing an 'integrity' subresource integrity attribute.
+    The 'integrity' attribute allows for the browser to verify that externally hosted files (for example from a CDN)
+    are delivered without unexpected manipulation. Without this attribute, if an attacker can modify the externally
+    hosted resource, this could lead to XSS and other types of attacks. To prevent this, include the base64-encoded
+    cryptographic hash of the resource (file) you’re telling the browser to fetch in the 'integrity' attribute for
+    all externally hosted files.
+  severity: WARNING
+  languages: [generic]

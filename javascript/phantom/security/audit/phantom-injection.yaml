@@ -1,6 +1,6 @@
 rules:
 - id: phantom-injection
-  message: |
+  message: >-
     If unverified user data can reach the `phantom` page methods it can result in Server-Side Request Forgery vulnerabilities
   severity: WARNING
   metadata:
@@ -12,11 +12,7 @@ rules:
   languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       $PHANTOM = require('phantom');
-      ...
-  - pattern-not-inside: |
-      var $INPUT = "...";
       ...
   - pattern-either:
     - pattern: $PAGE.open($INPUT,...)

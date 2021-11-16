@@ -1,0 +1,38 @@
+rules:
+- id: symfony-permissive-cors
+  patterns:
+  - pattern-inside: |
+      use Symfony\Component\HttpFoundation\Response;
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            new Symfony\Component\HttpFoundation\Response($X, $Y, $HEADERS, ...)
+        - pattern: new Response($X, $Y, $HEADERS, ...)
+      - pattern-either:
+        - pattern: new $R($X, $Y, [$KEY => $VALUE], ...)
+        - pattern-inside: |
+            $HEADERS = [$KEY => $VALUE];
+            ...
+    - patterns:
+      - pattern: $RES->headers->set($KEY, $VALUE)
+  - metavariable-regex:
+      metavariable: $KEY
+      regex: (\'|\")\s*(Access-Control-Allow-Origin|access-control-allow-origin)\s*(\'|\")
+  - metavariable-regex:
+      metavariable: $VALUE
+      regex: (\'|\")\s*(\*)\s*(\'|\")
+  message: >-
+    Access-Control-Allow-Origin response header is set to "*".
+    This will disable CORS Same Origin Policy restrictions.
+  metadata:
+    references:
+    - https://developer.mozilla.org/ru/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-346: Origin Validation Error'
+    category: security
+    technology:
+    - symfony
+  languages: [php]
+  severity: WARNING

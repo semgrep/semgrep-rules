@@ -1,0 +1,49 @@
+rules:
+- id: raw-html-format
+  severity: WARNING
+  message: >-
+    User data flows into the host portion of this manually-constructed URL.
+    This could allow an attacker to send data to their own server, potentially
+    exposing sensitive data such as cookies or authorization information sent
+    with this request. They could also probe internal servers or other resources
+    that the server runnig this code can access. (This is called server-side request
+    forgery, or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist
+    for approved hosts hardcode the correct host.
+  metadata:
+    owasp:
+    - A07:2017
+    - A03:2021
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - express
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        require('express');
+        ...
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+    - pattern: $REQ
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: '"$HTMLSTR" + $EXPR'
+          - pattern: '"$HTMLSTR".concat(...)'
+          - pattern: util.format($HTMLSTR, ...)
+        - metavariable-pattern:
+            metavariable: $HTMLSTR
+            language: generic
+            pattern: <$TAG ...
+      - patterns:
+        - pattern: |
+            `...`
+        - pattern-regex: |
+            .*<\w+.*

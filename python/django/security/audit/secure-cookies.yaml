@@ -26,7 +26,7 @@ rules:
   - pattern-not: response.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
   - pattern-not: response.set_cookie(..., **$A)
   - pattern: response.set_cookie(...)
-  message: |
+  message: >-
     Django cookies should be handled securely by setting secure=True, httponly=True, and samesite='Lax' in
     response.set_cookie(...). If your situation calls for different settings, explicitly disable the setting.
     If you want to send the cookie over http, set secure=False.  If you want to let client-side JavaScript

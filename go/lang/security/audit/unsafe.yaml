@@ -1,6 +1,6 @@
 rules:
 - id: use-of-unsafe-block
-  message: |
+  message: >-
     Using the unsafe package in Go gives you low-level memory management and
     many of the strengths of the C language but also gives flexibility to the attacker
     of your application.
@@ -10,4 +10,6 @@ rules:
     cwe: 'CWE-242: Use of Inherently Dangerous Function'
     source_rule_url: https://github.com/securego/gosec/blob/master/rules/unsafe.go
     category: security
+    technology:
+    - go
   pattern: unsafe.$FUNC(...)

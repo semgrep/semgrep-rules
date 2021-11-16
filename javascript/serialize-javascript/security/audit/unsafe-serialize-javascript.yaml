@@ -1,6 +1,6 @@
 rules:
 - id: unsafe-serialize-javascript
-  message: |
+  message: >-
     `serialize-javascript` used with `unsafe` parameter, this could be vulnerable to XSS.
   severity: WARNING
   languages: [javascript, typescript]
@@ -12,7 +12,6 @@ rules:
     - serialize-javascript
   patterns:
   - pattern-inside: |
-      ...
       $S = require('serialize-javascript');
       ...
   - pattern-not-inside: escape(...)
