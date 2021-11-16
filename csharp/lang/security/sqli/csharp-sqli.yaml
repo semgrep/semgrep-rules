@@ -5,10 +5,18 @@ rules:
       metavariable: $PATTERN
       regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
   - pattern-either:
-    - pattern: |
-        StringBuilder $SB = new StringBuilder(...);
-        ...
-        $S.$PATTERN = $SB.ToString();
+    - patterns:
+      - pattern-inside: |
+          StringBuilder $SB = new StringBuilder(...);
+          ...
+          $S.$PATTERN = $SB.ToString();
+      - pattern: $S.$PATTERN = $SB.ToString();
+    - patterns:
+      - pattern-inside: |
+          StringBuilder $SB = new StringBuilder(...);
+          ...
+          $PATTERN $X = new $PATTERN($SB.ToString(),...);
+      - pattern: $PATTERN $X = new $PATTERN($SB.ToString(),...);
     - pattern: |
         $S.$PATTERN = string.Format(...);
     - pattern: |
@@ -18,19 +26,11 @@ rules:
     - pattern: |
         $S.$PATTERN  = String.Concat(...);
     - pattern: |
-        StringBuilder $SB = new StringBuilder(...);
-        ...
-        $PATTERN $X = new $PATTERN($SB.ToString(),...);
-    - pattern: |
-        $S  = string.Format(...);
-        ...
-        $PATTERN $SQL = new $PATTERN(...);
-    - pattern: |
         $S = string.Concat(...);
         ...
         $PATTERN $SQL = new $PATTERN($S,...);
     - pattern: |
-        $S  = String.Format(...);
+        $S = String.Format(...);
         ...
         $PATTERN $SQL = new PATTERN($S,...);
     - pattern: |
@@ -39,21 +39,24 @@ rules:
         $PATTERN $SQL = new $PATTERN($S,...);
     - pattern: |
         $PATTERN $S = new $PATTERN(...);
-    - pattern: |
-        $T $X(...,$SQL,...)
-        {
-         ...
-         $S.$PATTERN = $SQL;
-         ...
-        }
-    - pattern: |
-        $T $X(...,$SQL,...)
-        {
-         ...
-         $PATTERN $S = new $PATTERN($SQL,...);
-         ...
-        }
-
+    - patterns:
+      - pattern-inside: |
+          $T $X(...,$SQL,...)
+          {
+            ...
+            $S.$PATTERN = $SQL;
+            ...
+          }
+      - pattern: $S.$PATTERN = $SQL;
+    - patterns:
+      - pattern-inside: |
+          $T $X(...,$SQL,...)
+          {
+            ...
+            $PATTERN $S = new $PATTERN($SQL,...);
+            ...
+          }
+      - pattern: $PATTERN $S = new $PATTERN($SQL,...);
   - pattern-not: |
       $S.$PATTERN = "..." + "...";
   - pattern-not-inside: |
