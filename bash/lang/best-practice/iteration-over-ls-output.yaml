@@ -1,0 +1,18 @@
+rules:
+- id: iteration-over-ls-output
+  pattern: |
+    for $VAR in $(ls ...); do
+      ...
+    done
+  message: >-
+    Iterating over ls output is fragile. Use globs, e.g. 'dir/*' instead
+    of '$(ls dir)'.
+  metadata:
+    references:
+    - https://github.com/koalaman/shellcheck/wiki/SC2045
+    category: best-practice
+    technology:
+    - bash
+  severity: WARNING
+  languages:
+  - bash

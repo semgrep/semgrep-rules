@@ -1,6 +1,6 @@
 rules:
 - id: use-of-sha1
-  message: |
+  message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
@@ -16,13 +16,15 @@ rules:
       control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
       version: '4'
     category: security
+    technology:
+    - java
   pattern-either:
   - pattern: |
       MessageDigest $VAR = $MD.getInstance("SHA1");
   - pattern: |
       $DU.getSha1Digest().digest(...)
 - id: use-of-md5
-  message: |
+  message: >-
     Detected MD5 hash algorithm which is considered insecure. MD5 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
@@ -37,6 +39,8 @@ rules:
       control_id: 6.2.5 Insecure Algorithm
       control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
     category: security
+    technology:
+    - java
   pattern-either:
   - pattern: |
       MessageDigest $VAR = $MD.getInstance("MD5");

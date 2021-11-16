@@ -1,5 +1,4 @@
 // example from https://hackerone.com/reports/748214
-// ruleid: jwt-decode-without-verify
 const jwt = require('jsonwebtoken');
 
 module.exports = function (sequelize) {
@@ -12,6 +11,7 @@ module.exports = function (sequelize) {
       const comp = authorization.split(' ');
       if (comp.length == 2 && comp[0] == 'Bearer') {
         const token = comp[1];
+        // ruleid: jwt-decode-without-verify
         const { jti } = jwt.decode(token);
 
         const access_token = await OauthAccessToken.findById(jti);

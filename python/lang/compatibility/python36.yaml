@@ -6,6 +6,8 @@ rules:
   severity: ERROR
   metadata:
     category: compatibility
+    technology:
+    - python
 - id: python36-compatibility-Popen1
   pattern: subprocess.Popen(errors=$X, ...)
   message: the `errors` argument to Popen is only available on Python 3.6+
@@ -13,6 +15,8 @@ rules:
   severity: ERROR
   metadata:
     category: compatibility
+    technology:
+    - python
 - id: python36-compatibility-Popen2
   pattern: subprocess.Popen(encoding=$X, ...)
   message: the `encoding` argument to Popen is only available on Python 3.6+
@@ -20,3 +24,5 @@ rules:
   severity: ERROR
   metadata:
     category: compatibility
+    technology:
+    - python

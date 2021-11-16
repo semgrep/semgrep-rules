@@ -1,0 +1,29 @@
+name: semgrep-rule-lints
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    name: semgrep-rule-lints
+    steps:
+    - uses: actions/checkout@v2
+    - uses: returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          yaml/semgrep/duplicate-id.yaml
+          yaml/semgrep/duplicate-pattern.yaml
+          yaml/semgrep/unsatisfiable.yaml
+          yaml/semgrep/metadata-cwe.yaml
+          yaml/semgrep/metadata-owasp.yaml
+          yaml/semgrep/metadata-references.yaml
+          yaml/semgrep/empty-message.yaml
+          yaml/semgrep/missing-message-field.yaml
+          yaml/semgrep/missing-language-field.yaml
+          yaml/semgrep/metadata-technology.yaml
+          yaml/semgrep/metadata-category.yaml
+          yaml/semgrep/multi-line-message.yaml
+          yaml/semgrep/slow-pattern-top-ellipsis.yaml

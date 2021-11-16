@@ -8,6 +8,7 @@ on:
 jobs:
   run_benchmarks:
     runs-on: ubuntu-latest
+    if: github.repository == 'returntocorp/semgrep-rules'
     name: Run benchmarks for each rule
     steps:
     - uses: actions/checkout@v2

@@ -1,0 +1,25 @@
+rules:
+- id: flask-debugging-enabled
+  languages: [yaml]
+  severity: WARNING
+  message: >-
+    Do not set FLASK_ENV to "development" since that sets `debug=True` in Flask.
+    Use "dev" or a similar term instead.
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-489: Active Debug Code'
+    references:
+    - https://flask.palletsprojects.com/en/2.0.x/debugging/
+    - https://flask.palletsprojects.com/en/2.0.x/config/#ENV
+    category: security
+    technology:
+    - kubernetes
+    - flask
+  patterns:
+  - pattern-inside: |
+      env: [...]
+  - pattern: |
+      {name: FLASK_ENV, value: "development"}
+  fix-regex:
+    regex: development
+    replacement: dev

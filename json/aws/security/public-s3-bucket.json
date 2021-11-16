@@ -1,0 +1,52 @@
+
+  {
+
+    "Resources": {
+      "MyBucketF68F3FF0": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+              {
+                "ServerSideEncryptionByDefault": {
+                  "SSEAlgorithm": "aws:kms"
+                }
+              }
+            ]
+          },
+          // ruleid: public-s3-bucket
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": false,
+            "RestrictPublicBuckets": true
+          }
+        },
+        "UpdateReplacePolicy": "Delete",
+        "DeletionPolicy": "Delete"
+      },
+      "MyBucketF68F3FF1": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+              {
+                "ServerSideEncryptionByDefault": {
+                  "SSEAlgorithm": "aws:kms"
+                }
+              }
+            ]
+          },
+          // ok : public-s3-bucket
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": true,
+            "RestrictPublicBuckets": true
+          }
+        },
+        "UpdateReplacePolicy": "Delete",
+        "DeletionPolicy": "Delete"
+      }
+    }
+  }

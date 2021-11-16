@@ -1,62 +1,53 @@
 rules:
 - id: insecure-file-permissions
-  patterns:
-  - pattern-either:
-    - pattern: os.chmod($FILENAME, $MODE, ...)
-    - pattern: os.lchmod($FILENAME, $MODE)
-    - pattern: os.fchmod($FD, $MODE)
-  - pattern-where-python: |-
-      import stat
-
-      def stat_to_bits(mode):
-        bits = 0
-        for flag in mode.split('|'):
-          try:
-            bits |= {k: v for k, v in stat.__dict__.items() if type(v) == int}[flag.strip().replace("stat.", "")]
-          except: # ignore things that aren't in stat module
-            continue
-        return bits
-
-      def numeric_to_bits(mode):
-        # Try combos of ints: 0o777, 511, 0x1ff
-        bits = 0
-        for num in mode.split("|"):
-          num = num.strip()
-          try:
-            tidbit = int(num)
-          except:
-            try:
-              tidbit = int(num, 8)
-            except:
-              try:
-                tidbit = int(num, 16)
-              except:
-                try:
-                  tidbit = int(num, 2)
-                except:
-                  tidbit = 0
-          bits |= tidbit
-        return bits
-
-      perms = vars['$MODE']
-      try:
-        if "stat" in perms:
-          mode = stat_to_bits(perms)
-        else:
-          mode = numeric_to_bits(perms)
-      except:
-        mode = 0 # can't resolve. ignore this.
-
-      filemode = stat.filemode(mode)
-      alert = False
-      if 'w' in filemode[-3:] or 'x' in filemode[-3:]:
-        alert = True
-      elif 'x' in filemode[-6:-3]:
-        alert = True
-      alert
-  message: |
-    Insecure file permissions detected.
   languages: [python]
   severity: WARNING
   metadata:
     category: security
+    owasp:
+    - A06:2017 - Security Misconfiguration
+    - A05:2021 - Security Misconfiguration
+    cwe: 'CWE-276: Incorrect Default Permissions'
+    technology:
+    - python
+  message: >-
+    These permissions `$BITS` are widely permissive and grant access
+    to more people than may be necessary. A good default is `0o644` which
+    gives read and write access to yourself and read access to everyone else.
+  patterns:
+  - pattern-inside: os.$METHOD(...)
+  - metavariable-pattern:
+      metavariable: $METHOD
+      patterns:
+      - pattern-either:
+        - pattern: chmod
+        - pattern: lchmod
+        - pattern: fchmod
+  - pattern-either:
+    - patterns:
+      - pattern: os.$METHOD($FILE, $BITS, ...)
+      - metavariable-comparison:
+          metavariable: $BITS
+          comparison: $BITS >= 0o650 and $BITS < 0o100000
+    - patterns:
+      - pattern: os.$METHOD($FILE, $BITS)
+      - metavariable-comparison:
+          metavariable: $BITS
+          comparison: $BITS >= 0o100650
+    - patterns:
+      - pattern: os.$METHOD($FILE, $BITS, ...)
+      - metavariable-pattern:
+          metavariable: $BITS
+          patterns:
+          - pattern-either:
+            - pattern: <... stat.S_IWGRP ...>
+            - pattern: <... stat.S_IXGRP ...>
+            - pattern: <... stat.S_IWOTH ...>
+            - pattern: <... stat.S_IXOTH ...>
+            - pattern: <... stat.S_IRWXO ...>
+            - pattern: <... stat.S_IRWXG ...>
+    - patterns:
+      - pattern: os.$METHOD($FILE, $EXPR | $MOD, ...)
+      - metavariable-comparison:
+          metavariable: $MOD
+          comparison: $MOD == 0o111

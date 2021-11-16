@@ -1,7 +1,7 @@
 rules:
 - id: mako-templates-detected
   pattern: mako.template.Template(...)
-  message: |
+  message: >-
     Mako templates do not provide a global HTML escaping mechanism.
     This means you must escape all sensitive data in your templates
     using '| u' for URL escaping or '| h' for HTML escaping.
@@ -15,5 +15,7 @@ rules:
     - https://docs.makotemplates.org/en/latest/syntax.html#expression-escaping
     - https://jinja.palletsprojects.com/en/2.11.x/intro/#
     category: security
+    technology:
+    - mako
   languages: [python]
   severity: INFO

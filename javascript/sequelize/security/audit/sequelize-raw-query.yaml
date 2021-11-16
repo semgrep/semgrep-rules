@@ -1,7 +1,7 @@
 rules:
 - id: sequelize-raw-query
-  message: >
-    Avoiding SQL string concatenation: untrusted input concatinated with raw
+  message: >-
+    Avoiding SQL string concatenation: untrusted input concatenated with raw
     SQL query can result in SQL Injection. Data replacement or data binding
     should be used.
     See https://sequelize.org/master/manual/raw-queries.html
@@ -16,6 +16,7 @@ rules:
   severity: WARNING
   languages:
   - javascript
+  - typescript
   pattern-either:
   - pattern: |
       $DATABASE.sequelize.query(`...${...}...`, ...)

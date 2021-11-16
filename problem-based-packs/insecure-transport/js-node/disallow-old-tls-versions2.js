@@ -1,6 +1,8 @@
+const https = require('https');
+
 function ok1() {
-    // ok: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ok: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -10,8 +12,8 @@ function ok1() {
 }
 
 function ok2() {
-    // ok: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ok: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -21,8 +23,8 @@ function ok2() {
 }
 
 function ok3() {
-    // ok: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ok: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -32,8 +34,8 @@ function ok3() {
 }
 
 function ok4() {
-    // ok: disallow-old-tls-versions2
     var constants = require('constants');
+    // ok: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -43,8 +45,8 @@ function ok4() {
 }
 
 function bad1() {
-    // ruleid: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ruleid: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -54,8 +56,8 @@ function bad1() {
 }
 
 function bad2() {
-    // ruleid: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ruleid: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -65,8 +67,8 @@ function bad2() {
 }
 
 function bad3() {
-    // ruleid: disallow-old-tls-versions2
     var constants = require('crypto');
+    // ruleid: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',
@@ -75,8 +77,8 @@ function bad3() {
 }
 
 function bad4() {
-    // ruleid: disallow-old-tls-versions2
     var constants = require('constants');
+    // ruleid: disallow-old-tls-versions2
     var sslOptions = {
     key: fs.readFileSync('/etc/ssl/private/private.key'),
     secureProtocol: 'SSLv23_server_method',

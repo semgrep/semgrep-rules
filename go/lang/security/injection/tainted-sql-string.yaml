@@ -1,0 +1,47 @@
+rules:
+- id: tainted-sql-string
+  languages: [go]
+  message: >-
+    User data flows into this manually-constructed SQL string. User data
+    can be safely inserted into SQL strings using prepared statements or an
+    object-relational mapper (ORM). Manually-constructed SQL strings is a
+    possible indicator of SQL injection, which could let an attacker steal
+    or manipulate data from the database.
+    Instead, use prepared statements (`db.Query("SELECT * FROM t WHERE id = ?", id)`)
+    or a safe library.
+  metadata:
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A10:2021
+    - A01:2017
+    references:
+    - https://golang.org/doc/database/sql-injection
+    - https://www.stackhawk.com/blog/golang-sql-injection-guide-examples-and-prevention/
+    category: security
+    technology:
+    - go
+  mode: taint
+  severity: WARNING
+  pattern-sources:
+  - pattern-either:
+    - pattern: '($REQUEST : *http.Request).$ANYTHING'
+    - pattern: '($REQUEST : http.Request).$ANYTHING'
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            "$SQLSTR" + ...
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: (?i)(select|delete|insert|create|update|alter|drop).*
+      - patterns:
+        - pattern-either:
+          - pattern: fmt.Fprintf($F, "$SQLSTR", ...)
+          - pattern: fmt.Sprintf("$SQLSTR", ...)
+          - pattern: fmt.Printf("$SQLSTR", ...)
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: (?i)(select|delete|insert|create|update|alter|drop)\b.*%(v|s|q).*
+  pattern-sanitizers:
+  - pattern: strconv.Atoi(...)

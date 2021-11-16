@@ -1,8 +1,10 @@
 rules:
 - id: potential-dos-via-decompression-bomb
   message: >-
-    Detected a possible denial-of-service via a zip bomb attack. By limiting the max bytes read, you can mitigate this attack.
-    `io.CopyN()` can specify a size. Refer to https://bomb.codes/ to learn more about this attack and other ways to mitigate
+    Detected a possible denial-of-service via a zip bomb attack. By limiting the max
+    bytes read, you can mitigate this attack.
+    `io.CopyN()` can specify a size. Refer to https://bomb.codes/ to learn more about
+    this attack and other ways to mitigate
     it.
   severity: WARNING
   languages: [go]
@@ -52,3 +54,5 @@ rules:
     - https://golang.org/pkg/io/#CopyN
     - https://github.com/securego/gosec/blob/master/rules/decompression-bomb.go
     category: security
+    technology:
+    - go

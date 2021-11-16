@@ -11,11 +11,12 @@ rules:
       app.controller(..., function($scope,$sce){
       ...
       });
-  message: |
-    The use of $sce.trustAsJs can be dangerous if unsantiized user input flows through this API.
+  message: >-
+    The use of $sce.trustAsJs can be dangerous if unsanitized user input flows through this API.
   severity: WARNING
   languages:
   - javascript
+  - typescript
   metadata:
     references:
     - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs

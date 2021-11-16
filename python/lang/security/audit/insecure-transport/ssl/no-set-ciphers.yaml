@@ -1,7 +1,7 @@
 rules:
 - id: no-set-ciphers
   pattern: $CONTEXT.set_ciphers(...)
-  message: |
+  message: >-
     The 'ssl' module disables insecure cipher suites by default. Therefore,
     use of 'set_ciphers()' should only be used when you have very specialized
     requirements. Otherwise, you risk lowering the security of the SSL channel.

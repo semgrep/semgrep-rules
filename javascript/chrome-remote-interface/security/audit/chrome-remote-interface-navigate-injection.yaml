@@ -1,6 +1,6 @@
 rules:
 - id: chrome-remote-interface-navigate-injection
-  message: |
+  message: >-
     If unverified user data can reach the `navigate` method it can result in Server-Side Request Forgery vulnerabilities
   severity: WARNING
   metadata:
@@ -9,14 +9,12 @@ rules:
     category: security
     technology:
     - chrome-remote-interface
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       require('chrome-remote-interface');
       ...
   - pattern-not-inside: |
-      ...
       var $INPUT = "...";
       ...
   - pattern: |

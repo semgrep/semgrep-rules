@@ -1,7 +1,7 @@
 rules:
 - id: insecure-hash-algorithm-md5
   pattern: hashlib.md5(...)
-  message: |
+  message: >-
     Detected MD5 hash algorithm which is considered insecure. MD5 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
@@ -20,12 +20,14 @@ rules:
     - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
     - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
     category: security
+    technology:
+    - python
   severity: WARNING
   languages:
   - python
 - id: insecure-hash-algorithm-sha1
   pattern: hashlib.sha1(...)
-  message: |
+  message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
@@ -45,6 +47,8 @@ rules:
     - http://2012.sharcs.org/slides/stevens.pdf
     - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
     category: security
+    technology:
+    - python
   severity: WARNING
   languages:
   - python

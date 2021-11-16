@@ -1,6 +1,6 @@
 rules:
 - id: puppeteer-evaluate-arg-injection
-  message: |
+  message: >-
     If unverified user data can reach the `evaluate` method it can result in Server-Side Request Forgery vulnerabilities
   severity: WARNING
   metadata:
@@ -9,10 +9,9 @@ rules:
     category: security
     technology:
     - puppeteer
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       require('puppeteer');
       ...
   - pattern-either:

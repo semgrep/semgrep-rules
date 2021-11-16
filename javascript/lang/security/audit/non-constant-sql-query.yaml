@@ -3,7 +3,7 @@ rules:
   patterns:
   - pattern: $DB.sequelize.query(...)
   - pattern-not: $DB.sequelize.query("...")
-  message: |
+  message: >-
     Non-constant SQL query detected. Ensure this is not controlled
     by external data, otherwise this is a SQL injection.
   metadata:

@@ -3,7 +3,7 @@ rules:
   pattern-either:
   - pattern: document.write(<... document.location.$W ...>)
   - pattern: document.write(<... location.$W ...>)
-  message: |
+  message: >-
     Detected possible DOM-based XSS. This occurs because a portion of the URL is being used
     to construct an element added directly to the page. For example, a malicious actor could
     send someone a link like this: http://www.some.site/page.html?default=<script>alert(document.cookie)</script>

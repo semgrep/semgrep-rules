@@ -5,7 +5,7 @@ rules:
   languages: [json, yaml]
   pattern: '...'
   metadata:
-      # ok: metadata-owasp
+    # ok: metadata-owasp
     owasp: 'A1: Some Vulnerability'
 - id: example-2
   message: Example
@@ -13,7 +13,7 @@ rules:
   languages: [json, yaml]
   pattern: '...'
   metadata:
-      # ruleid: metadata-owasp
+    # ruleid: metadata-owasp
     owasp: 'A11: Some Vulnerability'
 - id: example-3
   message: Example
@@ -21,7 +21,7 @@ rules:
   languages: [json, yaml]
   pattern: '...'
   metadata:
-      # ruleid: metadata-owasp
+    # ruleid: metadata-owasp
     owasp: a4
 - id: example-4
   message: Example
@@ -29,5 +29,29 @@ rules:
   languages: [json, yaml]
   pattern: '...'
   metadata:
-      # ruleid: metadata-owasp
+    # ruleid: metadata-owasp
     owasp: A5 Some Vulnerability
+- id: example-5
+  message: Example
+  severity: ERROR
+  languages: [json, yaml]
+  pattern: '...'
+  metadata:
+    # ok: metadata-owasp
+    owasp:
+    # ok: metadata-owasp
+    - A05:2021 - Security Misconfiguration
+    # ok: metadata-owasp
+    - A06:2017 - Security Misconfiguration
+- id: example-6
+  message: Example
+  severity: ERROR
+  languages: [json, yaml]
+  pattern: '...'
+  metadata:
+    # ok: metadata-owasp
+    owasp:
+    # ruleid: metadata-owasp
+    - A5:2021 - Security Misconfiguration
+    # ruleid: metadata-owasp
+    - A06:201789 - Security Misconfiguration

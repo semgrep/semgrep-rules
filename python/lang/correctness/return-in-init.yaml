@@ -7,6 +7,11 @@ rules:
   - pattern-inside: |
       def __init__(...):
           ...
+  - pattern-not-inside: |
+      def __init__(...):
+          ...
+          def $F(...):
+              ...
   - patterns:
     - pattern: return ...
     - pattern-not: return
@@ -16,6 +21,8 @@ rules:
   severity: ERROR
   metadata:
     category: correctness
+    technology:
+    - python
 - id: yield-in-init
   patterns:
   - pattern-inside: |
@@ -24,6 +31,11 @@ rules:
   - pattern-inside: |
       def __init__(...):
           ...
+  - pattern-not-inside: |
+      def __init__(...):
+          ...
+          def $F(...):
+              ...
   - pattern-either:
     - pattern: yield ...
     - pattern: yield
@@ -32,3 +44,5 @@ rules:
   severity: ERROR
   metadata:
     category: correctness
+    technology:
+    - python

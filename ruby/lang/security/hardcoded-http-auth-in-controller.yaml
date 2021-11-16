@@ -5,7 +5,7 @@ rules:
       ...
       http_basic_authenticate_with ..., :password => "...", ...
     end
-  message: |
+  message: >-
     Detected hardcoded password used in basic authentication in a controller
     class. Including this password in version control could expose this
     credential. Consider refactoring to use environment variables or
@@ -16,5 +16,7 @@ rules:
     owasp: 'A3: Sensitive Data Exposure'
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
     category: security
+    technology:
+    - ruby
   languages:
   - ruby

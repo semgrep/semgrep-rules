@@ -1,6 +1,6 @@
 rules:
 - id: xml2json-xxe
-  message: |
+  message: >-
     If unverified user data can reach the XML Parser it can result in XML External or
     Internal Entity (XXE) Processing vulnerabilities
   metadata:
@@ -15,7 +15,7 @@ rules:
     technology:
     - xml2json
   severity: WARNING
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern: |
       var $XML = require('xml2json');

@@ -1,6 +1,6 @@
 rules:
 - id: no-io-writestring-to-responsewriter
-  message: |
+  message: >-
     Detected 'io.WriteString()' writing directly to 'http.ResponseWriter'.
     This bypasses HTML escaping that prevents cross-site scripting
     vulnerabilities. Instead, use the 'html/template' package
@@ -12,6 +12,8 @@ rules:
     - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
     - https://golang.org/pkg/io/#WriteString
     category: security
+    technology:
+    - go
   severity: WARNING
   patterns:
   - pattern-either:

@@ -11,7 +11,7 @@ rules:
       http.Cookie{
         ...,
       }
-  message: |
+  message: >-
     A session cookie was detected without setting the 'Secure' flag.
     The 'secure' flag for cookies prevents the client from transmitting
     the cookie over insecure channels such as HTTP.  Set the 'Secure'
@@ -23,6 +23,8 @@ rules:
     - https://github.com/0c34/govwa/blob/139693e56406b5684d2a6ae22c0af90717e149b8/util/cookie.go
     - https://golang.org/src/net/http/cookie.go
     category: security
+    technology:
+    - go
   fix-regex:
     regex: (Secure\s*:\s+)false
     replacement: \1true

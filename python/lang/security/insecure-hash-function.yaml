@@ -1,6 +1,6 @@
 rules:
 - id: insecure-hash-function
-  message: |
+  message: >-
     Detected use of an insecure MD4 or MD5 hash function.
     These functions have known vulnerabilities and are considered deprecated.
     Consider using 'SHA256' or a similar function instead.
@@ -18,6 +18,8 @@ rules:
     - https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision
     - https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html
     category: security
+    technology:
+    - python
   languages: [python]
   severity: WARNING
   pattern-either:

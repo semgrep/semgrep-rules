@@ -21,7 +21,7 @@ rules:
   - metavariable-regex:
       metavariable: $FUNC
       regex: (delete|doExecute|exchange|getForEntity|getForObject|headForHeaders|optionsForAllow|patchForObject|postForEntity|postForLocation|postForObject|put)
-  message: |
+  message: >-
     Checks for requests sent via Java Spring RestTemplate API to http:// URLS. This is dangerous because
     the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
     https:// URLS.

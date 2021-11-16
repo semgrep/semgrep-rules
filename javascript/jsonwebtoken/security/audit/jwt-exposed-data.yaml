@@ -1,6 +1,6 @@
 rules:
 - id: jwt-exposed-data
-  message: |
+  message: >-
     The object is passed strictly to jsonwebtoken.sign(...)
     Make sure that sensitive information is not exposed through JWT token payload.
   severity: WARNING
@@ -16,7 +16,7 @@ rules:
     category: security
     technology:
     - jwt
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
       $JWT = require('jsonwebtoken');

@@ -4,7 +4,7 @@ rules:
   - pattern-inside: import json; ...
   - pattern-inside: import requests; ...
   - pattern: requests.$METHOD(..., body=json.dumps($BODY), ...)
-  message: |
+  message: >-
     The requests library has a convenient shortcut for sending JSON requests,
     which lets you stop worrying about serializing the body yourself.
     To use it, replace `body=json.dumps(...)` with `json=...`.

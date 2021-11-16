@@ -11,7 +11,7 @@ rules:
       new SSLConnectionSocketFactory(..., new String[] {"TLSv1.3"}, ...);
   - pattern-not: |
       new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2"}, ...);
-  message: |
+  message: >-
     Detects direct creations of SSLConnectionSocketFactories that don't disallow SSL v2, SSL v3, and TLS v1.
     SSLSocketFactory can be used to validate the identity of the HTTPS server against a list of trusted certificates.
     These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
@@ -22,5 +22,7 @@ rules:
     references:
     - https://stackoverflow.com/questions/26429751/java-http-clients-and-poodle
     category: security
+    technology:
+    - java
   severity: WARNING
   languages: [java]

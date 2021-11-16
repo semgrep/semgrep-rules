@@ -1,6 +1,6 @@
 rules:
 - id: no-fprintf-to-responsewriter
-  message: |
+  message: >-
     Detected 'Fprintf' or similar writing to 'http.ResponseWriter'.
     This bypasses HTML escaping that prevents cross-site scripting
     vulnerabilities. Instead, use the 'html/template' package
@@ -11,6 +11,8 @@ rules:
     references:
     - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
     category: security
+    technology:
+    - go
   severity: WARNING
   patterns:
   - pattern-either:

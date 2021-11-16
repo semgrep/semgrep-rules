@@ -4,7 +4,7 @@ rules:
   - pattern-not-inside: django.utils.html.format_html(...)
   - pattern-not: django.utils.safestring.mark_safe("...")
   - pattern: django.utils.safestring.mark_safe(...)
-  message: |
+  message: >-
     'mark_safe()' is used to mark a string as "safe" for HTML output.
     This disables escaping and could therefore subject the content to
     XSS attacks. Use 'django.utils.html.format_html()' to build HTML

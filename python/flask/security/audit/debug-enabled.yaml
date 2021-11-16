@@ -5,7 +5,7 @@ rules:
       import flask
       ...
   - pattern: $APP.run(..., debug=True, ...)
-  message: |
+  message: >-
     Detected Flask app with debug=True. Do not deploy to production with this flag enabled
     as it will leak sensitive information. Instead, consider using Flask configuration
     variables or setting 'debug' using system environment variables.

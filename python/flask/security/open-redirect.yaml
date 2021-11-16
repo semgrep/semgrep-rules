@@ -3,12 +3,14 @@ rules:
   patterns:
   - pattern-inside: |
       @$APP.route(...)
-      def $X():
+      def $X(...):
         ...
   - pattern-not-inside: |
-      ...
-      if <... werkzeug.urls.url_parse($V) ...>:
+      @$APP.route(...)
+      def $X(...):
         ...
+        if <... werkzeug.urls.url_parse($V) ...>:
+          ...
   - pattern-either:
     - pattern: flask.redirect(<... flask.request.$W.get(...) ...>, ...)
     - pattern: flask.redirect(<... flask.request.$W[...] ...>, ...)
@@ -30,7 +32,7 @@ rules:
         $V = flask.request.$W
         ...
         flask.redirect(<... $V ...>, ...)
-  message: |
+  message: >-
     Data from request is passed to redirect().
     This is an open redirect and could be exploited.
     Consider using 'url_for()' to generate links to known locations.

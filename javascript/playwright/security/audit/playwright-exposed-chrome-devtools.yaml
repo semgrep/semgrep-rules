@@ -1,6 +1,6 @@
 rules:
 - id: playwright-exposed-chrome-devtools
-  message: |
+  message: >-
     Remote debugging protocol does not perform any authentication, so exposing it too widely can be a security risk.
   severity: WARNING
   metadata:
@@ -9,10 +9,9 @@ rules:
     category: security
     technology:
     - playwright
-  languages: [javascript]
+  languages: [javascript, typescript]
   patterns:
   - pattern-inside: |
-      ...
       require('playwright');
       ...
   - pattern-either:

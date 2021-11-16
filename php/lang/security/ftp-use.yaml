@@ -5,12 +5,14 @@ rules:
   - metavariable-regex:
       metavariable: $FUNC
       regex: ftp_.+
-  message: |
+  message: >-
     FTP allows for unencrypted file transfers. Consider using an encrypted alternative.
   metadata:
     references:
     - https://www.php.net/manual/en/intro.ftp.php
     - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/FringeFunctionsSniff.php
     category: security
+    technology:
+    - php
   languages: [php]
   severity: ERROR

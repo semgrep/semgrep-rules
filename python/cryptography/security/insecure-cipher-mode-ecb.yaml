@@ -1,7 +1,7 @@
 rules:
 - id: insecure-cipher-mode-ecb
   pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
-  message: |
+  message: >-
     Detected ECB cipher mode which is considered insecure. The algorithm can
     potentially leak information about the plaintext. Use CBC mode instead.
   metadata:

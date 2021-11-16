@@ -1,7 +1,7 @@
 rules:
 - id: ssl-wrap-socket-is-deprecated
   pattern: ssl.wrap_socket(...)
-  message: |
+  message: >-
     'ssl.wrap_socket()' is deprecated. This function creates an insecure socket
     without server name indication or hostname matching. Instead, create an SSL
     context using 'ssl.SSLContext()' and use that to wrap a socket.
@@ -12,5 +12,7 @@ rules:
     - https://docs.python.org/3/library/ssl.html#ssl.wrap_socket
     - https://docs.python.org/3/library/ssl.html#ssl.SSLContext.wrap_socket
     category: security
+    technology:
+    - python
   languages: [python]
   severity: WARNING

@@ -47,7 +47,8 @@ rules:
   - pattern-not: $DB.query(..., $X.concat("..."), ...)
   languages:
   - js
-  message: |
+  - typescript
+  message: >-
     Detected string concatenation with a non-literal variable in a node-postgres
     JS SQL statement. This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
@@ -58,4 +59,6 @@ rules:
     references:
     - https://node-postgres.com/features/queries
     category: security
+    technology:
+    - node-postgres
   severity: WARNING

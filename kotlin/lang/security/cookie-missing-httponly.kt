@@ -1,5 +1,5 @@
 public class CookieController {
-    public fun setCookie(value: String, reponse: HttpServletResponse) {
+    public fun setCookie(value: String, response: HttpServletResponse) {
         val cookie: Cookie = Cookie("cookie", value)
         // ruleid: cookie-missing-httponly
         response.addCookie(cookie)
