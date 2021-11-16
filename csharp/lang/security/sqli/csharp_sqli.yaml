@@ -59,9 +59,16 @@ rules:
   - pattern-not-inside: |
       ...
       $S.Parameters
-
-  message: |
+  message: >-
     Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized.
     Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'.
+  metadata:
+    category: csharp
+    technology:
+    - csharp
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
   languages: [csharp]
   severity: ERROR
