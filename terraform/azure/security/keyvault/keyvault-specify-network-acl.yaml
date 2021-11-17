@@ -1,0 +1,43 @@
+rules:
+- id: keyvault-specify-network-acl
+  message: >-
+    Network ACLs allow you to reduce your exposure to risk by limiting what can access your key vault.
+    The default action of the Network ACL should be set to deny for when IPs are not matched. Azure services can be allowed
+    to bypass.
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_key_vault" "..." {
+      ...
+      network_acls {
+          ...
+          default_action = "Deny"
+          ...
+      }
+      ...
+      }
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_key_vault" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_key_vault" "..." {
+        ...
+        network_acls {
+            ...
+            default_action = "Allow"
+            ...
+        }
+        ...
+        }
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault#network_acls
+    - https://docs.microsoft.com/en-us/azure/key-vault/general/network-security
+  languages: [hcl]
+  severity: ERROR

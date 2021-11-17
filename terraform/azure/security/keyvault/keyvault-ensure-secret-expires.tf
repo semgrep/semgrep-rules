@@ -1,0 +1,33 @@
+resource "azurerm_key_vault_secret" "good_example" {
+  name         = "generated-certificate"
+  key_vault_id = azurerm_key_vault.example.id
+  key_type     = "RSA"
+  key_size     = 2048
+  expiration_date = "1982-12-31T00:00:00Z"
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
+
+# ruleid: keyvault-ensure-secret-expires
+resource "azurerm_key_vault_secret" "bad_example" {
+  name         = "generated-certificate"
+  key_vault_id = azurerm_key_vault.example.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
