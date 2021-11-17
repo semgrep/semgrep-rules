@@ -1,0 +1,21 @@
+rules:
+- id: aws-backup-vault-unencrypted
+  patterns:
+    - pattern-not-inside: |
+        resource "aws_backup_vault" $BACKUP {
+          ...
+          kms_key_arn = ...
+          ...
+        }
+    - pattern: resource "aws_backup_vault" $BACKUP {...}
+  message: The AWS Backup vault is unencrypted. The AWS KMS encryption key protects backups in the Backup vault. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp: A02:2021-Cryptographic Failures
+    cwe: |
+      CWE-311: Missing Encryption of Sensitive Data
+    technology:
+      - aws
+      - terraform
+    category: security
