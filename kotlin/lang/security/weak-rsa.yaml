@@ -20,11 +20,7 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        val $KEY = $G.getInstance("RSA")
-        ...
-        $KEY.initialize($BITS)
-    - pattern: |
-        var $KEY = $G.getInstance("RSA")
+        $KEY = $G.getInstance("RSA")
         ...
         $KEY.initialize($BITS)
   - metavariable-comparison:
