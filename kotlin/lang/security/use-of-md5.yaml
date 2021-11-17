@@ -19,12 +19,6 @@ rules:
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
   pattern-either:
   - pattern: |
-      val $VAR: MessageDigest = $MD.getInstance("MD5")
-  - pattern: |
-      var $VAR: MessageDigest = $MD.getInstance("MD5")
-  - pattern: |
-      val $VAR = $MD.getInstance("MD5")
-  - pattern: |
-      var $VAR = $MD.getInstance("MD5")
+      $VAR = $MD.getInstance("MD5")
   - pattern: |
       $DU.getMd5Digest().digest(...)

@@ -20,12 +20,6 @@ rules:
     - kotlin
   pattern-either:
   - pattern: |
-      val $VAR: MessageDigest = $MD.getInstance("SHA1")
-  - pattern: |
-      var $VAR: MessageDigest = $MD.getInstance("SHA1")
-  - pattern: |
-      val $VAR = $MD.getInstance("SHA1")
-  - pattern: |
-      var $VAR = $MD.getInstance("SHA1")
+      $VAR = $MD.getInstance("SHA1")
   - pattern: |
       $DU.getSha1Digest().digest(...)
