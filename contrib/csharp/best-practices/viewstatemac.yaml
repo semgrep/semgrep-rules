@@ -1,0 +1,12 @@
+rules:
+  - id: viewstate-mac
+    patterns:
+      - pattern: ... enableViewStateMac="false" ...
+    message: |
+      The enableViewStateMac is disabled in configuration file.
+    languages: [generic]
+    severity: ERROR
+    metadata:
+      owasp: 'A6: Security Misconfiguration'
+      cwe: >-
+        CWE-554: ASP.NET Misconfiguration: Not Using Input Validation Framework
