@@ -1,0 +1,29 @@
+rules:
+- id: storage-default-action-deny
+  message: >-
+    Detected a Storage that was not configured to deny action by default. Add `default_action = "Deny"`
+    in your resource block.
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_storage_account_network_rules" "..." {
+      ...
+        default_action = "Deny"
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_storage_account_network_rules" "..." {
+      ...
+        default_action = "Allow"
+      ...
+      }
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules#default_action
+    - https://docs.microsoft.com/en-us/azure/firewall/rule-processing
+  languages: [hcl]
+  severity: ERROR
