@@ -1,0 +1,34 @@
+rules:
+- id: storage-use-secure-tls-policy
+  message: >-
+    Azure Storage currently supports three versions of the TLS protocol: 1.0, 1.1, and 1.2.
+    Azure Storage uses TLS 1.2 on public HTTPS endpoints, but TLS 1.0 and TLS 1.1 are still supported for backward compatibility.
+    This check will warn if the minimum TLS is not set to TLS1_2.
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_storage_account" "..." {
+          ...
+          min_tls_version = "$ANYTHING"
+          ...
+        }
+    - pattern-inside: |
+        resource "azurerm_storage_account" "..." {
+          ...
+        }
+  - pattern-not-inside: |
+      resource "azurerm_storage_account" "..." {
+        ...
+        min_tls_version = "TLS1_2"
+        ...
+      }
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#min_tls_version
+    - https://docs.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version
+  languages: [hcl]
+  severity: ERROR
