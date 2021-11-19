@@ -1,8 +1,8 @@
 rules:
   - id: viewstate-crypt
     patterns:
-      - pattern-not: ... viewStateEncryptionMode="Always" ...
-      - pattern: ... viewStateEncryptionMode="$VALUE"...
+      - pattern-not: viewStateEncryptionMode="Always"
+      - pattern: viewStateEncryptionMode="$VALUE"
     message: >-
       Web Forms controls use hidden base64 encoded fields to store state information. If sensitive information is stored there it may be leaked to the client side.
     languages: [generic]
