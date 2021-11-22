@@ -1,5 +1,5 @@
 rules:
-- id: python_reverse_shell
+- id: python-reverse-shell
   patterns:
   - pattern-either:
     - pattern: pty.spawn("$BINPATH",...)
@@ -15,6 +15,9 @@ rules:
       $S.connect(($IP,$PORT),...)
       ...
   message: Semgrep found a Python reverse shell using $BINPATH to $IP at $PORT
+  metadata:
+    category: security
+    technology: [python]
   languages:
   - python
   severity: WARNING
