@@ -1,0 +1,22 @@
+rules:
+- id: rsa-padding-set
+  metadata:
+    cwe: 'CWE-330: Use of Insufficiently Random Values'
+    owasp: 'A3: Sensitive Data Exposure'
+    category: security
+    technology:
+    - scala
+    - cryptography
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    resources:
+    - https://find-sec-bugs.github.io/bugs.htm
+  message: >-
+    Flags the use of a predictable random value from `scala.util.Random`. This can lead to vulnerabilities when used in security
+    contexts, such as in a CSRF token, password reset token, or any other secret value. To fix this, use java.security.SecureRandom
+    instead.
+  severity: WARNING
+  languages:
+  - scala
+  patterns:
+  - pattern: |
+      import scala.util.Random
