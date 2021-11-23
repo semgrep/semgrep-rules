@@ -37,7 +37,7 @@ RUN pip3 install --no-cache-dir MySQL_python semgrep
 
 FROM python:3.7
 
-ENV PIP_NO_CACHE_DIR=true
+ENV SOMETHING=true PIP_NO_CACHE_DIR=true
 
 # ok: missing-pip-no-cache-dir
 RUN pip install MySQL_python
