@@ -35,9 +35,9 @@ class Test {
     if (!Files.exists(Paths.get("public/lists/" + value))) {
       NotFound("File not found")
     } else {
-      // ruleid: path-traversal-fromfile
       var filename1 = "public/lists/"
       val filename = filename1.concat(value)
+      // ruleid: path-traversal-fromfile
       val result = Source.fromFile(filename).getLines().mkString // Weak point
       Ok(result)
     }
