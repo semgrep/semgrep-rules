@@ -1,0 +1,21 @@
+rules:
+- id: missing-aws-api-gateway-cache
+  patterns:
+  - pattern-not-inside: |
+      resource "aws_api_gateway_stage" $ANYTHING {
+        ...
+        cache_cluster_enabled = ...
+        ...
+      }
+  - pattern: resource "aws_api_gateway_stage" $ANYTHING {...}
+  message: >-
+    The AWS API Gateway cache is disabled for this stage.
+    Enabling caching can reduce the number of calls to your endpoint and reduce the latency of API requests.
+    To enable, add `settings {caching_enabled = true}` to your resource block.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    technology:
+    - aws
+    - terraform
+    category: best-practice
