@@ -25,7 +25,7 @@ export class CdkStarterStack extends cdk.Stack {
       const privateProject2 = codebuild.Project(this, 'privateProject2', {
           badge: false
       })
-     
+
       // ok:awscdk-codebuild-project-public
       const privateProject3 = codebuild.Project(this, 'privateProject3')
 
@@ -45,7 +45,7 @@ export class CdkStarterStack extends cdk.Stack {
       const privateProject2Renamed = rename_codebuild.Project(this, 'privateProject2', {
         badge: false
       })
-   
+
       // ok:awscdk-codebuild-project-public
       const privateProject3Renamed = rename_codebuild.Project(this, 'privateProject3')
 
@@ -65,7 +65,7 @@ export class CdkStarterStack extends cdk.Stack {
       const privateProject2Direct = Project(this, 'privateProject2', {
         badge: false
       })
-   
+
       // ok:awscdk-codebuild-project-public
       const privateProject3Direct = Project(this, 'privateProject3')
   }

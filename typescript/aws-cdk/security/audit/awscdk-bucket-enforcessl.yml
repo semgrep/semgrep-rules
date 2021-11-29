@@ -1,27 +1,27 @@
 rules:
 - id: aws-cdk-bucket-enforcessl
   pattern-either:
-    - patterns:
-      - pattern-inside: |
-          import {Bucket} from '@aws-cdk/aws-s3';
-          ...
-      - pattern: const $X = new Bucket(...)
-      - pattern-not: |
-          const $X = new Bucket(..., {enforceSSL: true}, ...)
-    - patterns:
-      - pattern-inside: |
-          import * as $Y from '@aws-cdk/aws-s3';
-          ...
-      - pattern: const $X = new $Y.Bucket(...)
-      - pattern-not: |
-          const $X = new $Y.Bucket(..., {..., enforceSSL: true, ...})
-  message: Bucket $X is not set to enforce encryption-in-transit, if not explictly setting this on the bucket policy - the property "enforceSSL" should be set to true
+  - patterns:
+    - pattern-inside: |
+        import {Bucket} from '@aws-cdk/aws-s3';
+        ...
+    - pattern: const $X = new Bucket(...)
+    - pattern-not: |
+        const $X = new Bucket(..., {enforceSSL: true}, ...)
+  - patterns:
+    - pattern-inside: |
+        import * as $Y from '@aws-cdk/aws-s3';
+        ...
+    - pattern: const $X = new $Y.Bucket(...)
+    - pattern-not: |
+        const $X = new $Y.Bucket(..., {..., enforceSSL: true, ...})
+  message: Bucket $X is not set to enforce encryption-in-transit, if not explictly setting this on the bucket policy - the
+    property "enforceSSL" should be set to true
   languages: [ts]
   severity: ERROR
-  metadata: 
-      category: security
-      technology:
-        - AWS-CDK
-      references:
-        - https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html
-      
+  metadata:
+    category: security
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html

@@ -37,7 +37,7 @@ export class Stack extends cdk.Stack {
     const encryptedQueue1RenamedImport = new rename_sqs.Queue(this, 'encryptedQueue', {
         encryption: rename_sqs.QueueEncryption.KMS_MANAGED
     })
-    
+
     //ok:awscdk-sqs-unencryptedqueue
     const encryptedQueue2RenamedImport = new rename_sqs.Queue(this, 'encryptedQueue', {
         encryption: rename_sqs.QueueEncryption.KMS
@@ -55,7 +55,7 @@ export class Stack extends cdk.Stack {
     const encryptedQueue1DirectImport = new Queue(this, 'encryptedQueue', {
         encryption: QueueEncryption.KMS_MANAGED
     })
-    
+
     //ok:awscdk-sqs-unencryptedqueue
     const encryptedQueue2DirectImport = new Queue(this, 'encryptedQueue', {
         encryption: QueueEncryption.KMS

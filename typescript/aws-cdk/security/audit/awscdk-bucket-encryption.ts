@@ -39,7 +39,7 @@ export class CdkStarterStack extends cdk.Stack {
     const goodBucketDirect = new Bucket(this, 's3-bucket', {
       encryption: BucketEncryption.S3_MANAGED
     })
-    
+
     // ruleid:awscdk-bucket-encryption
     const badBucketDirect = new Bucket(this, 's3-bucket-bad')
     // ok:awscdk-bucket-encryption
