@@ -23,8 +23,8 @@ rules:
           const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS, ...})
       - pattern-not: |
           const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.S3_MANAGED, ...})
-  message: |
-      Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
+  message: >- 
+    Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
   languages: [typescript]
   severity: ERROR
   metadata: 

@@ -19,8 +19,8 @@ rules:
           const $X = new $Y.Queue(..., {..., encryption: $Y.QueueEncryption.KMS_MANAGED, ...})
       - pattern-not: |
           const $X = new $Y.Queue(..., {..., encryption: $Y.QueueEncryption.KMS, ...})
-  message: |
-      Queue $X is missing encryption at rest. Add "encryption: $Y.QueueEncryption.KMS" or "encryption: $Y.QueueEncryption.KMS_MANAGED" to the queue props to enable encryption at rest for the queue.
+  message: >- 
+    Queue $X is missing encryption at rest. Add "encryption: $Y.QueueEncryption.KMS" or "encryption: $Y.QueueEncryption.KMS_MANAGED" to the queue props to enable encryption at rest for the queue.
   languages: [ts]
   severity: WARNING
   metadata: 
