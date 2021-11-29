@@ -1,0 +1,35 @@
+rules:
+- id: awscdk-bucket-encryption
+  pattern-either:
+    - patterns:
+      - pattern-inside: |
+          import {Bucket} from '@aws-cdk/aws-s3' 
+          ...
+      - pattern: const $X = new Bucket(...)
+      - pattern-not: |
+          const $X = new Bucket(..., {..., encryption: BucketEncryption.KMS_MANAGED, ...})
+      - pattern-not: |
+          const $X = new Bucket(..., {..., encryption: BucketEncryption.KMS, ...})
+      - pattern-not: |
+          const $X = new Bucket(..., {..., encryption: BucketEncryption.S3_MANAGED, ...})
+    - patterns:
+      - pattern-inside: |
+          import * as $Y from '@aws-cdk/aws-s3' 
+          ...
+      - pattern: const $X = new $Y.Bucket(...)
+      - pattern-not: |
+          const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS_MANAGED, ...})
+      - pattern-not: |
+          const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS, ...})
+      - pattern-not: |
+          const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.S3_MANAGED, ...})
+  message: |
+      Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
+  languages: [typescript]
+  severity: ERROR
+  metadata: 
+    category: security
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html

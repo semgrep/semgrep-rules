@@ -1,0 +1,29 @@
+rules:
+- id: awscdk-bucket-grantpublicaccessmethod
+  pattern-either:
+    - patterns:
+      - pattern-inside: |
+          import {Bucket} from '@aws-cdk/aws-s3' 
+          ...
+      - pattern: |
+          const $X = new Bucket(...)
+          ...
+          $X.grantPublicAccess(...)
+    - patterns:
+      - pattern-inside: |
+          import * as $Y from '@aws-cdk/aws-s3' 
+          ...
+      - pattern: |
+          const $X = new $Y.Bucket(...)
+          ...
+          $X.grantPublicAccess(...)
+  message: Using the GrantPublicAccess method on bucket contruct $X will make the objects in the bucket world accessible. Verify if this is intentional.
+  languages: [ts]
+  severity: WARNING
+  metadata:
+    cwe: "CWE-306: Missing Authentication for Critical Function"
+    category: security
+    technology:
+    - AWS-CDK
+    references:
+    - 
