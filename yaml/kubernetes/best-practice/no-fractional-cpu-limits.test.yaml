@@ -1,6 +1,8 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  owasp:
+  - A00: 0000
   name: mumbledj
   namespace: mumble
   labels:
@@ -14,6 +16,8 @@ spec:
       app: mumbledj
   template:
     metadata:
+      owasp:
+      - A00: 0000
       labels:
         app: mumbledj
     spec:

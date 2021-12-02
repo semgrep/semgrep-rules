@@ -2,6 +2,8 @@ rules:
 - id: incorrect-default-permission
   message: Expect permissions to be `0600` or less for os.Chmod, os.Mkdir, os.OpenFile, os.MkdirAll, and ioutil.WriteFile
   metadata:
+    owasp:
+    - A00: 0000
     cwe: 'CWE-276: Incorrect Default Permissions'
     source_rule_url: https://github.com/securego/gosec
     category: correctness
