@@ -6,8 +6,7 @@ rules:
     Instead of using '.extra', use the Django ORM and parameterized queries such as
     `People.objects.get(name='Bob')`.
   metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-        ('SQL Injection')"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp:
     - A01:2017 - Injection
     - A03:2021 - Injection
@@ -23,4 +22,3 @@ rules:
   patterns:
   - pattern: $MODEL.extra(...)
   - pattern-not-inside: '$MODEL.extra(select = {$KEY: "..."})'
-..."})'

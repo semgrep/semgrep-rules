@@ -44,8 +44,8 @@ rules:
         ...
         $SESSION.patch(...)
   fix-regex:
-    regex: (.*) )
-    replacement: 1, timeout=30)
+    regex: (.*)\)
+    replacement: \1, timeout=30)
   message: >-
     Detected a 'requests' call without a timeout set. By default, 'requests' calls
     wait until the connection is closed. This means a 'requests' call without a timeout

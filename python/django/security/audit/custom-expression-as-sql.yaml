@@ -2,13 +2,11 @@ rules:
 - id: custom-expression-as-sql
   languages:
   - python
-  message: Detected a Custom Expression ''$EXPRESSION'' calling ''as_sql(...).'' This
-    could lead to SQL injection, which can result in attackers exfiltrating sensitive
-    data. Instead, ensure no user input enters this function or that user input is
-    properly sanitized.
+  message: Detected a Custom Expression ''$EXPRESSION'' calling ''as_sql(...).'' This could lead to SQL injection, which can
+    result in attackers exfiltrating sensitive data. Instead, ensure no user input enters this function or that user input
+    is properly sanitized.
   metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-        ('SQL Injection')"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp: 'A1: Injection'
     references:
     - https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.Func.as_sql
@@ -18,4 +16,3 @@ rules:
     - django
   pattern: $EXPRESSION.as_sql(...)
   severity: WARNING
-ING

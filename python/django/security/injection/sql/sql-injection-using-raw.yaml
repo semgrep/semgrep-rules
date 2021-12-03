@@ -1,8 +1,8 @@
 rules:
 - id: sql-injection-using-raw
-  message: "Data that is possible user-controlled from a python request is passed to `raw()`. This could lead to SQL injection\
-    \ and attackers gaining access to protected information. Instead, use django's QuerySets, which are built with query parameterization\
-    \ and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`. "
+  message: Data that is possible user-controlled from a python request is passed to `raw()`. This could lead to SQL injection
+    and attackers gaining access to protected information. Instead, use django's QuerySets, which are built with query parameterization
+    and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`.
   metadata:
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp: 'A1: Injection'
