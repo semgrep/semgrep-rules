@@ -1,8 +1,7 @@
 rules:
 - id: integer-overflow-int16
-  message: Detected conversion of the result of a strconv.Atoi command to an int16.
-    This could lead to an integer overflow, which could possibly result in unexpected
-    behavior and even privilege escalation. Instead, use `strconv.ParseInt`.
+  message: Detected conversion of the result of a strconv.Atoi command to an int16. This could lead to an integer overflow,
+    which could possibly result in unexpected behavior and even privilege escalation. Instead, use `strconv.ParseInt`.
   languages: [go]
   severity: WARNING
   patterns:
@@ -18,7 +17,12 @@ rules:
     category: correctness
     technology:
     - go
-ns:
+- id: integer-overflow-int32
+  message: Detected conversion of the result of a strconv.Atoi command to an int32. This could lead to an integer overflow,
+    which could possibly result in unexpected behavior and even privilege escalation. Instead, use `strconv.ParseInt`.
+  languages: [go]
+  severity: WARNING
+  patterns:
   - pattern: |
       $F, $ERR := strconv.Atoi($NUM)
       ...

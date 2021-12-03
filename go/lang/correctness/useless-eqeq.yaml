@@ -6,16 +6,23 @@ rules:
     - pattern: $X == $X
     - pattern: $X != $X
   - pattern-not: 1 == 1
-  message: "Detected useless comparison operation `$X == $X` or `$X != $X`. This will
-      always return 'True' or 'False' and therefore is not necessary. Instead, remove
-      this comparison operation or use another comparison expression that is not deterministic. "
+  message: Detected useless comparison operation `$X == $X` or `$X != $X`. This will always return 'True' or 'False' and therefore
+    is not necessary. Instead, remove this comparison operation or use another comparison expression that is not deterministic.
   languages: [go]
   severity: ERROR
   metadata:
     category: correctness
     technology:
     - go
-
+- id: hardcoded-eq-true-or-false
+  message: Detected useless if statement. 'if (True)' and 'if (False)' always result in the same behavior, and therefore is
+    not necessary in the code. Remove the 'if (False)' expression completely or just the 'if (True)' comparison depending
+    on which expression is in the code.
+  languages: [go]
+  severity: ERROR
+  pattern-either:
+  - pattern: if (true) { ... }
+  - pattern: if (false) { ... }
   metadata:
     category: correctness
     technology:
