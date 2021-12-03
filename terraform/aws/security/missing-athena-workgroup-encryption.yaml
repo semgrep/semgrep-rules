@@ -1,0 +1,31 @@
+rules:
+- id: missing-athena-workgroup-encryption
+  patterns:
+  - pattern: resource "aws_athena_workgroup" $ANYTHING {...}
+  - pattern-not-inside: |
+      resource "aws_athena_workgroup" $ANYTHING {
+        ...
+        encryption_configuration {...}
+        ...
+      }
+  message: >-
+    The AWS Athena Workgroup is unencrypted.
+    Encryption protects query results in your workgroup.
+    To enable, add:
+    `encryption_configuration {
+      encryption_option = "SSE_KMS"
+      kms_key_arn       = aws_kms_key.example.arn
+    }`
+    within `result_configuration { }` in your resource block, where `encryption_option` is your chosen encryption method and
+    `kms_key_arn` is your KMS key ARN.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    technology:
+    - aws
+    - terraform
+    category: security
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: |
+      CWE-311: Missing Encryption of Sensitive Data
