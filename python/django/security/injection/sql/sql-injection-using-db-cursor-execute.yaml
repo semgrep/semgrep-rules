@@ -1,7 +1,8 @@
 rules:
 - id: sql-injection-db-cursor-execute
-  message: Data from request is passed to execute(). This is a SQL injection and could be exploited. See https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
-    to learn how to mitigate. See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.
+  message: "User-controlled data from a request is passed to 'execute()'. This could lead to a SQL injection and therefore\
+    \ protected information could be leaked. Instead, use django's QuerySets, which are built with query parameterization\
+    \ and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`. "
   metadata:
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp: 'A1: Injection'

@@ -1,9 +1,13 @@
 rules:
 - id: request-data-fileresponse
-  message: Found request data opening a file into FileResponse. This is dangerous because an attacker could specify an arbitrary
-    file to read, leaking data. Be sure to validate or sanitize the filename before using it in FileResponse.
+  message: Found user-controlled request data being passed into a file open, which
+    is them passed as an argument into  the FileResponse. This is dangerous because
+    an attacker could specify an arbitrary file to read, which could result in leaking
+    important data. Be sure to validate or sanitize the user-inputted filename in
+    the request data before using it in FileResponse.
   metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path
+        Traversal')"
     owasp: 'A1: Injection'
     references:
     - https://django-book.readthedocs.io/en/latest/chapter20.html#cross-site-scripting-xss
