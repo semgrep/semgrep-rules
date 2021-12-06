@@ -9,13 +9,11 @@ rules:
   - pattern-inside: 'rules: ...'
   - pattern-inside: 'metadata: ...'
   - pattern-either:
-    - patterns:
-      - pattern: 'owasp: "..."'
-      - pattern-not: 'owasp: "=~/^A(0?[1-9]|10): .+$/"'
+    - pattern: 'owasp: "..."'
     - patterns:
       - pattern-inside: 'owasp: [...]'
       - pattern: '"$ANYTHING"'
-      - pattern-not-regex: .*A[01][0-9]:[0-9]{4}\s+.*
+      - pattern-not-regex: A\d\d:20\d\d.*
       - pattern-not-regex: 'owasp:'
   metadata:
     category: best-practice
