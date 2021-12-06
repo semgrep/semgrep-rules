@@ -133,7 +133,8 @@ rules:
   ...
   metadata:
     cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
-    owasp: 'A01:2017 Injection'
+    owasp:
+    - 'A01:2017 Injection'
     references:
     - https://nvisium.com/blog/2016/03/09/exploring-ssti-in-flask-jinja2.html
 ```
