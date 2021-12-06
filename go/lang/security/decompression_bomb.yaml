@@ -47,6 +47,8 @@ rules:
     regex: (.*)(Copy|CopyBuffer)\((.*?),(.*?)(\)|,.*\))
     replacement: \1CopyN(\3, \4, 1024*1024*256)
   metadata:
+    owasp:
+    - A06:2017 - Security Misconfiguration
     cwe: 'CWE-400: Uncontrolled Resource Consumption'
     source-rule-url: https://github.com/securego/gosec
     references:
