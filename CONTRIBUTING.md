@@ -74,7 +74,7 @@ We have developed a few best-practices for rules submitted to this repository ba
 - The presence of a `technology` metadata field. This is usually the library or framework the rule is targeting, e.g., `django`. If it's for the language itself, just use the language name, e.g., `python`.
 - The use of the YAML multiline string operator `>-` when rule messages span multiple lines. This presents the best-looking rule message in the terminal.
 - For `security` category rules, the presence of `owasp` and `cwe` metadata tags. This lets users group Semgrep results by familiar security tags. An example of an `owasp` tag is: <br>
-`owasp: 'A09: Using Components with Known Vulnerabilities'` <br>
+`owasp: 'A09:2017 - Using Components with Known Vulnerabilities'` <br>
 and an example of a `cwe` tag is: <br>
 `cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'`
 
@@ -134,7 +134,7 @@ rules:
   metadata:
     cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
     owasp:
-    - 'A01:2017 Injection'
+    - 'A01:2017 - Injection'
     references:
     - https://nvisium.com/blog/2016/03/09/exploring-ssti-in-flask-jinja2.html
 ```
