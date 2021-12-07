@@ -1,8 +1,9 @@
 rules:
 - id: avoid-raw-sql
-  message: "Detected the use of 'RawSQL' or 'raw' indicating the execution of a non-parameterized SQL query. This could lead\
-    \ to a SQL injection and therefore protected information could be leaked. Instead, use Django ORM and parameterized queries\
-    \ before raw SQL. An example of using the Django ORM is: `People.objects.get(name='Bob')`"
+  message: >-
+    Detected the use of 'RawSQL' or 'raw' indicating the execution of a non-parameterized SQL query. This could lead
+    to a SQL injection and therefore protected information could be leaked. Instead, use Django ORM and parameterized queries
+    before raw SQL. An example of using the Django ORM is: `People.objects.get(name='Bob')`
   metadata:
     cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp: 'A1: Injection'
