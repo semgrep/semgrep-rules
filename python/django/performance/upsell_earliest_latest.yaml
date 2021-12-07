@@ -1,7 +1,7 @@
 rules:
 - id: use-earliest-or-latest
-  message: Looks like you are only accessing first element of an ordered QuerySet. Use `latest()` or `earliest()` instead.
-    See https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.latest
+  message: Looks like you are only accessing first element of an ordered QuerySet. Use `latest()` or `earliest()` instead,
+    as they are more readable and convenient.
   languages: [python]
   severity: ERROR
   pattern-either:
@@ -12,3 +12,5 @@ rules:
     category: performance
     technology:
     - django
+    references:
+    - https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.latest

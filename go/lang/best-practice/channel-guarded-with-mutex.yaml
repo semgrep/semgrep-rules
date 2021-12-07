@@ -11,12 +11,12 @@ rules:
       $MUX.Unlock()
   message: >-
     Detected a channel guarded with a mutex. Channels already have
-    an internal mutex, so this is unnecessary. Remove the mutex.
-    See https://hackmongo.com/page/golang-antipatterns/#guarded-channel
-    for more information.
+    an internal mutex, so this is unnecessary. Instead, remove the mutex.
   languages: [go]
   severity: WARNING
   metadata:
     category: best-practice
     technology:
     - go
+    resources:
+    - https://hackmongo.com/page/golang-antipatterns/#guarded-channel
