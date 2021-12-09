@@ -23,6 +23,6 @@ def nested2():
   async def inner():
     # ruleid:sync-sleep-in-async-code
     time.sleep(1)
-  
+
   # ok:sync-sleep-in-async-code
   time.sleep(1)
