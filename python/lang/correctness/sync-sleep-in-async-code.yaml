@@ -1,0 +1,14 @@
+rules:
+- id: sync-sleep-in-async-code
+  patterns:
+    - pattern: time.sleep(...)
+    - pattern-inside: |
+        async def $F(...):
+          ...
+    - pattern-not-inside: |
+        async def $F(...):
+          def $INNER(...):
+            ...
+  message: Synchronous sync in async ccode will block the event loop. Use asyncio.sleep() instead
+  languages: [python]
+  severity: WARNING
