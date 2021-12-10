@@ -9,7 +9,7 @@ public class VulnerableLog4jExampleHandler implements HttpHandler {
 
   public void handle(HttpExchange he) throws IOException {
     string userAgent = he.getRequestHeader("user-agent");
-
+    // ruleid: log4j-message-lookup-injection
     log.info("Request User Agent:" + userAgent);
 
   }
