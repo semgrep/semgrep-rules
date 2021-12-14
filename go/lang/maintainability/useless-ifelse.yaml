@@ -1,7 +1,7 @@
 rules:
 - id: useless-if-conditional
-  message: >-
-    Detected an if block that checks for the same condition on both branches (`$X`)
+  message: Detected an if block that checks for the same condition on both branches (`$X`). The second condition check is
+    useless as it is the same as the first, and therefore can be removed from the code,
   languages: [go]
   severity: WARNING
   pattern: |
@@ -21,8 +21,8 @@ rules:
     } else {
         $S
     }
-  message: >-
-    Detected identical if-statement bodies. Is this intentional?
+  message: Detected identical statements in the if body and the else body of an if-statement. This will lead to the same code
+    being executed no matter what the if-expression evaluates to. Instead, remove the if statement.
   languages: [go]
   severity: WARNING
   metadata:
