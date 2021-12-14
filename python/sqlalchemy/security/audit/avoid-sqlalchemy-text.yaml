@@ -4,7 +4,7 @@ rules:
   - pattern: sqlalchemy.text(...)
   - pattern-not-inside: sqlalchemy.text("...")
   message: sqlalchemy.text passes the constructed SQL statement to the database mostly
-    unchanged. This means that the usualy SQL injection protections are not applied
+    unchanged. This means that the usual SQL injection protections are not applied
     and this function is vulnerable to SQL injection if user input can reach here.
     Use normal SQLAlchemy operators (such as or_, and_, etc.) to construct SQL.
   metadata:
