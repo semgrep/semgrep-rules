@@ -6,9 +6,6 @@ import importlib.resources
 # ruleid: python37-compatibility-importlib3
 import importlib.abc.ResourceReader
 
-# ruleid:python37-compatability-os-module
-os.pwrite('a')
-
 # ruleid:python37-compatibility-importlib
 importlib.source_hash()
 
