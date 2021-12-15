@@ -9,11 +9,15 @@ jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out develop
+    - name: Check out release
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
         ref: release
+    - name: Reset release branch to base on develop
+      run: |
+        git fetch origin develop:develop
+        git reset --hard develop
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3.12.0
       with:
