@@ -12,11 +12,12 @@ rules:
   - pattern-not: $RESPONSE.set_cookie(..., **$A)
   - pattern: $RESPONSE.set_cookie(...)
   message: >-
-    Flask cookies should be handled securely by setting secure=True, httponly=True, and samesite='Lax' in
-    response.set_cookie(...). If your situation calls for different settings, explicitly disable the setting.
-    If you want to send the cookie over http, set secure=False.  If you want to let client-side JavaScript
-    read the cookie, set httponly=False. If you want to attach cookies to requests for external sites,
-    set samesite=None.
+    Found a Flask cookie without secure, httponly, or samesite correctly set. Flask
+    cookies should be handled securely by setting secure=True, httponly=True, and
+    samesite='Lax' in response.set_cookie(...). If these parameters are not properly
+    set, your cookies are not properly protected and are at risk of being stolen by
+    an attacker. Include the 'secure=True', 'httponly=True', samesite='Lax' arguments
+    or set these to be true in the Flask configuration.
   metadata:
     cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp: 'A3: Sensitive Data Exposure'

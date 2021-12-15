@@ -1,7 +1,7 @@
 rules:
 - id: reflected-data-httpresponse
-  message: Found request data reflected into HttpResponse. This could be vulnerable to XSS. Ensure the request data is properly
-    escaped or sanitzed.
+  message: Found user-controlled request data passed into HttpResponse. This could be vulnerable to XSS, leading to attackers
+    gaining access to user cookies and protected information. Ensure that the request data is properly escaped or sanitzed.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp: 'A7: Cross-Site Scripting (XSS)'

@@ -9,8 +9,9 @@ rules:
       def $X(filename):
         ...
   - pattern: flask.send_file(filename, ...)
-  message: Looks like `filename` could flow to `flask.send_file()` function. Make sure to properly sanitize filename or use
-    `flask.send_from_directory`
+  message: Detected a user-controlled `filename` that could flow to `flask.send_file()`
+    function. This could lead to an attacker reading arbitrary file from the system,
+    leaking private information. Make sure to properly sanitize filename or use `flask.send_from_directory`
   metadata:
     cwe: 'CWE-73: External Control of File Name or Path'
     owasp: 'A1: Injection'

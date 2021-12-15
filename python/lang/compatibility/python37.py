@@ -6,9 +6,6 @@ import importlib.resources
 # ruleid: python37-compatibility-importlib3
 import importlib.abc.ResourceReader
 
-# ruleid:python37-compatability-os-module
-os.pwrite('a')
-
 # ruleid:python37-compatibility-importlib
 importlib.source_hash()
 
@@ -44,9 +41,6 @@ multiprocessing.Process.kill()
 
 # ruleid: python37-compatibility-os1
 os.preadv(var)
-
-# ruleid: python37-compatability-os-module
-os.pwrite('c')
 
 # ruleid: python37-compatibility-pdb
 pdb.set_trace(header=header, stuffa)
