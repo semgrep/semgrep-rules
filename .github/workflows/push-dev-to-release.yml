@@ -16,6 +16,9 @@ jobs:
       with:
         fetch-depth: 0
         ref: release
+    - name: Install hub
+      run: |
+        sudo apt install hub
     - name: Reset release branch to base on develop
       run: |
         git checkout -b merge-develop-to-release
@@ -24,3 +27,4 @@ jobs:
     - name: Create Pull Request
       run: |
         git push -u origin merge-develop-to-release
+        hub pull-request -m "Merge develop into release" -b origin:release -h origin:develop
