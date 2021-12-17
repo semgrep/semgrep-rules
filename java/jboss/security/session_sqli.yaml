@@ -2,10 +2,8 @@ rules:
 - id: find-sql-string-concatenation
   message: >-
     In $METHOD, $X is used to construct a SQL query via string concatenation.
-  fix: |
-
   languages: [java]
-  severity: WARNING
+  severity: ERROR
   pattern-either:
   - pattern: |
       $RETURN $METHOD(...,String $X,...){
@@ -35,3 +33,8 @@ rules:
     category: security
     technology:
     - jboss
+    confidence: MEDIUM
+    cwe: "CWE-89"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
