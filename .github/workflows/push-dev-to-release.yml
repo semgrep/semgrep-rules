@@ -25,6 +25,8 @@ jobs:
         hub fetch origin develop:develop
         hub reset --hard develop
     - name: Create Pull Request
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         hub push -u origin merge-develop-to-release
         hub pull-request -m "Merge develop into release" -b origin:release -h origin:develop
