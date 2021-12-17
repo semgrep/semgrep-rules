@@ -10,6 +10,17 @@ resource "aws_s3_bucket" "a" {
 }
 
 resource "aws_s3_bucket" "b" {
+  bucket = "my-tf-test-bucket-b"
+  # ruleid: s3-public-read-bucket
+  acl    = "authenticated-read"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
+
+resource "aws_s3_bucket" "c" {
   bucket = "s3-website-test.hashicorp.com"
   # ok: s3-public-read-bucket
   acl    = "public-read"
