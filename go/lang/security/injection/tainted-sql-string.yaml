@@ -42,6 +42,6 @@ rules:
           - pattern: fmt.Printf("$SQLSTR", ...)
         - metavariable-regex:
             metavariable: $SQLSTR
-            regex: (?i)(select|delete|insert|create|update|alter|drop)\b.*%(v|s|q).*
+            regex: \s*(?i)(select|delete|insert|create|update|alter|drop)\b.*%(v|s|q).*
   pattern-sanitizers:
   - pattern: strconv.Atoi(...)
