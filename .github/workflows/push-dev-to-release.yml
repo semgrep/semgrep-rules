@@ -17,6 +17,8 @@ jobs:
         fetch-depth: 0
         ref: release
     - name: Install hub
+      env:
+        HUB_VERBOSE: 1
       run: |
         sudo apt install hub
     - name: Reset release branch to base on develop
@@ -26,7 +28,7 @@ jobs:
         hub reset --hard develop
     - name: Create Pull Request
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_API_TOKEN }}
       run: |
         hub push -u origin merge-develop-to-release
         hub pull-request -m "Merge develop into release" -b origin:release -h origin:develop
