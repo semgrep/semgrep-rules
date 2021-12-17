@@ -21,10 +21,10 @@ jobs:
         sudo apt install hub
     - name: Reset release branch to base on develop
       run: |
-        git checkout -b merge-develop-to-release
-        git fetch origin develop:develop
-        git reset --hard develop
+        hub checkout -b merge-develop-to-release
+        hub fetch origin develop:develop
+        hub reset --hard develop
     - name: Create Pull Request
       run: |
-        git push -u origin merge-develop-to-release
+        hub push -u origin merge-develop-to-release
         hub pull-request -m "Merge develop into release" -b origin:release -h origin:develop
