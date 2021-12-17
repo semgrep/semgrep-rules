@@ -14,5 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: |
+    - name: validate rules
+      run: |
+        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --validate
+    - name: test with semgrep develop branch
+      run: |
         docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --test --test-ignore-todo
