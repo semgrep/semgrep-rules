@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: validate rules
       run: |
-        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --validate --config .
+        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --validate --config /src
     - name: test with semgrep develop branch
       run: |
         docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --test --test-ignore-todo
