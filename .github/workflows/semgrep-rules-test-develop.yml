@@ -14,9 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: semgrep-rules
     - name: validate rules
       run: |
-        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --validate --config /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
     - name: test with semgrep develop branch
       run: |
-        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --test --test-ignore-todo
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --test --test-ignore-todo /src
