@@ -19,4 +19,4 @@ jobs:
         docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
     - name: test with semgrep develop branch
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --test --test-ignore-todo /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --quiet --test --test-ignore-todo /src
