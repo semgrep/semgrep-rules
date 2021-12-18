@@ -10,8 +10,7 @@ class Person(models.Model):
 ##### True Positives #########
 def get_user_age1(request):
     user_name = request.POST.get("user_name")
-    # ruleid: tainted-sql-string
-    user_age = Person.objects.raw(
+    user_age = Person.objects.raw( # ruleid: tainted-sql-string
         "SELECT user_age FROM myapp_person where user_name = %s" % user_name
     )
     html = "<html><body>User Age %s.</body></html>" % user_age
@@ -20,8 +19,7 @@ def get_user_age1(request):
 
 def get_user_age2(request):
     user_name = request.POST.get("user_name")
-    # ruleid: tainted-sql-string
-    user_age = Person.objects.raw(
+    user_age = Person.objects.raw( # ruleid: tainted-sql-string
         f"SELECT user_age FROM myapp_person where user_name = {user_name}"
     )
     html = "<html><body>User Age %s.</body></html>" % user_age
@@ -30,8 +28,7 @@ def get_user_age2(request):
 
 def get_user_age3(request):
     user_name = request.POST.get("user_name")
-    # ruleid: tainted-sql-string
-    user_age = Person.objects.raw(
+    user_age = Person.objects.raw( # ruleid: tainted-sql-string
         "SELECT user_age FROM myapp_person where user_name = %s".format(user_name)
     )
     html = "<html><body>User Age %s.</body></html>" % user_age
@@ -40,8 +37,7 @@ def get_user_age3(request):
 
 def get_user_age4(request):
     user_name = request.POST.get("user_name")
-    # ruleid: tainted-sql-string
-    user_age = Person.objects.raw(
+    user_age = Person.objects.raw( # ruleid: tainted-sql-string
         "SELECT user_age FROM myapp_person where user_name = " + user_name
     )
     html = "<html><body>User Age %s.</body></html>" % user_age
@@ -67,8 +63,7 @@ def get_user_age6(request):
 
 def get_users1(request):
     client_id = request.headers.get("client_id")
-    # ruleid: tainted-sql-string
-    users = Person.objects.raw(
+    users = Person.objects.raw( # ruleid: tainted-sql-string
         "SELECT * FROM myapp_person where client_id = %s" % client_id
     )
     html = "<html><body>Users %s.</body></html>" % users
@@ -77,8 +72,7 @@ def get_users1(request):
 
 def get_users2(request):
     client_id = request.headers.get("client_id")
-    # ruleid: tainted-sql-string
-    users = Person.objects.raw(
+    users = Person.objects.raw( # ruleid: tainted-sql-string
         f"SELECT * FROM myapp_person where client_id = {client_id}"
     )
     html = "<html><body>Users %s.</body></html>" % users

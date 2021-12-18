@@ -1,5 +1,4 @@
 name: semgrep-rules-test-develop
-
 on:
   pull_request:
     branches:
@@ -7,16 +6,17 @@ on:
   push:
     branches:
     - develop
-
 jobs:
   test-latest:
     name: rules-test-latest
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: semgrep-rules
     - name: validate rules
       run: |
-        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --validate --config .
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
     - name: test with semgrep develop branch
       run: |
-        docker run --rm -v $(PWD):/src returntocorp/semgrep:develop --test --test-ignore-todo
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --quiet --test --test-ignore-todo /src
