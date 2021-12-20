@@ -1,11 +1,9 @@
 name: Create Pull Request to Push Dev to Release
 
 on:
-  pull_request:
-  push:
-    branches:
-    - develop
-    - release
+  workflow_dispatch:
+  schedule:
+  - cron: 30 17 * * *
 
 jobs:
   create-pull-request:
