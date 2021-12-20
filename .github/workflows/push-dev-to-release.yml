@@ -31,4 +31,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         hub push -u origin merge-develop-to-release
-        hub pull-request -m "Merge develop into release" -b origin:release -h origin:develop
+        curl \
+        -X POST \
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/returntocorp/semgrep-rules/pulls \
+        -d '{"base":"release","head":"merge-develop-to-release"}' \
+        -d '{"title":"test"}'
