@@ -16,24 +16,18 @@ jobs:
       with:
         fetch-depth: 0
         ref: release
-    - name: Install hub
-      env:
-        HUB_VERBOSE: 1
-      run: |
-        sudo apt install hub
     - name: Reset release branch to base on develop
       run: |
-        hub checkout -b merge-develop-to-release
-        hub fetch origin develop:develop
-        hub reset --hard develop
+        git checkout -b merge-develop-to-release
+        git fetch origin develop:develop
+        git reset --hard develop
+        git push -u origin merge-develop-to-release
     - name: Create Pull Request
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        hub push -u origin merge-develop-to-release
         curl \
         -X POST \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
         https://api.github.com/repos/returntocorp/semgrep-rules/pulls \
-        -d '{"base":"release","head":"merge-develop-to-release","title":"Merge Develop into Release"}' \
+        -d '{"base":"release","head":"merge-develop-to-release","title":"Merge Develop into Release","body":"Created automatically with the Github action in 'push-dev-to-release'."}'\
+        -f
