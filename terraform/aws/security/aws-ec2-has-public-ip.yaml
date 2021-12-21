@@ -1,0 +1,29 @@
+rules:
+- id: aws-ec2-has-public-ip
+  patterns:
+  - pattern-either: 
+    - pattern: |
+        resource "aws_instance" $ANYTHING {
+          ...
+          associate_public_ip_address = true
+          ...
+        }
+    - pattern: |
+        resource "aws_launch_template" $ANYTHING {
+          ...
+          associate_public_ip_address = true
+          ...
+        }
+  message: >-
+    EC2 instances should not have a public IP address attached in order to block public access to the instances. To fix this, set your `associate_public_ip_address` to
+    `"false"`.
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+  languages: [hcl]
+  severity: WARNING

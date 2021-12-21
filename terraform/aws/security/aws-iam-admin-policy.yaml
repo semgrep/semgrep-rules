@@ -1,0 +1,35 @@
+rules:
+- id: aws-iam-admin-policy
+  patterns:
+  - pattern-inside: |
+      resource "aws_iam_policy" $ANYTHING {
+        ...
+      }
+  - pattern: policy = "$STATEMENT"
+  - metavariable-pattern:
+      metavariable: $STATEMENT
+      language: json
+      patterns:
+      - pattern-not-inside: |
+          {..., "Effect": "Deny", ...}
+      - pattern-either:
+        - pattern: |
+            {..., "Action": [..., "*", ...], "Resource": [..., "*", ...], ...}
+        - pattern: |
+            {..., "Action": "*", "Resource": "*", ...}
+        - pattern: |
+            {..., "Action": "*", "Resource": [...], ...}
+        - pattern: |
+            {..., "Action": [...], "Resource": "*", ...}
+  message: >-
+    Detected admin access granted in your policy. This means anyone with this policy can perform administrative actions. Instead, limit actions and resources to what you need according to least privilege.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+  languages: [hcl]
+  severity: ERROR

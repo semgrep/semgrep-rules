@@ -1,0 +1,26 @@
+rules:
+- id: aws-docdb-encrypted-with-cmk
+  patterns:
+    - pattern: |
+        resource "aws_docdb_cluster" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_docdb_cluster" $ANYTHING {
+          ...
+          kms_key_id = ...
+          ...
+        }
+    - pattern-regex: (^aws_kms_key\.(.*))
+  message: >-
+    Ensure DocDB is encrypted at rest using KMS CMKs. CMKs gives you control over the encryption key in terms of access and rotation.
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: 'CWE-320: Key Management Errors'
+  languages: [hcl]
+  severity: WARNING

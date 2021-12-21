@@ -1,0 +1,18 @@
+rules:
+- id: aws-qldb-inadequate-ledger-permissions-mode
+  patterns:
+    - pattern: |
+        resource "aws_qldb_ledger" $ANYTHING {
+          ...
+          permissions_mode = "ALLOW_ALL"
+          ...
+        }
+  message: >-
+    The AWS QLDB ledger permissions are too permissive. Consider using "'STANDARD'" permissions mode if possible.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws

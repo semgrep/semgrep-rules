@@ -1,0 +1,22 @@
+rules:
+- id: aws-rds-multiaz-not-enabled
+  patterns:
+    - pattern: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+          multi_az = true
+          ...
+        }
+  message: >-
+    The AWS RDS is not configured to use multi-az. Consider using it if possible.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws
