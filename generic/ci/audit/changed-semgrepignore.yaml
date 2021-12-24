@@ -1,0 +1,15 @@
+rules:
+- id: use-sys-exit-multiline
+  paths:
+    include:
+    - .semgrepignore
+  patterns:
+  - pattern: $LINE
+  - metavariable-regex:
+      metavariable: $LINE
+      regex: ^.*$
+  message: |
+    $LINES has been made to the .semgrepignore list of ignored paths. Someone from app-sec may want to audit these changes.
+  languages:
+  - generic
+  severity: WARNING
