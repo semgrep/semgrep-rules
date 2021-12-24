@@ -9,7 +9,11 @@ rules:
       metavariable: $LINE
       regex: ^.*$
   message: |
-    $LINES has been made to the .semgrepignore list of ignored paths. Someone from app-sec may want to audit these changes.
+    $LINE has been added to the .semgrepignore list of ignored paths. Someone from app-sec may want to audit these changes.
   languages:
   - generic
   severity: WARNING
+  metadata:
+    technology:
+    - semgrep
+    category: best-practice
