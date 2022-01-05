@@ -6,7 +6,11 @@ resource "aws_fsx_ontap_file_system" "pass" {
   preferred_subnet_id = aws_subnet.test1.id
   kms_key_id          = aws_kms_key.test.arn
 }
+<<<<<<< HEAD
 # ruleid: aws-fsx-ontapfs-encrypted-with-cmk
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_fsx_ontap_file_system" "fail" {
   storage_capacity    = 1024
   subnet_ids          = [aws_subnet.test1.id, aws_subnet.test2.id]

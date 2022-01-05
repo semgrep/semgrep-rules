@@ -7,7 +7,11 @@ resource "aws_timestreamwrite_database" "enabled" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: aws-timestream-database-encrypted-with-cmk
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_timestreamwrite_database" "default" {
   database_name = "timestream"
 }

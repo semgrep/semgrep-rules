@@ -19,7 +19,11 @@ resource "aws_lambda_function" "no_env" {
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-lambda-environment-credentials
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lambda_function" "fail" {
   function_name = "stest-env"
   role = ""

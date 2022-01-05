@@ -11,7 +11,11 @@ resource "aws_elasticache_cluster" "enabled" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: aws-elasticache-automatic-backup-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_elasticache_cluster" "default" {
   cluster_id           = "cluster"
   engine               = "redis"
@@ -19,7 +23,11 @@ resource "aws_elasticache_cluster" "default" {
   num_cache_nodes      = 1
   parameter_group_name = "default.redis6.x"
 }
+<<<<<<< HEAD
 # ruleid: aws-elasticache-automatic-backup-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_elasticache_cluster" "disabled" {
   cluster_id           = "cluster"
   engine               = "redis"

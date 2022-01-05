@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # ruleid: aws-imagebuilder-component-encrypted-with-cmk
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_imagebuilder_component" "fail" {
   data = yamlencode({
     phases = [{

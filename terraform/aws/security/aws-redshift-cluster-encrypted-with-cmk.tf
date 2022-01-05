@@ -11,7 +11,11 @@ resource "aws_redshift_cluster" "pass" {
   encrypted                           = true
   kms_key_id                          = aws_kms_key.test.arn
 }
+<<<<<<< HEAD
 # ruleid: aws-redshift-cluster-encrypted-with-cmk
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_redshift_cluster" "fail" {
   cluster_identifier                  = "examplea"
   availability_zone                   = data.aws_availability_zones.available.names[0]

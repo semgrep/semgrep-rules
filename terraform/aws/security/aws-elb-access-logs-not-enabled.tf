@@ -23,19 +23,31 @@ resource "aws_alb" "enabled" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lb" "default" {
   load_balancer_type = "network"
   name               = "nlb"
   subnets            = var.public_subnet_ids
 }
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_alb" "default" {
   load_balancer_type = "application"
   name               = "alb"
   subnets            = var.public_subnet_ids
 }
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lb" "only_bucket" {
   load_balancer_type = "network"
   name               = "nlb"
@@ -45,7 +57,11 @@ resource "aws_lb" "only_bucket" {
     bucket = var.bucket_name
   }
 }
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_alb" "only_bucket" {
   load_balancer_type = "application"
   name               = "alb"
@@ -55,7 +71,11 @@ resource "aws_alb" "only_bucket" {
     bucket = var.bucket_name
   }
 }
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lb" "disabled" {
   load_balancer_type = "network"
   name               = "nlb"
@@ -66,7 +86,11 @@ resource "aws_lb" "disabled" {
     enabled = false
   }
 }
+<<<<<<< HEAD
 # ruleid: aws-elb-access-logs-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_alb" "disabled" {
   load_balancer_type = "application"
   name               = "alb"

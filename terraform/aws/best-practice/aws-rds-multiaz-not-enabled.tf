@@ -1,5 +1,8 @@
 # fail
+<<<<<<< HEAD
 # ruleid: aws-rds-multiaz-not-enabled
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "disabled" {
   name   = "name"
   engine = "mysql"
@@ -10,7 +13,10 @@ resource "aws_db_instance" "disabled" {
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-rds-multiaz-not-enabled
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "default" {
   name   = "name"
   engine = "mysql"

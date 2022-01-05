@@ -13,7 +13,11 @@ resource "aws_qldb_ledger" "enabled" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: missing-aws-qldb-deletion-protection
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_qldb_ledger" "disabled" {
   name             = "ledger"
   permissions_mode = "STANDARD"

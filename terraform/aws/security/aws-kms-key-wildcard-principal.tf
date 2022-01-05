@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # ruleid: aws-kms-key-wildcard-principal
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_kms_key" "fail_0" {
   description = "description"
   policy = <<POLICY
@@ -25,7 +28,11 @@ resource "aws_kms_key" "fail_0" {
 }
 POLICY  
 }
+<<<<<<< HEAD
 # ruleid: aws-kms-key-wildcard-principal
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_kms_key" "fail_1" {
   description = "description"
   policy = <<POLICY
@@ -42,7 +49,11 @@ resource "aws_kms_key" "fail_1" {
 }
 POLICY  
 }
+<<<<<<< HEAD
 # ruleid: aws-kms-key-wildcard-principal
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_kms_key" "fail_2" {
   description = "description"
   policy = <<POLICY
@@ -59,7 +70,11 @@ resource "aws_kms_key" "fail_2" {
 }
 POLICY  
 }
+<<<<<<< HEAD
 # ruleid: aws-kms-key-wildcard-principal
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_kms_key" "fail_3" {
   description = "description"
   policy = <<POLICY
@@ -76,7 +91,11 @@ resource "aws_kms_key" "fail_3" {
 }
 POLICY  
 }
+<<<<<<< HEAD
 # ruleid: aws-kms-key-wildcard-principal
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_kms_key" "fail_4" {
   description = "description"
   policy = <<POLICY

@@ -13,7 +13,11 @@ resource "aws_secretsmanager_secret" "enabled2" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: aws-secretsmanager-secret-unencrypted
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_secretsmanager_secret" "default" {
   name = "secret"
 }

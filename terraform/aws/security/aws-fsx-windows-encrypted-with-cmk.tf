@@ -6,7 +6,11 @@ resource "aws_fsx_windows_file_system" "pass" {
   subnet_ids          = [aws_subnet.test1.id]
   throughput_capacity = 8
 }
+<<<<<<< HEAD
 # ruleid: aws-fsx-windows-encrypted-with-cmk
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_fsx_windows_file_system" "fail" {
   active_directory_id = aws_directory_service_directory.test.id
   skip_final_backup   = true

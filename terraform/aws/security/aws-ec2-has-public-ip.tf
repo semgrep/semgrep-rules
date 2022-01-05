@@ -33,7 +33,11 @@ resource "aws_launch_template" "private" {
 # fail
 
 # EC2 instance
+<<<<<<< HEAD
 # ruleid: aws-ec2-has-public-ip
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_instance" "public" {
   ami           = "ami-12345"
   instance_type = "t3.micro"
@@ -42,7 +46,11 @@ resource "aws_instance" "public" {
 }
 
 # launch template
+<<<<<<< HEAD
 # ruleid: aws-ec2-has-public-ip
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_launch_template" "public" {
   image_id      = "ami-12345"
   instance_type = "t3.micro"

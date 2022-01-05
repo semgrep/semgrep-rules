@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # ruleid: aws-emr-encrypted-with-cmk
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_emr_security_configuration" "fail" {
   name = "fail"
 

@@ -8,7 +8,11 @@ resource "aws_ebs_snapshot_copy" "pass" {
     Name = "testAccEBSSnapshotCopyWithKMSConfig"
   }
 }
+<<<<<<< HEAD
 # ruleid: aws-ebs-snapshot-encrypted-with-cmk
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ebs_snapshot_copy" "fail" {
   source_snapshot_id = aws_ebs_snapshot.test.id
   source_region      = data.aws_region.current.name

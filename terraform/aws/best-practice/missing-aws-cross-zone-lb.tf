@@ -21,14 +21,22 @@ resource "aws_alb" "enabled" {
 }
 
 # failure
+<<<<<<< HEAD
 # ruleid: missing-aws-cross-zone-lb
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lb" "default" {
   internal           = false
   load_balancer_type = "network"
   name               = "nlb"
   subnets            = var.public_subnet_ids
 }
+<<<<<<< HEAD
 # ruleid: missing-aws-cross-zone-lb
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_alb" "default" {
   load_balancer_type = "gateway"
   name               = "glb"
@@ -37,7 +45,11 @@ resource "aws_alb" "default" {
     subnet_id = var.subnet_id
   }
 }
+<<<<<<< HEAD
 # ruleid: missing-aws-cross-zone-lb
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lb" "disabled" {
   internal           = false
   load_balancer_type = "network"
@@ -46,7 +58,11 @@ resource "aws_lb" "disabled" {
 
   enable_cross_zone_load_balancing = false
 }
+<<<<<<< HEAD
 # ruleid: missing-aws-cross-zone-lb
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_alb" "disabled" {
   load_balancer_type = "gateway"
   name               = "glb"

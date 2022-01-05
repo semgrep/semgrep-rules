@@ -22,7 +22,10 @@ EOF
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-glacier-vault-any-principal
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_glacier_vault" "my_archive2" {
   name = "MyArchive"
 
@@ -51,7 +54,10 @@ EOF
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-glacier-vault-any-principal
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_glacier_vault" "my_archive3" {
   name = "MyArchive"
 
@@ -77,7 +83,10 @@ EOF
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-glacier-vault-any-principal
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_glacier_vault" "my_archive4" {
   name = "MyArchive"
 
@@ -103,7 +112,10 @@ EOF
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-glacier-vault-any-principal
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_glacier_vault" "my_archive5" {
   name = "MyArchive"
 

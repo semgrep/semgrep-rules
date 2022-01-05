@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # ruleid: aws-codebuild-project-artifacts-unencrypted
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_codebuild_project" "fail" {
   name = "fail-project"
   artifacts {

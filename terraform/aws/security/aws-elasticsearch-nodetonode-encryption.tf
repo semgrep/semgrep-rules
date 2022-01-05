@@ -42,7 +42,10 @@ resource "aws_elasticsearch_domain" "old_hcl" {
 }
 
 # fail
+<<<<<<< HEAD
 # ruleid: aws-elasticsearch-nodetonode-encryption-not-enabled
+=======
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_elasticsearch_domain" "node_to_node_encryption_disabled" {
   domain_name           = "node_to_node_encryption_disabled"
 
@@ -54,7 +57,11 @@ resource "aws_elasticsearch_domain" "node_to_node_encryption_disabled" {
     enabled = false
   }
 }
+<<<<<<< HEAD
 # ruleid: aws-elasticsearch-nodetonode-encryption-not-enabled
+=======
+
+>>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_elasticsearch_domain" "node_to_node_encryption_doesnt_exist" {
   domain_name           = "node_to_node_encryption_doesnt_exist"
 
