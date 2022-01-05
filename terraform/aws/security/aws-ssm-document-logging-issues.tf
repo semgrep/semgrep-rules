@@ -113,11 +113,7 @@ DOC
 }
 
 # failure
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "disabled" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
@@ -146,11 +142,7 @@ resource "aws_ssm_document" "disabled" {
   }
 DOC
 }
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "disabled_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
@@ -177,11 +169,7 @@ resource "aws_ssm_document" "disabled_yaml" {
       linux: ''
 DOC
 }
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "s3_enabled_not_encrypted" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
@@ -210,11 +198,7 @@ resource "aws_ssm_document" "s3_enabled_not_encrypted" {
   }
 DOC
 }
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "s3_enabled_not_encrypted_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
@@ -241,11 +225,7 @@ resource "aws_ssm_document" "s3_enabled_not_encrypted_yaml" {
       linux: ''
 DOC
 }
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "cw_enabled_not_encrypted" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
@@ -274,11 +254,7 @@ resource "aws_ssm_document" "cw_enabled_not_encrypted" {
   }
 DOC
 }
-<<<<<<< HEAD
 # ruleid: aws-ssm-document-logging-issues
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ssm_document" "cw_enabled_not_encrypted_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"

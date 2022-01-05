@@ -20,11 +20,7 @@ resource "aws_codebuild_project" "enabled" {
 }
 
 # fail
-<<<<<<< HEAD
 # ruleid: aws-codebuild-project-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_codebuild_project" "default" {
   name         = "example"
   service_role = "aws_iam_role.example.arn"

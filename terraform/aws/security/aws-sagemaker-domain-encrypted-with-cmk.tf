@@ -13,11 +13,7 @@ resource "aws_sagemaker_domain" "pass" {
     home_efs_file_system = "Delete"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-sagemaker-domain-encrypted-with-cmk
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_sagemaker_domain" "fail" {
   domain_name = "examplea"
   auth_mode   = "IAM"

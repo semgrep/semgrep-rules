@@ -1,8 +1,5 @@
 # fail
-<<<<<<< HEAD
 # ruleid: aws-transfer-server-is-public
-=======
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_transfer_server" "example_public" {
     endpoint_type = "PUBLIC"
     protocols   = ["SFTP"]
@@ -15,10 +12,7 @@ resource "aws_transfer_server" "example_vpc" {
 }
 
 # fail
-<<<<<<< HEAD
 # ruleid: aws-transfer-server-is-public
-=======
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_transfer_server" "example" {
     protocols   = ["SFTP"]
 }

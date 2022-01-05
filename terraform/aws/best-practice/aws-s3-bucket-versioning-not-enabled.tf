@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # ruleid: aws-s3-bucket-versioning-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "fail4" {
   region        = "us-west-2"
   bucket        = "my_bucket"
@@ -12,12 +8,7 @@ resource "aws_s3_bucket" "fail4" {
     Name = "my-bucket"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-s3-bucket-versioning-not-enabled
-=======
-
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "fail3" {
   region        = "us-west-2"
   bucket        = "my_bucket"
@@ -26,11 +17,7 @@ resource "aws_s3_bucket" "fail3" {
   tags          = { Name = "my-bucket" }
   enabled       = True
 }
-<<<<<<< HEAD
 # ruleid: aws-s3-bucket-versioning-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "fail2" {
   region        = "us-west-2"
   bucket        = "my_bucket"
@@ -42,11 +29,7 @@ resource "aws_s3_bucket" "fail2" {
     enabled = true }
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-s3-bucket-versioning-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "fail" {
   region        = "us-west-2"
   bucket        = "my_bucket"
@@ -73,11 +56,7 @@ resource "aws_s3_bucket" "pass" {
     enabled = true
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-s3-bucket-versioning-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "failcomplex" {
   acl    = "public-read-write"
   bucket = "superfail"

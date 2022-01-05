@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # ruleid: aws-insecure-cloudfront-distribution-tls-version
-=======
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_cloudfront_distribution" "fail" {
   origin {
     domain_name = aws_s3_bucket.b.bucket_regional_domain_name
@@ -106,11 +103,7 @@ resource "aws_cloudfront_distribution" "fail" {
     cloudfront_default_certificate = true
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-insecure-cloudfront-distribution-tls-version
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_cloudfront_distribution" "fail2" {
   origin {
     domain_name = aws_s3_bucket.b.bucket_regional_domain_name
@@ -216,11 +209,7 @@ resource "aws_cloudfront_distribution" "fail2" {
     minimum_protocol_version = "TLSv1"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-insecure-cloudfront-distribution-tls-version
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_cloudfront_distribution" "fail3" {
   origin {
     domain_name = aws_s3_bucket.b.bucket_regional_domain_name

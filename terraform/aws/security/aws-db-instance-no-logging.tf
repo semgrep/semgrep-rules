@@ -21,11 +21,7 @@ resource "aws_db_instance" "mysql" {
 }
 
 # failure
-<<<<<<< HEAD
 # ruleid: aws-db-instance-no-logging
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "default" {
   allocated_storage = 5
   engine            = "mysql"
@@ -33,11 +29,7 @@ resource "aws_db_instance" "default" {
   password          = "mysql"
   username          = "mysql"
 }
-<<<<<<< HEAD
 # ruleid: aws-db-instance-no-logging
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "empty" {
   allocated_storage = 5
   engine            = "mysql"

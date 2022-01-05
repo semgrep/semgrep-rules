@@ -8,11 +8,7 @@ resource "aws_ebs_volume" "pass" {
     Name = "taggy"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-ebs-volume-encrypted-with-cmk
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_ebs_volume" "fail" {
   availability_zone = data.aws_availability_zones.available.names[0]
   size              = 1

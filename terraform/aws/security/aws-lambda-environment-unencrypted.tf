@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # ruleid: aws-lambda-environment-unencrypted
-=======
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lambda_function" "fail" {
    function_name                  = var.function_name
    role                           = aws_iam_role.lambda-messageprocessor.arn
@@ -17,11 +14,7 @@ resource "aws_lambda_function" "fail" {
         test="true"
     }
 }
-<<<<<<< HEAD
 # ruleid: aws-lambda-environment-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lambda_function" "failkmsnovars" {
    function_name                  = var.function_name
    role                           = aws_iam_role.lambda-messageprocessor.arn
@@ -65,11 +58,7 @@ resource "aws_lambda_function" "pass" {
     }
    kms_key_arn = aws_kms_key.anyoldguff.arn
 }
-<<<<<<< HEAD
 # ruleid: aws-lambda-environment-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_lambda_function" "failasempty" {
    function_name                  = var.function_name
    role                           = aws_iam_role.lambda-messageprocessor.arn

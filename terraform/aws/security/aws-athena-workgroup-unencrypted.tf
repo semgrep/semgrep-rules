@@ -14,11 +14,7 @@ resource "aws_athena_workgroup" "pass" {
     }
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-athena-workgroup-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_athena_workgroup" "fail" {
   name = "wg-non-encrypted"
 

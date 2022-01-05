@@ -20,11 +20,7 @@ resource "aws_dynamodb_table" "cmk" {
 }
 
 # failure
-<<<<<<< HEAD
 # ruleid: aws-dynamodb-table-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_dynamodb_table" "default" {
   name           = "GameScores"
   billing_mode   = "PROVISIONED"
@@ -38,11 +34,7 @@ resource "aws_dynamodb_table" "default" {
     type = "S"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-dynamodb-table-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_dynamodb_table" "encrypted_false" {
   name           = "GameScores"
   billing_mode   = "PROVISIONED"

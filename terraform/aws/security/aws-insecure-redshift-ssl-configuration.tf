@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # ruleid: aws-insecure-redshift-ssl-configuration
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_redshift_parameter_group" "failasfalse" {
   name   = var.param_group_name
   family = "redshift-1.0"
@@ -18,11 +14,7 @@ resource "aws_redshift_parameter_group" "failasfalse" {
   }
 }
 
-<<<<<<< HEAD
 # ruleid: aws-insecure-redshift-ssl-configuration
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_redshift_parameter_group" "fail" {
   name   = var.param_group_name
   family = "redshift-1.0"

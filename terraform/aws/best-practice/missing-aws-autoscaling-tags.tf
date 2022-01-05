@@ -48,11 +48,7 @@ resource "aws_autoscaling_group" "passtags" {
   )
 }
 
-<<<<<<< HEAD
 # ruleid: missing-aws-autoscaling-tags
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_autoscaling_group" "fail" {
   name                 = "foobar3-terraform-test"
   max_size             = 5

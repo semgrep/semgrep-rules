@@ -16,11 +16,7 @@ resource "aws_workspaces_workspace" "pass" {
 
   tags = var.common_tags
 }
-<<<<<<< HEAD
 # ruleid: aws-workspaces-user-volume-unencrypted
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_workspaces_workspace" "fail" {
   directory_id = aws_workspaces_directory.main.id
   bundle_id    = data.aws_workspaces_bundle.bundle.id

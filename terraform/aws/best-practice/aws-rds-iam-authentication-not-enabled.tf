@@ -21,11 +21,7 @@ resource "aws_db_instance" "enabled_postgres" {
 }
 
 # failure
-<<<<<<< HEAD
 # ruleid: aws-rds-iam-authentication-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "default_mysql" {
   allocated_storage = 5
   engine            = "mysql"
@@ -33,11 +29,7 @@ resource "aws_db_instance" "default_mysql" {
   password          = "password"
   username          = "username"
 }
-<<<<<<< HEAD
 # ruleid: aws-rds-iam-authentication-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "default_postgres" {
   allocated_storage = 5
   engine            = "postgres"
@@ -45,11 +37,7 @@ resource "aws_db_instance" "default_postgres" {
   password          = "password"
   username          = "username"
 }
-<<<<<<< HEAD
 # ruleid: aws-rds-iam-authentication-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "disabled_mysql" {
   allocated_storage = 5
   engine            = "postgres"
@@ -59,11 +47,7 @@ resource "aws_db_instance" "disabled_mysql" {
 
   iam_database_authentication_enabled = false
 }
-<<<<<<< HEAD
 # ruleid: aws-rds-iam-authentication-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_db_instance" "disabled_postgres" {
   allocated_storage = 5
   engine            = "postgres"

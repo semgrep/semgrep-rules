@@ -30,11 +30,7 @@ resource "aws_iam_policy" "pass1" {
 }
 POLICY
 }
-<<<<<<< HEAD
 # ruleid: aws-iam-admin-policy
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_iam_policy" "fail1" {
   name = "fail1"
   path = "/"
@@ -60,11 +56,7 @@ resource "aws_iam_policy" "fail1" {
 }
 POLICY
 }
-<<<<<<< HEAD
 # ruleid: aws-iam-admin-policy
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_iam_policy" "fail2" {
   name = "fail2"
   path = "/"
@@ -86,11 +78,7 @@ resource "aws_iam_policy" "fail2" {
 }
 POLICY
 }
-<<<<<<< HEAD
 # ruleid: aws-iam-admin-policy
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_iam_policy" "fail3" {
   name = "fail3"
   path = "/"
@@ -108,11 +96,7 @@ resource "aws_iam_policy" "fail3" {
 }
 POLICY
 }
-<<<<<<< HEAD
 # ruleid: aws-iam-admin-policy
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_iam_policy" "fail4" {
   name = "fail4"
   path = "/"

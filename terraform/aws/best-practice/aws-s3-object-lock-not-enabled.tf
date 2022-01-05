@@ -19,11 +19,7 @@ resource "aws_s3_bucket" "enabled_via_block" {
 }
 
 # failure
-<<<<<<< HEAD
 # ruleid: aws-s3-object-lock-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "disabled_via_object" {
   bucket = "test-bucket"
   acl    = "private"
@@ -32,11 +28,7 @@ resource "aws_s3_bucket" "disabled_via_object" {
     object_lock_enabled = "Disabled"
   }
 }
-<<<<<<< HEAD
 # ruleid: aws-s3-object-lock-not-enabled
-=======
-
->>>>>>> refs/remotes/origin/migrated-checkov-rules
 resource "aws_s3_bucket" "disabled_via_block" {
   bucket = "test-bucket"
   acl    = "private"
