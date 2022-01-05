@@ -1,0 +1,22 @@
+rules:
+- id: aws-rds-cluster-iam-authentication-not-enabled
+  patterns:
+    - pattern: |
+        resource "aws_rds_cluster" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_rds_cluster" $ANYTHING {
+          ...
+          iam_database_authentication_enabled = true
+          ...
+        }
+  message: >-
+    The AWS RDS Cluster is not configured to use IAM authentication. Consider using IAM for authentication.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws

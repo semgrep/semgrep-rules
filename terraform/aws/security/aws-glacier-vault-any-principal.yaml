@@ -1,0 +1,36 @@
+rules:
+- id: aws-glacier-vault-any-principal
+  patterns:
+  - pattern-inside: |
+      resource "aws_glacier_vault" $ANYTHING {
+        ...
+      }
+  - pattern: access_policy = "$STATEMENT"
+  - metavariable-pattern:
+      metavariable: $STATEMENT
+      language: json
+      patterns:
+      - pattern-inside: |
+          {..., "Effect": "Allow", ...}
+      - pattern-either:
+          - pattern: |
+              "Principal": "*"
+          - pattern: |
+              "Principal": {..., "AWS": "*", ...}
+          - pattern-inside: |
+              "Principal": {..., "AWS": ..., ...}
+          - pattern-regex: |
+              (^\"arn:aws:iam::\*:(.*)\"$)
+  message: >-
+    Detected wildcard access granted to Glacier Vault. This means anyone within your
+    AWS account ID can perform actions on Glacier resources. Instead, limit to
+    a specific identity in your account, like this: `arn:aws:iam::<account_id>:<identity>`.
+  metadata:
+    category: security
+    technology:
+    - aws
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+  languages: [hcl]
+  severity: ERROR

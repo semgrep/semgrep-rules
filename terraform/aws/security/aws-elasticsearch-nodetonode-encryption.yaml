@@ -1,0 +1,39 @@
+rules:
+- id: aws-elasticsearch-nodetonode-encryption-not-enabled
+  patterns:
+    - pattern-either:
+      - pattern: |
+          resource "aws_elasticsearch_domain" $ANYTHING {
+            ...
+            node_to_node_encryption {
+              ...
+              enabled = false
+              ...
+            }
+            ...
+          }
+      - pattern: |
+          resource "aws_elasticsearch_domain" $ANYTHING {
+            ...
+            cluster_config {
+              ...
+              instance_count = $COUNT
+              ...
+            }
+          }
+    - metavariable-comparison:
+        metavariable: $COUNT
+        comparison: $COUNT > 1
+  message: >-
+    Ensure all Elasticsearch has node-to-node encryption enabled.	
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+  languages: [hcl]
+  severity: WARNING
