@@ -79,10 +79,11 @@ EOF
 }
 
 # fail
-# ruleid: aws-glacier-vault-any-principal
+
 resource "aws_glacier_vault" "my_archive4" {
   name = "MyArchive"
 
+  # ruleid: aws-glacier-vault-any-principal
   access_policy = <<EOF
 {
     "Version":"2012-10-17",
