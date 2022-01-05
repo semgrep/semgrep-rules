@@ -8,10 +8,10 @@ class CustomStrategy
     end
   end
   
-  class ApplicationController < ActionController:x:Base
+  class ApplicationController < ActionController::Base
     # ruleid: rails-skip-forgery-protection
     skip_forgery_protection 
   end
-  class ApplicationController2 < ActionController:x:Base
+  class ApplicationController2 < ActionController::Base
     # ok: rails-skip-forgery-protection
   end
