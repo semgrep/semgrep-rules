@@ -30,11 +30,12 @@ resource "aws_iam_policy" "pass1" {
 }
 POLICY
 }
-# ruleid: aws-iam-admin-policy
+
 resource "aws_iam_policy" "fail1" {
   name = "fail1"
   path = "/"
   # the policy doesn't actually make sense, but it tests checking arrays for *
+  # ruleid: aws-iam-admin-policy
   policy = <<POLICY
 {
   "Statement": [
@@ -56,10 +57,11 @@ resource "aws_iam_policy" "fail1" {
 }
 POLICY
 }
-# ruleid: aws-iam-admin-policy
+
 resource "aws_iam_policy" "fail2" {
   name = "fail2"
   path = "/"
+  # ruleid: aws-iam-admin-policy
   policy = <<POLICY
 {
   "Statement": [
@@ -78,10 +80,11 @@ resource "aws_iam_policy" "fail2" {
 }
 POLICY
 }
-# ruleid: aws-iam-admin-policy
+
 resource "aws_iam_policy" "fail3" {
   name = "fail3"
   path = "/"
+  # ruleid: aws-iam-admin-policy
   policy = <<POLICY
 {
   "Statement": [
@@ -96,11 +99,12 @@ resource "aws_iam_policy" "fail3" {
 }
 POLICY
 }
-# ruleid: aws-iam-admin-policy
+
 resource "aws_iam_policy" "fail4" {
   name = "fail4"
   path = "/"
   # implicit allow, not actually valid, but it's a default that we check
+  # ruleid: aws-iam-admin-policy
   policy = <<POLICY
 {
   "Statement": [
