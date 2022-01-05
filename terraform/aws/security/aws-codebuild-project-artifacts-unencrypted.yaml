@@ -4,7 +4,12 @@ rules:
     - pattern: |
         resource "aws_codebuild_project" $ANYTHING {
           ...
-          encryption_disabled = false
+          artifacts {
+            ...
+            encryption_disabled = true
+            ...
+          }
+          ...
         }
     - pattern-not-inside: |
         resource "aws_codebuild_project" $ANYTHING {
