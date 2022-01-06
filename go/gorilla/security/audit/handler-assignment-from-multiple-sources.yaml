@@ -7,6 +7,7 @@ rules:
     category: security
     technology:
     - gorilla
+    confidence: MEDIUM
   patterns:
   - pattern-inside: |
       func $HANDLER(..., $R *http.Request, ...) {
@@ -48,7 +49,8 @@ rules:
       $VAR = $X
       ...
       $VAR = $Y
-  message: "Variable $VAR is assigned from two different sources: '$X' and '$Y'. Make sure this is intended, as this could\
-    \ cause logic bugs if they are treated as they are the same object."
+  message: "Variable $VAR is assigned from two different sources: '$X' and '$Y'. Make\
+    \ sure this is intended, as this could cause logic bugs if they are treated as\
+    \ they are the same object."
   languages: [go]
   severity: WARNING

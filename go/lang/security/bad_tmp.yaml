@@ -5,10 +5,11 @@ rules:
   severity: WARNING
   metadata:
     cwe: 'CWE-377: Insecure Temporary File'
-    source_rule_url: https://github.com/securego/gosec
+    source-rule-url: https://github.com/securego/gosec
     category: security
     technology:
     - go
+    confidence: MEDIUM
   pattern-either:
   - pattern: ioutil.WriteFile("=~//tmp/.*$/", ...)
   - pattern: os.Create("=~//tmp/.*$/", ...)

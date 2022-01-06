@@ -1,6 +1,6 @@
 rules:
 - id: insecure-javascriptserializer-deserialization
-  severity: WARNING
+  severity: ERROR
   languages:
   - C#
   metadata:
@@ -11,6 +11,7 @@ rules:
     category: security
     technology:
     - .net
+    confidence: HIGH
   message: >-
     The SimpleTypeResolver class is insecure and should not be used. Using SimpleTypeResolver to deserialize JSON could allow
     the remote client to execute malicious code within the app and take control of the web server.
