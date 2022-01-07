@@ -5,7 +5,7 @@ rules:
   - pattern: strncpy(...)
   message: >-
     Finding triggers whenever there is a strcpy or strncpy used.
-    This is an issue because strcpy or strncpy can lead to buffer overflow vulns.
+    This is an issue because strcpy or strncpy can lead to buffer overflow vulnerabilities and therefore crashes or executing arbitrary code.
     Fix this by using strcpy_s instead.
   metadata:
     references:
