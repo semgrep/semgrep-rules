@@ -15,6 +15,7 @@ rules:
     category: security
     technology:
     - pgx
+    confidence: MEDIUM
   patterns:
   - pattern-either:
     - patterns:
@@ -55,4 +56,4 @@ rules:
   - metavariable-regex:
       metavariable: $METHOD
       regex: ^(Exec|ExecEx|Query|QueryEx|QueryRow|QueryRowEx)$
-  severity: WARNING
+  severity: ERROR

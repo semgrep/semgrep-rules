@@ -1,0 +1,32 @@
+name: Create Pull Request to Push Dev to Release
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: 30 17 * * *
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out release
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: release
+    - name: Reset release branch to base on develop
+      run: |
+        git checkout -b merge-develop-to-release
+        git fetch origin develop:develop
+        git reset --hard develop
+        git push -u origin merge-develop-to-release
+    - name: Create Pull Request
+      run: |
+        # TODO: `-f` in curl won't fail on all non-200 HTTP responses.
+        # Instead, add a `make` command with some bash scripting in order to do this.
+        curl \
+        -f -X POST \
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/returntocorp/semgrep-rules/pulls \
+        -d '{"base":"release","head":"merge-develop-to-release","title":"Merge Develop into Release","body":"Created automatically with the Github action in push-dev-to-release.yml."}' \

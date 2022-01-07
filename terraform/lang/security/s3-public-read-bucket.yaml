@@ -1,7 +1,9 @@
 rules:
 - id: s3-public-read-bucket
   patterns:
-  - pattern: acl = "public-read"
+  - pattern-either:
+    - pattern: acl = "public-read"
+    - pattern: acl = "authenticated-read"
   - pattern-not-inside: |
       resource "aws_s3_bucket" "..." {
         ...

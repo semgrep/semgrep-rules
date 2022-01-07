@@ -2,10 +2,12 @@ rules:
 - id: tainted-url-host
   languages:
   - go
-  message: User data flows into the host portion of this manually-constructed URL. This could allow an attacker to send data
-    to their own server, potentially exposing sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig this code can access. (This is called
-    server-side request forgery, or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
+  message: User data flows into the host portion of this manually-constructed URL.
+    This could allow an attacker to send data to their own server, potentially exposing
+    sensitive data such as cookies or authorization information sent with this request.
+    They could also probe internal servers or other resources that the server runnig
+    this code can access. (This is called server-side request forgery, or SSRF.) Do
+    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
     the correct host.
   metadata:
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -18,6 +20,7 @@ rules:
     technology:
     - go
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    confidence: HIGH
   mode: taint
   pattern-sinks:
   - patterns:

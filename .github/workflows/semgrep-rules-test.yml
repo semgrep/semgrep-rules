@@ -3,11 +3,9 @@ name: semgrep-rules-test
 on:
   pull_request:
     branches:
-    - develop
     - release
   push:
     branches:
-    - develop
     - release
 
 jobs:
@@ -21,5 +19,7 @@ jobs:
         python-version: 3.9.2
     - name: install semgrep
       run: pip3 install semgrep
+    - name: validate rules
+      run: semgrep --validate --config .
     - name: run semgrep
       run: semgrep --test --test-ignore-todo
