@@ -8,8 +8,7 @@ rules:
       metavariable: $FUNC
       regex: include|include_once|require|require_once
   message: >-
-    Non-constant file inclusion. This can lead to LFI or RFI if user
-    input reaches this statement.
+    Detected non-constant file inclusion. This can lead to local file inclusion (LFI) or remote file inclusion (RFI) if user input reaches this statement. LFI and RFI could lead to sensitive files being obtained by attackers. Instead, explicitly specify what to include. If that is not a viable solution, validate user input thoroughly.
   metadata:
     references:
     - https://www.php.net/manual/en/function.include.php
