@@ -1,0 +1,30 @@
+rules:
+  - id: csharp-random
+    patterns:
+      - metavariable-regex:
+          metavariable: $PATTERN
+          regex: ^(random|Random|SHA1CryptoServiceProvider|MD5.Create)$
+      - pattern-either:
+          - pattern: |
+              var $RND = new $PATTERN(...);
+              ...
+              $RND.GetBytes(...);
+          - pattern: |
+              var $RND = new $PATTERN(...);
+              ...
+          - pattern: |
+              var $RND = $PATTERN(...);
+              ...
+
+    message: |
+      The use of a predictable random value can lead to vulnerabilities when used in certain security critical contexts.
+
+    languages:
+      - csharp
+
+    severity: ERROR
+
+    metadata:
+      owasp: 'A2: Cryptographic Failures'
+      cwe: >-
+        CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)
