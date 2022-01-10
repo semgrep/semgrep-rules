@@ -1,28 +1,28 @@
 rules:
-- id: express-xml2json-xxe-event
-  message: >-
-    Xml Parser is used inside Request Event.
-    Make sure that unverified user data can not reach the XML Parser,
-    as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
-  metadata:
-    owasp: 'A4: XML External Entities (XXE)'
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
-    category: security
-    technology:
-    - express
-  severity: WARNING
-  languages: [javascript, typescript]
-  patterns:
-  - pattern-inside: |
-      require('xml2json');
-      ...
-  - pattern-either:
-    - pattern-inside: function ... ($REQ, $RES) {...}
-    - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-    - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-    - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-  - pattern: $REQ.on('...', function(...) { ... $EXPAT.toJson($INPUT,...); ... })
+  - id: express-xml2json-xxe-event
+    message: >-
+      Xml Parser is used inside Request Event.
+      Make sure that unverified user data can not reach the XML Parser,
+      as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
+    metadata:
+      owasp: "A4: XML External Entities (XXE)"
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      category: security
+      technology:
+        - express
+    severity: WARNING
+    languages: [javascript, typescript]
+    patterns:
+      - pattern-inside: |
+          require('xml2json');
+          ...
+      - pattern-either:
+          - pattern-inside: function ... ($REQ, $RES) {...}
+          - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
+      - pattern: $REQ.on('...', function(...) { ... $EXPAT.toJson($INPUT,...); ... })

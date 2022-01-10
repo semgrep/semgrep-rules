@@ -1,40 +1,40 @@
 rules:
-- id: find-sql-string-concatenation
-  message: >-
-    In $METHOD, $X is used to construct a SQL query via string concatenation.
-  languages: [java]
-  severity: ERROR
-  pattern-either:
-  - pattern: |
-      $RETURN $METHOD(...,String $X,...){
-        ...
-        Session $SESSION = ...;
-        ...
-        String $QUERY = ... + $X + ...;
-        ...
-        PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
-        ...
-        ResultSet $RESULT = $PS.executeQuery();
-        ...
-      }
-  - pattern: |
-      $RETURN $METHOD(...,String $X,...){
-        ...
-        String $QUERY = ... + $X + ...;
-        ...
-        Session $SESSION = ...;
-        ...
-        PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
-        ...
-        ResultSet $RESULT = $PS.executeQuery();
-        ...
-      }
-  metadata:
-    category: security
-    technology:
-    - jboss
-    confidence: MEDIUM
-    cwe: "CWE-89: SQL Injection"
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
+  - id: find-sql-string-concatenation
+    message: >-
+      In $METHOD, $X is used to construct a SQL query via string concatenation.
+    languages: [java]
+    severity: ERROR
+    pattern-either:
+      - pattern: |
+          $RETURN $METHOD(...,String $X,...){
+            ...
+            Session $SESSION = ...;
+            ...
+            String $QUERY = ... + $X + ...;
+            ...
+            PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
+            ...
+            ResultSet $RESULT = $PS.executeQuery();
+            ...
+          }
+      - pattern: |
+          $RETURN $METHOD(...,String $X,...){
+            ...
+            String $QUERY = ... + $X + ...;
+            ...
+            Session $SESSION = ...;
+            ...
+            PreparedStatement $PS = $SESSION.connection().prepareStatement($QUERY);
+            ...
+            ResultSet $RESULT = $PS.executeQuery();
+            ...
+          }
+    metadata:
+      category: security
+      technology:
+        - jboss
+      confidence: MEDIUM
+      cwe: "CWE-89: SQL Injection"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
