@@ -1,34 +1,34 @@
 rules:
-- id: appservice-enable-https-only
-  message: >-
-    By default, clients can connect to App Service by using both HTTP or HTTPS. HTTP should be disabled enabling the HTTPS
-    Only setting.
-  patterns:
-  - pattern: resource
-  - pattern-not-inside: |
-      resource "azurerm_app_service" "..." {
-      ...
-        https_only = true
-      ...
-      }
-  - pattern-either:
-    - pattern-inside: |
-        resource "azurerm_app_service" "..." {
-        ...
-        }
-    - pattern-inside: |
-        resource "azurerm_app_service" "..." {
-        ...
-          https_only = false
-        ...
-        }
-  metadata:
-    category: security
-    technology:
-    - terraform
-    - azure
-    references:
-    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#https_only
-    - https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-bindings#enforce-https
-  languages: [hcl]
-  severity: ERROR
+  - id: appservice-enable-https-only
+    message: >-
+      By default, clients can connect to App Service by using both HTTP or HTTPS. HTTP should be disabled enabling the HTTPS
+      Only setting.
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+            https_only = true
+          ...
+          }
+      - pattern-either:
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+              }
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+                https_only = false
+              ...
+              }
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#https_only
+        - https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-bindings#enforce-https
+    languages: [hcl]
+    severity: ERROR

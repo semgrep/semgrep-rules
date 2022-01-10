@@ -1,25 +1,25 @@
 rules:
-- id: rsa-padding-set
-  metadata:
-    cwe: 'CWE-780: Use of RSA Algorithm without OAEP'
-    owasp:
-    - A02:2021 - Cryptographic Failures'
-    category: security
-    technology:
-    - scala
-    - cryptography
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    resources:
-    - https://blog.codacy.com/9-scala-security-issues/
-  message: >-
-    Usage of RSA without OAEP (Optimal Asymmetric Encryption Padding) may weaken encrption. This could lead to sensitive data
-    exposure. Instead, use RSA with `OAEPWithMD5AndMGF1Padding` instead.
-  severity: WARNING
-  languages:
-  - scala
-  patterns:
-  - pattern: |
-      $VAR = $CIPHER.getInstance($MODE)
-  - metavariable-regex:
-      metavariable: $MODE
-      regex: .*RSA/.*/NoPadding.*
+  - id: rsa-padding-set
+    metadata:
+      cwe: "CWE-780: Use of RSA Algorithm without OAEP"
+      owasp:
+        - A02:2021 - Cryptographic Failures'
+      category: security
+      technology:
+        - scala
+        - cryptography
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      resources:
+        - https://blog.codacy.com/9-scala-security-issues/
+    message: >-
+      Usage of RSA without OAEP (Optimal Asymmetric Encryption Padding) may weaken encrption. This could lead to sensitive data
+      exposure. Instead, use RSA with `OAEPWithMD5AndMGF1Padding` instead.
+    severity: WARNING
+    languages:
+      - scala
+    patterns:
+      - pattern: |
+          $VAR = $CIPHER.getInstance($MODE)
+      - metavariable-regex:
+          metavariable: $MODE
+          regex: .*RSA/.*/NoPadding.*
