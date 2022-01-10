@@ -19,6 +19,7 @@ jobs:
     - name: lints for semgrep rules
       run: |
         semgrep \
+          --error \
           --config yaml/semgrep/duplicate-id.yaml \
           --config yaml/semgrep/duplicate-pattern.yaml \
           --config yaml/semgrep/unsatisfiable.yaml \
