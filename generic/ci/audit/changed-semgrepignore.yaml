@@ -1,0 +1,19 @@
+rules:
+- id: changed-semgrepignore
+  paths:
+    include:
+    - .semgrepignore
+  patterns:
+  - pattern: $LINE
+  - metavariable-regex:
+      metavariable: $LINE
+      regex: ^.*$
+  message: |
+    $LINE has been added to the .semgrepignore list of ignored paths. Someone from app-sec may want to audit these changes.
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    technology:
+    - semgrep
+    category: best-practice
