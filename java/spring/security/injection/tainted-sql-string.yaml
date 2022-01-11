@@ -1,57 +1,57 @@
 rules:
-- id: tainted-sql-string
-  languages: [java]
-  severity: WARNING
-  message: >-
-    User data flows into this manually-constructed SQL string. User data
-    can be safely inserted into SQL strings using prepared statements or an
-    object-relational mapper (ORM). Manually-constructed SQL strings is a
-    possible indicator of SQL injection, which could let an attacker steal or
-    manipulate data from the database. Instead, use prepared statements
-    (`connection.PreparedStatement`) or a safe library.
-  metadata:
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp:
-    - A03:2021
-    - A01:2017
-    references:
-    - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
-    category: security
-    technology:
-    - spring
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
-          $TYPE $PARAMETER, ...) {
-            ...
-          }
-      - pattern: |
-          @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
-          @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
-            ...
-          }
-  pattern-sinks:
-  - patterns:
-    - patterns:
-      - pattern-either:
-        - pattern: |
-            "$SQLSTR" + ...
-        - pattern: |
-            "$SQLSTR".concat(...)
-        - patterns:
-          - pattern-inside: |
-              StringBuilder $SB = new StringBuilder("$SQLSTR");
-              ...
-          - pattern: $SB.append(...)
-        - patterns:
-          - pattern-inside: |
-              $VAR = "$SQLSTR";
-              ...
-          - pattern: $VAR += ...
-        - pattern: String.format("$SQLSTR", ...)
-      - metavariable-regex:
-          metavariable: $SQLSTR
-          regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+  - id: tainted-sql-string
+    languages: [java]
+    severity: WARNING
+    message: >-
+      User data flows into this manually-constructed SQL string. User data
+      can be safely inserted into SQL strings using prepared statements or an
+      object-relational mapper (ORM). Manually-constructed SQL strings is a
+      possible indicator of SQL injection, which could let an attacker steal or
+      manipulate data from the database. Instead, use prepared statements
+      (`connection.PreparedStatement`) or a safe library.
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp:
+        - A03:2021
+        - A01:2017
+      references:
+        - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
+      category: security
+      technology:
+        - spring
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
+                  $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
+                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+    pattern-sinks:
+      - patterns:
+          - patterns:
+              - pattern-either:
+                  - pattern: |
+                      "$SQLSTR" + ...
+                  - pattern: |
+                      "$SQLSTR".concat(...)
+                  - patterns:
+                      - pattern-inside: |
+                          StringBuilder $SB = new StringBuilder("$SQLSTR");
+                          ...
+                      - pattern: $SB.append(...)
+                  - patterns:
+                      - pattern-inside: |
+                          $VAR = "$SQLSTR";
+                          ...
+                      - pattern: $VAR += ...
+                  - pattern: String.format("$SQLSTR", ...)
+              - metavariable-regex:
+                  metavariable: $SQLSTR
+                  regex: (?i)(select|delete|insert|create|update|alter|drop)\b
