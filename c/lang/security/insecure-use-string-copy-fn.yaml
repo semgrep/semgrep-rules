@@ -5,7 +5,10 @@ rules:
       - pattern: strncpy(...)
     message: >-
       Finding triggers whenever there is a strcpy or strncpy used.
-      This is an issue because strcpy or strncpy can lead to buffer overflow vulns.
+      This is an issue because strcpy does not affirm the size of the destination array 
+      and strncpy will not automatically NULL-terminate strings. 
+      This can lead to buffer overflows, which can cause program crashes 
+      and potentially let an attacker inject code in the program.
       Fix this by using strcpy_s instead.
     metadata:
       references:

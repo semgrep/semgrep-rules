@@ -11,7 +11,7 @@ rules:
           $FIELD = ...;
           ...
     message: >-
-      Object injection via bracket notation via $FIELD
+      Detected user input used in bracket notation accessor. This could lead to object injection through $FIELD, which could grant access to every property available in the object and therefore sensitive information. Instead, avoid the use of user input in property name fields or create a whitelist of allowed input.
     severity: WARNING
     languages:
       - javascript
