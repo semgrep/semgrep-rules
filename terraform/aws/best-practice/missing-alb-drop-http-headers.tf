@@ -66,4 +66,4 @@ resource "aws_alb" "disabled" {
   subnets            = var.public_subnet_ids
 
   drop_invalid_header_fields = false
-}missing-u
+}
