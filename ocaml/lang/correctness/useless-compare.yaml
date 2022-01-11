@@ -6,9 +6,9 @@ rules:
     - pattern: $MODULE.compare $X $X
 
   message: >-
-    This comparison is useless because the arguments are always
-    identical. If this isn't actually a comparison, the function
-    shouldn't be called 'compare'.
+    This comparison is useless because the expressions being compared
+    are identical. This is expected to always return the same result,
+    0, unless your code is really strange.
   languages: [ocaml]
   severity: ERROR
   metadata:
