@@ -1,0 +1,17 @@
+rules:
+- id: useless-compare
+  patterns:
+  - pattern-either:
+    - pattern: compare $X $X
+    - pattern: $MODULE.compare $X $X
+
+  message: >-
+    This comparison is useless because the arguments are always
+    identical. If this isn't actually a comparison, the function
+    shouldn't be called 'compare'.
+  languages: [ocaml]
+  severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - ocaml
