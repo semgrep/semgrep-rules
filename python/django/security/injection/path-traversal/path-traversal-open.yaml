@@ -5,6 +5,8 @@ rules:
     Ensure the request data is validated or sanitized, 
     otherwise it could result in path traversal attacks and 
     therefore sensitive data being leaked.
+    To mitigate, consider using os.path.abspath or os.path.realpath
+    or the pathlib library.
   metadata:
     cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     owasp: 'A1: Injection'
