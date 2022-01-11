@@ -17,14 +17,20 @@ jobs:
           node-version: "17.3.0"
       - name: install prettier
         run: npm install prettier
+      - name: check for unformatted rules
+        id: check
+        continue-on-error: true
+        run: npx prettier --check "./**/*.yaml"
       - name: format unformatted rules
+        id: format
+        if: steps.check.outcome == 'failure'
         run: npx prettier --write $(npx prettier --list-different "./**/*.yaml")
       - name: commit formatted files
+        id: commit
+        if: steps.format.outcome == 'success'
         run: |
-          date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "Formatted new rules"
           git push
-
