@@ -1,26 +1,26 @@
 rules:
-- id: missing-noreferrer
-  metadata:
-    category: security
-    technology:
-    - html
-    cwe: "CWE-1022: Use of Web Link to Untrusted Target with window.opener Access"
-    owasp:
-    - A05:2017 - Broken Access Control
-    - A01:2021 - Broken Access Control
-    confidence: MEDIUM
-  patterns:
-  - pattern: |
-      <a ... target="_blank" ...>
-  - pattern-not-inside: |
-      <a ... rel="... noreferrer ..." ... >
-  paths:
-    include:
-    - '*.html'
-  message: >-
-    This anchor tag with 'target="_blank"' is missing 'noreferrer'.
-    A page opened with 'target="_blank"' can access the window object of the origin page.
-    This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
-    This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
-  severity: WARNING
-  languages: [generic]
+  - id: missing-noreferrer
+    metadata:
+      category: security
+      technology:
+        - html
+      cwe: "CWE-1022: Use of Web Link to Untrusted Target with window.opener Access"
+      owasp:
+        - A05:2017 - Broken Access Control
+        - A01:2021 - Broken Access Control
+      confidence: MEDIUM
+    patterns:
+      - pattern: |
+          <a ... target="_blank" ...>
+      - pattern-not-inside: |
+          <a ... rel="... noreferrer ..." ... >
+    paths:
+      include:
+        - "*.html"
+    message: >-
+      This anchor tag with 'target="_blank"' is missing 'noreferrer'.
+      A page opened with 'target="_blank"' can access the window object of the origin page.
+      This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
+      This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
+    severity: WARNING
+    languages: [generic]

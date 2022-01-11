@@ -1,24 +1,24 @@
 rules:
-- id: detect-angular-resource-loading
-  pattern-either:
-  - pattern: |
-      $sceDelegateProvider.resourceUrlWhitelist([...,'**',...]);
-  - patterns:
-    - pattern: |
-        $sceDelegateProvider.resourceUrlWhitelist([...,$DOM,...]);
-    - metavariable-regex:
-        metavariable: $DOM
-        regex: ^'.*\*\*.+'$
-  message: >-
-    $sceDelegateProvider allowlisting can introduce security issues if wildcards are used.
-  languages:
-  - javascript
-  - typescript
-  metadata:
-    references:
-    - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
-    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-    category: security
-    technology:
-    - angular
-  severity: WARNING
+  - id: detect-angular-resource-loading
+    pattern-either:
+      - pattern: |
+          $sceDelegateProvider.resourceUrlWhitelist([...,'**',...]);
+      - patterns:
+          - pattern: |
+              $sceDelegateProvider.resourceUrlWhitelist([...,$DOM,...]);
+          - metavariable-regex:
+              metavariable: $DOM
+              regex: ^'.*\*\*.+'$
+    message: >-
+      $sceDelegateProvider allowlisting can introduce security issues if wildcards are used.
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      references:
+        - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
+        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+      category: security
+      technology:
+        - angular
+    severity: WARNING
