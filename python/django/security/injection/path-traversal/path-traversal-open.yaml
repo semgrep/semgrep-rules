@@ -1,7 +1,10 @@
 rules:
 - id: path-traversal-open
-  message: Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise it could result
-    in path traversal attacks.
+  message: >-
+    Found request data in a call to 'open'. 
+    Ensure the request data is validated or sanitized, 
+    otherwise it could result in path traversal attacks and 
+    therefore sensitive data being leaked.
   metadata:
     cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     owasp: 'A1: Injection'

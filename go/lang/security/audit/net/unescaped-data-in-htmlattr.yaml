@@ -1,9 +1,10 @@
 rules:
 - id: unescaped-data-in-htmlattr
   message: >-
-    Found a formatted template string passed to 'template.HTMLAttr()'.
-    'template.HTMLAttr()' does not escape contents. Be absolutely sure
-    there is no user-controlled data in this template.
+    Found a formatted template string passed to 'template.
+    HTMLAttr()'. 'template.HTMLAttr()' does not escape contents. 
+    Be absolutely sure there is no user-controlled data in this template or 
+    validate and sanitize the data before passing it into the template.
   metadata:
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site\
       \ Scripting')"
