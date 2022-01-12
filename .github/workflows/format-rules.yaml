@@ -7,7 +7,7 @@ on:
       - release
 
 jobs:
-  test-latest:
+  format-rules:
     name: format-rules
     runs-on: ubuntu-latest
     steps:
@@ -23,14 +23,13 @@ jobs:
         run: npx prettier --check "./**/*.yaml"
       - name: format unformatted rules
         id: format
-        if: steps.check.outcome == 'failure'
         run: npx prettier --write $(npx prettier --list-different "./**/*.yaml")
       - name: commit formatted files
+        if: ${{ success() }}
         id: commit
-        if: steps.format.outcome == 'success'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Formatted new rules"
+          git commit -m "Formatted new rules" --no-verify
           git push
