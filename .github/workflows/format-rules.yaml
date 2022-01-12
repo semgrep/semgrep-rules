@@ -1,0 +1,35 @@
+name: format-rules
+
+on:
+  push:
+    branches:
+      - develop
+      - release
+
+jobs:
+  format-rules:
+    name: format-rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "17.3.0"
+      - name: install prettier
+        run: npm install prettier
+      - name: check for unformatted rules
+        id: check
+        continue-on-error: true
+        run: npx prettier --check "./**/*.yaml"
+      - name: format unformatted rules
+        id: format
+        run: npx prettier --write $(npx prettier --list-different "./**/*.yaml")
+      - name: commit formatted files
+        if: ${{ success() }}
+        id: commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Formatted new rules" --no-verify
+          git push
