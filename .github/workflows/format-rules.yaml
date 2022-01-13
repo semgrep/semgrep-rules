@@ -26,7 +26,7 @@ jobs:
       - name: get changed files
         id: changes
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || "develop" }}
           THIS_SHA: ${{ github.sha }}
         run: |
           echo "::set-output name=changed::$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $THIS_SHA | grep .yaml$ | xargs)" 
