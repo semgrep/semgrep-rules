@@ -12,7 +12,7 @@ on:
 jobs:
   format-rules:
     name: format-rules
-    if: github.event.review.state == 'approved'
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           THIS_SHA: ${{ github.sha }}
         run: |
-          echo "::set-output name=changed::$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $THIS_SHA | grep .yaml$ | xargs)" 
+          echo "::set-output name=changed::$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $THIS_SHA | grep .yaml$ | grep -v ^.github | xargs)" 
       - name: format incoming rules
         id: format
         env:
@@ -44,6 +44,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add $CHANGED
+          git checkout "$BRANCH"
+          git add "$CHANGED"
           git commit -m "Formatted new rules" --no-verify
           git push origin "$BRANCH"
