@@ -1,23 +1,23 @@
 rules:
-- id: avoid-content-tag
-  message: >-
-    'content_tag' exhibits unintuitive escaping behavior and may accidentally
-    expose your application to cross-site scripting. If using Rails 2, only
-    attribute values are escaped. If using Rails 3, content and attribute values
-    are escaped. Tag and attribute names are never escaped. Because of this,
-    it is recommended to use 'html_safe' if you must render raw HTML data.
-  metadata:
-    source-rule-url: https://brakemanscanner.org/docs/warning_types/content_tag/
-    references:
-    - https://brakemanscanner.org/docs/warning_types/content_tag/
-    category: security
-    technology:
-    - rails
-  languages: [generic]
-  paths:
-    include:
-    - '*.erb'
-  severity: WARNING
-  patterns:
-  - pattern-inside: <%= ... %>
-  - pattern: content_tag
+  - id: avoid-content-tag
+    message: >-
+      'content_tag' exhibits unintuitive escaping behavior and may accidentally
+      expose your application to cross-site scripting. If using Rails 2, only
+      attribute values are escaped. If using Rails 3, content and attribute values
+      are escaped. Tag and attribute names are never escaped. Because of this,
+      it is recommended to use 'html_safe' if you must render raw HTML data.
+    metadata:
+      source-rule-url: https://brakemanscanner.org/docs/warning_types/content_tag/
+      references:
+        - https://brakemanscanner.org/docs/warning_types/content_tag/
+      category: security
+      technology:
+        - rails
+    languages: [generic]
+    paths:
+      include:
+        - "*.erb"
+    severity: WARNING
+    patterns:
+      - pattern-inside: <%= ... %>
+      - pattern: content_tag

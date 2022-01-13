@@ -1,23 +1,23 @@
 rules:
-- id: python-reverse-shell
-  patterns:
-  - pattern-either:
-    - pattern: pty.spawn("$BINPATH",...)
-    - pattern: subprocess.call(["$BINPATH",...],...)
-  - metavariable-regex:
-      metavariable: $BINPATH
-      regex: /bin/.*?sh\b
-  - pattern-inside: |
-      import socket
-      ...
-      $S = socket.socket(...)
-      ...
-      $S.connect(($IP,$PORT),...)
-      ...
-  message: Semgrep found a Python reverse shell using $BINPATH to $IP at $PORT
-  metadata:
-    category: security
-    technology: [python]
-  languages:
-  - python
-  severity: WARNING
+  - id: python-reverse-shell
+    patterns:
+      - pattern-either:
+          - pattern: pty.spawn("$BINPATH",...)
+          - pattern: subprocess.call(["$BINPATH",...],...)
+      - metavariable-regex:
+          metavariable: $BINPATH
+          regex: /bin/.*?sh\b
+      - pattern-inside: |
+          import socket
+          ...
+          $S = socket.socket(...)
+          ...
+          $S.connect(($IP,$PORT),...)
+          ...
+    message: Semgrep found a Python reverse shell using $BINPATH to $IP at $PORT
+    metadata:
+      category: security
+      technology: [python]
+    languages:
+      - python
+    severity: WARNING

@@ -1,28 +1,28 @@
 rules:
-- id: storage-enforce-https
-  message: >-
-    Detected a Storage that was not configured to deny action by default. Add `enable_https_traffic_only = true`
-    in your resource block.
-  patterns:
-  - pattern-not-inside: |
-      resource "azurerm_storage_account" "..." {
-      ...
-        enable_https_traffic_only = true
-      ...
-      }
-  - pattern-inside: |
-      resource "azurerm_storage_account" "..." {
-      ...
-        enable_https_traffic_only = false
-      ...
-      }
-  metadata:
-    category: security
-    technology:
-    - terraform
-    - azure
-    references:
-    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#enable_https_traffic_only
-    - https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer
-  languages: [hcl]
-  severity: WARNING
+  - id: storage-enforce-https
+    message: >-
+      Detected a Storage that was not configured to deny action by default. Add `enable_https_traffic_only = true`
+      in your resource block.
+    patterns:
+      - pattern-not-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+            enable_https_traffic_only = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+            enable_https_traffic_only = false
+          ...
+          }
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#enable_https_traffic_only
+        - https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer
+    languages: [hcl]
+    severity: WARNING

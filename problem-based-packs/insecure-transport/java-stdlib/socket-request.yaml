@@ -1,36 +1,36 @@
 rules:
-- id: socket-request
-  message: >-
-    Insecure transport rules to catch socket connections to http, telnet, and ftp servers.
-    This is dangerous because these are protocols that do not encrypt traffic.
-  metadata:
-    vulnerability: Insecure Transport
-    owasp: 'A3: Sensitive Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html
-    category: security
-    technology:
-    - java
-  languages:
-  - java
-  severity: WARNING
-  pattern-either:
-  - pattern: |
-      $SOCKET = new Socket("=~/[tT][eE][lL][nN][eE][tT]://.*/", ...);
-      ...
-      $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
-      ...
-      $OUT.$FUNC(...);
-  - pattern: |
-      $SOCKET = new Socket("=~/^[fF][tT][pP]://.*/", ...);
-      ...
-      $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
-      ...
-      $OUT.$FUNC(...);
-  - pattern: |
-      $SOCKET = new Socket("=~/[hH][tT][tT][pP]://.*/", ...);
-      ...
-      $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
-      ...
-      $OUT.$FUNC(...);
+  - id: socket-request
+    message: >-
+      Insecure transport rules to catch socket connections to http, telnet, and ftp servers.
+      This is dangerous because these are protocols that do not encrypt traffic.
+    metadata:
+      vulnerability: Insecure Transport
+      owasp: "A3: Sensitive Data Exposure"
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      references:
+        - https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html
+      category: security
+      technology:
+        - java
+    languages:
+      - java
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          $SOCKET = new Socket("=~/[tT][eE][lL][nN][eE][tT]://.*/", ...);
+          ...
+          $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
+          ...
+          $OUT.$FUNC(...);
+      - pattern: |
+          $SOCKET = new Socket("=~/^[fF][tT][pP]://.*/", ...);
+          ...
+          $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
+          ...
+          $OUT.$FUNC(...);
+      - pattern: |
+          $SOCKET = new Socket("=~/[hH][tT][tT][pP]://.*/", ...);
+          ...
+          $OUT = new PrintWriter($SOCKET.getOutputStream(...), ...);
+          ...
+          $OUT.$FUNC(...);
