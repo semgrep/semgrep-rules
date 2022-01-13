@@ -1,36 +1,36 @@
 rules:
-- id: user-exec
-  message: >-
-    Found user data in a call to 'exec'. This is extremely dangerous because it can enable an attacker to
-    execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and
-    instead use a safe library for the specific functionality you need.
-  metadata:
-    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-    owasp: 'A1: Injection'
-    category: security
-    technology:
-    - django
-    references:
-    - https://owasp.org/www-community/attacks/Code_Injection
-  patterns:
-  - pattern-inside: |
-      def $F(...):
-        ...
-  - pattern-either:
-    - pattern: exec(..., request.$W.get(...), ...)
-    - pattern: |
-        $V = request.$W.get(...)
-        ...
-        exec(..., $V, ...)
-    - pattern: exec(..., request.$W(...), ...)
-    - pattern: |
-        $V = request.$W(...)
-        ...
-        exec(..., $V, ...)
-    - pattern: exec(..., request.$W[...], ...)
-    - pattern: |
-        $V = request.$W[...]
-        ...
-        exec(..., $V, ...)
-  languages: [python]
-  severity: WARNING
+  - id: user-exec
+    message: >-
+      Found user data in a call to 'exec'. This is extremely dangerous because it can enable an attacker to
+      execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and
+      instead use a safe library for the specific functionality you need.
+    metadata:
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      owasp: "A1: Injection"
+      category: security
+      technology:
+        - django
+      references:
+        - https://owasp.org/www-community/attacks/Code_Injection
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-either:
+          - pattern: exec(..., request.$W.get(...), ...)
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              exec(..., $V, ...)
+          - pattern: exec(..., request.$W(...), ...)
+          - pattern: |
+              $V = request.$W(...)
+              ...
+              exec(..., $V, ...)
+          - pattern: exec(..., request.$W[...], ...)
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              exec(..., $V, ...)
+    languages: [python]
+    severity: WARNING

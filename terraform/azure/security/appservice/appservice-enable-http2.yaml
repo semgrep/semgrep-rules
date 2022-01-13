@@ -1,41 +1,41 @@
 rules:
-- id: appservice-enable-http2
-  message: >-
-    Use the latest version of HTTP to ensure you are benefiting from security fixes. Add `http2_enabled = true` to your appservice
-    resource block
-  patterns:
-  - pattern: resource
-  - pattern-not-inside: |
-      resource "azurerm_app_service" "..." {
-      ...
-        site_config {
+  - id: appservice-enable-http2
+    message: >-
+      Use the latest version of HTTP to ensure you are benefiting from security fixes. Add `http2_enabled = true` to your appservice
+      resource block
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
           ...
-          http2_enabled = true
+            site_config {
+              ...
+              http2_enabled = true
+              ...
+            }
           ...
-        }
-      ...
-      }
-  - pattern-either:
-    - pattern-inside: |
-        resource "azurerm_app_service" "..." {
-        ...
-        }
-    - pattern-inside: |
-        resource "azurerm_app_service" "..." {
-        ...
-          site_config {
-            ...
-            http2_enabled = false
-            ...
           }
-        ...
-        }
-  metadata:
-    category: security
-    technology:
-    - terraform
-    - azure
-    references:
-    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#http2_enabled
-  languages: [hcl]
-  severity: INFO
+      - pattern-either:
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+              }
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+                site_config {
+                  ...
+                  http2_enabled = false
+                  ...
+                }
+              ...
+              }
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#http2_enabled
+    languages: [hcl]
+    severity: INFO

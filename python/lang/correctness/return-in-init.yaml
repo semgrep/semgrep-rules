@@ -1,48 +1,48 @@
 rules:
-- id: return-in-init
-  patterns:
-  - pattern-inside: |
-      class $A(...):
-          ...
-  - pattern-inside: |
-      def __init__(...):
-          ...
-  - pattern-not-inside: |
-      def __init__(...):
-          ...
-          def $F(...):
+  - id: return-in-init
+    patterns:
+      - pattern-inside: |
+          class $A(...):
               ...
-  - patterns:
-    - pattern: return ...
-    - pattern-not: return
-    - pattern-not: return None
-  message: '`return` should never appear inside a class __init__ function. This will cause a runtime error.'
-  languages: [python]
-  severity: ERROR
-  metadata:
-    category: correctness
-    technology:
-    - python
-- id: yield-in-init
-  patterns:
-  - pattern-inside: |
-      class $A(...):
-          ...
-  - pattern-inside: |
-      def __init__(...):
-          ...
-  - pattern-not-inside: |
-      def __init__(...):
-          ...
-          def $F(...):
+      - pattern-inside: |
+          def __init__(...):
               ...
-  - pattern-either:
-    - pattern: yield ...
-    - pattern: yield
-  message: '`yield` should never appear inside a class __init__ function. This will cause a runtime error.'
-  languages: [python]
-  severity: ERROR
-  metadata:
-    category: correctness
-    technology:
-    - python
+      - pattern-not-inside: |
+          def __init__(...):
+              ...
+              def $F(...):
+                  ...
+      - patterns:
+          - pattern: return ...
+          - pattern-not: return
+          - pattern-not: return None
+    message: "`return` should never appear inside a class __init__ function. This will cause a runtime error."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - python
+  - id: yield-in-init
+    patterns:
+      - pattern-inside: |
+          class $A(...):
+              ...
+      - pattern-inside: |
+          def __init__(...):
+              ...
+      - pattern-not-inside: |
+          def __init__(...):
+              ...
+              def $F(...):
+                  ...
+      - pattern-either:
+          - pattern: yield ...
+          - pattern: yield
+    message: "`yield` should never appear inside a class __init__ function. This will cause a runtime error."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - python

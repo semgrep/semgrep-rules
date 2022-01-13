@@ -1,33 +1,33 @@
 rules:
-- id: keyvault-purge-enabled
-  message: >-
-    Key vault should have purge protection enabled
-  patterns:
-  - pattern: resource
-  - pattern-not-inside: |
-      resource "azurerm_key_vault" "..." {
-      ...
-       purge_protection_enabled = true
-      ...
-      }
-  - pattern-either:
-    - pattern-inside: |
-        resource "azurerm_key_vault" "..." {
-        ...
-        }
-    - pattern-inside: |
-        resource "azurerm_key_vault" "..." {
-        ...
-          purge_protection_enabled = false
-        ...
-        }
-  metadata:
-    category: security
-    technology:
-    - terraform
-    - azure
-    references:
-    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault#purge_protection_enabled
-    - https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection
-  languages: [hcl]
-  severity: WARNING
+  - id: keyvault-purge-enabled
+    message: >-
+      Key vault should have purge protection enabled
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+           purge_protection_enabled = true
+          ...
+          }
+      - pattern-either:
+          - pattern-inside: |
+              resource "azurerm_key_vault" "..." {
+              ...
+              }
+          - pattern-inside: |
+              resource "azurerm_key_vault" "..." {
+              ...
+                purge_protection_enabled = false
+              ...
+              }
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault#purge_protection_enabled
+        - https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview#purge-protection
+    languages: [hcl]
+    severity: WARNING

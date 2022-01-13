@@ -1,26 +1,26 @@
 rules:
-- id: insecure-urlretrieve-ftp
-  message: >-
-    Detected 'urllib.urlretrieve()' using 'ftp://'. This request will not be
-    encrypted. Use SFTP instead. urllib does not support SFTP, so consider
-    switching to a library which supports SFTP.
-  metadata:
-    owasp: 'A3: Sensitive Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve
-    category: security
-    technology:
-    - urllib
-  severity: WARNING
-  languages: [python]
-  pattern-either:
-  - pattern: urllib.request.urlretrieve("=~/^[Ff][Tt][Pp]://.*/", ...)
-  - pattern: |
-      $URL = "=~/^[Ff][Tt][Pp]://.*/"
-      ...
-      urllib.request.urlretrieve($URL, ...)
-  - pattern: |-
-      def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-        ...
-        urllib.request.urlretrieve($URL, ...)
+  - id: insecure-urlretrieve-ftp
+    message: >-
+      Detected 'urllib.urlretrieve()' using 'ftp://'. This request will not be
+      encrypted. Use SFTP instead. urllib does not support SFTP, so consider
+      switching to a library which supports SFTP.
+    metadata:
+      owasp: "A3: Sensitive Data Exposure"
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      references:
+        - https://docs.python.org/3/library/urllib.request.html#urllib.request.urlretrieve
+      category: security
+      technology:
+        - urllib
+    severity: WARNING
+    languages: [python]
+    pattern-either:
+      - pattern: urllib.request.urlretrieve("=~/^[Ff][Tt][Pp]://.*/", ...)
+      - pattern: |
+          $URL = "=~/^[Ff][Tt][Pp]://.*/"
+          ...
+          urllib.request.urlretrieve($URL, ...)
+      - pattern: |-
+          def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
+            ...
+            urllib.request.urlretrieve($URL, ...)

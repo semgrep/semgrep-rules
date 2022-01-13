@@ -1,39 +1,39 @@
 rules:
-- id: react-css-injection
-  patterns:
-  - pattern-either:
-    - pattern-inside: |
-        import $STYLE from "...";
-        ...
-    - pattern-inside: |
-        $STYLE = $METHOD(...);
-        ...
-    - pattern-inside: |
-        function $FUNC(...,{$STYLE},...) {
-          ...
-        }
-    - pattern-inside: |
-        function $FUNC(...,$STYLE,...) {
-          ...
-        }
-  - pattern-either:
-    - pattern: |
-        <$EL style={$STYLE} />
-    - pattern: |
-        $R.createElement($EL, {style: $STYLE}, ...)
-  - pattern-not: |
-      <$EL style={{$X:...}} />
-  - pattern-not: |
-      $R.createElement($EL, {style: {...}}, ...)
-  message: >-
-    User controlled data in a `style` attribute is an anti-pattern that can lead to XSS vulnerabilities
-  metadata:
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    category: security
-    technology:
-    - react
-  languages:
-  - typescript
-  - javascript
-  severity: WARNING
+  - id: react-css-injection
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              import $STYLE from "...";
+              ...
+          - pattern-inside: |
+              $STYLE = $METHOD(...);
+              ...
+          - pattern-inside: |
+              function $FUNC(...,{$STYLE},...) {
+                ...
+              }
+          - pattern-inside: |
+              function $FUNC(...,$STYLE,...) {
+                ...
+              }
+      - pattern-either:
+          - pattern: |
+              <$EL style={$STYLE} />
+          - pattern: |
+              $R.createElement($EL, {style: $STYLE}, ...)
+      - pattern-not: |
+          <$EL style={{$X:...}} />
+      - pattern-not: |
+          $R.createElement($EL, {style: {...}}, ...)
+    message: >-
+      User controlled data in a `style` attribute is an anti-pattern that can lead to XSS vulnerabilities
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A7: Cross-Site Scripting (XSS)"
+      category: security
+      technology:
+        - react
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING

@@ -1,42 +1,42 @@
 rules:
-- id: insecure-load-balancer-tls-version
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: ssl_policy = $ANYTHING
-      - pattern-not-inside: ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
-    - patterns:
-      - pattern: protocol = "HTTP"
-      - pattern-not-inside: |
-          resource $ANYTHING $NAME {
-            ...
-            default_action {
-              ...
-              redirect {
-                ...
-                protocol = "HTTPS"
-                ...
-              }
-              ...
-            }
-            ...
-          }
-  message: >-
-    Detected an AWS load balancer with an insecure TLS version.
-    TLS versions less than 1.2 are considered insecure because they
-    can be broken. To fix this, set your `ssl_policy` to
-    `"ELBSecurityPolicy-FS-1-2-Res-2019-08"`, or include a default action
-    to redirect to HTTPS.
-  metadata:
-    category: security
-    technology:
-    - terraform
-    - aws
-    owasp:
-    - A02:2021 - Cryptographic Failures
-    - A03:2017 - Sensitive Data Exposure
-    cwe: 'CWE-326: Inadequate Encryption Strength'
-    references:
-    - https://www.ietf.org/rfc/rfc5246.txt
-  languages: [hcl]
-  severity: WARNING
+  - id: insecure-load-balancer-tls-version
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: ssl_policy = $ANYTHING
+              - pattern-not-inside: ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
+          - patterns:
+              - pattern: protocol = "HTTP"
+              - pattern-not-inside: |
+                  resource $ANYTHING $NAME {
+                    ...
+                    default_action {
+                      ...
+                      redirect {
+                        ...
+                        protocol = "HTTPS"
+                        ...
+                      }
+                      ...
+                    }
+                    ...
+                  }
+    message: >-
+      Detected an AWS load balancer with an insecure TLS version.
+      TLS versions less than 1.2 are considered insecure because they
+      can be broken. To fix this, set your `ssl_policy` to
+      `"ELBSecurityPolicy-FS-1-2-Res-2019-08"`, or include a default action
+      to redirect to HTTPS.
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - aws
+      owasp:
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe: "CWE-326: Inadequate Encryption Strength"
+      references:
+        - https://www.ietf.org/rfc/rfc5246.txt
+    languages: [hcl]
+    severity: WARNING
