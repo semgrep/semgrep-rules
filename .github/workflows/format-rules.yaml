@@ -20,19 +20,24 @@ jobs:
           node-version: "17.3.0"
       - name: install prettier
         run: npm install prettier
-      - name: check for unformatted rules
-        id: check
-        continue-on-error: true
-        run: npx prettier --check "./**/*.yaml"
+      - name: get changed files
+        id: changed-files
+        env:
+          BASE_SHA: github.event.pull_request.base.sha
+          THIS_SHA: github.sha
+        run: |
+          echo "::set-output name=yaml::$(git diff --name-only --diff-filter=ACMRT $BASE_SHA $THIS_SHA | grep .yaml$ | xargs)" 
       - name: format unformatted rules
         id: format
         run: npx prettier --write $(npx prettier --list-different "./**/*.yaml")
       - name: commit formatted files
         if: ${{ success() }}
         id: commit
+        env:
+          BRANCH: github.event.pull_request.head.ref
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "Formatted new rules" --no-verify
-          git push
+          git push origin '$BRANCH'
