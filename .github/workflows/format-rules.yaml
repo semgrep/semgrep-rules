@@ -12,7 +12,7 @@ on:
 jobs:
   format-rules:
     name: format-rules
-    if: github.event.review.state == 'approved'
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
