@@ -1,0 +1,9 @@
+# Install dependencies separately to improve caching
+COPY package.json yarn.lock /app/
+WORKDIR /app
+# ruleid: use-frozen-lockfile
+RUN yarn install
+
+RUN yarn install --frozen-lockfile
+COPY . /app
+RUN yarn build
