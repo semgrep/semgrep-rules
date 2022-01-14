@@ -19,6 +19,6 @@ def ok2()
 end
 
 def ok3()
-  # ruleid: mail-to
+  # ok: mail-to
   mail_to escape_javascript("me@domain.com"), escape_javascript("My email"), :encode => "javascript"
 end
