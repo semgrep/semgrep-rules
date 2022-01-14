@@ -1,0 +1,15 @@
+rules:
+- id: use-frozen-lockfile
+  patterns:
+  - pattern: yarn install
+  - pattern-not-inside: yarn install --frozen-lockfile
+  message: >-
+    When performing yarn install, make sure to use the lockfile. Without `--frozen-lockfile`, yarn will update the lockfile rather than using the pinned versions.
+  languages:
+  - generic
+  severity: ERROR
+  metadata:
+    category: security
+    technology:
+    - yarn
+    cwe: 'CWE-494: Download of Code Without Integrity Check'
