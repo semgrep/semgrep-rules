@@ -2,7 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Show full error reports and disable caching.
-  # ruleid: information-disclosure
+  # ruleid: detailed-exceptions 
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
@@ -14,7 +14,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Show full error reports and disable caching.
-  # ok: information-disclosure
+  # ok: detailed-exceptions 
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = false
 
@@ -23,14 +23,14 @@ Rails.application.configure do
 end
 
 class ConfigController < ApplicationController
-  # ruleid: information-disclosure
+  # ruleid: detailed-exceptions 
   def show_detailed_exceptions?
     return true
   end
 end
 
 class ConfigController < ApplicationController
-  # ok: information-disclosure
+  # ok: detailed-exceptions
   def show_detailed_exceptions?
     return false
   end
