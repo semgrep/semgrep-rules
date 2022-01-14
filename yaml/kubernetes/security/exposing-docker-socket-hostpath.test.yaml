@@ -4,14 +4,14 @@ metadata:
   name: test-pd
 spec:
   containers:
-  - image: gcr.io/google_containers/test-webserver
-    name: test-container
-    volumeMounts:
-    - mountPath: /var/run/docker.sock
-      name: docker-sock-volume
+    - image: gcr.io/google_containers/test-webserver
+      name: test-container
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock-volume
   volumes:
-  - name: docker-sock-volume
-    # ruleid: exposing-docker-socket-hostpath
-    hostPath:
-      type: File
-      path: /var/run/docker.sock
+    - name: docker-sock-volume
+      # ruleid: exposing-docker-socket-hostpath
+      hostPath:
+        type: File
+        path: /var/run/docker.sock

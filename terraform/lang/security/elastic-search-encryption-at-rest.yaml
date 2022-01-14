@@ -1,28 +1,28 @@
 rules:
-- id: elastic-search-encryption-at-rest
-  patterns:
-  - pattern: |
-      resource
-  - pattern-not-inside: |
-      resource "aws_elasticsearch_domain" "..."{
-        ...
-        encrypt_at_rest{
-          ...
-          enabled = true
-          ...
-        }
-        ...
-      }
-  - pattern-inside: |
-      resource "aws_elasticsearch_domain" "..." {...}
-  languages:
-  - hcl
-  message: >-
-    Encryption at rest is not enabled for the elastic search domain resource
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-311: Missing Encryption of Sensitive Data'
-    technology:
-    - terraform
-    - aws
+  - id: elastic-search-encryption-at-rest
+    patterns:
+      - pattern: |
+          resource
+      - pattern-not-inside: |
+          resource "aws_elasticsearch_domain" "..."{
+            ...
+            encrypt_at_rest{
+              ...
+              enabled = true
+              ...
+            }
+            ...
+          }
+      - pattern-inside: |
+          resource "aws_elasticsearch_domain" "..." {...}
+    languages:
+      - hcl
+    message: >-
+      Encryption at rest is not enabled for the elastic search domain resource
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-311: Missing Encryption of Sensitive Data"
+      technology:
+        - terraform
+        - aws

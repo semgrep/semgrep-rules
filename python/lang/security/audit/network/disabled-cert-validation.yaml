@@ -1,24 +1,24 @@
 rules:
-- id: disabled-cert-validation
-  patterns:
-  - pattern-either:
-    - pattern: urllib3.PoolManager(..., cert_reqs=$REQS, ...)
-    - pattern: urllib3.ProxyManager(..., cert_reqs=$REQS, ...)
-    - pattern: urllib3.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
-    - pattern: urllib3.connectionpool.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
-    - pattern: urllib3.connection_from_url(..., cert_reqs=$REQS, ...)
-    - pattern: urllib3.proxy_from_url(..., cert_reqs=$REQS, ...)
-    - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
-    - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
-  - metavariable-regex:
-      metavariable: $REQS
-      regex: (NONE|CERT_NONE|CERT_OPTIONAL|ssl\.CERT_NONE|ssl\.CERT_OPTIONAL|\'NONE\'|\"NONE\"|\'OPTIONAL\'|\"OPTIONAL\")
-  message: certificate verification explicitly disabled, insecure connections possible
-  metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
-    owasp: 'A3: Sensitive Data Exposure'
-    category: security
-    technology:
-    - python
-  languages: [python]
-  severity: ERROR
+  - id: disabled-cert-validation
+    patterns:
+      - pattern-either:
+          - pattern: urllib3.PoolManager(..., cert_reqs=$REQS, ...)
+          - pattern: urllib3.ProxyManager(..., cert_reqs=$REQS, ...)
+          - pattern: urllib3.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
+          - pattern: urllib3.connectionpool.HTTPSConnectionPool(..., cert_reqs=$REQS, ...)
+          - pattern: urllib3.connection_from_url(..., cert_reqs=$REQS, ...)
+          - pattern: urllib3.proxy_from_url(..., cert_reqs=$REQS, ...)
+          - pattern: $CONTEXT.wrap_socket(..., cert_reqs=$REQS, ...)
+          - pattern: ssl.wrap_socket(..., cert_reqs=$REQS, ...)
+      - metavariable-regex:
+          metavariable: $REQS
+          regex: (NONE|CERT_NONE|CERT_OPTIONAL|ssl\.CERT_NONE|ssl\.CERT_OPTIONAL|\'NONE\'|\"NONE\"|\'OPTIONAL\'|\"OPTIONAL\")
+    message: certificate verification explicitly disabled, insecure connections possible
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A3: Sensitive Data Exposure"
+      category: security
+      technology:
+        - python
+    languages: [python]
+    severity: ERROR

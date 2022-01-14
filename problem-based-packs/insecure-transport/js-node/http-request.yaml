@@ -1,42 +1,42 @@
 rules:
-- id: http-request
-  patterns:
-  - pattern-inside: |
-      $HTTP = require('http');
-      ...
-  - pattern-either:
-    - pattern: |
-        $HTTP.request("=~/http://.*/",...);
-    - pattern: |
-        $HTTP.get("=~/http://.*/", ...)
-    - pattern: |
-        $VAR = new URL("=~/http://.*/");
-        ...
-        $HTTP.request($VAR, ...);
-    - pattern: |
-        $VAR = {...,hostname: "..."};
-        ...
-        $HTTP.request(..., $VAR, ...);
-    - pattern: |
-        $HTTP.request(..., {...,hostname: "..."}, ...);
-  - pattern-not: |
-      $VAR = {...,protocol: "https"};
-      ...
-      $HTTP.request(..., $VAR, ...);
-  - pattern-not: |
-      $HTTP.request(..., {...,protocol: "https"}, ...);
-  message: >-
-    Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
-    that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.
-  metadata:
-    vulnerability: Insecure Transport
-    owasp: 'A3: Sensitive Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    references:
-    - https://nodejs.org/api/http.html#http_http_request_options_callback
-    category: security
-    technology:
-    - node.js
-  languages:
-  - javascript
-  severity: WARNING
+  - id: http-request
+    patterns:
+      - pattern-inside: |
+          $HTTP = require('http');
+          ...
+      - pattern-either:
+          - pattern: |
+              $HTTP.request("=~/http://.*/",...);
+          - pattern: |
+              $HTTP.get("=~/http://.*/", ...)
+          - pattern: |
+              $VAR = new URL("=~/http://.*/");
+              ...
+              $HTTP.request($VAR, ...);
+          - pattern: |
+              $VAR = {...,hostname: "..."};
+              ...
+              $HTTP.request(..., $VAR, ...);
+          - pattern: |
+              $HTTP.request(..., {...,hostname: "..."}, ...);
+      - pattern-not: |
+          $VAR = {...,protocol: "https"};
+          ...
+          $HTTP.request(..., $VAR, ...);
+      - pattern-not: |
+          $HTTP.request(..., {...,protocol: "https"}, ...);
+    message: >-
+      Checks for requests sent to http:// URLs. This is dangerous as the server is attempting to connect to a website
+      that does not encrypt traffic with TLS. Instead, only send requests to https:// URLs.
+    metadata:
+      vulnerability: Insecure Transport
+      owasp: "A3: Sensitive Data Exposure"
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      references:
+        - https://nodejs.org/api/http.html#http_http_request_options_callback
+      category: security
+      technology:
+        - node.js
+    languages:
+      - javascript
+    severity: WARNING
