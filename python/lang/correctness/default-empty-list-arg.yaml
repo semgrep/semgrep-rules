@@ -1,0 +1,12 @@
+rules:
+- id: default-empty-list-arg
+  pattern: |
+    def $FUNC(..., $ARG = [], ...):
+      ...
+  message: Python assigns argument defaults at function-declaration time, rather than
+    run-time. This can lead to unexpected behavior, as seen in https://stackoverflow.com/questions/1132941/least-astonishment-and-the-mutable-default-argument.
+    Instead, initialize $ARG to None in the argument list, and set it equal to an
+    empty list in the body of the function if it needs to be of type list.
+  languages:
+  - python
+  severity: WARNING
