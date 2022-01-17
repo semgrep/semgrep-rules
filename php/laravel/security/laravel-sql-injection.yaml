@@ -1,0 +1,103 @@
+
+rules:
+- id: laravel-sql-injection
+  severity: WARNING
+  message: >-
+    SQL query based on user input risks SQL injection.
+  languages: [php]
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+      - pattern: $_SERVER
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $SQL
+      - pattern: $EXPRESSION
+      - pattern: $COLUMN
+      - pattern: $COLUMNS
+    - pattern-either:
+      - pattern-inside: DB::table(...)->whereRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->orWhereRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->groupByRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->havingRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->orHavingRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->orderByRaw($SQL, ...)
+      - pattern-inside: DB::table(...)->selectRaw($EXPRESSION, ...)
+      - pattern-inside: DB::table(...)->fromRaw($EXPRESSION, ...)
+      - pattern-inside: DB::table(...)->whereIn($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereIn($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereNotIn($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereNotIn($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereIntegerInRaw($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereIntegerInRaw($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereIntegerNotInRaw($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereIntegerNotInRaw($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereBetweenColumns($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereBetween($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereBetweenColumns($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereNotBetween($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereNotBetweenColumns($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereNotBetween($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereNotBetweenColumns($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereNotNull($COLUMN)
+      - pattern-inside: DB::table(...)->whereDate($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereDate($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereTime($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereTime($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereDay($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereDay($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereMonth($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereMonth($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereYear($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereYear($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereJsonContains($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereJsonContains($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereJsonDoesntContain($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereJsonDoesntContain($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereJsonLength($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhereJsonLength($COLUMN, ...)
+      - pattern-inside: DB::table(...)->having($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orHaving($COLUMN, ...)
+      - pattern-inside: DB::table(...)->havingBetween($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orderBy($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orderByDesc($COLUMN)
+      - pattern-inside: DB::table(...)->latest($COLUMN)
+      - pattern-inside: DB::table(...)->oldest($COLUMN)
+      - pattern-inside: DB::table(...)->forPageBeforeId($PERPAGE, $LASTID, $COLUMN)
+      - pattern-inside: DB::table(...)->forPageAfterId($PERPAGE, $LASTID, $COLUMN)
+      - pattern-inside: DB::table(...)->value($COLUMN)
+      - pattern-inside: DB::table(...)->get($COLUMNS)
+      - pattern-inside: DB::table(...)->pluck($COLUMN, ...)
+      - pattern-inside: DB::table(...)->implode($COLUMN, ...)
+      - pattern-inside: DB::table(...)->count($COLUMNS)
+      - pattern-inside: DB::table(...)->min($COLUMN)
+      - pattern-inside: DB::table(...)->max($COLUMN)
+      - pattern-inside: DB::table(...)->sum($COLUMN)
+      - pattern-inside: DB::table(...)->avg($COLUMN)
+      - pattern-inside: DB::table(...)->average($COLUMN)
+      - pattern-inside: DB::table(...)->increment($COLUMN, ...)
+      - pattern-inside: DB::table(...)->decrement($COLUMN, ...)
+      - pattern-inside: DB::table(...)->where($COLUMN, ...)
+      - pattern-inside: DB::table(...)->orWhere($COLUMN, ...)
+      - pattern-inside: DB::table(...)->whereNull($COLUMNS, ...)
+      - pattern-inside: DB::table(...)->orWhereNull($COLUMN)
+      - pattern-inside: DB::table(...)->whereNotNull($COLUMNS, ...)
+      - pattern-inside: DB::table(...)->whereRowValues($COLUMNS, ...)
+      - pattern-inside: DB::table(...)->orWhereRowValues($COLUMNS, ...)
+      - pattern-inside: DB::table(...)->find($ID, $COLUMNS)
+      - pattern-inside: DB::table(...)->paginate($PERPAGE, $COLUMNS, ...)
+      - pattern-inside: DB::table(...)->simplePaginate($PERPAGE, $COLUMNS, ...)
+      - pattern-inside: DB::table(...)->cursorPaginate($PERPAGE, $COLUMNS, ...)
+      - pattern-inside: DB::table(...)->getCountForPagination($COLUMNS)
+      - pattern-inside: DB::table(...)->aggregate($FUNCTION, $COLUMNS)
+      - pattern-inside: DB::table(...)->numericAggregate($FUNCTION, $COLUMNS)
+      - pattern-inside: DB::table(...)->insertUsing($COLUMNS, ...)
+      - pattern-inside: DB::table(...)->select($COLUMNS)
+      - pattern-inside: DB::table(...)->addSelect($COLUMN)
+      - pattern-inside: DB::unprepared($QUERY)
