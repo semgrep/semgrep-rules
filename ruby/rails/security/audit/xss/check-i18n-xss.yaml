@@ -1,0 +1,101 @@
+rules:
+  - id: rails-check-i18n-xss
+    languages:
+      - generic
+    metadata:
+      severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'rails', '3.$MIN'
+                          - pattern: gem 'rails', '~> 3.$MIN'
+                      - metavariable-comparison:
+                          metavariable: $MIN
+                          comparison: $MIN <= 2
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'rails', '3.0.$PATCH'
+                          - pattern: gem 'rails', '~> 3.0.$PATCH'
+                      - metavariable-comparison:
+                          metavariable: $PATCH
+                          comparison: $PATCH >= 6
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'rails', '3.1.$PATCH'
+                          - pattern: gem 'rails', '~> 3.1.$PATCH'
+                      - metavariable-comparison:
+                          metavariable: $PATCH
+                          comparison: $PATCH <= 99
+              - pattern-either:
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'i18n, '0.$MIN'
+                          - pattern: gem 'i18n, '~> 0.$MIN'
+                      - metavariable-comparison:
+                          metavariable: $MIN
+                          comparison: $MIN <= 5
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'i18n, '0.5.$PATCH'
+                          - pattern: gem 'i18n, '~> 0.5.$PATCH'
+                      - metavariable-comparison:
+                          metavariable: $PATCH
+                          comparison: $PATCH <= 1
+          - patterns:
+              - pattern-either:
+                  - patterns:
+                    - pattern-either:
+                        - pattern: gem 'rails', '3.$MIN'
+                        - pattern: gem 'rails', '~> 3.$MIN'
+                    - metavariable-comparison:
+                        metavariable: $MIN
+                        comparison: $MIN <= 2
+                  - patterns:
+                    - pattern-either:
+                        - pattern: gem 'rails', '3.2.$PATCH'
+                        - pattern: gem 'rails', '~> 3.2.$PATCH'
+                    - metavariable-comparison:
+                        metavariable: $PATCH
+                        comparison: $PATCH < 16
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'rails', '4.0.$PATCH'
+                          - pattern: gem 'rails', '~> 4.0.$PATCH'
+                      - metavariable-comparison:
+                          metavariable: $PATCH
+                          comparison: $PATCH == 0 or $PATCH == 1
+              - pattern-either:
+                  - patterns:
+                      - pattern-either:
+                          - pattern: gem 'i18n, '0.$MIN'
+                          - pattern: gem 'i18n, '~> 0.$MIN'
+                      - metavariable-comparison:
+                          metavariable: $MIN
+                          comparison: $MIN <= 6
+                  - patterns:
+                      - pattern-either:
+                          - patterns:
+                              - pattern-either:
+                                  - pattern: gem 'i18n, '0.$MIN.$PATCH'
+                                  - pattern: gem 'i18n, '~> 0.$MIN.$PATCH'
+                              - metavariable-comparison:
+                                  metavariable: $MIN
+                                  comparison: $MIN < 6
+                          - patterns:
+                              - pattern-either:
+                                  - pattern: gem 'i18n, '0.6.$PATCH'
+                                  - pattern: gem 'i18n, '~> 0.6.$PATCH'
+                              - metavariable-comparison:
+                                  metavariable: $PATCH
+                                  comparison: $PATCH <= 6
+    message: |
+        Rails versions 3.0.6 - 3.1.99 are vulnerable to a reflected XSS attack if the i18n gem version is < 0.5.1, upgrade to Rails 3.2.16 or i18n 0.5.1.
+        Rails versions 3.2.0 - 4.0.1 are vulnerable if the i18n gem version is < 0.6.6, upgrade to Rails 4.0.2 or i18n 0.6.6.
+    severity: WARNING
+    paths:
+      include:
+        - "*Gemfile"
+        - "gems.rb"

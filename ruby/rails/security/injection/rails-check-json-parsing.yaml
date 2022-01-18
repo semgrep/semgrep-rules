@@ -1,0 +1,19 @@
+id: rails-check-json-parsing
+patterns:
+  - pattern-either:
+      - patterns:
+          - pattern: gem 'rails', '2.3.$Z'
+          - metavariable-comparison:
+              metavariable: $Z
+              comparison: $Z >= 0 and $Z < 16
+      - patterns:
+          - pattern: gem 'rails', '3.0.$Z'
+          - metavariable-comparison:
+              metavariable: $Z
+              comparison: $Z >= 0 and $Z <= 20
+message: Rails versions 2.3.0 - 2.3.15 and 3.0.0 - 3.0.20 are vulnerable to a
+  Remote Code Execution attack via JSON parsing (CVE-2013-0333).
+languages:
+  - generic
+severity: WARNING
+

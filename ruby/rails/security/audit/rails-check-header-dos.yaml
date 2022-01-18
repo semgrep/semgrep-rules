@@ -7,35 +7,28 @@ rules:
     patterns:
       - pattern-either:
           - patterns:
-              - pattern-either:
-                  - pattern: gem 'rails', '3.$A'
-                  - pattern: gem 'rails', '~> 3.$A'
+              - pattern: gem 'rails', '3.$Y'
               - metavariable-comparison:
-                  metavariable: $A
-                  comparison: $A <= 2
+                  metavariable: $Y
+                  comparison: $Y <= 2
           - patterns:
               - pattern-either:
-                  - pattern: gem 'rails', '3.0.$B'
-                  - pattern: gem 'rails', '~> 3.0.$B'
-                  - pattern: gem 'rails', '3.1.$B'
-                  - pattern: gem 'rails', '~> 3.1.$B'
+                  - pattern: gem 'rails', '3.0.$Z'
+                  - pattern: gem 'rails', '3.1.$Z'
           - patterns:
-              - pattern-either:
-                  - pattern: gem 'rails', '3.2.$C'
-                  - pattern: gem 'rails', '~> 3.2.$C'
+              - pattern: gem 'rails', '3.2.$Z'
               - metavariable-comparison:
-                  metavariable: $C
-                  comparison: $C < 16
+                  metavariable: $Z
+                  comparison: $Z < 16
           - patterns:
-              - pattern-either:
-                  - pattern: gem 'rails', '4.0.$D'
-                  - pattern: gem 'rails', '~> 4.0.$D'
+              - pattern: gem 'rails', '4.0.$Z'
               - metavariable-comparison:
-                  metavariable: $D
-                  comparison: $D == 0 or $D == 1
-    message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a DoS attack (CVE-2013-6414).
+                  metavariable: $Z
+                  comparison: $Z == 0 or $Z == 1
+    message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
+      DoS attack (CVE-2013-6414).
     severity: WARNING
     paths:
       include:
-        - "*Gemfile"
+        - Gemfile
 
