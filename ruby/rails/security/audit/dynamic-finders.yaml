@@ -9,8 +9,8 @@ rules:
     - rails
   message: >-
     Discovered an application that uses MySQL and find_by_* dynamic finders 
-    on potentially sensitive fields. This could lead to 0=0 comparisons where queries will always return true,
-    and therefore sensitive data being exposed. Instead, upgrade to Rails version 4.
+    on potentially sensitive fields. There is a vulnerability in MySQL integer conversion, which could case "0" to match any string,
+    and could therefore lead to sensitive data being exposed. Instead, upgrade to Rails version 4.
   languages: [ruby]
   severity: WARNING
   mode: taint
