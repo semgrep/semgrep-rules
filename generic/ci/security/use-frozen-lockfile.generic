@@ -1,10 +1,10 @@
 # Install dependencies separately to improve caching
 COPY package.json yarn.lock /app/
 WORKDIR /app
-# ruleid: use-frozen-lockfile
+# ruleid: use-frozen-lockfile-yarn
 RUN yarn install
 # trailing space
-# ruleid: use-frozen-lockfile
+# ruleid: use-frozen-lockfile-yarn
 RUN yarn install 
 RUN yarn install --frozen-lockfile
 RUN yarn install some_package
