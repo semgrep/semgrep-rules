@@ -1,0 +1,38 @@
+rules:
+- id: detailed-exceptions 
+  metadata:
+    owasp: 'A3: Sensitive Data Exposure'
+    cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_detailed_exceptions.rb
+    category: security
+    technology:
+    - rails
+  message: >-
+    Found that the setting for providing detailed exception reports in Rails
+    is set to true. This can lead to information exposure,
+    where sensitive system or internal information is displayed 
+    to the end user. Instead, turn this setting off.
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          config.consider_all_requests_local = true
+    - patterns:
+       - pattern-inside: |
+           class $CONTROLLER < ApplicationController
+             ...
+           end
+       - pattern: |
+           def show_detailed_exceptions? (...)
+             ...
+           return $RETURN
+           end
+       - metavariable-pattern:
+           metavariable: $RETURN
+           patterns:
+             - pattern-not: |
+                 false
+
+
