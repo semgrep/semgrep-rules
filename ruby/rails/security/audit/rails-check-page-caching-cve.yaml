@@ -1,0 +1,35 @@
+id: rails-check-page-caching-cve
+pattern-either:
+  - patterns:
+      - pattern: gem 'actionpack_page-caching', '1.$MIN'
+      - metavariable-comparison:
+          metavariable: $MIN
+          comparison: $MIN <= 2
+  - patterns:
+      - pattern: gem 'actionpack_page-caching', '1.$MIN.$PATCH'
+      - metavariable-comparison:
+          metavariable: $MIN
+          comparison: $MIN < 2
+  - patterns:
+      - patterns:
+          - pattern: gem 'actionpack_page-caching', '1.2.$PATCH'
+          - metavariable-comparison:
+              metavariable: $PATCH
+              comparison: $PATCH < 1
+  - pattern-either:
+      - pattern: gem 'actionpack_page-caching', '~> 0.$MIN'
+      - pattern: gem 'actionpack_page-caching', '~> 0.$MIN.$PATCH'
+      - patterns:
+          - pattern-either:
+              - pattern: gem 'actionpack_page-caching', '~> 1.$MIN'
+              - pattern: gem 'actionpack_page-caching', '~> 1.$MIN.$PATCH'
+          - metavariable-comparison:
+              metavariable: $MIN
+              comparison: $MIN < 2
+message: All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable
+  to arbitrary file write and remote code execution (CVE-2020-8159). Update to
+  version 1.2.1 or greater.
+languages:
+  - generic
+severity: WARNING
+
