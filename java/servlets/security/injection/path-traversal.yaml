@@ -1,0 +1,27 @@
+rules:
+- id: path-traversal
+  severity: ERROR
+  languages: [java]
+  message: >-
+    Path traversal
+  metadata:
+    cwe: 'CWE-22: Path Traversal'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - pattern-either:
+    - pattern: (FileInputStream $FIS) = ...;
+    - pattern: (java.io.FileInputStream $FIS) = ...;
+    - pattern: (File $FILE) = ...;
+    - pattern: (java.io.File $FILE) = ...;
+    - pattern: (Path $PATH) = ...;
+    - pattern: (java.nio.file.Path $PATH) = ...;

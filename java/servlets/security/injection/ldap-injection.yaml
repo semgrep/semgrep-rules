@@ -1,0 +1,28 @@
+rules:
+- id: ldap-injection
+  severity: ERROR
+  languages: [java]
+  message: >-
+    LDAP injection  
+  metadata:
+    cwe: 'CWE-90: LDAP Injection'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - pattern-either:
+    - pattern: (InitialDirContext $DC).search(...)
+    - pattern: (javax.naming.directory.InitialDirContext $DC).search(...)
+    - pattern: (DirContext $DC).search(...)
+    - pattern: (javax.naming.directory.DirContext $DC).search(...)
+
+    - pattern: NamingEnumeration<$TYPE> $RESULT = ...;
+    - pattern: javax.naming.NamingEnumeration<$TYPE> $RESULT = ...;

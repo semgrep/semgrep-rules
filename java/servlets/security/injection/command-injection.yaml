@@ -1,0 +1,28 @@
+rules:
+- id: command-injection
+  severity: ERROR
+  languages: [java]
+  message: >-
+    command injection  
+  metadata:
+    cwe: 'CWE-78: Command Injection'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - pattern-either:
+    - pattern: (ProcessBuilder $PB).command(...)
+    - pattern: (java.lang.ProcessBuilder $PB).command(...)
+    - pattern: new ProcessBuilder(...)
+    - pattern: new java.lang.ProcessBuilder(...)
+
+    - pattern: (Runtime $R).exec(...)
+    - pattern: (java.lang.Runtime $R).exec(...)

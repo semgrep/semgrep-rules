@@ -1,0 +1,38 @@
+rules:
+- id: sql-injection
+  severity: ERROR
+  languages: [java]
+  message: >-
+    SQL injection  
+  metadata:
+    cwe: 'CWE-89: SQL Injection'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: |
+        String $SQL = $EXPR;
+        ...
+        $SINK(...);
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: (CallableStatement $STATEMENT).$METHOD(...)
+          - pattern: (java.sql.CallableStatement $STATEMENT).$METHOD(...)
+          - pattern: (Statement $STATEMENT).$METHOD(...)
+          - pattern: (java.sql.Statement $STATEMENT).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: (execute.*|addBatch)
+
+      - pattern: (SqlRowSet $RESULTS) = ...;
+      - pattern: (org.springframework.jdbc.support.rowset.SqlRowSet $RESULTS) = ...;

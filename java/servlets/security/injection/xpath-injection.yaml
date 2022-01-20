@@ -1,0 +1,27 @@
+rules:
+- id: xpath-injection
+  severity: ERROR
+  languages: [java]
+  message: >-
+   Xpath injection 
+  metadata:
+    cwe: 'CWE-643: XPath Injection'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: (javax.xml.xpath.XPath $XPATH).$METHOD(...)
+      - pattern: (XPath $XPATH).$METHOD(...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: (evaluate|compile)

@@ -1,0 +1,59 @@
+rules:
+- id: cross-site-scripting
+  severity: ERROR
+  languages: [java]
+  message: >-
+    Path traversal
+  metadata:
+    cwe: 'CWE-79: Cross-site Scripting (XSS)'
+    owasp: A03:2021 - Injection
+    technology:
+    - java
+    - servlets
+    category: security
+    confidence: HIGH
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: (HttpServletRequest $REQUEST)
+    - pattern: (javax.servlet.http.HttpServletRequest $REQUEST)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: (HttpServletResponse $RESPONSE).getWriter().$METHOD(...)
+      - pattern: (javax.servlet.http.HttpServletRequest $RESPONSE).getWriter().$METHOD(...)
+      - patterns:
+        - pattern-inside: |
+            $TYPE $WRITER = (HttpServletResponse $RESPONSE).getWriter(...);
+            ...
+        - pattern: $WRITER.$METHOD(...)
+      - patterns:
+        - pattern-inside: |
+            $TYPE $WRITER = (javax.servlet.http.HttpServletResponse $RESPONSE).getWriter(...);
+            ...
+        - pattern: $WRITER.$METHOD(...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: (format|print|printf|println|write)
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: org.owasp.esapi.ESAPI.encoder().$ENCODEFOR(...)
+      - pattern: ESAPI.encoder().$ENCODEFOR(...)
+      - patterns:
+        - pattern-inside: |
+            $TYPE $ENCODER = org.owasp.esapi.ESAPI.encoder(...);
+            ...
+        - pattern: $ENCODER.$ENCODEFOR(...)
+      - patterns:
+        - pattern-inside: |
+            $TYPE $ENCODER = ESAPI.encoder(...);
+            ...
+        - pattern: $ENCODER.$ENCODEFOR(...)
+    - metavariable-regex:
+        metavariable: $ENCODEFOR
+        regex: (encodeFor.*)
+  - patterns:
+    - pattern-either:
+      - pattern: org.springframework.web.util.HtmlUtils.htmlEscape(...)
+      - pattern: HtmlUtils.htmlEscape(...)
