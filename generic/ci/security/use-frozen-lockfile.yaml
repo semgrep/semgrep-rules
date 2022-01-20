@@ -1,15 +1,57 @@
 rules:
-- id: use-frozen-lockfile
-  patterns:
-  - pattern: yarn install
-  - pattern-not-inside: yarn install --frozen-lockfile
-  message: >-
-    When performing yarn install, make sure to use the lockfile. Without `--frozen-lockfile`, yarn will update the lockfile rather than using the pinned versions.
-  languages:
-  - generic
-  severity: ERROR
-  metadata:
-    category: security
-    technology:
-    - yarn
-    cwe: 'CWE-494: Download of Code Without Integrity Check'
+  - id: use-frozen-lockfile-yarn
+    patterns:
+      - pattern-regex: yarn install\s
+      - pattern-not-regex: yarn install --frozen-lockfile
+      - pattern-not-regex: yarn install [\w]+
+    fix: yarn install --frozen-lockfile
+    message: >-
+      To ensure reproducable and deterministic builds, when performing yarn install, make sure to use the lockfile. Without `--frozen-lockfile`, yarn will update the lockfile rather than using the pinned versions.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe: "CWE-494: Download of Code Without Integrity Check"
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+        - yarn
+  - id: use-frozen-lockfile-npm
+    patterns:
+      - pattern-regex: npm install\s
+      - pattern-not-regex: npm install [\w]+
+    fix: npm ci
+    message: >-
+      To ensure reproducable and deterministic builds, use `npm ci` rather than `npm install` in scripts. This will use the lockfile rather than updating it.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe: "CWE-494: Download of Code Without Integrity Check"
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+        - npm
+  - id: use-frozen-lockfile-pip
+    patterns:
+      - pattern-regex: pip install\s
+      - pattern-not-regex: pip install --ignore-pipfile
+      - pattern-not-regex: pip install [\w]+
+    fix: pip install --ignore-pipfile
+    message: >-
+      To ensure reproducable and deterministic builds, use `pip install --ignore-pipfile` rather than `pip install` in scripts. This will use the lockfile rather than updating it.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe: "CWE-494: Download of Code Without Integrity Check"
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+        - pip
