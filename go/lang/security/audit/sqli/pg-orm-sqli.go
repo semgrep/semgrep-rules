@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "path"
 
     "github.com/go-pg/pg/v10"
     "github.com/go-pg/pg/v10/orm"
@@ -135,4 +136,9 @@ func ok6(db *pg.DB) {
     // ok: pg-orm-sqli
     err := db.Model().
     ColumnExpr(fmt.Sprintf("SELECT * FROM users WHERE email=hello;"))
+}
+
+func ok7() {
+    // ok: pg-orm-sqli
+    path.Join("foo", fmt.Sprintf("%s.baz", "bar"))
 }

@@ -33,6 +33,7 @@ rules:
               }
       - pattern-not: |
           $DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
+      - pattern-not: path.Join(...)
       - metavariable-regex:
           metavariable: $METHOD
           regex: ^(Where|WhereOr|Join|GroupExpr|OrderExpr|ColumnExpr)$
