@@ -1,0 +1,34 @@
+id: rails-check-render-dos
+pattern-either:
+  - pattern-either:
+    - patterns:
+      - pattern: gem 'rails', '3.$VER'
+      - metavariable-comparison:
+          metavariable: $VER
+          comparison: $VER <= 2
+    - patterns:
+      - pattern: gem 'rails', '~> 3.$VER'
+      - metavariable-comparison:
+          metavariable: $VER
+          comparison: $VER < 2
+  - pattern-either:
+    - patterns:
+      - pattern: gem 'rails', '3.0.$PATCH'
+      - metavariable-comparison:
+          metavariable: $PATCH
+          comparison: $PATCH <= 20
+    - patterns:
+      - pattern: gem 'rails', '3.1.$PATCH'
+      - metavariable-comparison:
+          metavariable: $PATCH
+          comparison: $PATCH <= 12
+    - patterns:
+      - pattern: gem 'rails', '3.2.$PATCH'
+      - metavariable-comparison:
+          metavariable: $PATCH
+          comparison: $PATCH <= 16
+message: Rails versions 3.0.0 - 3.0.20, 3.1.0 - 3.1.12, and 3.2.0 - 3.2.16 are vulnerable to a denial of service attack (CVE-2014-0082). Upgrade to 3.2.17
+languages:
+  - generic
+severity: WARNING
+
