@@ -1,6 +1,6 @@
-# ruleid: aws-kms-key-wildcard-principal
 resource "aws_kms_key" "fail_0" {
   description = "description"
+  # ruleid: aws-kms-key-wildcard-principal
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -25,9 +25,10 @@ resource "aws_kms_key" "fail_0" {
 }
 POLICY  
 }
-# ruleid: aws-kms-key-wildcard-principal
+
 resource "aws_kms_key" "fail_1" {
   description = "description"
+  # ruleid: aws-kms-key-wildcard-principal
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -42,9 +43,10 @@ resource "aws_kms_key" "fail_1" {
 }
 POLICY  
 }
-# ruleid: aws-kms-key-wildcard-principal
+
 resource "aws_kms_key" "fail_2" {
   description = "description"
+  # ruleid: aws-kms-key-wildcard-principal
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -59,9 +61,10 @@ resource "aws_kms_key" "fail_2" {
 }
 POLICY  
 }
-# ruleid: aws-kms-key-wildcard-principal
+
 resource "aws_kms_key" "fail_3" {
   description = "description"
+  # ruleid: aws-kms-key-wildcard-principal
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -76,9 +79,10 @@ resource "aws_kms_key" "fail_3" {
 }
 POLICY  
 }
-# ruleid: aws-kms-key-wildcard-principal
+
 resource "aws_kms_key" "fail_4" {
   description = "description"
+  # ruleid: aws-kms-key-wildcard-principal
   policy = <<POLICY
 {
   "Version": "2012-10-17",

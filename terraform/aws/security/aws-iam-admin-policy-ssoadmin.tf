@@ -30,10 +30,11 @@ resource "aws_ssoadmin_permission_set_inline_policy" "pass1" {
 }
 POLICY
 }
-# ruleid: aws-iam-admin-policy-ssoadmin
+
 resource "aws_ssoadmin_permission_set_inline_policy" "fail1" {
   instance_arn       = aws_ssoadmin_permission_set.example.instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.example.arn
+  # ruleid: aws-iam-admin-policy-ssoadmin
   inline_policy = <<POLICY
 {
   "Statement": [

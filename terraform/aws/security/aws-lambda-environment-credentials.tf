@@ -19,7 +19,7 @@ resource "aws_lambda_function" "no_env" {
 }
 
 # fail
-# ruleid: aws-lambda-environment-credentials
+
 resource "aws_lambda_function" "fail" {
   function_name = "stest-env"
   role = ""
@@ -27,7 +27,9 @@ resource "aws_lambda_function" "fail" {
 
   environment {
     variables = {
+      # ruleid: aws-lambda-environment-credentials
       AWS_ACCESS_KEY_ID     = "AKIAIOSFODNN7EXAMPLE",
+      # ruleid: aws-lambda-environment-credentials
       AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       AWS_DEFAULT_REGION    = "us-west-2"
     }
