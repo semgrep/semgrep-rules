@@ -11,7 +11,6 @@ rules:
           kms_key_id = ...
           ...
         }
-    - pattern-regex: (^aws_kms_key\.(.*))
   message: The AWS Lambda Environment is unencrypted. The AWS KMS encryption key protects environment in the Lambda. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
   languages: [hcl]
   severity: WARNING

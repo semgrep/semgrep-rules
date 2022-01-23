@@ -21,6 +21,20 @@ rules:
               ...
             }
           }
+    - pattern-not-inside: |
+          resource "aws_elasticsearch_domain" $ANYTHING {
+            ...
+            cluster_config {
+              ...
+              instance_count = $COUNT
+              ...
+            }
+            node_to_node_encryption {
+              ...
+              enabled = true
+              ...
+            }
+          }
     - metavariable-comparison:
         metavariable: $COUNT
         comparison: $COUNT > 1

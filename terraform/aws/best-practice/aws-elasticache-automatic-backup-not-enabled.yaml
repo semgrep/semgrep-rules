@@ -8,11 +8,23 @@ rules:
   - pattern-not-inside: |
       resource "aws_elasticache_cluster" $ANYTHING {
         ...
+        engine = "memcached"
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_elasticache_cluster" $ANYTHING {
+        ...
         snapshot_retention_limit = ...
         ...
       }
+  - pattern-not-inside: |
+      resource "aws_elasticache_cluster" $ANYTHING {
+        ...
+        snapshot_retention_limit = 0
+        ...
+      }
   message: >-
-    Ensure that Amazon ElastiCache clusters have automatic backup turned on	. To fix this, set a `snapshot_retention_limit`.
+    Ensure that Amazon ElastiCache clusters have automatic backup turned on. To fix this, set a `snapshot_retention_limit`.
   metadata:
     category: best-practice
     technology:

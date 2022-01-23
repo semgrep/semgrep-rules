@@ -13,10 +13,6 @@ rules:
           {..., s3BucketName: ..., "s3EncryptionEnabled": true, ...}
       - pattern-not-inside: |
           {..., "cloudWatchLogGroupName": ..., "cloudWatchEncryptionEnabled": true, ...}
-      - pattern-not-inside: |
-          {..., cloudWatchLogGroupName: ..., cloudWatchEncryptionEnabled: true, ...}
-      - pattern-not-inside: |
-          {..., s3BucketName: ..., s3EncryptionEnabled: true, ...}
   message: The AWS SSM logs are unencrypted or disabled. Please enable logs and use AWS KMS encryption key to protect SSM logs. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
   languages: [hcl]
   severity: WARNING

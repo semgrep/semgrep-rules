@@ -2,11 +2,11 @@ rules:
 - id: missing-aws-cross-zone-lb
   patterns:
     - pattern: |
-        resource "aws_lb" $ANYTHING {
+        resource $ANYLB $ANYTHING {
           ...
         }
     - pattern-not-inside: |
-        resource "aws_lb" $ANYTHING {
+        resource $ANYLB $ANYTHING {
           ...
           enable_cross_zone_load_balancing = true
           ...
