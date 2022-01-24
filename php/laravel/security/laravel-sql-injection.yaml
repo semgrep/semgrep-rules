@@ -7,9 +7,13 @@ rules:
     category: security
     technology:
     - laravel
+    references: 
+    - https://laravel.com/docs/8.x/queries
   severity: WARNING
   message: >-
-    SQL query based on user input risks SQL injection.
+    Detected a SQL query based on user input.
+    This could lead to SQL injection, which could potentially result in sensitive data being exfiltrated by attackers. 
+    Instead, use parameterized queries and prepared statements.
   languages: [php]
   mode: taint
   pattern-sources:
