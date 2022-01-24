@@ -1,6 +1,12 @@
 
 rules:
 - id: laravel-sql-injection
+  metadata:
+    owasp: 'A3: Injection'
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    category: security
+    technology:
+    - laravel
   severity: WARNING
   message: >-
     SQL query based on user input risks SQL injection.
