@@ -19,8 +19,6 @@ DB::table('users')->orderBy($tainted);
 $price = DB::table('orders')->max($tainted);
 // ruleid: laravel-sql-injection
 $query = DB::table('users')->select($tainted);
-// ruleid: laravel-sql-injection
-$users = $query->addSelect($tainted)->get();
 
 // ok: laravel-sql-injection
 $user = DB::table('users')->where('name', $tainted)->first();
