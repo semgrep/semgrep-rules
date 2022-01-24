@@ -6,8 +6,9 @@ rules:
       DOMPurify.sanitize($X, {RETURN_DOM_FRAGMENT: true})
   - pattern-not: |
       DOMPurify.sanitize($X, {RETURN_DOM: true})
-  message: DOMPurify.sanitize() was called without using RETURN_DOM or RETURN_DOM_FRAGMENT.
-    Adding one of these options will harden against potential future DOMPurify exploits.
+  message: DOMPurify.sanitize() was called without using RETURN_DOM or RETURN_DOM_FRAGMENT. This is prone to mutation XSS,
+    which could possibly bypass existing XSS filters. Adding one of these options will harden against potential future DOMPurify
+    exploits.
   languages:
   - js
   - ts
