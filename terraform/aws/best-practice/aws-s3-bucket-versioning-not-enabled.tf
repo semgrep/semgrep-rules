@@ -94,7 +94,7 @@ resource "aws_s3_bucket" "failcomplex" {
 POLICY
 }
 
-
+# todoruleid: aws-s3-bucket-versioning-not-enabled
 resource "aws_s3_bucket" "this" {
   bucket = var.bucket
   acl    = "private"

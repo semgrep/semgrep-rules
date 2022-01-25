@@ -1,23 +1,20 @@
 rules:
 - id: aws-s3-object-lock-not-enabled
   patterns:
+  - pattern-either:
     - pattern: |
         resource "aws_s3_bucket" $ANYTHING {
           ...
-        }
-    - pattern-not-inside: |
-        resource "aws_s3_bucket" $ANYTHING {
-          ...
           object_lock_configuration = {
-            object_lock_enabled = "Enabled"
+            object_lock_enabled = "Disabled"
           }
           ...
         }
-    - pattern-not-inside: |
+    - pattern: |
         resource "aws_s3_bucket" $ANYTHING {
           ...
           object_lock_configuration {
-            object_lock_enabled = "Enabled"
+            object_lock_enabled = "Disabled"
           }
           ...
         }

@@ -15,6 +15,17 @@ rules:
         }
         ...
       }
+    # filter out unknowns for now
+  - pattern-not-inside: |
+      resource "aws_s3_bucket" $ANYTHING {
+        ...
+        versioning {
+          ...
+          enabled = var.$X
+          ...
+        }
+        ...
+      }
   message: >-
     Ensure that Amazon S3 bucket versioning is not enabled. Consider using versioning if you don't have alternative backup mechanism.
   metadata:
