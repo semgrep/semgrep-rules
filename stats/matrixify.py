@@ -196,8 +196,18 @@ if __name__ == "__main__":
             "totals": {cwe: len(v) for cwe, v in sorted(cwe_matrix.items())},
             "per_framework": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_framework_matrix[cwe][lang].items()} for lang in sorted(cwe_by_framework_matrix[cwe])} for cwe in sorted(cwe_by_framework_matrix)},
             "per_technology": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_technology_matrix[cwe][lang].items()} for lang in sorted(cwe_by_technology_matrix[cwe])} for cwe in sorted(cwe_by_technology_matrix)},
-            "per_metacategory": {lang: {frm: {mc: {cwe: ({'count': len(cwe_metacategory_matrix[lang][frm][mc])},
-                                                         {'cwes': [cwe for cwe in cwe_metacategory_matrix[lang][frm][mc]]})} for mc in cwe_metacategory_matrix[lang][frm]} for frm in sorted(cwe_metacategory_matrix[lang])} for lang in sorted(cwe_metacategory_matrix)},
+            "per_metacategory": { # formatting this one specifically because it's especially awful to read as a one-liner
+                lang: {
+                    frm: {
+                        mc: {
+                            cwe: (
+                                {"count": len(cwe_metacategory_matrix[lang][frm][mc])},
+                                {"cwes": [cwe for cwe in cwe_metacategory_matrix[lang][frm][mc]]},
+                            )
+                        } for mc in cwe_metacategory_matrix[lang][frm]
+                    } for frm in sorted(cwe_metacategory_matrix[lang])
+                } for lang in sorted(cwe_metacategory_matrix)
+            },
             "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
         }
     }))
