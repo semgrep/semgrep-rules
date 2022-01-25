@@ -60,6 +60,7 @@ resource "aws_db_instance" "disabled_postgres" {
 
 # unknown
 
+# ruleid: aws-rds-iam-authentication-not-enabled
 resource "aws_db_instance" "mariadb" {
   allocated_storage = 5
   engine            = "mariadb"
