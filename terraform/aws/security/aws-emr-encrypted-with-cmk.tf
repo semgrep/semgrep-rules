@@ -1,7 +1,7 @@
-# ruleid: aws-emr-encrypted-with-cmk
 resource "aws_emr_security_configuration" "fail" {
   name = "fail"
 
+  # ruleid: aws-emr-encrypted-with-cmk
   configuration = <<EOF
 {
   "EncryptionConfiguration": {
