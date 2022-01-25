@@ -1,10 +1,15 @@
 rules:
 - id: aws-elb-access-logs-not-enabled
   patterns:
-    - pattern: |
-        resource $ANYLB $ANYTHING {
-          ...
-        }
+    - pattern-either:
+      - pattern: |
+          resource "aws_lb" $ANYTHING {
+            ...
+          }
+      - pattern: |
+          resource "aws_alb" $ANYTHING {
+            ...
+          }
     - pattern-not-inside: |
         resource $ANYLB $ANYTHING {
           ...
