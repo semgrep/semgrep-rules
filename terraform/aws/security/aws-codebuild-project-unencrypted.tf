@@ -40,6 +40,7 @@ resource "aws_codebuild_project" "default" {
 
 # unknown
 
+# ruleid: aws-codebuild-project-unencrypted
 resource "aws_codebuild_project" "no_artifacts" {
   name         = "example"
   service_role = "aws_iam_role.example.arn"
