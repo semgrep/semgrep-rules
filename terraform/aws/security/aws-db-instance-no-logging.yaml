@@ -4,12 +4,13 @@ rules:
     - pattern: |
         resource "aws_db_instance" $ANYTHING {
           ...
-          enabled_cloudwatch_logs_exports = $ARRAY
+        }
+    - pattern-not-inside: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+          enabled_cloudwatch_logs_exports = [$SOMETHING, ...]
           ...
         }
-    - metavariable-regex:
-        metavariable: $ARRAY
-        regex: (^\[(.*)\]$)
   message: Database instance has no logging. Missing logs can cause missing important event information.
   languages: [hcl]
   severity: WARNING
