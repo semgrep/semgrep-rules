@@ -2,7 +2,11 @@ rules:
 - id: missing-aws-cross-zone-lb
   patterns:
     - pattern: |
-        resource $ANYLB $ANYTHING {
+        resource "aws_lb" $ANYTHING {
+          ...
+        }
+    - pattern: |
+        resource "aws_alb" $ANYTHING {
           ...
         }
     - pattern-not-inside: |
