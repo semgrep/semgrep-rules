@@ -20,6 +20,14 @@ rules:
           }
           ...
         }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          subnet_mapping {
+            ...
+          }
+          ...
+        } 
   message: ELB has no logging. Missing logs can cause missing important event information.
   languages: [hcl]
   severity: WARNING
