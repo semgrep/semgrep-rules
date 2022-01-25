@@ -1,53 +1,54 @@
-id: rails-check-json-parsing-rce
-patterns:
-  - pattern-either:
-      - patterns:
-          - pattern-either:
-              - pattern: gem 'rails', '$MAJ'
-              - pattern: gem 'rails', '$MAJ.$MIN'
-              - pattern: gem 'rails', '$MAJ.$MIN.$PATCH'
-              - pattern: gem 'rails', '~> $MAJ'
-              - pattern: gem 'rails', '~> $MAJ.$MIN'
-              - pattern: gem 'rails', '~> $MAJ.$MIN.$PATCH'
-          - metavariable-comparison:
-              metavariable: $MAJ
-              comparison: $MAJ < 2
-      - patterns:
-          - pattern-either:
-              - pattern: gem 'rails', '2.$MAJ'
-              - pattern: gem 'rails', '2.$MAJ.$PATCH'
-              - pattern: gem 'rails', '~> 2.$MAJ'
-              - pattern: gem 'rails', '~> 2.$MAJ.$PATCH'
-          - metavariable-comparison:
-              metavariable: $MAJ
-              comparison: $MAJ < 3
-      - patterns:
-          - pattern-either:
-              - pattern: gem 'rails', '2.3.$PATCH'
-              - pattern: gem 'rails', '~> 2.3.$PATCH'
-          - metavariable-comparison:
-              metavariable: $PATCH
-              comparison: $PATCH <= 14
-      - patterns:
-          - pattern-either:
-              - pattern: gem 'rails', '3.0.$PATCH'
-              - pattern: gem 'rails', '~> 3.0.$PATCH'
-          - metavariable-comparison:
-              metavariable: $PATCH
-              comparison: $PATCH <= 19
-  - pattern-not-inside: |
-      ...
-      gem 'yajl' ...
-      ...
-message: Rails versions 0.0.0 - 2.3.14 and 3.0.0 - 3.0.19 are vulnerable to a
-  Remote Code Execution attack via JSON parsing (CVE-2013-0333). Either use the
-  'yajl' gem or update to Rails 2.3.16 or greater if using Rails 0.0.0 - 2.3.14
-  and Rails 3.0.20 or greater if using Rails 3.0.0 - 3.0.19
-languages:
-  - generic
-severity: WARNING
-paths:
-  include:
-    - "*Gemfile"
-    - gems.rb
+rules:
+  - id: rails-check-json-parsing-rce
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: gem 'rails', '$MAJ'
+                  - pattern: gem 'rails', '$MAJ.$MIN'
+                  - pattern: gem 'rails', '$MAJ.$MIN.$PATCH'
+                  - pattern: gem 'rails', '~> $MAJ'
+                  - pattern: gem 'rails', '~> $MAJ.$MIN'
+                  - pattern: gem 'rails', '~> $MAJ.$MIN.$PATCH'
+              - metavariable-comparison:
+                  metavariable: $MAJ
+                  comparison: $MAJ < 2
+          - patterns:
+              - pattern-either:
+                  - pattern: gem 'rails', '2.$MAJ'
+                  - pattern: gem 'rails', '2.$MAJ.$PATCH'
+                  - pattern: gem 'rails', '~> 2.$MAJ'
+                  - pattern: gem 'rails', '~> 2.$MAJ.$PATCH'
+              - metavariable-comparison:
+                  metavariable: $MAJ
+                  comparison: $MAJ < 3
+          - patterns:
+              - pattern-either:
+                  - pattern: gem 'rails', '2.3.$PATCH'
+                  - pattern: gem 'rails', '~> 2.3.$PATCH'
+              - metavariable-comparison:
+                  metavariable: $PATCH
+                  comparison: $PATCH <= 14
+          - patterns:
+              - pattern-either:
+                  - pattern: gem 'rails', '3.0.$PATCH'
+                  - pattern: gem 'rails', '~> 3.0.$PATCH'
+              - metavariable-comparison:
+                  metavariable: $PATCH
+                  comparison: $PATCH <= 19
+      - pattern-not-inside: |
+          ...
+          gem 'yajl' ...
+          ...
+    message: Rails versions 0.0.0 - 2.3.14 and 3.0.0 - 3.0.19 are vulnerable to a
+      Remote Code Execution attack via JSON parsing (CVE-2013-0333). Either use the
+      'yajl' gem or update to Rails 2.3.16 or greater if using Rails 0.0.0 - 2.3.14
+      and Rails 3.0.20 or greater if using Rails 3.0.0 - 3.0.19
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "*Gemfile"
+        - gems.rb
 
