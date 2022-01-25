@@ -53,6 +53,7 @@ resource "aws_dynamodb_table" "encrypted_false" {
   }
 }
 
+# ruleid: aws-dynamodb-table-unencrypted 
 resource "aws_dynamodb_table" "encrypted_no_cmk" {
   name           = "GameScores"
   billing_mode   = "PROVISIONED"
