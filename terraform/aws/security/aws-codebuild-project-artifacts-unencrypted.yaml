@@ -20,6 +20,14 @@ rules:
           }
           ...
         }
+    - pattern-not-inside: |
+        resource "aws_codebuild_project" $ANYTHING {
+          ...
+          artifacts {
+            type = "NO_ARTIFACTS"
+          }
+          ...
+        }
   message: The AWS CodeBuild Project Artifacts are unencrypted. The AWS KMS encryption key protects artifacts in the CodeBuild Projects. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
   languages: [hcl]
   severity: WARNING
