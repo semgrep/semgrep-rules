@@ -2,15 +2,6 @@ rules:
   - id: rails-check-header-dos
     languages:
       - generic
-    metadata:
-      severity: WARNING
-      technology:
-        - rails
-      category: security
-      cwe: "CWE-20: Improper Input Validation"
-      owasp:
-        - "A09:2017 - Using Components with Known Vulnerabilities"
-        - "A06:2021 - Vulnerable and Outdated Components"
     patterns:
       - pattern-either:
           - patterns:
@@ -34,8 +25,17 @@ rules:
                   comparison: $Z == 0 or $Z == 1
     message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
       DoS attack (CVE-2013-6414).
-    severity: WARNING
+    metadata:
+      severity: WARNING
+      technology:
+        - rails
+      category: security
+      cwe: "CWE-20: Improper Input Validation"
+      owasp:
+        - "A09:2017 - Using Components with Known Vulnerabilities"
+        - "A06:2021 - Vulnerable and Outdated Components"
     paths:
       include:
-        - Gemfile
+        - "*Gemfile"
+        - "gems.rb"
 
