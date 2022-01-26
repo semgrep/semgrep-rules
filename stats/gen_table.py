@@ -5,18 +5,15 @@
 # Takes in the json output from matrixify.py
 # Run: python gen_table.py json_output.json --save cwe_coverage_table.md
 
-import io
 import json
 import os
 import sys
 import pprint
 import yaml
 import pandas as pd
+
 from collections import defaultdict
-
 from typing import Dict, Any
-
-pp = pprint.PrettyPrinter()
 
 # Reads 'cwe_to_metacategory.yml' to construct a map to convert a CWE to a metacategory
 def create_metacategory_map(path: str) -> Dict[str, str]:
@@ -31,10 +28,10 @@ def create_metacategory_map(path: str) -> Dict[str, str]:
 
     return cwe_mc_map
 
-def parse_cwe_mc_counts(data: Dict[str, Any]) -> Dict[str, Dict[str, Dict[str, int]]]:
+
+def parse_cwe_mc_counts(data: Dict[str, Any]) -> Dict[str, Any]:
     mc_cwe_counts = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
     cwe_to_mc = create_metacategory_map('cwe_to_metacategory.yml')
-    #pp.pprint(cwe_to_mc)
     cwe_data = data.get('cwe').get('per_framework')
     for cwe in cwe_data:
         languages = cwe_data[cwe]
@@ -46,9 +43,11 @@ def parse_cwe_mc_counts(data: Dict[str, Any]) -> Dict[str, Dict[str, Dict[str, i
                 mc_cwe_counts[lang][framework][mc] = cwe_count
     return mc_cwe_counts
 
+
 def save(stuff: bytes, filename: str):
     with open(filename, 'wb') as fout:
         fout.write(stuff)
+
 
 # rows: framework, cols: metacategory
 if __name__ == "__main__":
@@ -74,13 +73,12 @@ if __name__ == "__main__":
     dataframes = defaultdict(map)
     for language in cwe_metacategory_stats:
         df = pd.DataFrame(cwe_metacategory_stats[language])
-        #table = create_table(cwe_metacategory_stats)
-        dataframes[language] = df
-        
+        # table = create_table(cwe_metacategory_stats)
+        dataframes[language] = df.fillna(0)
+
     if args.save:
         save(df, args.save)
     else:
-        for lang in sorted(dataframes.keys()):
-            print(f'\nfor {lang}:')
-            pp.pprint(dataframes[lang])
-        #pp.pprint(df.to_markdown())
+        for lang in dataframes:
+            print(f'\n## {lang}')
+            print(dataframes[lang].to_markdown())

@@ -9,7 +9,7 @@ import os
 import json
 import sys
 
-from collections import defaultdict, Counter
+from collections import defaultdict
 from typing import Dict, List, Set, Any
 
 logger = logging.getLogger(__file__)
