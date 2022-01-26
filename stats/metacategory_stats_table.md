@@ -1,5 +1,5 @@
-
 ## go
+
 |                       |   gorilla |   lang |   grpc |   jwt-go |   otto |   template |
 |:----------------------|----------:|-------:|-------:|---------:|-------:|-----------:|
 | Cookie Flag Security  |         1 |      1 |      0 |        0 |      0 |          0 |
@@ -15,7 +15,9 @@
 | SSRF                  |         0 |      1 |      0 |        0 |      0 |          0 |
 | Hard-coded Secrets    |         0 |      0 |      0 |        1 |      0 |          0 |
 
+
 ## java
+
 |                       |   lang |   jax-rs |   servlets |   jjwt |   java-jwt |   spring |   rmi |   log4j |   jboss |   android |
 |:----------------------|-------:|---------:|-----------:|-------:|-----------:|---------:|------:|--------:|--------:|----------:|
 | Cookie Flag Security  |      1 |        0 |          0 |      0 |          0 |        0 |     0 |       0 |       0 |         0 |
@@ -31,7 +33,9 @@
 | XXE                   |      3 |        0 |          0 |      0 |          0 |        0 |     0 |       0 |       0 |         0 |
 | SQL Injection         |      2 |        0 |          0 |      0 |          0 |        1 |     0 |       0 |       0 |         0 |
 
+
 ## kotlin
+
 |                       |   lang |
 |:----------------------|-------:|
 | Command Injection     |      1 |
@@ -39,12 +43,16 @@
 | Cryptography          |      4 |
 | Unmapped Metacategory |      1 |
 
+
 ## html
+
 |                       |   security |
 |:----------------------|-----------:|
 | Unmapped Metacategory |          1 |
 
+
 ## php
+
 |                       |   lang |   symfony |   doctrine |
 |:----------------------|-------:|----------:|-----------:|
 | Unmapped Metacategory |     13 |         1 |          0 |
@@ -56,7 +64,9 @@
 | CSRF                  |      0 |         1 |          0 |
 | Open Redirect         |      0 |         1 |          0 |
 
+
 ## javascript
+
 |                       |   lang |   express |   sequelize |   jsonwebtoken |   jose |   browser |   ajv |   grpc |   passport-jwt |   sax |   node-expat |   xml2json |   deno |   shelljs |   jquery |   fbjs |   monaco-editor |   serialize-javascript |   wkhtmltopdf |   puppeteer |   chrome-remote-interface |   playwright |   apollo |   wkhtmltoimage |   phantom |   thenify |   vm2 |   bluebird |   sandbox |   vue |   angular |
 |:----------------------|-------:|----------:|------------:|---------------:|-------:|----------:|------:|-------:|---------------:|------:|-------------:|-----------:|-------:|----------:|---------:|-------:|----------------:|-----------------------:|--------------:|------------:|--------------------------:|-------------:|---------:|----------------:|----------:|----------:|------:|-----------:|----------:|------:|----------:|
 | XSS                   |      1 |        13 |           0 |              0 |      0 |         5 |     0 |      0 |              0 |     0 |            0 |          0 |      0 |         0 |        3 |      1 |               1 |                      1 |             0 |           0 |                         0 |            0 |        0 |               0 |         0 |         0 |     0 |          0 |         0 |     0 |         0 |
@@ -75,7 +85,9 @@
 | Denial of Service     |      0 |         0 |           0 |              0 |      0 |         0 |     1 |      0 |              0 |     0 |            0 |          0 |      0 |         0 |        0 |      0 |               0 |                      0 |             0 |           0 |                         0 |            0 |        0 |               0 |         0 |         0 |     0 |          0 |         0 |     0 |         0 |
 | Deserialization       |      0 |         0 |           0 |              0 |      0 |         0 |     0 |      1 |              0 |     0 |            0 |          0 |      0 |         0 |        0 |      0 |               0 |                      0 |             0 |           0 |                         0 |            0 |        0 |               0 |         0 |         0 |     0 |          0 |         0 |     0 |         0 |
 
+
 ## python
+
 |                       |   jinja2 |   lang |   flask |   django |   jwt |   requests |   pycryptodome |   cryptography |   airflow |   sh |   boto3 |   sqlalchemy |   docker |   distributed |   pymongo |
 |:----------------------|---------:|-------:|--------:|---------:|------:|-----------:|---------------:|---------------:|----------:|-----:|--------:|-------------:|---------:|--------------:|----------:|
 | XSS                   |        1 |      1 |      10 |       19 |     0 |          0 |              0 |              0 |         0 |    0 |       0 |            0 |        0 |             0 |         0 |
@@ -96,7 +108,9 @@
 | Denial of Service     |        0 |      0 |       0 |        2 |     0 |          0 |              0 |              0 |         0 |    0 |       0 |            0 |        0 |             0 |         0 |
 | Prototype Pollution   |        0 |      0 |       0 |        1 |     0 |          0 |              0 |              0 |         0 |    0 |       0 |            0 |        0 |             0 |         0 |
 
+
 ## csharp
+
 |                       |   lang |   razor |
 |:----------------------|-------:|--------:|
 | Regex                 |      1 |       0 |
@@ -106,20 +120,26 @@
 | SSRF                  |      4 |       0 |
 | Unmapped Metacategory |      0 |       1 |
 
+
 ## terraform
+
 |                       |   lang |   aws |   azure |
 |:----------------------|-------:|------:|--------:|
 | Unmapped Metacategory |      2 |     1 |      18 |
 | Cryptography          |      3 |     1 |       0 |
 
+
 ## typescript
+
 |                       |   react |   aws-cdk |   angular |   lang |   nestjs |
 |:----------------------|--------:|----------:|----------:|-------:|---------:|
 | Unmapped Metacategory |       4 |         3 |         2 |      1 |        3 |
 | Cryptography          |       1 |         0 |         0 |      0 |        0 |
 | XSS                   |      10 |         0 |         0 |      0 |        0 |
 
+
 ## ruby
+
 |                       |   rails |   jwt |   lang |
 |:----------------------|--------:|------:|-------:|
 | Path Traversal        |       3 |     0 |      0 |
@@ -134,30 +154,40 @@
 | Hard-coded Secrets    |       0 |     0 |      1 |
 | Prototype Pollution   |       0 |     0 |      2 |
 
+
 ## scala
+
 |                       |   lang |   scala-jwt |
 |:----------------------|-------:|------------:|
 | Path Traversal        |      1 |           0 |
 | Cryptography          |      1 |           0 |
 | Unmapped Metacategory |      0 |           1 |
 
+
 ## json
+
 |                       |   aws |
 |:----------------------|------:|
 | Unmapped Metacategory |     1 |
 
+
 ## contrib
+
 |                       |   nodejsscan |
 |:----------------------|-------------:|
 | Cryptography          |            1 |
 | Unmapped Metacategory |            1 |
 
+
 ## c
+
 |                       |   lang |
 |:----------------------|-------:|
 | Unmapped Metacategory |      8 |
 
+
 ## yaml
+
 |                       |   kubernetes |   github-actions |   docker-compose |
 |:----------------------|-------------:|-----------------:|-----------------:|
 | Active Debug Code     |            1 |                0 |                0 |
@@ -165,14 +195,20 @@
 | Command Injection     |            0 |                2 |                0 |
 | Mass Assignment       |            0 |                1 |                0 |
 
+
 ## generic
+
 |                       |   html-templates |   unicode |   dockerfile |   ci |   secrets |   nginx |
 |:----------------------|-----------------:|----------:|-------------:|-----:|----------:|--------:|
 | XSS                   |                4 |         0 |            0 |    0 |         0 |       0 |
 | Unmapped Metacategory |                0 |         1 |            2 |    1 |        52 |      11 |
 
+
 ## bash
+
 |                       |   curl |   lang |
 |:----------------------|-------:|-------:|
 | Code Injection        |      2 |      0 |
 | Unmapped Metacategory |      0 |      1 |
+
+

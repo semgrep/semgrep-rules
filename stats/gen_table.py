@@ -71,14 +71,17 @@ if __name__ == "__main__":
 
     cwe_metacategory_stats = parse_cwe_mc_counts(json_data)
     dataframes = defaultdict(map)
+
+    output = ''
     for language in cwe_metacategory_stats:
         df = pd.DataFrame(cwe_metacategory_stats[language])
         # table = create_table(cwe_metacategory_stats)
-        dataframes[language] = df.fillna(0)
+        dataframes[language] = df.fillna(0).to_markdown()
+        output += f'## {language}\n\n'
+        output += dataframes[language]
+        output += '\n\n\n'
 
     if args.save:
-        save(df, args.save)
+        save(output.encode('UTF-8'), args.save)
     else:
-        for lang in dataframes:
-            print(f'\n## {lang}')
-            print(dataframes[lang].to_markdown())
+        print(output)
