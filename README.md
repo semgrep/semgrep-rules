@@ -12,7 +12,9 @@ Welcome! This repository is the “standard library” for [Semgrep](https://sem
 
 ## How do I use these rules?
 
-We recommend starting with a pre-selected subset of rules that someone has already carefully tuned for precision. These subsets of rules, which we will call rulesets, may include rules not present in this repository. However, they are available for free on the [Semgrep Registry](https://semgrep.dev/explore).
+We recommend starting with `semgrep --config auto`. The `--config auto` flag will fetch rules relevant to your project from [Semgrep Registry](https://semgrep.dev/explore). The name of your project will be sent to Semgrep Registry as an identifier to make selecting relevant rules fast next time; source code will not be uploaded.
+
+Alternatively, you can start with a pre-selected subset of rules that has already been carefully tuned for precision. These subsets of rules, which we call rulesets, may include rules not present in this repository. However, they are available for free on the [Semgrep Registry](https://semgrep.dev/explore). These rules have been written by open-source contributors and r2c.
 
 The two most popular rulesets are:
 * `semgrep --config=p/ci` to find logic bugs and high-confidence security vulnerabilities; recommended for CI
@@ -31,7 +33,7 @@ You can also contact us at support@r2c.dev to make Semgrep rule contributions. W
 
 ### Rulesets
 
-Rulesets -- that is, combined sets of rules from the Semgrep registry -- are organized in a private repository. If you want to modify existing sets or create your own, please contact us at support@r2c.dev.
+Rulesets -- combined sets of rules from the Semgrep registry -- are organized in a private repository. If you want to modify existing sets or create your own, please contact us at support@r2c.dev.
 
 If you have more questions, please see the [FAQ section in the Semgrep docs](https://semgrep.dev/docs/faq).
 
