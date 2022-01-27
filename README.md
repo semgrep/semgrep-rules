@@ -12,7 +12,7 @@ Welcome! This repository is the “standard library” for [Semgrep](https://sem
 
 ## How do I use these rules?
 
-We recommend running Semgrep with the command `semgrep --config auto`. The `--config auto` flag will automatically fetch rules relevant to your project from [Semgrep Registry](https://semgrep.dev/explore). Only the name of your project will be sent to Semgrep Registry, to look up the project's language and select relevant rules. Your source code will not be uploaded.
+We recommend starting with `semgrep --config auto`. The `--config auto` flag will fetch rules relevant to your project from [Semgrep Registry](https://semgrep.dev/explore). The name of your project will be sent to Semgrep Registry as an identifier to make selecting relevant rules fast next time; source code will not be uploaded.
 
 Alternatively, you can start with a pre-selected subset of rules that has already been carefully tuned for precision. These subsets of rules, which we call rulesets, may include rules not present in this repository. However, they are available for free on the [Semgrep Registry](https://semgrep.dev/explore). These rules have been written by open-source contributors and r2c.
 
