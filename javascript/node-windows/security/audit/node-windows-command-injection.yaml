@@ -1,0 +1,28 @@
+rules:
+- id: node-windows-command-injection
+  patterns:
+    - pattern: $WINCMD.kill(...)
+    - pattern-inside: |
+        var $WINCMD = require('node-windows')
+        ...
+    - pattern-not-inside: $WINCMD.kill("...")
+    - r2c-internal-project-depends-on:
+      - namespace: npm
+        package: node-windows
+        version: "<= 1.0.0-beta.5"
+  metadata:
+    owasp:
+      - "A09:2017 - Vulnerable and Outdated Components"
+      - "A06:2021 - Vulnerable and Outdated Components"
+      - "A01:2017 - Injection"
+      - "A03:2021 - Injection"
+    cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    source-rule-url: https://github.com/advisories/GHSA-53xv-c2hx-5w6q
+    category: security
+    technology:
+      - node
+  message: |
+      Versions <= 1.0.0-beta.5 of the "node-windows" library has a vulnerability in the "kill" function that allows for command injection. (CVE-2021-45459) Please upgrade "node-windows" to version 1.0.0-beta.6 or later.
+  languages: [js]
+  severity: WARNING
+
