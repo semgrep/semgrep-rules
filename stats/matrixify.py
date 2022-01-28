@@ -96,9 +96,7 @@ def create_metacategory_map(path: str) -> Dict[str, str]:
     with open(path, 'r') as mc_map_file:
         mc_map = yaml.safe_load(mc_map_file)
 
-        for mc in mc_map:
-            for cwe in mc_map[mc]:
-                cwe_mc_map[cwe] = mc
+    return {cwe: mc for mc, cwes in mc_map for cwe in cwes}
 
     return cwe_mc_map
 
