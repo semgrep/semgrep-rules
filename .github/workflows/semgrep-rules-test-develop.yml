@@ -14,12 +14,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
-    - name: remove stats directory
-      run: |
-        rm -rf /src/stats
     - name: validate rules
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --exclude=stats --config /src
     - name: test with semgrep develop branch
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --test --test-ignore-todo /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --test --test-ignore-todo --exclude=stats /src
