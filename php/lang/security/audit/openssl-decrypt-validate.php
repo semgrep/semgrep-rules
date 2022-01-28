@@ -44,11 +44,10 @@ class OpenSslTest{
         return $data;
     }
 
-        public static function decrypt_test_ok($crypt, $ky) {
+    public static function decrypt_test_ok($crypt, $ky) {
         $key   = html_entity_decode($ky);
         $iv = "@@@@&&&&####$$$$";
-        openssl_decrypt ( $crypt , "AES-128-CBC" , $key, 0, $iv );
-
+    
         // ok: openssl-decrypt-validate
         $data = openssl_decrypt ( $crypt , "AES-128-CBC" , $key, 0, $iv );
         assertTrue(false !== $data);
