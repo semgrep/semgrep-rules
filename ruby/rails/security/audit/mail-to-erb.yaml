@@ -1,0 +1,31 @@
+rules:
+- id: mail-to-erb
+  metadata:
+    owasp: 'A3: Injection'
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross Site Scripting')"
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_mail_to.rb 
+    category: security
+    technology:
+    - rails
+  message: >-
+    Detected use of mail_to helper used with the `:encode => :javascript option`. The attacker could specify a malicious name or email value that could lead to a XSS attack. Instead, use `:encode => :hex` or patch to Rails 3.0.4 or 2.3.11.
+  languages: [generic]
+  severity: WARNING
+  patterns:
+  - pattern-either: 
+    - pattern: |
+        <%= mail_to ..., ..., :encode => :javascript %>
+    - pattern: |
+        <%= mail_to ..., ..., :encode => :javascript, ... %>
+  - pattern-not: |
+      <%= mail_to escape_javascript(...), escape_javascript(...), ... :encode => :javascript %>
+  - pattern-not: |
+      <%= mail_to escape_javascript(...), escape_javascript(...), ... :encode => :javascript, ... %>
+  - pattern-not: |
+      <%= mail_to "...", "...", ... :encode => :javascript %>
+  - pattern-not: |
+      <%= mail_to "...", "...", ... :encode => :javascript, ... %>
+
+
+      
+
