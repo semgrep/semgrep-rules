@@ -107,7 +107,7 @@ def is_security(path: str) -> bool:
 
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
-    return ("yaml" in ext or "yml" in ext) and '/scripts/' not in path
+    return ext in (".yaml", ".yml") and '/scripts/' not in path
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
