@@ -1,0 +1,30 @@
+rules:
+  - id: ecdsa-signature-forgery
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              from ellipticcurve.ecdsa import Ecdsa
+              ...
+          - pattern-inside: |
+              import Ecdsa
+              ...
+      - pattern: $ECDSA.verify(...)
+      - r2c-internal-project-depends-on:
+          - namespace: pypi
+            package: starkbank-ecdsa
+            version: "< 2.0.1"
+    metadata:
+      owasp:
+        - "A09:2017 - Vulnerable and Outdated Components"
+        - "A06:2021 - Vulnerable and Outdated Components"
+        - "A03:2017 - Sensitive Data Exposure"
+        - "A02:2021 - Cryptographic Failures"
+      cwe: "CWE-347: Improper Verification of Cryptographic Signature"
+      source-rule-url: https://github.com/advisories/GHSA-9wx7-jrvc-28mm
+      category: security
+      technology:
+        - python
+    message: |
+      Versions < 2.0.1 of the "starkbank-ecdsa" library have a vulnerability in the "verify" function that allows attackers to forge signatures for arbitrary messages. (CVE-2021-43572) Please upgrade "starkbank-ecdsa" to version 2.0.1 or later.
+    languages: [python]
+    severity: WARNING
