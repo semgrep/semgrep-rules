@@ -14,12 +14,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
-    - name: ls
-      run: ls 1>&2
-    - name: pwd
-      run: pwd 1>&2
     - name: delete stats directory
-      run: rm -rf /src/stats
+      run: rm -rf semgrep-rules/stats
     - name: validate rules
       run: |
         docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
