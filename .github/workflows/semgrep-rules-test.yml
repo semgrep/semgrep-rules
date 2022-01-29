@@ -19,6 +19,8 @@ jobs:
         python-version: 3.9.2
     - name: install semgrep
       run: pip3 install semgrep
+    - name: remove stats directory
+      run: rm -rf stats
     - name: validate rules
       run: semgrep --validate --config .
     - name: run semgrep

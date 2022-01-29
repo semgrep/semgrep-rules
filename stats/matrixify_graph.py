@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Generates graphs showing our owasp coverage per language and technology
 # based on the json output from matrixify.py 

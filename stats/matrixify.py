@@ -8,7 +8,6 @@ import yaml
 import os
 import json
 import sys
-import pprint
 
 from collections import defaultdict
 from typing import Dict, List, Set, Any
@@ -18,8 +17,6 @@ logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(stream=sys.stderr)
 handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 logger.addHandler(handler)
-
-pp = pprint.PrettyPrinter(indent=2)
 
 class ArchList(list):
     """
@@ -92,12 +89,23 @@ def get_framework(path: str, rule: Dict[str, Any]) -> str:
     # if lang == hcl:
     return s[s.index(lang)+1].strip()
 
+# Reads 'cwe_to_metacategory.yml' to construct a map to convert a CWE to a metacategory
+def create_metacategory_map(path: str) -> Dict[str, str]:
+    cwe_mc_map = {} # {cwe, metacategory}
+
+    with open(path, 'r') as mc_map_file:
+        mc_map = yaml.safe_load(mc_map_file)
+
+    return {cwe: mc for mc, cwes in mc_map for cwe in cwes}
+
+    return cwe_mc_map
+
 def is_security(path: str) -> bool:
     return "security" in path
 
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
-    return "yaml" in ext or "yml" in ext
+    return ext in (".yaml", ".yml") and '/scripts/' not in path
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
@@ -128,6 +136,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    metacategories = create_metacategory_map('cwe_to_metacategory.yml')
+
     owasp_matrix = defaultdict(list)
     cwe_matrix = defaultdict(list)
     owasp_by_lang_matrix = defaultdict(lambda: defaultdict(list))
@@ -136,6 +146,7 @@ if __name__ == "__main__":
     cwe_by_framework_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     owasp_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     cwe_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+    cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
     for dirpath, dirnames, filenames in os.walk(args.directory):
         for filename in filenames:
             path = os.path.join(dirpath, filename)
@@ -151,17 +162,25 @@ if __name__ == "__main__":
                     cwe = get_cwe(rule)
                     owasp = get_owasp(rule)
                     technology = get_technology(rule)
+
+                    # I think the cwe stuff is supposed to be out of the owasp loop
+                    cwe_matrix[cwe].append((path, rule))
+                    cwe_by_lang_matrix[cwe][lang].append((path, rule))
+                    cwe_by_framework_matrix[cwe][lang][framework].append((path, rule))
+                    for tech in technology:
+                        cwe_by_technology_matrix[cwe][lang][tech].append((path, rule))
+
+                    if cwe in metacategories:
+                        metacategory = metacategories[cwe]
+                        cwe_metacategory_matrix[lang][framework][metacategory].add(cwe)
+
                     for owasp_standard in owasp: # Some rules have multiple owasp tags
                         owasp_standard = normalize_owasp(owasp_standard)
                         owasp_matrix[owasp_standard].append((path, rule))
-                        cwe_matrix[cwe].append((path, rule))
                         owasp_by_lang_matrix[owasp_standard][lang].append((path, rule))
-                        cwe_by_lang_matrix[cwe][lang].append((path, rule))
                         owasp_by_framework_matrix[owasp_standard][lang][framework].append((path, rule))
-                        cwe_by_framework_matrix[cwe][lang][framework].append((path, rule))
                         for tech in technology: # Some rules have multiple technology tags
                             owasp_by_technology_matrix[owasp_standard][lang][tech].append((path, rule))
-                            cwe_by_technology_matrix[cwe][lang][tech].append((path, rule))
 
     of = open('json_output.json', 'w')
     of.write(json.dumps({
@@ -175,6 +194,18 @@ if __name__ == "__main__":
             "totals": {cwe: len(v) for cwe, v in sorted(cwe_matrix.items())},
             "per_framework": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_framework_matrix[cwe][lang].items()} for lang in sorted(cwe_by_framework_matrix[cwe])} for cwe in sorted(cwe_by_framework_matrix)},
             "per_technology": {cwe: {lang: {frm: len(v) for frm, v in cwe_by_technology_matrix[cwe][lang].items()} for lang in sorted(cwe_by_technology_matrix[cwe])} for cwe in sorted(cwe_by_technology_matrix)},
+            "per_metacategory": { # formatting this one specifically because it's especially awful to read as a one-liner
+                lang: {
+                    frm: {
+                        mc: {
+                            cwe: (
+                                {"count": len(cwe_metacategory_matrix[lang][frm][mc])},
+                                {"cwes": [cwe for cwe in cwe_metacategory_matrix[lang][frm][mc]]},
+                            )
+                        } for mc in cwe_metacategory_matrix[lang][frm]
+                    } for frm in sorted(cwe_metacategory_matrix[lang])
+                } for lang in sorted(cwe_metacategory_matrix)
+            },
             "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
         }
     }))
