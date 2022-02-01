@@ -9,7 +9,7 @@ class CachingController2 < ApplicationController
 end
 
 class SafeController < ApplicationController
-  # ruleid: ok
+  # ok
   asdf :show
 end
 
