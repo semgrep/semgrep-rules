@@ -96,9 +96,7 @@ def create_metacategory_map(path: str) -> Dict[str, str]:
     with open(path, 'r') as mc_map_file:
         mc_map = yaml.safe_load(mc_map_file)
 
-        for mc in mc_map:
-            for cwe in mc_map[mc]:
-                cwe_mc_map[cwe] = mc
+    return {cwe: mc for mc, cwes in mc_map for cwe in cwes}
 
     return cwe_mc_map
 
@@ -107,7 +105,7 @@ def is_security(path: str) -> bool:
 
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
-    return ("yaml" in ext or "yml" in ext) and '/scripts/' not in path
+    return ext in (".yaml", ".yml") and '/scripts/' not in path
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
