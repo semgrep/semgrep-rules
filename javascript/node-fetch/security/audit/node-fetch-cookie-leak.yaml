@@ -1,0 +1,42 @@
+rules:
+  - id: node-fetch-cookie-leak
+    patterns:
+      - pattern-either:
+        - pattern: |
+            fetch(..., { ..., headers: {..., 'Cookie': ..., ...}, ... })
+        - pattern: |
+            const $HEADERS = {..., 'Cookie': ..., ...}
+            ...
+            fetch(..., { headers: $HEADERS }, ...)
+        - pattern: |
+            const $OPTIONS = {..., headers: $HEADERS, ...}
+            ...
+            fetch(..., $OPTIONS)
+      - pattern-inside: |
+          import fetch from 'node-fetch';
+          ...
+      - r2c-internal-project-depends-on:
+        - namespace: npm
+          package: node-fetch
+          version: "< 2.6.7"
+        - namespace: npm
+          package: node-fetch
+          version: ">= 3.0.0, < 3.1.1"
+    metadata:
+      owasp:
+        - "A09:2017 - Vulnerable and Outdated Components"
+        - "A06:2021 - Vulnerable and Outdated Components"
+        - "A05:2017 - Broken Access Control"
+        - "A01:2021 - Broken Access Control"
+      cwe:
+        - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      source-rule-url: https://github.com/advisories/GHSA-r683-j2x4-v87g 
+      category: security
+      technology:
+        - node
+    message: |
+        Versions < 2.6.7, as well as 3.0.0 to 3.1.0 (inclusive), of the "node-fetch" library have a vulnerability in the "fetch" function that allows for cookies to be leaked. (CVE-2022-0235) Please upgrade "node-fetch" to version 2.6.7 - 2.9.9, >= 3.1.1.
+    languages: [js]
+    severity: WARNING
+
