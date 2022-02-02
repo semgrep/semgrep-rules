@@ -1,0 +1,20 @@
+rules:
+- id: correctness-sslcertificatetrust-handshake-no-trust
+  patterns:
+    - pattern-either:
+      - pattern: SslCertificateTrust.CreateForX509Collection(...,sendTrustInHandshake=true)
+      - pattern: SslCertificateTrust.CreateForX509Collection(...,true)
+      - pattern: SslCertificateTrust.CreateForX509Store(...,sendTrustInHandshake=true)
+      - pattern: SslCertificateTrust.CreateForX509Store(...,true)
+  message: Sending the trusted CA list increases the size of the handshake request and can leak system configuration information.
+  languages: [csharp]
+  metadata:
+    references: 
+      - https://docs.microsoft.com/en-us/dotnet/api/system.net.security.sslcertificatetrust.createforx509collection?view=net-6.0
+    cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+    owasp: "A3: Sensitive Data Exposure"
+    category: correctness
+    technology: 
+      - .net
+    confidence: HIGH
+  severity: WARNING
