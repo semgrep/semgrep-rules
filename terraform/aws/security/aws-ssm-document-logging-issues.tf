@@ -113,11 +113,11 @@ DOC
 }
 
 # failure
-# ruleid: aws-ssm-document-logging-issues
 resource "aws_ssm_document" "disabled" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
+  # ruleid: aws-ssm-document-logging-issues
   content = <<DOC
   {
     "schemaVersion": "1.0",
@@ -142,13 +142,13 @@ resource "aws_ssm_document" "disabled" {
   }
 DOC
 }
-# ruleid: aws-ssm-document-logging-issues
 resource "aws_ssm_document" "disabled_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
   document_format = "YAML"
 
+  # todoruleid: aws-ssm-document-logging-issues
   content = <<DOC
   schemaVersion: '1.0'
   description: Document to hold regional settings for Session Manager
@@ -169,11 +169,12 @@ resource "aws_ssm_document" "disabled_yaml" {
       linux: ''
 DOC
 }
-# ruleid: aws-ssm-document-logging-issues
+
 resource "aws_ssm_document" "s3_enabled_not_encrypted" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
+  # ruleid: aws-ssm-document-logging-issues
   content = <<DOC
   {
     "schemaVersion": "1.0",
@@ -198,13 +199,14 @@ resource "aws_ssm_document" "s3_enabled_not_encrypted" {
   }
 DOC
 }
-# ruleid: aws-ssm-document-logging-issues
+
 resource "aws_ssm_document" "s3_enabled_not_encrypted_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
   document_format = "YAML"
 
+  # todoruleid: aws-ssm-document-logging-issues
   content = <<DOC
   schemaVersion: '1.0'
   description: Document to hold regional settings for Session Manager
@@ -225,11 +227,12 @@ resource "aws_ssm_document" "s3_enabled_not_encrypted_yaml" {
       linux: ''
 DOC
 }
-# ruleid: aws-ssm-document-logging-issues
+
 resource "aws_ssm_document" "cw_enabled_not_encrypted" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
+  # ruleid: aws-ssm-document-logging-issues
   content = <<DOC
   {
     "schemaVersion": "1.0",
@@ -254,13 +257,14 @@ resource "aws_ssm_document" "cw_enabled_not_encrypted" {
   }
 DOC
 }
-# ruleid: aws-ssm-document-logging-issues
+
 resource "aws_ssm_document" "cw_enabled_not_encrypted_yaml" {
   name          = "SSM-SessionManagerRunShell"
   document_type = "Session"
 
   document_format = "YAML"
 
+  # todoruleid: aws-ssm-document-logging-issues
   content = <<DOC
   schemaVersion: '1.0'
   description: Document to hold regional settings for Session Manager
