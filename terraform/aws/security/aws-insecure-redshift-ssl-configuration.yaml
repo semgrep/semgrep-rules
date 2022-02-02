@@ -1,0 +1,39 @@
+rules:
+- id: aws-insecure-redshift-ssl-configuration
+  patterns:
+  - pattern: |
+      resource "aws_redshift_parameter_group" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_redshift_parameter_group" $ANYTHING {
+        ...
+        parameter {
+          name  = "require_ssl"
+          value = "true"
+        }
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_redshift_parameter_group" $ANYTHING {
+        ...
+        parameter {
+          name  = "require_ssl"
+          value = true
+        }
+        ...
+      }
+  message: >-
+    Detected an AWS Redshift configuration with a SSL disabled. To fix this, set your `require_ssl` to
+    `"true"`.
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+  languages: [hcl]
+  severity: WARNING
