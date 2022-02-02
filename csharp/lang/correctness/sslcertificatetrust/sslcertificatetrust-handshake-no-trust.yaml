@@ -2,10 +2,12 @@ rules:
 - id: correctness-sslcertificatetrust-handshake-no-trust
   patterns:
     - pattern-either:
-      - pattern: SslCertificateTrust.CreateForX509Collection(...,sendTrustInHandshake=true)
-      - pattern: SslCertificateTrust.CreateForX509Collection(...,true)
-      - pattern: SslCertificateTrust.CreateForX509Store(...,sendTrustInHandshake=true)
-      - pattern: SslCertificateTrust.CreateForX509Store(...,true)
+      - pattern: SslCertificateTrust.$METHOD($COLLECTION,sendTrustInHandshake=true)
+      - pattern: SslCertificateTrust.$METHOD($COLLECTION,true)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: CreateForX509(Collection|Store)
+  fix: $METHOD($COLLECTION,false)
   message: Sending the trusted CA list increases the size of the handshake request and can leak system configuration information.
   languages: [csharp]
   metadata:

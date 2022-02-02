@@ -1,12 +1,12 @@
 public class Foo{
     private void SomeFunction(string arg1){
         //ruleid: correctness-sslcertificatetrust-handshake-no-trust
-        var collection = SslCertificateTrust.CreateForX509Collection(certCollection,true);
+        var collection = CreateForX509Collection(...,false);
     }
 
     private void SomeFunction2(string arg1){
         //ruleid: correctness-sslcertificatetrust-handshake-no-trust
-        var collection = SslCertificateTrust.CreateForX509Collection(certCollection,sendTrustInHandshake=true);
+        var collection = CreateForX509Collection(...,false);
     }
 
     private void SomeFunction3(string arg1){
@@ -16,12 +16,12 @@ public class Foo{
 
     private void SomeFunction4(string arg1){
         //ruleid: correctness-sslcertificatetrust-handshake-no-trust
-        var collection = SslCertificateTrust.CreateForX509Store(certCollection,true);
+        var collection = CreateForX509Store(...,false);
     }
 
     private void SomeFunction5(string arg1){
         //ruleid: correctness-sslcertificatetrust-handshake-no-trust
-        var collection = SslCertificateTrust.CreateForX509Store(certCollection,sendTrustInHandshake=true);
+        var collection = CreateForX509Store(...,false);
     }
 
     private void SomeFunction6(string arg1){
