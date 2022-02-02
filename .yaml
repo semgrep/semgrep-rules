@@ -1,0 +1,15 @@
+rules:
+- id: javascript-alert
+  message: found alert() call; should this be in production code?
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern-either:
+  - pattern: alert()
+  - pattern: alert($X)
+  metadata:
+    category: best-practice
+    technology:
+    - javascript
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
