@@ -1,21 +1,23 @@
 rules:
-  - id: wkhtmltopdf-injection
-    message: >-
-      If unverified user data can reach the `wkhtmltopdf` it can result in Server-Side Request Forgery vulnerabilities
-    severity: WARNING
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - wkhtmltopdf
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          $WK = require('wkhtmltopdf');
-          ...
-      - pattern-not-inside: |
-          var $INPUT = "...";
-          ...
-      - pattern: $WK($INPUT,...)
-      - pattern-not: $WK("...",...)
+- id: wkhtmltopdf-injection
+  message: >-
+    If unverified user data can reach the `wkhtmltopdf` it can result in Server-Side
+    Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - wkhtmltopdf
+    license: Semgrep Registry License
+  languages: [javascript, typescript]
+  patterns:
+  - pattern-inside: |
+      $WK = require('wkhtmltopdf');
+      ...
+  - pattern-not-inside: |
+      var $INPUT = "...";
+      ...
+  - pattern: $WK($INPUT,...)
+  - pattern-not: $WK("...",...)

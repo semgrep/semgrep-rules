@@ -1,23 +1,25 @@
 rules:
-  - id: chrome-remote-interface-compilescript-injection
-    message: >-
-      If unverified user data can reach the `compileScript` method it can result in Server-Side Request Forgery vulnerabilities
-    severity: WARNING
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - chrome-remote-interface
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('chrome-remote-interface');
-          ...
-      - pattern-not-inside: |
-          var $INPUT = "...";
-          ...
-      - pattern: |
-          $RUNTIME.compileScript({expression: $INPUT},...)
-      - pattern-not: |-
-          $RUNTIME.compileScript({expression: "..."},...)
+- id: chrome-remote-interface-compilescript-injection
+  message: >-
+    If unverified user data can reach the `compileScript` method it can result in
+    Server-Side Request Forgery vulnerabilities
+  severity: WARNING
+  metadata:
+    owasp: 'A1: Injection'
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - chrome-remote-interface
+    license: Semgrep Registry License
+  languages: [javascript, typescript]
+  patterns:
+  - pattern-inside: |
+      require('chrome-remote-interface');
+      ...
+  - pattern-not-inside: |
+      var $INPUT = "...";
+      ...
+  - pattern: |
+      $RUNTIME.compileScript({expression: $INPUT},...)
+  - pattern-not: |-
+      $RUNTIME.compileScript({expression: "..."},...)
