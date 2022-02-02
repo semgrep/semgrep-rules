@@ -1,0 +1,27 @@
+rules:
+- id: model-serialize
+  metadata:
+    owasp: 'A3: Injection'
+    cwe: "CWE-502: Deserialization of Untrusted Data" 
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_model_serialize.rb 
+    category: security
+    technology:
+    - rails
+  message: >-
+    Detected use of the 'serialize' helper in ActiveRecord with
+    user input directly used to provide values for serialized attribute.
+    The attacker could cause the application to deserialize arbitrary YAMl, resulting in denial of service or execution of arbitrary code.
+    Instead, make sure that users can't assign directly to the serialized column
+    or upgrade Rails version to 2.3 or 3.0. $INPUT $INPUTS
+  languages: [ruby]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      class $CLASS < ActiveRecord::Base
+        ...
+        serialize :$INPUT
+        ...
+      end
+      ...
+  - pattern: |
+      $OBJECT.$INPUT = params[...]

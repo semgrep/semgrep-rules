@@ -7,7 +7,7 @@ rules:
           end
       - pattern: |
           render :$TEXT
-    message: The render method in Rails versions 3.0.0 - 3.0.20, 3.1.0 - 3.1.12, and 3.2.0 - 3.2.16 are vulnerable to a denial of service attack (CVE-2014-0082). Upgrade to 3.2.17
+    message: The render method in Rails versions 3.0.0 - 3.0.20, 3.1.0 - 3.1.12, and 3.2.0 - 3.2.16 are vulnerable to a denial of service attack (CVE-2014-0082), which could lead to service downtime. Upgrade to 3.2.17 or higher instead.
     languages:
       - generic
     severity: WARNING
@@ -21,6 +21,7 @@ rules:
       technology:
         - rails
       category: security
+      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_render_dos.rb
       references:
         - https://groups.google.com/g/rubyonrails-security/c/LMxO_3_eCuc/m/ozGBEhKaJbIJ 
         - https://nvd.nist.gov/vuln/detail/CVE-2014-0082

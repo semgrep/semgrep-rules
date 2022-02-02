@@ -23,8 +23,11 @@ rules:
               - metavariable-comparison:
                   metavariable: $Z
                   comparison: $Z == 0 or $Z == 1
-    message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
-      DoS attack (CVE-2013-6414).
+    message: >-
+      Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
+      DoS attack (CVE-2013-6414). This can cause your service to be 
+      taken down for substantial amount of time. Instead, upgrade to 
+      4.0.2 or 3.2.16 or higher.
     severity: WARNING
     metadata:
       technology:
@@ -34,6 +37,7 @@ rules:
       owasp:
         - "A09:2017 - Using Components with Known Vulnerabilities"
         - "A06:2021 - Vulnerable and Outdated Components"
+      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_header_dos.rb
     paths:
       include:
         - "*Gemfile"
