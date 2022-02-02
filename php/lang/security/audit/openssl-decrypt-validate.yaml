@@ -17,11 +17,31 @@ rules:
   - pattern-not-inside: |
       $DECRYPTED_STRING = openssl_decrypt(...);
       ...
+      if(false === $DECRYPTED_STRING){
+        ...
+      }
+  - pattern-not-inside: |
+      $DECRYPTED_STRING = openssl_decrypt(...);
+      ...
+      if(false == $DECRYPTED_STRING){
+        ...
+      }
+  - pattern-not-inside: |
+      $DECRYPTED_STRING = openssl_decrypt(...);
+      ...
       assertTrue(false !== $DECRYPTED_STRING,...);
   - pattern-not-inside: |
       $DECRYPTED_STRING = openssl_decrypt(...);
       ...
+      assertTrue($DECRYPTED_STRING !== false,...);
+  - pattern-not-inside: |
+      $DECRYPTED_STRING = openssl_decrypt(...);
+      ...
       $REFERENCE::assertTrue(false !== $DECRYPTED_STRING,...);
+  - pattern-not-inside: |
+      $DECRYPTED_STRING = openssl_decrypt(...);
+      ...
+      $REFERENCE::assertTrue($DECRYPTED_STRING !== false,...);
   - pattern-not-inside: |
       $DECRYPTED_STRING = openssl_decrypt(...);
       ...

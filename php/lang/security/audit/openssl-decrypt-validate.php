@@ -44,7 +44,20 @@ class OpenSslTest{
         return $data;
     }
 
-    public static function decrypt_test_ok($crypt, $ky) {
+    public static function decrypt_test_ok_2($crypt, $ky) {
+        $key   = html_entity_decode($ky);
+        $iv = "@@@@&&&&####$$$$";
+
+        // ok: openssl-decrypt-validate
+        $data = openssl_decrypt ( $crypt , "AES-128-CBC" , $key, 0, $iv );
+        if(false === $data){
+            return "";
+        }
+
+        return $data;
+    }
+
+    public static function decrypt_test_ok_3($crypt, $ky) {
         $key   = html_entity_decode($ky);
         $iv = "@@@@&&&&####$$$$";
     
