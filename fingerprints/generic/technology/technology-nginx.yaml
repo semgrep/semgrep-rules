@@ -1,0 +1,10 @@
+rules:
+  id: cai-generic-technology-nginx
+  languages:
+  - generic
+  message: Detected a .conf file. This likely indicates that Nginx is in use.
+  paths:
+    include:
+    - '*.conf'
+  pattern: "location ... {\n  ...\n  ...\n  ...\n}\n"
+  severity: INVENTORY

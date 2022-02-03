@@ -1,0 +1,19 @@
+rules:
+  id: cai-javascript-dependency-react-yarn
+  languages:
+  - generic
+  message: 'Detected `react` as a dependency in a yarn.lock file.
+
+    This likely indicates that React frontend framework is being used.'
+  paths:
+    include:
+    - yarn.lock
+  pattern-either:
+  - pattern: react@$VERSION
+  - pattern: react@^$VERSION
+  - pattern: react@~$VERSION
+  - pattern: react@>$VERSION
+  - pattern: react@<$VERSION
+  - pattern: react@>=$VERSION
+  - pattern: react@<=$VERSION
+  severity: INVENTORY

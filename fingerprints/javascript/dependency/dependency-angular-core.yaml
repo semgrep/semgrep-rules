@@ -1,0 +1,17 @@
+rules:
+  id: cai-javascript-dependency-angular-core
+  languages:
+  - json
+  message: 'Detected `angular-core` as a dependency in a package.json file.
+
+    This likely indicates that Angular frontend framework is being used.'
+  paths:
+    include:
+    - package.json
+  patterns:
+  - pattern-either:
+    - pattern: "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"@angular/core\"\
+        : $VERSION\n  }\n}\n"
+    - pattern: "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"@angular/core\"\
+        : $VERSION\n  }\n}\n"
+  severity: INVENTORY

@@ -21,6 +21,8 @@ jobs:
       run: pip3 install semgrep
     - name: remove stats directory
       run: rm -rf stats
+    - name: remove fingerprints from testing
+      run: rm -rf fingerprints
     - name: validate rules
       run: semgrep --validate --config .
     - name: run semgrep

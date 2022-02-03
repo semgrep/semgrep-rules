@@ -1,0 +1,12 @@
+rules:
+  id: cai-generic-technology-kubernetes
+  languages:
+  - generic
+  message: Detected a Kubernetes configuration file. This likely indicates that Kubernetes
+    is in use.
+  paths:
+    include:
+    - '*.yaml'
+    - '*.yml'
+  pattern: "apiVersion: ...\nkind: ...\nmetadata:\n  ...\nspec:\n  ...\n"
+  severity: INVENTORY

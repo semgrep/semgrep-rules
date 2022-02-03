@@ -1,0 +1,15 @@
+rules:
+  id: cai-java-dependency-spring
+  languages:
+  - generic
+  message: 'Detected `spring`  as a dependency in a pom.xml file.
+
+    This likely indicates that Spring framework is being used.'
+  paths:
+    include:
+    - pom.xml
+  patterns:
+  - pattern: "<dependency>\n    ...\n    <artifactId>spring-...</artifactId>\n   \
+      \ ...\n</dependency>\n"
+  - pattern-not-inside: "<exclusion>\n    ...\n</exclusion>\n"
+  severity: INVENTORY

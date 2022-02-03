@@ -1,0 +1,19 @@
+rules:
+  id: cai-javascript-dependency-puppeteer-yarn
+  languages:
+  - generic
+  message: 'Detected `puppeteer` as a dependency in a yarn.lock file.
+
+    This likely indicates that headless-browser is being used.'
+  paths:
+    include:
+    - yarn.lock
+  pattern-either:
+  - pattern: puppeteer@$VERSION
+  - pattern: puppeteer@^$VERSION
+  - pattern: puppeteer@~$VERSION
+  - pattern: puppeteer@>$VERSION
+  - pattern: puppeteer@<$VERSION
+  - pattern: puppeteer@>=$VERSION
+  - pattern: puppeteer@<=$VERSION
+  severity: INVENTORY

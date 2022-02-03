@@ -1,0 +1,12 @@
+rules:
+  id: cai-ruby-dependency-rails
+  languages:
+  - generic
+  message: 'Detected `rails` as a dependency in a Gemfile file.
+
+    This likely indicates that Ruby web framework Rails is being used.'
+  paths:
+    include:
+    - Gemfile
+  pattern-regex: gem ['"]rails
+  severity: INVENTORY

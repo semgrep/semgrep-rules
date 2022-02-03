@@ -1,0 +1,17 @@
+rules:
+  id: cai-javascript-dependency-jsonwebtoken
+  languages:
+  - json
+  message: 'Detected `jsonwebtoken` as a dependency in a package.json file.
+
+    This likely indicates that JWT is being used.'
+  paths:
+    include:
+    - package.json
+  patterns:
+  - pattern-either:
+    - pattern: "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"jsonwebtoken\":\
+        \ $VERSION\n  }\n}\n"
+    - pattern: "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"jsonwebtoken\"\
+        : $VERSION\n  }\n}\n"
+  severity: INVENTORY

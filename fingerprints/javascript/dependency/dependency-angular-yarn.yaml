@@ -1,0 +1,19 @@
+rules:
+  id: cai-javascript-dependency-angular-yarn
+  languages:
+  - generic
+  message: 'Detected `angular` as a dependency in a yarn.lock file.
+
+    This likely indicates that Angular frontend framework is being used.'
+  paths:
+    include:
+    - yarn.lock
+  pattern-either:
+  - pattern: angular@$VERSION
+  - pattern: angular@^$VERSION
+  - pattern: angular@~$VERSION
+  - pattern: angular@>$VERSION
+  - pattern: angular@<$VERSION
+  - pattern: angular@>=$VERSION
+  - pattern: angular@<=$VERSION
+  severity: INVENTORY

@@ -1,0 +1,14 @@
+rules:
+  id: cai-python-dependency-fastapi
+  languages:
+  - generic
+  message: 'Detected `fastapi` as a dependency in a requirements.txt file.
+
+    This likely indicates that Python web framework FastAPI is being used.'
+  paths:
+    include:
+    - requirements.txt
+    - requirements.in
+    - setup.py
+  pattern-regex: fastapi
+  severity: INVENTORY
