@@ -1,0 +1,29 @@
+rules:
+- id: correctness-double-epsilon-equality
+  patterns: 
+    - pattern: |
+        $V1 - $V2
+    - pattern-inside: |
+        ... <= Double.Epsilon;
+    - pattern-not-inside: |
+        double $V1 = 0;
+        ...
+    - pattern-not-inside: |
+        double $V2 = 0;
+        ...
+    - pattern-not-inside: |
+        $V1 = 0;
+        ...
+    - pattern-not-inside: |
+        $V2 = 0;
+        ...
+  message: Double.Epsilon is defined by .NET as the smallest value that can be added to or subtracted from a zero-value Double.  It is unsuitable for equality comparisons of non-zero Double values.
+  languages: [csharp]
+  severity: WARNING
+  metadata:
+    references:
+      - https://docs.microsoft.com/en-us/dotnet/api/system.double?view=net-6.0#testing-for-equality
+    category: correctness
+    technology: 
+      - .net
+    confidence: HIGH
