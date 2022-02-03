@@ -7,7 +7,7 @@ rules:
     - metavariable-regex:
         metavariable: $METHOD
         regex: CreateForX509(Collection|Store)
-  fix: $METHOD($COLLECTION,false)
+  fix: SslCertificateTrust.$METHOD($COLLECTION,false)
   message: Sending the trusted CA list increases the size of the handshake request and can leak system configuration information.
   languages: [csharp]
   metadata:
