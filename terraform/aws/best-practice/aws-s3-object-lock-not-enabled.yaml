@@ -1,0 +1,29 @@
+rules:
+- id: aws-s3-object-lock-not-enabled
+  patterns:
+  - pattern-either:
+    - pattern: |
+        resource "aws_s3_bucket" $ANYTHING {
+          ...
+          object_lock_configuration = {
+            object_lock_enabled = "Disabled"
+          }
+          ...
+        }
+    - pattern: |
+        resource "aws_s3_bucket" $ANYTHING {
+          ...
+          object_lock_configuration {
+            object_lock_enabled = "Disabled"
+          }
+          ...
+        }
+  message: >-
+    The AWS S3 object lock is not enabled. Consider using it if possible.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws

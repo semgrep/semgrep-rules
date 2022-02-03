@@ -1,0 +1,32 @@
+rules:
+- id: missing-aws-autoscaling-tags
+  patterns:
+    - pattern: |
+        resource "aws_autoscaling_group" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_autoscaling_group" $ANYTHING {
+          ...
+          tag {
+            ...
+          }
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_autoscaling_group" $ANYTHING {
+          ...
+          tags = concat(
+            ...
+          )
+          ...
+        }
+  message: >-
+    The AWS Autoscaling Group is not tagged.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws
