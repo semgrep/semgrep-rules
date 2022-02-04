@@ -11,11 +11,6 @@ public class SamplesRegionInfo  {
       // Creates a RegionInfo using a CultureInfo.LCID.
       RegionInfo myRI2 = new RegionInfo( new CultureInfo("en-US",false).LCID );
 
-      // Compares the two instances.
-      if ( myRI1.Equals( myRI2 ) )
-         Console.WriteLine( "The two RegionInfo instances are equal." );
-      else
-         Console.WriteLine( "The two RegionInfo instances are NOT equal." );
       using (AnonymousPipeServerStream pipeServer =
                   new AnonymousPipeServerStream(PipeDirection.Out,
                   HandleInheritability.Inheritable)){
