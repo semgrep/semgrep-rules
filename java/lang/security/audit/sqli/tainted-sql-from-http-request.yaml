@@ -9,9 +9,18 @@ rules:
     mode: taint
     pattern-sources:
     - patterns:
-      - pattern-either:
+      - pattern-either: # using this more specific pattern instead of (HttpServletRequest $REQ) reduces FP that are designed to trick taint
         - pattern: |
-            (HttpServletRequest $REQ).$REQFUNC(...)
+            (HttpServletRequest $REQ).$REQFUNC(...) 
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
     pattern-sinks:
     - patterns:
       - pattern-either:
