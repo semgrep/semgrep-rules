@@ -1,0 +1,19 @@
+rules:
+  - id: insecure-binaryformatter-deserialization
+    severity: WARNING
+    languages:
+      - C#
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A8: Insecure Deserialization"
+      references:
+        - https://docs.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide
+      category: security
+      technology:
+        - .net
+      confidence: HIGH
+    message: >-
+      Only use DataContractResolver if you are completely sure of what information is being serialized. Malicious types can cause unexpected behavior.
+    patterns:
+      - pattern: |
+          class $MYDCR : DataContractResolver { ... }
