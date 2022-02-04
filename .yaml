@@ -1,0 +1,11 @@
+rules:
+- id: csharp-metavariable-compare
+  patterns:
+  - pattern: double $VAL = ...;
+  - metavariable-comparison:
+      metavariable: $VAL
+      comparison: $VAL == 0
+  message: Semgrep found a match
+  languages:
+  - csharp
+  severity: WARNING
