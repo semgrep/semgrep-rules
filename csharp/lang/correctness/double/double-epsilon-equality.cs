@@ -22,9 +22,14 @@ public class Example
       return Math.Abs((value1 - value2) / divisor) <= Double.Epsilon;
    }
 
-   static bool lazyEqual(double v1, double v2){
+   static bool lazyEqualLeftCompare(double v1, double v2){
        //ruleid: correctness-double-epsilon-equality
        return Math.Abs(v1 - v2) <= Double.Epsilon;
+   }
+
+   static bool lazyEqualRightCompare(double v1, double v2){
+       //ruleid: correctness-double-epsilon-equality
+       return  Double.Epsilon <= Math.Abs(v1 - v2);
    }
 
    static bool uselessZeroEqual(){
