@@ -16,3 +16,15 @@ rules:
   - pattern-either:
     - pattern: filepath.Clean(...)
     - pattern: path.Clean(...)
+  metadata:
+    references:
+    - https://pkg.go.dev/path#Clean
+    - http://technosophos.com/2016/03/31/go-quickly-cleaning-filepaths.html
+    - https://labs.detectify.com/2021/12/15/zero-day-path-traversal-grafana/
+    cwe: 'CWE-22: Path Traversal'
+    owasp:
+    - 'A03:2021 - Injection'
+    - 'A01:2017 - Injection'
+    category: security
+    technology:
+    - go
