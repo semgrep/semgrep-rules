@@ -1,0 +1,18 @@
+rules:
+- id: filepath-clean-misuse
+  message: >-
+    `Clean` is not intended to sanitize against path traversal attacks.
+    This function is for finding the shortest path name equivalent to the given input.
+    Using `Clean` to sanitize file reads may expose this application to
+    path traversal attacks, where an attacker could access arbitrary files on the server.
+    To fix this easily, prepend a slash ("/") at the beginning of the input, like this:
+    `Clean("/"+...)`. However, a better solution is 
+  severity: ERROR
+  languages: [go]
+  mode: taint
+  pattern-sources:
+  - pattern: "($REQUEST : *http.Request).$ANYTHING"
+  pattern-sinks:
+  - pattern-either:
+    - pattern: filepath.Clean(...)
+    - pattern: path.Clean(...)
