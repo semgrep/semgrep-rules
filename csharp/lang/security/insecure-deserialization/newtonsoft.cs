@@ -18,5 +18,12 @@ namespace InsecureDeserialization
                 Console.WriteLine(e);
             }
         }
+
+        public void ConverterOverrideSettings(){
+            JsonConvert.DefaultSettings = () => 
+                //ruleid: insecure-newtonsoft-deserialization
+                new JsonSerializerSettings{TypeNameHandling = TypeNameHandling.Auto};
+            Bar newBar = JsonConvert.DeserializeObject<Bar>(someJson);
+            }
     }
 }
