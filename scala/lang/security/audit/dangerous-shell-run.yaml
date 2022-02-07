@@ -1,0 +1,27 @@
+rules:
+- id: dangerous-shell-run
+  patterns:
+    - pattern: Seq($SH, "-c", $CMD, ...)
+    - pattern-not: Seq($SH, "-c", "...", ...)
+    - pattern-not-inside: |
+        $CMD = "..."
+        ...
+    - pattern-either:
+      - pattern-inside: Seq(...).!
+      - pattern-inside: Seq(...).!!
+      - pattern-inside: Seq(...).lazyLines
+    - metavariable-regex:
+        metavariable: $SH
+        regex: '"(sh|bash|ksh|csh|tcsh|zsh)"'
+  message: >-
+    Found dynamic content used for the external process.
+    This is dangerous if arbitrary data can reach this function call because it allows a malicious actor to execute commands.
+    Ensure your variables are not controlled by users or sufficiently sanitized.
+  languages: [scala]
+  severity: WARNING
+  metadata: 
+    category: security
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: "A1: Injection"
+    technology:
+    - scala
