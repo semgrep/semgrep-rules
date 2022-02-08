@@ -18,12 +18,13 @@ rules:
   pattern-sinks:
   - patterns:
     - pattern-either:
-      - pattern: filepath.Clean(...)
-      - pattern: path.Clean(...)
+      - pattern: filepath.Clean($...INNER)
+      - pattern: path.Clean($...INNER)
   pattern-sanitizers:
   - pattern-either:
     - pattern: |
         "/" + ...
+  fix: filepath.FromSlash(filepath.Clean("/"+strings.Trim($...INNER, "/")))
   metadata:
     references:
     - https://pkg.go.dev/path#Clean
