@@ -11,11 +11,18 @@ rules:
   languages: [go]
   mode: taint
   pattern-sources:
-  - pattern: "($REQUEST : *http.Request).$ANYTHING"
-  pattern-sinks:
   - pattern-either:
-    - pattern: filepath.Clean(...)
-    - pattern: path.Clean(...)
+    - pattern: "($REQUEST : *http.Request).$ANYTHING"
+    - pattern: "($REQUEST : http.Request).$ANYTHING"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: filepath.Clean(...)
+      - pattern: path.Clean(...)
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: |
+        "/" + ...
   metadata:
     references:
     - https://pkg.go.dev/path#Clean
