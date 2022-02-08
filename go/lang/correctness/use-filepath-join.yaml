@@ -1,0 +1,14 @@
+rules:
+- id: use-filepath-join
+  languages: [go]
+  severity: WARNING
+  message: >-
+    `path.Join(...)` always joins using a forward slash. This may cause
+    issues on Windows or other systems using a different delimiter. Use
+    `filepath.Join(...)` instead which uses OS-specific path separators.
+  pattern: path.Join(...)
+  metadata:
+    category: correctness
+    references:
+    - https://parsiya.net/blog/2019-03-09-path.join-considered-harmful/
+    - https://go.dev/src/path/path.go?s=4034:4066#L145
