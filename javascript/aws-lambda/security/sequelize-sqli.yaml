@@ -1,0 +1,48 @@
+rules:
+- id: sequelize-sqli
+  severity: WARNING
+  message: >-
+    Detected SQL statement that is tainted by `$EVENT` object. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `sequelize.query('SELECT * FROM projects WHERE status = ?', { replacements: ['active'], type: QueryTypes.SELECT });`
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  metadata:
+    references:
+      - https://sequelize.org/master/manual/raw-queries.html
+    category: security
+    technology:
+      - aws-lambda
+      - sequelize
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+    - pattern: $EVENT
+  pattern-sinks:
+  - patterns:
+    - pattern: $QUERY
+    - pattern-either:
+      - pattern-inside: $DB.query($QUERY, ...)
+    - pattern-either:
+      - pattern-inside: |
+          require('sequelize')
+          ...
+      - pattern-inside: |
+          import 'sequelize'
+          ...
