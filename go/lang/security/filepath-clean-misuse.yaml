@@ -5,9 +5,9 @@ rules:
     This function is for finding the shortest path name equivalent to the given input.
     Using `Clean` to sanitize file reads may expose this application to
     path traversal attacks, where an attacker could access arbitrary files on the server.
-    To fix this easily, prepend a slash ("/") at the beginning of the input, like this:
-    `Clean("/"+...)`. However, a better solution is using the `SecureJoin` function
-    in the package `filepath-securejoin`. See https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme.
+    To fix this easily, write this: `filepath.FromSlash(path.Clean("/"+strings.Trim(req.URL.Path, "/")))`
+    However, a better solution is using the `SecureJoin` function in the package `filepath-securejoin`.
+    See https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme.
   severity: ERROR
   languages: [go]
   mode: taint
@@ -29,6 +29,7 @@ rules:
     - https://pkg.go.dev/path#Clean
     - http://technosophos.com/2016/03/31/go-quickly-cleaning-filepaths.html
     - https://labs.detectify.com/2021/12/15/zero-day-path-traversal-grafana/
+    - https://dzx.cz/2021/04/02/go_path_traversal/
     - https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme
     cwe: 'CWE-22: Path Traversal'
     owasp:
