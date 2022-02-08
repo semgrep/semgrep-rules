@@ -5,7 +5,7 @@ WORKDIR /app
 RUN yarn install
 # trailing space
 # ruleid: use-frozen-lockfile-yarn
-RUN yarn install 
+RUN yarn install
 RUN yarn install --frozen-lockfile
 RUN yarn install some_package
 
@@ -29,11 +29,11 @@ RUN echo 'npm installing foo'
 
 
 # ruleid: use-frozen-lockfile-pip
-RUN pip install
+RUN pipenv install
 # another case with a trailing space
 # ruleid: use-frozen-lockfile-pip
-RUN pip install 
-RUN pip install some_package
-RUN pip install --ignore-pipfile
+RUN pipenv install
+RUN pipenv install some_package
+RUN pipenv install --ignore-pipfile
 
-RUN echo 'pip installing foo'
+RUN echo 'pipenv installing foo'
