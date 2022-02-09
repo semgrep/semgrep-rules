@@ -1,0 +1,40 @@
+rules:
+- id: web-config-httponly-cookies-disabled
+  patterns:
+    - pattern-either:
+      - pattern: |
+          httpOnlyCookies="false"
+      - pattern-not: |
+          httpOnlyCookies="true"
+    - pattern-either:
+        - pattern-inside: |
+            <httpCookies ...>
+        - pattern-not: |
+          <httpCookies ...>
+    - pattern-inside: |
+        <system.web>
+        ...
+        </system.web>
+  message: Cookie HTTPOnly flag is not set or explicitly disabled. You
+    should enforce this value to prevent script from reading sensitive cookie values.
+  languages:
+    - generic
+  severity: WARNING
+  paths:
+    include:
+      - "*web.config"
+  metadata:
+    category: security
+    license: MIT
+    references:
+      - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
+      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
+      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
+    technology:
+      - .net
+      - asp
+      - webforms
+    cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp:
+      - A06:2017 - Security Misconfiguration
+      - A05:2021 - Security Misconfiguration
