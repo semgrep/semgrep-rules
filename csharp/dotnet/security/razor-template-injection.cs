@@ -27,7 +27,7 @@ using RazorEngine.Templating;
         {
             var junk = someFunction(razorTpl);
             // WARNING This code is vulnerable on purpose: do not use in production and do not take it as an example!
-            // ok: razor-template-injection - we can't be sure that someFunction doesn't have sanitizing side-effects
+            // ok: razor-template-injection
             ViewBag.RenderedTemplate = Razor.Parse(junk);
             ViewBag.Template = razorTpl;
             return View();
