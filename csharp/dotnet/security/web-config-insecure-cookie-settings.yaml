@@ -2,8 +2,6 @@ rules:
 - id: web-config-insecure-cookie-settings
   patterns:
     - pattern-either:
-        - pattern: | 
-            httpOnlyCookies="false"
         - pattern: |
             requireSSL="false"
         - pattern: |
@@ -15,10 +13,9 @@ rules:
             <forms ...>
         - pattern-inside: |
             <roleManager ...>
-  message: Cookie HTTPonly and/or Secure flags are explicitly disabled. You
-    should enforce these values to avoid accidentally presenting credentials over
-    plaintext HTTP and prevent script execution from reading and exfiltrating
-    cookie values to arbitrary third-party destinations.
+  message: Cookie Secure flag is explicitly disabled. You
+    should enforce this value to avoid accidentally presenting sensitive cookie values over
+    plaintext HTTP connections.
   languages:
     - generic
   severity: WARNING
@@ -36,9 +33,7 @@ rules:
       - .net
       - asp
       - webforms
-    cwe:
-      - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
-      - "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp:
       - A06:2017 - Security Misconfiguration
       - A05:2021 - Security Misconfiguration
