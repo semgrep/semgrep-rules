@@ -1,0 +1,27 @@
+rules:
+  - id: http-listener-wildcard-bindings
+    severity: WARNING
+    languages:
+      - C#
+    metadata:
+      cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
+      owasp:
+        - "A5:2017 - Broken Access Control"
+        - "A1:2021 - Broken Access Control"
+      references:
+        - https://docs.microsoft.com/en-us/dotnet/api/system.net.httplistener?view=net-6.0 
+      category: security
+      technology:
+        - .net
+      confidence: MEDIUM
+    message: >-
+      Prefix: $PREFIX
+    patterns:
+      - pattern-inside: |
+          using System.Net;
+          ...
+      - pattern: $LISTENER.Prefixes.Add("$PREFIX")
+      - metavariable-regex:
+          metavariable: $PREFIX
+          regex: |
+            (http|https)://(\*|\+)(.[a-zA-Z]{2,})?:[0-9]+
