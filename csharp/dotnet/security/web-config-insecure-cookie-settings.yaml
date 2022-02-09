@@ -1,43 +1,44 @@
 rules:
 - id: web-config-insecure-cookie-settings
   patterns:
-  - pattern-either:
-    - pattern: |
-        httpOnlyCookies="false"
-    - pattern: |
-        requireSSL="false"
-    - pattern: |
-        cookieRequireSSL="false"
-  - pattern-either:
-    - pattern-inside: |
-        <httpCookies ...>
-    - pattern-inside: |
-        <forms ...>
-    - pattern-inside: |
-        <roleManager ...>
-  message: Cookie HTTPonly and/or Secure flags are explicitly disabled. You should
-    enforce these values to avoid accidentally presenting credentials over plaintext
-    HTTP and prevent script execution from reading and exfiltrating cookie values
-    to arbitrary third-party destinations.
+    - pattern-either:
+        - pattern: | 
+            httpOnlyCookies="false"
+        - pattern: |
+            requireSSL="false"
+        - pattern: |
+            cookieRequireSSL="false"
+    - pattern-either:
+        - pattern-inside: |
+            <httpCookies ...>
+        - pattern-inside: |
+            <forms ...>
+        - pattern-inside: |
+            <roleManager ...>
+  message: Cookie HTTPonly and/or Secure flags are explicitly disabled. You
+    should enforce these values to avoid accidentally presenting credentials over
+    plaintext HTTP and prevent script execution from reading and exfiltrating
+    cookie values to arbitrary third-party destinations.
   languages:
-  - generic
+    - generic
   severity: WARNING
   paths:
     include:
-    - web.config
+      - "*web.config"
   metadata:
+    category: security
     license: MIT
     references:
-    - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
-    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
-    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
+      - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
+      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
+      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
     technology:
-    - .net
-    - asp
-    - webforms
+      - .net
+      - asp
+      - webforms
     cwe:
-    - 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
-    - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+      - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+      - "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp:
-    - A06:2017 - Security Misconfiguration
-    - A05:2021 - Security Misconfiguration
+      - A06:2017 - Security Misconfiguration
+      - A05:2021 - Security Misconfiguration
