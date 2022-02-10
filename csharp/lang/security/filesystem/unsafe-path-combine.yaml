@@ -11,6 +11,8 @@ rules:
         - pattern: $ARG
         - pattern-inside: |
             Path.Combine(...)
+        - pattern-not-inside: |
+            Path.Combine(...,Path.GetFileName(...),...)
     pattern-sanitizers:
       - patterns:
         - pattern: $ARG
@@ -21,7 +23,7 @@ rules:
           - pattern-inside: |
               <... Path.GetFileName(...) != $ARG ...>;
               ...
-    message: String method argument $ARG passed to Path.Combine without sanitization.
+    message: String method argument $ARG passed to Path.Combine without sanitization via Path.GetFileName.  If user-supplied data is supplied this can lead to path traversal.
     languages:
       - csharp
     severity: WARNING

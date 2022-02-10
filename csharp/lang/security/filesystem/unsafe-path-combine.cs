@@ -47,4 +47,14 @@ public class Foo{
         string filepath = Path.Combine("\\FILESHARE\images", filename); 
         return File.ReadAllBytes(filepath);
     }
+
+    public static bytes[] GetFileSafe3(string filename) { 
+        // Ensure that all path elements are safe path elements. 
+        if (string.IsNullOrEmpty(filename)) 
+        {   
+            throw new ArgumentNullException("error"); 
+        }
+        // ok: unsafe-path-combine
+        string filepath = Path.Combine("\\FILESHARE\images", Path.GetFileName(filename)); 
+        
 }	
