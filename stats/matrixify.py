@@ -96,16 +96,12 @@ def get_framework(path: str, rule: Dict[str, Any]) -> str:
 
 # Reads 'cwe_to_metacategory.yml' to construct a map to convert a CWE to a metacategory
 def create_metacategory_map(path: str) -> Dict[str, str]:
-    cwe_mc_map = {} # {cwe, metacategory}
-
     with open(path, "r") as mc_map_file:
         mc_map = yaml.safe_load(mc_map_file)
 
-        for mc in mc_map:
-            for cwe in mc_map[mc]:
-                cwe_mc_map[cwe] = mc
-
-    return cwe_mc_map
+    # list comprehensions are complicated!
+    # in this case, first we need to enumerate the keys, then we need to enumerate *all* entries for that key
+    return {cwe: mc for mc in mc_map.keys() for cwe in mc_map[mc]}
 
 def is_security(path: str) -> bool:
     return "security" in path
