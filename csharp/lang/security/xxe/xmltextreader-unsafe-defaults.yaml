@@ -1,0 +1,39 @@
+rules:
+  - id: xmltextreader-unsafe-defaults
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $ARG
+          - pattern-inside: |
+              public $T $M(...,string $ARG,...){...}
+    pattern-sinks:
+      - patterns:
+          - pattern: |
+              $READER.$METHOD(...)
+          - pattern-not-inside: |
+              $READER.DtdProcessing = DtdProcessing.Prohibit;
+              ...
+          - pattern-inside: |
+              XmlTextReader $READER = new XmlTextReader(...);
+              ...
+    message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader
+      handling a string argument from a public method.  Enabling Document Type
+      Definition (DTD) parsing may cause XML External Entity (XXE) injection if
+      supplied with user-controllable data.
+    languages:
+      - csharp
+    severity: WARNING
+    metadata:
+      category: security
+      license: MIT
+      references:
+        - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
+        - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver?view=net-6.0#remarks
+      technology:
+        - .net
+        - xml
+      cwe:
+        - "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp:
+        - A04:2017 - XML External Entities (XXE)
+        - A05:2021 - Security Misconfiguration
