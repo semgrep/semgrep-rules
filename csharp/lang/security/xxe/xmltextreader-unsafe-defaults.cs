@@ -16,6 +16,22 @@ namespace SomeNamespace{
             Console.ReadLine();
         }
 
+        public static void StaticReaderBad(string userInput)
+        {
+            XmlTextReader myReader = new XmlTextReader(new StringReader(userInput));
+
+            // ruleid: xmltextreader-unsafe-defaults
+            while (myReader.Read())
+            {
+                if (myReader.NodeType == XmlNodeType.Element)
+                {
+                    // ruleid: xmltextreader-unsafe-defaults
+                    Console.WriteLine(myReader.ReadElementContentAsString());
+                }
+            }
+            Console.ReadLine();
+        }
+
         public void ReaderGood(string userInput)
         {
             XmlTextReader myReader = new XmlTextReader(new StringReader(userInput));

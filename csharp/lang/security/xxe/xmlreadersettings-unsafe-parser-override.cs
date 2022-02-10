@@ -12,6 +12,20 @@ public void ParseBad(string input){
     Console.ReadLine();
 }
 
+public static void StaticParseBad(string input){
+    XmlReaderSettings rs = new XmlReaderSettings();
+    rs.DtdProcessing = DtdProcessing.Parse;
+
+    // ruleid:xmlreadersettings-unsafe-parser-override
+    XmlReader myReader = XmlReader.Create(new StringReader(input),rs);
+            
+    while (myReader.Read())
+    {
+        Console.WriteLine(myReader.Value);
+    }
+    Console.ReadLine();
+}
+
 public void ParseBad2(string input){
     XmlReaderSettings rs = new XmlReaderSettings();
     rs.DtdProcessing = DtdProcessing.Parse;
