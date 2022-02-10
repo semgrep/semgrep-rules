@@ -64,3 +64,11 @@ try:
       print("finally executed")
 except ZeroDivisionError:
   print("outer ZeroDivisionError caught")
+
+# ruleid: suppressed-exception-handling-finally-break
+try:
+  print("hi")
+  return "hi"
+finally:
+  print("finally")
+  return "finally"
