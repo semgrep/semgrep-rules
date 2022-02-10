@@ -1,0 +1,14 @@
+rules:
+- id: error-break
+  pattern: |
+    try:
+      ...
+    except $EXCEPTION:
+      ...
+    finally:
+      ...
+      break
+  message: having a break in a finally block will cause the execption to be not caught
+  languages:
+  - python
+  severity: WARNING
