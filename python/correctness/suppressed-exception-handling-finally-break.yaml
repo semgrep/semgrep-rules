@@ -1,14 +1,31 @@
 rules:
-- id: error-break
-  pattern: |
-    try:
-      ...
-    except $EXCEPTION:
-      ...
-    finally:
-      ...
-      break
-  message: having a break in a finally block will cause the execption to be not caught
-  languages:
-  - python
+- id: suppressed-exception-handling-finally-break
+  patterns:
+    - pattern-either:
+      - pattern: |
+          try:
+            ...
+          except $EXCEPTION:
+            ...
+          finally:
+            ...
+            break
+      - pattern: |
+          try:
+            ...
+          except $EXCEPTION:
+            ...
+          finally:
+            ...
+            continue
+      - pattern: |
+          try:
+            ...
+          except $EXCEPTION:
+            ...
+          finally:
+            ...
+            return ...
+  message: having a `break`, `continue`, or `return` in a `finally` block will cause strange behaviors including an execption to be not caught
+  languages: [python]
   severity: WARNING
