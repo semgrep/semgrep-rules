@@ -7,10 +7,15 @@ rules:
       - pattern-not-inside: |
           def $Y(...) -> $TYPE:
             ...
-      - pattern-inside: |
-          @attr.s(...,auto_attribs=True, ...)
-          class $X(...):
-            ...
+      - pattern-either:
+          - pattern-inside: |
+              @attr.s(...,auto_attribs=True, ...)
+              class $X(...):
+                ...
+          - pattern-inside: |
+              @attrs.define
+              class $X(...):
+                ...
       - pattern-either:
           - pattern: |
               $M = {...}
