@@ -1,0 +1,43 @@
+rules:
+  - id: IssuerNameRegistry-subject-name-validation
+    severity: WARNING
+    languages:
+      - C#
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp:
+        - "A02:2017 - Broken Authentication"
+        - "A07:2021 - Identification and Authentication Failures"
+      references:
+        - https://docs.microsoft.com/en-us/dotnet/api/system.identitymodel.tokens.issuernameregistry?view=netframework-4.8
+      category: security
+      technology:
+        - .net
+      confidence: MEDIUM
+    message: >-
+      The top level wildcard bindings $PREFIX leaves your application open to security vulnerabilities and give attackers more control over where traffic is routed.
+      If you must use wildcards, consider using subdomain wildcard binding. For example, you can use "*.asdf.gov" if you own all of "asdf.gov".
+    patterns:
+      - pattern-inside: |
+          using System.IdentityModel.Tokens;
+          ...
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  X509SecurityToken $TOK = $RHS;
+                  ...
+              - pattern-inside: |
+                  $T $M(..., X509SecurityToken $TOK, ...) {
+                      ...
+                  }
+          - metavariable-pattern:
+              metavariable: $RHS
+              pattern-either:
+                - pattern: $T as X509SecurityToken
+                - pattern: new X509SecurityToken(...)
+      - pattern-either: 
+          - pattern: String.Equals($TOK.Certificate.SubjectName.Name, "...")
+          - pattern: String.Equals("...", $TOK.Certificate.SubjectName.Name)
+          - pattern: $TOK.Certificate.SubjectName.Name.Equals("...")
+          - pattern: $TOK.Certificate.SubjectName.Name == "..."
+          - pattern: $TOK.Certificate.SubjectName.Name != "..."
