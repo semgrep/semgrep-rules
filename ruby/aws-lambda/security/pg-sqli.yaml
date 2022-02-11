@@ -1,0 +1,42 @@
+rules:
+- id: pg-sqli
+  languages:
+  - ruby
+  message: >-
+    Detected SQL statement that is tainted by `event` object. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `conn.exec_params('SELECT $1 AS a, $2 AS b, $3 AS c', [1, 2, nil])`
+  mode: taint
+  metadata:
+    references:
+      - https://www.rubydoc.info/gems/pg/PG/Connection
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+      - aws-lambda
+      - postgres
+      - pg
+  pattern-sinks:
+  - patterns:
+    - pattern: $QUERY
+    - pattern-either:
+      - pattern: $CONN.exec($QUERY,...)
+      - pattern: $CONN.exec_params($QUERY,...)
+      - pattern: $CONN.exec_prepared($QUERY,...)
+      - pattern: $CONN.async_exec($QUERY,...)
+      - pattern: $CONN.async_exec_params($QUERY,...)
+      - pattern: $CONN.async_exec_prepared($QUERY,...)
+    - pattern-inside: |
+        require 'pg'
+        ...
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context)
+          ...
+        end
+  severity: WARNING
