@@ -22,8 +22,9 @@ rules:
   - metavariable-regex:
       metavariable: $PIPESTREAM
       regex: (Anonymous|Named)Pipe(Server|Client)Stream
-  message: Potential inter-process write of RegionInfo $RI via $PIPESTREAM $P that
-    was instantiated with a two-character culture code $REGION.
+  message: >-
+    Potential inter-process write of RegionInfo $RI via $PIPESTREAM $P that was instantiated with a two-character culture code $REGION. 
+    Per .NET documentation, if you want to persist a RegionInfo object or communicate it between processes, you should instantiate it by using a full culture name rather than a two-letter ISO region code.
   languages:
   - csharp
   severity: WARNING
