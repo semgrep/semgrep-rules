@@ -15,8 +15,9 @@ rules:
       category: security
       technology:
         - java
+        - xml
     message: >-
-      DOCTYPE declaratons are enabled for this DocumentBuilderFactory.
+      DOCTYPE declarations are enabled for this DocumentBuilderFactory.
       Without prohibiting external entity declarations, this is vulnerable to XML external entity attacks.
       Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl" to true.
       Alternatively, allow DOCTYPE declarations and only prohibit external entities declarations.
@@ -26,17 +27,33 @@ rules:
       - pattern-not-inside: |
           $RETURNTYPE $METHOD(...){
             ...
-            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", ...);
+            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
             ...
-            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", ...);
+            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             ...
           }
       - pattern-not-inside: |
           $RETURNTYPE $METHOD(...){
             ...
-            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", ...);
+            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             ...
-            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", ...);
+            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            ...
+          }
+      - pattern-not-inside: |
+          $RETURNTYPE $METHOD(...){
+            ...
+            $DBF.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            ...
+            $DBF.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            ...
+          }
+      - pattern-not-inside: |
+          $RETURNTYPE $METHOD(...){
+            ...
+            $DBF.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            ...
+            $DBF.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
             ...
           }
 # Fix commented out due to bug in autofix behaviour
