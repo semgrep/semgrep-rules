@@ -1,6 +1,9 @@
 rules:
   - id: insecure-hash-algorithm-md5
     pattern: hashlib.md5(...)
+    fix-regex:
+      regex: md5
+      replacement: sha256
     message: >-
       Detected MD5 hash algorithm which is considered insecure. MD5 is not
       collision resistant and is therefore not suitable as a cryptographic
@@ -27,6 +30,9 @@ rules:
       - python
   - id: insecure-hash-algorithm-sha1
     pattern: hashlib.sha1(...)
+    fix-regex:
+      regex: sha1
+      replacement: sha256
     message: >-
       Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
       collision resistant and is therefore not suitable as a cryptographic

@@ -1,6 +1,9 @@
 rules:
   - id: insecure-cipher-algorithm-rc4
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
+    fix-regex:
+      regex: ARC4
+      replacement: AES
     message: >-
       Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
       known vulnerabilities. Use AES instead.
@@ -20,6 +23,9 @@ rules:
       - python
   - id: insecure-cipher-algorithm-blowfish
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
+    fix-regex:
+      regex: Blowfish
+      replacement: AES
     message: >-
       Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
       known vulnerabilities. Use AES instead.
@@ -38,6 +44,9 @@ rules:
       - python
   - id: insecure-cipher-algorithm-idea
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
+    fix-regex:
+      regex: IDEA
+      replacement: AES
     message: >-
       Detected IDEA cipher algorithm which is considered insecure. The algorithm is
       considered weak and has been deprecated. Use AES instead.
