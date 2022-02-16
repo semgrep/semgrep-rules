@@ -1,0 +1,19 @@
+rules:
+  - id: generic-entropy-comment
+    patterns:
+      - pattern-either: 
+        - pattern: |
+            // ... $B ...
+        - pattern: |
+            # ... $B ...
+        - pattern: |
+            /* ... $B ... */
+        - pattern: |
+            <!-- ... $B ... -->
+      - metavariable-analysis:
+          analyzer: entropy
+          metavariable: $B
+    message: Found a high-entropy string in a comment.
+    languages:
+      - generic
+    severity: ERROR
