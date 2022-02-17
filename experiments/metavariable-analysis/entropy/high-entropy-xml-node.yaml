@@ -1,0 +1,15 @@
+rules:
+  - id: high-entropy-xml-node
+    patterns:
+      - pattern-either:
+        - pattern: |
+            <$NODE>$X</$NODE>
+        - pattern: |
+            <$NODE $VAL=$X />
+      - metavariable-analysis:
+          analyzer: entropy
+          metavariable: $X
+    message: Found a high-entropy string in an XML node $NODE
+    languages:
+      - generic
+    severity: ERROR
