@@ -1,0 +1,15 @@
+rules:
+- id: mongo-client-bad-auth-copy
+  pattern: |
+    pymongo.MongoClient(..., authMechanism='MONGODB-CR')
+  message: |
+    Warning MONGODB-CR was deprecated with the release of MongoDB 3.6 and is no longer supported by MongoDB 4.0 (see https://api.mongodb.com/python/current/examples/authentication.html for details).
+  fix-regex:
+    regex: MONGODB-CR
+    replacement: SCRAM-SHA-256
+  severity: WARNING
+  languages:
+  - python
+  metadata:
+    category: security
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
