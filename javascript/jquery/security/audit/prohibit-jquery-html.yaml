@@ -6,7 +6,9 @@ rules:
       - pattern-not: |
           $X.html("...",...)
     message: >-
-      JQuery's `html` function is susceptible to Cross Site Scripting (XSS) attacks. If you're just passing text, consider `text` instead. Otherwise, use a function that escapes HTML such as edX's `HtmlUtils.setHtml()`.
+      JQuery's `.html()` is susceptible to Cross Site Scripting (XSS) attacks. 
+      If you're just passing text, consider `.text()` instead. Otherwise, use a 
+      function that escapes HTML such as edX's `HtmlUtils.setHtml()`.
     metadata:
       owasp: "A7: Cross-Site Scripting (XSS)"
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
