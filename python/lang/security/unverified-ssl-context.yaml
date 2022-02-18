@@ -1,6 +1,9 @@
 rules:
   - id: unverified-ssl-context
     pattern: ssl._create_unverified_context(...)
+    fix-regex:
+      regex: _create_unverified_context
+      replacement: create_default_context
     message: >-
       Unverified SSL context detected. This will permit insecure connections without
       verifying
