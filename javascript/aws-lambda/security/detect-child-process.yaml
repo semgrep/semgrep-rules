@@ -1,0 +1,53 @@
+rules:
+- id: detect-child-process
+  mode: taint
+  metadata:
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: "A1: Injection"
+    category: security
+    technology:
+    - javascript
+    - aws-lambda
+  message: >-
+    Allowing spawning arbitrary programs or running shell processes with arbitrary arguments may end up in a command injection vulnerability.
+    Try to avoid non-literal values for the command string.
+    If it is not possible, then do not let running arbitrary commands, use a white list for inputs.
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern: $CMD
+    - pattern-either:
+      - pattern-inside: exec($CMD,...)
+      - pattern-inside: execSync($CMD,...)
+      - pattern-inside: spawn($CMD,...)
+      - pattern-inside: spawnSync($CMD,...)
+      - pattern-inside: $CP.exec($CMD,...)
+      - pattern-inside: $CP.execSync($CMD,...)
+      - pattern-inside: $CP.spawn($CMD,...)
+      - pattern-inside: $CP.spawnSync($CMD,...)
+    - pattern-either:
+      - pattern-inside: |
+          require('child_process')
+          ...
+      - pattern-inside: |
+          import 'child_process'
+          ...
+  severity: WARNING
+  languages:
+    - javascript
+    - typescript

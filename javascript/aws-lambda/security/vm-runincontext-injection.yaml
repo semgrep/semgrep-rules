@@ -1,0 +1,57 @@
+rules:
+- id: vm-runincontext-injection
+  mode: taint
+  message: >-
+    The `vm` module enables compiling and running code within V8 Virtual Machine contexts.
+    The `vm` module is not a security mechanism. Do not use it to run untrusted code.
+    If code passed to `vm` functions is controlled by user input it could result in command injection.
+    Do not let user input in `vm` functions.
+  severity: WARNING
+  languages:
+  - javascript
+  - typescript
+  metadata:
+    owasp: "A1: Injection"
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    category: security
+    technology:
+      - javascript
+      - aws-lambda
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          require('vm');
+          ...
+      - pattern-inside: |
+          import 'vm'
+          ...
+    - pattern-either:
+      - pattern: $VM.runInContext($X,...)
+      - pattern: $VM.runInNewContext($X,...)
+      - pattern: $VM.runInThisContext($X,...)
+      - pattern: $VM.compileFunction($X,...)
+      - pattern: new $VM.Script($X,...)
+      - pattern: new $VM.SourceTextModule($X,...)
+      - pattern: runInContext($X,...)
+      - pattern: runInNewContext($X,...)
+      - pattern: runInThisContext($X,...)
+      - pattern: compileFunction($X,...)
+      - pattern: new Script($X,...)
+      - pattern: new SourceTextModule($X,...)
