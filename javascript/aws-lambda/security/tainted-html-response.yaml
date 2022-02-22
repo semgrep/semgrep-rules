@@ -1,0 +1,34 @@
+rules:
+- id: tainted-html-response
+  severity: WARNING
+  message: >-
+    Detected user input flowing into a manually constructed HTML string. You may be
+    accidentally bypassing secure methods
+    of rendering HTML by manually constructing HTML and this could create a cross-site
+    scripting vulnerability, which could
+    let attackers steal sensitive user data.
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+    - pattern: $EVENT
+  pattern-sinks:
+  - patterns:
+    - pattern: $BODY
+    - pattern-inside: |
+        {..., headers: {..., 'Content-Type': 'text/html', ...}, body: $BODY, ... }
