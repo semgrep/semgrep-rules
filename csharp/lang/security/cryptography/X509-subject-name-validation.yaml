@@ -1,0 +1,66 @@
+rules:
+- id: X509-subject-name-validation
+  severity: WARNING
+  languages:
+  - csharp
+  metadata:
+    cwe: 'CWE-295: Improper Certificate Validation'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.identitymodel.tokens.issuernameregistry?view=netframework-4.8
+    category: security
+    technology:
+    - .net
+    confidence: MEDIUM
+  message: 'Validating certificates based on subject name is '
+  patterns:
+  - pattern-inside: |
+      using System.IdentityModel.Tokens;
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            X509SecurityToken $TOK = $RHS;
+            ...
+        - pattern-inside: |
+            $T $M(..., X509SecurityToken $TOK, ...) {
+                ...
+            }
+      - metavariable-pattern:
+          metavariable: $RHS
+          pattern-either:
+          - pattern: $T as X509SecurityToken
+          - pattern: new X509SecurityToken(...)
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            X509Certificate2 $CERT = new X509Certificate2(...);
+            ...
+        - pattern-inside: |
+            $T $M(..., X509Certificate2 $CERT, ...) {
+                ...
+            }
+        - pattern-inside: |
+            foreach (X509Certificate2 $CERT in $COLLECTION) {
+                ...
+            }
+  - patterns:
+    - pattern-either:
+      - pattern: String.Equals($NAME, "...")
+      - pattern: String.Equals("...", $NAME)
+      - pattern: $NAME.Equals("...")
+      - pattern: $NAME == "..."
+      - pattern: $NAME != "..."
+      - pattern: |
+          "..." == $NAME
+      - pattern: |
+          "..." != $NAME
+    - metavariable-pattern:
+        metavariable: $NAME
+        pattern-either:
+        - pattern: $TOK.Certificate.SubjectName.Name
+        - pattern: $CERT.SubjectName.Name
+        - pattern: $CERT.GetNameInfo(...)
