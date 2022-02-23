@@ -1,17 +1,20 @@
 rules:
   - id: insecure-use-string-copy-fn
-    patterns:
-      - pattern: $X(...)
-      - metavariable-regex:
-          metavariable: $X
-          regex: (strcpy|strncpy)
+    pattern-either:
+      - pattern: strcpy(...)
+      - pattern: strncpy(...)
     message: >-
-      Use `$X_s` instead of `$X` to avoid buffer overflows from mismatched destination array sizes or non NULL-terminated strings.
+      Finding triggers whenever there is a strcpy or strncpy used.
+      This is an issue because strcpy does not affirm the size of the destination array
+      and strncpy will not automatically NULL-terminate strings.
+      This can lead to buffer overflows, which can cause program crashes
+      and potentially let an attacker inject code in the program.
+      Fix this by using strcpy_s instead (although note that strcpy_s is an
+      optional part of the C11 standard, and so may not be available).
     metadata:
       references:
-        - https://randomascii.wordpress.com/2013/04/03/stop-using-strncpy-already/
-        - https://en.cppreference.com/w/c/string/byte/strcpy
-        - https://en.cppreference.com/w/c/string/byte/strncpy
+        - https://cwe.mitre.org/data/definitions/676
+        - https://nvd.nist.gov/vuln/detail/CVE-2019-11365
       category: security
       technology:
         - c
