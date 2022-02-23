@@ -1,0 +1,20 @@
+rules:
+  - id: insecure-use-string-copy-fn
+    patterns:
+      - pattern: $X(...)
+      - metavariable-regex:
+          metavariable: $X
+          regex: (strcpy|strncpy)
+    message: >-
+      Use `$X_s` instead of `$X` to avoid buffer overflows from mismatched destination array sizes or non NULL-terminated strings.
+    metadata:
+      references:
+        - https://randomascii.wordpress.com/2013/04/03/stop-using-strncpy-already/
+        - https://en.cppreference.com/w/c/string/byte/strcpy
+        - https://en.cppreference.com/w/c/string/byte/strncpy
+      category: security
+      technology:
+        - c
+      confidence: MEDIUM
+    languages: [c]
+    severity: WARNING
