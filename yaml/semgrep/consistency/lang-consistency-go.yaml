@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-go
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^(?i)golang$
+    message: golang found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: go
+    metadata:
+      category: correctness
