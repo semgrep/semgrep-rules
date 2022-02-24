@@ -30,7 +30,7 @@ def generate_rule(lang_data):
                             }
                         }
                     ],
-                    "message": "Found '$X' in language config which diverges from semgrep.dev normalization.",
+                    "message": f"Found '$X' in language config which diverges from semgrep.dev normalization. Please use '{lang_data['id']}' instead.",
                     "languages":["yaml"],
                     "severity":"WARNING",
                     "fix":lang_data['id'],
