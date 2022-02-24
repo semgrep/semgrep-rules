@@ -1,6 +1,6 @@
 rules:
-- fix: solidity
-  id: lang-consistency-solidity
+- fix: ts
+  id: lang-consistency-ts
   languages:
   - yaml
   message: Found '$X' in language config which diverges from semgrep.dev normalization.
@@ -13,5 +13,5 @@ rules:
   - pattern-inside: 'languages: ...'
   - metavariable-regex:
       metavariable: $X
-      regex: ^(sol)$
+      regex: ^(typescript)$
   severity: WARNING

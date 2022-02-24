@@ -1,20 +1,17 @@
 rules:
-  - id: lang-consistency-bash
-    patterns:
-      - pattern: $X
-      - pattern-either:
-          - pattern-inside: |
-              languages: ...
-      - metavariable-regex:
-          metavariable: $X
-          regex: ^sh$
-    message: >-
-      Found '$X' in language config which diverges from semgrep.dev normalization.
-    languages:
-      - yaml
-    severity: WARNING
-    fix: bash
-    metadata:
-      category: correctness
-      technology:
-        - semgrep
+- fix: bash
+  id: lang-consistency-bash
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(sh)$
+  severity: WARNING

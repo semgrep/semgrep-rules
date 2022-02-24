@@ -1,20 +1,17 @@
 rules:
-  - id: lang-consistency-go
-    patterns:
-      - pattern: $X
-      - pattern-either:
-          - pattern-inside: |
-              languages: ...
-      - metavariable-regex:
-          metavariable: $X
-          regex: ^(?i)golang$
-    message: >-
-      Found '$X' in language config which diverges from semgrep.dev normalization.
-    languages:
-      - yaml
-    severity: WARNING
-    fix: go
-    metadata:
-      category: correctness
-      technology:
-        - semgrep
+- fix: go
+  id: lang-consistency-go
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(golang)$
+  severity: WARNING

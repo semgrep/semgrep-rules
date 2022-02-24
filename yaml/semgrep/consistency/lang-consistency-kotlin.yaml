@@ -1,20 +1,17 @@
 rules:
-  - id: lang-consistency-kotlin
-    patterns:
-      - pattern: $X
-      - pattern-either:
-          - pattern-inside: |
-              languages: ...
-      - metavariable-regex:
-          metavariable: $X
-          regex: ^kt$
-    message: >-
-      Found '$X' in language config which diverges from semgrep.dev normalization.
-    languages:
-      - yaml
-    severity: WARNING
-    fix: kotlin
-    metadata:
-      category: correctness
-      technology:
-        - semgrep
+- fix: kotlin
+  id: lang-consistency-kotlin
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(kt)$
+  severity: WARNING
