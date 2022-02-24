@@ -7,12 +7,13 @@ rules:
               languages: ...
       - metavariable-regex:
           metavariable: $X
-          regex: ^js$
-    message: javascript shortname found in language config.
+          regex: ^javascript$
+    message: >
+      Found '$X' in language config which diverges from semgrep.dev normalization.
     languages:
       - yaml
     severity: WARNING
-    fix: javascript
+    fix: js
     metadata:
       category: correctness
       technology:

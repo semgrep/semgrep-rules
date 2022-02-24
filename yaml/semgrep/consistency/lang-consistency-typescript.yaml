@@ -7,12 +7,13 @@ rules:
               languages: ...
       - metavariable-regex:
           metavariable: $X
-          regex: ^ts$
-    message: typescript shortname found in language config.
+          regex: ^typescript$
+    message: >
+      Found '$X' in language config which diverges from semgrep.dev normalization.
     languages:
       - yaml
     severity: WARNING
-    fix: typescript
+    fix: ts
     metadata:
       category: correctness
       technology:

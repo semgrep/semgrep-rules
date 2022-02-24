@@ -8,12 +8,13 @@ rules:
                 ...
       - metavariable-regex:
           metavariable: $X
-          regex: ^(tf|hcl)$
-    message: terraform shortname found in language config.
+          regex: ^(tf|terraform)$
+    message: >
+      Found '$X' in language config which diverges from semgrep.dev normalization.
     languages:
       - yaml
     severity: WARNING
-    fix: terraform
+    fix: hcl
     metadata:
       category: correctness
       technology:
