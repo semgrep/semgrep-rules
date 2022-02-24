@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-elixir
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^ex$
+    message: elixir shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: elixir
+    metadata:
+      category: correctness

@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-cpp
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^c\+\+$
+    message: cpp shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: cpp
+    metadata:
+      category: correctness

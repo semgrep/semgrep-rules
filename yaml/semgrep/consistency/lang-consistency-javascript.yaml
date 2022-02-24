@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-javascript
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^js$
+    message: javascript shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: javascript
+    metadata:
+      category: correctness

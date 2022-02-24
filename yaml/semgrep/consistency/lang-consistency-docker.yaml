@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-docker
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^dockerfile$
+    message: dockerfile found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: docker
+    metadata:
+      category: correctness

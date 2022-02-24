@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-typescript
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^ts$
+    message: typescript shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: typescript
+    metadata:
+      category: correctness

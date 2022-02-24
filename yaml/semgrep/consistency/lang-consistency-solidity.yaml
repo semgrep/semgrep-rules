@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-solidity
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^sol$
+    message: solidity shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: solidity
+    metadata:
+      category: correctness

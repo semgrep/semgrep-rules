@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-kotlin
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^kt$
+    message: kotlin shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: kotlin
+    metadata:
+      category: correctness

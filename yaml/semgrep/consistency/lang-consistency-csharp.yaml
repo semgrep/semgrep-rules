@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-csharp
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^[cC]#$
+    message: csharp shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: csharp
+    metadata:
+      category: correctness

@@ -1,0 +1,17 @@
+rules:
+  - id: lang-consistency-python
+    patterns:
+      - pattern: $X
+      - pattern-either:
+          - pattern-inside: |
+              languages: ...
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^py$
+    message: python shortname found in language config.
+    languages:
+      - yaml
+    severity: WARNING
+    fix: python
+    metadata:
+      category: correctness
