@@ -2,6 +2,7 @@ from pdb import runeval
 import requests
 import yaml
 import os
+import re
 
 def fetch_lang_data():
     print('fetching latest lang configs..')
@@ -9,7 +10,7 @@ def fetch_lang_data():
     return requests.get(lang_url).json()
 
 def generate_rule(lang_data):
-    alt_names = list(filter(lambda x: x != lang_data['id'], lang_data['keys']))
+    alt_names = list(map(lambda y: re.escape(y) ,filter(lambda x: x != lang_data['id'], lang_data['keys'])))
     rule_obj = None
     if len(alt_names) > 0:
         key_string = '|'.join(alt_names)
