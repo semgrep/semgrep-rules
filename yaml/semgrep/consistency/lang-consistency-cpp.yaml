@@ -1,0 +1,18 @@
+rules:
+- fix: cpp
+  id: lang-consistency-cpp
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+    Please use 'cpp' instead.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(c\+\+)$
+  severity: WARNING
