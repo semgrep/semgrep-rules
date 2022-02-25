@@ -23,3 +23,6 @@ rules:
       - pattern: requests.request(..., verify=False, ...)
       - pattern: requests.get(..., verify=False, ...)
       - pattern: requests.post(..., verify=False, ...)
+    fix-regex:
+      regex: verify(\s)*=(\s)*False
+      replacement: verify=True

@@ -1,0 +1,37 @@
+rules:
+- id: correctness-regioninfo-interop
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $WRITER.Write($RI);
+    - pattern: |
+        $WRITER.WriteAsync($RI);
+    - pattern: |
+        $WRITER.WriteLine($RI);
+    - pattern: |
+        $WRITER.WriteLineAsync($RI);
+  - pattern-inside: |
+      RegionInfo $RI = new RegionInfo($REGION);
+      ...
+      using($PIPESTREAM $P = ...){
+        ...
+      }
+  - metavariable-regex:
+      metavariable: $REGION
+      regex: ^"\w{2}"$
+  - metavariable-regex:
+      metavariable: $PIPESTREAM
+      regex: (Anonymous|Named)Pipe(Server|Client)Stream
+  message: >-
+    Potential inter-process write of RegionInfo $RI via $PIPESTREAM $P that was instantiated with a two-character culture code $REGION. 
+    Per .NET documentation, if you want to persist a RegionInfo object or communicate it between processes, you should instantiate it by using a full culture name rather than a two-letter ISO region code.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.globalization.regioninfo.twoletterisoregionname?view=net-6.0#remarks
+    technology:
+    - .net
+    category: correctness
+    confidence: MEDIUM

@@ -1,0 +1,40 @@
+rules:
+- id: psycopg-sqli
+  languages:
+  - python
+  message: >-
+    Detected SQL statement that is tainted by `event` object. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `cursor.execute('SELECT * FROM projects WHERE status = %s', 'active')`
+  mode: taint
+  metadata:
+    references:
+      - https://www.psycopg.org/docs/cursor.html#cursor.execute
+      - https://www.psycopg.org/docs/cursor.html#cursor.executemany
+      - https://www.psycopg.org/docs/cursor.html#cursor.mogrify
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+      - aws-lambda
+      - psycopg
+      - psycopg2
+  pattern-sinks:
+  - patterns:
+    - pattern: $QUERY
+    - pattern-either:
+      - pattern-inside: $CURSOR.execute($QUERY,...)
+      - pattern-inside: $CURSOR.executemany($QUERY,...)
+      - pattern-inside: $CURSOR.mogrify($QUERY,...)
+    - pattern-inside: |
+        import psycopg2
+        ...
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context):
+          ...
+  severity: WARNING

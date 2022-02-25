@@ -1,0 +1,28 @@
+rules:
+  - id: http-listener-wildcard-bindings
+    severity: WARNING
+    languages:
+      - C#
+    metadata:
+      cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
+      owasp:
+        - "A05:2017 - Broken Access Control"
+        - "A01:2021 - Broken Access Control"
+      references:
+        - https://docs.microsoft.com/en-us/dotnet/api/system.net.httplistener?view=net-6.0
+      category: security
+      technology:
+        - .net
+      confidence: MEDIUM
+    message: >-
+      The top level wildcard bindings $PREFIX leaves your application open to security vulnerabilities and give attackers more control over where traffic is routed.
+      If you must use wildcards, consider using subdomain wildcard binding. For example, you can use "*.asdf.gov" if you own all of "asdf.gov".
+    patterns:
+      - pattern-inside: |
+          using System.Net;
+          ...
+      - pattern: $LISTENER.Prefixes.Add("$PREFIX")
+      - metavariable-regex:
+          metavariable: $PREFIX
+          regex: |
+            (http|https)://(\*|\+)(.[a-zA-Z]{2,})?:[0-9]+
