@@ -2,6 +2,7 @@ rules:
   - id: unquoted-csv-writer
     patterns:
       - pattern-not: csv.writer(..., quoting=csv.QUOTE_ALL, ...)
+      - pattern-not: csv.writer(..., quoting=1, ...)
       - pattern: csv.writer(...)
     message: Found an unquoted CSV writer. This is susceptible to injection. Use 'quoting=csv.QUOTE_ALL'.
     metadata:
