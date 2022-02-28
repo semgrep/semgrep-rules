@@ -7,6 +7,22 @@ class Test {
     return result.map("%02x" format _).mkString
   }
 
+  def bad2() {
+    // ruleid: insecure-random
+    import java.util.Random
+
+    val result = Seq.fill(16)(Random.nextInt)
+    return result.map("%02x" format _).mkString
+  }
+
+  def bad3() {
+    // ruleid: insecure-random
+    import java.lang.Math.Random
+
+    val result = Seq.fill(16)(Random.nextInt)
+    return result.map("%02x" format _).mkString
+  }
+
   def ok1() {
     // ok: insecure-random
     import java.security.SecureRandom

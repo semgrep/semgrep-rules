@@ -12,12 +12,16 @@ rules:
       resources:
         - https://find-sec-bugs.github.io/bugs.htm
     message: >-
-      Flags the use of a predictable random value from `scala.util.Random`. This can lead to vulnerabilities when used in security
-      contexts, such as in a CSRF token, password reset token, or any other secret value. To fix this, use java.security.SecureRandom
-      instead.
+      Flags the use of a predictable random value from an insecure random number generator. This can lead to vulnerabilities when used
+      in security contexts, such as in a CSRF token, password reset token, or any other secret value. To fix this, use
+      java.security.SecureRandom instead.
     severity: WARNING
     languages:
       - scala
-    patterns:
+    pattern-either:
       - pattern: |
           import scala.util.Random
+      - pattern: |
+          import java.util.Random
+      - pattern: |
+          import java.lang.Math.Random
