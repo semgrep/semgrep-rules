@@ -1,0 +1,18 @@
+rules:
+- fix: ts
+  id: lang-consistency-ts
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+    Please use 'ts' instead.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(typescript)$
+  severity: WARNING

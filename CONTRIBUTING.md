@@ -132,6 +132,10 @@ rules:
 - id: render-template-string
   ...
   metadata:
+    category: security
+    technology:
+    - python
+    - jinja
     cwe: "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
     owasp: 'A01:2017 Injection'
     references:

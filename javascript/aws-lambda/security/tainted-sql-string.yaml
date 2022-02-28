@@ -1,0 +1,58 @@
+rules:
+- id: tainted-sql-string
+  severity: WARNING
+  message: >-
+    Detected user input used to manually construct a SQL string. This is usually
+    bad practice because manual construction could accidentally result in a SQL
+    injection. An attacker could use a SQL injection to steal or modify contents
+    of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using an
+    object-relational mapper (ORM) such as Sequelize which will protect your queries.
+  metadata:
+    references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+    - aws-lambda
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+    - pattern: $EVENT
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              "$SQLSTR" + $EXPR
+          - pattern: |
+              "$SQLSTR".concat(...)
+          - pattern: util.format($SQLSTR, ...)
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+      - patterns:
+        - pattern: |
+            `...${...}...`
+        - pattern-regex: |
+            .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+    - pattern-not-inside: |
+        console.$LOG(...)

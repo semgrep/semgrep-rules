@@ -1,0 +1,61 @@
+rules:
+  - id: tainted-sql-from-http-request 
+    message: >-
+      Detected input from a HTTPServletRequest going into a SQL sink or statement. This could lead to SQL
+      injection if variables in the SQL statement are not properly sanitized.
+      Use parameterized SQL queries or properly sanitize user input instead.
+    languages: [java]
+    severity: WARNING
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either: # using this more specific pattern instead of (HttpServletRequest $REQ) reduces FP that are designed to trick taint
+        - pattern: |
+            (HttpServletRequest $REQ).$REQFUNC(...) 
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (java.sql.CallableStatement $STMT) = ...; 
+        - pattern: |
+            (java.sql.Statement $STMT) = ...;
+            ...
+            $OUTPUT = $STMT.$FUNC(...);
+        - pattern: |
+            (java.sql.PreparedStatement $STMT) = ...;
+        - pattern: |
+            $VAR = $CONN.prepareStatement(...)
+        - pattern: |
+            $PATH.queryForObject(...);
+        - pattern: |
+            (java.util.Map<String, Object> $STMT) = $PATH.queryForMap(...);
+        - pattern: |
+            (org.springframework.jdbc.support.rowset.SqlRowSet $STMT) = ...;
+        - patterns: 
+          - pattern-inside: |
+              (String $SQL) = "$SQLSTR" + ...;
+              ...
+          - pattern:
+              $PATH.$SQLCMD(..., $SQL, ...);
+          - metavariable-regex:
+              metavariable: $SQLSTR
+              regex: (?i)(^SELECT.* | ^INSERT.* | ^UPDATE.*)
+          - metavariable-regex:
+              metavariable: $SQLCMD
+              regex: (execute|query|executeUpdate)
+    metadata:
+      category: security
+      technology:
+        - sql
+        - java
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp: "A01: Injection"

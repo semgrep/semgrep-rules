@@ -111,14 +111,17 @@
 
 ## csharp
 
-|                       |   lang |   razor |
-|:----------------------|-------:|--------:|
-| Regex                 |      1 |       0 |
-| Deserialization       |      8 |       0 |
-| Command Injection     |      1 |       0 |
-| SQL Injection         |      1 |       0 |
-| SSRF                  |      4 |       0 |
-| Unmapped Metacategory |      0 |       1 |
+|                       |   dotnet |   lang |   razor |
+|:----------------------|---------:|-------:|--------:|
+| Unmapped Metacategory |        1 |      1 |       1 |
+| CSRF                  |        1 |      0 |       0 |
+| Cookie Flag Security  |        1 |      0 |       0 |
+| Regex                 |        0 |      2 |       0 |
+| Deserialization       |        0 |     10 |       0 |
+| XXE                   |        0 |      3 |       0 |
+| Command Injection     |        0 |      1 |       0 |
+| SQL Injection         |        0 |      1 |       0 |
+| SSRF                  |        0 |      4 |       0 |
 
 
 ## terraform

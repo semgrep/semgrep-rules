@@ -5,7 +5,6 @@
 
 | branch | using semgrep docker image | test status          |
 | ------------ | ------------------------ | -------------------- |
-| `master` | `returntocorp/semgrep:latest`   | [![semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/workflows/semgrep/badge.svg?branch=master)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep+branch%3Amaster) |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
 Welcome! This repository is the “standard library” for [Semgrep](https://semgrep.dev) rules, but there are many more written by [r2c](https://r2c.dev) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore). If there a specific rule you are looking for, you can also search the Semgrep registry [here](https://semgrep.dev/r).
@@ -15,10 +14,6 @@ Welcome! This repository is the “standard library” for [Semgrep](https://sem
 We recommend starting with `semgrep --config auto`. The `--config auto` flag will fetch rules relevant to your project from [Semgrep Registry](https://semgrep.dev/explore). The name of your project will be sent to Semgrep Registry as an identifier to make selecting relevant rules fast next time; source code will not be uploaded.
 
 Alternatively, you can start with a pre-selected subset of rules that has already been carefully tuned for precision. These subsets of rules, which we call rulesets, may include rules not present in this repository. However, they are available for free on the [Semgrep Registry](https://semgrep.dev/explore). These rules have been written by open-source contributors and r2c.
-
-The two most popular rulesets are:
-* `semgrep --config=p/ci` to find logic bugs and high-confidence security vulnerabilities; recommended for CI
-* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans
 
 If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules from the python/flask directory in this repo, just run:<br/>
 `semgrep --config=r/python.flask`
