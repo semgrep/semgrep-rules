@@ -1,0 +1,27 @@
+rules:
+- id: raw-razor-method
+  languages:
+  - generic
+  message: 'Data is written to the browser using a raw Razor helper method: @Html.Raw(Model.Variable).
+    This can result in Cross-Site Scripting (XSS) vulnerabilities if the data source
+    is considered untrusted or dynamic (request parameters, database, web service,
+    etc.).'
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://software-security.sans.org/developer-how-to/developer-guide-xss
+    source-rule-url: https://pumascan.com/rules/#sec0102-raw-razor-method
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: |
+      $TYPE. ... .$PROPERTY
+  - pattern-inside: |
+      @Html.Raw(...)
+  severity: WARNING

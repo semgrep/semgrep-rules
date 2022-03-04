@@ -1,0 +1,16 @@
+
+<!-- test code from https://pumascan.com/rules/#sec0103-raw-writeliteral-method -->
+<div class="loginDisplay">
+@{
+    <!-- ruleid:raw-writeliteral-method -->
+    WriteLiteral(string.Format("Welcome <span class=\"bold\">{0}</span>!", Model.UserName));
+}
+</div>
+
+
+<div class="loginDisplay">
+<!-- ok:raw-writeliteral-method -->
+    Welcome <span class="bold">@Model.UserName</span>!
+</div>
+
+            

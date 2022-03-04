@@ -1,0 +1,27 @@
+rules:
+- id: raw-writeliteral-method
+  languages:
+  - generic
+  message: Data is written to the browser using the raw WriteLiteral method. This
+    can result in Cross-Site Scripting (XSS) vulnerabilities if the data source is
+    considered untrusted or dynamic (request parameters, database, web service, etc.).
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://msdn.microsoft.com/en-us/library/system.web.webpages.webpagebase.writeliteral(v=vs.111).aspx
+    - https://msdn.microsoft.com/en-us/library/system.web.webpages.html.htmlhelper_methods(v=vs.111).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0103-raw-writeliteral-method
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: |
+      $TYPE. ... .$PROPERTY
+  - pattern-inside: |
+      @{ ... WriteLiteral(...) ...}
+  severity: WARNING

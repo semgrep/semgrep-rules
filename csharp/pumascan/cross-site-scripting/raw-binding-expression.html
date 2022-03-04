@@ -1,0 +1,26 @@
+
+<!-- test code from https://pumascan.com/rules/#sec0101-raw-binding-expression -->
+<asp:GridView ID="gv" runat="server" ItemType="Data.Product">
+    <Columns>
+        <asp:TemplateField HeaderText="Product">
+            <ItemTemplate>
+<!-- ruleid:raw-binding-expression -->
+                <%# Item.Property1.Property2.ProductName %>
+            </ItemTemplate>
+        </asp:TemplateField>
+    </Columns>
+</asp:GridView>
+
+
+<asp:GridView ID="gv" runat="server" ItemType="Data.Product">
+    <Columns>
+        <asp:TemplateField HeaderText="Product">
+            <ItemTemplate>
+<!-- ok:raw-binding-expression -->
+                <%#: Item.Property1.Property2.ProductName %>
+            </ItemTemplate>
+        </asp:TemplateField>
+    </Columns>
+</asp:GridView>
+
+            

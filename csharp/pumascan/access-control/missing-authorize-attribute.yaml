@@ -1,0 +1,33 @@
+rules:
+- id: missing-authorize-attribute
+  languages:
+  - csharp
+  message: Missing Authorization occurs when an application does not properly verify
+    an authenticated user's access to functionality, data, or resources. In many cases,
+    applications do not check  policy, claim, or role-based access control rules during
+    a request. This can allow attackers to invoke privileged functionality, such as
+    changing their role or directly browsing to an administrative interface in the
+    application.
+  metadata:
+    category: security
+    confidence: MEDIUM
+    cwe: 'CWE-306: Missing Authentication for Critical Function'
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication
+    - https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control
+    - https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.authorizeattribute
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.mvc.authorizeattribute
+    source-rule-url: https://pumascan.com/rules/#sec0120-missing-authorize-attribute
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern: |
+        [HttpPost]
+        public ActionResult $M(...){...}
+    - pattern-not: |
+        [Authorize(...)]
+        public ActionResult $M(...){...}
+  severity: WARNING

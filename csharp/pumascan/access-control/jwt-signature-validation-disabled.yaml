@@ -1,0 +1,25 @@
+rules:
+- id: jwt-signature-validation-disabled
+  languages:
+  - csharp
+  message: The JSON Web Tokens (JWT) header and payload values are base64 encoded,
+    which can be decoded, tampered, and replayed to gain access to protected resources.
+  metadata:
+    category: security
+    cwe: 'CWE-347: Improper Verification of Cryptographic Signature'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://cheatsheets.pragmaticwebsecurity.com/cheatsheets/jwt.pdf
+    - https://tools.ietf.org/html/rfc7519#section-11.2
+    - https://docs.microsoft.com/en-us/dotnet/api/microsoft.identitymodel.tokens.tokenvalidationparameters
+    source-rule-url: https://pumascan.com/rules/#sec0122-jwt-signature-validation-disabled
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: |
+      RequireSignedTokens = false
+  - pattern-inside: |
+      new TokenValidationParameters{...}
+  severity: WARNING

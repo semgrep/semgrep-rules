@@ -1,0 +1,31 @@
+rules:
+- id: cors-allow-origin-wildcard
+  languages:
+  - csharp
+  message: Cross-Origin Resource Sharing (CORS) allows a service to disable the browser's
+    Same-origin policy, which prevents scripts on an attacker-controlled domain from
+    accessing resources and data hosted on a different domain. The CORS Access-Control-Allow-Origin
+    HTTP header specifies the domain with permission to invoke a cross-origin service
+    and view the response data. Configuring the Access-Control-Allow-Origin header
+    with a wildcard (*) can allow code running on an attacker-controlled domain to
+    view responses containing sensitive data.
+  metadata:
+    category: security
+    cwe: 'CWE-942: Overly Permissive Cross-domain Whitelist'
+    references:
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+    - https://www.youtube.com/watch?reload=9&v=wgkj4ZgxI4c
+    - https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.2
+    source-rule-url: https://pumascan.com/rules/#sec0121-cors-any-origin-wildcard
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern: |
+        $B.AllowAnyOrigin()
+    - pattern-inside: |
+        $APP.UseCors(...);
+    - pattern-inside: |
+        using Microsoft.AspNetCore;
+        ...
+  severity: WARNING

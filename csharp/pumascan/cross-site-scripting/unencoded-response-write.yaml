@@ -1,0 +1,30 @@
+rules:
+- id: unencoded-response-write
+  languages:
+  - csharp
+  message: Data is written to the browser using the HttpResonse.Write method. This
+    can result in Cross-Site Scripting (XSS) vulnerabilities if the data source is
+    considered untrusted or dynamic (request parameters, database, web service, etc.).
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://msdn.microsoft.com/en-us/library/1463ysyw(v=vs.110).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0024-unencoded-response-write
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - pattern: |
+        Request["..."]
+  pattern-sinks:
+    - pattern: |
+        Response.Write(...)
+  pattern-sanitizers:
+    - pattern: |
+        Encoder.HtmlEncode(...)
+  severity: WARNING

@@ -1,0 +1,31 @@
+rules:
+- id: raw-binding-expression
+  languages:
+  - generic
+  message: 'Data is written to the browser using a raw binding expression: <%# Item.Variable
+    %>. This can result in Cross-Site Scripting (XSS) vulnerabilities if the data
+    source is considered untrusted or dynamic (request parameters, database, web service,
+    etc.).'
+  metadata:
+    category: security
+    confidence: MEDIUM
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://software-security.sans.org/developer-how-to/developer-guide-xss
+    source-rule-url: https://pumascan.com/rules/#sec0101-raw-binding-expression
+    technology:
+    - .net
+    - asp
+  mode: search
+  patterns:
+  - pattern: |
+      $TYPE. ... .$PROPERTY
+  - pattern-inside: |
+      <%# ... >
+  - pattern-not-inside: |
+      <%#: ... >
+  severity: WARNING
