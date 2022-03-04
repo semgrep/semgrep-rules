@@ -1,0 +1,39 @@
+rules:
+- id: unencoded-webforms-property-inline
+  languages:
+  - generic
+  message: Data is written to the browser using a WebForms property that does not
+    perform output encoding. This can result in Cross-Site Scripting (XSS) vulnerabilities
+    if the data source is considered untrusted or dynamic (request parameters, database,
+    web service, etc.).
+  metadata:
+    category: security
+    confidence: MEDIUM
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://msdn.microsoft.com/en-us/library/system.web.security.antixss.antixssencoder(v=vs.110).aspx
+    - https://wpl.codeplex.com/
+    source-rule-url: https://pumascan.com/rules/#sec0104-unencoded-webforms-property
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern: |
+        <script language="C#" ...>
+        $...CSHARP
+        </script>
+    - metavariable-pattern:
+        language: csharp
+        metavariable: $...CSHARP
+        patterns:
+          - pattern: |
+              $MODEL.$PROPERTY
+          - pattern-inside: $OBJ.Text = $MODEL.$PROPERTY;
+          - pattern-not-inside: |
+              Encoder.HtmlEncode($MODEL.$PROPERTY)
+
+  severity: WARNING

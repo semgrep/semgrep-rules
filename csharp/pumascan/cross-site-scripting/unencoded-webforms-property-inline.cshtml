@@ -1,0 +1,26 @@
+
+<%@ Page Language="C#" AutoEventWireup="True" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Label Example</title>
+<!-- ruleid: unencoded-webforms-property-inline -->
+<script language="C#" runat="server">
+// test code from https://pumascan.com/rules/#sec0104-unencoded-webforms-property
+    void Button_Click(object sender, EventArgs e){
+        product = GetProduct(e.someArg); 
+        litDetails.Text = product.ProductDescription;
+    }
+</script>
+<!-- ok: unencoded-webforms-property-inline -->
+<script language="C#" runat="server">
+    void Button2_Click(object sender, EventArgs e){
+        product = GetProduct(e.someArg);    
+        litDetails.Text = Encoder.HtmlEncode(product.ProductDescription);
+    }
+</script>
+</head>
+<body></body>
+</html>
+            
