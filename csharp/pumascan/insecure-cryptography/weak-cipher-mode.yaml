@@ -1,0 +1,25 @@
+rules:
+- id: weak-cipher-mode
+  languages:
+  - csharp
+  message: >-
+    Symmetric algorithms use a Cipher Mode to repeatedly apply a cryptographic
+    transformation to multiple blocks of data. Weaknesses in the Cipher Mode can allow
+    cryptographic attacks to compromise the integrity or confidentiality of data.
+    Electronic Code Book (ECB) mode uses a static transformation that can leak information about the ciphertext -
+    identical plaintext blocks have identical ciphertext blocks under ECB.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.ciphermode(v=vs.110).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0026-weak-cipher-mode
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: $AES.Mode = CipherMode.ECB
+  severity: WARNING

@@ -1,0 +1,34 @@
+rules:
+- id: command-injection-process-start
+  languages:
+  - csharp
+  message: Concatenating untrusted data into operating system commands can allow attackers
+    to execute arbitrary commands against the server's operating system.
+  metadata:
+    category: security
+    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
+      (''OS Command Injection'')'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A1-Injection
+    - https://msdn.microsoft.com/en-us/library/system.diagnostics.process.start(v=vs.110).aspx
+    - https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo(v=vs.110).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0031-command-injection-process-start
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern: $ARG
+      - pattern-inside: |
+          public ActionResult $M(...,$ARG,...){...}
+  pattern-sinks:
+    - pattern: |
+        Process.Start(...)
+  pattern-sanitizers:
+    - not_conflicting: true
+      pattern: |
+        $F(...)
+  severity: WARNING

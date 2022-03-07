@@ -1,0 +1,37 @@
+rules:
+- id: ldap-injection-path-assignment
+  languages:
+  - csharp
+  message: >-
+    LDAP Injection vulnerabilities occur when untrusted data is concatenated
+    into a LDAP Path or Filter expression without properly escaping control characters.
+    This can allow attackers to change the meaning of an LDAP query and gain access
+    to resources for which they are not authorized.
+  metadata:
+    category: security
+    cwe: 'CWE-90: Improper Neutralization of Special Elements used in an LDAP Query
+      (''LDAP Injection'')'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A1-Injection
+    - https://msdn.microsoft.com/en-us/library/system.directoryservices.directoryentry(v=vs.110).aspx
+    - https://msdn.microsoft.com/en-us/library/system.directoryservices.directorysearcher(v=vs.110).aspx]
+    - https://wpl.codeplex.com/
+    source-rule-url: https://pumascan.com/rules/#sec0117-ldap-injection-path-assignment
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern: $ARG
+      - pattern-inside: |
+          public $TYPE $M(...,$ARG,...){...}
+  pattern-sinks:
+    - pattern: |
+        (DirectoryEntry $ENTRY).Path = ...;
+  pattern-sanitizers:
+    - pattern: |
+        Encoder.LdapDistinguishedNameEncode(...)
+  severity: WARNING

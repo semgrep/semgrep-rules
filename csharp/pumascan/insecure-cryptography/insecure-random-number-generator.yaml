@@ -1,0 +1,27 @@
+rules:
+- id: insecure-random-number-generator
+  languages:
+  - csharp
+  message: Found System.Random use along with an import of a security-critical namespace. System.Random is a statistical random number generator that does not generate
+    sufficiently random values for use in a security context.
+  metadata:
+    category: security
+    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.rngcryptoserviceprovider(v=vs.110).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0115-insecure-random-number-generator
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: new Random()
+  - pattern-either: 
+    - pattern-inside: |
+        using System.Security;
+        ...
+    - pattern-inside: |
+        using Org.BouncyCastle;
+        ...
+  severity: WARNING

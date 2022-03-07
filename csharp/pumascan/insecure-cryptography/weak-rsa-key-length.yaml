@@ -1,0 +1,26 @@
+rules:
+- id: weak-rsa-key-length
+  languages:
+  - csharp
+  message: Due to advances in cryptanalysis attacks and cloud computing capabilities,
+    the National Institute of Standards and Technology (NIST) deprecated 1024-bit
+    RSA keys on January 1, 2011.
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf
+    source-rule-url: https://pumascan.com/rules/#sec0125-weak-rsa-key-length
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern: |
+        new RSACryptoServiceProvider($KEYLENGTH)
+    - metavariable-comparison:
+        metavariable: $KEYLENGTH
+        comparison: $KEYLENGTH < 2048
+  severity: WARNING

@@ -1,0 +1,38 @@
+rules:
+- id: sql-injection-dynamic-ef-query
+  options:
+    symbolic_propagation: true
+  languages:
+  - csharp
+  message: 'Concatenating untrusted data into a dynamic SQL string and calling vulnerable
+    Entity Framework (EF) methods can allow SQL Injection:'
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A1-Injection
+    - https://msdn.microsoft.com/en-us/library/system.data.entity.database(v=vs.113).aspx
+    - https://docs.microsoft.com/en-us/ef/core/querying/raw-sql
+    source-rule-url: https://pumascan.com/rules/#sec0108-sql-injection-dynamic-ef-query
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern: $ARG
+      - pattern-inside: |
+          public $TYPE $M(...,$ARG,...){...}
+      - pattern-either: 
+        - pattern: |
+            "..." + $ARG
+        - pattern: |
+            "..." + $ARG.$P
+  pattern-sinks:
+    - patterns:
+      - pattern: |
+          (DbDataContext $CONTEXT).Database.ExecuteSqlCommand(...)
+  severity: WARNING

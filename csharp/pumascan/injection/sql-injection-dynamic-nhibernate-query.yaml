@@ -1,0 +1,38 @@
+rules:
+- id: sql-injection-dynamic-nhibernate-query
+  languages:
+  - csharp
+  message: 'Concatenating untrusted data into a dynamic SQL string and calling vulnerable
+    NHibernate Framework methods can allow SQL Injection. To ensure calls to vulnerable
+    NHibernate Framework methods are parameterized, pass positional or named parameters
+    in the statement. The following NHibernate methods allow for raw SQL queries to
+    be executed:'
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A1-Injection
+    - https://nhibernate.info/doc/nhibernate-reference/querysql.html
+    source-rule-url: https://pumascan.com/rules/#sec0126-sql-injection-dynamic-nhibernate-query
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern: $ARG
+      - pattern-inside: |
+          public $TYPE $M(...,$ARG,...){...}
+      - pattern-either: 
+        - pattern: |
+            "..." + $ARG
+        - pattern: |
+            "..." + $ARG.$P
+  pattern-sinks:
+    - patterns:
+      - pattern: |
+          (ISession $SESSION).CreateQuery(...)
+  severity: WARNING

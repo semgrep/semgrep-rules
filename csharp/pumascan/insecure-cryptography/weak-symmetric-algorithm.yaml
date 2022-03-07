@@ -1,0 +1,37 @@
+rules:
+- id: weak-symmetric-algorithm
+  languages:
+    - csharp
+  message: >-
+    The DES, TripleDES, and RC2 classes use weak encryption algorithms and
+    not considered secure for protecting sensitive information.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - http://csrc.nist.gov/groups/ST/toolkit/block_ciphers.html
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.aesmanaged(v=vs.110).aspx
+    source-rule-url: https://pumascan.com/rules/#sec0025-weak-symmetric-algorithm
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern-either:
+      - pattern: |
+          new DESCryptoServiceProvider()
+      - pattern: |
+          new TripleDESCryptoServiceProvider()
+      - pattern: |
+          new TripleDESCng(...)
+      - pattern: |
+          new RC2CryptoServiceProvider()
+      - pattern: |
+          $ALG = DES.Create()
+      - pattern: |
+          $ALG = TripleDES.Create()
+      - pattern: |
+          $ALG = RC2.Create()
+  severity: WARNING

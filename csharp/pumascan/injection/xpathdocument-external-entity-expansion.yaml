@@ -1,0 +1,34 @@
+rules:
+- id: xpathdocument-external-entity-expansion
+  languages:
+  - csharp
+  message: >-
+    XPathDocument in .NET before 4.5.2 is vulnerable to XML External Entity attacks unless constructed with an XmlReader. 
+    XML External Entity (XXE) vulnerabilities occur when applications process
+    untrusted XML data without disabling external entities and DTD processing. Processing
+    untrusted XML data with a vulnerable parser can allow attackers to extract data
+    from the server, perform denial of service attacks, and in some cases gain remote
+    code execution.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A4-XML_External_Entities_(XXE)
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xpath.xpathdocument
+    - https://www.jardinesoftware.net/2016/09/12/xxe-in-net-and-xpathdocument/
+    source-rule-url: https://pumascan.com/rules/#sec0035-xxe-xpathdocument
+    technology:
+    - .net
+    - .net451
+  mode: search
+  patterns:
+    - pattern: |
+        $X
+    - pattern-inside: |
+        new XPathDocument($X)
+    - pattern-not: |
+        (XmlReader $X)
+  severity: WARNING

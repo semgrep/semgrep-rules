@@ -1,0 +1,45 @@
+rules:
+- id: weak-cipher-mode-padding
+  languages:
+  - csharp
+  message: >-
+    Found AES-CBC cryptography  Padding Oracle attacks can occur in applications that decrypt ciphertext
+    values without an integrity check. This is commonly identified when decrypting
+    untrusted values from an HTTP request or web service.
+  metadata:
+    category: security
+    cwe: 'CWE-347: Improper Verification of Cryptographic Signature'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - 'CWE-347: Improper Verification of Cryptographic Signature'
+    - ''
+    - https://www.owasp.org/index.php/Testing_for_Padding_Oracle_(OTG-CRYPST-002)
+    - https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.ciphermode
+    - http://resources.infosecinstitute.com/padding-oracle-attack-2/
+    source-rule-url: https://pumascan.com/rules/#sec0124-weak-cipher-mode-padding
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern: $ARG
+      - pattern-inside: |
+          public $T $M(...,$ARG,...){...}
+  pattern-sinks:
+    - patterns:
+      - pattern: |
+          (CryptoStream $CS).Write(...)
+      - pattern-inside: |
+          $A $ALG = Aes.Create();
+          ...
+          $ALG.Mode = CipherMode.CBC;
+          ...
+  pattern-sanitizers: 
+    - patterns:
+      - pattern: |
+          $DATA
+      - pattern-inside: |
+          $HASH.ComputeHash($DATA);
+          ...
+  severity: WARNING

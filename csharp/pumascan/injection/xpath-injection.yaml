@@ -1,0 +1,42 @@
+rules:
+- id: xpath-injection
+  languages:
+  - csharp
+  message: 'Concatenating untrusted data into XPath queries allow attackers to change
+    the meaning of the XPath query. The following XPath methods allow for raw queries
+    to be executed:'
+  metadata:
+    category: security
+    cwe: 'CWE-643: Improper Neutralization of Data within XPath Expressions (''XPath
+      Injection'')'
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - ''
+    - https://www.owasp.org/index.php/XPATH_Injection
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnode.selectnodes
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmlnode.selectsinglenode
+    source-rule-url: https://pumascan.com/rules/#sec0127-xpath-injection
+    technology:
+    - .net
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern: $ARG
+        - pattern-inside: |
+            public $TYPE $M(...,$ARG,...){...}
+  pattern-sinks:
+    - patterns:
+        - pattern: |
+            (XmlDocument $D).SelectNodes(...)
+  pattern-sanitizers:
+    - not_conflicting: true
+      patterns:
+        - pattern: $A
+        - pattern-inside: |
+            if(...){
+              ...
+              throw new $EXCEPTION(...);
+            }
+            ...
+  severity: WARNING

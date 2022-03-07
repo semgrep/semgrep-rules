@@ -1,0 +1,30 @@
+rules:
+- id: xml-document-external-entity-expansion
+  languages:
+  - csharp
+  message: XML External Entity (XXE) vulnerabilities occur when applications process
+    untrusted XML data without disabling external entities and DTD processing. Processing
+    untrusted XML data with a vulnerable parser can allow attackers to extract data
+    from the server, perform denial of service attacks, and in some cases gain remote
+    code execution.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://www.owasp.org/index.php/Top_10-2017_A4-XML_External_Entities_(XXE)
+    - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver
+    source-rule-url: https://pumascan.com/rules/#sec0037-xml-document
+    technology:
+    - .net
+  mode: search
+  patterns:
+    - pattern: |
+        $DOC.LoadXml(...)
+    - pattern-inside: |
+        (XmlDocument $DOC).XmlResolver = (XmlUrlResolver $X);
+        ...
+  severity: WARNING

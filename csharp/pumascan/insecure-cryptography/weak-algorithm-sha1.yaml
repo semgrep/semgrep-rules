@@ -1,0 +1,25 @@
+rules:
+- id: weak-algorithm-sha1
+  languages:
+  - csharp
+  message: The SHA1 algorithm has known collision weaknesses and should not be used
+    for security operations in new applications.
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.sha1managed(v=vs.110).aspx
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.sha256(v=vs.110).aspx
+    - https://msdn.microsoft.com/en-us/library/system.security.cryptography.sha512(v=vs.110).aspx
+    - https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
+    source-rule-url: https://pumascan.com/rules/#sec0028-weak-algorithm-sha1
+    technology:
+    - .net
+  mode: search
+  patterns:
+  - pattern: |
+      new SHA1CryptoServiceProvider()
+  severity: WARNING
