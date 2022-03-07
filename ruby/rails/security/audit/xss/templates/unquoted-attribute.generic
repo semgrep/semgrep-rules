@@ -1,0 +1,25 @@
+<!-- cf. https://github.com/caiomartini/mustache-demo/blob/97b9200ebd2d27953febff23e6718aa1aa9ee44d/demo-mustache.html -->
+<!DOCTYPE HTML>
+<html>
+
+
+<div class="jumbotron text-center">
+    <h1 class="display-4">Oi, meu nome é <%= nome %>!</h1>
+    <p class="lead">Isso é apenas uma demonstração de como utilizar o Mustache.JS</p>
+    <!-- ruleid: unquoted-attribute -->
+    <a href=<%= link %> class="text-center">Click me</a>
+    <!-- ruleid: unquoted-attribute -->
+    <a href=/<%= link %> class="text-center">Click me</a>
+    <!-- ok: unquoted-attribute -->
+    <a href="<%= Foo::Bar::FooBar.frobnicate("#{event_id}", @params) %>" class="text-center">Click me</a>
+    <!-- ok: unquoted-attribute -->
+    <a href='<%= link %>' class="text-center">Click me</a>
+
+    <!-- ok: unquoted-attribute -->
+    <div class="alert lead alert-<%= key %>"><%= value %> </div>
+
+    <!-- ok: unquoted-attribute -->
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= current_user.name.pluralize %> Account <b class="caret"></b></a>
+</div>
+
+</html>
