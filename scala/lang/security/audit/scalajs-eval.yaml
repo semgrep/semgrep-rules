@@ -1,0 +1,28 @@
+rules:
+- id: scalajs-eval
+  patterns:
+    - pattern: $JS.eval(<... $CODE ...>)
+    - pattern-inside: |
+        import scala.scalajs.$X
+        ...
+    - pattern-either:
+      - pattern-inside: |
+          def $FUNC(..., $CODE: $T, ...) = $A {
+            ...
+          }
+      - pattern-inside: |
+          def $FUNC(..., $CODE: $T, ...) = {
+            ...
+          }
+  message: >-
+    Ensure user-controlled data cannot enter '.eval()', otherwise, this is
+    a code injection vulnerability.
+  metadata:
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: "A1: Injection"
+    category: security
+    technology:
+      - scala
+      - scala-js
+  languages: [scala]
+  severity: WARNING
