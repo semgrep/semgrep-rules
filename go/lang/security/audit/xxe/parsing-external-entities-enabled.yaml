@@ -1,0 +1,30 @@
+rules:
+  - id: parsing-external-entities-enabled
+    patterns:
+      - pattern-inside: |
+          import ("github.com/lestrrat-go/libxml2/parser")
+          ...
+      - pattern: $PARSER := parser.New(parser.XMLParseNoEnt)
+    message: >-
+      Even though Go ships with a native XML parser (encoding/xml) that can
+      be used for mere XML data parsing and manipulation, it does not support
+      advanced XML features like validation. Developers that use the native XML
+      solution should not usually concern themselves with any security aspects. If a
+      parser with more features is required, then developers must rely on
+      third-parties libraries, for example https://github.com/lestrrat-go/libxml2.
+      Parsing of external entities is disabled by default, and care must be taken to
+      avoid processing untrusted XML data when this option is enabled. Parsing of
+      external entities can be enabled with "XMLParseNoEnt" and can lead to XXE
+      vulnerability if user controlled data is parsed by the library.
+    languages:
+      - go
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp:
+        - "A05:2021 - Security Misconfiguration"
+      references:
+        - https://knowledge-base.secureflag.com/vulnerabilities/xml_injection/xml_entity_expansion_go_lang.html
+        - https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+      confidence: MEDIUM
