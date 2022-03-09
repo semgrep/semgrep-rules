@@ -3,6 +3,8 @@ rules:
     patterns:
       - pattern-not: csv.writer(..., quoting=csv.QUOTE_ALL, ...)
       - pattern-not: csv.writer(..., quoting=1, ...)
+      - pattern-not: csv.writer(..., dialect='unix', ...)
+      - pattern-not: csv.writer(..., dialect=csv.unix_dialect, ...)
       - pattern: csv.writer(...)
     message: Found an unquoted CSV writer. This is susceptible to injection. Use 'quoting=csv.QUOTE_ALL'.
     metadata:
