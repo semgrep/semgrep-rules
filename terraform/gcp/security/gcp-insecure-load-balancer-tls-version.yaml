@@ -1,28 +1,29 @@
-id: gcp-insecure-load-balancer-tls-version
-patterns:
-  - pattern: |
-      resource "google_compute_ssl_policy" $ANYTHING {
-        ...
-        min_tls_version = "..."
-        ...
-      }
-  - pattern-not: |
-      resource "google_compute_ssl_policy" $ANYTHING {
-        ...
-        min_tls_version = "TLS_1_2"
-        ...
-      }
-message: >-
-  Detected GCP Load Balancer to be using an insecure version of TLS. To fix this set your "min_tls_version" to "TLS_1_2"
-languages:
-  - terraform
-severity: WARNING
-metadata:
-  cwe: "CWE-326: Inadequate Encryption Strength"
-  owasp:
-    - A02:2021 - Cryptographic Failures
-    - A03:2017 - Sensitive Data Exposure
-  technology:
-    - gcp
+rules:
+- id: gcp-insecure-load-balancer-tls-version
+  patterns:
+    - pattern: |
+        resource "google_compute_ssl_policy" $ANYTHING {
+          ...
+          min_tls_version = "..."
+          ...
+        }
+    - pattern-not: |
+        resource "google_compute_ssl_policy" $ANYTHING {
+          ...
+          min_tls_version = "TLS_1_2"
+          ...
+        }
+  message: >-
+    Detected GCP Load Balancer to be using an insecure version of TLS. To fix this set your "min_tls_version" to "TLS_1_2"
+  languages:
     - terraform
-  category: security
+  severity: WARNING
+  metadata:
+    cwe: "CWE-326: Inadequate Encryption Strength"
+    owasp:
+      - A02:2021 - Cryptographic Failures
+      - A03:2017 - Sensitive Data Exposure
+    technology:
+      - gcp
+      - terraform
+    category: security
