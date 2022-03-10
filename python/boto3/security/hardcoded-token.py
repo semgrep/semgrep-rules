@@ -2,16 +2,16 @@ import boto3
 from boto3 import client
 
 # ruleid:hardcoded-token
-client("s3", aws_secret_access_key="jWnyxxxxxxxxxxxxxxxxX7ZQxxxxxxxxxxxxxxxx")
+client("s3", aws_secret_access_key="9ekAkjIs+UE2f1XLm7wgSAf9HkBEqJmbK3oHx9NC")
 
 # ruleid:hardcoded-token
-boto3.sessions.Session(aws_secret_access_key="jWnyxxxxxxxxxxxxxxxxX7ZQxxxxxxxxxxxxxxxx")
+boto3.sessions.Session(aws_secret_access_key="9ekAkjIs+UE2f1XLm7wgSAf9HkBEqJmbK3oHx9NC")
 
 s = boto3.sessions
 # ruleid:hardcoded-token
-s.Session(aws_access_key_id="AKIAxxxxxxxxxxxxxxxx")
+s.Session(aws_access_key_id="AKIAYVP4CIPPMP5UU6VI")
 
-uhoh_key = "AKIAxxxxxxxxxxxxxxxx"
+uhoh_key = "AKIAYVP4CIPPMP5UU6VI"
 ok_secret = os.environ.get("SECRET_ACCESS_KEY")
 # ruleid:hardcoded-token
 s3 = boto3.resource(
@@ -23,8 +23,7 @@ s3 = boto3.resource(
 )
 
 ok_key = os.environ.get("ACCESS_KEY_ID")
-
-uhoh_secret = "jWnyxxxxxxxxxxxxxxxxX7ZQxxxxxxxxxxxxxxxx"
+uhoh_secret = "9ekAkjIs+UE2f1XLm7wgSAf9HkBEqJmbK3oHx9NC"
 # ruleid:hardcoded-token
 s3 = boto3.resource(
     "s3",

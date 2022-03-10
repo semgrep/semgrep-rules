@@ -17,7 +17,20 @@ rules:
         - boto3
     languages: [python]
     severity: WARNING
-    pattern-either:
-      - pattern: $W(..., aws_secret_access_key="=~/^[A-Za-z0-9/+=]+$/", ...)
-      - pattern: $W(..., aws_access_key_id="=~/^AKI/", ...)
-      - pattern: $W(..., aws_session_token="...", ...)
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $W(..., aws_access_key_id="$KEY", ...)
+        - metavariable-regex:
+            metavariable: $KEY
+            regex: ^A(K|S)I.*  
+        - metavariable-analysis:
+            metavariable: $KEY
+            analyzer: entropy
+      - patterns:  
+        - pattern-either:
+          - pattern: $W(..., aws_secret_access_key="$SECRET", ...)
+          - pattern: $W(..., aws_session_token="$SECRET", ...)
+        - metavariable-analysis:
+            metavariable: $SECRET
+            analyzer: entropy
