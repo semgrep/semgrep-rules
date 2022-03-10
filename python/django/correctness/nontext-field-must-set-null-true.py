@@ -1,4 +1,5 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class FakeModel(models.Model):
@@ -6,6 +7,8 @@ class FakeModel(models.Model):
     fieldChar = models.CharField(
         max_length=200,
         blank=True)
+    # ok: nontext-field-must-set-null-true
+    fieldPhone = PhoneNumberField()
     # ok: nontext-field-must-set-null-true
     fieldText = models.TextField(blank=True)
     # ok: nontext-field-must-set-null-true
