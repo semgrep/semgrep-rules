@@ -49,7 +49,7 @@ class XssController extends Controller {
   }
 
   def safeTemplate(value:String) = Action {
-    // ok: tainted-html-response
+    // ruleid: tainted-html-response
     Ok(views.html.template.render(value))
   }
 
