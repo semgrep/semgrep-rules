@@ -28,12 +28,12 @@ class XssController extends Controller {
     Ok("Hello " + value + " !").as(ContentTypes.HTML)
   }
 
-  def vulnerable5(value: String) = Action { implicit request: Request[AnyContent] =>
+  def vulnerable5(value: String) = Action {
     // ruleid: tainted-html-response
     Ok(s"Hello $value !").as(HTML)
   }
 
-  def vulnerable6(value:String) = Action {
+  def vulnerable6(value:String) = Action { implicit request: Request[AnyContent] =>
     // ruleid: tainted-html-response
     Ok(views.html.xssHtml.render(Html.apply("Hello "+value+" !")))
   }
