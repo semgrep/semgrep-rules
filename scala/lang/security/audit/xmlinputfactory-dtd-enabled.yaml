@@ -1,0 +1,24 @@
+rules:
+- id: xmlinputfactory-dtd-enabled
+  patterns:
+  - pattern-not-inside: |
+      ...
+      $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false)
+      ...
+  - pattern-either:
+    - pattern: $XMLFACTORY = XMLInputFactory.newFactory(...)
+    - pattern: $XMLFACTORY = XMLInputFactory.newInstance(...)
+    - pattern: $XMLFACTORY = new XMLInputFactory(...)
+  message: >-
+    XMLInputFactory being instantiated without calling the setProperty functions that are generally used for disabling entity processing.
+    User controlled data in XML Document builder can result in XML Internal Entity Processing vulnerabilities like the disclosure of confidential data, denial of service, Server Side Request Forgery (SSRF), port scanning.
+    Make sure to disable entity processing functionality.
+  languages: [scala]
+  severity: WARNING
+  metadata:
+    cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+    owasp: "A4: XML External Entities (XXE)"
+    source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    category: security
+    technology:
+    - scala
