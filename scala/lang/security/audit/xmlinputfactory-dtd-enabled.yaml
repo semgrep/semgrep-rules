@@ -1,7 +1,7 @@
 rules:
 - id: xmlinputfactory-dtd-enabled
   patterns:
-  - pattern-not-inside: |
+  - pattern-not-inside: | # nosemgrep: slow-pattern-top-ellipsis
       ...
       $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false)
   - pattern-either:
