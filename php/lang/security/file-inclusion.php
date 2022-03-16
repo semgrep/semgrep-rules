@@ -29,3 +29,6 @@ include(__DIR__ . $user_input);
 
 // ok: file-inclusion
 include(__DIR__ . 'constant.php');
+
+// ok: file-inclusion
+include_safe(__DIR__ . $user_input);
