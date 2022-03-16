@@ -48,7 +48,7 @@ rules:
     - pattern: org.owasp.encoder.Encode.forHtml(...)
   pattern-sinks:
   - pattern-either:
-    - pattern: views.html.$TEMPLATE.render(...)
+    - pattern: Html.apply(...)
     - pattern: Ok(...).as(HTML)
     - pattern: Ok(...).as(ContentTypes.HTML)
     - patterns:
