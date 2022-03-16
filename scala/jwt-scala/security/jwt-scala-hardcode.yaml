@@ -1,0 +1,71 @@
+rules:
+- id: jwt-scala-hardcode
+  patterns:
+  - pattern-inside: |
+      import pdi.jwt.$DEPS
+      ...
+  - pattern-either:
+    - pattern: $JWT.encode($X, "...", ...)
+    - pattern: $JWT.decode($X, "...", ...)
+    - pattern: $JWT.decodeRawAll($X, "...", ...)
+    - pattern: $JWT.decodeRaw($X, "...", ...)
+    - pattern: $JWT.decodeAll($X, "...", ...)
+    - pattern: $JWT.validate($X, "...", ...)
+    - pattern: $JWT.isValid($X, "...", ...)
+    - pattern: $JWT.decodeJson($X, "...", ...)
+    - pattern: $JWT.decodeJsonAll($X, "...", ...)
+    - patterns:
+      - pattern-either:
+        - pattern: $JWT.encode($X, $KEY, ...)
+        - pattern: $JWT.decode($X, $KEY, ...)
+        - pattern: $JWT.decodeRawAll($X, $KEY, ...)
+        - pattern: $JWT.decodeRaw($X, $KEY, ...)
+        - pattern: $JWT.decodeAll($X, $KEY, ...)
+        - pattern: $JWT.validate($X, $KEY, ...)
+        - pattern: $JWT.isValid($X, $KEY, ...)
+        - pattern: $JWT.decodeJson($X, $KEY, ...)
+        - pattern: $JWT.decodeJsonAll($X, $KEY, ...)
+        - pattern: $JWT.encode($X, this.$KEY, ...)
+        - pattern: $JWT.decode($X, this.$KEY, ...)
+        - pattern: $JWT.decodeRawAll($X, this.$KEY, ...)
+        - pattern: $JWT.decodeRaw($X, this.$KEY, ...)
+        - pattern: $JWT.decodeAll($X, this.$KEY, ...)
+        - pattern: $JWT.validate($X, this.$KEY, ...)
+        - pattern: $JWT.isValid($X, this.$KEY, ...)
+        - pattern: $JWT.decodeJson($X, this.$KEY, ...)
+        - pattern: $JWT.decodeJsonAll($X, this.$KEY, ...)
+      - pattern-either:
+        - pattern-inside: |
+            class $CL {
+              ...
+              $KEY = "..."
+              ...
+            }
+        - pattern-inside: |
+            object $CL {
+              ...
+              $KEY = "..."
+              ...
+            }
+  - metavariable-pattern:
+      metavariable: $JWT
+      patterns:
+      - pattern-either:
+        - pattern: Jwt
+        - pattern: JwtArgonaut
+        - pattern: JwtCirce
+        - pattern: JwtJson4s
+        - pattern: JwtJson
+        - pattern: JwtUpickle
+  message: >-
+    Hardcoded JWT secret or private key is used.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
+  languages: [scala]
+  severity: WARNING
+  metadata: 
+      category: security
+      cwe: "CWE-522: Insufficiently Protected Credentials"
+      owasp: "A2: Broken Authentication"
+      technology:
+        - scala
