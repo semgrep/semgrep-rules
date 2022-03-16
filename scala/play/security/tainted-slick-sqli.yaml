@@ -1,0 +1,45 @@
+rules:
+- id: tainted-slick-sqli
+  mode: taint
+  metadata:
+    references:
+    - https://scala-slick.org/doc/3.3.3/sql.html#splicing-literal-values
+    - https://scala-slick.org/doc/3.2.0/sql-to-slick.html#non-optimal-sql-code
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: "A1: Injection"
+    technology:
+    - scala
+    - slick
+    - play
+  message: >-
+    Detected a tainted SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Avoid using using user input for generating SQL strings.
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: request
+        - pattern-inside: |
+            Action {
+              request: Request[$T] => 
+                ...
+            }
+      - patterns:
+        - pattern: $PARAM
+        - pattern-inside: |
+            def $CTRL(..., $PARAM: $TYPE, ...) = Action {
+              ...
+            }
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $MODEL.overrideSql(...)
+      - pattern: sql"..."
+    - pattern-inside: |
+        import slick.$DEPS
+        ...
+  severity: WARNING
+  languages:
+    - scala

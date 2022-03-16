@@ -1,0 +1,73 @@
+rules:
+- id: tainted-html-response
+  mode: taint
+  metadata:
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp: "A7: Cross-Site Scripting (XSS)"
+    technology:
+    - scala
+    - play
+  message: >-
+    Detected a request with potential user-input going into an `Ok()` response. 
+    This bypasses any view or template environments, including HTML escaping, which may
+    expose this application to cross-site scripting (XSS) vulnerabilities.
+    Consider using a view technology such as Twirl which automatically escapes HTML views.
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $REQ
+        - pattern-inside: |
+            Action {
+              $REQ: Request[$T] => 
+                ...
+            }
+      - patterns:
+        - pattern: $REQ
+        - pattern-inside: |
+            Action.async {
+              $REQ: Request[$T] => 
+                ...
+            }
+      - patterns:
+        - pattern: $PARAM
+        - pattern-inside: |
+            def $CTRL(..., $PARAM: $TYPE, ...) = Action {
+              ...
+            }
+      - patterns:
+        - pattern: $PARAM
+        - pattern-inside: |
+            def $CTRL(..., $PARAM: $TYPE, ...) = Action.async {
+              ...
+            }
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: org.apache.commons.lang3.StringEscapeUtils.escapeHtml4(...)
+    - pattern: org.owasp.encoder.Encode.forHtml(...)
+  pattern-sinks:
+  - pattern-either:
+    - pattern: Html.apply(...)
+    - pattern: Ok(...).as(HTML)
+    - pattern: Ok(...).as(ContentTypes.HTML)
+    - patterns:
+      - pattern: Ok(...).as($CTYPE)
+      - metavariable-regex:
+          metavariable: $CTYPE
+          regex: '"[tT][eE][xX][tT]/[hH][tT][mM][lL]"'
+    - patterns:
+      - pattern: Ok(...).as($CTYPE)
+      - pattern-not: Ok(...).as("...")
+      - pattern-either:
+        - pattern-inside: |
+            def $FUNC(..., $URL: $T, ...) = $A {
+              ...
+            }
+        - pattern-inside: |
+            def $FUNC(..., $URL: $T, ...) = {
+              ...
+            }
+  severity: WARNING
+  languages:
+    - scala

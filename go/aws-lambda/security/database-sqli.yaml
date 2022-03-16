@@ -1,0 +1,51 @@
+rules:
+- id: database-sqli
+  languages:
+  - go
+  message: >-
+    Detected SQL statement that is tainted by `$EVENT` object. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use prepared statements with the 'Prepare' and 'PrepareContext' calls.
+  mode: taint
+  metadata:
+    references:
+      - 'https://pkg.go.dev/database/sql#DB.Query'
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+      - aws-lambda
+      - database
+      - sql
+  pattern-sinks:
+  - patterns:
+    - pattern: $QUERY
+    - pattern-either:
+      - pattern: $DB.Exec($QUERY,...)
+      - pattern: $DB.ExecContent($QUERY,...)
+      - pattern: $DB.Query($QUERY,...)
+      - pattern: $DB.QueryContext($QUERY,...)
+      - pattern: $DB.QueryRow($QUERY,...)
+      - pattern: $DB.QueryRowContext($QUERY,...)
+    - pattern-inside: |
+        import "database/sql"
+        ...
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          func $HANDLER($CTX $CTXTYPE, $EVENT $TYPE, ...) {...}
+          ...
+          lambda.Start($HANDLER, ...)
+      - patterns:
+          - pattern-inside: |
+              func $HANDLER($EVENT $TYPE) {...}
+              ...
+              lambda.Start($HANDLER, ...)
+          - pattern-not-inside: |
+              func $HANDLER($EVENT context.Context) {...}
+              ...
+              lambda.Start($HANDLER, ...)
+    - pattern: $EVENT
+  severity: WARNING

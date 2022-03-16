@@ -36,14 +36,14 @@ rules:
         - javascript
         - typescript
         - npm
-  - id: use-frozen-lockfile-pip
+  - id: use-frozen-lockfile-pipenv
     patterns:
-      - pattern-regex: pip install\s
-      - pattern-not-regex: pip install --ignore-pipfile
-      - pattern-not-regex: pip install [\w]+
-    fix: pip install --ignore-pipfile
+      - pattern-regex: pipenv install\s
+      - pattern-not-regex: pipenv install --ignore-pipfile
+      - pattern-not-regex: pipenv install [\w]+
+    fix: pipenv install --ignore-pipfile
     message: >-
-      To ensure reproducable and deterministic builds, use `pip install --ignore-pipfile` rather than `pip install` in scripts. This will use the lockfile rather than updating it.
+      To ensure reproducable and deterministic builds, use `pipenv install --ignore-pipfile` rather than `pipenv install` in scripts. This will use the lockfile rather than updating it.
     languages:
       - generic
     severity: INFO
@@ -54,4 +54,4 @@ rules:
         - dockerfile
         - javascript
         - typescript
-        - pip
+        - pipenv

@@ -32,42 +32,47 @@ class ArchList(list):
         except IndexError:
             return default
 
-def get_owasp(rule: Dict[str, Any]) -> str:
+def get_owasp(rule: Dict[str, Any]) -> List[str]:
     try:
         output = rule.get("metadata", {}).get("owasp", "")
         if type(output) == str: # Ensure that we're returning lists
-            if output == '':
-                output = 'Not OWASP Related'
+            if output == "":
+                return ["Not OWASP Related"]
             return [output.strip()]
+        output = [o.strip() for o in output]
         return output
     except AttributeError:
-        return ArchList(filter(lambda d: "owasp" in d.keys(), rule.get('metadata'))).get(0, {}).get('owasp', "")
+        return ArchList(filter(lambda d: "owasp" in d.keys(), rule.get("metadata"))).get(0, {}).get("owasp", "")
     except Exception:
         logger.warning(f"Could not get owasp for rule {rule.get('id', '')}")
         return ""
 
-def get_cwe(rule: Dict[str, Any]) -> str:
+def get_cwe(rule: Dict[str, Any]) -> List[str]:
     try:
-        cwe = rule.get("metadata", {}).get("cwe", "")
-        if cwe == "":
-            return "Uncategorized"
-        return cwe.strip()
+        output = rule.get("metadata", {}).get("cwe", "")
+        if type(output) == str:
+            if output == "":
+                return ["Uncategorized CWE"]
+            return [output.strip()]
+        output = [c.strip() for c in output]
+        return output
     except AttributeError:
-        return ArchList(filter(lambda d: "cwe" in d.keys(), rule.get('metadata'))).get(0, {}).get('cwe', "")
+        return ArchList(filter(lambda d: "cwe" in d.keys(), rule.get("metadata"))).get(0, {}).get("cwe", "")
     except Exception:
         logger.warning(f"Could not get cwe for rule {rule.get('id', '')}")
-        return ""
+        return ''
 
-def get_technology(rule: Dict[str, Any]) -> str:
+def get_technology(rule: Dict[str, Any]) -> List[str]:
     try:
         output = rule.get("metadata", {}).get("technology", "")
         if type(output) == str: # Ensure that we're returning lists
-            if output == '':
-                output = 'Uncategorized Technology'
+            if output == "":
+                return ["Uncategorized Technology"]
             return [output.strip()]
+        output = [t.strip() for t in output]
         return output
     except AttributeError:
-        return ArchList(filter(lambda d: "technology" in d.keys(), rule.get('metadata'))).get(0, {}).get('technology', "")
+        return ArchList(filter(lambda d: "technology" in d.keys(), rule.get("metadata"))).get(0, {}).get("technology", "")
     except Exception:
         logger.warning(f"Could not get technology for rule {rule.get('id', '')}")
         return ""
@@ -83,29 +88,27 @@ def get_framework(path: str, rule: Dict[str, Any]) -> str:
     #  get the dir name immediately under the language
     s = path.split(os.path.sep)
     lang = s[1]
-    if 'contrib' in path:
-        return s[s.index('contrib')+1].strip()
+    if "contrib" in path:
+        return s[s.index("contrib")+1].strip()
     # Crashes if lang is 'hcl'. This occurs with azure, aws, and lang
     # if lang == hcl:
     return s[s.index(lang)+1].strip()
 
 # Reads 'cwe_to_metacategory.yml' to construct a map to convert a CWE to a metacategory
 def create_metacategory_map(path: str) -> Dict[str, str]:
-    cwe_mc_map = {} # {cwe, metacategory}
-
-    with open(path, 'r') as mc_map_file:
+    with open(path, "r") as mc_map_file:
         mc_map = yaml.safe_load(mc_map_file)
 
-    return {cwe: mc for mc, cwes in mc_map for cwe in cwes}
-
-    return cwe_mc_map
+    # list comprehensions are complicated!
+    # in this case, first we need to enumerate the keys, then we need to enumerate *all* entries for that key
+    return {cwe: mc for mc in mc_map.keys() for cwe in mc_map[mc]}
 
 def is_security(path: str) -> bool:
     return "security" in path
 
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
-    return ext in (".yaml", ".yml") and '/scripts/' not in path
+    return ext in (".yaml", ".yml") and "/scripts/" not in path
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
@@ -136,7 +139,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    metacategories = create_metacategory_map('cwe_to_metacategory.yml')
+    metacategories = create_metacategory_map("cwe_to_metacategory.yml")
 
     owasp_matrix = defaultdict(list)
     cwe_matrix = defaultdict(list)
@@ -154,9 +157,9 @@ if __name__ == "__main__":
                 continue
             if not is_security(path):
                 continue
-            with open(path, 'r') as fin:
+            with open(path, "r") as fin:
                 rules = yaml.safe_load(fin)
-                for rule in rules.get('rules', []):
+                for rule in rules.get("rules", []):
                     framework = get_framework(path, rule)
                     lang = get_lang(path)
                     cwe = get_cwe(rule)
@@ -164,15 +167,16 @@ if __name__ == "__main__":
                     technology = get_technology(rule)
 
                     # I think the cwe stuff is supposed to be out of the owasp loop
-                    cwe_matrix[cwe].append((path, rule))
-                    cwe_by_lang_matrix[cwe][lang].append((path, rule))
-                    cwe_by_framework_matrix[cwe][lang][framework].append((path, rule))
-                    for tech in technology:
-                        cwe_by_technology_matrix[cwe][lang][tech].append((path, rule))
+                    for c in cwe:
+                        cwe_matrix[c].append((path, rule))
+                        cwe_by_lang_matrix[c][lang].append((path, rule))
+                        cwe_by_framework_matrix[c][lang][framework].append((path, rule))
+                        for tech in technology:
+                            cwe_by_technology_matrix[c][lang][tech].append((path, rule))
 
-                    if cwe in metacategories:
-                        metacategory = metacategories[cwe]
-                        cwe_metacategory_matrix[lang][framework][metacategory].add(cwe)
+                        if c in metacategories:
+                            metacategory = metacategories[c]
+                            cwe_metacategory_matrix[lang][framework][metacategory].add(c)
 
                     for owasp_standard in owasp: # Some rules have multiple owasp tags
                         owasp_standard = normalize_owasp(owasp_standard)
@@ -182,7 +186,7 @@ if __name__ == "__main__":
                         for tech in technology: # Some rules have multiple technology tags
                             owasp_by_technology_matrix[owasp_standard][lang][tech].append((path, rule))
 
-    of = open('json_output.json', 'w')
+    of = open("json_output.json", "w")
     of.write(json.dumps({
         "owasp": {
             "totals": {owasp: len(v) for owasp, v in sorted(owasp_matrix.items())},
@@ -198,7 +202,7 @@ if __name__ == "__main__":
                 lang: {
                     frm: {
                         mc: {
-                            cwe: (
+                            c: (
                                 {"count": len(cwe_metacategory_matrix[lang][frm][mc])},
                                 {"cwes": [cwe for cwe in cwe_metacategory_matrix[lang][frm][mc]]},
                             )

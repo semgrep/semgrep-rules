@@ -1,0 +1,55 @@
+rules:
+- id: node-knex-sqli
+  severity: WARNING
+  message: >-
+    Detected tainted SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `knex.raw('SELECT $1 from table', [userinput])`
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  metadata:
+    references:
+      - 'https://knexjs.org/#Builder-fromRaw'
+      - 'https://knexjs.org/#Builder-whereRaw'
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+      - knex
+  pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: $X + $Y
+        - pattern: $X.concat($Y)
+        - pattern: |
+            `...${...}...`
+        - patterns:
+          - pattern: |
+              [..., $X, ...].join(...)
+          - metavariable-pattern:
+              metavariable: $X
+              patterns:
+                - pattern-not: |
+                   "..."
+      - pattern-not: |
+          "..." + "..."
+      - pattern-not: |
+          $X.concat("...")
+  pattern-sinks:
+  - patterns:
+    - pattern: $QUERY
+    - pattern-either:
+      - pattern-inside: $KNEX.fromRaw($QUERY, ...)
+      - pattern-inside: $KNEX.whereRaw($QUERY, ...)
+      - pattern-inside: $KNEX.raw($QUERY, ...)
+    - pattern-either:
+      - pattern-inside: |
+          require('knex')
+          ...
+      - pattern-inside: |
+          import 'knex'
+          ...

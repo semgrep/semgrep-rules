@@ -1,0 +1,58 @@
+rules:
+- id: tainted-html-string
+  severity: WARNING
+  message: >-
+    Detected user input flowing into a manually constructed HTML string. You may be accidentally bypassing secure methods
+    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
+    let attackers steal sensitive user data. To be sure this is safe, check that the HTML is rendered safely. Otherwise, use
+    templates which will safely render HTML instead.
+  metadata:
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+      - A07:2017
+      - A03:2021
+    category: security
+    technology:
+    - aws-lambda
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+    - pattern: $EVENT
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              "$HTMLSTR" + $EXPR
+          - pattern: |
+              "$HTMLSTR".concat(...)
+          - pattern: $UTIL.format($HTMLSTR, ...)
+          - pattern: format($HTMLSTR, ...)
+        - metavariable-pattern:
+            metavariable: $HTMLSTR
+            language: generic
+            pattern: <$TAG ...
+      - patterns:
+        - pattern: |
+            `...${...}...`
+        - pattern-regex: |
+            .*<\w+.*
+    - pattern-not-inside: |
+        console.$LOG(...)

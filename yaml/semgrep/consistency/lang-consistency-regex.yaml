@@ -1,0 +1,18 @@
+rules:
+- fix: regex
+  id: lang-consistency-regex
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+    Please use 'regex' instead.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(none)$
+  severity: WARNING
