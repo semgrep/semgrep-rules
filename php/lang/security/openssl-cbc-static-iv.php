@@ -17,7 +17,7 @@ function encryptBad($plaintext, $password) {
     $key = hash('sha256', $password, true);
     $iv = "4c25ecc95c8816db753cba44a3b56aca";
 
-    // ruleid: php_openssl_static_iv
+    // ruleid: openssl-cbc-static-iv
     $ciphertext = openssl_encrypt($plaintext, $method, $key, OPENSSL_RAW_DATA, $iv);
     $hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
 
@@ -28,7 +28,7 @@ function encryptBad2($plaintext, $password) {
     $key = hash('sha256', $password, true);
     $iv = "4c25ecc95c8816db753cba44a3b56aca";
 
-    // ruleid: php_openssl_static_iv
+    // ruleid: openssl-cbc-static-iv
     $ciphertext = openssl_encrypt($plaintext, "AES-256-CBC", $key, OPENSSL_RAW_DATA, $iv);
     $hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
 
@@ -57,6 +57,6 @@ function decryptBad($ivHashCiphertext, $password) {
 
     if (!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash)) return null;
 
-    // ruleid: php_openssl_static_iv
+    // ruleid: openssl-cbc-static-iv
     return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
 }
