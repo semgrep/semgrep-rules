@@ -21,8 +21,6 @@ rules:
               React.createElement($EL, <... $PROPS ...>)
           - pattern: |
               React.createElement($EL, $F(<... $PROPS ...>))
-      - pattern-not-inside: |
-          React.createElement($EL, {$ATTR: ...})
     message: >-
       Inject arbitrary props into the new element. It may introduce an XSS vulnerability.
     metadata:
