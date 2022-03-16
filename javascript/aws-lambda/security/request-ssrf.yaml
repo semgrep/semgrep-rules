@@ -1,0 +1,118 @@
+rules:
+- id: request-ssrf
+  mode: taint
+  message: >-
+    Tainted URL in `request` call.
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern: $URL
+    - pattern-either:
+      - patterns:
+        - pattern-not-inside: |
+            $REQ.$METHOD({...},...) 
+        - pattern-not-inside: |
+            $URL = {...}
+            ...
+            $REQ.$METHOD($URL,...)
+        - pattern-either:
+          - pattern-inside: $REQ.get($URL,...)
+          - pattern-inside: $REQ.post($URL,...)
+          - pattern-inside: $REQ.put($URL,...)
+          - pattern-inside: $REQ.patch($URL,...)
+          - pattern-inside: $REQ.del($URL,...)
+          - pattern-inside: $REQ.head($URL,...)
+          - pattern-inside: $REQ.options($URL,...)
+          - patterns:
+            - pattern-inside: |
+                $REQ($URL,...)
+            - pattern-not-inside: |
+                $REQ({...},...)
+            - pattern-not-inside: |
+                $URL = {...}
+                ...
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $REQ.get({url: $URL},...)
+          - pattern-inside: |
+              $REQ.post({url: $URL},...)
+          - pattern-inside: |
+              $REQ.put({url: $URL},...)
+          - pattern-inside: |
+              $REQ.patch({url: $URL},...)
+          - pattern-inside: |
+              $REQ.del({url: $URL},...)
+          - pattern-inside: |
+              $REQ.head({url: $URL},...)
+          - pattern-inside: |
+              $REQ.options({url: $URL},...)
+          - pattern-inside: |
+              $REQ({url: $URL},...)
+          - pattern-inside: |
+              $REQ.get({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.post({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.put({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.patch({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.del({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.head({uri: $URL},...)
+          - pattern-inside: |
+              $REQ.options({uri: $URL},...)
+          - pattern-inside: |
+              $REQ({uri: $URL},...)
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $CONF = {url: $URL}
+              ...
+          - pattern-inside: |
+              $CONF = {uri: $URL}
+              ...
+        - pattern-either:
+          - pattern-inside: |
+              $REQ.get($CONF,...)
+          - pattern-inside: |
+              $REQ.post($CONF,...)
+          - pattern-inside: |
+              $REQ.put($CONF,...)
+          - pattern-inside: |
+              $REQ.patch($CONF,...)
+          - pattern-inside: |
+              $REQ.del($CONF,...)
+          - pattern-inside: |
+              $REQ.head($CONF,...)
+          - pattern-inside: |
+              $REQ.options($CONF,...)
+          - pattern-inside: |
+              $REQ($CONF,...)
+    - pattern-either:
+      - pattern-inside: |
+          $REQ = require('request')
+          ...
+      - pattern-inside: |
+          $REQ = request.defaults(...)
+          ...
+  severity: ERROR
+  languages:
+    - javascript
+    - typescript

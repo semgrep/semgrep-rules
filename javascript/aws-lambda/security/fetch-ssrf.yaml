@@ -1,0 +1,29 @@
+rules:
+- id: fetch-ssrf
+  mode: taint
+  message: >-
+    Tainted URL in `fetch` call.
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern: $URL
+    - pattern-inside: fetch($URL,...)
+  severity: ERROR
+  languages:
+    - javascript
+    - typescript

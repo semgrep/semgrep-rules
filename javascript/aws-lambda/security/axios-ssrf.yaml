@@ -1,0 +1,70 @@
+rules:
+- id: axios-ssrf
+  mode: taint
+  message: >-
+    Tainted URL in Axios call.
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern: $URL
+    - pattern-either:
+      - pattern-inside: $AXIOS.default.get($URL,...)
+      - pattern-inside: $AXIOS.default.delete($URL,...)
+      - pattern-inside: $AXIOS.default.head($URL,...)
+      - pattern-inside: $AXIOS.default.options($URL,...)
+      - pattern-inside: $AXIOS.default.put($URL,...)
+      - pattern-inside: $AXIOS.default.patch($URL,...)
+      - pattern-inside: $AXIOS.get($URL,...)
+      - pattern-inside: $AXIOS.delete($URL,...)
+      - pattern-inside: $AXIOS.head($URL,...)
+      - pattern-inside: $AXIOS.options($URL,...)
+      - pattern-inside: $AXIOS.put($URL,...)
+      - pattern-inside: $AXIOS.patch($URL,...)
+      - pattern-inside: |
+          $AXIOS.request({url: $URL},...)
+      - pattern-inside: |
+          $AXIOS.default.request({url: $URL},...)
+      - pattern-inside: |
+          $AXIOS({url: $URL},...)
+      - pattern-inside: |
+          $CONF = {url: $URL}
+          ...
+          $AXIOS.request($CONF,...)
+      - pattern-inside: |
+          $CONF = {url: $URL}
+          ...
+          $AXIOS.default.request($CONF,...)
+      - patterns:
+        - pattern-inside: |
+            $AXIOS($URL,...)
+        - pattern-not-inside: |
+            $AXIOS({...},...)
+        - pattern-not-inside: |
+            $URL = {...}
+            ...
+    - pattern-either:
+      - pattern-inside: |
+          $AXIOS = require('axios')
+          ...
+      - pattern-inside: |
+          $AXIOS = require('axios').default
+          ...
+  severity: ERROR
+  languages:
+    - javascript
+    - typescript
