@@ -1,0 +1,24 @@
+rules:
+- id: scalac-debug
+  patterns:
+  - pattern-either:
+    - pattern: scalacOptions ... "-Vdebug"
+    - pattern: scalacOptions ... "-Ydebug"
+  message: >-
+    Scala applications built with `debug` set to true in production may leak debug information to attackers.
+    Debug mode also affects performance and reliability.
+    Remove it from configuration.
+  languages: [generic]
+  severity: WARNING
+  paths:
+    include:
+      - "*.sbt*"
+  metadata: 
+    category: security
+    cwe: "CWE-489: Active Debug Code"
+    owasp: 'A5: Security Misconfiguration'
+    technology:
+    - scala
+    - sbt
+    references:
+      - https://docs.scala-lang.org/overviews/compiler-options/index.html
