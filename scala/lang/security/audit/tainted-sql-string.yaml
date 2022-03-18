@@ -59,7 +59,9 @@ rules:
               metavariable: $SQLSTR
               regex: (?i)(select|delete|insert|create|update|alter|drop)\b
         - patterns:
-          - pattern: s"..."
+          - pattern-either:
+            - pattern: s"..."
+            - pattern: f"..."
           - pattern-regex: |
               .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
       - pattern-not-inside: println(...)

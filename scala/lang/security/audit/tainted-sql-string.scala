@@ -40,7 +40,7 @@ object Smth {
   }
 
   def call5(name: String) = {
-    // todoruleid: tainted-sql-string
+    // ruleid: tainted-sql-string
     val sql = s"SELECT * FROM table WHERE name = ${name + "smth"};"
     val conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password")
     val stmt = conn.createStatement()
