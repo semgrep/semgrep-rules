@@ -20,7 +20,7 @@ class Bad {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body)
@@ -36,7 +36,7 @@ class Bad {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         HttpResponse<String> response =
             client.send(request, BodyHandlers.ofString());
@@ -55,7 +55,7 @@ class Bad {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         HttpResponse<String> response =
             client.send(request, BodyHandlers.ofString());
@@ -113,7 +113,7 @@ class Ok {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body)
@@ -129,7 +129,7 @@ class Ok {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         HttpResponse<String> response =
             client.send(request, BodyHandlers.ofString());
@@ -148,7 +148,7 @@ class Ok {
             .timeout(Duration.ofMinutes(1))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofFile(Paths.get("file.json")))
-            .build();
+            .build()
 
         HttpResponse<String> response =
             client.send(request, BodyHandlers.ofString());

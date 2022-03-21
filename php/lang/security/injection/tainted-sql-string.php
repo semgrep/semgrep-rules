@@ -62,12 +62,3 @@ function test4() {
     $info = mysql_query($query);
     return $info;
 }
-
-function test5() {
-    $part = $_POST['url'];
-    $part = mysqli_real_escape_string($part);
-    // ok: tainted-sql-string
-    $query = sprintf("SELECT * FROM table WHERE Id = '" . $part . "'");
-    $info = mysql_query($query);
-    return $info;
-}
