@@ -6,7 +6,7 @@ rules:
       - pattern-not: $FUNC(__DIR__ . "...");
       - metavariable-regex:
           metavariable: $FUNC
-          regex: \b(include|include_once|require|require_once)\b
+          regex: include|include_once|require|require_once
     message: >-
       Detected non-constant file inclusion. This can lead to local file inclusion (LFI) or remote file inclusion (RFI) if user input reaches this statement. LFI and RFI could lead to sensitive files being obtained by attackers. Instead, explicitly specify what to include. If that is not a viable solution, validate user input thoroughly.
     metadata:
