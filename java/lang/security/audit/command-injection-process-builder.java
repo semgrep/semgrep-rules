@@ -33,11 +33,19 @@ public class TestExecutor {
       return "foo";
     }
 
+    public String test4(String userInput) {
+      ProcessBuilder builder = new ProcessBuilder();
+      // ruleid: command-injection-process-builder
+      builder.command("cmd", "/c", userInput);
+      return "foo";
+    }
+
     public String okTest() {
       ProcessBuilder builder = new ProcessBuilder();
       // ok: command-injection-process-builder
-      builder.command("bash", "-c", "ls");
+      builder.command("bash", "/c", "ls");
       return "foo";
     }
+
 
 }
