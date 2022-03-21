@@ -1,55 +1,58 @@
 rules:
-  - id: tainted-sql-string
-    languages:
-      - php
-    severity: ERROR
-    message: >-
-      User data flows into this manually-constructed SQL string. User data
-      can be safely inserted into SQL strings using prepared statements or an
-      object-relational mapper (ORM). Manually-constructed SQL strings is a
-      possible indicator of SQL injection, which could let an attacker steal
-      or manipulate data from the database.
-      Instead, use prepared statements (`$mysqli->prepare("INSERT INTO test(id, label) VALUES (?, ?)");`)
-      or a safe library.
-    metadata:
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-      owasp:
-        - A10:2021
-        - A01:2017
-      references:
-        - https://owasp.org/www-community/attacks/SQL_Injection
-      category: security
-      technology:
-        - php
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-either:
-              - pattern: $_GET
-              - pattern: $_POST
-              - pattern: $_COOKIE
-              - pattern: $_REQUEST
-    pattern-sinks:
-      - pattern-either:
-          - patterns:
-              - pattern: |
-                  sprintf($SQLSTR, ...)
-              - metavariable-regex:
-                  metavariable: $SQLSTR
-                  regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-          - patterns:
-              - pattern: |
-                  "...{$EXPR}..."
-              - pattern-regex: |
-                  .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-          - patterns:
-              - pattern: |
-                  "...$EXPR..."
-              - pattern-regex: |
-                  .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-          - patterns:
-              - pattern: |
-                  "...".$EXPR
-              - pattern-regex: |
-                  .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+- id: tainted-sql-string
+  languages:
+  - php
+  severity: ERROR
+  message: User data flows into this manually-constructed SQL string. User data can
+    be safely inserted into SQL strings using prepared statements or an object-relational
+    mapper (ORM). Manually-constructed SQL strings is a possible indicator of SQL
+    injection, which could let an attacker steal or manipulate data from the database.
+    Instead, use prepared statements (`$mysqli->prepare("INSERT INTO test(id, label)
+    VALUES (?, ?)");`) or a safe library.
+  metadata:
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    owasp:
+    - A10:2021
+    - A01:2017
+    references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    category: security
+    technology:
+    - php
+  mode: taint
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: mysqli_real_escape_string(...)
+    - pattern: real_escape_string(...)
+    - pattern: $MYSQLI->real_escape_string(...)
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+  pattern-sinks:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          sprintf($SQLSTR, ...)
+      - metavariable-regex:
+          metavariable: $SQLSTR
+          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+    - patterns:
+      - pattern: |
+          "...{$EXPR}..."
+      - pattern-regex: |
+          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+    - patterns:
+      - pattern: |
+          "...$EXPR..."
+      - pattern-regex: |
+          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+    - patterns:
+      - pattern: |
+          "...".$EXPR
+      - pattern-regex: |
+          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
