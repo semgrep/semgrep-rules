@@ -3,6 +3,9 @@ rules:
   patterns:
     - pattern: Seq($CMD, ...)
     - pattern-not: Seq("...", ...)
+    - pattern-inside: |
+        import sys.process
+        ...
     - pattern-not-inside: |
         $CMD = "..."
         ...
