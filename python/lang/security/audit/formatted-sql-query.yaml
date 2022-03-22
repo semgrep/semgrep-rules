@@ -1,7 +1,11 @@
 rules:
   - id: formatted-sql-query
     message: >-
-      Detected possible formatted SQL query. Use parameterized queries instead.
+      Detected possible formatted SQL query. 
+      This could lead to SQL injection if user input has been used
+      in the formatted SQL query. 
+      Use parameterized queries instead, or sanitize user input
+      thoroughly before using it in a formatted SQL query.
     metadata:
       owasp: "A1: Injection"
       cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
@@ -13,7 +17,20 @@ rules:
     severity: WARNING
     languages:
       - python
-    pattern-either:
+    mode: taint
+    pattern-sources:
+    - pattern-either:
+      - pattern: request.$PATH.get(...)
+      - pattern: request.$PATH[...]
+      - pattern: request.$FUNC
+      - patterns:
+        - pattern-inside: |
+            @$APP.route(...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
+        - pattern: $ROUTEVAR
+    pattern-sinks:
+    - pattern-either:
       - pattern: $DB.execute("..." % ...)
       - pattern: $DB.execute("...".format(...))
       - pattern: $DB.execute(f"...")
