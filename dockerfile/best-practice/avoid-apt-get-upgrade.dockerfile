@@ -7,6 +7,9 @@ RUN apt-get update
 RUN apt-get update && apt-get upgrade
 
 # ruleid:avoid-apt-get-upgrade
+RUN apt-get update && apt-get upgrade -y
+
+# ruleid:avoid-apt-get-upgrade
 RUN apt-get update && apt-get dist-upgrade
 
 # ruleid:avoid-apt-get-upgrade
