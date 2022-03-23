@@ -20,18 +20,47 @@ rules:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: request
-        - pattern-inside: |
-            Action {
-              request: Request[$T] => 
-                ...
-            }
+        - pattern: $REQ
+        - pattern-either:
+          - pattern-inside: |
+              Action {
+                $REQ: Request[$T] => 
+                  ...
+              }
+          - pattern-inside: |
+              Action(...) {
+                $REQ: Request[$T] => 
+                  ...
+              }
+          - pattern-inside: |
+              Action.async {
+                $REQ: Request[$T] => 
+                  ...
+              }
+          - pattern-inside: |
+              Action.async(...) {
+                $REQ: Request[$T] => 
+                  ...
+              }
       - patterns:
         - pattern: $PARAM
-        - pattern-inside: |
-            def $CTRL(..., $PARAM: $TYPE, ...) = Action {
-              ...
-            }
+        - pattern-either:
+          - pattern-inside: |
+              def $CTRL(..., $PARAM: $TYPE, ...) = Action {
+                ...
+              }
+          - pattern-inside: |
+              def $CTRL(..., $PARAM: $TYPE, ...) = Action(...) {
+                ...
+              }
+          - pattern-inside: |
+              def $CTRL(..., $PARAM: $TYPE, ...) = Action.async {
+                ...
+              }
+          - pattern-inside: |
+              def $CTRL(..., $PARAM: $TYPE, ...) = Action.async(...) {
+                ...
+              }
   pattern-sinks:
   - patterns:
     - pattern-either:
