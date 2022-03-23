@@ -1,7 +1,7 @@
 rules:
   - id: prefer-json-notation
     severity: INFO
-    languages: [generic]
+    languages: [dockerfile]
     message: >-
       Prefer JSON notation when using CMD or ENTRYPOINT. This allows signals to be passed
       from the OS.
@@ -19,8 +19,8 @@ rules:
         - "*Dockerfile*"
     pattern-either:
       - patterns:
-          - pattern: CMD $WORD
+          - pattern: CMD $WORD ...
           - pattern-not-inside: CMD [...]
       - patterns:
-          - pattern: ENTRYPOINT $WORD
+          - pattern: ENTRYPOINT $WORD ...
           - pattern-not-inside: ENTRYPOINT [...]

@@ -1,10 +1,10 @@
 rules:
   - id: prefer-apt-get
     severity: INFO
-    languages: [generic]
+    languages: [dockerfile]
     patterns:
-      - pattern: RUN apt
-      - pattern-not-inside: RUN apt-get
+      - pattern: RUN apt ...
+      - pattern-not: RUN apt-get ...
     message: >-
       'apt-get' is preferred as an unattended tool for stability. 'apt' is discouraged.
     metadata:

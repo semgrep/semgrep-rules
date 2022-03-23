@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y python \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+# ruleid: remove-package-cache
+RUN apt-get update && apt-get install --no-install-recommends -y python \
+ && rm -rf /var/lib/apt/lists/* && apt-get install -no-install-recommends -y semgrep
 
 # ok: remove-package-cache
 RUN apt-get update &&\

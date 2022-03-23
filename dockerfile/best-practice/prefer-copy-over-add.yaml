@@ -1,7 +1,7 @@
 rules:
   - id: prefer-copy-over-add
     severity: INFO
-    languages: [generic]
+    languages: [dockerfile]
     message: >-
       The ADD command will accept and include files from a URL.
       This potentially exposes the container to a man-in-the-middle attack.
@@ -17,4 +17,4 @@ rules:
       include:
         - "*dockerfile*"
         - "*Dockerfile*"
-    pattern: ADD
+    pattern: ADD $FROM $TO

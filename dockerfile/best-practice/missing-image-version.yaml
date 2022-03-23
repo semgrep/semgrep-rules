@@ -3,9 +3,7 @@ rules:
     patterns:
       - pattern-either:
           - pattern: FROM $IMAGE
-          - pattern: FROM --platform=$PLATFORM $IMAGE
       - pattern-not: FROM $IMAGE:$VERSION
-      - pattern-not: FROM --platform=$PLATFORM:$VERSION $IMAGE
     message: >-
       Images should be tagged with an explicit version to produce
       deterministic container images.

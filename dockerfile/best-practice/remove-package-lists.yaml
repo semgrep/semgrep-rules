@@ -1,8 +1,8 @@
 rules:
   - id: remove-package-lists
     patterns:
-      - pattern: RUN apt-get update
-      - pattern-not-inside: RUN apt-get update ... ... ... && ... rm -rf /var/lib/apt/lists/*
+      - pattern: RUN apt-get update ...
+      - pattern-not: RUN ... rm -rf /var/lib/apt/lists/*
     message: >-
       The package lists were not deleted after running 'apt-get update', which
       increases the size of the image.
@@ -10,7 +10,7 @@ rules:
       end
       of apt-get command chain.
     severity: WARNING
-    languages: [generic]
+    languages: [dockerfile]
     metadata:
       source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3009
       references:
