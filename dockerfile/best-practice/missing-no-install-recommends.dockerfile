@@ -6,6 +6,15 @@ RUN apt-get install semgrep=0.30.0
 RUN apt-get install -y python=2.7 semgrep
 
 # ok: missing-no-install-recommends
+RUN apt-get install semgrep --no-install-recommends
+
+# ok: missing-no-install-recommends
+RUN apt-get install semgrep --no-install-recommends -y
+
+# ok: missing-no-install-recommends
+RUN apt-get install --no-install-recommends semgrep
+
+# ok: missing-no-install-recommends
 RUN apt-get install --no-install-recommends -y python=2.7 semgrep
 
 # ok: missing-no-install-recommends
