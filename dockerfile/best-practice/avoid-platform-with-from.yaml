@@ -1,8 +1,8 @@
 rules:
   - id: avoid-platform-with-from
     severity: INFO
-    languages: [generic]
-    pattern: FROM ... --platform= ... $IMAGE
+    languages: [dockerfile]
+    pattern: FROM --platform=$PLATFORM $IMAGE
     message: >-
       Using '--platform' with FROM restricts the image to build on a single platform.
       Further, this must be the same as the

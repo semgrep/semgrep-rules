@@ -1,9 +1,9 @@
 rules:
   - id: missing-dnf-clean-all
     severity: WARNING
-    languages: [generic]
+    languages: [dockerfile]
     patterns:
-      - pattern: dnf $COMMAND
+      - pattern: RUN ... dnf ...
       - pattern-not-inside: RUN ... && dnf clean all
       - pattern-not-inside: RUN ... && \ dnf clean all
     message: >-

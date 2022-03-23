@@ -1,13 +1,16 @@
 rules:
   - id: missing-image-version
     patterns:
-      - pattern: FROM $IMAGE
-      - pattern-not-inside: FROM $IMAGE:$VERSION
+      - pattern-either:
+          - pattern: FROM $IMAGE
+          - pattern: FROM --platform=$PLATFORM $IMAGE
+      - pattern-not: FROM $IMAGE:$VERSION
+      - pattern-not: FROM --platform=$PLATFORM:$VERSION $IMAGE
     message: >-
       Images should be tagged with an explicit version to produce
       deterministic container images.
     severity: WARNING
-    languages: [generic]
+    languages: [dockerfile]
     metadata:
       source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3006
       references:
@@ -19,3 +22,4 @@ rules:
       include:
         - "*dockerfile*"
         - "*Dockerfile*"
+
