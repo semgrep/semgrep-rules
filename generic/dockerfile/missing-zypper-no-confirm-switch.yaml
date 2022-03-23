@@ -1,14 +1,14 @@
 rules:
   - id: missing-zypper-no-confirm-switch
     severity: WARNING
-    languages: [generic]
+    languages: [dockerfile]
     patterns:
       - pattern: |
-          RUN ... zypper install ... $SOMETHING
-      - pattern-not-inside: |
-          RUN ... zypper install ... -y
-      - pattern-not-inside: |
-          RUN ... zypper install ... --no-confirm
+          RUN ... zypper install ...
+      - pattern-not: |
+          RUN ... zypper install ... -y ...
+      - pattern-not: |
+          RUN ... zypper install ... --no-confirm ...
     message: >-
       This 'zypper install' is missing the '-y' switch. This might stall
       builds because it requires human intervention. Add the '-y' switch.
