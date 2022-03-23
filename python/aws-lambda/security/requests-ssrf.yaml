@@ -1,0 +1,19 @@
+rules:
+- id: requests-ssrf
+  mode: taint
+  message: >-
+    Tainted URL in Requests call.
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context):
+          ...
+  pattern-sinks:
+  - patterns:
+    - pattern: $URL
+    - pattern-either:
+      - pattern-inside: requests.$METHOD($URL,...)
+  severity: ERROR
+  languages:
+    - python
