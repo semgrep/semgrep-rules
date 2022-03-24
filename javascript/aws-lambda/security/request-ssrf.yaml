@@ -107,6 +107,12 @@ rules:
               $REQ($CONF,...)
     - pattern-either:
       - pattern-inside: |
+          $REQ = require('request-promise')
+          ...
+      - pattern-inside: |
+          $REQ = require('request-promise-native')
+          ...
+      - pattern-inside: |
           $REQ = require('request')
           ...
       - pattern-inside: |
