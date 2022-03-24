@@ -1,0 +1,28 @@
+rules:
+- id: urllib3-ssrf
+  mode: taint
+  message: >-
+    Tainted URL in urllib3 call.
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context):
+          ...
+  pattern-sinks:
+  - patterns:
+    - pattern: $URL
+    - pattern-either:
+      - pattern-inside: |
+          $X = urllib3.$CLASS(...)
+          ...
+          $X.request($METHOD, $URL, ...)
+      - pattern-inside: |
+          $X = urllib3.$CLASS(...)
+          ...
+          $X.urlopen($METHOD, $URL, ...)
+      - pattern-inside: urllib3.$CLASS(...).request($METHOD, $URL, ...)
+      - pattern-inside: urllib3.$CLASS(...).urlopen($METHOD, $URL, ...)
+  severity: ERROR
+  languages:
+    - python
