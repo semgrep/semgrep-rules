@@ -1,24 +1,20 @@
 rules:
   - id: missing-pip-no-cache-dir
     severity: INFO
-    languages: [generic]
+    languages: [dockerfile]
     patterns:
       - patterns:
           - pattern: |
               RUN ... $PIP install ... $SOMETHING
           - pattern-not-inside: |
-              RUN ... $PIP install ... --no-cache-dir
+              RUN ... $PIP install ... --no-cache-dir ...
           - pattern-not-inside: |
-              RUN ... $PIP install . ... $SOMETHING
+              RUN ... $PIP install . ... 
           - pattern-not-inside: |
-              ENV ... PIP_NO_CACHE_DIR=...
-              ...
-              ...
+              ENV ... PIP_NO_CACHE_DIR=$BOOL ...
               ...
           - pattern-not-inside: |
               ENV ... PIP_NO_CACHE_DIR ...
-              ...
-              ...
               ...
       - metavariable-regex:
           metavariable: $PIP
@@ -34,7 +30,3 @@ rules:
       category: best-practice
       technology:
         - dockerfile
-    paths:
-      include:
-        - "*dockerfile*"
-        - "*Dockerfile*"
