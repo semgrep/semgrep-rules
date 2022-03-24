@@ -1,11 +1,11 @@
 rules:
   - id: react-http-leak
-    pattern-either:
+    patterns:
+    - pattern-not: <$X $Y="..." />
+    - pattern-either:
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
-          - pattern-not: |
-              <$EL codebase="..." />
           - metavariable-regex:
               metavariable: $EL
               regex: applet|object
@@ -21,8 +21,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: cite
-          - pattern-not: |
-              <$EL cite="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -32,8 +30,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: longdesc
-          - pattern-not: |
-              <$EL longdesc="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR={$INJECT} />
@@ -43,8 +39,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: src
-          - pattern-not: |
-              <$EL src="..." />
           - pattern-not-inside: |
               import $INJECT from "...";
               ...
@@ -57,8 +51,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: usemap
-          - pattern-not: |
-              <$EL usemap="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -68,8 +60,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: formaction
-          - pattern-not: |
-              <$EL formaction="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -79,8 +69,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: srcset
-          - pattern-not: |
-              <$EL srcset="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -90,8 +78,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: background 
-          - pattern-not: |
-              <body background="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -101,8 +87,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: action
-          - pattern-not: |
-              <form action="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -112,8 +96,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: profile
-          - pattern-not: |
-              <head profile="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -123,8 +105,6 @@ rules:
           - metavariable-regex:
               metavariable: $EL
               regex: object
-          - pattern-not: |
-              <object $ATTR="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -134,8 +114,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: poster
-          - pattern-not: |
-              <video poster="..." />
       - patterns:
           - pattern: |
               <command icon=... />
@@ -145,8 +123,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: icon
-          - pattern-not: |
-              <command icon="..." />
       - patterns:
           - pattern: |
               <$EL $ATTR=... />
@@ -156,8 +132,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: manifest
-          - pattern-not: |
-              <html manifest="..." />
       - patterns:
           - pattern: |
               <meta content=... />
@@ -167,8 +141,6 @@ rules:
           - metavariable-regex:
               metavariable: $ATTR
               regex: content
-          - pattern-not: |
-              <meta content="..." />
     message: >-
       This HTML element '$EL' and attribute '$ATTR' together may load an external
       resource. This means that if dynamic content can enter this attribute it may
