@@ -2,7 +2,7 @@ rules:
   - id: maintainer-is-deprecated
     severity: INFO
     languages: [dockerfile]
-    pattern: MAINTAINER ...
+    pattern: MAINTAINER $NAME
     message: >-
       MAINTAINER has been deprecated.
     metadata:
@@ -16,3 +16,4 @@ rules:
       include:
         - "*dockerfile*"
         - "*Dockerfile*"
+    fix: "# MAINTAINER $NAME"
