@@ -1,0 +1,8 @@
+# ok: check-dynamic-render-local-file-include
+<%= render :partial => (params[:awesome] ? 'awesome' : 'not_awesome') %>
+
+# ok: check-dynamic-render-local-file-include
+<%= render :partial => User.find(params[:user][:id]) %>
+
+# ruleid: check-dynamic-render-local-file-include
+<%= render :file => "/tmp/#{params[:file]}" %>
