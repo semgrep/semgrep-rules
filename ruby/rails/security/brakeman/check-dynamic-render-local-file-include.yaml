@@ -1,0 +1,31 @@
+rules:
+- id: check-dynamic-render-local-file-include
+  mode: search
+  paths:
+    include:
+      - "*.erb"
+  patterns:
+  - pattern: |
+      params[...]
+  - pattern-inside: |
+      render :file => ...
+  message: Found request parameters in a call to `render` in a dynamic context. This
+    can allow end users to request arbitrary local files which may result in leaking
+    sensitive information persisted on disk.
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    technology:
+    - ruby
+    - rails
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A05:2021 - Broken Access Control
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_render.rb
+    references:
+    - https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/07-Input_Validation_Testing/11.1-Testing_for_Local_File_Inclusion
+    - https://github.com/presidentbeef/brakeman/blob/f74cb53ead47f0af821d98b5b41e16d63100c240/test/apps/rails2/app/views/home/test_render.html.erb
