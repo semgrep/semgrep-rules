@@ -10,7 +10,8 @@ rules:
         render ...
   message: Found request parameters in a call to `render`. This can allow end users
     to request arbitrary local files which may result in leaking sensitive information
-    persisted on disk.
+    persisted on disk. Where possible, avoid letting users specify template paths for `render`.
+    If you must allow user input, use an allow-list of known templates or normalize the user-supplied value with `File.basename(...)`.
   languages:
   - ruby
   severity: WARNING
