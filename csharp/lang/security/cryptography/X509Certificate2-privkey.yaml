@@ -1,0 +1,35 @@
+rules:
+  - id: X509Certificate2-privkey
+    severity: WARNING
+    languages:
+      - C#
+    metadata:
+      cwe: "CWE-310: Cryptographic Issues"
+      owasp:
+        - "A02:2021 - Cryptographic Failures"
+        - "A03:2017 - Sensitive Data Exposure"
+        - "A06:2021 – Vulnerable and Outdated Components"
+        - "A09:2017 – Using Components with Known Vulnerabilities"
+      references:
+        - https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509certificate2.privatekey
+      category: security
+      technology:
+        - .net
+      confidence: MEDIUM
+    message: >-
+      X509Certificate2.PrivateKey is obsolete. Use a method such as GetRSAPrivateKey() or GetECDsaPrivateKey().
+      Alternatively, use the CopyWithPrivateKey() method to create a new instance with a private key. Further,
+      if you set X509Certificate2.PrivateKey to `null` or set it to another key without deleting it first, the private key will
+      be left on disk. 
+    patterns:
+      - pattern-inside: |
+          using System.Security.Cryptography;
+          ...
+      - pattern-either:
+          - pattern-inside: |
+              X509Certificate2Collection $COLLECTION = ...;
+              ...
+          - pattern-inside: |
+              X509Certificate2 $CERT = ...;
+              ...
+      - pattern: $CERT.PrivateKey

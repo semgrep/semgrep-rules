@@ -1,34 +1,34 @@
 rules:
-- id: jwt-decode-without-verify
-  message: >-
-    Detected the decoding of a JWT token without a verify step.
-    JWT tokens must be verified before use, otherwise the token's
-    integrity is unknown. This means a malicious actor could forge
-    a JWT token with any claims. Call '.verify()' before using the token.
-  metadata:
-    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
-    owasp: 'A2: Broken Authentication'
-    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-    asvs:
-      section: 'V3: Session Management Verification Requirements'
-      control_id: 3.5.3 Insecue Stateless Session Tokens
-      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
-      version: '4'
-    category: security
-    technology:
-    - jwt
-  languages: [javascript, typescript]
-  severity: WARNING
-  patterns:
-  - pattern-inside: |
-      $JWT = require('jsonwebtoken');
-      ...
-  - pattern-either:
-    - pattern: |
-        $JWT.decode(...)
-    - pattern: |
-        $JWT.decode(...).$PARAM
-  - pattern-not-inside: |
-      ...
-      $JWT.verify(...)
-      ...
+  - id: jwt-decode-without-verify
+    message: >-
+      Detected the decoding of a JWT token without a verify step.
+      JWT tokens must be verified before use, otherwise the token's
+      integrity is unknown. This means a malicious actor could forge
+      a JWT token with any claims. Call '.verify()' before using the token.
+    metadata:
+      cwe: "CWE-345: Insufficient Verification of Data Authenticity"
+      owasp: "A2: Broken Authentication"
+      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+      asvs:
+        section: "V3: Session Management Verification Requirements"
+        control_id: 3.5.3 Insecue Stateless Session Tokens
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+        version: "4"
+      category: security
+      technology:
+        - jwt
+    languages: [javascript, typescript]
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          $JWT = require('jsonwebtoken');
+          ...
+      - pattern-not-inside: | # nosemgrep: slow-pattern-top-ellipsis
+          ...
+          $JWT.verify($TOKEN, ...)
+          ...
+      - pattern-not-inside: | # nosemgrep: slow-pattern-top-ellipsis
+          ...
+          if (<... $JWT.verify($TOKEN, ...) ...>) { ... }
+          ...
+      - pattern: $JWT.decode($TOKEN, ...)

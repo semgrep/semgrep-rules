@@ -1,18 +1,20 @@
 rules:
-- id: string-concat-in-list
-  patterns:
-  - pattern-either:
-    - pattern-inside: '[...]'
-    - pattern-inside: '{...}'
-  - pattern: '"..." "..."'
-  - pattern-not-inside: f"..."
-  - pattern-not-inside: '{..., $KEY: $VALUE, ...}'
-  message: >-
-    Detected strings that are implicitly concatenated inside a list.
-    Python will implicitly concatenate strings when not explicitly delimited.
-    Was this supposed to be individual elements of the list?
-  severity: WARNING
-  languages:
-  - python
-  metadata:
-    category: correctness
+  - id: string-concat-in-list
+    patterns:
+      - pattern-either:
+          - pattern-inside: "[...]"
+          - pattern-inside: "{...}"
+      - pattern: '"..." "..."'
+      - pattern-not-inside: f"..."
+      - pattern-not-inside: "{..., $KEY: $VALUE, ...}"
+    message: >-
+      Detected strings that are implicitly concatenated inside a list.
+      Python will implicitly concatenate strings when not explicitly delimited.
+      Was this supposed to be individual elements of the list?
+    severity: WARNING
+    languages:
+      - python
+    metadata:
+      category: correctness
+      technology:
+        - python

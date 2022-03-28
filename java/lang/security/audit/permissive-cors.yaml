@@ -1,61 +1,65 @@
 rules:
-- id: permissive-cors
-  message: >-
-    https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
-    Permissive CORS policy will allow a malicious application to communicate with the victim application in an inappropriate way, leading to spoofing, data theft, relay and other attacks.
-  metadata:
-    asvs:
-      section: 'V14: Configuration Verification Requirements'
-      control_id: 14.4.8 Permissive CORS
-      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x22-V14-Config.md#v144-http-security-headers-requirements
-      version: '4'
-    category: security
-  severity: WARNING
-  languages: [java]
-  pattern-either:
-  - pattern: |
-      HttpServletResponse $RES = ...;
-      ...
-      $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-  - pattern: |
-      HttpServletResponse $RES = ...;
-      ...
-      $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-  - pattern: |
-      ServerHttpResponse $RES = ...;
-      ...
-      $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-  - pattern: |
-      HttpHeaders $HEADERS = ...;
-      ...
-      $HEADERS.set("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-  - pattern: |
-      ServerWebExchange $SWE = ...;
-      ...
-      $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
-  - pattern: |
-      $X $METHOD(...,HttpServletResponse $RES,...) {
-        ...
-        $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-        ...
-      }
-  - pattern: |
-      $X $METHOD(...,HttpServletResponse $RES,...) {
-        ...
-        $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-        ...
-      }
-  - pattern: |
-      $X $METHOD(...,ServerHttpResponse $RES,...) {
-        ...
-        $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-        ...
-      }
-  - pattern: |
-      $X $METHOD(...,ServerWebExchange $SWE,...) {
-        ...
-        $SWE.getResponse().getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
-        ...
-      }
-  - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
-  - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
+  - id: permissive-cors
+    message: >-
+      https://find-sec-bugs.github.io/bugs.htm#PERMISSIVE_CORS
+      Permissive CORS policy will allow a malicious application to communicate with
+      the victim application in an inappropriate way, leading to spoofing, data theft,
+      relay and other attacks.
+    metadata:
+      asvs:
+        section: "V14: Configuration Verification Requirements"
+        control_id: 14.4.8 Permissive CORS
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x22-V14-Config.md#v144-http-security-headers-requirements
+        version: "4"
+      category: security
+      technology:
+        - java
+    severity: WARNING
+    languages: [java]
+    pattern-either:
+      - pattern: |
+          HttpServletResponse $RES = ...;
+          ...
+          $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      - pattern: |
+          HttpServletResponse $RES = ...;
+          ...
+          $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      - pattern: |
+          ServerHttpResponse $RES = ...;
+          ...
+          $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      - pattern: |
+          HttpHeaders $HEADERS = ...;
+          ...
+          $HEADERS.set("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      - pattern: |
+          ServerWebExchange $SWE = ...;
+          ...
+          $SWE.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...) {
+            ...
+            $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...) {
+            ...
+            $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,ServerHttpResponse $RES,...) {
+            ...
+            $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,ServerWebExchange $SWE,...) {
+            ...
+            $SWE.getResponse().getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+            ...
+          }
+      - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
+      - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")

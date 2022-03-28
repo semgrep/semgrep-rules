@@ -1,16 +1,23 @@
 rules:
-- id: insecure-use-string-copy-fn
-  pattern-either:
-  - pattern: strcpy(...)
-  - pattern: strncpy(...)
-  message: >-
-    Finding triggers whenever there is a strcpy or strncpy used.
-    This is an issue because strcpy or strncpy can lead to buffer overflow vulns.
-    Fix this by using strcpy_s instead.
-  metadata:
-    references:
-    - https://cwe.mitre.org/data/definitions/676
-    - https://nvd.nist.gov/vuln/detail/CVE-2019-11365
-    category: security
-  languages: [c]
-  severity: WARNING
+  - id: insecure-use-string-copy-fn
+    pattern-either:
+      - pattern: strcpy(...)
+      - pattern: strncpy(...)
+    message: >-
+      Finding triggers whenever there is a strcpy or strncpy used.
+      This is an issue because strcpy does not affirm the size of the destination array
+      and strncpy will not automatically NULL-terminate strings.
+      This can lead to buffer overflows, which can cause program crashes
+      and potentially let an attacker inject code in the program.
+      Fix this by using strcpy_s instead (although note that strcpy_s is an
+      optional part of the C11 standard, and so may not be available).
+    metadata:
+      references:
+        - https://cwe.mitre.org/data/definitions/676
+        - https://nvd.nist.gov/vuln/detail/CVE-2019-11365
+      category: security
+      technology:
+        - c
+      confidence: MEDIUM
+    languages: [c]
+    severity: WARNING

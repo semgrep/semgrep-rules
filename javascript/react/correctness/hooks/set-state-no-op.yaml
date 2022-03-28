@@ -1,0 +1,16 @@
+rules:
+  - id: calling-set-state-on-current-state
+    patterns:
+      - pattern: $Y($X);
+      - pattern-inside: |
+          const [$X, $Y] = useState(...);
+          ...
+    message: >-
+      Calling setState on the current state is always a no-op. Did you mean to change the state like $Y(!$X) instead?
+    languages:
+      - js
+    severity: ERROR
+    metadata:
+      technology:
+        - react
+      category: correctness

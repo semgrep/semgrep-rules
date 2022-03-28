@@ -1,0 +1,26 @@
+rules:
+- id: openssl-cbc-static-iv
+  patterns:
+  - pattern-either:
+    - pattern: openssl_encrypt($D, $M, $K, $FLAGS, "...",...);
+    - pattern: openssl_decrypt($D, $M, $K, $FLAGS, "...",...);
+  - metavariable-comparison:
+      metavariable: $M
+      comparison: re.match(".*-CBC",$M)
+  message: Static IV used with AES in CBC mode.  Static IVs enable chosen-plaintext
+    attacks against encrypted data.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-329: Generation of Predictable IV with CBC Mode'
+    references:
+    - https://csrc.nist.gov/publications/detail/sp/800-38a/final
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    technology:
+    - php
+    - openssl
+    category: security
+    license: MIT

@@ -1,34 +1,36 @@
 rules:
-- id: avoid-pyyaml-load
-  metadata:
-    owasp: 'A8: Insecure Deserialization'
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    references:
-    - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
-    - https://nvd.nist.gov/vuln/detail/CVE-2017-18342
-    category: security
-  languages:
-  - python
-  message: >-
-    Avoid using `load()`. `PyYAML.load` can create arbitrary Python
-    objects. A malicious actor could exploit this to run arbitrary
-    code. Use `safe_load()` instead.
-  fix-regex:
-    regex: load
-    replacement: safe_load
-    count: 1
-  severity: ERROR
-  patterns:
-  - pattern-inside: |
-      import yaml
-      ...
-  - pattern-not-inside: |
-      $YAML = ruamel.yaml.YAML(...)
-      ...
-  - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader, ...)
-  - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
-  - pattern-not: yaml.load_all(..., Loader=yaml.CSafeLoader, ...)
-  - pattern-not: yaml.load_all(..., Loader=yaml.SafeLoader, ...)
-  - pattern-either:
-    - pattern: yaml.load(...)
-    - pattern: yaml.load_all(...)
+  - id: avoid-pyyaml-load
+    metadata:
+      owasp: "A8: Insecure Deserialization"
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      references:
+        - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
+        - https://nvd.nist.gov/vuln/detail/CVE-2017-18342
+      category: security
+      technology:
+        - pyyaml
+    languages:
+      - python
+    message: >-
+      Avoid using `load()`. `PyYAML.load` can create arbitrary Python
+      objects. A malicious actor could exploit this to run arbitrary
+      code. Use `safe_load()` instead.
+    fix-regex:
+      regex: load
+      replacement: safe_load
+      count: 1
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          import yaml
+          ...
+      - pattern-not-inside: |
+          $YAML = ruamel.yaml.YAML(...)
+          ...
+      - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader, ...)
+      - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
+      - pattern-not: yaml.load_all(..., Loader=yaml.CSafeLoader, ...)
+      - pattern-not: yaml.load_all(..., Loader=yaml.SafeLoader, ...)
+      - pattern-either:
+          - pattern: yaml.load(...)
+          - pattern: yaml.load_all(...)

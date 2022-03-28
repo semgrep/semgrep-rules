@@ -1,0 +1,22 @@
+rules:
+- id: missing-aws-lb-deletion-protection
+  patterns:
+    - pattern: |
+        resource $ANYLB $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          enable_deletion_protection = true
+          ...
+        }
+  message: >-
+    The AWS LoadBalancer deletion protection is not enabled.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws

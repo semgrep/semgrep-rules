@@ -1,0 +1,54 @@
+rules:
+  - id: tainted-url-host
+    languages:
+      - php
+    severity: WARNING
+    message: >-
+      User data flows into the host portion of this manually-constructed URL. This could allow an attacker to send data
+      to their own server, potentially exposing sensitive data such as cookies or authorization information sent with this request.
+      They could also probe internal servers or other resources that the server runnig this code can access. (This is called
+      server-side request forgery, or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
+      the correct host.
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp:
+        - A10:2021
+        - A01:2017
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      category: security
+      technology:
+        - php
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: $_GET
+              - pattern: $_POST
+              - pattern: $_COOKIE
+              - pattern: $_REQUEST
+    pattern-sinks:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  sprintf($URLSTR, ...)
+              - metavariable-pattern:
+                  metavariable: $URLSTR
+                  language: generic
+                  pattern: $SCHEME://%s
+          - patterns:
+              - pattern: |
+                  "...{$EXPR}..."
+              - pattern-regex: |
+                  .*://\{.*
+          - patterns:
+              - pattern: |
+                  "...$EXPR..."
+              - pattern-regex: |
+                  .*://\$.*
+          - patterns:
+              - pattern: |
+                  "...".$EXPR
+              - pattern-regex: |
+                  .*://["'].*

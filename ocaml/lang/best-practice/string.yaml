@@ -1,31 +1,39 @@
 rules:
-- id: ocamllint-str-first-chars
-  pattern: String.sub $S 0 $N
-  message: Use instead `Str.first_chars`
-  languages: [ocaml]
-  severity: WARNING
-  metadata:
-    category: best-practice
-- id: ocamllint-str-string-after
-  pattern: String.sub $S $N (String.length $S - $N)
-  message: Use instead `Str.string_after`
-  languages: [ocaml]
-  severity: WARNING
-  metadata:
-    category: best-practice
-- id: ocamllint-str-last-chars
-  pattern: String.sub $S (String.length $S - $N) $N
-  message: Use instead `Str.last_chars`
-  languages: [ocaml]
-  severity: WARNING
-  metadata:
-    category: best-practice
-- id: ocamllint-useless-sprintf
-  pattern-either:
-  - pattern: Printf.sprintf "..."
-  - pattern: Printf.sprintf "%s" $S
-  message: Useless sprintf
-  languages: [ocaml]
-  severity: WARNING
-  metadata:
-    category: best-practice
+  - id: ocamllint-str-first-chars
+    pattern: String.sub $S 0 $N
+    message: Use instead `Str.first_chars`
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - ocaml
+  - id: ocamllint-str-string-after
+    pattern: String.sub $S $N (String.length $S - $N)
+    message: Use instead `Str.string_after`
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - ocaml
+  - id: ocamllint-str-last-chars
+    pattern: String.sub $S (String.length $S - $N) $N
+    message: Use instead `Str.last_chars`
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - ocaml
+  - id: ocamllint-useless-sprintf
+    pattern-either:
+      - pattern: Printf.sprintf "..."
+      - pattern: Printf.sprintf "%s" $S
+    message: Useless sprintf
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - ocaml

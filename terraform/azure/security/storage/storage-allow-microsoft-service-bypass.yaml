@@ -1,0 +1,51 @@
+rules:
+  - id: storage-allow-microsoft-service-bypass
+    message: >-
+      Some Microsoft services that interact with storage accounts operate from networks that can't be granted access through
+      network rules.
+      To help this type of service work as intended, allow the set of trusted Microsoft services to bypass the network rules
+    patterns:
+      - pattern-not-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+            network_rules {
+              ...
+              bypass = ["...", "AzureServices"]
+              ...
+            }
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_storage_account_network_rules" "..." {
+          ...
+            bypass = ["...", "AzureServices"]
+          ...
+          }
+      - pattern-either:
+          - pattern-inside: |
+              resource "azurerm_storage_account_network_rules" "..." {
+              ...
+              bypass = [$ANYTHING]
+              ...
+              }
+          - pattern-inside: |
+              resource "azurerm_storage_account" "..." {
+              ...
+                network_rules {
+                  ...
+                  bypass = [$ANYTHING]
+                  ...
+                }
+              ...
+              }
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#bypass
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules#bypass
+        - https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security#trusted-microsoft-services
+    languages: [hcl]
+    severity: WARNING

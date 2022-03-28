@@ -13,7 +13,7 @@ resource "aws_iam_user_policy" "lb_ro" {
           "std:AssumeRole",
         ]
         Effect   = "Allow"
-        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws:username}"]
+        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws.username}"]
       },
     ]
   })

@@ -1,20 +1,22 @@
 rules:
-- id: baseclass-attribute-override
-  message: >-
-    Class $C inherits from both `$A` and `$B` which both have a method named
-    `$F`; one of these methods will be overwritten.
-  languages: [python]
-  severity: WARNING
-  pattern: |
-    class $A(...):
-      def $F(...):
-       ...
-    ...
-    class $B(...):
-      def $F(...):
-       ...
-    ...
-    class $C(..., $A, $B, ...):
-       ...
-  metadata:
-    category: correctness
+  - id: baseclass-attribute-override
+    message: >-
+      Class $C inherits from both `$A` and `$B` which both have a method named
+      `$F`; one of these methods will be overwritten.
+    languages: [python]
+    severity: WARNING
+    pattern: |
+      class $A(...):
+        def $F(...):
+         ...
+      ...
+      class $B(...):
+        def $F(...):
+         ...
+      ...
+      class $C(..., $A, $B, ...):
+         ...
+    metadata:
+      category: correctness
+      technology:
+        - python

@@ -1,0 +1,58 @@
+rules:
+- id: tainted-sql-string
+  languages: [go]
+  severity: ERROR
+  message: >-
+    Detected user input used to manually construct a SQL string. This is usually
+    bad practice because manual construction could accidentally result in a SQL
+    injection. An attacker could use a SQL injection to steal or modify contents
+    of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using an
+    object-relational mapper (ORM) such as Sequelize which will protect your queries.
+  metadata:
+    references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+    - aws-lambda
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          func $HANDLER($CTX $CTXTYPE, $EVENT $TYPE, ...) {...}
+          ...
+          lambda.Start($HANDLER, ...)
+      - patterns:
+          - pattern-inside: |
+              func $HANDLER($EVENT $TYPE) {...}
+              ...
+              lambda.Start($HANDLER, ...)
+          - pattern-not-inside: |
+              func $HANDLER($EVENT context.Context) {...}
+              ...
+              lambda.Start($HANDLER, ...)
+    - pattern: $EVENT
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            "$SQLSTR" + ...
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: (?i)(select|delete|insert|create|update|alter|drop).*
+      - patterns:
+        - pattern-either:
+            - pattern: fmt.Fprintf($F, "$SQLSTR", ...)
+            - pattern: fmt.Sprintf("$SQLSTR", ...)
+            - pattern: fmt.Printf("$SQLSTR", ...)
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: \s*(?i)(select|delete|insert|create|update|alter|drop)\b.*%(v|s|q).*
+    - pattern-not-inside: |
+        log.$PRINT(...)
+  pattern-sanitizers:
+    - pattern: strconv.Atoi(...)

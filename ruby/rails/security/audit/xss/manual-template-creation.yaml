@@ -1,18 +1,19 @@
 rules:
-- id: manual-template-creation
-  metadata:
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    references:
-    - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/template_injection/index.markdown
-    category: security
-    technology:
-    - rails
-  message: >-
-    Detected manual creation of an ERB template. Manual creation of templates
-    may expose your application to server-side template injection (SSTI) or
-    cross-site scripting (XSS) attacks if user input is used to create the
-    template. Instead, create a '.erb' template file and use 'render'.
-  languages: [ruby]
-  severity: WARNING
-  pattern: ERB.new(...)
+  - id: manual-template-creation
+    metadata:
+      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_template_injection.rb
+      owasp: "A7: Cross-Site Scripting (XSS)"
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      references:
+        - https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/template_injection/index.markdown
+      category: security
+      technology:
+        - rails
+    message: >-
+      Detected manual creation of an ERB template. Manual creation of templates
+      may expose your application to server-side template injection (SSTI) or
+      cross-site scripting (XSS) attacks if user input is used to create the
+      template. Instead, create a '.erb' template file and use 'render'.
+    languages: [ruby]
+    severity: WARNING
+    pattern: ERB.new(...)

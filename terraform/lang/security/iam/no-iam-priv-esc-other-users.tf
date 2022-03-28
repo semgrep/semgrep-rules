@@ -13,7 +13,7 @@ resource "aws_iam_user_policy" "lb_ro" {
           "iam:CreateAccessKey",
         ]
         Effect   = "Allow"
-        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws:username}"]
+        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws.username}"]
       },
     ]
   })
@@ -34,7 +34,7 @@ resource "aws_iam_user_policy" "lb_ro" {
           "iam:CreateAccessKey",
         ]
         Effect   = "Allow"
-        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws:username}"]
+        Resource = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws.username}"]
       },
     ]
   })
@@ -69,7 +69,7 @@ data aws_iam_policy_document "policy" {
        type        = "AWS"
        identifiers = ["*"]
      }
-     resources = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws:username}"]
+     resources = ["arn:aws:iam::ACCOUNT-ID-WITHOUT-HYPHENS:user/${aws.username}"]
    }
 }
 

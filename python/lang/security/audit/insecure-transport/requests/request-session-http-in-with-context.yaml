@@ -1,35 +1,36 @@
 rules:
-- id: request-session-http-in-with-context
-  patterns:
-  - pattern-inside: |
-      with requests.Session(...) as $SESSION:
-        ...
-  - pattern-either:
-    - pattern: $SESSION.$W("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
-    - pattern: $SESSION.request($METHOD, "=~/[Hh][Tt][Tt][Pp]://.*/", ...)
-    - patterns:
+  - id: request-session-http-in-with-context
+    patterns:
       - pattern-inside: |
-          $URL =  "=~/[Hh][Tt][Tt][Pp]://.*/"
-          ...
+          with requests.Session(...) as $SESSION:
+            ...
       - pattern-either:
-        - pattern: $SESSION.$W($URL, ...)
-        - pattern: $SESSION.request($METHOD, $URL, ...)
-  fix-regex:
-    regex: '[Hh][Tt][Tt][Pp]://'
-    replacement: https://
-    count: 1
-  message: >-
-    Detected a request using 'http://'. This request will be unencrypted. Use 'https://' instead.
-  metadata:
-    owasp: 'A3: Sensitive Data Exposure'
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    asvs:
-      section: V9 Communications Verification Requirements
-      control_id: 9.2.1 Weak TLS
-      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
-      version: '4'
-    category: security
-    technology:
-    - requests
-  languages: [python]
-  severity: ERROR
+          - pattern: $SESSION.$W("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+          - pattern: $SESSION.request($METHOD, "=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+          - patterns:
+              - pattern-inside: |
+                  $URL =  "=~/[Hh][Tt][Tt][Pp]://.*/"
+                  ...
+              - pattern-either:
+                  - pattern: $SESSION.$W($URL, ...)
+                  - pattern: $SESSION.request($METHOD, $URL, ...)
+    fix-regex:
+      regex: "[Hh][Tt][Tt][Pp]://"
+      replacement: https://
+      count: 1
+    message: >-
+      Detected a request using 'http://'. This request will be unencrypted. Use 'https://'
+      instead.
+    metadata:
+      owasp: "A3: Sensitive Data Exposure"
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      asvs:
+        section: V9 Communications Verification Requirements
+        control_id: 9.2.1 Weak TLS
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+        version: "4"
+      category: security
+      technology:
+        - requests
+    languages: [python]
+    severity: ERROR

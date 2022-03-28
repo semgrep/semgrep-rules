@@ -1,21 +1,28 @@
 rules:
-- id: ecr-image-scan-on-push
-  patterns:
-  - pattern: |
-      {...}
-  - pattern-not-inside: |
-      resource "aws_ecr_repository" "..." {... image_scanning_configuration{scan_on_push=true} ...}
-  - pattern-inside: |
-      resource "aws_ecr_repository" "..." {...}
-  languages:
-  - generic
-  paths:
-    include:
-    - '*.tf'
-  message: >-
-    The ECR Repository isn't configured to scan images on push
-  severity: WARNING
-  metadata:
-    category: security
-    technology:
-    - terraform
+  - id: ecr-image-scan-on-push
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "aws_ecr_repository" "..." {
+            ...
+            image_scanning_configuration {
+              ...
+              scan_on_push=true
+              ...
+            }
+            ...
+          }
+      - pattern-inside: |
+          resource "aws_ecr_repository" "..." {
+            ...
+          }
+    languages:
+      - hcl
+    message: >-
+      The ECR Repository isn't configured to scan images on push
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - aws

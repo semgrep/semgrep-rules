@@ -1,0 +1,21 @@
+rules:
+- id: aws-ebs-unencrypted
+  patterns:
+    - pattern: |
+        resource "aws_ebs_encryption_by_default" $ANYTHING {
+          ...
+          enabled = false
+          ...
+        }
+  message: The AWS EBS is unencrypted. The AWS EBS encryption protects data in the EBS.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: |
+      CWE-311: Missing Encryption of Sensitive Data
+    technology:
+      - aws
+      - terraform
+    category: security

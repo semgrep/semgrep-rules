@@ -1,0 +1,24 @@
+rules:
+  - id: documentbuilderfactory-external-general-entities-true
+    severity: ERROR
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A4: XML External Entities (XXE)"
+      asvs:
+        section: V5 Validation, Sanitization and Encoding
+        control_id: 5.5.2 Insecue XML Deserialization
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+        version: "4"
+      references:
+        - https://blog.sonarsource.com/secure-xml-processor
+      category: security
+      technology:
+        - java
+        - xml
+    message: >-
+      External entities are allowed for this DocumentBuilderFactory.
+      This is vulnerable to XML external entity attacks. Disable this by setting the feature "http://xml.org/sax/features/external-general-entities" to false.
+    pattern: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities", true);
+    fix: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+    languages:
+      - java

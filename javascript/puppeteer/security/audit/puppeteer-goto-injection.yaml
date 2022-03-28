@@ -1,23 +1,24 @@
 rules:
-- id: puppeteer-goto-injection
-  message: >-
-    If unverified user data can reach the `goto` method it can result in Server-Side Request Forgery vulnerabilities
-  severity: WARNING
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-    category: security
-    technology:
-    - puppeteer
-  languages: [javascript, typescript]
-  patterns:
-  - pattern-inside: |
-      ...
-      require('puppeteer');
-      ...
-  - pattern-not-inside: |
-      ...
-      var $INPUT = "...";
-      ...
-  - pattern: $PAGE.goto($INPUT,...)
-  - pattern-not: $PAGE.goto("...",...)
+  - id: puppeteer-goto-injection
+    message: >-
+      If unverified user data can reach the `goto` method it can result in Server-Side Request Forgery vulnerabilities
+    severity: WARNING
+    metadata:
+      owasp: "A1: Injection"
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      category: security
+      technology:
+        - puppeteer
+    languages: [javascript, typescript]
+    patterns:
+      - pattern-inside: |
+          require('puppeteer');
+          ...
+      - pattern-not-inside: |
+          require('puppeteer');
+          ...
+          var $INPUT = "...";
+          ...
+          $PAGE.goto($INPUT,...)
+      - pattern: $PAGE.goto($INPUT,...)
+      - pattern-not: $PAGE.goto("...",...)

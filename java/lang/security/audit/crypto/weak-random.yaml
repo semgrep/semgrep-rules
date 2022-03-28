@@ -1,0 +1,19 @@
+rules:
+  - id: weak-random 
+    message: >-
+      Detected use of the functions `Math.random()` or `java.util.Random()`. These are both not
+      cryptographically strong random number generators (RNGs). If you are using these
+      RNGs to create passwords or secret tokens, use `java.security.SecureRandom` instead.
+    languages: [java]
+    severity: WARNING
+    metadata:
+      owasp: "A9: Using Components with Known Vulnerabilities"
+      cwe: "CWE-330: Use of Insufficiently Random Values"
+      category: security
+      technology:
+        - java
+    pattern-either:
+      - pattern: |
+          new java.util.Random(...).$FUNC(...)
+      - pattern: |
+          java.lang.Math.random(...)

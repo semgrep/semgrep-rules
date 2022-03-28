@@ -1,0 +1,18 @@
+rules:
+  - id: improper-list-concat
+    languages:
+      - python
+    message: >-
+      This expression will evaluate to be ONLY value the of the `else` clause if the
+      condition `$EXPRESSION`
+      is false. If you meant to do list concatenation, put parentheses around the entire
+      concatenation expression, like
+      this: `['a', 'b', 'c'] + (['d'] if x else ['e'])`. If this is the intended behavior,
+      the expression may be confusing to
+      others, and you may wish to add parentheses for readability.
+    metadata:
+      category: maintainability
+      technology:
+        - python
+    pattern: "[...] + [...] if $EXPRESSION else [...]"
+    severity: INFO

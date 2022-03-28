@@ -1,0 +1,46 @@
+rules:
+  - id: tainted-sql-string
+    languages: [ruby]
+    severity: ERROR
+    message: >-
+      Detected user input used to manually construct a SQL string. This is usually
+      bad practice because manual construction could accidentally result in a SQL
+      injection. An attacker could use a SQL injection to steal or modify contents
+      of the database. Instead, use a parameterized query which is available
+      by default in most database engines. Alternatively, consider using an
+      object-relational mapper (ORM) such as ActiveRecord which will protect your queries.
+    metadata:
+      cwe: >
+        CWE-89: Improper Neutralization of Special Elements used in an SQL
+        Command ('SQL Injection')
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      category: security
+      technology:
+        - rails
+      references:
+        - https://rorsecurity.info/portfolio/ruby-on-rails-sql-injection-cheat-sheet
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: params
+              - pattern: request
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern: |
+                      "...#{...}..."
+                  - pattern-regex: (?i)(select|delete|insert|create|update|alter|drop)\b|\w+\s*!?[<>=].*
+              - patterns:
+                  - pattern-either:
+                      - pattern: Kernel::sprintf("$SQLSTR", ...)
+                      - pattern: |
+                          "$SQLSTR" + $EXPR
+                      - pattern: |
+                          "$SQLSTR" % $EXPR
+                  - metavariable-regex:
+                      metavariable: $SQLSTR
+                      regex: (?i)(select|delete|insert|create|update|alter|drop)\b|\w+\s*!?[<>=].*
