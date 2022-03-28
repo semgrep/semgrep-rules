@@ -1,4 +1,5 @@
-
+func bad1() {
+    // ruleid: http-request
     resp, err := http.Get("http://example.com/")
     // ruleid: http-request
     resp, err := http.Post("http://example.com/", val, val)
@@ -9,11 +10,11 @@
 }
 
 func bad2() {
-    // ruleid: http-request
     client := &http.Client{
 	    CheckRedirect: redirectPolicyFunc,
     }
 
+    // ruleid: http-request
     resp, err := client.Get("http://example.com")
 }
 
