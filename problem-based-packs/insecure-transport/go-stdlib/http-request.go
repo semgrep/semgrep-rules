@@ -1,5 +1,4 @@
-func bad1() {
-    // ruleid: http-request
+
     resp, err := http.Get("http://example.com/")
     // ruleid: http-request
     resp, err := http.Post("http://example.com/", val, val)
@@ -27,13 +26,23 @@ func ok1() {
     resp, err := http.Head("https://example.com/")
     // ok: http-request
     resp, err := http.PostForm("https://example.com/", form)
+    // ok: http-request
+    resp, err := http.PostForm("http://127.0.0.1/", form)
+    // ok: http-request
+    resp, err := http.Head("http://127.0.0.1/path/to/x")
 }
 
 func ok2() {
-    // ok: http-request
     client := &http.Client{
 	    CheckRedirect: redirectPolicyFunc,
     }
 
+    // ok: http-request
     resp, err := client.Get("https://example.com")
+
+    // ok: http-request
+    resp, err := client.Post("https://127.0.0.1/path/to/x", form)
+
+    // ok: http-request
+    resp, err := client.Get("https://127.0.0.1")
 }
