@@ -21,14 +21,13 @@ rules:
         - pattern-inside: |
             def $INSIDE(..., $PARAM, ...):
               ...
-        - pattern: |
-            $PARAM
-      - pattern: 
-          request.$REQFUNC(...)
-      - pattern:
-          request.$REQFUNC.get(...)
-      - pattern: 
-          request.$REQFUNC[...]
+        - pattern-either: 
+          - pattern: 
+              request.$REQFUNC(...)
+          - pattern:
+              request.$REQFUNC.get(...)
+          - pattern: 
+              request.$REQFUNC[...]
     pattern-sinks:
     - pattern-either:
       - patterns:
