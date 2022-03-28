@@ -1,0 +1,21 @@
+rules:
+  - id: rds-public-access
+    patterns:
+      - pattern: publicly_accessible = true
+      - pattern-inside: |
+          resource "aws_db_instance" "..." {
+            ...
+          }
+    languages:
+      - hcl
+    severity: WARNING
+    message: RDS instance accessible from the Internet detected.
+    metadata:
+      references:
+        - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#publicly_accessible
+        - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Hiding
+      cwe: "CWE-284: Improper Access Control"
+      category: security
+      technology:
+        - terraform
+        - aws

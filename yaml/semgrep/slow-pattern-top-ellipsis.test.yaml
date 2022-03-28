@@ -1,0 +1,31 @@
+rules:
+  - id: javascript.phantom.security.audit.phantom-injection.phantom-injection
+    message: >-
+      If unverified user data can reach the `phantom` page methods it can result in Server-Side Request Forgery vulnerabilities
+    severity: WARNING
+    languages:
+      - javascript
+    patterns:
+      #ruleid: slow-pattern-top-ellipsis
+      - pattern: |
+          ...
+          $PHANTOM = require('phantom');
+          ...
+      - pattern-not-inside: |
+          var $INPUT = "...";
+          ...
+  - id: javascript.playwright.security.audit.playwright-evaluate-arg-injection.playwright-evaluate-arg-injection
+    message: >-
+      If unverified user data can reach the `evaluate` method it can result in Server-Side Request Forgery vulnerabilities
+    severity: WARNING
+    languages:
+      - javascript
+    patterns:
+      #ruleid: slow-pattern-top-ellipsis
+      - pattern-inside: |
+          ...
+          require('playwright');
+          ...
+      - pattern-either:
+          - pattern-inside: function $FUNC (...,$INPUT,...) {...}
+          - pattern-inside: function (...,$INPUT,...) {...}

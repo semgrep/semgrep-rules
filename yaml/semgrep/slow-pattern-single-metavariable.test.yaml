@@ -1,0 +1,45 @@
+rules:
+  - id: typescript.react.best-practice.react-props-in-state.react-props-in-state
+    pattern-either:
+      - patterns:
+          # ok: slow-pattern-single-metavariable
+          - pattern-inside: |
+              class $CN extends React.Component {
+                ...
+              }
+          - pattern-either:
+              # ok: slow-pattern-single-metavariable
+              - pattern: |
+                  state = {$NAME: <... this.props.$PROP ...>}
+              # ok: slow-pattern-single-metavariable
+              - pattern: |
+                  this.state = {$NAME: <... this.props.$PROP ...>}
+      - patterns:
+          # ok: slow-pattern-single-metavariable
+          - pattern-inside: |
+              function $FN({$PROP},...) {
+                ...
+              }
+          # ok: slow-pattern-single-metavariable
+          - pattern-inside: useState(...)
+          # ruleid: slow-pattern-single-metavariable
+          - pattern: $PROP
+      - patterns:
+          # ok: slow-pattern-single-metavariable
+          - pattern-inside: |
+              function $FN($PROP,...) {
+                ...
+              }
+          # ok: slow-pattern-single-metavariable
+          - pattern-inside: useState(...)
+          # ruleid: slow-pattern-single-metavariable
+          - pattern-not: $PROP
+    message: >-
+      It is a bad practice to stop the data flow in rendering by copying props into state.
+    metadata:
+      references:
+        - https://overreacted.io/writing-resilient-components/#principle-1-dont-stop-the-data-flow
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING

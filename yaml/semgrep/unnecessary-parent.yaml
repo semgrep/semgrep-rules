@@ -1,0 +1,37 @@
+rules:
+  - id: unnecessary-parent-operator
+    message: Unnecessary parent operator. Remove one to fix.
+    languages: [yaml]
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  pattern-either:
+                  - $THING1
+                  - ...
+              - pattern-not: |
+                  pattern-either:
+                  - $THING1
+                  - $THING2
+                  - ...
+          - patterns:
+              - pattern: |
+                  patterns:
+                  - $THING1
+                  - ...
+              - pattern-not: |
+                  patterns:
+                  - $THING1
+                  - $THING2
+                  - ...
+          - pattern: |
+              pattern-either:
+              - ...
+              - pattern-either:
+                - ...
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

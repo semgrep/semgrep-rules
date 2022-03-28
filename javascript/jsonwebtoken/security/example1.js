@@ -2,7 +2,6 @@
 const config = require('./app.config');
 const privateMethods = {
     initialize(USER) {
-        // ruleid: hardcoded-jwt-secret
         const router = require('express').Router(),
         jwt = require('jsonwebtoken');
         if (config) {
@@ -14,6 +13,7 @@ const privateMethods = {
                         if (error) {
                             return res.status(400).send({error: error});
                         } else {
+                            // ruleid: hardcoded-jwt-secret
                             const token = jwt.sign({id: user._id}, 'hardcoded-secret');
                             return res.status(201).json({token: token});
                         }

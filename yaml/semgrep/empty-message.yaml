@@ -1,0 +1,17 @@
+rules:
+  - id: empty-message
+    message: >-
+      This rule has an empty message field.
+      Consider adding a message field that communicates why this
+      rule is an issue and how to fix it. This will increase the
+      chance that the finding gets addressed.
+    languages: [yaml]
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern: |
+          message: ""
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - semgrep

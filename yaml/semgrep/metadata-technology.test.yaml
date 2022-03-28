@@ -1,0 +1,41 @@
+rules:
+  # ruleid: metadata-technology
+  - id: unchecked-subprocess-call
+    patterns:
+      - pattern-either:
+          - pattern: |
+              subprocess.call(...)
+          - pattern: |
+              subprocess.call(...)
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern-not-inside: |
+          subprocess.call(...) == $X
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)
+    metadata:
+      category: best-practice
+  # ok: metadata-technology
+  - id: subprocess-run
+    patterns: subprocess.run(...)
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)
+    metadata:
+      category: python
+      technology:
+        - semgrep
+  # ok: metadata-technology
+  - metadata:
+      category: python
+      technology:
+        - semgrep
+    id: subprocess-run-2
+    patterns: subprocess.run(...)
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)

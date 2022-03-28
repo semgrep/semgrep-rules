@@ -1,0 +1,31 @@
+rules:
+  - id: tainted-ldapi-from-http-request
+    message: >-
+      Detected input from a HTTPServletRequest going into an LDAP query.
+      This could lead to LDAP injection if the input is not properly santized,
+      which could result in attackers modifying objects in the LDAP tree structure.
+      Ensure data passed to an LDAP query is not controllable or properly sanitize
+      the data.
+    metadata:
+      cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+      owasp: "A1: Injection"
+      category: security
+      technology:
+        - java
+    severity: WARNING
+    languages: [java]
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern: (HttpServletRequest $REQ)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (javax.naming.directory.InitialDirContext $IDC).search(...)
+        - pattern: |
+            (javax.naming.directory.DirContext $CTX).search(...)
+      - pattern-not: |
+          (javax.naming.directory.InitialDirContext $IDC).search($Y, "...", ...)
+      - pattern-not: |
+          (javax.naming.directory.DirContext $CTX).search($Y, "...", ...)

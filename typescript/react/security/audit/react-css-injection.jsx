@@ -21,6 +21,11 @@ function Vulnerable3() {
     );
 }
 
+function Vulnerable4(input) {
+// ruleid: react-css-injection
+    return React.createElement('div', {style: input}, `foobar`);
+}
+
 function OkTest({siteUrl, input}) {
     return (
         <SuperDiv>
@@ -32,7 +37,7 @@ function OkTest({siteUrl, input}) {
     );
 }
 
-function OkTest(input) {
+function OkTest2(input) {
     let styles = {color: input};
     return (
         <SuperDiv>
@@ -42,4 +47,9 @@ function OkTest(input) {
             </div>
         </SuperDiv>
     );
+}
+
+function OkTest3(input) {
+// ok: react-css-injection
+    return React.createElement('div', {style: {width: 100}}, `foobar`);
 }

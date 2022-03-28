@@ -1,0 +1,18 @@
+rules:
+  - id: sync-sleep-in-async-code
+    patterns:
+      - pattern: time.sleep(...)
+      - pattern-inside: |
+          async def $F(...):
+            ...
+      - pattern-not-inside: |
+          async def $F(...):
+            def $INNER(...):
+              ...
+    message: Synchronous time.sleep in async code will block the event loop and not allow other tasks to execute. Use asyncio.sleep() instead.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - python

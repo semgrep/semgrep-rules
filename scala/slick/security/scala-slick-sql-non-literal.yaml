@@ -1,0 +1,25 @@
+rules:
+- id: scala-slick-sql-non-literal
+  patterns:
+  - pattern: sql"..."
+  - pattern-regex: \#\$
+  - pattern-inside: |
+      import slick.$DEPS
+      ...
+  message: >-
+      Detected a formatted string in a SQL statement. This could lead to SQL
+      injection if variables in the SQL statement are not properly sanitized.
+      Avoid using `#$variable` and use `$variable` in `sql"..."` strings instead.
+  languages: [scala]
+  severity: ERROR
+  metadata:
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SCALA_SQL_INJECTION_SLICK
+    references:
+    - https://scala-slick.org/doc/3.3.3/sql.html#splicing-literal-values
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp: "A1: Injection"
+    technology:
+    - scala
+    - slick
+    confidence: MEDIUM

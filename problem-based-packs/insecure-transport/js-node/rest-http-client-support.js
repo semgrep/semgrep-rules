@@ -1,10 +1,10 @@
-// ruleid: rest-http-client-support
 var Client = require('node-rest-client').Client;
 
 function bad_http1() {
     var client = new Client();
 
     // direct way
+    // ruleid: rest-http-client-support
     client.get("http://remote.site/rest/xml/method", function (data, response) {
         // parsed response body as js object
         console.log(data);
@@ -28,7 +28,6 @@ function ok_http1() {
     });
 }
 
-// ruleid: rest-http-client-support
 var Client = require('node-rest-client').Client;
 
 var client = new Client();
@@ -40,6 +39,7 @@ function bad_http2() {
         headers: { "Content-Type": "application/json" }
     };
 
+    // ruleid: rest-http-client-support
     client.post("http://remote.site/rest/xml/method", args, function (data, response) {
         // parsed response body as js object
         console.log(data);
@@ -68,9 +68,9 @@ function ok_http2() {
     });
 }
 
-// ruleid: rest-http-client-support
 const axios = require('axios');
 function bad_http3() {
+    // ruleid: rest-http-client-support
     axios({
     method: 'get',
     url: 'http://bit.ly/2mTM3nY',
@@ -94,10 +94,10 @@ function ok_http3() {
     });
 }
 
-// ruleid: rest-http-client-support
 const axios = require('axios');
 function bad_http4() {
     axios.all([
+    // ruleid: rest-http-client-support
     axios.get('http://api.github.com/users/mapbox'),
     axios.get('https://api.github.com/users/phantomjs')
     ])
@@ -115,7 +115,6 @@ function ok_http4() {
 const stream = require('stream');
 const {promisify} = require('util');
 const fs = require('fs');
-// ruleid: rest-http-client-support
 const got = require('got');
 
 function bad_http5() {
@@ -123,6 +122,7 @@ function bad_http5() {
 
     (async () => {
         await pipeline(
+            // ruleid: rest-http-client-support
             got.stream('http://sindresorhus.com'),
             fs.createWriteStream('index.html')
         );
@@ -158,9 +158,9 @@ function ok_http5() {
     })();
 }
 
-// ruleid: rest-http-client-support
 const got = require('got');
 function bad_http6() {
+    // ruleid: rest-http-client-support
     got('http://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', { json: true }).then(response => {
     console.log(response.body.url);
     console.log(response.body.explanation);

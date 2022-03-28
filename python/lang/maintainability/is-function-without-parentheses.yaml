@@ -1,0 +1,18 @@
+rules:
+  - id: is-function-without-parentheses
+    languages:
+      - python
+    message:
+      Is "$FUNC" a function or an attribute? If it is a function, you may have meant $X.$FUNC() because $X.$FUNC is always
+      true.
+    patterns:
+      - pattern: $X.$FUNC
+      - pattern-not-inside: $X.$FUNC(...)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: is_.*
+    severity: WARNING
+    metadata:
+      category: maintainability
+      technology:
+        - python

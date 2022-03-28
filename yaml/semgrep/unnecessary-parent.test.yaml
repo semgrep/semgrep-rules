@@ -1,0 +1,69 @@
+rules:
+  - id: unchecked-subprocess-call1
+    # ruleid: unnecessary-parent-operator
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.call1(...)
+          - pattern: subprocess.call2(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call2
+    # ok: unnecessary-parent-operator
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.call1(...)
+          - pattern: subprocess.call2(...)
+      - pattern: subprocess.call3(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call3
+    # ruleid: unnecessary-parent-operator
+    pattern-either:
+      - patterns:
+          - pattern: subprocess.call1(...)
+          - pattern: subprocess.call2(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call4
+    # ok: unnecessary-parent-operator
+    pattern-either:
+      - patterns:
+          - pattern: subprocess.call1(...)
+          - pattern: subprocess.call2(...)
+      - pattern: subprocess.call3(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call5
+    # ruleid: unnecessary-parent-operator
+    pattern-either:
+      - pattern: subprocess.call1(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call6
+    # ok: unnecessary-parent-operator
+    pattern-either:
+      - pattern: subprocess.call1(...)
+      - pattern: subprocess.call2(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call7
+    # ruleid: unnecessary-parent-operator
+    patterns:
+      - pattern: subprocess.call1(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  - id: unchecked-subprocess-call8
+    # ok: unnecessary-parent-operator
+    patterns:
+      - pattern: subprocess.call1(...)
+      - pattern: subprocess.call2(...)
+    message: test
+    severity: WARNING
+    fix: subprocess.check_call(...)

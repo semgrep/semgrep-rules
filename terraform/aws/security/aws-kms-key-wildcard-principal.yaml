@@ -1,0 +1,35 @@
+rules:
+- id: aws-kms-key-wildcard-principal
+  patterns:
+  - pattern-inside: |
+      resource "aws_kms_key" $ANYTHING {
+        ...
+      }
+  - pattern: policy = "$STATEMENT"
+  - metavariable-pattern:
+      metavariable: $STATEMENT
+      language: json
+      patterns:
+      - pattern-not-inside: |
+          {..., "Effect": "Deny", ...}
+      - pattern-either:
+        - pattern: |
+            {..., "Principal": "*", "Action": "kms:*", "Resource": "*", ...}
+        - pattern: |
+            {..., "Principal": [..., "*", ...], "Action": "kms:*", "Resource": "*", ...}
+        - pattern: |
+            {..., "Principal": { "AWS": "*" }, "Action": "kms:*", "Resource": "*", ...}
+        - pattern: |
+            {..., "Principal": { "AWS": [..., "*", ...] }, "Action": "kms:*", "Resource": "*", ...}
+  message: >-
+    Detected wildcard access granted in your KMS key. This means anyone with this policy can perform administrative actions over the keys. Instead, limit principals, actions and resources to what you need according to least privilege.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+  languages: [hcl]
+  severity: ERROR

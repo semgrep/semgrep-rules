@@ -38,6 +38,12 @@ os.fchmod(f, 0o654)
 # ruleid:insecure-file-permissions
 os.fchmod(f, 0o100775)
 
+
+# ok:insecure-file-permissions
+os.fchmod(f, 423)
+# ok:insecure-file-permissions
+os.fchmod(f, 0x1a1)
+
 import stat
 # ruleid:insecure-file-permissions
 os.chmod("file", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH | stat.S_IWOTH | stat.S_IXOTH)

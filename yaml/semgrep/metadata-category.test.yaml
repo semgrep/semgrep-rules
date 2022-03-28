@@ -1,0 +1,35 @@
+rules:
+  # ruleid: metadata-category
+  - id: unchecked-subprocess-call
+    patterns:
+      - pattern-either:
+          - pattern: |
+              subprocess.call(...)
+          - pattern: |
+              subprocess.call(...)
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern-not-inside: |
+          subprocess.call(...) == $X
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  # ok: metadata-category
+  - id: subprocess-run
+    patterns: subprocess.run(...)
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)
+    metadata:
+      category: python
+  - metadata:
+      category: python
+    # ok: metadata-category
+    id: subprocess-run-2
+    patterns: subprocess.run(...)
+    message: >-
+      bad stuff
+    severity: WARNING
+    fix: subprocess.check_call(...)

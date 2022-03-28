@@ -1,0 +1,40 @@
+rules:
+- id: aws-elasticache-automatic-backup-not-enabled
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          resource "aws_elasticache_cluster" $ANYTHING {
+            ...
+          }
+      - pattern-not-inside: |
+          resource "aws_elasticache_cluster" $ANYTHING {
+            ...
+            engine = "memcached"
+            ...
+          }
+      - pattern-not-inside: |
+          resource "aws_elasticache_cluster" $ANYTHING {
+            ...
+            snapshot_retention_limit = ...
+            ...
+          }
+    - patterns:
+      - pattern: |
+          resource "aws_elasticache_cluster" $ANYTHING {
+            ...
+            snapshot_retention_limit = $LIMIT
+            ...
+          }
+      - metavariable-comparison:
+          metavariable: $LIMIT
+          comparison: $LIMIT == 0
+  message: >-
+    Ensure that Amazon ElastiCache clusters have automatic backup turned on. To fix this, set a `snapshot_retention_limit`.
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws
+  languages: [hcl]
+  severity: WARNING

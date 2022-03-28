@@ -1,26 +1,33 @@
 rules:
-- id: useless-if-conditional
-  patterns:
-  - pattern-either:
-    - pattern: |-
-        if ($X) {
-            ...
-        } else if ($X) {
-            ...
-        }
-  message: |
-    Detected an if block that checks for the same condition on both branches (`$X`)
-  languages: [go]
-  severity: WARNING
-- id: useless-if-body
-  patterns:
-  - pattern: |-
+  - id: useless-if-conditional
+    message:
+      Detected an if block that checks for the same condition on both branches (`$X`). The second condition check is
+      useless as it is the same as the first, and therefore can be removed from the code,
+    languages: [go]
+    severity: WARNING
+    pattern: |
+      if ($X) {
+          ...
+      } else if ($X) {
+          ...
+      }
+    metadata:
+      category: maintainability
+      technology:
+        - go
+  - id: useless-if-body
+    pattern: |
       if ($X) {
           $S
       } else {
           $S
       }
-  message: |
-    Detected identical if-statement bodies. Is this intentional?
-  languages: [go]
-  severity: WARNING
+    message:
+      Detected identical statements in the if body and the else body of an if-statement. This will lead to the same code
+      being executed no matter what the if-expression evaluates to. Instead, remove the if statement.
+    languages: [go]
+    severity: WARNING
+    metadata:
+      category: maintainability
+      technology:
+        - go

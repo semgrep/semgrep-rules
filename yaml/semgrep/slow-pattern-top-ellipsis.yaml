@@ -1,0 +1,22 @@
+rules:
+  - id: slow-pattern-top-ellipsis
+    languages:
+      - yaml
+    message: >-
+      Using the ellipsis operator `...` at the top of the pattern drastically slows down the rule performance.
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              pattern-inside: $X
+          - pattern-inside: |
+              pattern-not-inside: $X
+          - pattern-inside: |
+              pattern: $X
+          - pattern-inside: |
+              pattern-not: $X
+      - pattern-regex: \|\s*\n\s*\.\.\.\s*\n[^\n]*\n\s*\.\.\.
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - semgrep

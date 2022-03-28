@@ -1,0 +1,42 @@
+rules:
+  - id: example-1
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ok: metadata-cwe
+      cwe: "CWE-123: Some Vulnerability"
+  - id: example-2
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ruleid: metadata-cwe
+      cwe: "CWE123: Some Vulnerability"
+  - id: example-3
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ruleid: metadata-cwe
+      cwe: "cwe-123: Some Vulnerability"
+  - id: example-4
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ruleid: metadata-cwe
+      cwe: CWE-123
+  - id: example-4
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ok: metadata-cwe
+      cwe: >
+        CWE-123: Some Vulnerability

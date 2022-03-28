@@ -1,0 +1,69 @@
+rules:
+  - id: duplicate-path-assignment
+    languages:
+      - python
+    message: path for `$URL` is uselessly assigned twice
+    metadata:
+      category: maintainability
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      technology:
+        - django
+    patterns:
+      - pattern: |
+          [..., django.urls.path('$URL', $VIEW, ...), ..., django.urls.path('$URL', $VIEW, ...), ...]
+    severity: WARNING
+  - id: conflicting-path-assignment
+    languages:
+      - python
+    message: >-
+      The path for `$URL` is assigned once to view `$VIEW` and once to `$DIFFERENT_VIEW`, which can lead to unexpected behavior.
+      Verify what the intended target view is and delete the other route.
+    metadata:
+      category: maintainability
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      technology:
+        - django
+    patterns:
+      - pattern: |
+          [..., django.urls.path('$URL', $VIEW, ...), ..., django.urls.path('$URL', $DIFFERENT_VIEW, ...), ...]
+      - pattern-not: |
+          [..., django.urls.path('$URL', $VIEW, ...), ..., django.urls.path('$URL', $VIEW, ...), ...]
+    severity: ERROR
+  - id: duplicate-path-assignment-different-names
+    languages:
+      - python
+    message: path for `$URL` is assigned twice with different names
+    metadata:
+      category: maintainability
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      technology:
+        - django
+    patterns:
+      - pattern: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$URL', $VIEW, name='$OTHER_NAME', ...), ...]
+      - pattern-not: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ...]
+    severity: WARNING
+  - id: duplicate-name-assignment
+    languages:
+      - python
+    message: >-
+      The name `$NAME` is used for both `$URL` and `$OTHER_URL`, which can lead to unexpected behavior when using URL reversing.
+      Pick a unique name for each path.
+    metadata:
+      category: maintainability
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      technology:
+        - django
+      references:
+        - https://docs.djangoproject.com/en/3.2/topics/http/urls/#naming-url-patterns
+    patterns:
+      - pattern: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$OTHER_URL', $OTHER_VIEW, name='$NAME', ...), ...]
+      - pattern-not: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ...]
+      - pattern-not: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$URL', $OTHER_VIEW, name='$NAME', ...), ...]
+      - pattern-not: |
+          [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$OTHER_URL', $VIEW, name='$NAME', ...), ...]
+    severity: ERROR

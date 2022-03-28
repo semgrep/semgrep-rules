@@ -19,11 +19,25 @@ app.get('/test1', async (req, res) => {
 
 app.get('/test2', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
-    // ruleid: express-expat-xxe
     var data = req.body.foo
+    // ruleid: express-expat-xxe
     parser.write(data)
     res.send('Hello World!')
 })
+
+const test3 = function func3(req, res) {
+    var parser = new expat.Parser('UTF-8')
+    // ruleid: express-expat-xxe
+    parser.parse(req.body)
+    res.send('Hello World!')
+}
+
+const test4 = function (req, res) {
+    var parser = new expat.Parser('UTF-8')
+    // ruleid: express-expat-xxe
+    parser.parse(req.body)
+    res.send('Hello World!')
+}
 
 app.get('/okTest1', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
@@ -34,8 +48,8 @@ app.get('/okTest1', async (req, res) => {
 
 app.get('/okTest2', async (req, res) => {
     var parser = new expat.Parser('UTF-8')
-    // ok: express-expat-xxe
     var data = foo()
+    // ok: express-expat-xxe
     parser.write(data)
     res.send('Hello World!')
 })

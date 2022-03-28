@@ -1,32 +1,39 @@
 rules:
-- id: insecure-jms-deserialization
-  severity: WARNING
-  languages:
-  - java
-  metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    owasp: 'A8: Insecure Deserialization'
-    asvs:
-      section: V5 Validation, Sanitization and Encoding
-      control_id: 5.5.3 Insecue Deserialization
-      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
-      version: '4'
-    references:
-    - https://www.blackhat.com/docs/us-16/materials/us-16-Kaiser-Pwning-Your-Java-Messaging-With-Deserialization-Vulnerabilities-wp.pdf
-  message: |
-    JMS Object messages depend on Java Serialization for marshalling/unmarshalling of the message payload when ObjectMessage.getObject() is called.
-    Deserialization of untrusted data can lead to security flaws; a remote attacker could via a crafted JMS ObjectMessage to execute
-    arbitrary code with the permissions of the application listening/consuming JMS Messages.
-    In this case, the JMS MessageListener consume an ObjectMessage type recieved inside
-    the onMessage method, which may lead to arbitrary code execution when calling the $Y.getObject method.
-  patterns:
-  - pattern-inside: |
-      public class $JMS_LISTENER implements MessageListener {
-        ...
-        public void onMessage(Message $JMS_MSG) {
+  - id: insecure-jms-deserialization
+    severity: WARNING
+    languages:
+      - java
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A8: Insecure Deserialization"
+      asvs:
+        section: V5 Validation, Sanitization and Encoding
+        control_id: 5.5.3 Insecue Deserialization
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+        version: "4"
+      references:
+        - https://www.blackhat.com/docs/us-16/materials/us-16-Kaiser-Pwning-Your-Java-Messaging-With-Deserialization-Vulnerabilities-wp.pdf
+      category: security
+      technology:
+        - java
+    message: >-
+      JMS Object messages depend on Java Serialization for marshalling/unmarshalling
+      of the message payload when ObjectMessage.getObject() is called.
+      Deserialization of untrusted data can lead to security flaws; a remote attacker
+      could via a crafted JMS ObjectMessage to execute
+      arbitrary code with the permissions of the application listening/consuming JMS
+      Messages.
+      In this case, the JMS MessageListener consume an ObjectMessage type received inside
+      the onMessage method, which may lead to arbitrary code execution when calling
+      the $Y.getObject method.
+    patterns:
+      - pattern-inside: |
+          public class $JMS_LISTENER implements MessageListener {
             ...
-        }
-      }
-  - pattern-either:
-    - pattern-inside: $X = $Y.getObject(...);
-    - pattern-inside: $X = ($Z) $Y.getObject(...);
+            public void onMessage(Message $JMS_MSG) {
+                ...
+            }
+          }
+      - pattern-either:
+          - pattern-inside: $X = $Y.getObject(...);
+          - pattern-inside: $X = ($Z) $Y.getObject(...);

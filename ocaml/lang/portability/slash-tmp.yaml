@@ -1,0 +1,11 @@
+rules:
+  - id: not-portable-tmp-string
+    pattern: |
+      "=~/\/tmp/"
+    message: You should probably use Filename.get_temp_dirname().
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: portability
+      technology:
+        - ocaml

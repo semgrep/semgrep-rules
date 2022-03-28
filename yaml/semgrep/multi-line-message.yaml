@@ -1,0 +1,18 @@
+rules:
+  - id: multi-line-message
+    message: >-
+      This rule has a multi-line message field, which may display poorly
+      in a terminal. Consider ensuring it is on one line. For example,
+      use `message: >-`, not `message: |`.
+    languages: [yaml]
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern: |
+          message: "=~/[\\n\\r]/"
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - semgrep
+      references:
+        - https://github.com/returntocorp/semgrep-rules/issues/1431

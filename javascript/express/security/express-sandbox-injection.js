@@ -10,23 +10,23 @@ const cb = () => {
 app.get('/', (req, res) => res.send('Hello World!'))
 
 app.get('/test1', function (req, res) {
-    // ruleid:express-sandbox-code-injection
     const s = new Sandbox();
+    // ruleid:express-sandbox-code-injection
     s.run('lol('+req.query.userInput+')', cb);
     res.send('Hello world');
 })
 
 app.get('/test2', function (req, res) {
-    // ruleid:express-sandbox-code-injection
     const s = new Sandbox();
     var code = 'lol('+req.query.userInput+')'
+    // ruleid:express-sandbox-code-injection
     s.run(code, cb);
     res.send('Hello world');
 })
 
 app.get('/test3', function (req, res) {
-    // ruleid:express-sandbox-code-injection
     const s = new Sandbox();
+    // ruleid:express-sandbox-code-injection
     s.run(`lol(${req.query.userInput})`, cb);
     res.send('Hello world');
 })

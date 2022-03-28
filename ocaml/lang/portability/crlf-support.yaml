@@ -1,0 +1,49 @@
+rules:
+  - id: broken-input-line
+    pattern: |
+      input_line
+    message: >-
+      'input_line' leaves a '\r' (CR) character when reading lines from
+      a Windows text file, whose lines end in "\r\n" (CRLF). This is a
+      problem for any Windows file that is being read either on a Unix-like
+      platform or on Windows in binary mode. If the code already takes
+      care of removing any trailing '\r' after reading the line, add a
+      '(* nosemgrep *)' comment to disable this warning.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: portability
+
+      technology:
+        - ocaml
+  - id: prefer-read-in-binary-mode
+    pattern: open_in
+    fix: open_in_bin
+    message: >-
+      'open_in' behaves differently on Windows and on Unix-like
+      systems with respect to line endings. To get the same behavior
+      everywhere, use 'open_in_bin' or 'open_in_gen [Open_binary]'.
+      If you really want CRLF-to-LF translations to take place when
+      running on Windows, use 'open_in_gen [Open_text]'.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: portability
+
+      technology:
+        - ocaml
+  - id: prefer-write-in-binary-mode
+    pattern: open_out
+    fix: open_out_bin
+    message: >-
+      'open_out' behaves differently on Windows and on Unix-like
+      systems with respect to line endings. To get the same behavior
+      everywhere, use 'open_out_bin' or 'open_out_gen [Open_binary]'.
+      If you really want LF-to-CRLF translations to take place when
+      running on Windows, use 'open_out_gen [Open_text]'.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: portability
+      technology:
+        - ocaml

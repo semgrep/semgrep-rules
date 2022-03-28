@@ -1,0 +1,16 @@
+rules:
+  - id: unchecked-subprocess-call
+    patterns:
+      - pattern: |
+          subprocess.call(...)
+      # ruleid: unsatisfiable-rule
+      - pattern-not: |
+          subprocess.call(...)
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern-not-inside: |
+          subprocess.call(...) == $X
+    message: >-
+      blah
+    severity: WARNING
+    fix: subprocess.check_call(...)

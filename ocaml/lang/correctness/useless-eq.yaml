@@ -1,0 +1,10 @@
+rules:
+  - id: useless-equal
+    pattern: $X = $X
+    message: This is always true. If testing for floating point NaN, use `Float.is_nan` instead.
+    languages: [ocaml]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - ocaml

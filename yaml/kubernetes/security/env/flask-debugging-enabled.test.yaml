@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    tags.datadoghq.com/env: dev
+spec:
+  template:
+    metadata:
+      labels:
+        tags.datadoghq.com/env: dev
+    spec:
+      initContainers:
+        - name: migrate-db
+          env:
+            - name: SQLALCHEMY_DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: SQLALCHEMY_DATABASE_URI
+                # ruleid: flask-debugging-enabled
+            - name: FLASK_ENV
+              value: development
+      containers:
+        - name: backend
+          env:
+            # ok: flask-debugging-enabled
+            - name: FLASK_ENV
+              value: dev

@@ -1,0 +1,24 @@
+rules:
+  # ruleid: missing-message-field
+  - id: unchecked-subprocess-call
+    patterns:
+      - pattern: |
+          subprocess.call(...)
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern-not-inside: |
+          subprocess.call(...) == $X
+    severity: WARNING
+    fix: subprocess.check_call(...)
+  # ok: missing-message-field
+  - id: other-rule
+    pattern: <div>hello</div>
+    languages: [generic]
+    severity: INFO
+    message: ""
+  # ok: missing-message-field
+  - message: ""
+    id: other-rule-2
+    pattern: <div>hello</div>
+    languages: [generic]
+    severity: INFO

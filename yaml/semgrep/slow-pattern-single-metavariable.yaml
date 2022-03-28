@@ -1,0 +1,27 @@
+rules:
+  - id: slow-pattern-single-metavariable
+    languages:
+      - yaml
+    message: >-
+      Using a single metavariable as a pattern drastically slows down the rule performance
+      because it will match every expression in a file. Instead, try to match something
+      specific such as a function name, or anchor on a statement that may occur above
+      or below the pattern. The more specific you can be, the faster the pattern will run.
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              pattern-inside: $PATTERN
+          - pattern-inside: |
+              pattern-not-inside: $PATTERN
+          - pattern-inside: |
+              pattern: $PATTERN
+          - pattern-inside: |
+              pattern-not: $PATTERN
+      - metavariable-regex:
+          metavariable: $PATTERN
+          regex: $[A-Z_]*
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - semgrep

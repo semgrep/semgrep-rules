@@ -1,0 +1,30 @@
+rules:
+  - id: positive-number-index-of
+    metadata:
+      category: correctness
+      technology:
+        - scala
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      references:
+        - https://blog.codacy.com/9-scala-security-issues/
+      confidence: MEDIUM
+    message: >-
+      Flags scala code that look for values that are greater than 0. This ignores the first element, which is most likely a
+      bug. Instead, use indexOf with -1. If the intent is to check the inclusion of a value, use the contains method instead.
+    severity: WARNING
+    languages:
+      - scala
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  $OBJ.indexOf(...) > $VALUE
+              - metavariable-comparison:
+                  metavariable: $VALUE
+                  comparison: $VALUE >= 0
+          - patterns:
+              - pattern: |
+                  $OBJ.indexOf(...) >= $SMALLERVAL
+              - metavariable-comparison:
+                  metavariable: $SMALLERVAL
+                  comparison: $SMALLERVAL > 0

@@ -1,27 +1,28 @@
-name: semgrep-develop
-
+name: semgrep-rules-test-develop
 on:
   pull_request:
-    branches: [develop]
+    branches:
+    - develop
   push:
-    branches: [develop]
-
+    branches:
+    - develop
 jobs:
-  test-develop:
+  # Note: if you change this test there will likely need to be a
+  # corresponding change in returntocorp/semgrep
+  test-latest:
+    name: rules-test-latest
     runs-on: ubuntu-latest
-    name: test-develop
     steps:
     - uses: actions/checkout@v2
-    - name: test
-      id: test
-      uses: returntocorp/semgrep-rules-test-action-develop@master
-    - uses: actions/upload-artifact@v1
-      if: always()
       with:
-        name: tests
-        path: ${{ steps.test.outputs.output_dir }}
-    - uses: actions/upload-artifact@v2
-      with:
-        name: semgrep_runs
-        path: semgrep_runs_output.tar.gz
-        if-no-files-found: error
+        path: semgrep-rules
+    - name: delete stats directory
+      run: rm -rf semgrep-rules/stats
+    - name: delete fingerprints directory
+      run: rm -rf semgrep-rules/fingerprints
+    - name: validate rules
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --validate --config /src
+    - name: test with semgrep develop branch
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop --test --test-ignore-todo /src

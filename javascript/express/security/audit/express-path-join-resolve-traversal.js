@@ -24,6 +24,22 @@ function testCtrl3(req,res) {
     res.send('Hello World!');
 }
 
+const func4 = function testCtrl4(req,res) {
+    // ruleid:express-path-join-resolve-traversal
+    let somePath = req.body.path;
+    const pth = path.join(opts.path, somePath);
+    extractFile(pth);
+    res.send('Hello World!');
+}
+
+const func5 = function (req,res) {
+    // ruleid:express-path-join-resolve-traversal
+    let somePath = req.body.path;
+    const pth = path.join(opts.path, somePath);
+    extractFile(pth);
+    res.send('Hello World!');
+}
+
 app.post('/test3', testCtrl3)
 
 app.post('/okTest', function (req,res) {

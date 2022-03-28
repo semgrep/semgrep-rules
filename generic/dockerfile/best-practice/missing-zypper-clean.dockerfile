@@ -5,3 +5,6 @@ FROM opensuse/leap:15.2
 RUN zypper install -y httpd=2.4.46
 # ok: missing-zypper-clean
 RUN zypper install -y httpd=2.4.46 && zypper clean
+# ok: missing-zypper-clean
+RUN zypper install -y httpd=2.4.46 && \
+  zypper clean

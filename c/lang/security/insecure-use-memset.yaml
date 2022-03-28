@@ -1,0 +1,19 @@
+rules:
+- id: insecure-use-memset
+  pattern: memset($VAR,...)
+  message: Using memset and then deleting that data can cause sensitive information
+    to still be in the buffer. Use **memset_s()** instead.
+  languages:
+  - c
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-14: Compiler Removal of Code to Clear Buffers'
+    owasp: 
+    - A04:2021 – Insecure Design
+    references:
+    - https://cwe.mitre.org/data/definitions/14.html
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+    category: security
+    technology:
+    - c
+    confidence: MEDIUM

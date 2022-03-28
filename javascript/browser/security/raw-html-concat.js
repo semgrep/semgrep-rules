@@ -5,11 +5,7 @@ $(function ($) {
     $.sceditor.formats.bbcode
         .set('align', {
             html: function (element, attrs, content) {
-                // ruleid: raw-html-concat
-                var x = ['<div align="', (attrs.defaultattr || 'left'), '">', content, '</div>'].join();
-
-                // ruleid: raw-html-concat
-                var x = `<div align="' + (attrs.defaultattr || 'left') + '">${content}</div>`
+                var x = `<div align="left">${content}</div>`
 
                 // ruleid: raw-html-concat
                 return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
@@ -48,35 +44,14 @@ $(function ($) {
               var data = '';
 
               if (attrs.pid)
-                  // ruleid: raw-html-concat
-                  data = [data, ' data-pid="', attrs.pid,'"'].join(',');
-
-                  // ruleid: raw-html-concat
-                  data = `${data} data-pid="${attrs.pid}"`;
-
-                  // ruleid: raw-html-concat
                   data += ' data-pid="' + attrs.pid + '"';
-
               if (attrs.dateline)
-                  // ruleid: raw-html-concat
-                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
-
-                  // ruleid: raw-html-concat
-                  data = `${data} data-dateline="${attrs.dateline}"`;
-
-                  // ruleid: raw-html-concat
                   data += ' data-dateline="' + attrs.dateline + '"';
-
               if (typeof attrs.defaultattr !== "undefined")
-                  // ruleid: raw-html-concat
-                  data = [data, ' data-dateline="', attrs.dateline, '"'].join(',');
-
-                  // ruleid: raw-html-concat
-                  data = `${data} data-dateline="${attrs.dateline}"`;
-
                   // ruleid: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
 
+              // ruleid: raw-html-concat
               return '<blockquote' + data + '>' + content + '</blockquote>';
           },
           quoteType: function (val, name) {
@@ -127,21 +102,21 @@ var tarteaucitron = {
 
         if (document.cookie !== '') {
             for (i = 0; i < nb; i += 1) {
+                // ruleid: raw-html-concat
                 html += '<li class="tarteaucitronCookiesListMain">';
                 // ruleid: raw-html-concat
-                html =  [html, '    <div class="tarteaucitronCookiesListRight">', cookies[i].split('=').slice(1).join('='), '</div>'].join();
-
-                // ruleid: raw-html-concat
-                html = `${html}    <div class="tarteaucitronCookiesListRight">${cookies[i].split('=').slice(1).join('=')}'</div>'`;
-
-                // ruleid: raw-html-concat
                 html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
+                // ruleid: raw-html-concat
                 html += '</li>';
             }
         } else {
+            // ruleid: raw-html-concat
             html += '<div class="tarteaucitronCookiesListMain">';
+            // ruleid: raw-html-concat
             html += '    <div class="tarteaucitronCookiesListLeft"><strong>-</strong></div>';
+            // ruleid: raw-html-concat
             html += '    <div class="tarteaucitronCookiesListRight"></div>';
+            // ruleid: raw-html-concat
             html += '</div>';
         }
     }
@@ -152,12 +127,6 @@ var DragElement = /** @class */ (function () {
     function DragElement(nodeName, offsetX, offsetY, $tree) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
-        // ruleid: raw-html-concat
-        this.$element = jQuery(["<span class=\"jqtree-title jqtree-dragging\">",nodeName, "</span>"].join());
-
-        // ruleid: raw-html-concat
-        this.$element = `${jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>")}`;
-
         // ruleid: raw-html-concat
         this.$element = jQuery("<span class=\"jqtree-title jqtree-dragging\">" + nodeName + "</span>");
         this.$element.css("position", "absolute");
@@ -205,7 +174,6 @@ var DragElement = /** @class */ (function () {
 
         return false;
     }, '*', function () {
-        // ruleid: raw-html-concat
         var x = `<svg viewBox="-20 -20 140 140" width="100" height="100"><defs><marker id="prism-previewer-easing-marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">
             <circle cx="2" cy="2" r="1.5" />
             </marker>

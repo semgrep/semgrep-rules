@@ -39,8 +39,8 @@ class Bad {
     }
 
     public void badsocket4() {
-        // ruleid: socket-request
         String servername = "telnet://example.com";
+        // ruleid: socket-request
         pingSocket = new Socket(servername, 23);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));
@@ -53,8 +53,8 @@ class Bad {
     }
 
     public void badsocket5() {
-        // ruleid: socket-request
         String servername = "ftp://example.com";
+        // ruleid: socket-request
         pingSocket = new Socket(servername, 23);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));
@@ -67,8 +67,8 @@ class Bad {
     }
 
     public void badsocket6() {
-        // ruleid: socket-request
         String servername = "http://example.com";
+        // ruleid: socket-request
         pingSocket = new Socket(servername, 23);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));
@@ -122,8 +122,8 @@ class Ok {
     }
 
     public void oksocket4() {
-        // ok: socket-request
         String servername = "ssh://example.com";
+        // ok: socket-request
         pingSocket = new Socket(servername, 22);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));
@@ -136,8 +136,8 @@ class Ok {
     }
 
     public void oksocket5() {
-        // ok: socket-request
         String servername = "sftp://example.com";
+        // ok: socket-request
         pingSocket = new Socket(servername, 23);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));
@@ -150,8 +150,8 @@ class Ok {
     }
 
     public void oksocket6() {
-        // ok: socket-request
         String servername = "https://example.com";
+        // ok: socket-request
         pingSocket = new Socket(servername, 443);
         out = new PrintWriter(pingSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(pingSocket.getInputStream()));

@@ -1,0 +1,28 @@
+rules:
+  - id: express-sandbox-code-injection
+    message: >-
+      Make sure that unverified user data can not reach `sandbox`.
+    severity: ERROR
+    languages: [javascript]
+    metadata:
+      owasp: "A1: Injection"
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    patterns:
+      - pattern-inside: |
+          ...
+          $SANDBOX = require('sandbox');
+          ...
+      - pattern-either:
+          # ok: slow-pattern-general-property
+          - pattern-inside: function ($REQ, $RES, ...) {...}
+          # ok: slow-pattern-general-property
+          - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+          # ok: slow-pattern-general-property
+          - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+          # ok: slow-pattern-general-property
+          - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+          # ruleid: slow-pattern-general-property
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+      - pattern-either:
+          # ruleid: slow-pattern-general-property
+          - pattern: $S.run(<... $REQ.$QUERY.$FOO ...>,...);

@@ -1,30 +1,33 @@
 rules:
-- id: cookie-missing-samesite
-  metadata:
-    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    owasp: 'A6: Security Misconfiguration'
-    asvs:
-      section: "V3: Session Management Verification Requirements"
-      control_id: "3.4.3 Missing Cookie Attribute"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v34-cookie-based-session-management"
-      version: "4"
-    references:
-    - https://stackoverflow.com/questions/42717210/samesite-cookie-in-java-application
-  message: |
-    Detected cookie without the SameSite attribute.
-  severity: WARNING
-  languages: [java]
-  # Java servlets doesn't have support for SameSite yet. It has to be set manually
-  # using .setHeader(...). This makes this rule tricky, since we want to detect the
-  # absence of SameSite but also reasonably assume they wanted to use a cookie in
-  # the method.
-  patterns:
-  - pattern-not-inside: |
-      $RETURNTYPE $METHOD(..., HttpServletResponse $RESP, ...) {
-        ...
-        $RESP.setHeader("Set-Cookie", "=~/.*SameSite=.*/");
-        ...
-      }
-  - pattern-either:
-    - pattern: $RESP.addCookie(...);
-    - pattern: $RESP.setHeader("Set-Cookie", ...);
+  - id: cookie-missing-samesite
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A6: Security Misconfiguration"
+      asvs:
+        section: "V3: Session Management Verification Requirements"
+        control_id: 3.4.3 Missing Cookie Attribute
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v34-cookie-based-session-management
+        version: "4"
+      references:
+        - https://stackoverflow.com/questions/42717210/samesite-cookie-in-java-application
+      category: security
+      technology:
+        - java
+    message: >-
+      Detected cookie without the SameSite attribute.
+    severity: WARNING
+    languages: [java]
+    # Java servlets doesn't have support for SameSite yet. It has to be set manually
+    # using .setHeader(...). This makes this rule tricky, since we want to detect the
+    # absence of SameSite but also reasonably assume they wanted to use a cookie in
+    # the method.
+    patterns:
+      - pattern-not-inside: |
+          $RETURNTYPE $METHOD(..., HttpServletResponse $RESP, ...) {
+            ...
+            $RESP.setHeader("Set-Cookie", "=~/.*SameSite=.*/");
+            ...
+          }
+      - pattern-either:
+          - pattern: $RESP.addCookie(...);
+          - pattern: $RESP.setHeader("Set-Cookie", ...);

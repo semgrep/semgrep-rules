@@ -5,7 +5,19 @@ var app = angular.module('MyApp', []).config(function ($sceDelegateProvider) {
     // ruleid: detect-angular-resource-loading
     $sceDelegateProvider.resourceUrlWhitelist(['http://semgrep.dev', '**']);
 
-    // Only one site is whitelisted, assumed to be safe
+    // ruleid: detect-angular-resource-loading
+    $sceDelegateProvider.resourceUrlWhitelist(['http://semgrep.dev', '**', 'http://semgrep.dev']);
+
+    // ruleid: detect-angular-resource-loading
+    $sceDelegateProvider.resourceUrlWhitelist(['http://**.semgrep.dev']);
+
+    // ok: detect-angular-resource-loading
+    $sceDelegateProvider.resourceUrlWhitelist(['http://semgrep.dev/ooo']);
+
+    // ok: detect-angular-resource-loading
+    $sceDelegateProvider.resourceUrlWhitelist(['http://semgrep.dev/**']);
+
+    // ok: detect-angular-resource-loading
     $sceDelegateProvider.resourceUrlWhitelist(['http://semgrep.dev']);
 
 });

@@ -36,4 +36,22 @@ public class ElExpressionSample {
     public void safeELMethod(ELContext elContext,ExpressionFactory expressionFactory) {
         expressionFactory.createMethodExpression(elContext, "1+1", String.class,new Class[] {Integer.class});
     }
+
+    //ruleid: el-injection
+    private void unsafeELTemplate(String message, ConstraintValidatorContext context) {
+         context.disableDefaultConstraintViolation();
+         context
+             .someMethod()
+             .buildConstraintViolationWithTemplate(message)
+             .addConstraintViolation();
+    }
+
+    //ok: el-injection
+    private void safeELTemplate(String message, ConstraintValidatorContext context) {
+         context.disableDefaultConstraintViolation();
+         context
+             .someMethod()
+             .buildConstraintViolationWithTemplate("somestring")
+             .addConstraintViolation();
+    }
 }

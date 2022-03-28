@@ -1,0 +1,22 @@
+rules:
+  - id: slow-pattern-general-property
+    languages:
+      - yaml
+    message: >-
+      Using patterns like `$X.$Y` may be too general and may slow down the rule performance.
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              pattern-inside: $X
+          - pattern-inside: |
+              pattern-not-inside: $X
+          - pattern-inside: |
+              pattern: $X
+          - pattern-inside: |
+              pattern-not: $X
+      - pattern-regex: \$[A-Z]*\.\$[A-Z]*
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - semgrep

@@ -1,0 +1,24 @@
+rules:
+  - id: metadata-technology
+    message: >-
+      This Semgrep rule is missing a 'technology' field in the 'metadata'.
+      Consider adding a list of technologies based on the rule's associated
+      library or framework, or another piece of relevant information.
+    severity: INFO
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern: |
+          id: ...
+          ...
+      - pattern-not: |
+          id: ...
+          ...
+          metadata:
+            ...
+            technology:
+              - ...
+    languages: [yaml]
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

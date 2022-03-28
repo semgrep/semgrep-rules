@@ -1,0 +1,36 @@
+rules:
+  - id: unspecified-open-encoding
+    patterns:
+      - pattern-inside: open(...)
+      - pattern-not: open(..., encoding="...", ...)
+      - pattern-not: open($F, "...", $B, "...", ...)
+      - pattern-either:
+          - pattern: open($FILE)
+          - patterns:
+              - pattern: open($FILE, ...)
+              - pattern-not: open($FILE, $M, ...)
+              - pattern-not-regex: open\(.*(?:encoding|mode)=.*\)
+          - patterns:
+              - pattern: open($FILE, $MODE, ...)
+              - metavariable-regex:
+                  metavariable: $MODE
+                  regex: (?!.*b.*)
+          - patterns:
+              - pattern: open($FILE, ..., mode=$MODE, ...)
+              - metavariable-regex:
+                  metavariable: $MODE
+                  regex: (?!.*b.*)
+
+    message: >-
+      Missing 'encoding' parameter.
+      'open()' uses device locale encodings by default, corrupting files with special characters.
+      Specify the encoding to ensure cross-platform support when opening files in text mode (e.g. encoding="utf-8").
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - python
+      references:
+        - https://www.python.org/dev/peps/pep-0597/
+        - https://docs.python.org/3/library/functions.html#open

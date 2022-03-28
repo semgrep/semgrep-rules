@@ -1,0 +1,20 @@
+rules:
+  - id: metadata-category
+    message: >-
+      This Semgrep rule is missing a valid 'category' field in the 'metadata'.
+      'category' must be one of 'security', 'correctness', 'best-practice',
+      'performance', 'maintainability', or 'portability'.
+    severity: INFO
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern: "id: $RULEID"
+      - pattern-not-inside: |
+          - ...
+            metadata:
+              ...
+              category: $CATEGORY
+    languages: [yaml]
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

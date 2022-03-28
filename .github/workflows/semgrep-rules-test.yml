@@ -1,26 +1,29 @@
-name: semgrep
+name: semgrep-rules-test
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+    - release
   push:
-    branches: [master]
+    branches:
+    - release
 
 jobs:
-  self_test:
+  test-latest:
+    name: rules-test-latest
     runs-on: ubuntu-latest
-    name: test
     steps:
     - uses: actions/checkout@v2
-    - name: test
-      id: test
-      uses: returntocorp/semgrep-rules-test-action@master
-    - uses: actions/upload-artifact@v1
-      if: always()
+    - uses: actions/setup-python@v2
       with:
-        name: tests
-        path: ${{ steps.test.outputs.output_dir }}
-    - uses: actions/upload-artifact@v2
-      with:
-        name: semgrep_runs
-        path: semgrep_runs_output.tar.gz
+        python-version: 3.9.2
+    - name: install semgrep
+      run: pip3 install semgrep==0.81.0
+    - name: remove stats directory
+      run: rm -rf stats
+    - name: remove fingerprints from testing
+      run: rm -rf fingerprints
+    - name: validate rules
+      run: semgrep --validate --config .
+    - name: run semgrep
+      run: semgrep --test --test-ignore-todo

@@ -1,0 +1,41 @@
+rules:
+- id: scala-dangerous-process-run
+  patterns:
+    - pattern-either:
+      - pattern: $X.!
+      - pattern: $X.!!
+      - pattern: $X.lazyLines
+    - pattern-inside: |
+        import sys.process
+        ...
+    - pattern-not: |
+        "...".!
+    - pattern-not: |
+        "...".!!
+    - pattern-not: |
+        "...".lazyLines
+    - pattern-not: |
+        Seq(...).!
+    - pattern-not: |
+        Seq(...).!!
+    - pattern-not: |
+        Seq(...).lazyLines
+    - pattern-not-inside: |
+        val $X = "..."
+        ...
+    - pattern-not-inside: |
+        val $X = Seq(...)
+        ...
+  message: >-
+    Found dynamic content used for the external process.
+    This is dangerous if arbitrary data can reach this function call because it allows a malicious actor to execute commands.
+    Use `Seq(...)` for dynamically generated commands.
+  languages: [scala]
+  severity: ERROR
+  metadata: 
+    category: security
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp: "A1: Injection"
+    technology:
+    - scala
+    confidence: MEDIUM

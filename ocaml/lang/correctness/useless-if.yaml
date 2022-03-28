@@ -1,0 +1,10 @@
+rules:
+  - id: ocamllint-useless-if
+    pattern: if $X then $E else $E
+    message: Useless if. Both branches are equal.
+    languages: [ocaml]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - ocaml

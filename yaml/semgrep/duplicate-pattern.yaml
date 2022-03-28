@@ -1,0 +1,21 @@
+rules:
+  - id: duplicate-pattern
+    message: >-
+      Two identical pattern clauses were detected.
+      This will cause Semgrep to run the same pattern twice.
+      Remove one of the duplicate pattern clauses.
+    severity: ERROR
+    languages: [yaml]
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern-inside: |
+          - pattern: $X
+          ...
+          - pattern: $X
+          ...
+      - pattern: |
+          pattern: $X
+    metadata:
+      category: correctness
+      technology:
+        - semgrep

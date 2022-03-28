@@ -1,12 +1,18 @@
 rules:
-- id: no-csrf-exempt
-  pattern: |
-    @django.views.decorators.csrf.csrf_exempt
-    def $R(...):
-      ...
-  message: There is rarely a good reason to use @csrf_exempt as is used for `$R`.
-  metadata:
-    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    owasp: 'A6: Security Misconfiguration'
-  languages: [python]
-  severity: WARNING
+  - id: no-csrf-exempt
+    pattern: |
+      @django.views.decorators.csrf.csrf_exempt
+      def $R(...):
+        ...
+    message:
+      Detected usage of @csrf_exempt, which indicates that there is no CSRF token set for this route. This could lead
+      to an attacker manipulating the user's account and exfiltration of private data. Instead, create a function without this
+      decorator.
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A6: Security Misconfiguration"
+      category: security
+      technology:
+        - django
+    languages: [python]
+    severity: WARNING

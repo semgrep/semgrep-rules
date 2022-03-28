@@ -1,0 +1,24 @@
+rules:
+  - id: lazy-load-module
+    patterns:
+      - pattern: require(...)
+      - pattern-inside: |
+          function $NAME(...) {
+              ...
+          }
+    message: >-
+      Lazy loading can complicate code bundling if care is not taken, also `require`s
+      are run synchronously by Node.js.
+      If they are called from within a function, it may block other requests from being
+      handled at a more critical time.
+      The best practice is to `require` modules at the beginning of each file, before
+      and outside of any functions.
+    languages: [js, ts]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - javascript
+      references:
+        - https://nodesecroadmap.fyi/chapter-2/dynamism.html
+        - https://github.com/goldbergyoni/nodebestpractices#-38-require-modules-first-not-inside-functions

@@ -1,28 +1,32 @@
 rules:
-- id: ldap-entry-poisoning
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ENTRY_POISONING
-    asvs:
-      section: "V5: Validation, Sanitization and Encoding Verification Requirements"
-      control_id: "5.3.7 Injection"
-      control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements"
-      version: "4"
-    references:
-    - https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf
-    - https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html
-  message: |
-    An object-returning LDAP search will allow attackers to control the LDAP response. This could
-    lead to Remote Code Execution.
-  severity: WARNING
-  pattern-either:
+  - id: ldap-entry-poisoning
+    metadata:
+      owasp: "A1: Injection"
+      cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ENTRY_POISONING
+      asvs:
+        section: "V5: Validation, Sanitization and Encoding Verification Requirements"
+        control_id: 5.3.7 Injection
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
+        version: "4"
+      references:
+        - https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf
+        - https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html
+      category: security
+      technology:
+        - java
+    message: >-
+      An object-returning LDAP search will allow attackers to control the LDAP response.
+      This could
+      lead to Remote Code Execution.
+    severity: WARNING
+    pattern-either:
       # SearchControls(int scope, long countlim, int timelim, String[] attrs, boolean retobj, boolean deref)
-  - pattern: |
-      new SearchControls($S, $CL, $TL, $AT, true, $DEREF)
-  - pattern: |
-      SearchControls $VAR = new SearchControls();
-      ...
-      $VAR.setReturningObjFlag(true);
-  languages:
-  - java
+      - pattern: |
+          new SearchControls($S, $CL, $TL, $AT, true, $DEREF)
+      - pattern: |
+          SearchControls $VAR = new SearchControls();
+          ...
+          $VAR.setReturningObjFlag(true);
+    languages:
+      - java

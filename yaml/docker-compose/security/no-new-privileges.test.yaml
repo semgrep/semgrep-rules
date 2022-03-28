@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   # ruleid: no-new-privileges
   web:
@@ -7,9 +7,9 @@ services:
   worker:
     image: my-worker-image:latest
     security_opt:
-    - label:user:testuser
+      - label:user:testuser
   # ok: no-new-privileges
   db:
     image: mysql
     security_opt:
-    - no-new-privileges:true
+      - no-new-privileges:true

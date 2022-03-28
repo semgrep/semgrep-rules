@@ -1,0 +1,10 @@
+rules:
+  - id: useless-let
+    pattern: let $X = $E in $X
+    message: Useless let
+    languages: [ocaml]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - ocaml

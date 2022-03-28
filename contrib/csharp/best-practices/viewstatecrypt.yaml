@@ -1,0 +1,17 @@
+rules:
+  - id: viewstate-crypt
+    patterns:
+      - pattern-not: viewStateEncryptionMode="Always"
+      - pattern: viewStateEncryptionMode="$VALUE"
+    message: >-
+      Web Forms controls use hidden base64 encoded fields to store state information. If sensitive information is stored there it may be leaked to the client side.
+    languages: [generic]
+    severity: WARNING
+    metadata:
+      technology:
+        - asp.net
+        - csharp
+      category: best-practice
+      owasp: "A6: Security Misconfiguration"
+      cwe: >-
+        CWE-554: ASP.NET Misconfiguration: Not Using Input Validation Framework
