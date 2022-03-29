@@ -6,12 +6,29 @@ const hashSettings = {
   parallelism: os.cpus().length || 8,
 };
 
-const prepareSaving = (user) => {
+const goodHashSettings = {
+  type: argon2.argon2id,
+  memoryCost: 2 ** 16,
+  parallelism: os.cpus().length || 8,
+};
+
+const prepareSavingGood = (user) => {
   if (!user.Password) return Promise.resolve(user);
 
 
   return argon2
-    // ruleid: unsafe-argon2-config
+    // ok: unsafe-argon2-config
+    .hash(user.Password, goodHashSettings)
+    .then((hash) => ({ ...user, Password: hash }))
+    .catch((err) => console.error(`Error during hashing: ${err}`));
+};
+
+const prepareSavingBad = (user) => {
+  if (!user.Password) return Promise.resolve(user);
+
+
+  return argon2
+    // TODO - this requires inter-function taint
     .hash(user.Password, hashSettings)
     .then((hash) => ({ ...user, Password: hash }))
     .catch((err) => console.error(`Error during hashing: ${err}`));
