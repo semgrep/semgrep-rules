@@ -1,6 +1,5 @@
 const argon2 = require("argon2");
 
-// ruleid:unsafe-argon2-config
 const hashSettings = {
   type: argon2.argon2i,
   memoryCost: 2 ** 16,
@@ -10,6 +9,7 @@ const hashSettings = {
 const prepareSaving = (user) => {
   if (!user.Password) return Promise.resolve(user);
 
+  // ruleid: unsafe-argon2-config
   return argon2
     .hash(user.Password, hashSettings)
     .then((hash) => ({ ...user, Password: hash }))
