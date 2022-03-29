@@ -5,8 +5,19 @@ rules:
     include:
       - "*.erb"
   patterns:
-  - pattern: |
-      params[...]
+  - pattern-either:
+    - pattern: |
+        cookies[...]
+    - patterns:
+      - pattern: |
+          cookies. ... .$PROPERTY[...]
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: (?!signed|encrypted)
+    - pattern: |
+        params[...]
+    - pattern: |
+        request.env[...]
   - pattern-inside: |
       render :file => ...
   message: Found request parameters in a call to `render` in a dynamic context. This

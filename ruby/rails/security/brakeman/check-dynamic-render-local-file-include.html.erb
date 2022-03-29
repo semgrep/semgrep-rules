@@ -6,3 +6,9 @@
 
 # ruleid: check-dynamic-render-local-file-include
 <%= render :file => "/tmp/#{params[:file]}" %>
+
+# ruleid: check-dynamic-render-local-file-include
+<%= render :file => "/tmp/#{cookies[:file]}" %>
+
+# ruleid: check-dynamic-render-local-file-include
+<%= render :file => "/tmp/#{request.env[:file]}" %>
