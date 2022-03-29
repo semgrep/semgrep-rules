@@ -24,13 +24,13 @@ rules:
     - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
     - https://eprint.iacr.org/2016/759.pdf
     - https://www.cs.tau.ac.il/~tromer/papers/cache-joc-20090619.pdf
+    - https://datatracker.ietf.org/doc/html/rfc9106#section-4
     category: security
     technology:
     - argon2
     - cryptography
   message: >-
-    Prefer Argon2id where possible. Argon2d is designed to resist GPU-based attacks but introduces cache-based side-channel attacks while Argon2i has a published attack (Alwen-Blocki) that necessitate >10 memory passes.
-    Argon2id is a hybrid approach using both Argon2d and Argon2i to mitigate the weaknesses of each individual scheme.
+    Prefer Argon2id where possible. Per RFC9016, section 4 IETF recommends selecting Argon2id unless you can guarantee an adversary has no direct access to the computing environment.
   severity: WARNING
   languages:
   - javascript
