@@ -9,8 +9,9 @@ const hashSettings = {
 const prepareSaving = (user) => {
   if (!user.Password) return Promise.resolve(user);
 
-  // ruleid: unsafe-argon2-config
+
   return argon2
+    // ruleid: unsafe-argon2-config
     .hash(user.Password, hashSettings)
     .then((hash) => ({ ...user, Password: hash }))
     .catch((err) => console.error(`Error during hashing: ${err}`));
@@ -23,8 +24,9 @@ const bad = (user) => {
     memoryCost: 2 ** 16,
     parallelism: os.cpus().length || 8,
   };
-  // ruleid:unsafe-argon2-config
+
   return argon2
+    // ruleid:unsafe-argon2-config
     .hash(user.Password, hashSettings)
     .then((hash) => ({ ...user, Password: hash }))
     .catch((err) => console.error(`Error during hashing: ${err}`));

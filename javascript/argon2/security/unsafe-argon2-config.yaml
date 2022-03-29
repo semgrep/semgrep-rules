@@ -7,7 +7,7 @@ rules:
           $ARGON = require('argon2');
           ...
       - pattern: |
-          {type: ...}
+          $X
   pattern-sanitizers:
     - patterns:
       - pattern: |
@@ -16,7 +16,9 @@ rules:
   pattern-sinks:
       - patterns:
         - pattern: |
-            $ARGON.hash(...)
+            $Y
+        - pattern-inside: |
+            $ARGON.hash(...,$Y)
   metadata:
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
