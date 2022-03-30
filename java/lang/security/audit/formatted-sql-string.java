@@ -76,6 +76,31 @@ public class SqlExample2 {
     }
 }
 
+public class SqlExample {
+    public void getAllFields(String tableName) throws SQLException {
+        Connection c = db.getConnection();
+        // ruleid:formatted-sql-string
+        ResultSet rs = c.createStatement().execute(String.format("SELECT * FROM %s", tableName);
+    }
+
+    public void findAccountsById(String id) throws SQLException {
+        // ruleid:formatted-sql-string
+        String sql = String.format("SELECT * FROM accounts WHERE id = '%s'", id);
+        Connection c = db.getConnection();
+        ResultSet rs = c.createStatement().execute(sql);
+    }
+
+
+    public List<AccountDTO> findAccountsById(String id) {
+        String jql = String.format("from Account where id = '%s'", id);
+        TypedQuery<Account> q = em.createQuery(jql, Account.class);
+        return q.getResultList()
+        .stream()
+        .map(this::toAccountDTO)
+        .collect(Collectors.toList());
+    }
+}
+
 public class tableConcatStatements {
     public void tableConcat() {
         // ok:formatted-sql-string
