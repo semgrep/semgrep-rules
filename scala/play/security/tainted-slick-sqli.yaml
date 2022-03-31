@@ -12,6 +12,7 @@ rules:
     - scala
     - slick
     - play
+    confidence: HIGH
   message: >-
     Detected a tainted SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
@@ -69,6 +70,6 @@ rules:
     - pattern-inside: |
         import slick.$DEPS
         ...
-  severity: WARNING
+  severity: ERROR
   languages:
     - scala

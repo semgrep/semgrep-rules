@@ -18,6 +18,27 @@ rules:
     languages: [python]
     severity: WARNING
     pattern-either:
-      - pattern: $W(..., aws_secret_access_key="=~/^[A-Za-z0-9/+=]+$/", ...)
-      - pattern: $W(..., aws_access_key_id="=~/^AKI/", ...)
-      - pattern: $W(..., aws_session_token="...", ...)
+    - patterns:
+      - pattern: |
+          $W(..., aws_secret_access_key="$ACCESSKEY", ...)
+      - metavariable-regex:
+          metavariable: $ACCESSKEY
+          regex: ^[A-Za-z0-9/+=]+$
+      - metavariable-analysis:
+          metavariable: $ACCESSKEY
+          analyzer: entropy
+    - patterns:
+      - pattern: |
+          $W(..., aws_access_key_id="$KEYID", ...)
+      - metavariable-regex:
+          metavariable: $KEYID
+          regex: ^AKI
+      - metavariable-analysis:
+          metavariable: $KEYID
+          analyzer: entropy
+    - patterns:
+      - pattern: |
+          $W(..., aws_session_token="$TOKEN", ...)
+      - metavariable-analysis:
+          metavariable: $TOKEN
+          analyzer: entropy

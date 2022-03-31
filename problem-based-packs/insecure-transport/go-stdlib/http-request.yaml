@@ -4,10 +4,20 @@ rules:
       - pattern-either:
           - pattern: |
               http.$FUNC("=~/[hH][tT][tT][pP]://.*/", ...)
-          - pattern: |
-              $CLIENT := &http.Client{...}
-              ...
-              client.$FUNC("=~/[hH][tT][tT][pP]://.*/", ...)
+          - patterns:
+            - pattern-inside: |
+                $CLIENT := &http.Client{...}
+                ...
+            - pattern: |
+                client.$FUNC("=~/[hH][tT][tT][pP]://.*/", ...)
+      - pattern-not:
+          http.$FUNC("=~/[hH][tT][tT][pP]://127.0.0.1.*/", ...)
+      - pattern-not:
+          client.$FUNC("=~/[hH][tT][tT][pP]://127.0.0.1.*/", ...)
+      - pattern-not:
+          http.$FUNC("=~/[hH][tT][tT][pP]://localhost.*/", ...)
+      - pattern-not:
+          client.$FUNC("=~/[hH][tT][tT][pP]://localhost.*/", ...)
       - metavariable-regex:
           metavariable: $FUNC
           regex: (Get|Post|Head|PostForm)
