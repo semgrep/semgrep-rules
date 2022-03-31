@@ -31,6 +31,8 @@ func ok1() {
     resp, err := http.PostForm("http://127.0.0.1/", form)
     // ok: http-request
     resp, err := http.Head("http://127.0.0.1/path/to/x")
+    // ok: http-request
+    resp, err := http.Head("http://localhost/path/to/x")
 }
 
 func ok2() {
@@ -46,4 +48,7 @@ func ok2() {
 
     // ok: http-request
     resp, err := client.Get("https://127.0.0.1")
+
+    // ok: http-request
+    resp, err := client.Get("https://localhost/asdf/path")
 }
