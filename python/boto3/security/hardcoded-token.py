@@ -34,6 +34,27 @@ s3 = boto3.resource(
     endpoint_url="https://sfo2.digitaloceanspaces.com",
 )
 
+ok_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# ok:hardcoded-token
+s3 = boto3.resource(
+    "s3",
+    aws_access_key_id=ok_key,
+    aws_secret_access_key=ok_secret,
+    region_name="sfo2",
+    endpoint_url="https://sfo2.digitaloceanspaces.com",
+)
+
+ok_token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# ok:hardcoded-token
+s3 = boto3.resource(
+    "s3",
+    aws_access_key_id=ok_key,
+    aws_secret_access_key=ok_secret,
+    aws_session_token=ok_token,
+    region_name="sfo2",
+    endpoint_url="https://sfo2.digitaloceanspaces.com",
+)
+
 # ok:hardcoded-token
 s3 = client("s3", aws_access_key_id="this-is-not-a-key")
 

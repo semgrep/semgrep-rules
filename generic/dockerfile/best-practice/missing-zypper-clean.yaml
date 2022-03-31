@@ -1,9 +1,9 @@
 rules:
   - id: missing-zypper-clean
     severity: WARNING
-    languages: [generic]
+    languages: [dockerfile]
     patterns:
-      - pattern: zypper $COMMAND
+      - pattern: RUN ... zypper $COMMAND ...
       - pattern-not-inside: RUN ... && zypper clean
       - pattern-not-inside: RUN ... && \ zypper clean
     message: >-
@@ -15,7 +15,3 @@ rules:
       category: best-practice
       technology:
         - dockerfile
-    paths:
-      include:
-        - "*dockerfile*"
-        - "*Dockerfile*"
