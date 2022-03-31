@@ -15,20 +15,20 @@ rules:
       A malicious attacker could tamper with the gRPC message, which could compromise
       the machine. Include credentials derived
       from an SSL certificate in order to create a secure gRPC connection. You can create
-      credentials using 'credentials.NewServerTLSFromFile("cert.pem",
-      "cert.key")'.
+      credentials using 'credentials.NewServerTLSFromFile("cert.pem", "cert.key")'.
     languages:
       - go
     severity: ERROR
     patterns:
-      - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
+      - pattern-not: $SERVER := grpc.NewServer(..., grpc.Creds(...), ...)
       - pattern-not-inside: |
           $OPTS := []grpc.ServerOption{
             ...,
             grpc.Creds(credentials.NewClientTLSFromCert(...)),
             ...,
           }
-          grpc.NewServer($OPTS...)
+          ...
+          $SERVER := grpc.NewServer($OPTS...)
       - pattern-not-inside: |
           $CREDS := credentials.NewClientTLSFromCert(...)
           ...
@@ -37,5 +37,10 @@ rules:
             $CREDS,
             ...,
           }
-          grpc.NewServer($OPTS...)
-      - pattern: grpc.NewServer(...)
+          ...
+          $SERVER := grpc.NewServer($OPTS...)
+      - pattern: $SERVER := grpc.NewServer($...ARGS)
+    fix: |
+      creds := credentials.NewServerTLSFromFile("cert.pem", "cert.key")
+      $SERVER := pgrpc.NewServer($...ARGS, grpc.Creds(creds))
+
