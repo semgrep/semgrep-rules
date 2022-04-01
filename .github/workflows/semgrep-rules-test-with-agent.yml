@@ -20,4 +20,4 @@ jobs:
       run: rm -rf semgrep-rules/fingerprints
     - name: test rules with semgrep-agent
       run: |
-        docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep-agent:v1 semgrep-agent --config /src
+        docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep-agent:v1 semgrep-agent --no-error --config /src
