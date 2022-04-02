@@ -1,12 +1,12 @@
 rules:
-- id: jsx-not-internationalized
+- id: useselect-label-not-i18n
   patterns:
-    - pattern: <$ELEMENT>$MESSAGE</$ELEMENT>
+    - pattern: useSelect($X1, $X2, '$LABEL', $X4)
     - metavariable-regex:
-        metavariable: $MESSAGE
+        metavariable: $LABEL
         regex: (.*[A-Za-z].*)
-    - pattern-not: <$ELEMENT>t('$KEY', ...)</$ELEMENT>
-  message: "JSX element not internationalized: '$MESSAGE'"
+    - pattern-not: useSelect($X1, $X2, t('...'), $X4)
+  message: React useSelect() label is not internationalized - '$LABEL'
   languages:
     - ts
     - js
@@ -19,5 +19,4 @@ rules:
       - i18next
     references:
       - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
-      - https://mui.com/
       - https://react.i18next.com/
