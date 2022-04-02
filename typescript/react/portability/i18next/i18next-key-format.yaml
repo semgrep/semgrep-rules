@@ -1,0 +1,57 @@
+rules:
+- id: i18next-key-format
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: t('$KEY')
+        - pattern: t('$KEY', $OPTIONS)
+        - pattern: t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?!^[a-z0-9-]+\.[a-z0-9-]+\.[a-zA-Z0-9_.-]+$)
+    - patterns:
+      - pattern-either:
+        - pattern: t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: $DYNAMIC_KEY
+          regex: (?!^[`][a-z0-9-]+[.][a-z0-9-]+[.]\S+$)
+    - patterns:
+      - pattern-either:
+        - pattern: $I18NEXT.t('$KEY')
+        - pattern: $I18NEXT.t('$KEY', $OPTIONS)
+        - pattern: $I18NEXT.t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: $I18NEXT.t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: $I18NEXT
+          regex: (^i18n|i18next$)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?!^[a-z0-9-]+\.[a-z0-9-]+\.[a-zA-Z0-9_.-]+$)
+    - patterns:
+      - pattern-either:
+        - pattern: $I18NEXT.t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: $I18NEXT.t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: $I18NEXT
+          regex: (^(i18n|i18next)$)
+      - metavariable-regex:
+          metavariable: $DYNAMIC_KEY
+          regex: (?!^[`][a-z0-9-]+[.][a-z0-9-]+[.]\S+$)
+  message: Translation key '$KEY' should match format 'MODULE.FEATURE.*'
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://mui.com/
+    - https://react.i18next.com/
