@@ -1,0 +1,33 @@
+rules:
+  - id: azure-containergroup-deployed-into-virtualnetwork
+    message: >-
+      Ensure that Azure Container group is deployed into virtual network
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_container_group" "..." {
+          ...
+          container {
+            ...
+          }
+          network_profile_id = "..."  
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_container_group" "..." {
+          ...
+          container {
+            ...
+          }
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

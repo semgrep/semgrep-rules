@@ -1,0 +1,28 @@
+rules:
+  - id: azure-appservice-min-tls-version
+    message: >-
+      Ensure web app is using the latest version of TLS encryption
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            min_tls_version = "1.1"
+          }
+          }
+    metadata:
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      - A03:2017 - Sensitive Data Exposure
+      cwe: 'CWE-326: Inadequate Encryption Strength'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING
