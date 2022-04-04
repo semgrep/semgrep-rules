@@ -1,0 +1,96 @@
+rules:
+  - id: tainted-sql-from-http-request
+    languages: [scala]
+    severity: ERROR
+    mode: taint
+    message: >-
+      User data flows into this manually-constructed SQL string. User data
+      can be safely inserted into SQL strings using prepared statements or an
+      object-relational mapper (ORM). Manually-constructed SQL strings is a
+      possible indicator of SQL injection, which could let an attacker steal or
+      manipulate data from the database. Instead, use prepared statements
+      (`connection.PreparedStatement`) or a safe library.
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp:
+        - A03:2021
+        - A01:2017
+      references:
+        - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
+      category: security
+      technology:
+      - scala
+      - play
+      confidence: HIGH
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: $REQ
+          - pattern-either:
+            - pattern-inside: |
+                Action {
+                  $REQ: Request[$T] => 
+                    ...
+                }
+            - pattern-inside: |
+                Action(...) {
+                  $REQ: Request[$T] => 
+                    ...
+                }
+            - pattern-inside: |
+                Action.async {
+                  $REQ: Request[$T] => 
+                    ...
+                }
+            - pattern-inside: |
+                Action.async(...) {
+                  $REQ: Request[$T] => 
+                    ...
+                }
+        - patterns:
+          - pattern: $PARAM
+          - pattern-either:
+            - pattern-inside: |
+                def $CTRL(..., $PARAM: $TYPE, ...) = Action {
+                  ...
+                }
+            - pattern-inside: |
+                def $CTRL(..., $PARAM: $TYPE, ...) = Action(...) {
+                  ...
+                }
+            - pattern-inside: |
+                def $CTRL(..., $PARAM: $TYPE, ...) = Action.async {
+                  ...
+                }
+            - pattern-inside: |
+                def $CTRL(..., $PARAM: $TYPE, ...) = Action.async(...) {
+                  ...
+                }
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                "$SQLSTR" + ...
+            - pattern: |
+                "$SQLSTR".format(...)
+            - patterns:
+              - pattern-inside: |
+                  $SB = new StringBuilder("$SQLSTR");
+                  ...
+              - pattern: $SB.append(...)
+            - patterns:
+              - pattern-inside: |
+                  $VAR = "$SQLSTR"
+                  ...
+              - pattern: $VAR += ...
+          - metavariable-regex:
+              metavariable: $SQLSTR
+              regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+        - patterns:
+          - pattern: s"..."
+          - pattern-regex: |
+              .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+      - pattern-not-inside: println(...)

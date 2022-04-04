@@ -1,5 +1,5 @@
 rules:
-  - id: missing-noreferrer
+  - id: missing-noopener-or-noreferrer
     metadata:
       category: security
       technology:
@@ -8,19 +8,21 @@ rules:
       owasp:
         - A05:2017 - Broken Access Control
         - A01:2021 - Broken Access Control
-      confidence: MEDIUM
+      confidence: HIGH
     patterns:
       - pattern: |
-          <a ... target="_blank" ...>
+          <a ... target="_blank" ... >
+      - pattern-not-inside: |
+          <a ... rel="... noopener ..." ... >
       - pattern-not-inside: |
           <a ... rel="... noreferrer ..." ... >
     paths:
       include:
         - "*.html"
     message: >-
-      This anchor tag with 'target="_blank"' is missing 'noreferrer'.
+      This anchor tag with 'target="_blank"' is missing 'noopener' or 'noreferrer'.
       A page opened with 'target="_blank"' can access the window object of the origin page.
       This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
-      This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
+      This is called reverse tabnabbing. To prevent this, include 'rel=noopener' or 'rel=noreferrer' on this tag.
     severity: WARNING
     languages: [generic]

@@ -45,19 +45,21 @@ rules:
               - pattern: |
                   new ProcessBuilder("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
               - pattern: |
-                  new ProcessBuilder(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
+                  new ProcessBuilder("cmd","/c",$ARG,...)
               - pattern: |
-                  new ProcessBuilder(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+                  new ProcessBuilder(Arrays.asList("cmd","/c",$ARG,...),...)
+              - pattern: |
+                  new ProcessBuilder(new String[]{"cmd","/c",$ARG,...},...)
               - patterns:
                   - pattern-either:
                       - pattern: |
-                          new ProcessBuilder($CMD,"-c",$ARG,...)
+                          new ProcessBuilder($CMD,"/c",$ARG,...)
                       - pattern: |
-                          new ProcessBuilder(Arrays.asList($CMD,"-c",$ARG,...),...)
+                          new ProcessBuilder(Arrays.asList($CMD,"/c",$ARG,...),...)
                       - pattern: |
-                          new ProcessBuilder(new String[]{$CMD,"-c",$ARG,...},...)
+                          new ProcessBuilder(new String[]{$CMD,"/c",$ARG,...},...)
                   - pattern-inside: |
-                      $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+                      $CMD = "cmd";
                       ...
           - pattern-not-inside: |
               $ARG = "...";
@@ -73,9 +75,15 @@ rules:
               - pattern: |
                   $PB.command("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
               - pattern: |
+                  $PB.command("cmd","/c",$ARG,...)
+              - pattern: |
                   $PB.command(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
               - pattern: |
+                  $PB.command(Arrays.asList("cmd","/c",$ARG,...),...)
+              - pattern: |
                   $PB.command(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+              - pattern: |
+                  $PB.command(new String[]{"cmd","/c",$ARG,...},...)
               - patterns:
                   - pattern-either:
                       - pattern: |
@@ -86,6 +94,17 @@ rules:
                           $PB.command(new String[]{$CMD,"-c",$ARG,...},...)
                   - pattern-inside: |
                       $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+                      ...
+              - patterns:
+                  - pattern-either:
+                      - pattern: |
+                          $PB.command($CMD,"/c",$ARG,...)
+                      - pattern: |
+                          $PB.command(Arrays.asList($CMD,"/c",$ARG,...),...)
+                      - pattern: |
+                          $PB.command(new String[]{$CMD,"/c",$ARG,...},...)
+                  - pattern-inside: |
+                      $CMD = "cmd";
                       ...
           - pattern-inside: |
               $TYPE $PB = new ProcessBuilder(...);

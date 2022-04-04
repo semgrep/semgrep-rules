@@ -11,7 +11,7 @@ rules:
       injection if variables in the SQL statement are not properly sanitized.
       Avoid using `#$variable` and use `$variable` in `sql"..."` strings instead.
   languages: [scala]
-  severity: WARNING
+  severity: ERROR
   metadata:
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SCALA_SQL_INJECTION_SLICK
     references:
@@ -22,3 +22,4 @@ rules:
     technology:
     - scala
     - slick
+    confidence: MEDIUM

@@ -23,12 +23,12 @@ class XssController extends Controller {
     Ok(s"Hello $smth !").as(contentType)
   }
 
-  def vulnerable4(value: String) = Action.async { implicit request: Request[AnyContent] =>
+  def vulnerable4(value: String) = Action.async(parse.json) { implicit request: Request[AnyContent] =>
     // ruleid: tainted-html-response
     Ok("Hello " + value + " !").as(ContentTypes.HTML)
   }
 
-  def vulnerable5(value: String) = Action {
+  def vulnerable5(value: String) = Action(parse.json) {
     // ruleid: tainted-html-response
     Ok(s"Hello $value !").as(HTML)
   }

@@ -5,42 +5,37 @@ from jinja2 import Environment, select_autoescape
 templateLoader = jinja2.FileSystemLoader( searchpath="/" )
 something = ''
 
-# ok:autoescape-disabled
+# ok:incorrect-autoescape-disabled
 Environment(loader=templateLoader, load=templateLoader, autoescape=True)
 
-# ok:autoescape-disabled
+# ok:incorrect-autoescape-disabled
 templateEnv = jinja2.Environment(autoescape=True,
         loader=templateLoader )
 
-# ruleid:autoescape-disabled
+# ruleid:incorrect-autoescape-disabled
 Environment(loader=templateLoader, load=templateLoader, autoescape=something)
 
 
-# ruleid:autoescape-disabled
+# ruleid:incorrect-autoescape-disabled
 templateEnv = jinja2.Environment(autoescape=False, loader=templateLoader )
 
 
-# ruleid:autoescape-disabled
 Environment(loader=templateLoader,
             load=templateLoader,
+# ruleid:incorrect-autoescape-disabled
             autoescape=False)
 
 
-# ruleid:autoescape-disabled
-Environment(loader=templateLoader,
-            load=templateLoader)
-
-# ok:autoescape-disabled
+# ok:incorrect-autoescape-disabled
 Environment(loader=templateLoader, autoescape=select_autoescape())
 
-# ok:autoescape-disabled
 Environment(loader=templateLoader,
+# ok:incorrect-autoescape-disabled
             autoescape=select_autoescape(['html', 'htm', 'xml']))
-
 
 def fake_func():
     return 'foobar'
 
-
-# ruleid:autoescape-disabled
+# ruleid:incorrect-autoescape-disabled
 Environment(loader=templateLoader, autoescape=fake_func())
+
