@@ -60,7 +60,7 @@ public class SpringJdbcTemplate {
         jdbcTemplate.execute(sql, new TestCallableStatementCallback());
     }
 
-    public void queryBatchUpdate(JdbcTemplate jdbcTemplate, String sql) throws DataAccessException {
+    public void queryBatchUpdate(JdbcTemplate jdbcTemplate, String sql, String taintedString) throws DataAccessException {
         // ruleid:spring-sqli
         jdbcTemplate.batchUpdate(sql);
         // ruleid:spring-sqli
@@ -75,6 +75,9 @@ public class SpringJdbcTemplate {
         jdbcTemplate.batchUpdate(sql, new ArrayList<UserEntity>(), 11, new TestParameterizedPreparedStatementSetter());
         // ruleid:spring-sqli
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>());
+
+        // ok:spring-sqli
+        jdbcTemplate.batchUpdate("SELECT foo FROM bar WHERE baz = 'biz'", new ArrayList<Object[]>(Arrays.asList(new Object[] {taintedString}));
         // ruleid:spring-sqli
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>(), new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR});
     }

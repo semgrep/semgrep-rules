@@ -7,11 +7,11 @@ rules:
         - pattern-inside: |
             public $T $M (..., String $ARG,...){...}
     pattern-sanitizers:
-    - not_conflicting: true
-        patterns:
-        - pattern: $A
-        - pattern-inside: |
-            new $TYPE(...,$A,...);
+        - not_conflicting: true
+          patterns:
+            - pattern: $A
+            - pattern-inside: |
+                new $TYPE(...,$A,...);
     pattern-sinks:
     - patterns:
         - pattern-either:
