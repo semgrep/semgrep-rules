@@ -7,7 +7,6 @@ rules:
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       references:
         - https://blog.codacy.com/9-scala-security-issues/
-      confidence: MEDIUM
     message: >-
       Flags scala code that look for values that are greater than 0. This ignores the first element, which is most likely a
       bug. Instead, use indexOf with -1. If the intent is to check the inclusion of a value, use the contains method instead.

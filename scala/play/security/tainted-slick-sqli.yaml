@@ -12,7 +12,6 @@ rules:
     - scala
     - slick
     - play
-    confidence: HIGH
   message: >-
     Detected a tainted SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
@@ -21,47 +20,18 @@ rules:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: $REQ
-        - pattern-either:
-          - pattern-inside: |
-              Action {
-                $REQ: Request[$T] => 
-                  ...
-              }
-          - pattern-inside: |
-              Action(...) {
-                $REQ: Request[$T] => 
-                  ...
-              }
-          - pattern-inside: |
-              Action.async {
-                $REQ: Request[$T] => 
-                  ...
-              }
-          - pattern-inside: |
-              Action.async(...) {
-                $REQ: Request[$T] => 
-                  ...
-              }
+        - pattern: request
+        - pattern-inside: |
+            Action {
+              request: Request[$T] => 
+                ...
+            }
       - patterns:
         - pattern: $PARAM
-        - pattern-either:
-          - pattern-inside: |
-              def $CTRL(..., $PARAM: $TYPE, ...) = Action {
-                ...
-              }
-          - pattern-inside: |
-              def $CTRL(..., $PARAM: $TYPE, ...) = Action(...) {
-                ...
-              }
-          - pattern-inside: |
-              def $CTRL(..., $PARAM: $TYPE, ...) = Action.async {
-                ...
-              }
-          - pattern-inside: |
-              def $CTRL(..., $PARAM: $TYPE, ...) = Action.async(...) {
-                ...
-              }
+        - pattern-inside: |
+            def $CTRL(..., $PARAM: $TYPE, ...) = Action {
+              ...
+            }
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -70,6 +40,6 @@ rules:
     - pattern-inside: |
         import slick.$DEPS
         ...
-  severity: ERROR
+  severity: WARNING
   languages:
     - scala

@@ -3,9 +3,9 @@ rules:
     severity: WARNING
     languages: [dockerfile]
     patterns:
-      - pattern: RUN ... zypper ...
-      - pattern-not: RUN ... zypper clean
-      - pattern-not: RUN ... zypper clean
+      - pattern: RUN ... && zypper ...
+      - pattern-not: RUN ... && zypper clean
+      - pattern-not: RUN ... && zypper clean
     message: >-
       This zypper command does not end with '&& zypper clean'. Running 'zypper clean' will remove cached data and reduce package size. (This must be performed in the same RUN step.)
     metadata:

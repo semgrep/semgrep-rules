@@ -14,11 +14,8 @@ rules:
     pattern-sources:
     - patterns:
       - pattern-either:
-        - patterns:
-          - pattern: |
-              (HttpServletRequest $REQ).$FUNC(...)
-          - pattern-not: |
-              (HttpServletRequest $REQ).getSession()
+        - pattern: |
+            (HttpServletRequest $REQ).$FUNC(...)
         - patterns: # this pattern is a hack to get the rule to      recognize `map` as tainted source when `cookie. getValue(user_input)` is used.
            - pattern-inside: |
                (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);

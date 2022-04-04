@@ -3,9 +3,6 @@ rules:
   patterns:
     - pattern: Seq($SH, "-c", $CMD, ...)
     - pattern-not: Seq($SH, "-c", "...", ...)
-    - pattern-inside: |
-        import sys.process
-        ...
     - pattern-not-inside: |
         $CMD = "..."
         ...
@@ -28,4 +25,3 @@ rules:
     owasp: "A1: Injection"
     technology:
     - scala
-    confidence: MEDIUM

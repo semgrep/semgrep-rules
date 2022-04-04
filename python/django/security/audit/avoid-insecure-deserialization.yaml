@@ -14,42 +14,38 @@ rules:
     languages:
       - python
     severity: ERROR
-    mode: taint
-    pattern-sources:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            def $INSIDE(..., $PARAM, ...):
+    patterns:
+      - pattern-inside: |
+          def $X(..., request, ...):
+            ...
+      - pattern-either:
+          - pattern: |
+              $VAR = <... request.$Y.get(...) ...>
               ...
-        - pattern-either: 
-          - pattern: 
-              request.$REQFUNC(...)
-          - pattern:
-              request.$REQFUNC.get(...)
-          - pattern: 
-              request.$REQFUNC[...]
-    pattern-sinks:
-    - pattern-either:
-      - patterns:
-        - pattern-either:
+              pickle.$FUNC(<... $VAR ...>)
+          - pattern: pickle.$FUNC(<... request.$Y.get(...) ...>)
           - pattern: |
-              pickle.$PICKLEFUNC(...)
+              $VAR = <... request.$Y.get(...) ...>
+              ...
+              _pickle.$FUNC(<... $VAR ...>)
+          - pattern: _pickle.$FUNC(<... request.$Y.get(...) ...>)
           - pattern: |
-              _pickle.$PICKLEFUNC(...)
+              $VAR = <... request.$Y.get(...) ...>
+              ...
+              cPickle.$FUNC(<... $VAR ...>)
+          - pattern: cPickle.$FUNC(<... request.$Y.get(...) ...>)
           - pattern: |
-              cPickle.$PICKLEFUNC(...)
+              $VAR = <... request.$Y.get(...) ...>
+              ...
+              dill.$FUNC(<... $VAR ...>)
+          - pattern: dill.$FUNC(<... request.$Y.get(...) ...>)
           - pattern: |
-              shelve.$PICKLEFUNC(...)
-        - metavariable-regex:
-            metavariable: $PICKLEFUNC
-            regex: dumps|dump|load|loads
-      - patterns:
-        - pattern: dill.$DILLFUNC(...)
-        - metavariable-regex:
-            metavariable: $DILLFUNC
-            regex: dump|dump_session|dumps|load|load_session|loads 
-      - patterns:
-        - pattern: yaml.$YAMLFUNC(...)
-        - metavariable-regex:
-            metavariable: $YAMLFUNC
-            regex: dump|dump_all|load|load_all
+              $VAR = <... request.$Y.get(...) ...>
+              ...
+              shelve.$FUNC(<... $VAR ...>)
+          - pattern: shelve.$FUNC(<... request.$Y.get(...) ...>)
+          - pattern: |
+              $VAR = <... request.$Y.get(...) ...>
+              ...
+              yaml.$FUNC(<... $VAR ...>)
+          - pattern: yaml.$FUNC(<... request.$Y.get(...) ...>)

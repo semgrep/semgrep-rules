@@ -18,16 +18,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok("ok")
   }
 
-  def twoAction(name: String) = Action {
-    val people = TableQuery[People]
-
-    // ruleid: tainted-slick-sqli
-    people.map(p => (p.id,p.name,p.age)).result.overrideSql(s"SELECT id, name, age FROM Person WHERE $name")
-
-    Ok("ok")
-  }
-
-  def threeAction(name: String) = Action.async(parse.json) {
+  def twoAction(name: String) = Action { implicit request: Request[AnyContent] =>
     val people = TableQuery[People]
 
     // ruleid: tainted-slick-sqli

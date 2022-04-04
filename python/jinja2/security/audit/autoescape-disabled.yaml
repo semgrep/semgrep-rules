@@ -1,14 +1,14 @@
 rules:
-  - id: incorrect-autoescape-disabled
+  - id: autoescape-disabled
     patterns:
-      - pattern: jinja2.Environment(... , autoescape=$VAL, ...)
-      - pattern-not: jinja2.Environment(... , autoescape=True, ...)
-      - pattern-not: jinja2.Environment(... , autoescape=jinja2.select_autoescape(...), ...)
-      - focus-metavariable: $VAL
-    fix: |
-      True
+      - pattern-not: jinja2.Environment(..., autoescape=True, ...)
+      - pattern-not: jinja2.Environment(..., autoescape=jinja2.select_autoescape(...), ...)
+      - pattern: jinja2.Environment(...)
+    fix-regex:
+      regex: (.*)\)
+      replacement: \1, autoescape=True)
     message: >-
-      Detected a Jinja2 environment with autoescaping disabled.
+      Detected a Jinja2 environment without autoescaping. Jinja2 does not autoescape by default.
       This is dangerous if you are rendering to a browser because this allows for cross-site
       scripting (XSS) attacks. If you are in a web context, enable autoescaping by setting
       'autoescape=True.' You may also consider using 'jinja2.select_autoescape()' to only enable

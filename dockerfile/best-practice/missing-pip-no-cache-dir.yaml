@@ -11,7 +11,7 @@ rules:
           - pattern-not-inside: |
               RUN ... $PIP install . ...
           - pattern-not-inside: |
-              ENV ... PIP_NO_CACHE_DIR=$BOOL ...
+              ENV ... PIP_NO_CACHE_DIR=$VAL ...
               ...
               RUN ... $PIP install ...
           - pattern-not-inside: |
@@ -32,3 +32,7 @@ rules:
       category: best-practice
       technology:
         - dockerfile
+    paths:
+      include:
+        - "*dockerfile*"
+        - "*Dockerfile*"

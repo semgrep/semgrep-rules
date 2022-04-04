@@ -142,8 +142,3 @@ func ok7() {
     // ok: pg-orm-sqli
     path.Join("foo", fmt.Sprintf("%s.baz", "bar"))
 }
-
-func ok8() {
-    // ok: pg-orm-sqli
-    filepath.Join("foo", fmt.Sprintf("%s.baz", "bar"))
-}
