@@ -1,6 +1,12 @@
 rules:
   - id: no-null-cipher
-    pattern: new NullCipher(...);
+    patterns:
+    - pattern-inside: |
+        $CI = new NullCipher(...);
+        ...
+    - pattern-either: 
+      - pattern: $CI.doFinal(...)
+      - pattern: $CI.update(...)
     metadata:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A3: Sensitive Data Exposure"

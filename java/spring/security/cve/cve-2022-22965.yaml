@@ -1,0 +1,43 @@
+rules:
+- id: cve-2022-22965
+  patterns:
+  - pattern: |
+      @$MAPPING(...)
+      public $RETURNTYPE $METHOD($Y $X, ...) {
+        ...
+      }
+  - pattern-not: |
+      @$MAPPING(...)
+      public $RETURNTYPE $METHOD(@$ANNOTATION $Y $X, ...) {
+        ...
+      }
+  - pattern-not: |
+      @$MAPPING(...)
+      public $RETURNTYPE $METHOD(@$ANNOTATION(...) $Y $X, ...) {
+        ...
+      }
+  - pattern-not: |
+      @$MAPPING(...)
+      public $RETURNTYPE $METHOD(HttpServletRequest $X, ...) {
+        ...
+      }
+  - pattern-not: |
+      @$MAPPING(...)
+      public $RETURNTYPE $METHOD(HttpServletResponse $X, ...) {
+        ...
+      }
+  - metavariable-regex:
+      metavariable: $MAPPING
+      regex: .+Mapping
+  message: Method $METHOD potentially vulnerable to CVE-2022-22965 due to plain binding
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    owap: 'A1: Injection'
+    technology:
+    - spring
+    references:
+    - https://spring.io/blog/2022/03/31/spring-framework-rce-early-announcement
