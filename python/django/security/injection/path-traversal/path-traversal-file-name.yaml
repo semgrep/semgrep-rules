@@ -1,68 +1,68 @@
 rules:
-- id: path-traversal-file-name
-  message: >-
-    Data from request is passed to a file name `$FILE`.
-    This is a path traversal vulnerability: https://owasp.org/www-community/attacks/Path_Traversal
-    To mitigate, consider using os.path.abspath or os.path.realpath or Path library.
-  metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    owasp: 'A1: Injection'
-    references:
-    - https://owasp.org/www-community/attacks/Path_Traversal
-    category: security
-    technology:
-    - django
-  patterns:
-  - pattern-inside: |
-      def $F(...):
-        ...
-  - pattern-not-inside: |
-      def $F(...):
-        ...
-        os.path.realpath(...)
-        ...
-  - pattern-not-inside: |
-      def $F(...):
-        ...
-        os.path.abspath(...)
-        ...
-  - pattern-either:
-        # match % use cases
-    - pattern: |
-        $V = request.$W.get($X)
-        ...
-        $FILE % ($V)
-    - pattern: |
-        $V = request.$W[$X]
-        ...
-        $FILE % ($V)
-    - pattern: |
-        $V = request.$W($X)
-        ...
-        $FILE % ($V)
-    - pattern: |
-        $V = request.$W
-        ...
-        $FILE % ($V)
-        # match format use cases
-    - pattern: |
-        $V = request.$W.get($X)
-        ...
-        $FILE.format(..., $V, ...)
-    - pattern: |
-        $V = request.$W[$X]
-        ...
-        $FILE.format(..., $V, ...)
-    - pattern: |
-        $V = request.$W($X)
-        ...
-        $FILE.format(..., $V, ...)
-    - pattern: |
-        $V = request.$W
-        ...
-        $FILE.format(..., $V, ...)
-  - metavariable-regex:
-      metavariable: $FILE
-      regex: .*\.(log|zip|txt|csv|xml|html).*
-  languages: [python]
-  severity: WARNING
+  - id: path-traversal-file-name
+    message: >-
+      Data from request is passed to a file name `$FILE`. 
+      This is a path traversal vulnerability, which can lead to sensitive data being leaked. 
+      To mitigate, consider using os.path.abspath or os.path.realpath or the pathlib library.
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A1: Injection"
+      references:
+        - https://owasp.org/www-community/attacks/Path_Traversal
+      category: security
+      technology:
+        - django
+    patterns:
+      - pattern-inside: |
+          def $F(...):
+            ...
+      - pattern-not-inside: |
+          def $F(...):
+            ...
+            os.path.realpath(...)
+            ...
+      - pattern-not-inside: |
+          def $F(...):
+            ...
+            os.path.abspath(...)
+            ...
+      - pattern-either:
+          # match % use cases
+          - pattern: |
+              $V = request.$W.get($X)
+              ...
+              $FILE % ($V)
+          - pattern: |
+              $V = request.$W[$X]
+              ...
+              $FILE % ($V)
+          - pattern: |
+              $V = request.$W($X)
+              ...
+              $FILE % ($V)
+          - pattern: |
+              $V = request.$W
+              ...
+              $FILE % ($V)
+              # match format use cases
+          - pattern: |
+              $V = request.$W.get($X)
+              ...
+              $FILE.format(..., $V, ...)
+          - pattern: |
+              $V = request.$W[$X]
+              ...
+              $FILE.format(..., $V, ...)
+          - pattern: |
+              $V = request.$W($X)
+              ...
+              $FILE.format(..., $V, ...)
+          - pattern: |
+              $V = request.$W
+              ...
+              $FILE.format(..., $V, ...)
+      - metavariable-regex:
+          metavariable: $FILE
+          regex: .*\.(log|zip|txt|csv|xml|html).*
+    languages: [python]
+    severity: WARNING

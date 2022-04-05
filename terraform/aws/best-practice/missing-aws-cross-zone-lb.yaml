@@ -1,0 +1,37 @@
+rules:
+- id: missing-aws-cross-zone-lb
+  patterns:
+    - pattern-either:
+      - pattern: |
+          resource "aws_lb" $ANYTHING {
+            ...
+            load_balancer_type = ...
+            ...
+          }
+      - pattern: |
+          resource "aws_alb" $ANYTHING {
+            ...
+            load_balancer_type = ...
+            ...
+          }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          enable_cross_zone_load_balancing = true
+          ...
+        }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          load_balancer_type = "application"
+          ...
+        }
+  message: >-
+    The AWS cross zone load balancing is not enabled.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - aws

@@ -1,0 +1,24 @@
+rules:
+  - id: missing-api-gateway-cache-cluster
+    severity: WARNING
+    languages: [hcl]
+    message: >-
+      Found a AWS API Gateway Stage without cache cluster enabled.
+      Enabling the cache cluster feature enhances responsiveness of your API.
+      Add `cache_cluster_enabled = true` to your resource block.
+    metadata:
+      category: best-practice
+      technology:
+        - aws
+        - terraform
+    patterns:
+      - pattern: |
+          resource "aws_api_gateway_stage" $ANYTHING {
+            ...
+          }
+      - pattern-not-inside: |
+          resource "aws_api_gateway_stage" $ANYTHING {
+            ...
+            cache_cluster_enabled = true
+            ...
+          }

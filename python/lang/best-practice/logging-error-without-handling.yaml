@@ -1,0 +1,33 @@
+rules:
+  - id: logging-error-without-handling
+    patterns:
+      - pattern-inside: |
+          try:
+            ...
+          except ...:
+            ...
+          ...
+      - pattern-either:
+          - pattern: |
+              logger.$FUNC(...)
+              ...
+              raise
+          - pattern: |
+              logger.$FUNC(...)
+              ...
+              raise $EX
+          - pattern: |
+              logger.$FUNC(...)
+              ...
+              raise $EX from $EX2
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (error|exception)
+    message: Errors should only be logged when handled. The code logs the error and propogates the exception, consider reducing the level to warning or info.
+    languages:
+      - python
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - python

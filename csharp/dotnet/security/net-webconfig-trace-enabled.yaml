@@ -1,0 +1,26 @@
+rules:
+- id: net-webconfig-trace-enabled
+  patterns:
+  - pattern: |
+      <trace ... enabled = "true" ... />
+  - pattern-inside: |
+      <system.web>
+        ...
+      </system.web>
+  message: >-
+    OWASP guidance recommends disabling tracing for production applications to prevent accidental leakage of sensitive application information.
+  languages: [generic]
+  severity: WARNING
+  paths:
+    include:
+      - "*web.config*"
+  metadata: 
+    category: security
+    cwe: "CWE-1323: Improper Management of Sensitive Trace Data"
+    owasp: 'A5: Security Misconfiguration'
+    technology:
+      - .net
+    confidence: HIGH
+    references:
+      - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#asp-net-web-forms-guidance
+      - https://msdn.microsoft.com/en-us/library/e8z01xdh.aspx

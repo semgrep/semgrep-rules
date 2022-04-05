@@ -1,55 +1,45 @@
-# Configuration for probot-stale - https://github.com/probot/stale
+#
+# Stalebot configuration file.
+# https://github.com/probot/stale
+#
+# Derived from https://github.com/returntocorp/semgrep/blob/cfe5b63516f3e91d0687093ae6b4a6c6f07e63cf/.github/stale.yml
+#
+# We use stalebot as follows:
+# - it reminds us to prioritize issues that don't have a priority:* label
+# - it applies the `stale` label on issues that need prioritizing
+#
+# This allows us to filter issues by priority.
+# Issues aren't automatically closed.
+#
 
-# Number of days of inactivity before an Issue or Pull Request becomes stale
-daysUntilStale: 60
-
-# Number of days of inactivity before an Issue or Pull Request with the stale label is closed.
-# Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
-daysUntilClose: 7
-
-# Only issues or pull requests with all of these labels are check if stale. Defaults to `[]` (disabled)
-onlyLabels: []
-
-# Set to true to ignore issues in a project (defaults to false)
-exemptProjects: false
-
-# Set to true to ignore issues in a milestone (defaults to false)
-exemptMilestones: false
-
-# Set to true to ignore issues with an assignee (defaults to false)
-exemptAssignees: false
-
-# Label to use when marking as stale
+# Label to use when marking an issue as stale
 staleLabel: stale
 
-# Comment to post when marking as stale. Set to `false` to disable
-markComment: >
-  This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed if no further activity occurs. Thank you
-  for your contributions.
+# Comment to post when closing a stale issue. Set to `false` to disable
+closeComment: Stale-bot has closed this stale item. Please reopen it if this is in error.
 
-# Comment to post when removing the stale label.
-# unmarkComment: >
-#   Your comment here.
+pulls:
+  daysUntilStale: 14
+  #  daysUntilClose: 7
+  markComment: >-
+    This pull request is being marked `stale` because there hasn't
+    been any activity in 14 days.
 
-# Comment to post when closing a stale Issue or Pull Request.
-# closeComment: >
-#   Your comment here.
-
-# Limit the number of actions per hour, from 1-30. Default is 30
-limitPerRun: 30
-
-# Limit to only `issues` or `pulls`
-# only: issues
-
-# Optionally, specify configuration settings that are specific to just 'issues' or 'pulls':
-# pulls:
-#   daysUntilStale: 30
-#   markComment: >
-#     This pull request has been automatically marked as stale because it has not had
-#     recent activity. It will be closed if no further activity occurs. Thank you
-#     for your contributions.
-
-# issues:
-#   exemptLabels:
-#     - confirmed
+issues:
+  daysUntilStale: 14
+  #  daysUntilClose: 7
+  #
+  # Any label that shows the issue was prioritized and doesn't imply urgency:
+  exemptLabels:
+    - priority:low
+    - planned-project
+    - tech-debt
+    - bug
+    - actionable-low
+    - actionable-med
+  markComment: >-
+    This issue is being marked `stale` because there hasn't been any
+    activity in 14 days and either it wasn't prioritized or its priority
+    is high.
+    Please apply the `priority:low` label or one of the other exempt
+    labels listed in `.github/stale.yml` if the issue is not urgent.

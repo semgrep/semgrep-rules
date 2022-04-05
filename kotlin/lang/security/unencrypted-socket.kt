@@ -36,7 +36,7 @@ public class UnencryptedSocket {
         doGetRequest(soc2)
     }
 
-    fun doGetRequest(Socket soc): Void {
+    fun doGetRequest(soc: Socket): Void {
         System.out.println("")
         soc.close()
     }

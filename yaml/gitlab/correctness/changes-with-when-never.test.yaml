@@ -1,0 +1,26 @@
+.bad_sast_template_cz_rules:
+  rules:
+    #ruleid: changes-with-when-never
+    - changes:
+        - .somefile
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - if: $CI_MERGE_REQUEST_IID
+      when: always
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: always
+
+.good_sast_template_cz_rules:
+  rules:
+    #ok: changes-with-when-never
+    - if: $CI_MERGE_REQUEST_IID
+      changes:
+        - .somefile
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - if: $CI_MERGE_REQUEST_IID
+      when: always
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: always

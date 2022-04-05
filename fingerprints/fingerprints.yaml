@@ -1,0 +1,826 @@
+rules:
+  - id: cai-generic-technology-docker-compose
+    languages:
+      - generic
+    message:
+      Detected a docker-compose.yml file. This likely indicates that Docker and
+      docker-compose are in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - docker-compose.yml
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-generic-technology-dockerfile
+    languages:
+      - generic
+    message: Detected a Dockerfile file. This likely indicates that Docker is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - Dockerfile
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-generic-technology-kubernetes
+    languages:
+      - generic
+    message:
+      Detected a Kubernetes configuration file. This likely indicates that Kubernetes
+      is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.yaml"
+        - "*.yml"
+    pattern: "apiVersion: ...\nkind: ...\nmetadata:\n  ...\nspec:\n  ...\n"
+    severity: INVENTORY
+  - id: cai-generic-technology-travis
+    languages:
+      - generic
+    message:
+      Detected a .travis.yml file. This likely indicates that TravisCI is in
+      use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - .travis.yml
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-generic-technology-circleci
+    languages:
+      - generic
+    message: Detected a CircleCI file. This likely indicates that CircleCI is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - .circleci/config.yml
+        - circle.yml
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-generic-technology-github-actions
+    languages:
+      - generic
+    message:
+      Detected a Github Actions file. This likely indicates that Github Actions
+      is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - .github/workflows/*.yaml
+        - .github/workflows/*.yml
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-generic-technology-gitlab
+    languages:
+      - generic
+    message: Detected a GitLab file. This likely indicates that GitLab is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - .gitlab-ci.yml
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-java-dependency-spring
+    languages:
+      - generic
+    message: "Detected `spring`  as a dependency in a pom.xml file.
+
+      This likely indicates that Spring framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - pom.xml
+    patterns:
+      - pattern:
+          "<dependency>\n    ...\n    <artifactId>spring-...</artifactId>\n   \
+          \ ...\n</dependency>\n"
+      - pattern-not-inside: "<exclusion>\n    ...\n</exclusion>\n"
+    severity: INVENTORY
+  - id: cai-java-framework-spring
+    languages:
+      - java
+    message:
+      Detected `spring` being imported, indicating this app uses the Java spring
+      web framework
+    metadata:
+      license: Semgrep Registry License
+    pattern: "import org.springframework.$PATH;
+
+      "
+    severity: INVENTORY
+  - id: cai-javascript-dependency-angular-core-yarn
+    languages:
+      - generic
+    message: "Detected `angular-core` as a dependency in a yarn.lock file.
+
+      This likely indicates that Angular frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: "@angular/core@$VERSION"
+      - pattern: "@angular/core@^$VERSION"
+      - pattern: "@angular/core@~$VERSION"
+      - pattern: "@angular/core@>$VERSION"
+      - pattern: "@angular/core@<$VERSION"
+      - pattern: "@angular/core@>=$VERSION"
+      - pattern: "@angular/core@<=$VERSION"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-angular-core
+    languages:
+      - json
+    message: "Detected `angular-core` as a dependency in a package.json file.
+
+      This likely indicates that Angular frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"@angular/core\"\
+              : $VERSION\n  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"@angular/core\"\
+              : $VERSION\n  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-angular-yarn
+    languages:
+      - generic
+    message: "Detected `angular` as a dependency in a yarn.lock file.
+
+      This likely indicates that Angular frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: angular@$VERSION
+      - pattern: angular@^$VERSION
+      - pattern: angular@~$VERSION
+      - pattern: angular@>$VERSION
+      - pattern: angular@<$VERSION
+      - pattern: angular@>=$VERSION
+      - pattern: angular@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-angular
+    languages:
+      - json
+    message: "Detected `angular` as a dependency in a package.json file.
+
+      This likely indicates that Angular frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"angular\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"angular\": $VERSION\n\
+              \  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-vue-yarn
+    languages:
+      - generic
+    message: "Detected `vue` as a dependency in a yarn.lock file.
+
+      This likely indicates that vue - a JS MVC framework. is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: vue@$VERSION
+      - pattern: vue@^$VERSION
+      - pattern: vue@~$VERSION
+      - pattern: vue@>$VERSION
+      - pattern: vue@<$VERSION
+      - pattern: vue@>=$VERSION
+      - pattern: vue@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-vue
+    languages:
+      - json
+    message: "Detected `vue` as a dependency in a package.json file.
+
+      This likely indicates that vue - a JS MVC framework. is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"vue\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"vue\": $VERSION\n\
+              \  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-expressjs-yarn
+    languages:
+      - generic
+    message: "Detected `expressjs` as a dependency in a yarn.lock file.
+
+      This likely indicates that NodeJS web framework Express JS is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: express@$VERSION
+      - pattern: express@^$VERSION
+      - pattern: express@~$VERSION
+      - pattern: express@>$VERSION
+      - pattern: express@<$VERSION
+      - pattern: express@>=$VERSION
+      - pattern: express@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-expressjs
+    languages:
+      - json
+    message: "Detected `expressjs` as a dependency in a package.json file.
+
+      This likely indicates that NodeJS web framework Express JS is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"express\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"express\": $VERSION\n\
+              \  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-jsonwebtoken-yarn
+    languages:
+      - generic
+    message: "Detected `jsonwebtoken` as a dependency in a yarn.lock file.
+
+      This likely indicates that JWT is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: jsonwebtoken@$VERSION
+      - pattern: jsonwebtoken@^$VERSION
+      - pattern: jsonwebtoken@~$VERSION
+      - pattern: jsonwebtoken@>$VERSION
+      - pattern: jsonwebtoken@<$VERSION
+      - pattern: jsonwebtoken@>=$VERSION
+      - pattern: jsonwebtoken@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-jsonwebtoken
+    languages:
+      - json
+    message: "Detected `jsonwebtoken` as a dependency in a package.json file.
+
+      This likely indicates that JWT is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"jsonwebtoken\":\
+              \ $VERSION\n  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"jsonwebtoken\"\
+              : $VERSION\n  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-pug-yarn
+    languages:
+      - generic
+    message: "Detected `pug` as a dependency in a yarn.lock file.
+
+      This likely indicates that Pug template engine is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: pug@$VERSION
+      - pattern: pug@^$VERSION
+      - pattern: pug@~$VERSION
+      - pattern: pug@>$VERSION
+      - pattern: pug@<$VERSION
+      - pattern: pug@>=$VERSION
+      - pattern: pug@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-pug
+    languages:
+      - json
+    message: "Detected `pug` as a dependency in a package.json file.
+
+      This likely indicates that Pug template engine is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"pug\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"pug\": $VERSION\n\
+              \  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-puppeteer-yarn
+    languages:
+      - generic
+    message: "Detected `puppeteer` as a dependency in a yarn.lock file.
+
+      This likely indicates that headless-browser is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: puppeteer@$VERSION
+      - pattern: puppeteer@^$VERSION
+      - pattern: puppeteer@~$VERSION
+      - pattern: puppeteer@>$VERSION
+      - pattern: puppeteer@<$VERSION
+      - pattern: puppeteer@>=$VERSION
+      - pattern: puppeteer@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-puppeteer
+    languages:
+      - json
+    message: "Detected `puppeteer` as a dependency in a package.json file.
+
+      This likely indicates that headless-browser is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"puppeteer\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"puppeteer\":\
+              \ $VERSION\n  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-dependency-react-yarn
+    languages:
+      - generic
+    message: "Detected `react` as a dependency in a yarn.lock file.
+
+      This likely indicates that React frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - yarn.lock
+    pattern-either:
+      - pattern: react@$VERSION
+      - pattern: react@^$VERSION
+      - pattern: react@~$VERSION
+      - pattern: react@>$VERSION
+      - pattern: react@<$VERSION
+      - pattern: react@>=$VERSION
+      - pattern: react@<=$VERSION
+    severity: INVENTORY
+  - id: cai-javascript-dependency-react
+    languages:
+      - json
+    message: "Detected `react` as a dependency in a package.json file.
+
+      This likely indicates that React frontend framework is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - package.json
+    patterns:
+      - pattern-either:
+          - pattern:
+              "{\n  ...,\n  \"dependencies\": {\n    ...,\n    \"react\": $VERSION\n\
+              \  }\n}\n"
+          - pattern:
+              "{\n  ...,\n  \"devDependencies\": {\n    ...,\n    \"react\": $VERSION\n\
+              \  }\n}\n"
+    severity: INVENTORY
+  - id: cai-javascript-framework-expressjs
+    languages:
+      - javascript
+    message:
+      Detected `express` being required and used, meaning this app uses the ExpressJS
+      web framework.
+    metadata:
+      license: Semgrep Registry License
+    pattern: 'var $IMPORT = require("express");
+
+      ...
+
+      var $APP = $IMPORT();
+
+      '
+    severity: INVENTORY
+  - id: cai-python-dependency-boto
+    languages:
+      - generic
+    message: "Detected `boto` as a dependency in a requirements.txt file.
+
+      This likely indicates that AWS SDK for Python is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    pattern-regex: boto([3|core])*
+    severity: INVENTORY
+  - id: cai-python-dependency-django
+    languages:
+      - generic
+    message: "Detected `django` as a dependency in a requirements.txt file.
+
+      This likely indicates that Detected `django` as a dependency in a requirements.txt
+      file. This likely indicates that the Python web framework Django is being used.
+      is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    pattern-regex: "[d|D]jango"
+    severity: INVENTORY
+  - id: cai-python-dependency-fastapi
+    languages:
+      - generic
+    message: "Detected `fastapi` as a dependency in a requirements.txt file.
+
+      This likely indicates that Python web framework FastAPI is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    pattern-regex: fastapi
+    severity: INVENTORY
+  - id: cai-python-dependency-flask
+    languages:
+      - generic
+    message: "Detected `flask` as a dependency in a requirements.txt file.
+
+      This likely indicates that Detected `flask` as a dependency in a requirements.txt
+      file. This likely indicates that the Python web framework Flask is being used.
+      is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    patterns:
+      - pattern-regex: "[Ff]lask"
+      - pattern-not-regex: "[Ff]lask-"
+      - pattern-not-regex: -[Ff]lask
+    severity: INVENTORY
+  - id: cai-python-dependency-jinja
+    languages:
+      - generic
+    message: "Detected `jinja` as a dependency in a requirements.txt file.
+
+      This likely indicates that Jinja template engine is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    pattern-regex: "[Jj]inja"
+    severity: INVENTORY
+  - id: cai-python-dependency-sqlalchemy
+    languages:
+      - generic
+    message: "Detected `sqlalchemy` as a dependency in a requirements.txt file.
+
+      This likely indicates that database is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - requirements.txt
+        - requirements.in
+        - setup.py
+    pattern-regex: "[Ss][Qq][Ll][Aa]lchemy"
+    severity: INVENTORY
+  - id: cai-python-framework-django
+    languages:
+      - python
+    message:
+      Detected `django.http` being imported, indicating this app uses the Python
+      Django web framework
+    metadata:
+      license: Semgrep Registry License
+    pattern: "import django.http.$FOO
+
+      "
+    severity: INVENTORY
+  - id: cai-python-framework-flask
+    languages:
+      - python
+    message:
+      Detected `Flask()` being instantiated, indicating this app uses the Python
+      Flask web framework
+    metadata:
+      license: Semgrep Registry License
+    pattern: "$FLASK = Flask(...)
+
+      "
+    severity: INVENTORY
+  - id: cai-ocaml-technology-opam
+    languages:
+      - generic
+    message: Detected a OPAM file. This likely indicates OCaml and OPAM are being used.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.opam"
+    pattern-regex: ^.*
+    severity: INVENTORY
+  - id: cai-ocaml-technology-dune
+    languages:
+      - generic
+    message: Detected a dune file. This likely indicates OCaml and dune are being used.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - dune
+        - dune-project
+    pattern-regex: ^.*
+    severity: INVENTORY
+  - id: cai-ruby-dependency-rails
+    languages:
+      - generic
+    message: "Detected `rails` as a dependency in a Gemfile file.
+
+      This likely indicates that Ruby web framework Rails is being used."
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - Gemfile
+    pattern-regex: gem ['"]rails
+    severity: INVENTORY
+  - id: cai-ruby-framework-rails
+    languages:
+      - ruby
+    message:
+      Detected a rails route being created, indicating this app uses the Ruby
+      rails web framework
+    metadata:
+      license: Semgrep Registry License
+    pattern: "Rails.application.routes.draw do \n  ...\nend\n"
+    severity: INVENTORY
+  - id: cai-generic-technology-nginx
+    languages:
+      - generic
+    message: Detected a .conf file. This likely indicates that Nginx is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.conf"
+    pattern: "location ... {\n  ...\n  ...\n  ...\n}\n"
+    severity: INVENTORY
+  - id: cai-hcl-technology-terraform
+    languages:
+      - generic
+    message: Detected a .tf file. This likely indicates that Terraform is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.tf"
+    pattern: "terraform {\n  ...\n  ...\n  ...\n}\n"
+    severity: INVENTORY
+  - id: cai-shell-technology-bash
+    languages:
+      - generic
+    message: Detected a bash script. This likely indicates bash is being used.
+    metadata:
+      license: Semgrep Registry License
+    pattern-either:
+      - pattern: "#!/bin/bash"
+      - pattern: "#!/usr/bin/env ... bash"
+    severity: INVENTORY
+  - id: cai-shell-technology-sh
+    languages:
+      - generic
+    message: Detected a sh script. This likely indicates sh is being used.
+    metadata:
+      license: Semgrep Registry License
+    pattern-either:
+      - pattern: "#!/bin/sh"
+      - pattern: "#!/usr/bin/env ... sh"
+    severity: INVENTORY
+  - id: cai-c-technology-c
+    languages:
+      - generic
+    message: Detected a .c file. This likely indicates C is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.c"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-csharp-technology-csharp
+    languages:
+      - generic
+    message: Detected a .cs file. This likely indicates C is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.cs"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-go-technology-go
+    languages:
+      - generic
+    message: Detected a .go file. This likely indicates Go is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.go"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-html-technology-html
+    languages:
+      - generic
+    message: Detected a .html file. This likely indicates html is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.html"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-java-technology-java
+    languages:
+      - generic
+    message: Detected a .java file. This likely indicates Java is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.java"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-javascript-technology-javascript
+    languages:
+      - generic
+    message: Detected a .js file. This likely indicates JavaScript is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.js"
+        - "*.javascript"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-kotlin-technology-kotlin
+    languages:
+      - generic
+    message: Detected a .kt file. This likely indicates Kotlin is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.kt"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-ocaml-technology-ocaml
+    languages:
+      - generic
+    message: Detected a .ml file. This likely indicates Ocaml is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.ml"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-php-technology-php
+    languages:
+      - generic
+    message: Detected a .php file. This likely indicates PHP is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.phtml"
+        - "*.php"
+        - "*.php3"
+        - "*.php4"
+        - "*.php5"
+        - "*.phps"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-python-technology-python
+    languages:
+      - generic
+    message: Detected a .py file. This likely indicates py is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.py"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-ruby-technology-ruby
+    languages:
+      - generic
+    message: Detected a .rb file. This likely indicates Ruby is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.rb"
+        - "*.erb"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-scala-technology-scala
+    languages:
+      - generic
+    message: Detected a .scala file. This likely indicates Scala is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.scala"
+        - "*.sc"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-terraform-technology-terraform
+    languages:
+      - generic
+    message: Detected a .tf file. This likely indicates Terraform is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.tf"
+    pattern-regex: ^.
+    severity: INVENTORY
+  - id: cai-typescript-technology-typescript
+    languages:
+      - generic
+    message: Detected a .ts file. This likely indicates TypeScript is in use.
+    metadata:
+      license: Semgrep Registry License
+    paths:
+      include:
+        - "*.ts"
+        - "*.typescript"
+    pattern-regex: ^.
+    severity: INVENTORY

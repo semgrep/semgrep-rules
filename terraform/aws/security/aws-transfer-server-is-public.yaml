@@ -1,0 +1,26 @@
+rules:
+- id: aws-transfer-server-is-public
+  patterns:
+  - pattern: | 
+      resource "aws_transfer_server" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_transfer_server" $ANYTHING {
+        ...
+        endpoint_type = "VPC"
+        ...
+      }
+  message: >-
+    Transfer Server endpoint type should not have public or null configured in order to block public access. To fix this, set your `endpoint_type` to
+    `"VPC"`.
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+  languages: [hcl]
+  severity: WARNING

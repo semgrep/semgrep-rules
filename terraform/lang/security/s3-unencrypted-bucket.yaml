@@ -1,0 +1,29 @@
+rules:
+  - id: s3-unencrypted-bucket
+    patterns:
+      - pattern: |
+          bucket = "..."
+      - pattern-inside: |
+          resource "aws_s3_bucket" "..." {
+            ...
+          }
+      - pattern-not-inside: |
+          resource "aws_s3_bucket" "..." {
+            ...
+            server_side_encryption_configuration {
+              ...
+            }
+          }
+    languages:
+      - hcl
+    severity: INFO
+    message: S3 bucket without encryption at rest detected.
+    metadata:
+      references:
+        - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#server_side_encryption_configuration
+        - https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html
+      cwe: "CWE-311: Missing Encryption of Sensitive Data"
+      category: security
+      technology:
+        - terraform
+        - aws

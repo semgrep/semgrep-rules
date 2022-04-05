@@ -1,37 +1,37 @@
 rules:
-- id: useless-inner-function
-  patterns:
-  - pattern-not-inside: |
-      def $F(...):
-          ...
-          def $FF(...):
-             ...
-          ...
-          <... $FF ...>
-  - pattern-not-inside: |
-      def $F(...):
-          ...
-          class $CLAZZ(...):
+  - id: useless-inner-function
+    patterns:
+      - pattern-not-inside: |
+          def $F(...):
+              ...
+              def $FF(...):
+                 ...
+              ...
+              <... $FF ...>
+      - pattern-not-inside: |
+          def $F(...):
+              ...
+              class $CLAZZ(...):
+                ...
+      - pattern-inside: |
+          def $F(...):
             ...
-  - pattern-inside: |
-      def $F(...):
-        ...
-        def $FF(...):
-           ...
-        ...
-  - pattern: |
-      def $FF(...):
-        ...
-  - pattern-not: |
-      @$DECORATOR
-      def $FF(...):
-        ...
-  message: function `$FF` is defined inside a function but never used
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: maintainability
-    technology:
-    - python
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+            def $FF(...):
+               ...
+            ...
+      - pattern: |
+          def $FF(...):
+            ...
+      - pattern-not: |
+          @$DECORATOR
+          def $FF(...):
+            ...
+    message: function `$FF` is defined inside a function but never used
+    languages:
+      - python
+    severity: ERROR
+    metadata:
+      category: maintainability
+      technology:
+        - python
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]

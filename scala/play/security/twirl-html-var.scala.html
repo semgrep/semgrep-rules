@@ -1,0 +1,32 @@
+@(foobar: String, value: String)
+
+@main("Temp") {
+
+  <div>
+    <p>
+      <!-- ruleid: twirl-html-var -->
+      Hello world: @Html(value)
+    </p>
+    <p>
+      <!-- ruleid: twirl-html-var -->
+      Hello world: @Html("<div>" + value + "</div>")
+    </p>
+    <p>
+      <!-- ruleid: twirl-html-var -->
+      Hello world: @Html("<br />" + value)
+    </p>
+    <p>
+      <!-- ruleid: twirl-html-var -->
+      Hello world: @Html(value + "<br />")
+    </p>
+    <p>
+      <!-- ok: twirl-html-var -->
+      Hello world: @Html("<div>Hardcoded text</div>")
+    </p>
+    <p>
+      <!-- ok: twirl-html-var -->
+      Hello world: @Html("<div>" + "Hardcoded text" + "</div>")
+    </p>
+  </div>
+
+}

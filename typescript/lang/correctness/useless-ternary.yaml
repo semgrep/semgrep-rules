@@ -1,0 +1,15 @@
+rules:
+  - id: useless-ternary
+    pattern: |
+      $CONDITION ? $ANS : $ANS
+    message:
+      It looks like no matter how $CONDITION is evaluated, this expression returns $ANS. This is probably a copy-paste
+      error.
+    languages:
+      - ts
+      - js
+    metadata:
+      category: correctness
+      technology:
+        - react
+    severity: ERROR

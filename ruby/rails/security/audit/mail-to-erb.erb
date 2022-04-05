@@ -1,0 +1,11 @@
+// ruleid: mail-to-erb
+<%= mail_to user.email, user.name, :encode => :javascript %>
+// ruleid: mail-to-erb
+<%= mail_to user.email, user.name, :encode => :javascript, :replace_at => :_at_ %>
+// ok: mail-to-erb
+<%= mail_to user.email, user.name, :encode => :hex %>
+// ok: mail-to-erb
+<%= mail_to escape_javascript(user.email),
+escape_javascript(user.name), :encode => :javascript %>
+// ok: mail-to-erb
+<%= mail_to "domain", "email", :encode => :javascript %>

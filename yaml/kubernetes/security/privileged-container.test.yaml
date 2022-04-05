@@ -4,16 +4,16 @@ spec:
   # ruleid: privileged-container
   privileged: true
   containers:
-  # ruleid: privileged-container
-  - name: nginx
-    image: nginx
-    securityContext:
-      privileged: true
-  # ok: privileged-container
-  - name: postgres
-    image: postgres
-  # ok: privileged-container
-  - name: redis
-    image: redis
-    securityContext:
-      privileged: false
+    # ruleid: privileged-container
+    - name: nginx
+      image: nginx
+      securityContext:
+        privileged: true
+    # ok: privileged-container
+    - name: postgres
+      image: postgres
+    # ok: privileged-container
+    - name: redis
+      image: redis
+      securityContext:
+        privileged: false

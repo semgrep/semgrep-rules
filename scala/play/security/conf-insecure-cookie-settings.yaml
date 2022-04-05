@@ -1,0 +1,32 @@
+rules:
+- id: conf-insecure-cookie-settings
+  patterns:
+    - pattern: secure = false
+    - pattern-inside: |
+        session = {
+          ...
+        }
+  message: >-
+    Session cookie `Secure` flag is explicitly disabled.
+    The `secure` flag for cookies prevents the client from transmitting
+    the cookie over insecure channels such as HTTP.  Set the `Secure`
+    flag by setting `secure` to `true` in configuration file.
+  languages:
+    - generic
+  severity: WARNING
+  paths:
+    include:
+      - "*.conf"
+  metadata:
+    category: security
+    references:
+      - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#security
+      - https://www.playframework.com/documentation/2.8.x/SettingsSession#Session-Configuration
+    technology:
+      - play
+      - scala
+    cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    owasp:
+      - A06:2017 - Security Misconfiguration
+      - A05:2021 - Security Misconfiguration
+    confidence: MEDIUM

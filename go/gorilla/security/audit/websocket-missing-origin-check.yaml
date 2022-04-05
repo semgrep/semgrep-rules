@@ -1,0 +1,32 @@
+rules:
+  - id: websocket-missing-origin-check
+    patterns:
+      - pattern-inside: |
+          import ("github.com/gorilla/websocket")
+          ...
+      - patterns:
+          - pattern-not-inside: |
+              $UPGRADER = websocket.Upgrader{..., CheckOrigin: $FN ,...}
+              ...
+          - pattern-not-inside: |
+              $UPGRADER.CheckOrigin = $FN2
+              ...
+          - pattern: |
+              $UPGRADER.Upgrade(...)
+    message: >-
+      The Origin header in the HTTP WebSocket handshake is used to guarantee that the
+      connection accepted by the WebSocket is from a trusted origin domain. Failure to enforce can
+      lead to Cross Site Request Forgery (CSRF). As per "gorilla/websocket" documentation: "A CheckOrigin 
+      function should carefully validate the request origin to prevent cross-site request forgery."
+    languages: [go]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp:
+      - 'A05:2021 - Security Misconfiguration'
+      references:
+        - https://pkg.go.dev/github.com/gorilla/websocket#Upgrader
+      technology:
+        - gorilla
+      confidence: MEDIUM

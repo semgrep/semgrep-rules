@@ -1,0 +1,42 @@
+rules:
+  - id: appservice-authentication-enabled
+    message: >-
+      Enabling authentication ensures that all communications in the application are authenticated.
+      The `auth_settings` block needs to be filled out with the appropriate auth backend settings
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+            auth_settings {
+              ...
+              enabled = true
+              ...
+            }
+          ...
+          }
+      - pattern-either:
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+              }
+          - pattern-inside: |
+              resource "azurerm_app_service" "..." {
+              ...
+                auth_settings {
+                  ...
+                  enabled = false
+                  ...
+                }
+              ...
+              }
+
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - azure
+      references:
+        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#auth_settings
+    languages: [hcl]
+    severity: ERROR

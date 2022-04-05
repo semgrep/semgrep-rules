@@ -62,8 +62,8 @@ def ex7(request):
 def ex8(request):
   env = request.POST.get('env')
   user_name = request.POST.get('user_name')
-  # todoruleid: tainted-url-host
   url = "https://{}/{}/age"
+  # ruleid: tainted-url-host
   user_age = requests.get(url.format(env, user_name))
   return HttpResponse(user_age)
 

@@ -1,0 +1,17 @@
+rules:
+- id: useless-compare
+  patterns:
+  - pattern-either:
+    - pattern: compare $X $X
+    - pattern: $MODULE.compare $X $X
+
+  message: >-
+    This comparison is useless because the expressions being compared
+    are identical. This is expected to always return the same result,
+    0, unless your code is really strange.
+  languages: [ocaml]
+  severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - ocaml

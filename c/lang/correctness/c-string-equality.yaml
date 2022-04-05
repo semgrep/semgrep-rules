@@ -1,11 +1,18 @@
 rules:
-- id: c-string-equality
-  pattern: (char *$X) == (char *$Y)
-  message: Using == on char* performs pointer comparison, use strcmp instead
-  fix: strcmp($X, $Y) == 0
-  languages: [c]
-  severity: ERROR
-  metadata:
-    category: correctness
-    technology:
-    - c
+  - id: c-string-equality
+    patterns:
+      - pattern: (char *$X) == (char *$Y)
+      - metavariable-comparison:
+          metavariable: $X
+          comparison: $X != 0
+      - metavariable-comparison:
+          metavariable: $Y
+          comparison: $Y != 0
+    message: Using == on char* performs pointer comparison, use strcmp instead
+    fix: strcmp($X, $Y) == 0
+    languages: [c]
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - c

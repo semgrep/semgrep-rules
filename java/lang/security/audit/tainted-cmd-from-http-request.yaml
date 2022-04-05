@@ -1,0 +1,54 @@
+rules:
+  - id: tainted-cmd-from-http-request 
+    message: >-
+      Detected input from a HTTPServletRequest going into a 'ProcessBuilder' or 'exec' command. 
+      This could lead to command injection if variables passed into the exec commands are not properly sanitized. 
+      Instead, avoid using these OS commands with user-supplied input, or, if you must use these commands, use a whitelist of specific values.
+    languages: [java]
+    severity: ERROR
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+          - pattern: |
+              (ProcessBuilder $PB) = ...;
+          - pattern: |
+              (Process $P) = ...;
+          - patterns: # used in the case that commands are added to an argument list along with a user-inputted parameter and then executed. also a hack similar to line 15.
+            - pattern-either: 
+              - pattern-inside: |
+                  (java.util.List<$TYPE> $ARGLIST) = ...;  
+                  ...
+                  (ProcessBuilder $PB) = ...;
+                  ...
+                  $PB.command($ARGLIST);
+              - pattern-inside: |
+                  (java.util.List<$TYPE> $ARGLIST) = ...;  
+                  ...
+                  (ProcessBuilder $PB) = ...;
+              - pattern-inside: |
+                  (java.util.List<$TYPE> $ARGLIST) = ...;  
+                  ...
+                  (Process $P) = ...;
+            - pattern: |
+                $ARGLIST.add(...);
+    metadata:
+      category: security
+      technology:
+        - java
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')" 
+      owasp: "A01: Injection"

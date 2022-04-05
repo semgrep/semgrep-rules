@@ -1,20 +1,20 @@
 rules:
-- id: react-legacy-component
-  patterns:
-  - pattern: |
-      $METHOD(...) {
-        ...
-      }
-  - metavariable-regex:
-      metavariable: $METHOD
-      regex: componentWillMount|componentWillReceiveProps|componentWillUpdate
-  message: >-
-    Legacy component lifecycle was detected - $METHOD.
-  languages:
-  - typescript
-  - javascript
-  severity: WARNING
-  metadata:
-    category: best-practice
-    technology:
-    - react
+  - id: react-legacy-component
+    patterns:
+      - pattern: |
+          $METHOD(...) {
+            ...
+          }
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: componentWillMount|componentWillReceiveProps|componentWillUpdate
+    message: >-
+      Legacy component lifecycle was detected - $METHOD.
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - react
