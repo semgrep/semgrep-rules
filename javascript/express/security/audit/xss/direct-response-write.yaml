@@ -34,5 +34,6 @@ rules:
       - pattern-not: $RES.write("...")
       - pattern-not: $RES.send("...")
       - pattern-either:
-          - pattern: $RES.write(...)
-          - pattern: $RES.send(...)
+          - pattern: $RES.write($ARG)
+          - pattern: $RES.send($ARG)
+    fix: $RES.render($ARG)
