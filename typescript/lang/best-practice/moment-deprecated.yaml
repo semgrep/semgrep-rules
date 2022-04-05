@@ -1,0 +1,17 @@
+rules:
+- id: moment-deprecated
+  pattern: |
+    import 'moment'
+  message: Moment is a legacy project in maintenance mode. Consider using libraries that are actively supported, e.g. `dayjs`.
+  languages:
+  - ts
+  - js
+  severity: INFO
+  metadata:
+    category: best-practice
+    technology:
+    - moment
+    - dayjs
+    references:
+    - 'https://momentjs.com/docs/#/-project-status/'
+    - 'https://day.js.org/'
