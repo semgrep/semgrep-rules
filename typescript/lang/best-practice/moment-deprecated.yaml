@@ -1,16 +1,17 @@
 rules:
 - id: moment-deprecated
-  pattern-either:
-  - pattern: import $MOMENT from 'moment';
-  - pattern: import { $MOMENT } from 'moment';
-  message: Do not use moment, please replace with dayjs.
+  pattern: |
+    import 'moment'
+  message: Moment is a legacy project in maintenance mode. Consider using libraries that are actively supported, e.g. `dayjs`.
   languages:
   - ts
   - js
-  severity: WARNING
+  severity: INFO
   metadata:
     category: best-practice
     technology:
+    - moment
     - dayjs
     references:
-    - https://day.js.org/
+    - 'https://momentjs.com/docs/#/-project-status/'
+    - 'https://day.js.org/'
