@@ -1,0 +1,43 @@
+rules:
+- id: scalajs-eval
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $PARAM
+    - pattern-either:
+      - pattern-inside: |
+          def $CTRL(..., $PARAM: $TYPE, ...) = {
+            ...
+          }
+      - pattern-inside: |
+          def $CTRL(..., $PARAM: $TYPE, ...) = $A {
+            ...
+          }
+      - pattern-inside: |
+          def $CTRL(..., $PARAM: $TYPE, ...) = $A(...) {
+            ...
+          }
+  pattern-sinks:
+  - patterns:
+    - pattern: $JS.eval(...)
+    - pattern-inside: |
+        import scala.scalajs.$X
+        ...
+  message: >-
+    `eval()` function evaluates JavaScript code represented as a string. Executing JavaScript from a string is an enormous security risk.
+    It is far too easy for a bad actor to run arbitrary code when you use `eval()`.
+    Do not use eval(). Alternatively: 
+    Ensure evaluated content is not definable by external sources.
+    If it’s not possible, strip everything except alphanumeric characters from an input provided for the command string and arguments.
+  metadata:
+    references:
+      - https://www.scala-js.org/doc/
+    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp: "A1: Injection"
+    category: security
+    technology:
+      - scala
+      - scala-js
+    confidence: HIGH
+  languages: [scala]
+  severity: WARNING

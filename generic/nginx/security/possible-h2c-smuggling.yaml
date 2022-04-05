@@ -35,6 +35,12 @@ rules:
       To mitigate:
       WebSocket support required: Allow only the value websocket for HTTP/1.1 upgrade headers (e.g., Upgrade: websocket).
       WebSocket support not required: Do not forward Upgrade headers.
+    paths:
+      include:
+        - "*.conf"
+        - "*.vhost"
+        - sites-available/*
+        - sites-enabled/*
     metadata:
       references:
         - https://labs.bishopfox.com/tech-blog/h2c-smuggling-request-smuggling-via-http/2-cleartext-h2c
