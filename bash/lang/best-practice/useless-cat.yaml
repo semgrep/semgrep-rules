@@ -1,0 +1,27 @@
+rules:
+- id: useless-cat
+  pattern-either:
+  - pattern: |
+      cat | ...
+  - patterns:
+    - pattern: |
+        cat $ARG | ...
+    - pattern-not: |
+        cat ${$SEVERAL_FILES} | ...
+  - pattern: |
+      ... | cat
+  - pattern: |
+      ... | cat | ...
+  # TODO: autofix, once we support $...ARGS
+  message: >-
+    Useless call to 'cat' in a pipeline. Use '<' and '>' for any command
+    to read from a file or write to a file.
+  metadata:
+    references:
+    - https://github.com/koalaman/shellcheck/wiki/SC2002
+    category: best-practice
+    technology:
+    - bash
+  severity: WARNING
+  languages:
+  - bash
