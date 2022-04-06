@@ -3,17 +3,12 @@ rules:
     message: >-
       Ensure web app is using the latest version of TLS encryption
     patterns:
-      - pattern: resource
-      - pattern-not-inside: |
-          resource "azurerm_app_service" "..." {
-          ...
-          }
+      - pattern: |
+          "1.1"
+      - pattern-inside: min_tls_version = ...
       - pattern-inside: |
-          resource "azurerm_app_service" "..." {
+          $RESOURCE "azurerm_app_service" "..." {
           ...
-          site_config {
-            min_tls_version = "1.1"
-          }
           }
     metadata:
       owasp:
