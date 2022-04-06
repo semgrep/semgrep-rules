@@ -1,10 +1,12 @@
 rules:
 - id: insufficient-rsa-key-size
-  message: |
+  message: >-
       The RSA key size $SIZE is insufficent by NIST standards. It is recommended to use a key length of 2048 or higher.
   languages: [ruby]
   severity: WARNING
   metadata:
+    technology:
+        - ruby
     category: security
     references: |
       - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
