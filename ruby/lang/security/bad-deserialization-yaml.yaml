@@ -1,0 +1,38 @@
+rules:
+  - id: bad-deserialization-yaml
+    patterns:
+      - pattern: |
+          YAML.load($...ARGS)
+      - pattern-not: |
+          YAML.load(..., safe: true, ...)
+      - pattern-not: |
+          YAML.load("...", ...)
+      - pattern-not-inside: |
+          $FILE = File.read("...", ...)
+          ...
+          YAML.load(..., $FILE, ...)
+      - pattern-not-inside: |
+          $FILENAME = "..."
+          ...
+          $FILE = File.read($FILENAME, ...)
+          ...
+          YAML.load(..., $FILE, ...)
+      - pattern-not-inside: |
+          YAML.load(..., File.read("...", ...), ...)
+    fix: Psych.safe_load($...ARGS)
+    message: >-
+      Unsafe deserialization from YAML. Objects in Ruby can be serialized into strings,
+      then later loaded from strings. However, uses of load and object_load can cause remote code execution.
+      Loading user input with YAML can potentially be dangerous. Use JSON in a secure fashion instead.
+      However, loading YAML from a static file is not dangerous and should not be flagged.
+    metadata:
+      references:
+        - https://groups.google.com/g/rubyonrails-security/c/61bkgvnSGTQ/m/nehwjA8tQ8EJ
+        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_deserialize.rb
+      category: security
+      technology:
+        - ruby
+        - yaml
+    languages:
+      - ruby
+    severity: ERROR
