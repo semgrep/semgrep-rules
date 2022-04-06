@@ -3,31 +3,40 @@ module Test
     require 'openssl'
 
     class Test
-        @pass = 'pass phrase goes here1'
+        $pass = 'super secret'
 
-        def assign(key = nil, iv = nil)
+        def initialize(key = nil, iv = nil)
 			@pass1 = 'my secure pass phrase goes here'
+			@keypem = 'foo.pem'
 			#ruleid: hardcoded-secret-rsa-passphrase
 			OpenSSL::PKey::RSA.new(1024).to_pem(cipher, "secret")
+			bad
+			bad1
+			bad2
+			bad3
+			ok
         end
 
 
 		def bad
-			key_pem = File.read @fileWithKeyName
+			key_pem = File.read @keypem
 			#ruleid: hardcoded-secret-rsa-passphrase
-			key = OpenSSL::PKey::RSA.new key_pem, @pass
+			key = OpenSSL::PKey::RSA.new key_pem, $pass
 		end
 
 		def bad1
-			key_pem = File.read @fileWithKeyName
+			key_pem = File.read @keypem
             #ruleid: hardcoded-secret-rsa-passphrase
 			key = OpenSSL::PKey::RSA.new key_pem, @pass1
+			$bad0 = 'secret'
 		end
 
         def bad2
-			key_pem = File.read @fileWithKeyName
+			key_pem = File.read @keypem
             #ruleid: hardcoded-secret-rsa-passphrase
 			key = OpenSSL::PKey::RSA.new key_pem, 'secret'
+			#ruleid: hardcoded-secret-rsa-passphrase
+			key = OpenSSL::PKey::RSA.new key_pem, $bad0
 		end
 
 		def bad3 
@@ -40,23 +49,15 @@ module Test
 			  #ruleid: hardcoded-secret-rsa-passphrase
 			  io.write ca_key.export(cipher, pass_phrase)
 			  #ruleid: hardcoded-secret-rsa-passphrase
-			  io.write ca_key.export(cipher, @pass)
+			  io.write ca_key.export(cipher, $pass)
 			  #ruleid: hardcoded-secret-rsa-passphrase
 			  io.write ca_key.export(cipher, @pass1)
 			end
 		end 
 
         def ok
-			key_pem = File.read @fileWithKeyName
+			key_pem = File.read @keypem
             #ok: hardcoded-secret-rsa-passphrase
 			key = OpenSSL::PKey::RSA.new key_pem, ENV['SECRET']
 		end
-
-		def bad_intrafunction
-		pass2 = 'omgsosekrit'
-		key_pem = File.read @fileWithKeyName
-        #ruleid: hardcoded-secret-rsa-passphrase
-		key = OpenSSL::PKey::RSA.new key_pem, pass2
-    end
-
 end

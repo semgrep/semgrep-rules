@@ -5,8 +5,6 @@ rules:
   languages: [ruby]
   severity: WARNING
   metadata:
-    technology:
-        - ruby
     category: security
     references: 
       - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
@@ -29,7 +27,9 @@ rules:
                       ...
                       end
                       ...
-                  - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)
+                  - pattern-either:
+                      - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)
+                      - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)
               - patterns:
                   - pattern-inside: |
                       def $METHOD1(...)
@@ -42,29 +42,9 @@ rules:
                       ...
                       end
                       ...
-                  - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)  
-              - patterns:
-                  - pattern-inside: |
-                      $ASSIGN = $SIZE
-                      ...
-                      def $METHOD(...)
-                      ...
-                      end
-                      ...
-                  - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)
-              - patterns:
-                  - pattern-inside: |
-                      def $METHOD1(...)
-                      ...
-                      $ASSIGN = $SIZE
-                      ...
-                      end
-                      ...
-                      def $METHOD2(...)
-                      ...
-                      end
-                      ...
-                  - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)  
+                  - pattern-either:
+                      - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)
+                      - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)
   - metavariable-comparison:
       metavariable: $SIZE
       comparison: $SIZE < 2048
