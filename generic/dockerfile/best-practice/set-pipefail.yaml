@@ -1,7 +1,7 @@
 rules:
   - id: set-pipefail
     languages:
-      - generic
+      - dockerfile 
     message: >-
       Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.
       If you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL ["/bin/bash", "-o", "pipefail", "-c"] before the command.
@@ -13,18 +13,12 @@ rules:
       category: best-practice
       technology:
         - dockerfile
-    paths:
-      include:
-        - "*dockerfile*"
-        - "*Dockerfile*"
     patterns:
-      - pattern: RUN $CMD ... | $CMD2
+      - pattern: RUN $CMD ... | $CMD2 ...
       - pattern-not-inside: |
-          SHELL [... "pipefail" ...]
-          ...
+          SHELL [..., "pipefail", ...]
           ...
       - pattern-not-inside: |
-          SHELL ["/bin/ash" ...]
-          ...
+          SHELL ["/bin/ash", ...]
           ...
     severity: WARNING
