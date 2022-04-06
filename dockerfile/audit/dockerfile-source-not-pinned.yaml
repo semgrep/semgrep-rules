@@ -11,9 +11,10 @@ rules:
       - pattern: FROM $IMAGE
       - pattern: FROM $IMAGE:$VERSION
       - pattern-not-inside: FROM $IMAGE:$VERSION@$HASH
-  message: To ensure reproducible builds, pin Dockerfile `FROM` commands to a specific
-    hash. You can find the hash by running `docker pull $IMAGE` and then specify it
-    with `$IMAGE:$VERSION@sha256:<hash goes here>`
+  message: >- 
+    To ensure reproducible builds, pin Dockerfile `FROM` commands to a specific
+    hash. You can find the hash by running `docker pull $IMAGE` and then 
+    specify it with `$IMAGE:$VERSION@sha256:<hash goes here>`
   fix: FROM $IMAGE:$VERSION@sha256:$HASH
   languages:
   - dockerfile
