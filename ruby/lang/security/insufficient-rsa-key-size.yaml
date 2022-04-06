@@ -1,0 +1,68 @@
+rules:
+- id: insufficient-rsa-key-size
+  message: |
+      The RSA key size $SIZE is insufficent by NIST standards. It is recommended to use a key length of 2048 or higher.
+  languages: [ruby]
+  severity: WARNING
+  metadata:
+    category: security
+    references: |
+      - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
+    cwe:
+      - "CWE-326: Inadequate Encryption Strength"
+    owasp:
+      - "A02:2021 - Cryptographic Failures"
+      - "A03:2017 - Sensitive Data Exposure"
+  patterns:
+  - pattern-either:
+      - pattern: OpenSSL::PKey::RSA.generate($SIZE,...)
+      - pattern: OpenSSL::PKey::RSA.new($SIZE, ...)
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      $ASSIGN = $SIZE
+                      ...
+                      def $METHOD(...)
+                      ...
+                      end
+                      ...
+                  - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)
+              - patterns:
+                  - pattern-inside: |
+                      def $METHOD1(...)
+                      ...
+                      $ASSIGN = $SIZE
+                      ...
+                      end
+                      ...
+                      def $METHOD2(...)
+                      ...
+                      end
+                      ...
+                  - pattern: OpenSSL::PKey::RSA.new($ASSIGN, ...)  
+              - patterns:
+                  - pattern-inside: |
+                      $ASSIGN = $SIZE
+                      ...
+                      def $METHOD(...)
+                      ...
+                      end
+                      ...
+                  - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)
+              - patterns:
+                  - pattern-inside: |
+                      def $METHOD1(...)
+                      ...
+                      $ASSIGN = $SIZE
+                      ...
+                      end
+                      ...
+                      def $METHOD2(...)
+                      ...
+                      end
+                      ...
+                  - pattern: OpenSSL::PKey::RSA.generate($ASSIGN, ...)  
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 2048
