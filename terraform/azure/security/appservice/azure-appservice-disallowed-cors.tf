@@ -1,5 +1,4 @@
 # fail
-# ruleid: azure-appservice-disallowed-cors
 resource "azurerm_app_service" "example" {
     name                = "example-app-service"
     location            = azurerm_resource_group.example.location
@@ -10,6 +9,7 @@ resource "azurerm_app_service" "example" {
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
     cors {
+        # ruleid: azure-appservice-disallowed-cors
         allowed_origins = ["*"]
     }
     }
