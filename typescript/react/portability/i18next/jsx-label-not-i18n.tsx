@@ -11,7 +11,7 @@ return <TextField
 // ruleid: jsx-label-not-i18n
 return <Tab label="Organization" value="1" />;
 
-// ok
+// ok: jsx-label-not-i18n
 return <TextField
     id="outlined-basic"
     label={t('extra-amount')}
@@ -20,7 +20,7 @@ return <TextField
     value={text}
     onChange={e => setText(e.target.value)}
     />;
-// ok
+// ok: jsx-label-not-i18n
 return <TextField
     id="outlined-basic"
     label=""
@@ -29,7 +29,7 @@ return <TextField
     value={text}
     onChange={e => setText(e.target.value)}
     />;
-// ok
+// ok: jsx-label-not-i18n
 return <TextField
     id="outlined-basic"
     label="13"
@@ -38,7 +38,7 @@ return <TextField
     value={text}
     onChange={e => setText(e.target.value)}
     />;
-// ok
+// ok: jsx-label-not-i18n
 return <TextField
     id="outlined-basic"
     label="13200.34"
@@ -65,7 +65,7 @@ return <TextField
     value={text}
     onChange={e => setText(e.target.value)}
     />;
-// ok
+// ok: jsx-label-not-i18n
 return <TextField
     id="outlined-basic"
     label="14%"
@@ -75,17 +75,17 @@ return <TextField
     onChange={e => setText(e.target.value)}
     />;
 
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label={t('fundraising.organization')} value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="" value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="123" value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="123.50" value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="123,50" value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="123-50" value="1" />;
-// ok
+// ok: jsx-label-not-i18n
 return <Tab label="123%" value="1" />;
