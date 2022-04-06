@@ -13,6 +13,7 @@ rules:
       allow an attacker to load an run arbitrary code, or access arbitrary files.
     patterns:
       - pattern: require($OBJ)
+      - pattern-not: require(process.env.$ENVVAR)
       - pattern-not: require('...')
     severity: WARNING
     languages:
