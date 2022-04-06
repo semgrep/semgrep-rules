@@ -1,0 +1,10 @@
+rules:
+- id: test-semgrep-rules-test
+  paths:
+    include:
+    - semgrep-rules.test.yml
+  pattern: print("...")
+  message: Semgrep found a match
+  languages:
+  - yaml
+  severity: WARNING
