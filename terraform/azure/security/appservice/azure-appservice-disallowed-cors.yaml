@@ -1,28 +1,22 @@
 rules:
-  - id: azure-appservice-disallowed-cors
-    message: >-
-      Ensure that CORS disallows every resource to access app services
-    patterns:
-      - pattern: resource
-      - pattern-not-inside: |
-          resource "azurerm_app_service" "..." {
-          ...
-          }
-      - pattern-inside: |
-          resource "azurerm_app_service" "..." {
-          ...
-          cors {
-            allowed_origins = ["*"]
-          }
-          ...
-          }
-    metadata:
+- id: azure-appservice-disallowed-cors
+  patterns:
+    - pattern: |
+        ["*"]
+    - pattern-inside: allowed_origins = ...
+    - pattern-inside: |
+        $RESOURCE "azurerm_app_service" "..." {
+        ...
+        }
+  message: Ensure that CORS disallows every resource to access app services
+  languages: [hcl]
+  severity: WARNING
+  metadata: 
       owasp:
-      - A05:2021 - Security Misconfiguration
-      cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+        - A05:2021 - Security Misconfiguration
+      cwe: "CWE-942: Permissive Cross-domain Policy with Untrusted Domains"
       category: security
       technology:
         - terraform
         - azure
-    languages: [hcl]
-    severity: WARNING
+ 
