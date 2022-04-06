@@ -4,6 +4,18 @@ rules:
     - pattern: |
         $SOCK.shutdown(socket.$A)
         $SOCK.close()
+    - pattern-not-inside: |
+        try:
+            ...
+        except ...:
+            ...
+            $SOCK.close()
+    - pattern-not-inside: |
+        try:
+            ...
+        finally:
+            ...
+            $SOCK.close()
   message: >-
       Socket is not closed if shutdown fails. When socket.shutdown fails on an
       OSError, socket.close is not called and the code fails to clean up the socket

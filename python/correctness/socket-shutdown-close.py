@@ -71,3 +71,37 @@ except OSError:
 # ok: socket-shutdown-close
 logging.shutdown()
 logging.close()
+
+# close is called after all
+sock = socket.socket(af, socktype, proto)
+
+try:
+    # ok: socket-shutdown-close
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
+except OSError:
+    sock.close()
+
+try:
+    # ok: socket-shutdown-close
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
+    pass
+except OSError:
+    pass
+    sock.close()
+    pass
+
+try:
+    # ok: socket-shutdown-close
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
+except:
+    sock.close()
+
+try:
+    # ok: socket-shutdown-close
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
+finally:
+    sock.close()
