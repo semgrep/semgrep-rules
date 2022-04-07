@@ -4,6 +4,8 @@ rules:
       - pattern-either:
           - pattern: FROM $IMAGE
       - pattern-not: FROM $IMAGE:$VERSION
+      - pattern-not: FROM $IMAGE@$DIGEST
+      - pattern-not: FROM $IMAGE:$VERSION@$DIGEST
     message: >-
       Images should be tagged with an explicit version to produce
       deterministic container images.
