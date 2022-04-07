@@ -1,39 +1,10 @@
-name: semgrep-rule-lints
-
-on:
-  pull_request:
-  push:
-    branches: [develop]
-
-jobs:
-  semgrep:
-    runs-on: ubuntu-latest
-    name: semgrep-rule-lints
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9.2
-      - name: install semgrep
-        run: pip3 install semgrep
-      - name: lints for semgrep rules
-        run: |
-          semgrep \
-            --error \
-            --config yaml/semgrep/duplicate-id.yaml \
-            --config yaml/semgrep/duplicate-pattern.yaml \
-            --config yaml/semgrep/unsatisfiable.yaml \
-            --config yaml/semgrep/metadata-cwe.yaml \
-            --config yaml/semgrep/metadata-owasp.yaml \
-            --config yaml/semgrep/metadata-references.yaml \
-            --config yaml/semgrep/empty-message.yaml \
-            --config yaml/semgrep/missing-message-field.yaml \
-            --config yaml/semgrep/missing-language-field.yaml \
-            --config yaml/semgrep/metadata-technology.yaml \
-            --config yaml/semgrep/metadata-category.yaml \
-            --config yaml/semgrep/multi-line-message.yaml \
-            --config yaml/semgrep/slow-pattern-top-ellipsis.yaml \
-            --exclude *.test.yaml \
-            --exclude contrib/ \
-            --exclude stats/ \
-            --exclude fingerprints/
+rules:
+- id: test-semgrep-rules-test
+  paths:
+    include:
+    - semgrep-rules.test.yml
+  pattern: print("...")
+  message: Semgrep found a match
+  languages:
+  - yaml
+  severity: WARNING
