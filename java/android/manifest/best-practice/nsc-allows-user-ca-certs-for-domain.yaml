@@ -1,0 +1,36 @@
+rules:
+- id: nsc-allows-user-ca-certs-for-domain
+  languages:
+  - generic
+  message: >-
+    The Network Security Config is set to accept user-installed CAs for the
+    domain `$DOMAIN`.
+    Evaluate if this is necessary for your app, and disable it if appropriate.
+    (To hide this warning, set `xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AcceptsUserCertificates"` as parameters to your
+    `<network-security-config>`)
+  metadata:
+    category: best-practice
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    technology:
+    - android
+    references:
+    - https://developer.android.com/training/articles/security-config
+    - https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/
+  patterns:
+  - pattern: |
+      <certificates src="user" ... />
+  - pattern-inside: |
+      <trust-anchors> ... </trust-anchors>
+  - pattern-inside: |
+      <domain-config ... > ... <domain ...> $DOMAIN </domain> ... </domain-config>
+  - pattern-not-inside: |
+      <!-- ... -->
+     # If the config explicitly tells us not to check for user CAs, respect that
+      # (on a best-effort basis due to limitations of how much you can glob in generic parser mode)
+  - pattern-not-inside: |
+      <network-security-config ... AcceptsUserCertificates ... > ... </network-security-config>
+  severity: WARNING
+  paths:
+    include:
+    - '*.xml'

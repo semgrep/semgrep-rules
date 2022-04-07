@@ -1,0 +1,28 @@
+rules:
+  - id: manifest-usesCleartextTraffic-true
+    languages:
+      - generic
+    message: >-
+      The Android manifest is configured to allow non-encrypted connections.
+      Evaluate if this is necessary for your app, and disable it if appropriate.
+      This flag is ignored on Android 7 (API 24) and above if a Network Security
+      Config is present.
+    metadata:
+      category: best-practice
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      technology:
+        - android
+      references:
+        - https://developer.android.com/guide/topics/manifest/application-element#usesCleartextTraffic
+        - https://developer.android.com/training/articles/security-config
+    patterns:
+      - pattern: |
+          android:usesCleartextTraffic="true"
+      - pattern-not-inside: |
+          <!-- ... -->
+    fix: |
+          android:usesCleartextTraffic="false"
+    severity: INFO
+    paths:
+      include:
+        - "*.xml"

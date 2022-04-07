@@ -1,0 +1,39 @@
+rules:
+- id: nsc-pinning-without-backup
+  languages:
+  - generic
+  message: >-
+    Your app uses TLS public key pinning without specifying a backup key.
+    If you are forced to change TLS keys or CAs on short notice, not
+    having a backup pin can lead to connectivity issues until you can push
+    out an update. It is considered best practice to add at least one additional
+    pin as a backup.
+  metadata:
+    category: best-practice
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    technology:
+    - android
+    references:
+    - https://developer.android.com/training/articles/security-config#CertificatePinning
+    - https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/
+  patterns:
+      # FIXME: This check will currently not detect cases where there are two pins
+      # listed, but one of them is inside a <!-- comment --> - these will be recognized
+      # as having two or more pins. I don't think detecting these cases while not falsely
+      # detecting cases where there are three pins, but the middle one is commented out,
+      # is possible using the generic parser - this would require a specialized XML parser
+      # that has knowledge about comments etc.
+  - pattern: |
+      <pin ...>...</pin>
+  - pattern-not-inside: |
+      <pin ...>...</pin>...<pin ...>...</pin>
+  - pattern-inside: |
+      <pin-set ...> ... ... </pin-set>
+  - pattern-inside: |
+      <domain-config ... > ... ... ... ... ... </domain-config>
+  - pattern-not-inside: |
+      <!-- ... -->
+  severity: INFO
+  paths:
+    include:
+    - '*.xml'
