@@ -1,0 +1,17 @@
+rules:
+- id: Insecure Cryptography
+  patterns:
+  - pattern-inside: |
+      using System.Security.Cryptography;
+      ...
+  - pattern-either:
+    - pattern: DES $VAR = new DESCryptoServiceProvider();
+    - pattern: RC2CryptoServiceProvider $VAR = new RC2CryptoServiceProvider();
+    - pattern: TripleDESCryptoServiceProvider $VAR = new TripleDESCryptoServiceProvider();
+    - pattern: DESCryptoServiceProvider $VAR = new();
+    - pattern: RC2CryptoServiceProvider $VAR = new();
+    - pattern: MyTripleDESCryptoServiceProvider $VAR = new();
+  message: "The following code uses an insecure cryptographic algorithm \n"
+  languages:
+  - csharp
+  severity: WARNING
