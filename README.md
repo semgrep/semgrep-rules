@@ -47,7 +47,7 @@ The namespacing format for contributing rules is `<language>.<framework>.<catego
 - maintainability
 - performance
 
-If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), we recommended appending `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
+If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), we recommend appending `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
 
 <p align="center">
     <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />
