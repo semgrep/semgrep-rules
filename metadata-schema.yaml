@@ -1,0 +1,74 @@
+$schema: http://json-schema.org/draft-07/schema#
+schema:
+  allOf:
+  - type: object
+    required:
+    - references
+    - category
+    - technology
+    properties:
+      references:
+        type: array
+        items:
+        - type: string
+      category:
+        type: string
+        enum:
+        - security
+        - correctness
+        - best-practice
+        - maintainability
+        - portability
+        - performance
+        - accessibility
+      technology:
+        type: array
+        items:
+        - type: string
+      confidence:
+        type: string
+        enum:
+        - LOW
+        - MEDIUM
+        - HIGH
+        - VERY HIGH
+      owasp:
+        type:
+        - array
+        - string
+        items:
+        - type: string
+      cwe:
+        type:
+        - array
+        - string
+        items:
+        - type: string
+      source-rule-url:
+        type: string
+      asvs:
+        type: object
+        required:
+        - section
+        - control_id
+        - control_url
+        - version
+        properties:
+          section:
+            type: string
+          control_id:
+            type: string
+          control_url:
+            type: string
+          version:
+            type: string
+    if:
+      properties:
+        category:
+          const: security
+      required:
+      - category
+    then:
+      required:
+      - owasp
+      - cwe
