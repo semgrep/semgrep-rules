@@ -27,7 +27,7 @@ rules:
           const_get(...)
       - pattern-inside: |
           qualified_const_get(...)
-  message: Found potential denial of service via unsafe symbol conversion of a string.
+  message: Found user-controllable input to Ruby reflection functionality.  This allows a remote user to influence runtime behavior, up to and including arbitrary remote code execution. Do not provide user-controllable input to reflection functionality.
     Do not call symbol conversion on user-controllable input.
   languages:
   - ruby
