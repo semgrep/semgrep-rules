@@ -1,0 +1,23 @@
+rules:
+  - id: azure-mariadb-geo-backup-enabled
+    message: >-
+      Ensure that MariaDB server enables geo-redundant backups
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_mariadb_server" "..." {
+          ...
+          geo_redundant_backup_enabled = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_mariadb_server" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

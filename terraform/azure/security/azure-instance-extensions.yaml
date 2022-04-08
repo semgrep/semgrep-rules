@@ -1,0 +1,28 @@
+rules:
+  - id: azure-instance-extensions
+    message: >-
+      Ensure Virtual Machine Extensions are not Installed
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_linux_virtual_machine" "..." {
+          ...
+          allow_extension_operations = false
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_windows_virtual_machine" "..." {
+          ...
+          allow_extension_operations = false
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,22 @@
+rules:
+- id: azure-functionapp-disallow-cors
+  patterns:
+    - pattern: |
+        ["*"]
+    - pattern-inside: allowed_origins = ...
+    - pattern-inside: |
+        $RESOURCE "azurerm_function_app" "..." {
+        ...
+        }
+  message: Ensure that CORS disallows every resource to access Function app
+  languages: [hcl]
+  severity: WARNING
+  metadata: 
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      cwe: "CWE-942: Permissive Cross-domain Policy with Untrusted Domains"
+      category: security
+      technology:
+        - terraform
+        - azure
+ 

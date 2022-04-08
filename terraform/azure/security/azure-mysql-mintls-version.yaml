@@ -1,0 +1,23 @@
+rules:
+  - id: azure-mysql-mintls-version
+    message: >-
+      Ensure MySQL is using the latest version of TLS encryption
+    patterns:
+      - pattern: |
+          "TLS1_1"
+      - pattern-inside: ssl_minimal_tls_version_enforced = ...
+      - pattern-inside: |
+          $RESOURCE "azurerm_mysql_server" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      - A03:2017 - Sensitive Data Exposure
+      cwe: 'CWE-326: Inadequate Encryption Strength'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

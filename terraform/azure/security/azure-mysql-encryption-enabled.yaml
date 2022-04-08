@@ -1,0 +1,22 @@
+rules:
+  - id: azure-mysql-encryption-enabled
+    message: >-
+      Ensure that MySQL server enables infrastructure encryption
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_mysql_server" "..." {
+          ...
+          infrastructure_encryption_enabled = true
+          ...
+          }
+    metadata:
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      cwe: 'CWE-320: Key Management Errors'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING
