@@ -1,0 +1,16 @@
+rules:
+- id: fix-intent
+  patterns:
+  - pattern-inside: <$NAME ... intent={...} ... />
+  - pattern: Intent.$INTENT
+  message: do not use unnecessary Intent.PRIMARY, use "primary". It's more straightforward,
+    easier to use and doesn't confuse new-hires.
+  fix: $INTENT
+  languages:
+  - ts
+  - js
+  severity: ERROR
+  metadata:
+    technology:
+    - react
+    category: correctness
