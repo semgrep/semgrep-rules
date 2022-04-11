@@ -6,7 +6,7 @@
 
     o = Klass.new("hello\n")
     data = YAML.dump(o)
-    # ruleid: bad-deserialization
+    # ok: bad-deserialization
     obj = YAML.load(data)
 
     o = Klass.new("hello\n")

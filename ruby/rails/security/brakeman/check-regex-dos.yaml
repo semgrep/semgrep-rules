@@ -1,0 +1,48 @@
+rules:
+- id: check-regex-dos
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $X
+        - pattern-inside: |
+            def $F(...,$X,...)
+              ...
+            end
+      - patterns:
+        - pattern: $X
+        - pattern-inside: |
+            params[...]
+      - patterns:
+        - pattern: $Y
+        - pattern-inside: |
+            $RECORD.$Y
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $Y
+        - pattern-inside: |
+            /...#{...}.../
+      - patterns:
+        - pattern: $Y
+        - pattern-inside: |
+            Regexp.new(...)
+  message: >-
+    Found a potentially user-controllable argument in the construction of a regular expressions.
+    This may result in excessive resource consumption when applied to certain inputs, or when the user is allowed to control the match target.
+    Avoid allowing users to specify regular expressions processed by the server.
+    If you must support user-controllable input in a regular expression, use an allow-list to restrict the expressions users may supply to limit catastrophic backtracking.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_regex_dos.rb
+    category: security
+    cwe: 'CWE-1333: Inefficient Regular Expression Complexity'
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS

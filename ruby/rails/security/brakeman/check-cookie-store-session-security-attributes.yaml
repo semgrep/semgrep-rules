@@ -1,0 +1,35 @@
+rules:
+- id: check-cookie-store-session-security-attributes
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          :$KEY => false
+      - pattern-inside: |
+          ActionController::Base.session = {...}
+    - pattern: |
+        Rails3::Application.config.session_store :cookie_store, ..., :$KEY => false, ...
+    - pattern: |
+        Rails.application.config.session_store :cookie_store, ..., $KEY: false
+  - metavariable-regex:
+      metavariable: $KEY
+      regex: ^(session_)?(http_?only|secure)$
+  message: Found a Rails `cookie_store` session configuration setting the `$KEY` attribute
+    to `false`. If using a cookie-based session store, the HttpOnly and Secure flags
+    should be set.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_session_settings.rb
+    category: security
+    cwe:
+    - 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes
