@@ -21,98 +21,28 @@ rules:
       injection if variables in the SQL statement are not properly sanitized.
       Use a prepared statements (java.sql.PreparedStatement) instead. You
       can obtain a PreparedStatement using 'connection.prepareStatement'.
-    patterns:
-      - pattern-not: $W.execute(<... "=~/.*TABLE *$/" ...>);
-      - pattern-not: $W.execute(<... "=~/.*TABLE %s$/" ...>);
+    mode: taint
+    pattern-sources:
+    - patterns:
       - pattern-either:
-          - pattern: $W.execute($X + $Y, ...);
-          - pattern: |
-              String $SQL = $X + $Y;
-              ...
-              $W.execute($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += $Y;
-              ...
-              $W.execute($SQL, ...);
-          - pattern: $W.execute(String.format($X, ...), ...);
-          - pattern: |
-              String $SQL = String.format($X, ...);
-              ...
-              $W.execute($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += String.format(...);
-              ...
-              $W.execute($SQL, ...);
-          - pattern: $W.executeQuery($X + $Y, ...);
-          - pattern: |
-              String $SQL = $X + $Y;
-              ...
-              $W.executeQuery($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += $Y;
-              ...
-              $W.executeQuery($SQL, ...);
-          - pattern: $W.executeQuery(String.format($X, ...), ...);
-          - pattern: |
-              String $SQL = String.format($X, ...);
-              ...
-              $W.executeQuery($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += String.format(...);
-              ...
-              $W.executeQuery($SQL, ...);
-          - pattern: $W.createQuery($X + $Y, ...);
-          - pattern: |
-              String $SQL = $X + $Y;
-              ...
-              $W.createQuery($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += $Y;
-              ...
-              $W.createQuery($SQL, ...);
-          - pattern: $W.createQuery(String.format($X, ...), ...);
-          - pattern: |
-              String $SQL = String.format($X, ...);
-              ...
-              $W.createQuery($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += String.format(...);
-              ...
-              $W.createQuery($SQL, ...);
-          - pattern: $W.query($X + $Y, ...);
-          - pattern: |
-              String $SQL = $X + $Y;
-              ...
-              $W.query($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += $Y;
-              ...
-              $W.query($SQL, ...);
-          - pattern: $W.query(String.format($X, ...), ...);
-          - pattern: |
-              String $SQL = String.format($X, ...);
-              ...
-              $W.query($SQL, ...);
-          - pattern: |
-              String $SQL = $X;
-              ...
-              $SQL += String.format(...);
-              ...
-              $W.query($SQL, ...);
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns:
+          - pattern-inside: |
+              $ANNOT $FUNC (..., $INPUT, ...) {
+                ...
+              }
+          - pattern-either:
+            - pattern: (String $INPUT)
+            - pattern: String.format(..., (String $INPUT), ...)
+    pattern-sinks: 
+    - patterns:
+      - pattern-not: $W.$SQLFUNC(<... "=~/.*TABLE *$/" ...>)
+      - pattern-not: $W.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
+      - pattern: $W.$SQLFUNC(...)
+      - metavariable-regex:
+          metavariable: $SQLFUNC
+          regex: execute|executeQuery|createQuery|query
     severity: ERROR
     languages:
       - java
