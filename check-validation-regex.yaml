@@ -1,0 +1,32 @@
+rules:
+- id: check-validation-regex
+  mode: search
+  patterns:
+  - pattern-either:
+    - pattern: |
+        validates ..., :format => <... $V ...>,...
+    - pattern: |
+        validates_format_of ..., :with => <... $V ...>,...
+  - metavariable-regex:
+      metavariable: $V
+      regex: /(.{2}(?<!\\A)[^\/]+|[^\/]+(?<!\\[Zz]))\/
+  message: $V Found an incorrectly-bounded regex passed to `validates_format_of` or
+    `validate ... format => ...`. Ruby regex behavior is multiline by default and
+    lines should be terminated by `\A` for beginning of line and `\Z` for end of line,
+    respectively.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_validation_regex.rb
+    category: security
+    cwe: 'CWE-185: Incorrect Regular Expression'
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A05:2021 - Broken Access Control
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/aef6253a8b7bcb97116f2af1ed2a561a6ae35bd5/test/apps/rails3/app/models/account.rb
+    - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails3.1/app/models/account.rb
