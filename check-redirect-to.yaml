@@ -1,0 +1,39 @@
+rules:
+- id: check-redirect-to
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: params
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $Y
+        - pattern-inside: |
+            params.$M <... $Y ...>
+            ...
+      - pattern: |
+          redirect_to [...]
+  pattern-sinks:
+  - patterns:
+    - pattern: $X
+    - pattern-inside: |
+        redirect_to $X, ...
+    - pattern-not: |
+        params.to_unsafe_hash.$M(...,:only_path => true,...)
+    - pattern-not: |
+        params.to_unsafe_h.$M(...,:only_path => true,...)
+  message: Found potentially unsafe handling of redirect behavior $X. Do not pass
+    `params` to `redirect_to` without the `:only_path => true` hash value.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_redirect.rb
+    category: security
+    cwe: 'CCWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
