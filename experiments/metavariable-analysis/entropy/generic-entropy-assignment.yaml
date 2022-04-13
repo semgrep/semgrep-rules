@@ -2,10 +2,17 @@ rules:
   - id: generic-entropy-assignment
     patterns:
       - pattern: $A = $B
+      - metavariable-regex:
+          metavariable: $B
+          regex: ^\S+$
       - metavariable-analysis:
           analyzer: entropy
           metavariable: $B
     message: Found a high-entropy assignment to $A
     languages:
       - generic
+    metadata:
+      category: security
+      technology: 
+        - entropy
     severity: ERROR
