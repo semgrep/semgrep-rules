@@ -16,7 +16,6 @@ resource "azurerm_role_definition" "example" {
 }
 
 # fail
-# ruleid: azure-customrole-definition-subscription-owner
 resource "azurerm_role_definition" "example" {
     name        = "my-custom-role"
     scope       = data.azurerm_subscription.primary.id
@@ -34,7 +33,6 @@ resource "azurerm_role_definition" "example" {
 }
 
 # fail
-# ruleid: azure-customrole-definition-subscription-owner
 resource "azurerm_role_definition" "example" {
     name        = "my-custom-role"
     scope       = data.azurerm_subscription.primary.id
