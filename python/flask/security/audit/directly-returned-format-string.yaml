@@ -14,33 +14,48 @@ rules:
     languages:
       - python
     severity: WARNING
-    patterns:
-      - pattern-inside: |
-          @$APP.route(...)
-          def $FUNC(...):
-            ...
+    mode: taint
+    pattern-sources:
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            @$APP.route(...)
+            def $FUNC(..., $PARAM, ...):
+              ...
+        - pattern: $PARAM
+      - pattern: |
+          request.$FUNC.get(...)
+      - pattern: | 
+          request.$FUNC(...)
+      - pattern:
+          request.$FUNC[...]
+    pattern-sinks:
+    - patterns:
       - pattern-not-inside: return "..."
-      - pattern-either:
-          - pattern: return "...".format(...)
-          - pattern: return "..." % ...
-          - pattern: return "..." + ...
-          - pattern: return ... + "..."
-          - pattern: return f"...{...}..."
-          - patterns:
-              - pattern: return $X
-              - pattern-either:
-                  - pattern-inside: |
-                      $X = "...".format(...)
-                      ...
-                  - pattern-inside: |
-                      $X = "..." % ...
-                      ...
-                  - pattern-inside: |
-                      $X = "..." + ...
-                      ...
-                  - pattern-inside: |
-                      $X = ... + "..."
-                      ...
-                  - pattern-inside: |
-                      $X = f"...{...}..."
-                      ...
+      - pattern-either: 
+        - pattern: return "...".format(...)
+        - pattern: return "..." % ...
+        - pattern: return "..." + ...
+        - pattern: return ... + "..."
+        - pattern: return f"...{...}..."
+        - patterns:
+          - pattern: return $X
+          - pattern-either:
+              - pattern-inside: |
+                  $X = "...".format(...)
+                  ...
+              - pattern-inside: |
+                  $X = "..." % ...
+                  ...
+              - pattern-inside: |
+                  $X = "..." + ...
+                  ...
+              - pattern-inside: |
+                  $X = ... + "..."
+                  ...
+              - pattern-inside: |
+                  $X = f"...{...}..."
+                  ...
+          - pattern-not-inside: |
+              $X = "..."
+              ...

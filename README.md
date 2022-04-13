@@ -15,10 +15,6 @@ We recommend starting with `semgrep --config auto`. The `--config auto` flag wil
 
 Alternatively, you can start with a pre-selected subset of rules that has already been carefully tuned for precision. These subsets of rules, which we call rulesets, may include rules not present in this repository. However, they are available for free on the [Semgrep Registry](https://semgrep.dev/explore). These rules have been written by open-source contributors and r2c.
 
-The two most popular rulesets are:
-* `semgrep --config=p/ci` to find logic bugs and high-confidence security vulnerabilities; recommended for CI
-* `semgrep --config=p/security-audit` to find security audit points; noisy, recommended for manual scans
-
 If you are determined to drink from the firehose, you can also pull directly from the registry by specifying `r/<foldername.subfolder.etc>`. So to run all the Python Flask rules from the python/flask directory in this repo, just run:<br/>
 `semgrep --config=r/python.flask`
 
@@ -51,7 +47,7 @@ The namespacing format for contributing rules is `<language>.<framework>.<catego
 - maintainability
 - performance
 
-If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), we recommended appending `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
+If a `security` rule is discouraging the use of a bad pattern (such as formatted SQL strings), we recommend appending `audit` to your namespace. This distinguishes it from a `security` rule that is specifically aiming to detect a vulnerability.
 
 <p align="center">
     <img src="https://web-assets.r2c.dev/semgrep-live-namespacing.png" alt="semgrep.live rule namespace" width="500" />

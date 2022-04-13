@@ -1,0 +1,27 @@
+rules:
+  - id: set-pipefail
+    languages: [dockerfile]
+    message: >-
+      Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.
+      If you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL ["/bin/bash", "-o", "pipefail", "-c"] before the command.
+      If you're using alpine and don't have bash installed, communicate this explicitly with `SHELL ["/bin/ash"]`.
+    metadata:
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL4006
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4006
+      category: best-practice
+      technology:
+        - dockerfile
+    patterns:
+      - pattern-either:
+          - pattern: RUN ... | ...
+          - pattern: RUN ... || ...
+      - pattern-not-inside: |
+          SHELL [..., "pipefail", ...]
+          ...
+          RUN ... | ...
+      - pattern-not-inside: |
+          SHELL ["/bin/ash", ...]
+          ...
+          RUN ... | ...
+    severity: WARNING

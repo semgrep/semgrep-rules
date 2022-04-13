@@ -3,32 +3,46 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-          - pattern: $ARG
+          - pattern: $A
           - pattern-inside: |
-                public $T $M(...,string $ARG,...){...}
+              Path.Combine(...,$A,...)
+          - pattern-inside: |
+              public $TYPE $M(...,$A,...){...}
+          - pattern-not-inside: |
+              <... Path.GetFileName($A) != $A ...>
     pattern-sinks:
-      - patterns: 
-        - pattern: $ARG
-        - pattern-inside: |
-            Path.Combine(...)
-        - pattern-not-inside: |
-            Path.Combine(...,Path.GetFileName(...),...)
-    pattern-sanitizers:
       - patterns:
-        - pattern: $ARG
-        - pattern-either:
+          - pattern: $X
           - pattern-inside: |
-              $ARG = Path.GetFileName(...);
-              ...
+              File.$METHOD($X,...)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: (?i)^(read|write)
+    pattern-sanitizers:
+      - pattern: |
+          Path.GetFileName(...)
+      - patterns:
           - pattern-inside: |
-              <... Path.GetFileName(...) != $ARG ...>;
+              $X = Path.GetFileName(...);
               ...
-    message: String method argument $ARG passed to Path.Combine without sanitization via Path.GetFileName.  If user-supplied data is supplied this can lead to path traversal.
+          - pattern: $X
+      - patterns:
+          - pattern: $X
+          - pattern-inside: |
+              if(<... Path.GetFileName($X) != $X ...>){
+                ...
+                throw new $EXCEPTION(...);
+              }
+              ...
+    message: String argument $A is used to read or write data from a file via
+      Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied
+      data this can lead to path traversal.
     languages:
       - csharp
     severity: WARNING
     metadata:
       category: security
+      confidence: MEDIUM
       license: MIT
       references:
         - https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/
@@ -36,7 +50,8 @@ rules:
       technology:
         - .net
       cwe:
-        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory
+          ('Path Traversal')"
       owasp:
         - A05:2017 - Broken Access Control
-        - A01:2021 - Broken Access Control 
+        - A01:2021 - Broken Access Control

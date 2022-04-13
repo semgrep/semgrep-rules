@@ -1,0 +1,55 @@
+rules:
+- id: tainted-sql-string
+  languages: [java]
+  severity: ERROR
+  message: >-
+    Detected user input used to manually construct a SQL string. This is usually
+    bad practice because manual construction could accidentally result in a SQL
+    injection. An attacker could use a SQL injection to steal or modify contents
+    of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using an
+    object-relational mapper (ORM) such as Sequelize which will protect your queries.
+  metadata:
+    references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    category: security
+    owasp: "A1: Injection"
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    technology:
+    - aws-lambda
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          $HANDLERTYPE $HANDLER($TYPE $EVENT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
+            ...
+          }
+      - pattern-inside: |
+          $HANDLERTYPE $HANDLER(InputStream $EVENT, OutputStream $OUT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
+            ...
+          }
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          "$SQLSTR" + ...
+      - pattern: |
+          "$SQLSTR".concat(...)
+      - patterns:
+        - pattern-inside: |
+            StringBuilder $SB = new StringBuilder("$SQLSTR");
+            ...
+        - pattern: $SB.append(...)
+      - patterns:
+        - pattern-inside: |
+            $VAR = "$SQLSTR";
+            ...
+        - pattern: $VAR += ...
+      - pattern: String.format("$SQLSTR", ...)
+    - metavariable-regex:
+        metavariable: $SQLSTR
+        regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+    - pattern-not-inside: |
+        System.out.$PRINTLN(...)

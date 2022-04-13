@@ -15,7 +15,7 @@ rules:
     message:
       Possible Lookup injection into Log4j messages. Lookups provide a way to add values to the Log4j messages at arbitrary
       places. If the message parameter contains an attacker controlled string, the attacker could inject arbitrary lookups,
-      for instance '${java:runtime}'. This cloud lead to information disclosure or even remove code execution if 'log4j2.formatMsgNoLookups'
+      for instance '${java:runtime}'. This could lead to information disclosure or even remote code execution if 'log4j2.formatMsgNoLookups'
       is enabled. This was enabled by default until version 2.15.0.
     patterns:
       # Checks for error(...), warn(...), info(...), debug(...), fatal(...), trace(...), log(level, ...):

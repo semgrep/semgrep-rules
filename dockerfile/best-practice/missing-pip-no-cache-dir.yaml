@@ -1,0 +1,34 @@
+rules:
+  - id: missing-pip-no-cache-dir
+    severity: INFO
+    languages: [dockerfile]
+    patterns:
+      - patterns:
+          - pattern: |
+              RUN ... $PIP install ...
+          - pattern-not-inside: |
+              RUN ... $PIP install ... --no-cache-dir ...
+          - pattern-not-inside: |
+              RUN ... $PIP install . ...
+          - pattern-not-inside: |
+              ENV ... PIP_NO_CACHE_DIR=$BOOL ...
+              ...
+              RUN ... $PIP install ...
+          - pattern-not-inside: |
+              ENV ... PIP_NO_CACHE_DIR ...
+              ...
+              RUN ... $PIP install ...
+      - metavariable-regex:
+          metavariable: $PIP
+          regex: (pip|pip2|pip3|python -m pip|python3 -m pip)
+    message: >-
+      This '$PIP install' is missing '--no-cache-dir'. This flag prevents
+      package archives from being kept around, thereby reducing image size.
+      Add '--no-cache-dir'.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3042
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3042
+      category: best-practice
+      technology:
+        - dockerfile
