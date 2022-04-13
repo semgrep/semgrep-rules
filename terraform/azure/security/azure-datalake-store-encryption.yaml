@@ -4,14 +4,10 @@ rules:
       Ensure that Data Lake Store accounts enables encryption
     patterns:
       - pattern: resource
-      - pattern-not-inside: |
-          resource "azurerm_data_lake_store" "..." {
-          ...
-          encryption_state = "Enabled"
-          ...
-          }
       - pattern-inside: |
           resource "azurerm_data_lake_store" "..." {
+          ...
+          encryption_state = "Disabled"
           ...
           }
     metadata:
