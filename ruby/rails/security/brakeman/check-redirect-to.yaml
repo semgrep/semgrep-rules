@@ -2,27 +2,59 @@ rules:
 - id: check-redirect-to
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern: params
+    - patterns:
+        - pattern-either:
+            - pattern: params
+            - pattern: cookies
+            - pattern: request.env
+            - pattern: url_for(params[...],...,:only_path => false,...)
   pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern: $Y
-        - pattern-inside: |
-            params.$M <... $Y ...>
-            ...
-      - pattern: |
-          redirect_to [...]
+    - patterns:
+        - pattern-either:
+            - patterns:
+              - pattern: |
+                  $F(...)
+              - metavariable-pattern:
+                  metavariable: $F
+                  patterns:
+                      - pattern-not-regex: (params|url_for|cookies|request.env|permit|redirect_to)
+            - pattern: |
+                params.merge! :only_path => true
+                ...
+            - pattern: |
+                params.slice(...)
+                ...
+            - pattern: |
+                redirect_to [...]
+            - patterns:
+                - pattern: |
+                    $MODEL. ... .$M(...)
+                    ...
+                - metavariable-regex:
+                    metavariable: $MODEL
+                    regex: "[A-Z]\\w+"
+                - metavariable-regex:
+                    metavariable: $M
+                    regex: (all|create|find|find_by|find_by_sql|first|last|new|from|group|having|joins|lock|order|reorder|select|where|take)
+            - patterns:
+                - pattern: |
+                    params.$UNSAFE_HASH.merge(...,:only_path => true,...)
+                    ...
+                - metavariable-regex:
+                    metavariable: $UNSAFE_HASH
+                    regex: to_unsafe_h(ash)?
+            - patterns:
+                - pattern: params.permit(...,$X,...)
+                - metavariable-pattern:
+                    metavariable: $X
+                    patterns:
+                      - pattern-not-regex: (host|port|(sub)?domain)
   pattern-sinks:
-  - patterns:
-    - pattern: $X
-    - pattern-inside: |
-        redirect_to $X, ...
-    - pattern-not: |
-        params.to_unsafe_hash.$M(...,:only_path => true,...)
-    - pattern-not: |
-        params.to_unsafe_h.$M(...,:only_path => true,...)
+    - patterns:
+        - pattern: $X
+        - pattern-inside: |
+            redirect_to $X, ...
+        - pattern-not-regex: params\.\w+(?<!permit)\(.*?\)
   message: Found potentially unsafe handling of redirect behavior $X. Do not pass
     `params` to `redirect_to` without the `:only_path => true` hash value.
   languages:
