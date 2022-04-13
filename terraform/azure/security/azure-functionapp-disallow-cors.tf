@@ -1,5 +1,4 @@
 # fail
-# ruleid: azure-functionapp-disallow-cors
 resource "azurerm_function_app" "example" {
   name                       = "test-azure-functions"
   location                   = azurerm_resource_group.example.location
@@ -9,6 +8,7 @@ resource "azurerm_function_app" "example" {
   storage_account_access_key = azurerm_storage_account.example.primary_access_key
   site_config {
     cors {
+        # ruleid: azure-functionapp-disallow-cors
         allowed_origins = ["*"]
     }
   }
