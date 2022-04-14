@@ -1,0 +1,53 @@
+rules:
+  - id: pyramid-sqlalchemy-sql-injection
+    message: >-
+      Distinct, Having, Group_by, Order_by, and Filter in SQLAlchemy can
+      cause sql injections if the developer inputs raw SQL into the before-mentioned
+      clauses. This pattern captures relevant cases in which the developer inputs
+      raw SQL into the distinct, having, group_by, order_by or filter clauses and
+      injects user-input into the raw SQL with any function besides "bindparams".
+      Use bindParams to securely bind user-input to SQL statements.
+    languages:
+      - python
+    severity: ERROR
+    metadata:
+      category: security
+      cwe:
+        "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+        ('SQL Injection')"
+      owasp: "A1: Injection"
+      technology:
+        - pyramid
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              from pyramid.view import view_config
+              ...
+              @view_config( ... )
+              def $VIEW($REQ):
+                ...
+          - pattern: $REQ.$ANYTHING
+          - pattern-not: $REQ.dbsession
+    pattern-sinks:
+      - patterns:
+          - pattern-inside: |
+              $QUERY = $REQ.dbsession.query(...)
+              ...
+          - pattern-either:
+              - pattern: |
+                  $QUERY.$SQLFUNC("...".$FORMATFUNC(...))
+              - pattern: |
+                  $QUERY.join(...).$SQLFUNC("...".$FORMATFUNC(...))
+              - pattern: |
+                  $QUERY.$SQLFUNC("...".$FORMATFUNC(...))
+          - pattern: $SINK
+          - metavariable-regex:
+              metavariable: $SQLFUNC
+              regex: (group_by|order_by|distinct|having|filter)
+          - metavariable-regex:
+              metavariable: $FORMATFUNC
+              regex: (?!bindparams)
+    fix-regex:
+      regex: format
+      replacement: bindparams

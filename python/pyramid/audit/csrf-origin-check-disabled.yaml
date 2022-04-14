@@ -1,0 +1,32 @@
+rules:
+  - id: pyramid-csrf-origin-check-disabled
+    message: |
+      Origin check for the CSRF token is disabled for this view.
+      This might represent a security risk if the CSRF storage policy is not known to be secure.
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A6: Security Misconfiguration"
+      asvs:
+        section: V4 Access Control
+        control_id: 4.2.2 CSRF
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V4-Access-Control.md#v42-operation-level-access-control
+        version: "4"
+      category: security
+      technology:
+        - pyramid
+    severity: WARNING
+    languages:
+      - python
+    patterns:
+      - pattern-inside: |
+          from pyramid.view import view_config
+          ...
+          @view_config(..., check_origin=$CHECK_ORIGIN, ...)
+          def $VIEW(...):
+            ...
+      - pattern: $CHECK_ORIGIN
+      - metavariable-comparison:
+          metavariable: $CHECK_ORIGIN
+          comparison: $CHECK_ORIGIN == False
+    fix: |
+      True

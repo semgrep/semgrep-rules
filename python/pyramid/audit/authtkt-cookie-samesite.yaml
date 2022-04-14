@@ -1,0 +1,23 @@
+rules:
+  - id: pyramid-authtkt-cookie-samesite
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., samesite='Lax', ...)
+              - pattern: pyramid.authentication.AuthTktCookieHelper(..., samesite=$SAMESITE, ...)
+          - patterns:
+              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., samesite='Lax', ...)
+              - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., samesite=$SAMESITE, ...)
+    message: >-
+      Found a Pyramid Authentication Ticket without the samesite option correctly set. Pyramid
+      cookies should be handled securely by setting samesite='Lax'.
+      If this parameter is not properly set, your cookies are not properly protected and
+      are at risk of being stolen by an attacker.
+    metadata:
+      cwe: "CWE-1275: Sensitive Cookie with Improper SameSite Attribute"
+      owasp: "A3: Sensitive Data Exposure"
+      category: security
+      technology:
+        - pyramid
+    languages: [python]
+    severity: WARNING
