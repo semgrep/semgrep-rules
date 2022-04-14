@@ -1,0 +1,46 @@
+rules:
+- id: check-unsafe-reflection
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: |
+        cookies[...]
+    - patterns:
+      - pattern: |
+          cookies. ... .$PROPERTY[...]
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: (?!signed|encrypted)
+    - pattern: |
+        params[...]
+    - pattern: |
+        request.env[...]
+  pattern-sinks:
+  - patterns:
+    - pattern: $X
+    - pattern-either:
+      - pattern-inside: |
+          $X.constantize
+      - pattern-inside: |
+          $X. ... .safe_constantize
+      - pattern-inside: |
+          const_get(...)
+      - pattern-inside: |
+          qualified_const_get(...)
+  message: Found user-controllable input to Ruby reflection functionality.  This allows a remote user to influence runtime behavior, up to and including arbitrary remote code execution. Do not provide user-controllable input to reflection functionality.
+    Do not call symbol conversion on user-controllable input.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_unsafe_reflection.rb
+    category: security
+    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    owasp:
+    - A03:2021 - Injection
+    - A01:2017 - Injection
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails2/app/controllers/application_controller.rb

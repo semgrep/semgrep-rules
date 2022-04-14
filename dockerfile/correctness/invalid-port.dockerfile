@@ -11,5 +11,5 @@ EXPOSE 65536
 # ok: invalid-port
 EXPOSE 0
 
-# ruleid: invalid-port
-EXPOSE -1
+# this is invalid dockerfile code and can not be parsed with dockerfile parser
+# EXPOSE -1
