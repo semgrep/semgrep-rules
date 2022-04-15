@@ -1,0 +1,40 @@
+rules:
+  - id: fs-directory-listing
+    message: >
+      Detected usage of 'http.FileServer' as handler: this allows directory listing
+      and an attacker could navigate through directories looking for sensitive
+      files. Be sure to disable directory listing or restrict access to specific
+      directories/files.
+    severity: WARNING
+    languages:
+      - go
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: |
+                  $FS := http.FileServer(...)
+                  ...
+              - pattern-either:
+                  - pattern: |
+                      http.ListenAndServe(..., $FS)
+                  - pattern: |
+                      http.ListenAndServeTLS(..., $FS)
+                  - pattern: |
+                      http.Handle(..., $FS)
+                  - pattern: |
+                      http.HandleFunc(..., $FS)
+          - patterns:
+              - pattern: |
+                  http.$FN(..., http.FileServer(...))
+              - metavariable-regex:
+                  metavariable: $FN
+                  regex: (ListenAndServe|ListenAndServeTLS|Handle|HandleFunc)
+    metadata:
+      category: security
+      cwe: "CWE-548: Exposure of Information Through Directory Listing"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      references:
+        - https://github.com/OWASP/Go-SCP
+        - https://cwe.mitre.org/data/definitions/548.html
+      confidence: MEDIUM
