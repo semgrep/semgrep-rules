@@ -1,0 +1,59 @@
+rules:
+- id: dynamodb-request-object
+  mode: taint
+  metadata:
+    cwe: "CWE-943: Improper Neutralization of Special Elements in Data Query Logic"
+    owasp: "A1: Injection"
+    category: security
+    technology:
+    - javascript
+    - aws-lambda
+    - dynamodb
+  message: >-
+    Detected DynamoDB query params that are tainted by `$EVENT` object. This could lead to NoSQL injection if the variable is user-controlled
+    and not properly sanitized. Explicitly assign query params instead of passing data from `$EVENT` directly to DynamoDB client.
+  pattern-sources:
+  - patterns:
+    - pattern: $EVENT
+    - pattern-either:
+      - pattern-inside: |
+          exports.handler = function ($EVENT, ...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FUNC ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+      - pattern-inside: |
+          $FUNC = function ($EVENT, ...) {...}
+          ...
+          exports.handler = $FUNC
+  pattern-sanitizers:
+  - patterns:
+    - pattern: |
+        {...}
+  pattern-sinks:
+  - patterns:
+    - pattern: $SINK
+    - pattern-inside: |
+        $DC.$METHOD($SINK, ...)
+    - metavariable-regex:
+        metavariable: "$METHOD"
+        regex: "(query|send|scan|delete|put|transactWrite|update|batchExecuteStatement|executeStatement|executeTransaction|transactWriteItems)"
+    - pattern-either:
+      - pattern-inside: |
+          $DC = new $AWS.DocumentClient(...);
+          ...
+      - pattern-inside: |
+          $DC = new $AWS.DynamoDB(...);
+          ...
+      - pattern-inside: |
+          $DC = new DynamoDBClient(...);
+          ...
+      - pattern-inside: |
+          $DC = DynamoDBDocumentClient.from(...);
+          ...
+  severity: ERROR
+  languages:
+    - javascript
+    - typescript
