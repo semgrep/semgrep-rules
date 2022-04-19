@@ -2,9 +2,9 @@ rules:
   - id: missing-apk-no-cache
     patterns:
       - pattern: |
-          RUN ... apk $COMMAND ... $SOMETHING
-      - pattern-not-inside: |
-          RUN ... apk $COMMAND ... --no-cache
+          RUN apk $COMMAND ...
+      - pattern-not: |
+          RUN apk $CMD ... --no-cache ...
     languages:
       - dockerfile
     message: >-
