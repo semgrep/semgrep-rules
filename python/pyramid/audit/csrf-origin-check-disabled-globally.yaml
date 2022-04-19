@@ -7,7 +7,7 @@ rules:
       - metavariable-comparison:
           metavariable: $CHECK_ORIGIN
           comparison: $CHECK_ORIGIN == False
-    message: |
+    message: >-
       Automatic check of the referrer for cross-site request forgery tokens has been explicitly disabled globally,
       which might leave views unprotected when an unsafe CSRF storage policy is used.
       Use 'pyramid.config.Configurator.set_default_csrf_options(check_origin=True)' to turn the automatic check for all unsafe methods (per RFC2616).
