@@ -37,9 +37,12 @@ rules:
             - pattern: String.format(..., (String $INPUT), ...)
     pattern-sinks: 
     - patterns:
-      - pattern-not: $W.$SQLFUNC(<... "=~/.*TABLE *$/" ...>)
-      - pattern-not: $W.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
-      - pattern: $W.$SQLFUNC(...)
+      - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE *$/" ...>)
+      - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
+      - pattern-either:
+        - pattern: (Statement $S).$SQLFUNC(...)
+        - pattern: (Connection $C).createStatement(...).$SQLFUNC(...)
+        - pattern: (EntityManager $EM).$SQLFUNC(...)
       - metavariable-regex:
           metavariable: $SQLFUNC
           regex: execute|executeQuery|createQuery|query
