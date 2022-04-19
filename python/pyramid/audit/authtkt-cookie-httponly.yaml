@@ -6,9 +6,11 @@ rules:
           - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., httponly=False, ...)
           - patterns:
               - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., httponly=True, ...)
+              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., **$PARAMS)
               - pattern: pyramid.authentication.AuthTktCookieHelper(...)
           - patterns:
               - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., httponly=True, ...)
+              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
               - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
     message: >-
       Found a Pyramid Authentication Ticket cookie without the httponly option correctly set. Pyramid

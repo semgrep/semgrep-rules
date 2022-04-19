@@ -6,9 +6,11 @@ rules:
           - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=False, ...)
           - patterns:
               - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., secure=True, ...)
+              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., **$PARAMS)
               - pattern: pyramid.authentication.AuthTktCookieHelper(...)
           - patterns:
               - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=True, ...)
+              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
               - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
     message: >-
       Found a Pyramid Authentication Ticket cookie without the secure option correctly set. Pyramid

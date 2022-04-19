@@ -14,6 +14,7 @@ rules:
                   $RESPONSE = pyramid.httpexceptions.HTTPFound(...)
                   ...
       - pattern-not: $RESPONSE.set_cookie(..., samesite='Lax', ...)
+      - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
       - pattern: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
     message: >-
       Found a Pyramid cookie without the samesite option correctly set. Pyramid

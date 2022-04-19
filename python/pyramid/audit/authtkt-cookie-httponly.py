@@ -32,6 +32,16 @@ def good1():
     authtkt = AuthTktCookieHelper(secret="test", httponly=True)
 
 
-def good2():
+def good2(params):
+    # ok: pyramid-authtkt-cookie-httponly
+    authtkt = AuthTktCookieHelper(**params)
+
+
+def good3():
     # ok: pyramid-authtkt-cookie-httponly
     authtkt = AuthTktAuthenticationPolicy(secret="test", httponly=True)
+
+
+def good4(params):
+    # ok: pyramid-authtkt-cookie-httponly
+    authtkt = AuthTktAuthenticationPolicy(**params)

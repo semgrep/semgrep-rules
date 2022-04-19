@@ -48,3 +48,11 @@ def my_good_view3(request):
     # ok: pyramid-set-cookie-samesite
     resp.set_cookie('MY_COOKIE', secure=True, httponly=True)
     return resp
+
+
+@view_config(route_name='my_view')
+def my_good_view4(request):
+    resp = exc.HTTPFound(location=request.referer or request.application_url)
+    # ok: pyramid-set-cookie-samesite
+    resp.set_cookie('MY_COOKIE', **global_cookie_flags)
+    return resp

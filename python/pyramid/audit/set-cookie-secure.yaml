@@ -17,6 +17,7 @@ rules:
           - pattern: $RESPONSE.set_cookie(..., secure=False, ...)
           - patterns:
               - pattern-not: $RESPONSE.set_cookie(..., secure=True, ...)
+              - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
               - pattern: $RESPONSE.set_cookie(...)
     message: >-
       Found a Pyramid cookie without the secure option correctly set. Pyramid

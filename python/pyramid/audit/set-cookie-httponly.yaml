@@ -17,6 +17,7 @@ rules:
           - pattern: $RESPONSE.set_cookie(..., httponly=False, ...)
           - patterns:
               - pattern-not: $RESPONSE.set_cookie(..., httponly=True, ...)
+              - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
               - pattern: $RESPONSE.set_cookie(...)
     message: >-
       Found a Pyramid cookie without the httponly option correctly set. Pyramid
