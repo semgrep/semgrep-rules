@@ -126,7 +126,9 @@ public class FalsePositiveCase {
 
     public void test(String parameter) throws ApiException {
         com.squareup.okhttp.Call call = constructHttpCall(parameter); // Create OKHttp call using parameter from outside
+                                                                 // ok: formatted-sql-string
         apiClient.execute(call);
+        // ok: formatted-sql-string
         apiClient.execute(call);
         apiClient.run(call); // proof that 'execute' name is causing the false-positive
     }
