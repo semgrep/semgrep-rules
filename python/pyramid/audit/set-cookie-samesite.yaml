@@ -15,7 +15,9 @@ rules:
                   ...
       - pattern-not: $RESPONSE.set_cookie(..., samesite='Lax', ...)
       - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
-      - pattern: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
+      - pattern-either:
+          - pattern: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
+          - pattern: $RESPONSE.set_cookie(...)
     message: >-
       Found a Pyramid cookie without the samesite option correctly set. Pyramid
       cookies should be handled securely by setting samesite='Lax' in response.set_cookie(...).
