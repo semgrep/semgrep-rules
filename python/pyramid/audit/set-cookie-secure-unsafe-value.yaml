@@ -1,0 +1,37 @@
+rules:
+  - id: pyramid-set-cookie-secure-unsafe-value
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              @pyramid.view.view_config(...)
+              def $VIEW($REQUEST):
+                  ...
+                  $RESPONSE = $REQUEST.response
+                  ...
+          - pattern-inside: |
+              def $VIEW(...):
+                  ...
+                  $RESPONSE = pyramid.httpexceptions.HTTPFound(...)
+                  ...
+      - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
+      - pattern: $RESPONSE.set_cookie(..., secure=$SECURE, ...)
+      - pattern: $SECURE
+      - metavariable-pattern:
+          metavariable: $SECURE
+          pattern: |
+            False
+    fix: |
+      True
+    message: >-
+      Found a Pyramid cookie without the secure option correctly set.
+      Pyramid cookies should be handled securely by setting secure=True in response.set_cookie(...).
+      If this parameter is not properly set, your cookies are not properly protected and
+      are at risk of being stolen by an attacker.
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A3: Sensitive Data Exposure"
+      category: security
+      technology:
+        - pyramid
+    languages: [python]
+    severity: WARNING

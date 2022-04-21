@@ -1,5 +1,5 @@
 rules:
-  - id: pyramid-set-cookie-secure
+  - id: pyramid-set-cookie-samesite-unsafe-default
     patterns:
       - pattern-either:
           - pattern-inside: |
@@ -13,19 +13,19 @@ rules:
                   ...
                   $RESPONSE = pyramid.httpexceptions.HTTPFound(...)
                   ...
-      - pattern-either:
-          - pattern: $RESPONSE.set_cookie(..., secure=False, ...)
-          - patterns:
-              - pattern-not: $RESPONSE.set_cookie(..., secure=True, ...)
-              - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
-              - pattern: $RESPONSE.set_cookie(...)
+      - pattern-not: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
+      - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
+      - pattern: $RESPONSE.set_cookie(...)
+    fix-regex:
+      regex: (.*)\)
+      replacement: \1, samesite='Lax')
     message: >-
-      Found a Pyramid cookie without the secure option correctly set. Pyramid
-      cookies should be handled securely by setting secure=True in response.set_cookie(...).
+      Found a Pyramid cookie using an unsafe value for the samesite option.
+      Pyramid cookies should be handled securely by setting samesite='Lax' in response.set_cookie(...).
       If this parameter is not properly set, your cookies are not properly protected and
       are at risk of being stolen by an attacker.
     metadata:
-      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      cwe: "CWE-1275: Sensitive Cookie with Improper SameSite Attribute"
       owasp: "A3: Sensitive Data Exposure"
       category: security
       technology:

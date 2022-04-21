@@ -5,22 +5,12 @@ from pyramid.authentication import AuthTktCookieHelper, AuthTktAuthenticationPol
 
 
 def bad1():
-    # ruleid: pyramid-authtkt-cookie-httponly
-    authtkt = AuthTktCookieHelper(secret="test")
-
-
-def bad2():
-    # ruleid: pyramid-authtkt-cookie-httponly
+    # ruleid: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktCookieHelper(secret="test", httponly=False)
 
 
-def bad3():
-    # ruleid: pyramid-authtkt-cookie-httponly
-    authtkt = AuthTktAuthenticationPolicy(secret="test")
-
-
-def bad4():
-    # ruleid: pyramid-authtkt-cookie-httponly
+def bad2():
+    # ruleid: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktAuthenticationPolicy(secret="test", httponly=False)
 
 
@@ -28,20 +18,20 @@ def bad4():
 
 
 def good1():
-    # ok: pyramid-authtkt-cookie-httponly
+    # ok: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktCookieHelper(secret="test", httponly=True)
 
 
 def good2(params):
-    # ok: pyramid-authtkt-cookie-httponly
+    # ok: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktCookieHelper(**params)
 
 
 def good3():
-    # ok: pyramid-authtkt-cookie-httponly
+    # ok: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktAuthenticationPolicy(secret="test", httponly=True)
 
 
 def good4(params):
-    # ok: pyramid-authtkt-cookie-httponly
+    # ok: pyramid-authtkt-cookie-httponly-unsafe-value
     authtkt = AuthTktAuthenticationPolicy(**params)

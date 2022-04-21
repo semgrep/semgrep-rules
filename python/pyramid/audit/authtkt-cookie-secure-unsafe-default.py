@@ -5,43 +5,33 @@ from pyramid.authentication import AuthTktCookieHelper, AuthTktAuthenticationPol
 
 
 def bad1():
-    # ruleid: pyramid-authtkt-cookie-secure
+    # ruleid: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktCookieHelper(secret="test")
 
 
 def bad2():
-    # ruleid: pyramid-authtkt-cookie-secure
-    authtkt = AuthTktCookieHelper(secret="test", secure=False)
-
-
-def bad3():
-    # ruleid: pyramid-authtkt-cookie-secure
+    # ruleid: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktAuthenticationPolicy(secret="test")
-
-
-def bad4():
-    # ruleid: pyramid-authtkt-cookie-secure
-    authtkt = AuthTktAuthenticationPolicy(secret="test", secure=False)
 
 
 ### True negatives ###
 
 
 def good1():
-    # ok: pyramid-authtkt-cookie-secure
+    # ok: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktCookieHelper(secret="test", secure=True)
 
 
 def good2(params):
-    # ok: pyramid-authtkt-cookie-secure
+    # ok: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktCookieHelper(**params)
 
 
 def good3():
-    # ok: pyramid-authtkt-cookie-secure
+    # ok: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktAuthenticationPolicy(secret="test", secure=True)
 
 
 def good4(params):
-    # ok: pyramid-authtkt-cookie-secure
+    # ok: pyramid-authtkt-cookie-secure-unsafe-default
     authtkt = AuthTktAuthenticationPolicy(**params)

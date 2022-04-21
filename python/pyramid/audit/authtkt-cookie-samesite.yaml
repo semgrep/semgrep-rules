@@ -2,12 +2,14 @@ rules:
   - id: pyramid-authtkt-cookie-samesite
     patterns:
       - pattern-either:
-          - patterns:
-              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., samesite='Lax', ...)
-              - pattern: pyramid.authentication.AuthTktCookieHelper(..., samesite=$SAMESITE, ...)
-          - patterns:
-              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., samesite='Lax', ...)
-              - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., samesite=$SAMESITE, ...)
+          - pattern: pyramid.authentication.AuthTktCookieHelper(..., samesite=$SAMESITE, ...)
+          - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., samesite=$SAMESITE, ...)
+      - pattern: $SAMESITE
+      - metavariable-regex:
+          metavariable: $SAMESITE
+          regex: (?!'Lax')
+    fix: |
+      'Lax'
     message: >-
       Found a Pyramid Authentication Ticket without the samesite option correctly set. Pyramid
       cookies should be handled securely by setting samesite='Lax'.

@@ -1,17 +1,20 @@
 rules:
-  - id: pyramid-authtkt-cookie-secure
+  - id: pyramid-authtkt-cookie-secure-unsafe-value
     patterns:
       - pattern-either:
-          - pattern: pyramid.authentication.AuthTktCookieHelper(..., secure=False, ...)
-          - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=False, ...)
           - patterns:
-              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., secure=True, ...)
               - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., **$PARAMS)
-              - pattern: pyramid.authentication.AuthTktCookieHelper(...)
+              - pattern: pyramid.authentication.AuthTktCookieHelper(..., secure=$SECURE, ...)
           - patterns:
-              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=True, ...)
               - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
-              - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
+              - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=$SECURE, ...)
+      - pattern: $SECURE
+      - metavariable-pattern:
+          metavariable: $SECURE
+          pattern: |
+            False
+    fix: |
+      True
     message: >-
       Found a Pyramid Authentication Ticket cookie without the secure option correctly set. Pyramid
       cookies should be handled securely by setting secure=True.
