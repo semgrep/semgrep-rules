@@ -1,0 +1,19 @@
+rules:
+  - id: azure-securitycenter-standard-pricing
+    message: >-
+      Ensure that standard pricing tier is selected
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Standard"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

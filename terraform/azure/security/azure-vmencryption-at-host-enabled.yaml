@@ -1,0 +1,28 @@
+rules:
+  - id: azure-vmencryption-at-host-enabled
+    message: >-
+      Ensure that Virtual machine scale sets have encryption at host enabled
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_windows_virtual_machine_scale_set" "..." {
+          ...
+          encryption_at_host_enabled = true
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_linux_virtual_machine_scale_set" "..." {
+          ...
+          encryption_at_host_enabled = true
+          ...
+          }
+    metadata:
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      cwe: 'CWE-320: Key Management Errors'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

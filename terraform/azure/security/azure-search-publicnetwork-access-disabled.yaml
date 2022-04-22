@@ -1,0 +1,22 @@
+rules:
+  - id: azure-search-publicnetwork-access-disabled
+    message: >-
+      Ensure that Azure Cognitive Search disables public network access
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_search_service" "..." {
+          ...
+          public_network_access_enabled = false
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

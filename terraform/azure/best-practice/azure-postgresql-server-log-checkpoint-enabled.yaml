@@ -1,0 +1,20 @@
+rules:
+  - id: azure-postgresql-server-log-checkpoint-enabled
+    message: >-
+      Ensure server parameter log_checkpoints is set to ON for PostgreSQL Database Server
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_postgresql_configuration" "..." {
+          ...
+          name = "log_checkpoints"
+          value = "on"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

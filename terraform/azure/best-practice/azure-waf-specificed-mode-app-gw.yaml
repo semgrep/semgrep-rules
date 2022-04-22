@@ -1,0 +1,21 @@
+rules:
+  - id: azure-waf-specificed-mode-app-gw
+    message: >-
+      Ensure that Application Gateway uses WAF in “Detection” or “Prevention” modes
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_web_application_firewall_policy" "..." {
+          ...
+          policy_settings {
+            enabled = false
+          }
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

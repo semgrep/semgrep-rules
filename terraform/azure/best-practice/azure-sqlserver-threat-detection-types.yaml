@@ -1,0 +1,20 @@
+rules:
+  - id: azure-sqlserver-threat-detection-types
+    message: >-
+      Ensure that Threat Detection types is set to All
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          state = "Enabled"
+          disabled_alerts = []
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING
