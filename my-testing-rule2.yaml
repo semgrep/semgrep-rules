@@ -1,0 +1,20 @@
+rules:
+- id: my-testing-rule2
+  pattern: |
+    <$X {...$PROPS} />
+  message: It's best practice to explicitly pass props to an HTML component rather
+    than use the spread operator.  The spread operator risks passing invalid HTML
+    props to an HTML element, which can cause console warnings or worse,  give malicious
+    actors a way to inject unexpected attributes.
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+    references:
+    - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
