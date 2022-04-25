@@ -2,30 +2,44 @@ rules:
   - id: detect-angular-element-methods
     mode: taint
     message: >-
-      Use of angular.element can lead to XSS if after,append,html,prepend,replaceWith,wrap are used with user-input.
+      Use of angular.element can lead to XSS if user-input is treated as part of the HTML element within `$SINK`. 
+      It is recommended to contextually output encode user-input, before inserting into `$SINK`. 
+      If the HTML needs to be preseved it is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
     languages:
       - javascript
       - typescript
     metadata:
+      confidence: LOW
       references:
         - https://docs.angularjs.org/api/ng/function/angular.element
         - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
       category: security
       technology:
-        - angular
-    severity: WARNING
+        - angularjs
+    severity: INFO
     pattern-sources:
-      - pattern: angular.element(...)
+      - patterns:
+          - pattern-either:
+              - pattern: $scope
+              - pattern: $rootScope
+              - pattern: $injector.get('$rootScope')
+              - pattern: $injector.get('$scope')
     pattern-sinks:
-      - pattern: |
-          $SINK.html(...);
-      - pattern: |
-          $SINK.append(...);
-      - pattern: |
-          $SINK.prepend(...);
-      - pattern: |
-          $SINK.replaceWith(...);
-      - pattern: |
-          $SINK.wrap(...);
-      - pattern: |
-          $SINK.after(...);
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  angular.element(...). ... .$SINK($QUERY)
+              - pattern-inside: |
+                  $ANGULAR = angular.element(...)
+                  ...
+                  $ANGULAR. ... .$SINK($QUERY)
+          - metavariable-regex:
+              metavariable: $SINK
+              regex: ^(after|append|html|prepend|replaceWith|wrap)$
+          - pattern: $QUERY
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern: $sce.getTrustedHtml(...)
+              - pattern: $sanitize(...)
+              - pattern: DOMPurify.sanitize(...)
