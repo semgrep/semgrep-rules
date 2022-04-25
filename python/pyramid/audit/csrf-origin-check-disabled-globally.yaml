@@ -1,0 +1,23 @@
+rules:
+  - id: pyramid-csrf-origin-check-disabled-globally
+    patterns:
+      - pattern-inside: |
+          $CONFIG.set_default_csrf_options(..., check_origin=$CHECK_ORIGIN, ...)
+      - pattern: $CHECK_ORIGIN
+      - metavariable-comparison:
+          metavariable: $CHECK_ORIGIN
+          comparison: $CHECK_ORIGIN == False
+    message: >-
+      Automatic check of the referrer for cross-site request forgery tokens has been explicitly disabled globally,
+      which might leave views unprotected when an unsafe CSRF storage policy is used.
+      Use 'pyramid.config.Configurator.set_default_csrf_options(check_origin=True)' to turn the automatic check for all unsafe methods (per RFC2616).
+    languages: [python]
+    severity: ERROR
+    fix: |
+      True
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A6: Security Misconfiguration"
+      category: security
+      technology:
+        - pyramid

@@ -1,0 +1,28 @@
+rules:
+  - id: pyramid-authtkt-cookie-secure-unsafe-default
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., secure=$SECURE, ...)
+              - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., **$PARAMS)
+              - pattern: pyramid.authentication.AuthTktCookieHelper(...)
+          - patterns:
+              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., secure=$SECURE, ...)
+              - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
+              - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
+    fix-regex:
+      regex: (.*)\)
+      replacement: \1, secure=True)
+    message: >-
+      Found a Pyramid Authentication Ticket cookie using an unsafe default for the secure option.
+      Pyramid cookies should be handled securely by setting secure=True.
+      If this parameter is not properly set, your cookies are not properly protected and
+      are at risk of being stolen by an attacker.
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A3: Sensitive Data Exposure"
+      category: security
+      technology:
+        - pyramid
+    languages: [python]
+    severity: WARNING
