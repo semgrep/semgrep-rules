@@ -1,0 +1,29 @@
+name: semgrep-rules-test-historical
+on:
+  pull_request:
+    branches:
+    - develop
+    - release
+  push:
+    branches:
+    - develop
+    - release
+jobs:
+  # Note: if you change this test there will likely need to be a
+  # corresponding change in returntocorp/semgrep
+  test-develop:
+    name: rules-test-historical
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: semgrep-rules
+    - name: test version tag name
+      run: |
+        echo ${{ github.event.release.tag_name }}
+    - name: validate rules on semgrep v0.87.0
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --validate --config /src
+    - name: test with semgrep develop branch
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --test --test-ignore-todo /src
