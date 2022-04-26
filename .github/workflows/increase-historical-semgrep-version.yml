@@ -21,10 +21,12 @@ jobs:
       run: |
         git checkout -b up-historical-semgrep-version
     - name: Increase version
+      working-directory: .github/workflows
       shell: bash
       run: |
         echo $PWD
-        FILENAME="workflows/semgrep-rules-test-historical.yml"
+        ls
+        FILENAME="semgrep-rules-test-historical.yml"
         SEMGREP_VERSION=`grep -ow "0.[0-9][0-9].0" $FILENAME | head -1`
         SEMGREP_VERSION_SHORT=${SEMGREP_VERSION:2:2}
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
