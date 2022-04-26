@@ -9,18 +9,13 @@ on:
     - develop
     - release
 jobs:
-  # Note: if you change this test there will likely need to be a
-  # corresponding change in returntocorp/semgrep
-  test-develop:
+  test-historical:
     name: rules-test-historical
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
-    - name: test version tag name
-      run: |
-        echo ${{ github.event.release.tag_name }}
     # need to delete these directories or else we get linter errors during 
     # the "validate" step.
     - name: delete stats directory
