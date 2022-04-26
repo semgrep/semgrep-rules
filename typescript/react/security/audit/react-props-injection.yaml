@@ -24,7 +24,7 @@ rules:
       - pattern-not-inside: |
           React.createElement($EL, {$ATTR: ...})
     message: >-
-      Injecting props into a new React Element may introduce an XSS vulnerability if the props may be an object (containing a for example `dangerouslySetInnerHTML`) that is user-controlled.
+      Injecting props into a new React Element may introduce an XSS vulnerability if the props contain an object (such as a user-controllable `dangerouslySetInnerHTML` expression).
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       owasp: "A7: Cross-Site Scripting (XSS)"
