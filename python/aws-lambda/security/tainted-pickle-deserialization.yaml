@@ -15,6 +15,11 @@ rules:
         - pattern-inside: pickle.loads($SINK,...)
         - pattern-inside: _pickle.load($SINK,...)
         - pattern-inside: _pickle.loads($SINK,...)
+        - pattern-inside: cPickle.load($SINK,...)
+        - pattern-inside: cPickle.loads($SINK,...)
+        - pattern-inside: dill.load($SINK,...)
+        - pattern-inside: dill.loads($SINK,...)
+        - pattern-inside: shelve.open($SINK,...)
     message: >-
       Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
       When unpickling, the serialized data could be manipulated to run arbitrary code.
