@@ -1,5 +1,10 @@
 name: validate-r2c-registry-metadata
 
+# Test this workflow using github.com/nektos/act
+# > brew install act
+# > echo '{"pull_request":{"head":{"ref":develop"}},{"base":{"ref":"release"}}}' > act-env.json
+# > act pull_request --verbose --eventpath act-env.json -j validate-metadata
+
 on:
   pull_request:
     branches: [develop, release]
