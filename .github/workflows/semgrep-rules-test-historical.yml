@@ -22,9 +22,9 @@ jobs:
       run: rm -rf semgrep-rules/stats
     - name: delete fingerprints directory
       run: rm -rf semgrep-rules/fingerprints
-    - name: validate rules on semgrep v0.87.0
+    - name: validate rules on semgrep v0.88.0
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --validate --config /src
-    - name: test with semgrep v0.87.0 
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.88.0 semgrep --validate --config /src
+    - name: test with semgrep v0.88.0 
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --test --test-ignore-todo /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.88.0 semgrep --test --test-ignore-todo /src
