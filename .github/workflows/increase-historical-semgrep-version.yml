@@ -12,14 +12,7 @@ jobs:
     name: increase-historical-semgrep-version
     runs-on: ubuntu-latest
     steps:
-    - name: Check out develop
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        ref: develop
-    - name: Create new branch
-      run: |
-        git checkout -b up-historical-semgrep-version
+    - uses: actions/checkout@v2
     - name: Increase version
       working-directory: .github/workflows
       shell: bash
@@ -30,11 +23,9 @@ jobs:
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
 
         sed -i -e "s/$SEMGREP_VERSION/$INCREASED_SEMGREP_VERSION/g" $FILENAME
-    - uses: actions/checkout@v2
     - name: Commit changes
       run: |
         git status
-        git add .github/workflows/semgrep-rules-test-historical.yml
         git config --global user.name 'Security'
         git config --global user.email 'security@r2c.dev'
         git commit -m "increasing the version of historical semgrep check"
