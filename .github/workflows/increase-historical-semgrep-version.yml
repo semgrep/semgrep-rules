@@ -12,7 +12,14 @@ jobs:
     name: increase-historical-semgrep-version
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out develop
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: develop
+    - name: Create new branch
+      run: |
+        git checkout -b up-historical-semgrep-version
     - name: Increase version
       working-directory: .github/workflows
       shell: bash
@@ -26,6 +33,7 @@ jobs:
     - name: Commit changes
       run: |
         git status
+        git add .github/workflows/semgrep-rules-test-historical.yml
         git config --global user.name 'Security'
         git config --global user.email 'security@r2c.dev'
         git commit -m "increasing the version of historical semgrep check"
