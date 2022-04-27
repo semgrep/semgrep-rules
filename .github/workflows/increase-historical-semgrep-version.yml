@@ -30,15 +30,10 @@ jobs:
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
 
         sed -i -e "s/$SEMGREP_VERSION/$INCREASED_SEMGREP_VERSION/g" $FILENAME
-        ls
-        # sed creates intermediary file, which we should remove
-        #rm "$FILENAME-e"
-
-        echo $INCREASED_SEMGREP_VERSION
-        echo $SEMGREP_VERSION
     - name: Commit changes
       run: |
-        git add semgrep-rules-test-historical.yml
+        git status
+        git add .github/workflows/semgrep-rules-test-historical.yml
         git commit -m "increasing the version of historical semgrep check"
     - name: Create Pull Request
       run: |
