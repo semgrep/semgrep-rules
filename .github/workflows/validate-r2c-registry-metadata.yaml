@@ -1,0 +1,32 @@
+name: validate-r2c-registry-metadata
+
+on:
+  pull_request:
+    branches: [develop, release]
+  push:
+    branches: [develop, release]
+
+jobs:
+  validate-metadata:
+    if: github.repository == 'returntocorp/semgrep-rules'
+    name: Validate r2c registry metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: changed-files
+        name: get changed files
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "::set-output name=CHANGED_FILES::$(git diff --name-only $HEAD_REF..$BASE_REF | xargs )"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.2
+      - name: install deps
+        run: pip install jsonschema pyyaml
+      - name: validate metadata
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
+        run: |
+          python .github/validate-metadata.py -s ./metadata-schema.yaml -f $CHANGED_FILES
