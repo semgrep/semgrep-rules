@@ -1,0 +1,30 @@
+name: semgrep-rules-test-historical
+on:
+  pull_request:
+    branches:
+    - develop
+    - release
+  push:
+    branches:
+    - develop
+    - release
+jobs:
+  test-historical:
+    name: rules-test-historical
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: semgrep-rules
+    # need to delete these directories or else we get linter errors during 
+    # the "validate" step.
+    - name: delete stats directory
+      run: rm -rf semgrep-rules/stats
+    - name: delete fingerprints directory
+      run: rm -rf semgrep-rules/fingerprints
+    - name: validate rules on semgrep v0.87.0
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --validate --config /src
+    - name: test with semgrep v0.87.0 
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:0.87.0 semgrep --test --test-ignore-todo /src
