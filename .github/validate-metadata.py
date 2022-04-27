@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import Optional
 import yaml
 from pathlib import Path
 
@@ -25,9 +26,10 @@ class RegistryMetadataValidator(Draft7Validator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.category_enum = self.schema.get('properties', {}).get('category', {}).get('enum', [])
+        #self.category_enum = self.schema.get('properties', {}).get('category', {}).get('enum', [])
+        self.category_enum = {}
 
-    def _extend_message(self, error):
+    def _extend_message(self, error: ValidationError) -> None:
         if error.message.endswith("is a required property"):
             prop = error.message[error.message.find("'") + 1 : error.message.rfind("'")]
             extended_message = self.required_property_messages.get(prop)
@@ -37,7 +39,7 @@ class RegistryMetadataValidator(Draft7Validator):
                 else f"{error.message}. {extended_message}"
             )
 
-    def validate(self, instance):
+    def validate(self, instance: dict) -> None:
         """
         Override validate method to provide useful error messages for required properties.
         """
@@ -47,14 +49,14 @@ class RegistryMetadataValidator(Draft7Validator):
             self._extend_message(ve)
             raise ve
 
-    def get_errors(self, instance):
+    def get_errors(self, instance: dict) -> list[ValidationError]:
         errors = list(self.iter_errors(instance))
         for error in errors:
             self._extend_message(error)
         return errors
 
 
-def validate_config_file_metadata(config_path, validator, invalid_configs=None):
+def validate_config_file_metadata(config_path: Path, validator: Draft7Validator, invalid_configs: Optional[list] = None):
     with open(config_path) as fin:
         config = yaml.safe_load(fin)
 
@@ -78,13 +80,16 @@ def validate_config_file_metadata(config_path, validator, invalid_configs=None):
         else:
             logger.warning(f"Invalid config {str(config_path)}: {ve.message}")
 
+def is_rule(path: Path) -> bool:
+    with open(path) as fin:
+        return fin.readlines()[0].startswith("rules:")
 
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
     # Add arguments here
-    parser.add_argument("--config", "-f")
+    parser.add_argument("--config", "-f", nargs="+")
     parser.add_argument("--schema", "-s")
 
     args = parser.parse_args()
@@ -96,13 +101,15 @@ if __name__ == "__main__":
     RegistryMetadataValidator.check_schema(schema)
     v = RegistryMetadataValidator(schema)
 
-    config_path = Path(args.config)
     invalid_configs = []
-    if config_path.is_file():
-        validate_config_file_metadata(config_path, v, invalid_configs)
-    elif config_path.is_dir():
-        for config_file in config_path.glob("**/*.yaml"):
-            validate_config_file_metadata(config_file, v, invalid_configs)
+    for config_item in args.config:
+        config_path = Path(config_item)
+        if config_path.is_file() and config_path.suffix == ".yaml" and is_rule(config_path):
+            validate_config_file_metadata(config_path, v, invalid_configs)
+        elif config_path.is_dir():
+            for config_file in config_path.glob("**/*.yaml"):
+                if is_rule(config_file):
+                    validate_config_file_metadata(config_file, v, invalid_configs)
 
     if len(invalid_configs) > 0:
         for invalid_config in sorted(invalid_configs, key=lambda t: t[0]):
