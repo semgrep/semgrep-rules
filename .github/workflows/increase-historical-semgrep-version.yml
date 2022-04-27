@@ -30,13 +30,14 @@ jobs:
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
 
         sed -i -e "s/$SEMGREP_VERSION/$INCREASED_SEMGREP_VERSION/g" $FILENAME
-    - name: Commit changes
+    - name: Commit changes and push branch
       run: |
         git status
         git add .github/workflows/semgrep-rules-test-historical.yml
         git config --global user.name 'Security'
         git config --global user.email 'security@r2c.dev'
         git commit -m "increasing the version of historical semgrep check"
+        git push --set-usptream origin up-historical-semgrep-version
     - name: Create Pull Request
       run: |
         # TODO: `-f` in curl won't fail on all non-200 HTTP responses.
