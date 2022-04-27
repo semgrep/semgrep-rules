@@ -24,16 +24,15 @@ jobs:
       working-directory: .github/workflows
       shell: bash
       run: |
-        echo $PWD
-        ls
         FILENAME="semgrep-rules-test-historical.yml"
         SEMGREP_VERSION=`grep -ow "0.[0-9][0-9].0" $FILENAME | head -1`
         SEMGREP_VERSION_SHORT=${SEMGREP_VERSION:2:2}
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
 
         sed -i -e "s/$SEMGREP_VERSION/$INCREASED_SEMGREP_VERSION/g" $FILENAME
+        ls
         # sed creates intermediary file, which we should remove
-        rm "$FILENAME-e"
+        #rm "$FILENAME-e"
 
         echo $INCREASED_SEMGREP_VERSION
         echo $SEMGREP_VERSION
