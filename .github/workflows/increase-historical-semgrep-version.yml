@@ -30,8 +30,8 @@ jobs:
         INCREASED_SEMGREP_VERSION="0.$(($SEMGREP_VERSION_SHORT + 1)).0"
 
         sed -i -e "s/$SEMGREP_VERSION/$INCREASED_SEMGREP_VERSION/g" $FILENAME
+    - uses: actions/checkout@v2
     - name: Commit changes
-      uses: actions/checkout@v2
       run: |
         git status
         git add .github/workflows/semgrep-rules-test-historical.yml
