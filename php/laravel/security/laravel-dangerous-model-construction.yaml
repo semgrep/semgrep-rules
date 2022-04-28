@@ -1,0 +1,26 @@
+rules:
+- id: laravel-dangerous-model-construction
+  patterns:
+  - pattern: |
+      $guarded = [];
+  - pattern-inside: |
+      class $CLASS extends Model {
+        ...
+      }
+  message: Setting `$guarded` to an empty array allows mass assignment to every property
+    in a Laravel model. This explicitly overrides Eloquent's safe-by-default mass
+    assignment protections.
+  languages:
+  - php
+  metadata:
+    category: security
+    technology:
+    - php
+    - laravel
+    - eloquent
+    references:
+    - https://laravel.com/docs/9.x/eloquent#allowing-mass-assignment
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
+      Attributes'
+  severity: ERROR
