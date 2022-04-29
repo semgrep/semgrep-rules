@@ -32,7 +32,7 @@ jobs:
         SEMGREP_VERSION=`semgrep --version`
         SEMGREP_VERSION_SHORT=${SEMGREP_VERSION:2:2}
         SEMGREP_OLD_VERSION="0.$(($SEMGREP_VERSION_SHORT-3)).0"
-        echo "::set-env name=SEMGREP_OLD_VERSION::$SEMGREP_OLD_VERSION"
+        echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
       run: |
         echo $SEMGREP_OLD_VERSION
