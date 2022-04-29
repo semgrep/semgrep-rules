@@ -27,6 +27,9 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           echo "::set-output name=CHANGED_FILES::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )"
+      - id: print-changed-files
+        name: debugging step - print changed files
+        run: echo $CHANGED_FILES
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9.2
