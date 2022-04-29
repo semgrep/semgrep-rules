@@ -1,6 +1,7 @@
 rules:
 - id: tainted-deserialization
   mode: taint
+  languages: [ruby]
   message: >-
     Deserialization of a string tainted by `event` object found. Objects in Ruby can be serialized into strings,
     then later loaded from strings. However, uses of `load` can cause remote code execution.
