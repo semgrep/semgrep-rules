@@ -26,7 +26,7 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "::set-output name=CHANGED_FILES::$(git diff --name-only $HEAD_REF $BASE_REF | xargs )"
+          echo "::set-output name=CHANGED_FILES::$(git diff --name-only $BASE_REF | xargs )"
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9.2
