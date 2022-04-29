@@ -89,10 +89,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     # Add arguments here
-    parser.add_argument("--config", "-f", nargs="+")
+    parser.add_argument("--config", "-f", nargs="*")
     parser.add_argument("--schema", "-s")
 
     args = parser.parse_args()
+
+    if len(args.config) == 0:
+        logger.warning(f"No configs supplied")
+        sys.exit(0)
 
     with open(args.schema) as fin:
         contents = yaml.safe_load(fin)
@@ -115,3 +119,4 @@ if __name__ == "__main__":
         for invalid_config in sorted(invalid_configs, key=lambda t: t[0]):
             print(invalid_config)
         sys.exit(1)
+
