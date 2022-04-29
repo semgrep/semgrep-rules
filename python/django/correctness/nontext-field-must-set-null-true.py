@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -25,6 +26,8 @@ class FakeModel(models.Model):
     fieldUUID = models.UUIDField(blank=True)
     # ok: nontext-field-must-set-null-true
     fieldManyToMany = models.ManyToManyField("self", blank=True)
+    # ok: nontext-field-must-set-null-true
+    fieldCKEditorRichtext = RichTextField(blank=True)
     # ruleid: nontext-field-must-set-null-true
     fieldInt = models.IntegerField(
         blank=True,
