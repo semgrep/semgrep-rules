@@ -1,0 +1,35 @@
+rules:
+- id: tainted-deserialization
+  mode: taint
+  message: >-
+    Deserialization of a string tainted by `event` object found. Objects in Ruby can be serialized into strings,
+    then later loaded from strings. However, uses of `load` can cause remote code execution.
+    Loading user input with MARSHAL or CSV can potentially be dangerous. Use JSON in a secure fashion instead.
+  metadata:
+    references:
+      - https://groups.google.com/g/rubyonrails-security/c/61bkgvnSGTQ/m/nehwjA8tQ8EJ
+      - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_deserialize.rb
+    category: security
+    technology:
+      - ruby
+      - aws-lambda
+  pattern-sinks:
+  - patterns:
+    - pattern: $SINK
+    - pattern-either:
+      - pattern-inside: |
+          YAML.load($SINK,...)
+      - pattern-inside: |
+          CSV.load($SINK,...)
+      - pattern-inside: |
+          Marshal.load($SINK,...)
+      - pattern-inside: |
+          Marshal.restore($SINK,...)
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context)
+          ...
+        end
+  severity: WARNING
