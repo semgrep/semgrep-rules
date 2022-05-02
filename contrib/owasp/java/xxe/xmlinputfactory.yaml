@@ -21,13 +21,24 @@ rules:
             ...
           }
       - pattern-not-inside: |
+          $RETURNTYPE $METHOD(...) {
+            ...
+            $XMLFACTORY.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+            ...
+          }
+      - pattern-not-inside: |
+          $RETURNTYPE $METHOD(...) {
+            ...
+            $XMLFACTORY.setProperty("javax.xml.stream.supportDTD", false);
+            ...
+          }
+      - pattern-not-inside: |
           $XMLFACTORY = $W.newInstance(...);
           ...
           $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
       - pattern-either:
-          - pattern: $XMLFACTORY = $W.newFactory(...);
+          - pattern: $XMLFACTORY = XMLInputFactory.newFactory(...);
           - pattern: $XMLFACTORY = new XMLInputFactory(...);
-          - pattern: $XMLFACTORY = SAXParserFactory.newInstance(...);
-          - pattern: $XMLFACTORY = DocumentBuilderFactory.newInstance(...);
+          - pattern: $XMLFACTORY = XMLInputFactory.newInstance(...);
     languages:
       - java
