@@ -416,6 +416,26 @@ public class XXE {
         return "XMLReader xxe security code";
     }
 
+    public static SortingMachine<Map.Pair<String, Integer>> shorten(
+            SortingMachine<Map.Pair<String, Integer>> sortMachine, int num) {
+        assert sortMachine != null : "Violation of: sortMachine is not null";
+        assert num <= sortMachine
+                .size() : "Violation of: N <= size of sortMachine";
+        // ok: owasp.java.xxe.javax.xml.stream.XMLInputFactory
+        SortingMachine<Map.Pair<String, Integer>> shortenedSM = sortMachine
+                .newInstance();
+        int i = 0;
+
+        //creates a new sortingMachine that only contains the N elements desired
+        //by the user
+        for (Map.Pair<String, Integer> pair : sortMachine) {
+            if (i < num) {
+                shortenedSM.add(pair);
+            }
+            i++;
+        }
+        return shortenedSM;
+    }
 
     /**
      * 修复该漏洞只需升级dom4j到2.1.1及以上，该版本及以上禁用了ENTITY；
