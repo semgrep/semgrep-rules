@@ -3,14 +3,20 @@ rules:
     languages:
       - java
     severity: ERROR
-    message:  TODO
+    message: >-
+      Detected user input creating a file path. An attacker could control
+      the location of this file, to include going backwards in the directory
+      with '../'. To address this, ensure that user-controlled variables in file
+      paths are sanitized. You may also consider using a utility method such as
+      org.apache.commons.io.FilenameUtils.getName(...) to only retrieve the file
+      name from the path.
     metadata:
-      cwe: TODO
+      cwe: "CWE-23: Relative Path Traversal"
       owasp:
         - A03:2021
         - A01:2017
       references:
-      - TODO
+      - https://owasp.org/www-community/attacks/Path_Traversal
       category: security
       technology:
         - java
