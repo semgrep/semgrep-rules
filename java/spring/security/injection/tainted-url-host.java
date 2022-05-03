@@ -30,6 +30,7 @@ public class SSRFVulnerability {
     public ResponseEntity<GenericVulnerabilityResponseBean<byte[]>> getVulnerablePayloadLevel1(
             @RequestParam(IMAGE_URL) String urlImage) {
         try {
+            // ruleid: tainted-url-host
             URL u = new URL(urlImage);
             URLConnection urlConnection = u.openConnection();
             byte[] bytes;
@@ -50,3 +51,36 @@ public class SSRFVulnerability {
                 HttpStatus.BAD_REQUEST);
     }
 }
+
+
+@RestController
+@RequestMapping("/user03")
+public class User03Controller {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @GetMapping("/get")
+    public UserDTO get(@RequestParam("id") Integer id) {
+        // ok: tainted-url-host
+        String url = String.format("http://%s/user/get?id=%d", "demo-provider", id);
+        return restTemplate.getForObject(url, UserDTO.class);
+    }
+
+    @PostMapping("/add")
+    public Integer add(UserAddDTO addDTO) {
+        // 请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // 请求体
+        String body = JSON.toJSONString(addDTO);
+        // 创建 HttpEntity 对象
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        // 执行请求
+        // ok: tainted-url-host
+        String url = String.format("http://%s/user/add", "demo-provider");
+        return restTemplate.postForObject(url, entity, Integer.class);
+    }
+
+}
+

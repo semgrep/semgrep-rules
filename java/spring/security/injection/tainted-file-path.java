@@ -35,6 +35,7 @@ public class PreflightController {
     public ResponseEntity<byte[]> fetchFile(@PathVariable("fileName") String fileName)
             throws IOException {
         InputStream inputStream =
+                // ruleid: tainted-file-path
                 new FileInputStream(
                         unrestrictedFileUpload.getContentDispositionRoot().toFile()
                                 + FrameworkConstants.SLASH
