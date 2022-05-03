@@ -1,0 +1,36 @@
+
+   
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
+<%= link_to("good", params.merge(:page => 2)) %>
+<%= link_to("xss", url_for(params[:bad])) %>
+// ruleid: check-reverse-tabnabbing
+<%= link_to(image_tag("icons/twitter-gray.svg"), sanitize(@user.home_page), target: "_blank") %>
+// ok: check-reverse-tabnabbing
+<%= link_to '', 'something_static', target: '_blank' %> No warning
+// ruleid: check-reverse-tabnabbing
+<%= link_to "", some_url, target: '_blank' %> Warn
+// ruleid: check-reverse-tabnabbing
+<%= link_to '', some_url, target: :_blank %> Warn
+// ruleid: check-reverse-tabnabbing
+<%= link_to some_url, target: '_blank' do -%>
+  Warn
+<% end %>
+// ruleid: check-reverse-tabnabbing
+<%= link_to some_url, target: :_blank do -%>
+  Warn
+<% end %>
+// ruleid: check-reverse-tabnabbing
+<%= link_to '', some_url, target: '_blank', rel: 'noopener' %> Weak warning
+// ruleid: check-reverse-tabnabbing
+<%= link_to '', some_url, target: '_blank', rel: 'noreferrer' %> Weak warning
+// ok: check-reverse-tabnabbing
+<%= link_to '', some_url, target: '_blank', rel: 'noopener noreferrer' %> No warning
+// ok: check-reverse-tabnabbing
+<%= link_to some_url, target: '_blank', rel: 'noopener noreferrer' do -%>
+  No Warning
+<% end %>
+// ok: check-reverse-tabnabbing
+<%= link_to '', target: '_blank' %> No warning
