@@ -70,4 +70,12 @@ rules:
               - metavariable-regex:
                   metavariable: $SQLSTR
                   regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+    pattern-sanitizer:
+    - pattern-either:
+      - pattern: System.out.println(...)
+      - pattern: $LOG.info(...)
+      - pattern: $LOG.warning(...)
+      - pattern: $LOG.debug(...)
+      - pattern: $LOG.debugging(...)
+      - pattern: $LOG.error(...)
 

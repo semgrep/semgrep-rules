@@ -64,7 +64,9 @@ rules:
                 $VAR = "$URLSTR";
                 ...
             - pattern: $VAR += ...
-          - pattern: String.format("$URLSTR", ...)
+          - patterns:
+            - pattern: String.format("$URLSTR", ...)
+            - pattern-not: String.format("$URLSTR", "...", ...)
           - patterns:
             - pattern-inside: |
                 String $VAR = "$URLSTR";
