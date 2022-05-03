@@ -60,6 +60,7 @@ public class Http3xxStatusCodeBasedInjection {
         MultiValueMap<String, String> headerParam = new HttpHeaders();
         if (validator.apply(urlToRedirect)) {
             headerParam.put(LOCATION_HEADER_KEY, new ArrayList<>());
+            // ruleid: nonconstant-location-header
             headerParam.get(LOCATION_HEADER_KEY).add(urlToRedirect);
             return new ResponseEntity<>(headerParam, HttpStatus.FOUND);
         }
@@ -185,6 +186,7 @@ public class Http3xxStatusCodeBasedInjection {
         MultiValueMap<String, String> headerParam = new HttpHeaders();
         URL requestUrl = new URL(requestEntity.getUrl().toString());
         headerParam.put(LOCATION_HEADER_KEY, new ArrayList<>());
+        // ruleid: nonconstant-location-header
         headerParam
                 .get(LOCATION_HEADER_KEY)
                 .add(requestUrl.getProtocol() + "://" + requestUrl.getAuthority() + urlToRedirect);
@@ -207,6 +209,7 @@ public class Http3xxStatusCodeBasedInjection {
         if (urlToRedirect.startsWith("/")) {
             urlToRedirect = urlToRedirect.substring(1);
         }
+        // ruleid: nonconstant-location-header
         headerParam
                 .get(LOCATION_HEADER_KEY)
                 .add(
