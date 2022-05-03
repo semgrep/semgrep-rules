@@ -19,8 +19,8 @@ rules:
         - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
       category: security
       technology:
+        - java
         - spring
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
       - patterns:
@@ -44,30 +44,8 @@ rules:
                     ...
                   }
     pattern-sinks:
-      - patterns:
-          - patterns:
-              - pattern-either:
-                  - pattern: |
-                      "$SQLSTR" + ...
-                  - pattern: |
-                      "$SQLSTR".concat(...)
-                  - patterns:
-                      - pattern-inside: |
-                          StringBuilder $SB = new StringBuilder("$SQLSTR");
-                          ...
-                      - pattern: $SB.append(...)
-                  - patterns:
-                      - pattern-inside: |
-                          $VAR = "$SQLSTR";
-                          ...
-                      - pattern: $VAR += ...
-                  - pattern: String.format("$SQLSTR", ...)
-                  - patterns:
-                    - pattern-inside: |
-                        String $VAR = "$SQLSTR";
-                        ...
-                    - pattern: String.format($VAR, ...)
-              - metavariable-regex:
-                  metavariable: $SQLSTR
-                  regex: (?i)(select|delete|insert|create|update|alter|drop)\b
-
+    - pattern-either:
+      - pattern: new FileInputStream(...)
+      - pattern: new FileReader(...)
+      - pattern: new File(...)
+      - pattern: $SOMETHING.getResourceAsStream(...)

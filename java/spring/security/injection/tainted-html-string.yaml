@@ -1,26 +1,26 @@
 rules:
-  - id: tainted-sql-string
+  - id: tainted-html-string
     languages:
       - java
     severity: ERROR
-    message: User data flows into this manually-constructed SQL string. User data
-      can be safely inserted into SQL strings using prepared statements or an
-      object-relational mapper (ORM). Manually-constructed SQL strings is a
-      possible indicator of SQL injection, which could let an attacker steal or
-      manipulate data from the database. Instead, use prepared statements
-      (`connection.PreparedStatement`) or a safe library.
+    message: >-
+      Detected user input flowing into a manually constructed HTML string.
+      You may be accidentally bypassing secure methods of rendering HTML by
+      manually constructing HTML and this could create a cross-site scripting
+      vulnerability, which could let attackers steal sensitive user data. To be
+      sure this is safe, check that the HTML is rendered safely. You can use
+      the OWASP ESAPI encoder if you must render user data.
     metadata:
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-        ('SQL Injection')"
+      cwe: "CWE-79"
       owasp:
         - A03:2021
-        - A01:2017
+        - A07:2017
       references:
-        - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
       category: security
       technology:
+        - java
         - spring
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
       - patterns:
@@ -48,26 +48,26 @@ rules:
           - patterns:
               - pattern-either:
                   - pattern: |
-                      "$SQLSTR" + ...
+                      "$HTMLSTR" + ...
                   - pattern: |
-                      "$SQLSTR".concat(...)
+                      "$HTMLSTR".concat(...)
                   - patterns:
                       - pattern-inside: |
-                          StringBuilder $SB = new StringBuilder("$SQLSTR");
+                          StringBuilder $SB = new StringBuilder("$HTMLSTR");
                           ...
                       - pattern: $SB.append(...)
                   - patterns:
                       - pattern-inside: |
-                          $VAR = "$SQLSTR";
+                          $VAR = "$HTMLSTR";
                           ...
                       - pattern: $VAR += ...
-                  - pattern: String.format("$SQLSTR", ...)
+                  - pattern: String.format("$HTMLSTR", ...)
                   - patterns:
                     - pattern-inside: |
-                        String $VAR = "$SQLSTR";
+                        String $VAR = "$HTMLSTR";
                         ...
                     - pattern: String.format($VAR, ...)
               - metavariable-regex:
-                  metavariable: $SQLSTR
-                  regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+                  metavariable: $HTMLSTR
+                  regex: ^<\w+
 

@@ -1,0 +1,75 @@
+rules:
+  - id: tainted-url-host
+    languages:
+      - java
+    severity: ERROR
+    message: >-
+      User data flows into the host portion of this manually-constructed URL.
+      This could allow an attacker to send data to their own server,
+      potentially exposing sensitive data such as cookies or authorization
+      information sent with this request. They could also probe internal
+      servers or other resources that the server runnig this code can access.
+      (This is called server-side request forgery, or SSRF.) Do not allow
+      arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
+      the correct host, or ensure that the user data can only affect the path or parameters.
+    metadata:
+      cwe: "CWE-918: SSRF"
+      owasp:
+        - A10:2021
+        - A07:2017
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      category: security
+      technology:
+        - java
+        - spring
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
+                  $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
+                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+              - pattern: |
+                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
+                    ...
+                  }
+              - pattern: |
+                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
+                    ...
+                  }
+    pattern-sinks:
+    - pattern-either:
+      - pattern: new URL($ONEARG)
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              "$URLSTR" + ...
+          - pattern: |
+              "$URLSTR".concat(...)
+          - patterns:
+            - pattern-inside: |
+                StringBuilder $SB = new StringBuilder("$URLSTR");
+                ...
+            - pattern: $SB.append(...)
+          - patterns:
+            - pattern-inside: |
+                $VAR = "$URLSTR";
+                ...
+            - pattern: $VAR += ...
+          - pattern: String.format("$URLSTR", ...)
+          - patterns:
+            - pattern-inside: |
+                String $VAR = "$URLSTR";
+                ...
+            - pattern: String.format($VAR, ...)
+        - metavariable-regex:
+            metavariable: $URLSTR
+            regex: http(s?)://%(v|s|q).*

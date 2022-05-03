@@ -1,0 +1,57 @@
+rules:
+  - id: tainted-system-command
+    languages:
+      - java
+    severity: ERROR
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
+                  $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+              - pattern: |
+                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
+                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+                    ...
+                  }
+              - pattern: |
+                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
+                    ...
+                  }
+              - pattern: |
+                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
+                    ...
+                  }
+    pattern-sinks:
+    - pattern-either:
+      - pattern: (Runtime $RUNTIME).exec(...)
+      - pattern: (Runtime $RUNTIME).loadLibrary(...)
+      - pattern: Runtime.getRuntime(...).exec(...)
+      - pattern: Runtime.getRuntime(...).loadLibrary(...)
+      - pattern: new ProcessBuilder($ONEARG)
+      - patterns:
+        - pattern: new ProcessBuilder(...)
+        - pattern-not: new ProcessBuilder("...", ...)
+    message: >-
+      Detected user input entering a method which executes a system command.
+      This could result in a command injection vulnerability, which allows an
+      attacker to inject an arbitrary system command onto the server. The attacker
+      could download malware onto or steal data from the server. Instead, use
+      ProcessBuilder, separating the command into individual arguments, like this:
+      `new ProcessBuilder("ls", "-al", targetDirectory)`. Further, make sure you
+      hardcode or allowlist the actual command so that attackers can't run arbitrary commands.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command
+        ('OS Command Injection')"
+      owasp: "A01:2017 - Injection"
+      category: security
+      technology:
+        - java
+        - spring
+      confidence: HIGH
+      references:
+      - https://www.stackhawk.com/blog/command-injection-java/
+      - https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html
