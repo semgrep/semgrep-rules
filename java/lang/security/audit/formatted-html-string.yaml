@@ -1,0 +1,35 @@
+rules:
+- id: formatted-html-string
+  languages:
+  - java
+  severity: WARNING
+  message: Detected a formatted HTML string. If this string contains user input and
+    is rendered directly as a broser page, this could be a cross-site scripting (XSS)
+    vulnerability. An attacker could input data that contains malicious JavasScript
+    which could steal user cookies or other sensitive information. Audit this finding
+    to make sure user input is not used to construct this HTML, or that it is not
+    rendered to users. If you must do this, consider using an encoder such as OWASP
+    ESAPI.
+  patterns:
+  - pattern-either:
+    - pattern: String.format("$HTMLSTR", ...)
+    - patterns:
+      - pattern-inside: |
+          String $VAR = "$HTMLSTR";
+          ...
+      - pattern: String.format($VAR, ...)
+  - metavariable-regex:
+      metavariable: $HTMLSTR
+      regex: ^<\w+
+  metadata:
+    category: security
+    confidence: MEDIUM
+    technology:
+    - java
+    - spring
+    - servlets
+    references:
+    - https://owasp.org/www-community/attacks/xss/
+    owasp:
+    - A07:2017 - XSS
+    - A03:2021 - Injection
