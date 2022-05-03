@@ -1,0 +1,30 @@
+rules:
+- id: nonconstant-location-header
+  message: Could not resolve the Location header. This is a possible open redirect.
+    If user input can reach this line, an attacker could trick a user to redirect
+    them to  a malicious site. Audit this finding to make sure no user input can reach
+    here, or limit the URLs which can be redirected to using an allowlist.
+  severity: WARNING
+  languages:
+  - java
+  patterns:
+  - pattern-either:
+    - pattern: $SOMETHING.put("$LOCATION", ...)
+    - pattern: $SOMETHING.get("$LOCATION").add(...)
+  - pattern-not: $SOMETHING.put("$LOCATION", "...")
+  - pattern-not: $SOMETHING.get("$LOCATION").add("...")
+  - pattern-not: $SOMETHING.put("$LOCATION", new ArrayList<>())
+  - metavariable-regex:
+      metavariable: $LOCATION
+      regex: (?i)location
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    technology:
+    - spring
+    category: security
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe: 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    confidence: MEDIUM
