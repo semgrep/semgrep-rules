@@ -15,8 +15,7 @@ rules:
     metadata:
       cwe: "CWE-918: SSRF"
       owasp:
-        - A10:2021
-        - A07:2017
+        - A10:2021 - Server-Side Request Forgery (SSRF)
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
       category: security
@@ -27,24 +26,20 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
-                  $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ($LOOKUP) String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
-                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
-                    ...
-                  }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
-                    ...
-                  }
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: (RequestBody|PathVariable|RequestParam)
+          - pattern: $SOURCE
     pattern-sinks:
     - pattern-either:
       - pattern: new URL($ONEARG)
