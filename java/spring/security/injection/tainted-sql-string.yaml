@@ -40,37 +40,35 @@ rules:
               regex: (RequestBody|PathVariable|RequestParam)
           - pattern: $SOURCE
     pattern-sinks:
-      - patterns:
-          - patterns:
-              - pattern-either:
-                  - pattern: |
-                      "$SQLSTR" + ...
-                  - pattern: |
-                      "$SQLSTR".concat(...)
-                  - patterns:
-                      - pattern-inside: |
-                          StringBuilder $SB = new StringBuilder("$SQLSTR");
-                          ...
-                      - pattern: $SB.append(...)
-                  - patterns:
-                      - pattern-inside: |
-                          $VAR = "$SQLSTR";
-                          ...
-                      - pattern: $VAR += ...
-                  - pattern: String.format("$SQLSTR", ...)
-                  - patterns:
-                    - pattern-inside: |
-                        String $VAR = "$SQLSTR";
-                        ...
-                    - pattern: String.format($VAR, ...)
-              - metavariable-regex:
-                  metavariable: $SQLSTR
-                  regex: (?i)(select|delete|insert|create|update|alter|drop)\b
-    pattern-sanitizers:
-    - pattern-either:
-      - pattern: System.out.println(...)
-      - pattern: $LOG.info(...)
-      - pattern: $LOG.warning(...)
-      - pattern: $LOG.debug(...)
-      - pattern: $LOG.debugging(...)
-      - pattern: $LOG.error(...)
+    - patterns:
+        - pattern-either:
+            - pattern: |
+                "$SQLSTR" + ...
+            - pattern: |
+                "$SQLSTR".concat(...)
+            - patterns:
+                - pattern-inside: |
+                    StringBuilder $SB = new StringBuilder("$SQLSTR");
+                    ...
+                - pattern: $SB.append(...)
+            - patterns:
+                - pattern-inside: |
+                    $VAR = "$SQLSTR";
+                    ...
+                - pattern: $VAR += ...
+            - pattern: String.format("$SQLSTR", ...)
+            - patterns:
+              - pattern-inside: |
+                  String $VAR = "$SQLSTR";
+                  ...
+              - pattern: String.format($VAR, ...)
+        - pattern-not-inside: System.out.println(...)
+        - pattern-not-inside: $LOG.info(...)
+        - pattern-not-inside: $LOG.warn(...)
+        - pattern-not-inside: $LOG.warning(...)
+        - pattern-not-inside: $LOG.debug(...)
+        - pattern-not-inside: $LOG.debugging(...)
+        - pattern-not-inside: $LOG.error(...)
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: (?i)(select|delete|insert|create|update|alter|drop)\b
