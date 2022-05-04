@@ -42,6 +42,9 @@ rules:
       - pattern-either:
           - pattern-either:
               - pattern: new FileInputStream(...)
+              - pattern: new java.io.FileInputStream(...)
               - pattern: new FileReader(...)
+              - pattern: new java.io.FileReader(...)
               - pattern: new File(...)
+              - pattern: new java.io.File(...)
               - pattern: $SOMETHING.getResourceAsStream(...)
