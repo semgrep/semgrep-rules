@@ -20,28 +20,25 @@ rules:
       category: security
       technology:
         - spring
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
-                  $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ($LOOKUP) String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
-                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
-                    ...
-                  }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
-                    ...
-                  }
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: (RequestBody|PathVariable|RequestParam)
+          - pattern: $SOURCE
     pattern-sinks:
       - patterns:
           - patterns:
@@ -77,4 +74,3 @@ rules:
       - pattern: $LOG.debug(...)
       - pattern: $LOG.debugging(...)
       - pattern: $LOG.error(...)
-
