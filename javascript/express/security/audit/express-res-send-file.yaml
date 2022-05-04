@@ -1,0 +1,43 @@
+rules:
+  - id: audit-express-res-send-file
+    message: The application processes possibly tainted data, this is passed to
+      res.sendFile which can allow an attacker to arbitrarily read files on the
+      system through path traversal. It is recommended to perform input
+      validation in addition to canonicalizing the path. This allows you to
+      validate the path against the intended directory it should be accessing.
+    languages:
+      - typescript
+    severity: INFO
+    mode: taint
+    pattern-sinks:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: $RES.sendFile($PATH.resolve(...,$QUERY,...))
+              - pattern: $QUERY
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          function ... (...,$REQ: $TYPE, ...) {...}
+                  - metavariable-regex:
+                      metavariable: $TYPE
+                      regex: ^(string|Request)
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)
+          - pattern-either:
+              - pattern: $REQ
+    metadata:
+      technology:
+        - express
+      category: security
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection

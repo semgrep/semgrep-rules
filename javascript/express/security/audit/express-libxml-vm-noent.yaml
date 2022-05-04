@@ -1,0 +1,43 @@
+rules:
+  - id: express-libxml-vm-noent
+    message:
+      Detected use of parseXml() function with the `noent` field set to `true`.
+      This can lead to an XML External Entities (XXE) attack if untrusted data
+      is passed into it.
+    metadata:
+      owasp: "A4: XML External Entities (XXE)"
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      category: security
+      technology:
+        - express
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: $VM.runInContext("$CMD", ...)
+                  - pattern: $VM.runInNewContext("$CMD", ...)
+                  - pattern: $VM.runInThisContext("$CMD", ...)
+                  - pattern: $VM.compileFunction("$CMD", ...)
+              - metavariable-pattern:
+                  metavariable: $CMD
+                  language: typescript
+                  pattern-either:
+                    - pattern: |
+                        $LIBXML.parseXml($DATA, {..., noent: true, ...}, ...)
+                    - patterns:
+                        - pattern-inside: |
+                            $OPTS = {..., noent: true, ...}
+                            ...
+                        - pattern: $LIBXML.parseXml( $DATA, $OPTS )
+          - pattern: |
+              $LIBXML.parseXml($DATA, {..., noent: true, ...}, ...)
+          - patterns:
+              - pattern-inside: |
+                  $OPTS = {..., noent: true, ...}
+                  ...
+              - pattern: $LIBXML.parseXml( $DATA, $OPTS )
+              
