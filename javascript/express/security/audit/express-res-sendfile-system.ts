@@ -5,11 +5,11 @@ import { Request, Response, NextFunction } from 'express'
 module.exports = function badNormal () {
   return (req: Request, res: Response, next: NextFunction) => {
     const file = req.params.file
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(path.resolve('ftp/', file))
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(path.join('/ftp/', file))
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(file)
   }
 
@@ -18,14 +18,14 @@ module.exports = function badNormal () {
 module.exports = function goodNormal () {
   return (req: Request, res: Response, next: NextFunction) => {
     const file = 'foo'
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendFile(path.resolve('ftp/', file))
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendfile(req.app.get('staticFilePath') + '/index-test.html');
     // diffrent rule 
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendfile(req.params.foo, {root: '/'});
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendfile(req.params.foo, options);
   }
 
@@ -35,14 +35,14 @@ module.exports = function goodNormal () {
 module.exports = function badWithTypes () {
   return ({ params, query }: Request, res: Response, next: NextFunction) => {
     const file = params.file
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(path.resolve('ftp/', file))
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(path.join('/ftp/', file))
-    // ruleid: express-res-send-file-system
+    // ruleid: express-res-send-system
     res.sendFile(file)
     // diffrent rule 
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendfile(file, {root: '/'});
   }
 
@@ -51,7 +51,7 @@ module.exports = function badWithTypes () {
 module.exports = function goodWithTypes () {
   return ({ params, query, session }: Request, res: Response, next: NextFunction) => {
     const file = session
-    // ok: express-res-send-file-system
+    // ok: express-res-send-system
     res.sendFile(path.resolve('ftp/', file))
   }
 
@@ -69,7 +69,7 @@ module.exports = function advanced () {
 
   function joinModeOrDeepSemgrep (file: string, res: Response, next: NextFunction) {
 
-      // todo: express-res-send-file-system
+      // todo: express-res-send-system
       res.sendFile(path.resolve('ftp/', file))
 
   }
