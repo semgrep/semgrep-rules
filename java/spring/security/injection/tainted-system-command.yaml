@@ -7,24 +7,20 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
-                  $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ($LOOKUP) String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
-                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
-                    ...
-                  }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
-                    ...
-                  }
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: (RequestBody|PathVariable|RequestParam)
+          - pattern: $SOURCE
     pattern-sinks:
     - pattern-either:
       - pattern: (Runtime $RUNTIME).exec(...)
@@ -46,7 +42,9 @@ rules:
     metadata:
       cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command
         ('OS Command Injection')"
-      owasp: "A01:2017 - Injection"
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
       category: security
       technology:
         - java
@@ -55,3 +53,4 @@ rules:
       references:
       - https://www.stackhawk.com/blog/command-injection-java/
       - https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html
+      
