@@ -7,6 +7,10 @@ module.exports = function badNormal () {
     const file = req.params.file
     // ruleid: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
+    // ruleid: express-res-sendfile
+    res.sendFile(path.join('/ftp/', file))
+    // ruleid: express-res-sendfile
+    res.sendFile(file)
   }
 
 
@@ -16,6 +20,13 @@ module.exports = function goodNormal () {
     const file = 'foo'
     // ok: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
+    // ok: express-res-sendfile
+    res.sendfile(req.app.get('staticFilePath') + '/index-test.html');
+    // diffrent rule 
+    // ok: express-res-sendfile
+    res.sendfile(req.params.foo, {root: '/'});
+    // ok: express-res-sendfile
+    res.sendfile(req.params.foo, options);
   }
 
 }
@@ -26,6 +37,13 @@ module.exports = function badWithTypes () {
     const file = params.file
     // ruleid: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
+    // ruleid: express-res-sendfile
+    res.sendFile(path.join('/ftp/', file))
+    // ruleid: express-res-sendfile
+    res.sendFile(file)
+    // diffrent rule 
+    // ok: express-res-sendfile
+    res.sendfile(file, {root: '/'});
   }
 
 }
