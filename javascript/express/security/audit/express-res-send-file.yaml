@@ -1,5 +1,5 @@
 rules:
-  - id: audit-express-res-send-file
+  - id: express-res-send-file
     message: The application processes possibly tainted data, this is passed to
       res.sendFile which can allow an attacker to arbitrarily read files on the
       system through path traversal. It is recommended to perform input
@@ -16,6 +16,19 @@ rules:
                   - pattern: $RES.sendFile($PATH.resolve(...,$QUERY,...))
               - pattern: $QUERY
     pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: >
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body
       - patterns:
           - pattern-either:
               - patterns:
