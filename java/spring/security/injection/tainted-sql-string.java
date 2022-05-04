@@ -1,5 +1,7 @@
 package com.r2c.tests;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.*;
@@ -14,6 +16,8 @@ import java.sql.Statement;
 @RestController
 @EnableAutoConfiguration
 public class TestController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestController.class);
 
     @RequestMapping(value = "/test1", method = RequestMethod.POST, produces = "plain/text")
     ResultSet test1(@RequestBody String name) {
@@ -83,6 +87,10 @@ public class TestController {
         String sql = "SELECT * FROM table WHERE name = 'everyone';";
         // ok: tainted-sql-string
         System.out.println(String.format("Got request from %s", name));
+        // ok: tainted-sql-string
+        System.out.println("select noise for tests using tainted name:" + name);
+        // ok: tainted-sql-string
+        Logger.debug("Create noise for tests using tainted name:" + name);
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
