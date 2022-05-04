@@ -22,22 +22,13 @@ rules:
       - pattern-not-inside: |
           $RETURNTYPE $METHOD(...) {
             ...
-            $DBF.setXIncludeAware(true);
-            $DBF.setNamespaceAware(true);
-            ...
             $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             ...
           }
       - pattern-not-inside: |
           DocumentBuilderFactory $DBF =  ... ;
           ...
-          $DBF.setXIncludeAware(true);
-          $DBF.setNamespaceAware(true);
-          ...
           $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-          $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
-          $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+          ...
     languages:
       - java
