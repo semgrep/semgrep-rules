@@ -1,5 +1,5 @@
 rules:
-  - id: express-res-send-file
+  - id: express-res-sendfile
     message: The application processes possibly tainted data, this is passed to
       res.sendFile which can allow an attacker to arbitrarily read files on the
       system through path traversal. It is recommended to perform input
@@ -48,6 +48,8 @@ rules:
           - pattern-either:
               - pattern: $REQ
     metadata:
+      references:
+            - https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
       technology:
         - express
       category: security

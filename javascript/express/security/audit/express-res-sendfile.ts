@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from 'express'
 module.exports = function badNormal () {
   return (req: Request, res: Response, next: NextFunction) => {
     const file = req.params.file
-    // ruleid: express-res-send-file
+    // ruleid: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
   }
 
@@ -14,7 +14,7 @@ module.exports = function badNormal () {
 module.exports = function goodNormal () {
   return (req: Request, res: Response, next: NextFunction) => {
     const file = 'foo'
-    // ok: express-res-send-file
+    // ok: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
   }
 
@@ -24,7 +24,7 @@ module.exports = function goodNormal () {
 module.exports = function badWithTypes () {
   return ({ params, query }: Request, res: Response, next: NextFunction) => {
     const file = params.file
-    // ruleid: express-res-send-file
+    // ruleid: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
   }
 
@@ -33,7 +33,7 @@ module.exports = function badWithTypes () {
 module.exports = function goodWithTypes () {
   return ({ params, query, session }: Request, res: Response, next: NextFunction) => {
     const file = session
-    // ok: express-res-send-file
+    // ok: express-res-sendfile
     res.sendFile(path.resolve('ftp/', file))
   }
 
@@ -51,7 +51,7 @@ module.exports = function advanced () {
 
   function joinModeOrDeepSemgrep (file: string, res: Response, next: NextFunction) {
 
-      // ruleid: express-res-send-file
+      // ruleid: express-res-sendfile
       res.sendFile(path.resolve('ftp/', file))
 
   }
