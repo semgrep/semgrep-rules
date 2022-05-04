@@ -3,8 +3,7 @@ rules:
     languages:
       - java
     severity: ERROR
-    message: >-
-      Detected user input creating a file path. An attacker could control
+    message: Detected user input controlling a file path. An attacker could control
       the location of this file, to include going backwards in the directory
       with '../'. To address this, ensure that user-controlled variables in file
       paths are sanitized. You may also consider using a utility method such as
@@ -13,10 +12,10 @@ rules:
     metadata:
       cwe: "CWE-23: Relative Path Traversal"
       owasp:
-        - A03:2021 - Injection
-        - A01:2017 - Injection
+        - A01:2021 - Broken Access Control
+        - A05:2017 - Broken Access Control
       references:
-      - https://owasp.org/www-community/attacks/Path_Traversal
+        - https://owasp.org/www-community/attacks/Path_Traversal
       category: security
       technology:
         - java
@@ -25,27 +24,24 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(..., @$ANNOTATION
-                  $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ($LOOKUP) String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  @RequestMapping(...) $RETURNTYPE $METHODNAME(...,
-                  @$ANNOTATION(...) $TYPE $PARAMETER, ...) {
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ String
+                  $SOURCE,...) {
                     ...
                   }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam $TYPE $PARAMETER) {
-                    ...
-                  }
-              - pattern: |
-                  $RETURNTYPE $METHODNAME(..., @RequestParam($LOOKUP) $TYPE $PARAMETER) {
-                    ...
-                  }
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: (RequestBody|PathVariable|RequestParam)
+          - pattern: $SOURCE
     pattern-sinks:
-    - pattern-either:
-      - pattern: new FileInputStream(...)
-      - pattern: new FileReader(...)
-      - pattern: new File(...)
-      - pattern: $SOMETHING.getResourceAsStream(...)
+      - pattern-either:
+          - pattern-either:
+              - pattern: new FileInputStream(...)
+              - pattern: new FileReader(...)
+              - pattern: new File(...)
+              - pattern: $SOMETHING.getResourceAsStream(...)
