@@ -1,0 +1,39 @@
+# Install dependencies separately to improve caching
+COPY package.json yarn.lock /app/
+WORKDIR /app
+# ruleid: use-frozen-lockfile-yarn
+RUN yarn install --frozen-lockfile
+# trailing space
+# ruleid: use-frozen-lockfile-yarn
+RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile
+RUN yarn install some_package
+
+RUN echo 'yarn installing foo'
+
+RUN yarn install --frozen-lockfile
+COPY . /app
+RUN yarn build
+
+WORKDIR /app
+RUN yarn install foo
+
+RUN npm install foo
+# ruleid: use-frozen-lockfile-npm
+RUN npm ci
+RUN npm ci
+COPY . /app
+RUN yarn build
+
+RUN echo 'npm installing foo'
+
+
+# ruleid: use-frozen-lockfile-pipenv
+RUN pipenv install --ignore-pipfile
+# another case with a trailing space
+# ruleid: use-frozen-lockfile-pipenv
+RUN pipenv install --ignore-pipfile
+RUN pipenv install some_package
+RUN pipenv install --ignore-pipfile
+
+RUN echo 'pipenv installing foo'

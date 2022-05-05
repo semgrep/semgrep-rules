@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 
 ENV dirpath=bar
 # ruleid: use-absolute-workdir
-WORKDIR ${dirpath}   # WORKDIR bar
+WORKDIR ${dirpath}
 
 ENV dirpath=/bar
 # ok: use-absolute-workdir
-WORKDIR ${dirpath}   # WORKDIR /bar
+WORKDIR ${dirpath}
