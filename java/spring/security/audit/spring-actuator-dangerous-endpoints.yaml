@@ -2,20 +2,14 @@ rules:
   - id: spring-actuator-dangerous-endpoints
     patterns:
     - pattern-either:
+      - pattern-regex: management.endpoints.web.exposure.include=(jolokia|heapdump|threaddump|jolokia|trace|env)
       - pattern: management.endpoints.enabled-by-default=true
-      - pattern: management.endpoints.web.exposure.include=*
       - pattern: management.endpoint.heapdump.enabled=true
       - pattern: management.endpoint.threaddump.enabled=true
       - pattern: management.endpoint.trace.enabled=true
       - pattern: management.endpoint.logfile.enabled=true
       - pattern: management.endpoint.env.enabled=true
       - pattern: management.endpoint.jolokia.enabled=true
-      - pattern: management.endpoints.web.exposure.include=...heapdump...
-      - pattern: management.endpoints.web.exposure.include=...threaddump...
-      - pattern: management.endpoints.web.exposure.include=...trace...
-      - pattern: management.endpoints.web.exposure.include=...logfile...
-      - pattern: management.endpoints.web.exposure.include=...env...
-      - pattern: management.endpoints.web.exposure.include=...jolokia...
     - pattern-not-regex: ^#.*
     message: Spring Boot Actuator has dangerous endpoints enabled, which could dump the heap memory,
       threads, http trace, env variables, jolokia endpoints and more. 
