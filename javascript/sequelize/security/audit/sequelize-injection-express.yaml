@@ -1,0 +1,61 @@
+rules:
+  - id: express-sequelize-injection
+    message: >-
+      Detected a sequelize statement that is tainted by user-input. This
+      could lead to SQL injection if the variable is user-controlled and is not
+      properly sanitized. In order to prevent SQL injection, it is recommended
+      to use parameterized queries or prepared statements.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    mode: taint
+    pattern-sinks:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: sequelize.query($QUERY,...)
+                  - pattern-inside: $DB.sequelize.query($QUERY,...)
+              - pattern: $QUERY
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: function ... ($REQ, $RES) {...}
+              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+              - patterns:
+                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)
+          - pattern-either:
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.cookies
+              - pattern: $REQ.headers
+              - pattern: $REQ.files
+      - patterns:
+          - pattern-either:
+              - pattern-inside: >
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body
+              - pattern: files
+    metadata:
+      references:
+        - https://sequelize.org/docs/v6/core-concepts/raw-queries/#replacements
+      category: security
+      technology:
+        - express
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+        ('SQL Injection')"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection

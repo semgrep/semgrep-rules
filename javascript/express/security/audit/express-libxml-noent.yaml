@@ -1,0 +1,60 @@
+rules:
+  - id: express-libxml-noent
+    message: >-
+      The libxml library processes user-input with the `noent` attribute is
+      set to `true` which can lead to being vulnerable to XML External Entities
+      (XXE) type attacks. It is recommended to set `noent` to `false` when using
+      this feature to ensure you are protected.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    mode: taint
+    pattern-sinks:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      $XML = require('$IMPORT')
+                      ...
+                  - pattern-inside: |
+                      import $XML from '$IMPORT'
+                        ...
+                  - pattern-inside: |
+                      import * as $XML from '$IMPORT'
+                      ...
+              - metavariable-regex:
+                  metavariable: $IMPORT
+                  regex: ^(libxmljs|libxmljs2)$
+              - pattern-inside: $XML.$FUNC($QUERY, {...,noent:true,...})
+              - metavariable-regex:
+                  metavariable: $FUNC
+                  regex: ^(parseXmlString|parseXml)$
+              - pattern: $QUERY
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: function ... ($REQ, $RES) {...}
+              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+              - patterns:
+                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)
+          - pattern-either:
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.cookies
+              - pattern: $REQ.headers
+              - pattern: $REQ.files
+    metadata:
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+      technology:
+        - express
+      category: security
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp:
+        - A04:2017 - XML External Entities (XXE)
+        - A03:2021 - Injection
