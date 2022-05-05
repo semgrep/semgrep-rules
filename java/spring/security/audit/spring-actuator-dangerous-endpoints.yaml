@@ -1,7 +1,7 @@
 rules:
   - id: spring-actuator-dangerous-endpoints
     patterns:
-    - pattern-either:
+    - patterns:
       - pattern-regex: management.endpoints.web.exposure.include=(jolokia|heapdump|threaddump|jolokia|trace|env)
       - pattern: management.endpoints.enabled-by-default=true
       - pattern: management.endpoint.heapdump.enabled=true
@@ -11,7 +11,7 @@ rules:
       - pattern: management.endpoint.env.enabled=true
       - pattern: management.endpoint.jolokia.enabled=true
     - pattern-not-regex: ^#.*
-    message: Spring Boot Actuator has dangerous endpoints enabled, which could dump the heap memory,
+    message: Spring Boot Actuator has dangerous endpoints enabled AND exposed, which could dump the heap memory,
       threads, http trace, env variables, jolokia endpoints and more. 
       Check your usage before enabling this in production, especially on the same port as your REST application.
     severity: ERROR
