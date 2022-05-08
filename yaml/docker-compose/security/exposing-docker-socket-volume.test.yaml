@@ -130,3 +130,88 @@ services:
       - /tmp/foo
       - /run/docker.sock
       - /tmp/bar
+  service22:
+    image: debian:bullseye
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+  service23:
+    image: debian:buster
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  service24:
+    image: debian:bullseye-slim
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - target: /run/docker.sock
+        source: /var/run/docker.sock
+  service25:
+    image: debian:buster-slim
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+  service26:
+    image: debian:bullseye
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+        target: /run/docker.sock
+  service27:
+    image: debian:buster
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - target: /var/run/docker.sock
+        source: /run/docker.sock
+  service28:
+    image: mysql:latest
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+  service29:
+    image: postgres:latest
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+        target: /tmp/bar
+      - source: /tmp/bar
+        target: /tmp/foo
+  service30:
+    image: nginx
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /var/run/docker.sock
+  service31:
+    image: nginx:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+      - source: /tmp/foo
+  service32:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /var/run/docker.sock
+      - source: /tmp/bar
+  service33:
+    image: nginx
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /run/docker.sock
+  service34:
+    image: nginx:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+      - source: /tmp/foo
+  service35:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /run/docker.sock
+      - source: /tmp/bar
