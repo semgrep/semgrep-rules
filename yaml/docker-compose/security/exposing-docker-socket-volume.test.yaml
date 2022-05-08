@@ -215,3 +215,52 @@ services:
       - source: /tmp/foo
       - source: /run/docker.sock
       - source: /tmp/bar
+  service36:
+    image: nginx:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - /var/run/docker.sock
+  service37:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+      - /tmp/foo
+  service38:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - source: /var/run/docker.sock
+      - /tmp/bar
+  service39:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+  service40:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  service41:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+  service42:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock:/run/docker.sock
+  service43:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
+  service44:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
