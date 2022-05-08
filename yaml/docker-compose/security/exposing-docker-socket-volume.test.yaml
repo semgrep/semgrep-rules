@@ -82,3 +82,51 @@ services:
       - /tmp/foo:/tmp/foo
       - /run/docker.sock:/var/run/docker.sock
       - /tmp/bar:/tmp/bar
+  service14:
+    image: redis:6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+  service15:
+    image: mysql:5.7
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /var/run/docker.sock
+  service16:
+    image: mysql:5.6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+      - /tmp/foo
+  service17:
+    image: postgres:13
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /var/run/docker.sock
+      - /tmp/bar
+  service18:
+    image: redis:6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+  service19:
+    image: mysql:5.7
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /run/docker.sock
+  service20:
+    image: mysql:5.6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+      - /tmp/foo
+  service21:
+    image: postgres:13
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /run/docker.sock
+      - /tmp/bar
