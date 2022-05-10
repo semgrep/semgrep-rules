@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-    # ruleid: run-as-non-root-unsafe-value
     - name: redis
       image: redis
       securityContext:
+        # ruleid: run-as-non-root-unsafe-value
         runAsNonRoot: false
     # ok: run-as-non-root-unsafe-value
     - name: haproxy
