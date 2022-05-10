@@ -2,22 +2,17 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-    # ruleid: run-as-non-root
+    # ruleid: run-as-non-root-unsafe-default
     - name: nginx
       image: nginx
-    # ruleid: run-as-non-root
+    # ruleid: run-as-non-root-unsafe-default
     - name: postgres
       image: postgres
       securityContext:
         runAsUser: 1000
         runAsGroup: 3000
         fsGroup: 2000
-    # ruleid: run-as-non-root
-    - name: redis
-      image: redis
-      securityContext:
-        runAsNonRoot: false
-    # ok: run-as-non-root
+    # ok: run-as-non-root-unsafe-default
     - name: haproxy
       image: haproxy
       securityContext:

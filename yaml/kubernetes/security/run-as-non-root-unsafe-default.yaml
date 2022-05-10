@@ -1,22 +1,24 @@
 rules:
-  - id: run-as-non-root
+  - id: run-as-non-root-unsafe-default
     patterns:
       - pattern-inside: |
           containers:
             ...
-      - pattern: |
-          image: ...
-          ...
       - pattern-not: |
-          image: ...
-          ...
-          securityContext:
+          - name: $NAME
+            image: ...
             ...
-            runAsNonRoot: true
-    message: >-
-      Container allows for running applications as root. This can result in
-      privilege escalation attacks. Add 'runAsNonRoot: true' in 'securityContext'
-      to prevent this.
+            securityContext:
+              ...
+              runAsNonRoot: $VALUE
+      - pattern: |
+          - name: $NAME
+            image: ...
+            ...
+      - focus-metavariable: $NAME
+    message: "Container allows for running applications as root. This can result in
+      privilege escalation attacks. Add 'runAsNonRoot: true' in
+      'securityContext' to prevent this."
     metadata:
       references:
         - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
@@ -25,5 +27,6 @@ rules:
       category: security
       technology:
         - kubernetes
-    languages: [yaml]
+    languages:
+      - yaml
     severity: WARNING
