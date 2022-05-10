@@ -111,8 +111,13 @@ def is_rule(path: str) -> bool:
     return ext in (".yaml", ".yml") and "/scripts/" not in path
 
 def is_audit(path: str) -> bool:
-    _, ext = os.path.splitext(path)
     return "/audit/" in path or path.endswith("/audit")
+
+def is_taint(rule: Dict[str, Any]) -> bool:
+    if 'mode' in rule:
+        if rule['mode'] == 'taint':
+            return True
+    return False
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
@@ -139,8 +144,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     # Add arguments here
-    parser.add_argument("directory")
     parser.add_argument("--skip-audit", "-s", help="skip audit rules", action='store_true')
+    parser.add_argument("--taint-only", "-t", help="only process taint mode rules", action='store_true')
+    parser.add_argument("--output-file", "-o", help="file to output json to")
+    parser.add_argument("directory", help="directory to scan")
 
     args = parser.parse_args()
 
@@ -157,21 +164,22 @@ if __name__ == "__main__":
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
 
     for dirpath, dirnames, filenames in os.walk(args.directory):
-        if is_audit(dirpath) and args.skip_audit:
+        if args.skip_audit and is_audit(dirpath):
             continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
-            if not is_rule(path):
-                continue
-            if not is_security(path):
+            if not is_rule(path) or not is_security(path):
                 continue
             with open(path, "r") as fin:
                 rules = yaml.safe_load(fin)
                 for rule in rules.get("rules", []):
-                    framework = get_framework(path)
-                    lang = get_lang(path)
+                    if args.taint_only and not is_taint(rule):
+                        continue
+
                     cwe = get_cwe(rule)
+                    lang = get_lang(path)
                     owasp = get_owasp(rule)
+                    framework = get_framework(path)
                     technology = get_technology(rule)
 
                     for c in cwe:
@@ -193,7 +201,8 @@ if __name__ == "__main__":
                         for tech in technology: # Some rules have multiple technology tags
                             owasp_by_technology_matrix[owasp_standard][lang][tech].append((path, rule))
 
-    of = open("json_output.json", "w")
+    out_file_name = args.output_file if args.output_file else 'json_output.json'
+    of = open(out_file_name, "w")
     of.write(json.dumps({
         "owasp": {
             "totals": {owasp: len(v) for owasp, v in sorted(owasp_matrix.items())},
