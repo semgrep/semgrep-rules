@@ -25,9 +25,9 @@ function CustomTextInput(props) {
 
   return (
     <div>
-// ruleid: react-no-refs
       <input
         type="text"
+        // ruleid: react-no-refs
         ref={textInput} />
       <input
         type="button"
