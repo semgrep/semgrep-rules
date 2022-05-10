@@ -45,7 +45,7 @@ def get_owasp(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "owasp" in d.keys(), rule.get("metadata"))).get(0, {}).get("owasp", "")
     except Exception:
         logger.warning(f"Could not get owasp for rule {rule.get('id', '')}")
-        return ""
+        return [""]
 
 def get_cwe(rule: Dict[str, Any]) -> List[str]:
     try:
@@ -60,7 +60,7 @@ def get_cwe(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "cwe" in d.keys(), rule.get("metadata"))).get(0, {}).get("cwe", "")
     except Exception:
         logger.warning(f"Could not get cwe for rule {rule.get('id', '')}")
-        return ''
+        return ['']
 
 def get_technology(rule: Dict[str, Any]) -> List[str]:
     try:
@@ -75,7 +75,7 @@ def get_technology(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "technology" in d.keys(), rule.get("metadata"))).get(0, {}).get("technology", "")
     except Exception:
         logger.warning(f"Could not get technology for rule {rule.get('id', '')}")
-        return ""
+        return [""]
 
 # Sometimes, the language as defined within the ArchList will be something that's not in the dict
 # So, the filepath seems like the only reliable way to get the lanaguage
@@ -84,7 +84,7 @@ def get_lang(path: str) -> str:
     #archlist =  ArchList(rule.get('languages', [])).get(0, "")
     #return archlist
 
-def get_framework(path: str, rule: Dict[str, Any]) -> str:
+def get_framework(path: str) -> str:
     #  get the dir name immediately under the language
     s = path.split(os.path.sep)
     lang = s[1]
@@ -168,7 +168,7 @@ if __name__ == "__main__":
             with open(path, "r") as fin:
                 rules = yaml.safe_load(fin)
                 for rule in rules.get("rules", []):
-                    framework = get_framework(path, rule)
+                    framework = get_framework(path)
                     lang = get_lang(path)
                     cwe = get_cwe(rule)
                     owasp = get_owasp(rule)
@@ -220,3 +220,4 @@ if __name__ == "__main__":
             "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
         }
     }))
+
