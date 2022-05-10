@@ -110,6 +110,10 @@ def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
     return ext in (".yaml", ".yml") and "/scripts/" not in path
 
+def is_audit(path: str) -> bool:
+    _, ext = os.path.splitext(path)
+    return "/audit/" in path or path.endswith("/audit")
+
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
     if "A01:2017" in owasp or "A03:2021" in owasp:
@@ -150,7 +154,10 @@ if __name__ == "__main__":
     owasp_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     cwe_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
+
     for dirpath, dirnames, filenames in os.walk(args.directory):
+        if is_audit(dirpath):
+            continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
             if not is_rule(path):
@@ -166,7 +173,6 @@ if __name__ == "__main__":
                     owasp = get_owasp(rule)
                     technology = get_technology(rule)
 
-                    # I think the cwe stuff is supposed to be out of the owasp loop
                     for c in cwe:
                         cwe_matrix[c].append((path, rule))
                         cwe_by_lang_matrix[c][lang].append((path, rule))
