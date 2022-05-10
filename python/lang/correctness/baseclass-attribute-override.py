@@ -1,5 +1,3 @@
-
-# ruleid: baseclass-attribute-override
 class A:
     def method1(self, args):
         pass
@@ -12,8 +10,16 @@ class A2:
 
 class B:
     def method1(self, args):
-        print('hello there')
+        print("hello there")
 
+
+# ruleid: baseclass-attribute-override
 class C(A, B):
     def __init__():
-        print('initialized')
+        print("initialized")
+
+
+# ok: baseclass-attribute-override
+class C(A2, B):
+    def __init__():
+        print("initialized")
