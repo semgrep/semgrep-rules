@@ -11,12 +11,11 @@ rules:
       category: security
       technology:
         - jwt
-    pattern-either:
+    patterns:
       - pattern: |
-          jwt.encode($X, "...", ...)
-      - pattern: |
-          $SECRET = "..."
-          ...
           jwt.encode($X, $SECRET, ...)
+      - focus-metavariable: $SECRET
+      - pattern: |
+          "..."
     languages: [python]
     severity: ERROR
