@@ -23,6 +23,7 @@ rules:
               React.createElement($EL, $F(<... $PROPS ...>))
       - pattern-not-inside: |
           React.createElement($EL, {$ATTR: ...})
+      - focus-metavariable: $PROPS
     message: >-
       Injecting props into a new React Element may introduce an XSS vulnerability if the props contains a user-controllable object (such as a `dangerouslySetInnerHTML` expression).
     metadata:
