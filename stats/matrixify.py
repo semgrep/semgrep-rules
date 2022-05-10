@@ -140,6 +140,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Add arguments here
     parser.add_argument("directory")
+    parser.add_argument("--skip-audit", "-s", help="skip audit rules", action='store_true')
 
     args = parser.parse_args()
 
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
 
     for dirpath, dirnames, filenames in os.walk(args.directory):
-        if is_audit(dirpath):
+        if is_audit(dirpath) and args.skip_audit:
             continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
