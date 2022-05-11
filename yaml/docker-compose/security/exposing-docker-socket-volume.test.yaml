@@ -1,12 +1,266 @@
 version: "3.9"
 services:
-  web:
+  service01:
     image: nginx:alpine
-  worker:
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /tmp/bar:/tmp/bar
+  service02:
     image: my-worker-image:latest
-  db:
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /var/run/docker.sock:/var/run/docker.sock
+  service03:
     image: mysql
-# ruleid: exposing-docker-socket-volume
-volumes:
-  - /tmp/foo:/tmp/foo
-  - /var/run/docker.sock:/var/run/docker.sock
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/foo:/tmp/foo
+  service04:
+    image: redis
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/bar:/tmp/bar
+  service05:
+    image: ubuntu
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /run/docker.sock:/run/docker.sock
+  service06:
+    image: debian:bullseye
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock:/run/docker.sock
+      - /tmp/foo:/tmp/foo
+  service07:
+    image: debian:buster
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /run/docker.sock:/run/docker.sock
+      - /tmp/bar:/tmp/bar
+  service08:
+    image: python:3.10
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /var/run/docker.sock:/run/docker.sock
+  service09:
+    image: python:3.9
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
+      - /tmp/foo:/tmp/foo
+  service10:
+    image: ruby:3
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /var/run/docker.sock:/run/docker.sock
+      - /tmp/bar:/tmp/bar
+  service11:
+    image: postgres:14
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /run/docker.sock:/var/run/docker.sock
+  service12:
+    image: random:thing
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock:/var/run/docker.sock
+      - /tmp/foo:/tmp/foo
+  service13:
+    image: semgrep:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo:/tmp/foo
+      - /run/docker.sock:/var/run/docker.sock
+      - /tmp/bar:/tmp/bar
+  service14:
+    image: redis:6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+  service15:
+    image: mysql:5.7
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /var/run/docker.sock
+  service16:
+    image: mysql:5.6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+      - /tmp/foo
+  service17:
+    image: postgres:13
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /var/run/docker.sock
+      - /tmp/bar
+  service18:
+    image: redis:6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+  service19:
+    image: mysql:5.7
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /run/docker.sock
+  service20:
+    image: mysql:5.6
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+      - /tmp/foo
+  service21:
+    image: postgres:13
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - /run/docker.sock
+      - /tmp/bar
+  service22:
+    image: debian:bullseye
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+  service23:
+    image: debian:buster
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  service24:
+    image: debian:bullseye-slim
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - target: /run/docker.sock
+        source: /var/run/docker.sock
+  service25:
+    image: debian:buster-slim
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+  service26:
+    image: debian:bullseye
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+        target: /run/docker.sock
+  service27:
+    image: debian:buster
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - target: /var/run/docker.sock
+        source: /run/docker.sock
+  service28:
+    image: mysql:latest
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+  service29:
+    image: postgres:latest
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+        target: /tmp/bar
+      - source: /tmp/bar
+        target: /tmp/foo
+  service30:
+    image: nginx
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /var/run/docker.sock
+  service31:
+    image: nginx:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /var/run/docker.sock
+      - source: /tmp/foo
+  service32:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /var/run/docker.sock
+      - source: /tmp/bar
+  service33:
+    image: nginx
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /run/docker.sock
+  service34:
+    image: nginx:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+      - source: /tmp/foo
+  service35:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - source: /run/docker.sock
+      - source: /tmp/bar
+  service36:
+    image: nginx:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /tmp/foo
+      - /var/run/docker.sock
+  service37:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - source: /run/docker.sock
+      - /tmp/foo
+  service38:
+    image: redis:alpine
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /tmp/foo
+      - source: /var/run/docker.sock
+      - /tmp/bar
+  service39:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock
+  service40:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  service41:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock
+  service42:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /run/docker.sock:/run/docker.sock
+  service43:
+    image: mysql:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
+  service44:
+    image: postgres:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
