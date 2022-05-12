@@ -119,6 +119,16 @@ def is_taint(rule: Dict[str, Any]) -> bool:
             return True
     return False
 
+def is_high_confidence(rule: Dict[str, Any]) -> bool:
+    if 'metadata' in rule:
+        metadata = rule['metadata']
+        if 'confidence' in metadata:
+            confidence = metadata['confidence']
+
+            if confidence.lower().strip() == 'high':
+                return True
+    return False
+
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
     if "A01:2017" in owasp or "A03:2021" in owasp:
@@ -145,7 +155,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Add arguments here
     parser.add_argument("--skip-audit", "-s", help="skip audit rules", action='store_true')
-    parser.add_argument("--taint-only", "-t", help="only process taint mode rules", action='store_true')
+    parser.add_argument("--taint-only", "-t", help="only process taint mode rules. does not exclude audit rules using taint mode. use in combination with `--taint-only` to do so.", action='store_true')
+    parser.add_argument("--high-signal", "-hs", help="process all taint mode rules in addition to ones with `confidence: HIGH`, even if they don't use taint. excludes all audit rules. NOTE: do NOT mix with `--skip-audit` or `--taint-only`", action='store_true')
     parser.add_argument("--output-file", "-o", help="file to output json to")
     parser.add_argument("directory", help="directory to scan")
 
@@ -164,7 +175,7 @@ if __name__ == "__main__":
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
 
     for dirpath, dirnames, filenames in os.walk(args.directory):
-        if args.skip_audit and is_audit(dirpath):
+        if (args.skip_audit or args.high_signal) and is_audit(dirpath):
             continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
@@ -173,8 +184,13 @@ if __name__ == "__main__":
             with open(path, "r") as fin:
                 rules = yaml.safe_load(fin)
                 for rule in rules.get("rules", []):
-                    if args.taint_only and not is_taint(rule):
-                        continue
+                    if args.taint_only:
+                        if not is_taint(rule):
+                            continue
+
+                    if args.high_signal:
+                        if not is_taint(rule) and not is_high_confidence(rule):
+                            continue
 
                     cwe = get_cwe(rule)
                     lang = get_lang(path)
