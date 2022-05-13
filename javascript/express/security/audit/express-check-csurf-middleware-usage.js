@@ -1,7 +1,9 @@
-var express = require('express')
 var cookieParser = require('cookie-parser') //for cookie parsing
-var csrf = require('csurf') //csrf module
+// var csrf = require('csurf') //csrf module
 var bodyParser = require('body-parser') //for body parsing
+
+// ruleid: express-check-csurf-usage
+var express = require('express')
 
 // setup route middlewares
 var csrfProtection = csrf({
@@ -28,7 +30,6 @@ app.post('/process', parseForm, csrfProtection, function(req, res) {
     res.send('data is being processed')
 })
 
-// ruleid: express-check-csurf-usage
 app.post('/bad', parseForm, function(req, res) {
     res.send('data is being processed')
 })
