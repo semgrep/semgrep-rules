@@ -32,7 +32,7 @@ module.exports = function badWithTypes () {
 module.exports = function goodWithTypes () {
   return ({ params, query, session }: Request, res: Response, next: NextFunction) => {
     const url = session
-    // ok: express-res-send-file
+    // ok: express-ssrf
      request.get(url)
   }
 
