@@ -1,0 +1,43 @@
+rules:
+  - id: javascript-check-directory-listing
+    message: Directory listing/indexing is enabled, which may lead to disclosure of
+      sensitive directories and files. It is recommended to disable directory
+      listing unless it is a public resource. If you need directory listing,
+      ensure that sensitive files are inaccessible when querying the resource.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe: "CWE-548: Exposure of Information Through Directory Listing"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
+      category: security
+      technology:
+        - express
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $APP.use(require('serve-index')(...))
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      $SERVEINDEX = require('serve-index')
+                      ...
+                  - pattern-inside: |
+                      import $SERVEINDEX from 'serve-index'
+                      ...
+                  - pattern-inside: |
+                      import * as $SERVEINDEX from 'serve-index'
+                      ...
+              - pattern-either:
+                  - patterns:
+                      - pattern-inside: |
+                          $VALUE = $SERVEINDEX(...)
+                          ...
+                      - pattern-either:
+                          - pattern: |
+                              $VALUE(...)
+                  - pattern: |
+                      $APP.use(<... $SERVEINDEX(...) ...>)

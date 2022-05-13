@@ -1,0 +1,32 @@
+rules:
+  - id: detect-replaceall-sanitization
+    message: |
+      Detected a call to `$FUNC()` in an attempt to HTML escape the string `$STR`.
+      Manually sanitizing input through a manually built list can be circumvented
+      in many situations, and it's better to use a well known sanitization library
+      such as `sanitize-html` or `DOMPurify`.
+    languages:
+      - javascript
+      - typescript
+    severity: INFO
+    patterns:
+      - pattern-either:
+          - pattern: $STR.$FUNC('<', '&lt;')
+          - pattern: $STR.$FUNC('>', '&gt;')
+          - pattern: $STR.$FUNC('"', '&quot;')
+          - pattern: $STR.$FUNC("'", '&apos;')
+          - pattern: $STR.$FUNC('&', '&amp;')
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (replace|replaceAll)
+    metadata:
+      category: security
+      technology:
+        - javascript
+        - typescript
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://www.npmjs.com/package/dompurify 
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
