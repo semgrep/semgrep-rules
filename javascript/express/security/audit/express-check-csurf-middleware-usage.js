@@ -2,7 +2,7 @@ var cookieParser = require('cookie-parser') //for cookie parsing
 // var csrf = require('csurf') //csrf module
 var bodyParser = require('body-parser') //for body parsing
 
-// ruleid: express-check-csurf-usage
+// ruleid: express-check-csurf-middleware-usage
 var express = require('express')
 
 // setup route middlewares
