@@ -13,9 +13,6 @@ var parseForm = bodyParser.urlencoded({
     extended: false
 })
 
-// create express app
-var app = express()
-
 // parse cookies
 app.use(cookieParser())
 
