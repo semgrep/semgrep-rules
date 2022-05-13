@@ -1,6 +1,6 @@
 rules:
   - id: detect-notevil-usage
-    message:
+    message: >-
       Detected usage of the `notevil` package, which is unmaintained and has vulnerabilities.
       Using any sort of `eval()` functionality can be very dangerous, but if you must,
       the `eval` package is an up to date alternative. Be sure that only trusted input
@@ -18,6 +18,9 @@ rules:
       owasp:
         - "A09:2017 - Using Components with Known Vulnerabilities"
         - "A06:2021 - Vulnerable and Outdated Components"
+      technology:
+        - javascript
+        - typescript
     patterns:
       - pattern-either:
           - pattern-inside: |
