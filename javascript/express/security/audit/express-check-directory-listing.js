@@ -20,7 +20,7 @@ app.use('/ftp', serveIndex('ftp', {
     icons: true
 }));
 
-// ok: express-check-directory-listing
+// ok
 app.use(bodyParser.text({
     type: '*/*'
 }));
