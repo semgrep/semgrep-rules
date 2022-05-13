@@ -34,13 +34,13 @@ rules:
                   - pattern-inside: |
                       import * as $SERVEINDEX from 'serve-index'
                       ...
+              # - pattern: $SERVEINDEX(...)
               - pattern-either:
                   - patterns:
                       - pattern-inside: |
                           $VALUE = $SERVEINDEX(...)
                           ...
-                      - pattern-either:
-                          - pattern: |
-                              $VALUE(...)
+                      - pattern: |
+                          $VALUE(...)
                   - pattern: |
-                      $APP.use(<... $SERVEINDEX(...) ...>)
+                      $APP.use(..., $SERVEINDEX(...), ...)
