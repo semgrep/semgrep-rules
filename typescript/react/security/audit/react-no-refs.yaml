@@ -1,11 +1,8 @@
 rules:
   - id: react-no-refs
-    pattern-either:
-      - pattern: <$EL ref=... />
-      - pattern: $REACT.createRef(...)
-      - pattern: $REACT.useRef(...)
-      - pattern: createRef(...)
-      - pattern: useRef(...)
+    patterns:
+      - pattern: a()
+      - pattern: b()
     message: >-
       `ref` usage found. refs give direct DOM access and may create a possibility for XSS, 
       which could cause sensitive information such as user cookies
