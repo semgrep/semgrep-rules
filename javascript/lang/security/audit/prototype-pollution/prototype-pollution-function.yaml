@@ -68,6 +68,18 @@ rules:
                     $NAME.call(...)
                     ...
                   }
+              - pattern-inside: |
+                  $OBJ = function $NAME(...) {
+                    ...
+                    $NAME(...)
+                    ...
+                  }
+              - pattern-inside: |
+                  $OBJ = function $NAME(...) {
+                    ...
+                    $NAME.call(...)
+                    ...
+                  }
     pattern-sanitizers:
       - patterns:
           - pattern: |
