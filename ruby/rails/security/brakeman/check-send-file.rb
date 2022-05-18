@@ -24,7 +24,7 @@ def test_send_file5
 end
 
 def test_send_file6
-    # ok: check-send-file
+    # ruleid: check-send-file
     send_file cookies.signed.permanent[:something]
 end
 
