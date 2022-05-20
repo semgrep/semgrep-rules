@@ -24,6 +24,8 @@ def test_send_file5
 end
 
 def test_send_file6
+    # this is reported since semgrep 0.94 because . ... . can now match
+    # intermediate fields, not just method calls.
     # ruleid: check-send-file
     send_file cookies.signed.permanent[:something]
 end
