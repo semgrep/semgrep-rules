@@ -1,0 +1,31 @@
+rules:
+  - id: hardcoded-hmac-key
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    message: >-
+      Detected a hardcoded hmac key. Avoid hardcoding secrets and consider using an alternate
+      option such as reading the secret from a config file or using an environment variable.
+    metadata:
+      category: security
+      technology:
+        - crypto
+        - hmac
+      references:
+        - https://rules.sonarsource.com/javascript/RSPEC-2068
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#key-management
+      owasp:
+        - A03:2017 - Sensitive Data Exposure
+        - A02:2017 - Cryptographic Failures
+      cwe: 
+        - "CWE-798: Use of Hard-coded Credentials"
+        - "CWE-321: Use of Hard-coded Cryptographic Key"
+    pattern-either:
+      - pattern: $CRYPTO.createHmac($ALGO, '...')
+      - patterns:
+        - pattern-inside: |
+            const $SECRET = '...'
+            ...
+        - pattern: $CRYPTO.createHmac($ALGO, $SECRET)
+
