@@ -7,11 +7,8 @@ rules:
             "DEFAULT_THROTTLE_RATES": ...
           }
       - pattern: |
-          $REST_FRAMEWORK = ...
-      - metavariable-pattern:
-          metavariable: $REST_FRAMEWORK
-          pattern: REST_FRAMEWORK
-      - focus-metavariable: $REST_FRAMEWORK
+          REST_FRAMEWORK = ...
+      - pattern: REST_FRAMEWORK
     message: >-
       Django REST framework configuration is missing default rate-
       limiting options. This could inadvertently allow resource

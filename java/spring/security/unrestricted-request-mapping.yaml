@@ -1,17 +1,14 @@
 rules:
   - id: unrestricted-request-mapping
     patterns:
-      - pattern: |
-          @$MAPPING(...)
+      - pattern-inside: |
+          @RequestMapping(...)
           $RETURNTYPE $METHOD(...) { ... }
       - pattern-not-inside: |
           @RequestMapping(..., method = $X, ...)
           $RETURNTYPE $METHOD(...) { ... }
-      - metavariable-pattern:
-          metavariable: $MAPPING
-          pattern: |
-            RequestMapping
-      - focus-metavariable: $MAPPING
+      - pattern: |
+          RequestMapping
     message: >-
       Detected a method annotated with 'RequestMapping' that does not specify
       the HTTP method. CSRF protections are not enabled for GET, HEAD, TRACE,
