@@ -38,14 +38,14 @@ Data about high signal repos can be generated using the `matrixify.py` script wi
 
 ## go
 
-|                       |   go |   grpc |   jwt |   aws-lambda |   database |   sql |
-|:----------------------|-----:|-------:|------:|-------------:|-----------:|------:|
-| Unmapped Metacategory |    1 |      0 |     0 |            0 |          0 |     0 |
-| Path Traversal        |    1 |      0 |     0 |            0 |          0 |     0 |
-| XSS                   |    1 |      0 |     0 |            0 |          0 |     0 |
-| SQL Injection         |    1 |      0 |     0 |            2 |          1 |     1 |
-| SSRF                  |    1 |      0 |     0 |            0 |          0 |     0 |
-| Cryptography          |    0 |      2 |     1 |            0 |          0 |     0 |
+|                       |   go |   grpc |   jwt |   md5 |   aws-lambda |   database |   sql |
+|:----------------------|-----:|-------:|------:|------:|-------------:|-----------:|------:|
+| Unmapped Metacategory |    1 |      0 |     0 |     0 |            0 |          0 |     0 |
+| Path Traversal        |    1 |      0 |     0 |     0 |            0 |          0 |     0 |
+| Cryptography          |    3 |      2 |     1 |     1 |            0 |          0 |     0 |
+| XSS                   |    1 |      0 |     0 |     0 |            0 |          0 |     0 |
+| SQL Injection         |    1 |      0 |     0 |     0 |            2 |          1 |     1 |
+| SSRF                  |    1 |      0 |     0 |     0 |            0 |          0 |     0 |
 
 
 ## java
@@ -87,6 +87,19 @@ Data about high signal repos can be generated using the `matrixify.py` script wi
 | XSS                   |         0 |            0 |            2 |       0 |        0 |           0 |          0 |    0 |      0 |          0 |        0 |              0 |            0 |     0 |      0 |     0 |     0 |          0 |        0 |           0 |          0 |          0 |     0 |            0 |           0 |         0 |
 
 
+## scala
+
+|                       |   scala |   sbt |   jwt |   cryptography |   play |   slick |   scala-js |
+|:----------------------|--------:|------:|------:|---------------:|-------:|--------:|-----------:|
+| Active Debug Code     |       1 |     1 |     0 |              0 |      0 |       0 |          0 |
+| XXE                   |       3 |     0 |     0 |              0 |      0 |       0 |          0 |
+| Cryptography          |       1 |     0 |     0 |              1 |      0 |       0 |          0 |
+| XSS                   |       1 |     0 |     0 |              0 |      1 |       0 |          0 |
+| SQL Injection         |       2 |     0 |     0 |              0 |      2 |       1 |          0 |
+| Code Injection        |       1 |     0 |     0 |              0 |      0 |       0 |          1 |
+| Unmapped Metacategory |       0 |     0 |     1 |              0 |      0 |       0 |          0 |
+
+
 ## python
 
 |                       |   python |   aws-lambda |   flask |   django |   pyramid |   sqlalchemy |   pymssql |   mysql |   pymysql |   psycopg |   psycopg2 |   boto3 |   dynamodb |
@@ -98,15 +111,6 @@ Data about high signal repos can be generated using the `matrixify.py` script wi
 | XSS                   |        0 |            2 |       1 |        1 |         1 |            0 |         0 |       0 |         0 |         0 |          0 |       0 |          0 |
 | SQL Injection         |        0 |            6 |       1 |        1 |         1 |            2 |         1 |       1 |         1 |         1 |          1 |       0 |          0 |
 | SSRF                  |        0 |            0 |       2 |        0 |         0 |            0 |         0 |       0 |         0 |         0 |          0 |       0 |          0 |
-
-
-## scala
-
-|                       |   jwt |   scala |   play |   slick |
-|:----------------------|------:|--------:|-------:|--------:|
-| Unmapped Metacategory |     1 |       0 |      0 |       0 |
-| XSS                   |     0 |       1 |      1 |       0 |
-| SQL Injection         |     0 |       2 |      2 |       1 |
 
 
 ## bash

@@ -175,7 +175,7 @@ if __name__ == "__main__":
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
 
     for dirpath, dirnames, filenames in os.walk(args.directory):
-        if (args.skip_audit or args.high_signal) and is_audit(dirpath):
+        if args.skip_audit and is_audit(dirpath):
             continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
@@ -188,9 +188,12 @@ if __name__ == "__main__":
                         if not is_taint(rule):
                             continue
 
+                    # Include rules in high signal scanning if a rule has `confidence: HIGH` OR (is a taint mode rule AND not an audit rule)
                     if args.high_signal:
-                        if not is_taint(rule) and not is_high_confidence(rule):
-                            continue
+                        if is_high_confidence(rule) or (is_taint(rule) and not is_audit(path)):
+                            pass # go on to process the rule
+                        else:
+                            continue # skip to the next rule
 
                     cwe = get_cwe(rule)
                     lang = get_lang(path)
