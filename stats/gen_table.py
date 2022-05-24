@@ -81,7 +81,7 @@ if __name__ == "__main__":
     output = ''
 
     if args.high_signal:
-        output += 'For a rule to be included as high signal, it has to: have `confidence: HIGH` in the metadata OR (be a taint mode rule AND cannot be an audit rule).\n\nData about high signal repos can be generated using the `matrixify.py` script with the `-hs` argument.\n\n'
+        output += 'For a rule to be included as high signal, it has to: have `confidence: HIGH` in the metadata OR \\(be a taint mode rule AND cannot be an audit rule\\).\n\nData about high signal repos can be generated using the `matrixify.py` script with the `-hs` argument.\n\n'
     for language in cwe_metacategory_stats:
         df = pd.DataFrame(cwe_metacategory_stats[language])
         dataframes[language] = df.fillna(0).to_markdown()
