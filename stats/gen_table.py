@@ -35,7 +35,7 @@ def create_metacategory_map(path: str) -> Dict[str, str]:
 def parse_cwe_mc_counts(data: Dict[str, Any]) -> Dict[str, Any]:
     mc_cwe_counts = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
     cwe_to_mc = create_metacategory_map('cwe_to_metacategory.yml')
-    cwe_data = data.get('cwe').get('per_framework')
+    cwe_data = data.get('cwe').get('per_technology')
     for cwe in cwe_data:
         cwe_num = get_cwe_num(cwe)
         languages = cwe_data[cwe]
