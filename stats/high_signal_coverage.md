@@ -1,3 +1,7 @@
+For a rule to be included as high signal, it has to: have `confidence: HIGH` in the metadata OR be a taint mode rule AND cannot be an audit rule.
+
+Data about high signal repos can be generated using the `matrixify.py` script with the `-hs` argument.
+
 ## html
 
 |                       |   html |
