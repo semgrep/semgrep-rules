@@ -1,0 +1,18 @@
+id: dart-xss
+pattern-either:
+  - pattern: ...NodeValidator...
+  - pattern: ...setInnerHtml...
+  - pattern: ...appendHtml...
+  - pattern: ...insertAdjacentHtml...
+  - pattern-inside: ...Element.html...
+message: Semgrep found a potential XSS vulnerability. More details here https://github.com/dart-lang/sdk/security/advisories/GHSA-hfq3-v9pv-p627.
+languages: [dart]
+severity: WARNING
+metadata:
+  category: security
+  technology:
+  - dart
+  cwe: "CWE-NULL: Not given"
+  owasp: 
+    - "A01:2017 Injection"
+    - "A03:2021 Injection"
