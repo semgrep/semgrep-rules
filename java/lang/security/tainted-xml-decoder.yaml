@@ -1,0 +1,40 @@
+rules:
+  - id: tainted-xml-decoder
+    message: >-
+      XMLDecoder should not be used to parse untrusted data.
+      Deserializing user input can lead to arbitrary code execution.
+      Use an alternative and explicitly disable external entities.
+      See https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+      for alternatives and vulnerability prevention.
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A4: XML External Entities (XXE)"
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XML_DECODER
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+      category: security
+      technology:
+        - java
+        - servlets
+    severity: WARNING
+    languages: [java]
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            new XMLDecoder(...)
