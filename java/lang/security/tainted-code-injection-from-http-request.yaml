@@ -1,6 +1,10 @@
 rules:
   - id: tainted-code-injection-from-http-request 
     message: >-
+      Passing unsanitized user input to a Script Engine or other means of
+      dynamic code evaluation is unsafe. This could lead to code injection
+      with data leakage or arbitrary code execution as a result. Avoid this,
+      or use proper sandboxing if user code evaluation is intended.
     languages: [java]
     severity: ERROR
     mode: taint
