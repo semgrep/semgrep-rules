@@ -1,0 +1,54 @@
+rules:
+  - id: tainted-ssrf
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: 
+        - A10:2021 – Server-Side Request Forgery (SSRF)
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#URLCONNECTION_SSRF_FD
+      references:
+        - https://cwe.mitre.org/data/definitions/918.html
+        - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
+        - https://portal.securecodewarrior.com/#/learning-resources/application_security_weaknesses~2Fweb~2Fauth~2Fssrf~2Fgeneric
+      category: security
+      technology:
+        - java
+        - servlets
+    severity: ERROR
+    languages:
+      - java
+    message: >-
+      The application retrieves content from a user-supplied URL or similar request.
+      Because the request is sent by the server, this can allow an attacker
+      to circumvent other protection mechanisms such as a firewall or VPN.
+    mode: taint
+    pattern-sources:
+    - patterns: 
+      - pattern-either: 
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `map = cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+        - patterns: # use this pattern to catch cases where tainted array values are assigned to a variable (not caught by taint)
+          - pattern-inside: |
+              $TYPE[] $VALS = (HttpServletRequest $REQ).$GETFUNC(...);
+              ...
+          - pattern: |
+              $PARAM = $VALS[$INDEX];
+    pattern-sanitizers:
+    - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            new URL(...).openConnection()
+        - pattern: |
+            new URL(...).openStream()
+        - pattern: |
+            new URL(...).getContent()
