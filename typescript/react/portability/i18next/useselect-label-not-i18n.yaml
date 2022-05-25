@@ -6,7 +6,10 @@ rules:
         metavariable: $LABEL
         regex: (.*[A-Za-z].*)
     - pattern-not: useSelect($X1, $X2, t('...'), $X4)
-  message: React useSelect() label is not internationalized - '$LABEL'
+  message: >-
+    React useSelect() label is not internationalized - '$LABEL'.
+    You should support different langauges in your website or app with internationalization.
+    Instead, use packages such as `i18next` to internationalize your elements.
   languages:
     - ts
     - js

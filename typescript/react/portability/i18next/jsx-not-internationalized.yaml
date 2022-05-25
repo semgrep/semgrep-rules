@@ -4,9 +4,12 @@ rules:
     - pattern: <$ELEMENT>$MESSAGE</$ELEMENT>
     - metavariable-regex:
         metavariable: $MESSAGE
-        regex: (.*[A-Za-z].*)
+        regex: ([A-Za-z\n ]+[A-Za-z]+[A-Za-z\n ]+)
     - pattern-not: <$ELEMENT>t('$KEY', ...)</$ELEMENT>
-  message: "JSX element not internationalized: '$MESSAGE'"
+  message: >-
+    JSX element not internationalized: '$MESSAGE'. 
+    You should support different languages in your website or app with internationalization.
+    Instead, use packages such as `i18next` in order to internationlize your elements.
   languages:
     - ts
     - js
