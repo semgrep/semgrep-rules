@@ -1,0 +1,36 @@
+rules:
+  - id: tainted-code-injection-from-http-request 
+    message: >-
+    languages: [java]
+    severity: ERROR
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+          - pattern: |
+              (ScriptEngine $ENGINE).eval(...)
+    metadata:
+      category: security
+      technology:
+        - java
+        - servlets
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      owasp: 
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://cwe.mitre.org/data/definitions/95.html
