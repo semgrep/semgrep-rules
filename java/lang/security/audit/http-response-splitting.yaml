@@ -11,6 +11,7 @@ rules:
       category: security
       technology:
         - java
+        - servlets
     message: >-
       Older Java application servers are vulnerable to HTTP response splitting, which
       may occur if an HTTP
@@ -20,7 +21,6 @@ rules:
     severity: INFO
     languages:
       - java
-      - servlets
     pattern-either:
       - pattern: |
           $VAR = $REQ.getParameter(...);
