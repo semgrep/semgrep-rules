@@ -12,10 +12,18 @@ rules:
        - A07:2017 - Cross-Site Scripting (XSS)
        - A03:2021 - Injection
       source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XSS_SERVLET
+      references:
+        - https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+        - https://portal.securecodewarrior.com/#/learning-resources/application_security_weaknesses~2Fweb~2Fdata_handling~2Fxss~2Fstored
+        - https://portal.securecodewarrior.com/#/learning-resources/application_security_weaknesses~2Fweb~2Fdata_handling~2Fxss~2Freflected
+      confidence: LOW
       category: security
       technology:
         - java
         - servlets
+      languages:
+        - java
     severity: ERROR
     patterns:
       - pattern-inside: $TYPE $FUNC(..., HttpServletResponse $RESP, ...) { ... }
@@ -26,5 +34,3 @@ rules:
               $WRITER = $RESP.getWriter(...);
               ...
               $WRITER.write(..., $VAR, ...);
-    languages:
-      - java

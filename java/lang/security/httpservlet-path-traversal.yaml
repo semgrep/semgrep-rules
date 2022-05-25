@@ -12,6 +12,9 @@ rules:
       technology:
         - java
         - servlets
+      severity: ERROR
+      languages:
+        - java
     message: >-
       Detected a potential path traversal. A malicious actor
       could control the location of this file, to include going backwards
@@ -51,6 +54,3 @@ rules:
             (java.io.FileOutputStream $FOS) = ...
         - pattern: |
             new java.io.FileInputStream(...)
-    severity: ERROR
-    languages:
-      - java
