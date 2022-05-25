@@ -23,6 +23,10 @@ rules:
       - pattern-either:
           - pattern: |
               (ScriptEngine $ENGINE).eval(...)
+          - pattern: |
+              (ExpressionFactory $FACTORY).createMethodExpression(...)
+          - pattern: |
+              (ExpressionFactory $FACTORY).createValueExpression(...)
     metadata:
       category: security
       technology:

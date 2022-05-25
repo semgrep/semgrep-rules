@@ -44,8 +44,26 @@ public class bad1 extends HttpServlet {
         String script2 = "this is a hardcoded script";
         // ok: tainted-code-injection-from-http-request 
         engine.eval(script2); //Bad things can happen here.
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
+        ELContext elContext = context.getELContext();
+        //ruleid: tainted-code-injection-from-http-request 
+        ValueExpression vex = expressionFactory.createValueExpression(elContext, "expression" + param, String.class);
+
+        String result = evaluateExpression("expression" + param);
+
     }
 
     public String createTaintedScript(String param){
         return "this is some script" + param;
+    }
+
+    public String evaluateExpression(String expression) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
+        ELContext elContext = context.getELContext();
+        // deepid: tainted-code-injection-from-http-request 
+        ValueExpression vex = expressionFactory.createValueExpression(elContext, expression, String.class);
+        return (String) vex.getValue(elContext);
     }
