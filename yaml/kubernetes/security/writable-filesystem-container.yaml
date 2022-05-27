@@ -18,11 +18,11 @@ rules:
             readOnlyRootFilesystem: true
       - focus-metavariable: $CONTAINER
     message: >-
-      "Container $CONTAINER is running with a writable root filesystem. This may allow
+      Container $CONTAINER is running with a writable root filesystem. This may allow
       malicious applications to download and run additional payloads, or modify
       container files. If an application inside a container has to save something
       temporarily consider using a tmpfs. Add 'readOnlyRootFilesystem: true' to this
-      container to prevent this."
+      container to prevent this.
     metadata:
       cwe: "CWE-732: Incorrect Permission Assignment for Critical Resource"
       owasp:
