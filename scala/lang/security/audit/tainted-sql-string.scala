@@ -1,6 +1,7 @@
 package com.test.test
 
 import java.sql.{Connection, ResultSet, DriverManager}
+import org.slf4j.LoggerFactory
 
 object Smth {
 
@@ -73,5 +74,15 @@ object Smth {
     doSmth(name)
   }
 
+  def loggingCall1(name: String) = {
+    val log = LoggerFactory.getLogger(getClass.getSimpleName)
+    // ok: tainted-sql-string
+    log.trace("Create user" + name)
+  }
 
+  def loggingCall2(name: String) = {
+    val scribe = LoggerFactory.getLogger(getClass.getSimpleName)
+    // ok: tainted-sql-string
+    scribe.warnToError("Create user" + name)
+  }
 }
