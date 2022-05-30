@@ -2,9 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 function Vulnerable1(userInput) {
 // ruleid: react-styled-components-injection
-  const ArbitraryComponent = styled.div`
-    background: url(${userInput});
-  `
+  const ArbitraryComponent = styled.div`background: url(${userInput});`
   return ArbitraryComponent
 }
 
@@ -12,18 +10,14 @@ function Vulnerable2(userInput) {
   const input = fooBar(userInput)
 
 // ruleid: react-styled-components-injection
-  return styled.div`
-    background: url(${input});
-  `
+  return styled.div`background: url(${input});`
 }
 
 function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
 // ruleid: react-styled-components-injection
-  return styled.div`
-    background: ${input};
-  `
+  return styled.div`background: ${input};`
 }
 
 function OkTest({siteUrl, input}) {
