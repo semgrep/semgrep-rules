@@ -11,11 +11,11 @@ app.get('/test/:id', (req, res) => {
 
 app.post('/testOk/:id', (req, res) => {
     let id = req.params.id;
-    let items = req.session.todos[id1];
-    if (!items) {
-        items = req.session.todos[id] = {};
-    }
-    if (req.query.name !== 'constructor' && req.query.name !== '__proto__') {
+    if (id !== 'constructor' && id !== '__proto__') {
+        let items = req.session.todos[id];
+        if (!items) {
+            items = req.session.todos[id] = {};
+        }
         // ok: prototype-pollution-assignment
         items[req.query.name] = req.query.text;
     }

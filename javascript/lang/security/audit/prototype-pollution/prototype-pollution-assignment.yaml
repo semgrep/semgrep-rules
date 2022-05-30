@@ -26,6 +26,8 @@ rules:
     patterns:
       - pattern: |
           $X[$B] = ...
+      - pattern-not: |
+          $X[$B] = '...'
       - pattern-inside: |
           $X = $SMTH[$A]
           ...
@@ -33,10 +35,12 @@ rules:
           if (<...'constructor' ...>) {
             ...
           }
+          ...
       - pattern-not-inside: |
           if (<...'__proto__' ...>) {
             ...
           }
+          ...
       - pattern-not-inside: |
           for(var $B = $S; ...; ...) {...}
       - pattern-not-inside: |
