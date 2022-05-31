@@ -8,6 +8,11 @@ def bad1():
     encoded = jwt.encode({"some": "payload"}, "secret", algorithm="HS256")
     return encoded
 
+def bad1b():
+    # ruleid: jwt-python-hardcoded-secret
+    encoded = jwt.encode({'some': 'payload'}, 'secret', algorithm='HS256')
+    return encoded
+
 
 def bad2():
     # ruleid: jwt-python-hardcoded-secret

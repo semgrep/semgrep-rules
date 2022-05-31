@@ -10,7 +10,7 @@ class A2:
 
 class B:
     def method1(self, args):
-        print("hello there")
+        print('hello there')
 
 
 # ruleid: baseclass-attribute-override
