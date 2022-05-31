@@ -25,11 +25,16 @@ rules:
           <$EL style={{$X:...}} />
       - pattern-not: |
           $R.createElement($EL, {style: {...}}, ...)
+      - focus-metavariable: $STYLE
     message: >-
       User controlled data in a `style` attribute is an anti-pattern that can lead to XSS vulnerabilities
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      owasp:
+        - A03:2021 - Injection
+        - A07:2017 - Cross-Site Scripting (XSS)
+      references:
+        - https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
       category: security
       technology:
         - react
