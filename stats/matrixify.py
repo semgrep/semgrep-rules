@@ -45,7 +45,7 @@ def get_owasp(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "owasp" in d.keys(), rule.get("metadata"))).get(0, {}).get("owasp", "")
     except Exception:
         logger.warning(f"Could not get owasp for rule {rule.get('id', '')}")
-        return ""
+        return [""]
 
 def get_cwe(rule: Dict[str, Any]) -> List[str]:
     try:
@@ -60,7 +60,7 @@ def get_cwe(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "cwe" in d.keys(), rule.get("metadata"))).get(0, {}).get("cwe", "")
     except Exception:
         logger.warning(f"Could not get cwe for rule {rule.get('id', '')}")
-        return ''
+        return ['']
 
 def get_technology(rule: Dict[str, Any]) -> List[str]:
     try:
@@ -75,7 +75,7 @@ def get_technology(rule: Dict[str, Any]) -> List[str]:
         return ArchList(filter(lambda d: "technology" in d.keys(), rule.get("metadata"))).get(0, {}).get("technology", "")
     except Exception:
         logger.warning(f"Could not get technology for rule {rule.get('id', '')}")
-        return ""
+        return [""]
 
 # Sometimes, the language as defined within the ArchList will be something that's not in the dict
 # So, the filepath seems like the only reliable way to get the lanaguage
@@ -84,7 +84,7 @@ def get_lang(path: str) -> str:
     #archlist =  ArchList(rule.get('languages', [])).get(0, "")
     #return archlist
 
-def get_framework(path: str, rule: Dict[str, Any]) -> str:
+def get_framework(path: str) -> str:
     #  get the dir name immediately under the language
     s = path.split(os.path.sep)
     lang = s[1]
@@ -109,6 +109,25 @@ def is_security(path: str) -> bool:
 def is_rule(path: str) -> bool:
     _, ext = os.path.splitext(path)
     return ext in (".yaml", ".yml") and "/scripts/" not in path
+
+def is_audit(path: str) -> bool:
+    return "/audit/" in path or path.endswith("/audit")
+
+def is_taint(rule: Dict[str, Any]) -> bool:
+    if 'mode' in rule:
+        if rule['mode'] == 'taint':
+            return True
+    return False
+
+def is_high_confidence(rule: Dict[str, Any]) -> bool:
+    if 'metadata' in rule:
+        metadata = rule['metadata']
+        if 'confidence' in metadata:
+            confidence = metadata['confidence']
+
+            if confidence.lower().strip() == 'high':
+                return True
+    return False
 
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
@@ -135,7 +154,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     # Add arguments here
-    parser.add_argument("directory")
+    parser.add_argument("--skip-audit", "-s", help="skip audit rules", action='store_true')
+    parser.add_argument("--taint-only", "-t", help="only process taint mode rules. does not exclude audit rules using taint mode. use in combination with `--taint-only` to do so.", action='store_true')
+    parser.add_argument("--high-signal", "-hs", help="process all taint mode rules in addition to ones with `confidence: HIGH`, even if they don't use taint. excludes all audit rules. NOTE: do NOT mix with `--skip-audit` or `--taint-only`", action='store_true')
+    parser.add_argument("--output-file", "-o", help="file to output json to")
+    parser.add_argument("directory", help="directory to scan")
 
     args = parser.parse_args()
 
@@ -150,23 +173,34 @@ if __name__ == "__main__":
     owasp_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     cwe_by_technology_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     cwe_metacategory_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: set())))
+
     for dirpath, dirnames, filenames in os.walk(args.directory):
+        if args.skip_audit and is_audit(dirpath):
+            continue
         for filename in filenames:
             path = os.path.join(dirpath, filename)
-            if not is_rule(path):
-                continue
-            if not is_security(path):
+            if not is_rule(path) or not is_security(path):
                 continue
             with open(path, "r") as fin:
                 rules = yaml.safe_load(fin)
                 for rule in rules.get("rules", []):
-                    framework = get_framework(path, rule)
-                    lang = get_lang(path)
+                    if args.taint_only:
+                        if not is_taint(rule):
+                            continue
+
+                    # Include rules in high signal scanning if a rule has `confidence: HIGH` OR (is a taint mode rule AND not an audit rule)
+                    if args.high_signal:
+                        if is_high_confidence(rule) or (is_taint(rule) and not is_audit(path)):
+                            pass # go on to process the rule
+                        else:
+                            continue # skip to the next rule
+
                     cwe = get_cwe(rule)
+                    lang = get_lang(path)
                     owasp = get_owasp(rule)
+                    framework = get_framework(path)
                     technology = get_technology(rule)
 
-                    # I think the cwe stuff is supposed to be out of the owasp loop
                     for c in cwe:
                         cwe_matrix[c].append((path, rule))
                         cwe_by_lang_matrix[c][lang].append((path, rule))
@@ -186,7 +220,8 @@ if __name__ == "__main__":
                         for tech in technology: # Some rules have multiple technology tags
                             owasp_by_technology_matrix[owasp_standard][lang][tech].append((path, rule))
 
-    of = open("json_output.json", "w")
+    out_file_name = args.output_file if args.output_file else 'json_output.json'
+    of = open(out_file_name, "w")
     of.write(json.dumps({
         "owasp": {
             "totals": {owasp: len(v) for owasp, v in sorted(owasp_matrix.items())},
@@ -213,3 +248,4 @@ if __name__ == "__main__":
             "rules_with_no_cwe": [t[0] for t in cwe_matrix[""]],
         }
     }))
+
