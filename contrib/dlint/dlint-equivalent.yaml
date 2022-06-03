@@ -8,6 +8,13 @@ rules:
       category: security
       technology:
         - pickle
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO103.md
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
     pattern-either:
       - pattern: pickle.loads(...)
       - pattern: pickle.load(...)
@@ -24,6 +31,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO104.md
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     patterns:
       - pattern: eval(...)
       - pattern-not: eval("...")
@@ -36,6 +50,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO105.md
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     patterns:
       - pattern: exec(...)
       - pattern-not: exec("...")
@@ -48,6 +69,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     pattern-either:
       - patterns:
           - pattern: os.popen(...)
@@ -73,6 +101,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO106.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-377: Insecure Temporary File"
     pattern-either:
       - pattern: os.tempnam(...)
       - pattern: os.tmpnam(...)
@@ -85,6 +120,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-611: Improper Restriction of XML External Entity Reference"
     pattern-either:
       - patterns:
           - pattern: xml.$ANYTHING
@@ -93,7 +135,7 @@ rules:
           - pattern-not: xml.etree.ElementTree.SubElement
       - pattern: xmlrpclib.$ANYTHING
   - id: insecure-yaml-use
-    message: The Python 'yaml' module is not secure against maliciously constructed input
+    message: The Python 'yaml' module's `load`, `load_all`, `dump`, and `dump_all` functions are not secure against maliciously constructed input
     languages: [python]
     severity: WARNING
     metadata:
@@ -101,6 +143,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO109.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
     patterns:
       - pattern: import yaml
       - pattern-either:
@@ -117,6 +166,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO110.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
     patterns:
       - pattern: compile(...)
       - pattern-not: compile("...")
@@ -129,6 +185,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO112.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     pattern-either:
       - pattern: |
           $ZF = zipfile.ZipFile(...)
@@ -147,6 +210,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO115.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     pattern-either:
       - pattern: |
           $TF = tarfile.TarFile(...)
@@ -189,6 +259,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO116.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
     pattern-either:
       - patterns:
           - pattern: subprocess.call(..., shell=True, ...)
@@ -214,6 +291,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO117.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-1104: Use of Unmaintained Third Party Components"
     pattern: dl.$ANYTHING
   - id: insecure-gl-use
     message: The Python 'gl' module may cause core dumps or other unsafe behavior
@@ -224,6 +308,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO118.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-1104: Use of Unmaintained Third Party Components"
     pattern: gl.$ANYTHING
   - id: insecure-shelve-use
     message: The Python 'shelve' module is not secure against maliciously constructed input
@@ -234,6 +325,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO119.md
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
     pattern: shelve.$ANYTHING
   - id: insecure-marshal-use
     message: The Python 'marshal' module is not secure against maliciously constructed input
@@ -244,6 +342,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO120.md
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
     pattern: marshal.$ANYTHING
   - id: insecure-tempfile-use
     message: The Python 'tempfile.mktemp' function allows for race conditions
@@ -254,6 +359,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO121.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-689: Permission Race Condition During Resource Copy"
     pattern: tempfile.mktemp(...)
   - id: insecure-ssl-use
     message: Weak or insecure 'ssl' module usage
@@ -264,6 +376,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO122.md
+      owasp:
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: ssl._create_unverified_context(...)
       - pattern: ssl._https_verify_certificates(enable=False)
@@ -282,6 +401,13 @@ rules:
       category: security
       technology:
         - requests
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO123.md
+      owasp:
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: requests.request(..., verify=False, ...)
       - pattern: requests.get(..., verify=False, ...)
@@ -300,6 +426,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO124.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-497: Exposure of Sensitive System Information to an Unauthorized Control Sphere"
     pattern-either:
       - pattern: xmlrpc.server.register_instance(..., allow_dotted_names=True, ...) # Python 3
       - pattern: SimpleXMLRPCServer.register_instance(..., allow_dotted_names=True, ...) # Python 2
@@ -312,6 +445,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO125.md
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     patterns:
       - pattern: commands.$ANYTHING(...)
       - pattern-not: commands.$ANYTHING("...")
@@ -324,6 +464,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO126.md
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     patterns:
       - pattern: popen2.$ANYTHING(...)
       - pattern-not: popen2.$ANYTHING("...")
@@ -336,6 +483,15 @@ rules:
       category: security
       technology:
         - duo
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO127.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: duo_client.Client(..., ca_certs="HTTP", ...)
       - pattern: duo_client.Client(..., ca_certs="DISABLE", ...)
@@ -362,6 +518,15 @@ rules:
       category: security
       technology:
         - onelogin
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO129.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: onelogin.saml2.utils.OneLogin_Saml2_Constants.SHA1
       - pattern: onelogin.saml2.utils.OneLogin_Saml2_Constants.RSA_SHA1
@@ -376,6 +541,15 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO130.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
     pattern-either:
       - pattern: hashlib.md5(...)
       - pattern: hashlib.sha1(...)
@@ -388,6 +562,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO131.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-311: Missing Encryption of Sensitive Data"
     pattern: urllib3.disable_warnings(...)
   - id: insecure-urllib3-connections-use
     message: The Python 'urllib3' module used with SSL verfication disabled
@@ -398,6 +579,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO132.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-311: Missing Encryption of Sensitive Data"
     pattern-either:
       - pattern: urllib3.PoolManager(..., cert_reqs="CERT_NONE", ...)
       - pattern: urllib3.PoolManager(..., cert_reqs="NONE", ...)
@@ -423,6 +611,13 @@ rules:
       category: security
       technology:
         - crypto
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO133.md
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A06:2021 - Vulnerable and Outdated Components
+      cwe:
+        - "CWE-1104: Use of Unmaintained Third Party Components"
     pattern: Crypto.$ANYTHING
   - id: insecure-cryptography-attribute-use
     message: Weak or insecure 'cryptography' module attribute usage
@@ -433,6 +628,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO134.md
+      owasp:
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: cryptography.hazmat.primitives.hashes.MD5
       - pattern: cryptography.hazmat.primitives.hashes.SHA1
@@ -450,6 +652,13 @@ rules:
       category: security
       technology:
         - python
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO136.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: xmlsec.constants.TransformDes3Cbc
       - pattern: xmlsec.constants.TransformKWDes3
@@ -471,6 +680,13 @@ rules:
       category: security
       technology:
         - itsdangerous
+      references:
+        - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO137.md
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-310: Cryptographic Issues"
     pattern-either:
       - pattern: itsdangerous.signer.Signer(..., algorithm=itsdangerous.signer.NoneAlgorithm, ...)
       - pattern: itsdangerous.signer.Signer(..., algorithm=itsdangerous.NoneAlgorithm, ...)
