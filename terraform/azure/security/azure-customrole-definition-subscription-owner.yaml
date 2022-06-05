@@ -6,11 +6,12 @@ rules:
       - pattern: |
           ["*"]
       - pattern-inside: | 
-          permissions {
-          ...
-          actions = ...
-          ...
+          resource "azurerm_role_definition" "..." {
+            permissions {
+              ...
+            }
           }
+      - pattern-inside: actions = ...
     metadata:
       owasp:
       - A01:2021 - Broken Access Control

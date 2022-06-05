@@ -4,15 +4,22 @@ rules:
       Ensure that Service Fabric use three levels of protection available
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_service_fabric_cluster" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_service_fabric_cluster" "..." {
           ...
           fabric_settings {
             name = "Security"
             parameters = {
+              ...
               name = "ClusterProtectionLevel"
               value = "EncryptAndSign"
+              ...
             }
+            ...
           }
           ...
           }

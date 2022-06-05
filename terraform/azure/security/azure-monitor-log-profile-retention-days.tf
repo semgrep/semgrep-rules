@@ -30,6 +30,10 @@ resource "azurerm_monitor_log_profile" "example" {
     "westus",
     "global",
     ]
+    retention_policy {
+    enabled = true
+    days    = 363
+    }
 }
 
 # pass
@@ -66,4 +70,4 @@ resource "azurerm_monitor_log_profile" "example" {
     enabled = true
     days    = 365
     }
-}
+} 

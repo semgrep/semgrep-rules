@@ -4,6 +4,10 @@ rules:
       Ensure that Azure File Sync disables public network access
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_storage_sync" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_storage_sync" "..." {
           ...

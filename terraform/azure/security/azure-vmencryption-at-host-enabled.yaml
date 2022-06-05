@@ -4,6 +4,15 @@ rules:
       Ensure that Virtual machine scale sets have encryption at host enabled
     patterns:
       - pattern: resource
+      - pattern-either:
+        - pattern-inside: |
+            resource "azurerm_windows_virtual_machine_scale_set" "..." {
+            ...
+            }
+        - pattern-inside: |
+            resource "azurerm_linux_virtual_machine_scale_set" "..." {
+            ...
+            }
       - pattern-not-inside: |
           resource "azurerm_windows_virtual_machine_scale_set" "..." {
           ...

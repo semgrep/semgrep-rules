@@ -6,7 +6,7 @@ resource "azurerm_app_service" "example" {
   app_service_plan_id = azurerm_app_service_plan.example.id
   site_config {
     # ruleid: azure-appservice-min-tls-version
-    min_tls_version = "1.1"
+    min_tls_version = "1.0"
   }
 }
 

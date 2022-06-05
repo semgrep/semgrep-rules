@@ -7,7 +7,7 @@ resource "azurerm_mssql_server" "examplea" {
     administrator_login           = var.sql["administrator_login"]
     administrator_login_password  = local.administrator_login_password
     # ruleid: azure-mssql-service-mintls-version
-    minimum_tls_version           = "1.1"
+    minimum_tls_version           = "1.0"
     public_network_access_enabled = var.sql["public_network_access_enabled"]
     identity {
     type = "SystemAssigned"

@@ -4,6 +4,10 @@ rules:
       Ensure public network access enabled is set to False for MariaDB servers
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mariadb_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mariadb_server" "..." {
           ...

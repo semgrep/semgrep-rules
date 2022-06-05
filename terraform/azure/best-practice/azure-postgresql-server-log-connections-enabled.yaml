@@ -4,6 +4,10 @@ rules:
       Ensure server parameter log_connections is set to ON for PostgreSQL Database Server
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_postgresql_configuration" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_postgresql_configuration" "..." {
           ...

@@ -4,6 +4,10 @@ rules:
       Ensure that Threat Detection types is set to All
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mssql_server_security_alert_policy" "..." {
           ...

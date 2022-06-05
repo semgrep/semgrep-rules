@@ -4,6 +4,10 @@ rules:
       Ensure public network access enabled is set to False for MySQL servers
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mysql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mysql_server" "..." {
           ...

@@ -4,11 +4,15 @@ rules:
       Ensure that Send Alerts To is enabled for MSSQL servers
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mssql_server_security_alert_policy" "..." {
           ...
           state = "Enabled"
-          email_addresses = ["..."]
+          email_addresses = ["...", ...]
           ...
           }
     metadata:

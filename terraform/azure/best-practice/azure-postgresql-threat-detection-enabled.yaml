@@ -4,11 +4,17 @@ rules:
       Ensure that PostgreSQL server enables Threat detection policy
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_postgresql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_postgresql_server" "..." {
           ...
           threat_detection_policy {
+              ...
               enabled = true
+              ...
           }
           ...
           }

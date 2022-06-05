@@ -4,6 +4,10 @@ rules:
       Ensure that Send email notification for high severity alerts is set to On
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_security_center_contact" "..." {
           ...

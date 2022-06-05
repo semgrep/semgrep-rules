@@ -4,6 +4,10 @@ rules:
       Ensure that Azure Synapse workspaces enables managed virtual networks
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_synapse_workspace" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_synapse_workspace" "..." {
           ...

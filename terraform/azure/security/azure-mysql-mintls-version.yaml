@@ -4,7 +4,7 @@ rules:
       Ensure MySQL is using the latest version of TLS encryption
     patterns:
       - pattern: |
-          "TLS1_1"
+          "TLS1_0"
       - pattern-inside: ssl_minimal_tls_version_enforced = ...
       - pattern-inside: |
           $RESOURCE "azurerm_mysql_server" "..." {

@@ -4,6 +4,10 @@ rules:
       Ensure that Email service and co-administrators is Enabled for MSSQL servers
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mssql_server_security_alert_policy" "..." {
           ...

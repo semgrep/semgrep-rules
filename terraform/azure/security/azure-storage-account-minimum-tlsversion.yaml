@@ -4,10 +4,20 @@ rules:
       Ensure Storage Account is using the latest version of TLS encryption
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_storage_account" "..." {
           ...
           min_tls_version = "TLS1_2"
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+          min_tls_version = "TLS1_3"
           ...
           }
     metadata:

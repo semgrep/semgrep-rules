@@ -4,11 +4,17 @@ rules:
       Ensure that MySQL server enables Threat detection policy
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mysql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mysql_server" "..." {
           ...
           threat_detection_policy {
+              ...
               enabled = true
+              ...
           }
           ...
           }

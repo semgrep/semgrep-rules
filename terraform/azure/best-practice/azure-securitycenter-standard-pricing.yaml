@@ -4,6 +4,10 @@ rules:
       Ensure that standard pricing tier is selected
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_security_center_subscription_pricing" "..." {
           ...

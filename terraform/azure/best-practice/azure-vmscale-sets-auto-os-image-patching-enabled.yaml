@@ -4,12 +4,18 @@ rules:
       Ensure that automatic OS image patching is enabled for Virtual Machine Scale Sets
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_virtual_machine_scale_set" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_virtual_machine_scale_set" "..." {
           ...
           automatic_os_upgrade = true
           os_profile_windows_config {
+            ...
             enable_automatic_upgrades = true
+            ...
           }
           ...
           }

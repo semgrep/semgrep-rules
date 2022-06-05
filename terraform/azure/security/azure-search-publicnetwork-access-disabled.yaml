@@ -4,6 +4,10 @@ rules:
       Ensure that Azure Cognitive Search disables public network access
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_search_service" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_search_service" "..." {
           ...

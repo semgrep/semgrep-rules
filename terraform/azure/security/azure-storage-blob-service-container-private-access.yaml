@@ -4,6 +4,10 @@ rules:
       Ensure that Public access level is set to Private for blob containers
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_storage_container" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_storage_container" "..." {
           ...

@@ -4,6 +4,10 @@ rules:
       Ensure that MySQL server enables infrastructure encryption
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mysql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mysql_server" "..." {
           ...

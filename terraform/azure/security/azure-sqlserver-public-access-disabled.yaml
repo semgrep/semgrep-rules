@@ -4,6 +4,10 @@ rules:
       Ensure that SQL server disables public network access
     patterns:
       - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_mssql_server" "..." {
           ...

@@ -6,10 +6,15 @@ rules:
       - pattern: |
           "TLS1_2"
       - pattern-inside: ssl_minimal_tls_version_enforced = ...
+      - pattern-inside: |
+          $RESOURCE "azurerm_postgresql_server" "..." {
+          ...
+          }
       - pattern-not-inside: |
           $RESOURCE "azurerm_postgresql_server" "..." {
           ...
           ssl_enforcement_enabled = true
+          ...
           }
     metadata:
       owasp:
