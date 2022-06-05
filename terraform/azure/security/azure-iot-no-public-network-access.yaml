@@ -4,10 +4,10 @@ rules:
       Ensure that Azure IoT Hub disables public network access
     patterns:
       - pattern: resource
-      - pattern-not-inside: |
+      - pattern-inside: |
           resource "azurerm_iothub" "..." {
           ...
-          public_network_access_enabled = false
+          public_network_access_enabled = true
           ...
           }
     metadata:
