@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 
 @pytest.mark.quick
 def test_foo(snapshot, mocker):
