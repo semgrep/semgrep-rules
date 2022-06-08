@@ -3,8 +3,11 @@ rules:
     message: >-
       Ensure MSSQL is using the latest version of TLS encryption
     patterns:
-      - pattern: |
-          "1.0"
+      - pattern-either:
+        - pattern: |
+            "1.0"
+        - pattern: |
+            "1.1"
       - pattern-inside: minimum_tls_version = ...
       - pattern-inside: |
           $RESOURCE "azurerm_mssql_server" "..." {
