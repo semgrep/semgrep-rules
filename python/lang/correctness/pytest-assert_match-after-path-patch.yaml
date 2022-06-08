@@ -9,7 +9,7 @@ rules:
             mocker.patch("pathlib.Path", $MOCKED_VALUE)
             ...
         - pattern-inside: |
-            mocker.patch.object(Path, $METHOD, $MOCKED_VALUE)
+            mocker.patch.object(pathlib.Path, $METHOD, $MOCKED_VALUE)
             ...
       - pattern:
           snapshot.assert_match(...)
