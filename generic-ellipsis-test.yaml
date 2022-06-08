@@ -1,0 +1,20 @@
+rules:
+- id: generic-ellipsis-test
+  message: TEST
+  languages:
+  - generic
+  severity: ERROR
+  patterns:
+  - pattern: <badValue>10</badValue>
+  - pattern-inside: '<context>
+
+      ...
+
+      </context>
+
+      '
+  options:
+    generic_ellipsis_max_span: 100
+  paths:
+    include:
+    - generic-ellipsis-test.xml
