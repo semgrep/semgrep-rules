@@ -3,8 +3,13 @@ rules:
     message: >-
       Ensure PostgreSQL is using the latest version of TLS encryption
     patterns:
-      - pattern: |
-          "TLS1_2"
+      - pattern-either:
+        - pattern: |
+            "TLS1_2"
+        - pattern: |
+            "TLS1_1"
+        - pattern: |
+            "TLS1_0"
       - pattern-inside: ssl_minimal_tls_version_enforced = ...
       - pattern-inside: |
           $RESOURCE "azurerm_postgresql_server" "..." {
