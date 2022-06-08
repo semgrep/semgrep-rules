@@ -4,9 +4,13 @@ rules:
       - pattern-inside: |
           import pytest
           ...
-      - pattern-inside: |
-          mocker.patch.object(Path, $METHOD, $MOCKED_VALUE)
-          ...
+      - pattern-either:
+        - pattern-inside: |
+            mocker.patch("pathlib.Path", $MOCKED_VALUE)
+            ...
+        - pattern-inside: |
+            mocker.patch.object(Path, $METHOD, $MOCKED_VALUE)
+            ...
       - pattern:
           snapshot.assert_match(...)
     message: >-
