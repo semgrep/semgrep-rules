@@ -8,7 +8,11 @@ rules:
       for why and what other cipher suites to use.
     metadata:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
-      owasp: "A9: Using Components with Known Vulnerabilities"
+      owasp:
+        - "A06:2017 - Security Misconfiguration"
+        - "A05:2021 - Security Misconfiguration"
+        - "A02:2021 - Cryptographic Failures"
+        - "A03:2017 - Sensitive Data Exposure"
       source-rule-url: https://github.com/securego/gosec/blob/master/rules/tls.go
       references:
         - https://golang.org/pkg/crypto/tls/#InsecureCipherSuites
