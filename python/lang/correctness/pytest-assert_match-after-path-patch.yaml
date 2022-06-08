@@ -1,0 +1,19 @@
+rules:
+  - id: pytest-assert_match-after-path-patch
+    patterns:
+      - pattern-inside: |
+          import pytest
+          ...
+      - pattern-inside: |
+          mocker.patch.object(Path, $METHOD, $MOCKED_VALUE)
+          ...
+      - pattern:
+          snapshot.assert_match(...)
+    message: >-
+      snapshot.assert_match makes use of pathlib to create files. Patching $METHOD may result in unexpected snapshot behavior
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - python
