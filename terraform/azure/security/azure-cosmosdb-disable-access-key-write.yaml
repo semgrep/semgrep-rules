@@ -1,0 +1,26 @@
+rules:
+  - id: azure-cosmosdb-disable-access-key-write
+    message: >-
+      Ensure that Cosmos DB accounts have access key write capability disabled
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_cosmosdb_account" "..." {
+          ...
+          access_key_metadata_writes_enabled = false
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_cosmosdb_account" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

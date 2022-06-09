@@ -1,0 +1,27 @@
+rules:
+  - id: azure-defenderon-kubernetes
+    message: >-
+      Ensure that Azure Defender is set to On for Kubernetes
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Standard"
+          resource_type = "KubernetesService"
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Free"
+          resource_type = "KubernetesService"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

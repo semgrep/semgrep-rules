@@ -1,0 +1,23 @@
+rules:
+  - id: azure-frontdoor-enables-waf
+    message: >-
+      Ensure that Azure Front Door enables WAF
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_frontdoor" "..." {
+          ...
+          web_application_firewall_policy_link_id = "..."
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_frontdoor" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

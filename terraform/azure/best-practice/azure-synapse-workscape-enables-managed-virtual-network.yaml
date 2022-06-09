@@ -1,0 +1,23 @@
+rules:
+  - id: azure-synapse-workscape-enables-managed-virtual-network
+    message: >-
+      Ensure that Azure Synapse workspaces enables managed virtual networks
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_synapse_workspace" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_synapse_workspace" "..." {
+          ...
+          managed_virtual_network_enabled = true
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

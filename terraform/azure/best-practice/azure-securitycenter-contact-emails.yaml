@@ -1,0 +1,23 @@
+rules:
+  - id: azure-securitycenter-contact-emails
+    message: >-
+      Ensure that Security contact emails is set
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          email = "..."
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

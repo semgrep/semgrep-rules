@@ -1,0 +1,22 @@
+rules:
+  - id: azure-keyvault-enables-purge-protection
+    message: >-
+      Ensure that key vault enables purge protection
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          purge_protection_enabled = true
+          }
+      - pattern-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING
