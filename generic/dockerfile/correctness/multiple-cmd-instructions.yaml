@@ -32,6 +32,14 @@ rules:
       HEALTHCHECK $CMD
       ...
       CMD [...]
+  - pattern-not: |
+      CMD ...
+      ...
+      HEALTHCHECK $CMD
+  - pattern-not: |
+      CMD [...]
+      ...
+      HEALTHCHECK $CMD
 
   message: Multiple CMD instructions were found. Only the last one will take effect.
   languages: [dockerfile]
