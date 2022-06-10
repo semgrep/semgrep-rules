@@ -1,0 +1,26 @@
+rules:
+  - id: azure-appservice-https-only
+    message: >-
+      Ensure web app redirects all HTTP traffic to HTTPS in Azure App Service Slot
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          https_only = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

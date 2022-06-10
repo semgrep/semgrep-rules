@@ -45,5 +45,64 @@ return (
             >
                 {i18next.t('menu.customers')}
             </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+            </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+                123
+            </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+                45.53
+            </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+                144,90
+            </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+                12-12-1220
+            </Typography>
+            // ok
+            <Typography
+                variant="h1"
+                sx={{
+                color: 'primary.main',
+                fontWeight: 'fontWeightMedium',
+                }}
+            >
+                12.50%
+            </Typography>
         </motion.div>
     </HeroContentStyle>);

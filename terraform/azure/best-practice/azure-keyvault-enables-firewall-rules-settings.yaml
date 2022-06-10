@@ -1,0 +1,27 @@
+rules:
+  - id: azure-keyvault-enables-firewall-rules-settings
+    message: >-
+      Ensure that key vault allows firewall rules settings
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          network_acls {
+            ...
+            default_action = "Deny"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,23 @@
+rules:
+  - id: azure-securitycenter-contact-phone
+    message: >-
+      Ensure that Security contact Phone number is set
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          phone = "..."
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

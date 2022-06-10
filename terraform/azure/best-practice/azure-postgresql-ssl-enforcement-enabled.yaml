@@ -1,0 +1,23 @@
+rules:
+  - id: azure-postgresql-ssl-enforcement-enabled
+    message: >-
+      Ensure Enforce SSL connection is set to Enabled for PostgreSQL servers
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_postgresql_server" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_postgresql_server" "..." {
+          ...
+          ssl_enforcement_enabled = true
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,30 @@
+rules:
+  - id: azure-appservice-identityprovider-enabled
+    message: >-
+      Ensure that Managed identity provider is enabled for app services
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          identity {
+          ...
+          type = "SystemAssigned"
+          ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

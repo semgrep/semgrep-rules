@@ -1,0 +1,27 @@
+rules:
+  - id: azure-aks-uses-azure-policies-addon
+    message: >-
+      Ensure that AKS uses Azure Policies Add-on
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_kubernetes_cluster" "..." {
+          ...
+          addon_profile {
+            azure_policy {
+              enabled = true
+            }
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_kubernetes_cluster" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO
