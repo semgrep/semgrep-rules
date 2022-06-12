@@ -17,7 +17,7 @@ rules:
               <$X href="=~/^\/[^\/]/i" rel=... />
           - pattern-not-inside: |
               <$X to="=~/^\/[^\/]/i" rel=... />
-          - pattern-regex: rel=["']((?!noreferrer).)*?["']
+          - pattern-regex: rel=["']((?!noreferrer)|(?!noopener).)*?["']
       - patterns:
           - pattern: |
               React.createElement($A, {target: '_blank'},...)
@@ -32,7 +32,7 @@ rules:
               React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
           - metavariable-regex:
               metavariable: $REL
-              regex: '["'']((?!noreferrer).)*?[''"]'
+              regex: '["'']((?!noreferrer)|(?!noopener).)*?[''"]'
       - patterns:
           - pattern: |
               $P = {target: '_blank'};
@@ -57,12 +57,12 @@ rules:
               React.createElement($A, $P,...);
           - metavariable-regex:
               metavariable: $REL
-              regex: '["'']((?!noreferrer).)*?[''"]'
+              regex: '["'']((?!noreferrer)|(?!noopener).)*?[''"]'
     message: >-
-      This anchor tag with 'target="_blank"' is missing 'noreferrer'.
+      This anchor tag with 'target="_blank"' is missing 'noreferrer' or 'noopener'.
       A page opened with 'target="_blank"' can access the window object of the origin page.
       This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
-      This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' on this tag.
+      This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' or 'rel=noopener' on this tag.
     metadata:
       cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
       owasp: "A3: Sensitive Data Exposure"
