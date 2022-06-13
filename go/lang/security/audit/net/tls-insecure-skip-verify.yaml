@@ -1,11 +1,14 @@
 rules:
   - id: tls-insecure-skip-verify
-    message: Setting InsecureSkipVerify to `true` leaves the TLS susceptible to
-      machine-in-the-middle attacks unless custom verification is used. Only use in
-      testing or in combination with `VerifyConnection` or `VerifyPeerCertificate`.
+    message: Setting InsecureSkipVerify to `true` disables verification of the server's
+      certificate chain and hostname, which leaves the TLS susceptible to machine-in-the-middle
+      attacks unless custom verification is used. Only use in testing or in combination
+      with `VerifyConnection` or `VerifyPeerCertificate`.
     metadata:
-      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
-      owasp: "A9: Using Components with Known Vulnerabilities"
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp:
+        - "A06:2017 - Security Misconfiguration"
+        - "A05:2021 - Security Misconfiguration"
       references:
         - https://golang.org/pkg/crypto/tls/#InsecureCipherSuites
       category: security
