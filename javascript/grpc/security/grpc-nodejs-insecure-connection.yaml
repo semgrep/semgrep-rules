@@ -17,9 +17,19 @@ rules:
           require('grpc');
           ...
           $GRPC($ADDR,...,$CREDENTIALS.createInsecure(),...);
+      - pattern: |
+          require('grpc');
+          ...
+          new $GRPC($ADDR,...,$CREDENTIALS.createInsecure(),...);
       - pattern: |-
           require('grpc');
           ...
           $CREDS = <... $CREDENTIALS.createInsecure() ...>;
           ...
           $GRPC($ADDR,...,$CREDS,...);
+      - pattern: |-
+          require('grpc');
+          ...
+          $CREDS = <... $CREDENTIALS.createInsecure() ...>;
+          ...
+          new $GRPC($ADDR,...,$CREDS,...);
