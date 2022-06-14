@@ -12,12 +12,17 @@ rules:
               <$X to="=~/^\/[^\/]/i" />
       - patterns:
           - pattern-inside: |
-              <$X target="_blank" rel=... />
+              <$X target="_blank" rel=$REL />
           - pattern-not-inside: |
-              <$X href="=~/^\/[^\/]/i" rel=... />
+              <$X href="=~/^\/[^\/]/i" rel=$REL />
           - pattern-not-inside: |
-              <$X to="=~/^\/[^\/]/i" rel=... />
-          - pattern-regex: rel=["']((?!noreferrer)|(?!noopener).)*?["']
+              <$X to="=~/^\/[^\/]/i" rel=$REL />
+          - metavariable-pattern:
+              metavariable: $REL
+              language: generic
+              patterns:
+              - pattern-not-regex: .*noopener.*
+              - pattern-not-regex: .*noreferrer.*
       - patterns:
           - pattern: |
               React.createElement($A, {target: '_blank'},...)
@@ -30,9 +35,12 @@ rules:
               React.createElement($A, {target: '_blank', rel: $REL},...)
           - pattern-not: |
               React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
-          - metavariable-regex:
+          - metavariable-pattern:
               metavariable: $REL
-              regex: '["'']((?!noreferrer)|(?!noopener).)*?[''"]'
+              language: generic
+              patterns:
+              - pattern-not-regex: .*noopener.*
+              - pattern-not-regex: .*noreferrer.*
       - patterns:
           - pattern: |
               $P = {target: '_blank'};
@@ -59,9 +67,8 @@ rules:
               metavariable: $REL
               language: generic
               patterns:
-              - pattern-either:
-                - pattern: noopener
-                - pattern: noreferrer
+              - pattern-not-regex: .*noopener.*
+              - pattern-not-regex: .*noreferrer.*
     message: >-
       This anchor tag with 'target="_blank"' is missing 'noreferrer' or 'noopener'.
       A page opened with 'target="_blank"' can access the window object of the origin page.
