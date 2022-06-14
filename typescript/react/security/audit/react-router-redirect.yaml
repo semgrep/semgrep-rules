@@ -1,17 +1,10 @@
 rules:
   - id: react-router-redirect
     patterns:
-      - pattern-inside: |
-          import "react-router-dom";
-          ...
-      - pattern: |
-          <Redirect to={...} />
-      - pattern-not: |
-          <Redirect to={"..."} />
-      - pattern-not: |
-          <Redirect to={{pathname: "..."}} />
+      - pattern: a()
+      - pattern: b()
     message: >-
-      User controlled data in <Redirect /> can lead to unpredicted redirects.
+      this rule has been deprecated.
     languages:
       - typescript
       - javascript
