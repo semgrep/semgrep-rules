@@ -8,3 +8,7 @@ CMD /bin/true
 FROM stage1 AS stage2
 # ok: multiple-cmd-instructions
 CMD /bin/false
+FROM stage2 AS stage3
+# ok: multiple-cmd-instructions
+HEALTHCHECK CMD /bin/true
+CMD /bin/false
