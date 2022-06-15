@@ -7,12 +7,15 @@ function TestComponent1() {
 }
 
 function TestComponent2() {
-    // ruleid:react-dangerouslysetinnerhtml
-  return <li className={"foobar"} dangerouslySetInnerHTML={createMarkup()} />;
+    // ok:react-dangerouslysetinnerhtml
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo},a:b};
+    return React.createElement('div', params);
 }
 
 function TestComponent3() {
     // ruleid:react-dangerouslysetinnerhtml
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: sanitize(foo)},a:b};
+
   return <li className={"foobar"} dangerouslySetInnerHTML={{__html: foo}} />;
 }
 
