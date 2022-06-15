@@ -9,11 +9,18 @@ rules:
           - focus-metavariable: $X
           - pattern-either:
               - pattern: |
-                  {dangerouslySetInnerHTML: {__html: <... $X ...>}}
+                  {dangerouslySetInnerHTML: <... $X ...>}
               - pattern: |
                   <$Y ... dangerouslySetInnerHTML={<... $X ...>} />
           - pattern-not: |
               <... {__html: "..."} ...>
+          - metavariable-pattern:
+              metavariable: $X
+              patterns:
+                - pattern-not: |
+                    {..., $FLD : $Y, ...}
+                - pattern-not: |
+                    {...,__html: $F,...}
     pattern-sanitizers:
       - patterns:
           - pattern-either:
@@ -44,10 +51,9 @@ rules:
           - pattern: $S(...)
     message: >-
       Detection of trusting HTML from code. This is risky because you can
-      inadvertently expose your users to cross-site scripting (XSS) attacks.
-      This can lead to attackers accessing sensitive information. Consider doing
-      this without dangerouslySetInnerHTML or use a sanitization library such as
-      DOMPurify to santize your HTML.
+      inadvertently expose your users to cross-site scripting (XSS) attacks. This
+      can lead to attackers accessing sensitive information. Consider doing this
+      without dangerouslySetInnerHTML or use a sanitization library such as DOMPurify to santize your HTML.
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation
         ('Cross-site Scripting')"
