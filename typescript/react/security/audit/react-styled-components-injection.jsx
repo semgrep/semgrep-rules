@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 function Vulnerable1(userInput) {
-// ruleid: react-styled-components-injection
+// ok: react-styled-components-injection
   const ArbitraryComponent = styled.div`
     background: url(${userInput});
   `
@@ -11,7 +11,7 @@ function Vulnerable1(userInput) {
 function Vulnerable2(userInput) {
   const input = fooBar(userInput)
 
-// ruleid: react-styled-components-injection
+// ok: react-styled-components-injection
   return styled.div`
     background: url(${input});
   `
@@ -20,7 +20,7 @@ function Vulnerable2(userInput) {
 function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
-// ruleid: react-styled-components-injection
+// ok: react-styled-components-injection
   return styled.div`
     background: ${input};
   `

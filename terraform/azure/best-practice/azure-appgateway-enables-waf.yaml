@@ -1,0 +1,25 @@
+rules:
+  - id: azure-appgateway-enables-waf
+    message: >-
+      Ensure that Application Gateway enables WAF
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_application_gateway" "..." {
+          ...
+          waf_configuration {
+            enabled = true
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_application_gateway" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

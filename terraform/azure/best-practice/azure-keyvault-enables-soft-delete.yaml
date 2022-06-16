@@ -1,0 +1,19 @@
+rules:
+  - id: azure-keyvault-enables-soft-delete
+    message: >-
+      Ensure that key vault enables soft delete
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          soft_delete_enabled = false
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

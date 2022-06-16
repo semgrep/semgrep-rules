@@ -6,6 +6,7 @@ rules:
       - pattern-not: FROM $IMAGE:$VERSION
       - pattern-not: FROM $IMAGE@$DIGEST
       - pattern-not: FROM $IMAGE:$VERSION@$DIGEST
+      - pattern-not: FROM scratch
     message: >-
       Images should be tagged with an explicit version to produce
       deterministic container images.
