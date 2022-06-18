@@ -4,7 +4,6 @@ const merge1 = (dst, src) => {
         if (isObject(dst[key])) {
             merge1(dst[key], src[key]);
         } else {
-            // ruleid: prototype-pollution-function
             dst[key] = src[key];
         }
     }
@@ -16,7 +15,6 @@ function merge2(dst, src) {
         if (isObject(dst[key])) {
             merge2(dst[key], src[key]);
         } else {
-            // ruleid: prototype-pollution-function
             dst[key] = src[key];
         }
     }
@@ -28,7 +26,6 @@ function okMerge1(dst, src) {
         if (dst.hasOwnProperty(key) && isObject(dst[key])) {
             okMerge1(dst[key], src[key]);
         } else {
-            // ok: prototype-pollution-function
             dst[key] = src[key];
         }
     }
@@ -41,7 +38,6 @@ function okMerge2(dst, src) {
         if (isObject(dst[key])) {
             okMerge2(dst[key], src[key]);
         } else {
-            // ok: prototype-pollution-function
             dst[key] = src[key];
         }
     }
