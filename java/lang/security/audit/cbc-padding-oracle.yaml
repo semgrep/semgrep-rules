@@ -17,7 +17,11 @@ rules:
       technology:
         - java
     severity: WARNING
-    fix: $CIPHER.getInstance("AES/GCM/NoPadding");
+    fix: |
+      "AES/GCM/NoPadding"
     languages:
       - java
-    pattern: $CIPHER.getInstance("=~/.*\/CBC\/PKCS5Padding/");
+    patterns:
+      - pattern-inside: Cipher.getInstance("=~/.*\/CBC\/PKCS5Padding/")
+      - pattern: |
+          "=~/.*\/CBC\/PKCS5Padding/"
