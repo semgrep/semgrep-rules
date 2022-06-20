@@ -21,8 +21,12 @@ rules:
       technology:
         - java
     severity: WARNING
-    pattern: $CIPHER.getInstance("=~/DES/.*/")
-    fix: $CIPHER.getInstance("AES/GCM/NoPadding")
+    patterns: 
+      - pattern-inside: $CIPHER.getInstance("=~/DES/.*/")
+      - pattern: |
+          "=~/DES/.*/"
+    fix: |
+      "AES/GCM/NoPadding"
     languages:
       - java
       - kt
