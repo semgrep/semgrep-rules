@@ -4,8 +4,8 @@ rules:
       Detected usage of dangerous method $METHOD which does not escape 
       inputs (see link in references). If the argument is user-controlled, 
       this can lead to SQL injection. 
-      When using $METHOD function don't trust user-submitted data and only allow 
-      approved list of input (possibly, use a whitelist approach).
+      When using $METHOD function, do not trust user-submitted data and only allow 
+      approved list of input (possibly, use an allowlist approach).
     severity: WARNING
     languages:
       - go
@@ -53,6 +53,8 @@ rules:
       cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
       owasp:
         - A03:2021 - Injection
+        - A01:2017 - Injection
       references:
         - https://gorm.io/docs/security.html#SQL-injection-Methods
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
       confidence: MEDIUM
