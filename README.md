@@ -7,7 +7,7 @@
 | ------------ | ------------------------ | -------------------- |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
-Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules, but there are many more written by [r2c](https://r2c.dev/) and other contributors available in the [Semgrep Registry](https://r2c.dev/). If there is a specific rule you are looking for, you can also search the [Semgrep registry](https://semgrep.dev/r).
+Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules, but there are many more written by [r2c](https://r2c.dev/) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore). If there is a specific rule you are looking for, you can also search the [Semgrep registry](https://semgrep.dev/r).
 
 ## Using Semgrep rules repository
 
