@@ -20,12 +20,13 @@ type User struct {
 }
 
 func testInjection(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
-	param := r.URL.Query().Get("orderBy")
+	param := r.Cookie("foo")
 	if param != "" {
 		table := db.Table("users")
 		var u User
 		//ruleid: gorm-dangerous-method-usage
 		table.Order(param).Find(&u)
+
 	}
 }
 

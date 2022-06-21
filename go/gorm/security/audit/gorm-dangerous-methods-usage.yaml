@@ -11,15 +11,38 @@ rules:
       - go
     mode: taint
     pattern-sources:
-      - pattern-either:
-          - pattern: "($REQUEST : *http.Request).$ANYTHING"
-          - pattern: "($REQUEST : http.Request).$ANYTHING"
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  ($REQUEST : http.Request)
+              - pattern: |
+                  ($REQUEST : *http.Request)
+          - pattern-either:
+              - pattern: $REQUEST.URL.Query
+              - pattern: $REQUEST.ParseForm
+              - pattern: $REQUEST.PostFormValue
+              - pattern: $REQUEST.Body
+              - pattern: $REQUEST.Header
+              - pattern: $REQUEST.Cookie
+              - pattern: $REQUEST.UserAgent
     pattern-sinks:
       - patterns:
           - pattern-inside: |
               import ("gorm.io/gorm")
               ...
-          - pattern: $DB.$METHOD(...)
+          - patterns:
+              - pattern-inside: |
+                  func $VAL(..., $GORM *gorm.DB,... ) {
+                    ...
+                  }
+              - pattern-either:
+                  - pattern: |
+                      $GORM. ... .$METHOD($VALUE)
+                  - pattern: |
+                      $DB := $GORM. ... .$ANYTHING(...)
+                      ...
+                      $DB. ... .$METHOD($VALUE)
+          - focus-metavariable: $VALUE
           - metavariable-regex:
               metavariable: $METHOD
               regex: ^(Order|Exec|Raw|Group|Having|Distinct|Select|Pluck)$
