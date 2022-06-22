@@ -30,8 +30,13 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: "($REQUEST : *http.Request).$ANYTHING"
-              - pattern: "($REQUEST : http.Request).$ANYTHING"
+              - pattern: |
+                  ($REQUEST : *http.Request).$ANYTHING
+              - pattern: |
+                  ($REQUEST : http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: (BasicAuth|Cookies|Cookies|Form|FormValue|MultipartReader|PostForm|PostFormValue|Referer|UserAgent|URL)
     pattern-sinks:
       - patterns:
           - pattern-either:

@@ -1,41 +1,47 @@
 rules:
-- id: filepath-clean-misuse
-  message: >-
-    `Clean` is not intended to sanitize against path traversal attacks.
-    This function is for finding the shortest path name equivalent to the given input.
-    Using `Clean` to sanitize file reads may expose this application to
-    path traversal attacks, where an attacker could access arbitrary files on the server.
-    To fix this easily, write this: `filepath.FromSlash(path.Clean("/"+strings.Trim(req.URL.Path, "/")))`
-    However, a better solution is using the `SecureJoin` function in the package `filepath-securejoin`.
-    See https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme.
-  severity: ERROR
-  languages: [go]
-  mode: taint
-  pattern-sources:
-  - pattern-either:
-    - pattern: "($REQUEST : *http.Request).$ANYTHING"
-    - pattern: "($REQUEST : http.Request).$ANYTHING"
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: filepath.Clean($...INNER)
-      - pattern: path.Clean($...INNER)
-  pattern-sanitizers:
-  - pattern-either:
-    - pattern: |
-        "/" + ...
-  fix: filepath.FromSlash(filepath.Clean("/"+strings.Trim($...INNER, "/")))
-  metadata:
-    references:
-    - https://pkg.go.dev/path#Clean
-    - http://technosophos.com/2016/03/31/go-quickly-cleaning-filepaths.html
-    - https://labs.detectify.com/2021/12/15/zero-day-path-traversal-grafana/
-    - https://dzx.cz/2021/04/02/go_path_traversal/
-    - https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme
-    cwe: 'CWE-22: Path Traversal'
-    owasp:
-    - 'A03:2021 - Injection'
-    - 'A01:2017 - Injection'
-    category: security
-    technology:
-    - go
+  - id: filepath-clean-misuse
+    message: >-
+      `Clean` is not intended to sanitize against path traversal attacks.
+      This function is for finding the shortest path name equivalent to the given input.
+      Using `Clean` to sanitize file reads may expose this application to
+      path traversal attacks, where an attacker could access arbitrary files on the server.
+      To fix this easily, write this: `filepath.FromSlash(path.Clean("/"+strings.Trim(req.URL.Path, "/")))`
+      However, a better solution is using the `SecureJoin` function in the package `filepath-securejoin`.
+      See https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme.
+    severity: ERROR
+    languages: [go]
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  ($REQUEST : *http.Request).$ANYTHING
+              - pattern: |
+                  ($REQUEST : http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: (BasicAuth|Cookies|Cookies|Form|FormValue|MultipartReader|PostForm|PostFormValue|Referer|UserAgent|URL)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: filepath.Clean($...INNER)
+              - pattern: path.Clean($...INNER)
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: |
+              "/" + ...
+    fix: filepath.FromSlash(filepath.Clean("/"+strings.Trim($...INNER, "/")))
+    metadata:
+      references:
+        - https://pkg.go.dev/path#Clean
+        - http://technosophos.com/2016/03/31/go-quickly-cleaning-filepaths.html
+        - https://labs.detectify.com/2021/12/15/zero-day-path-traversal-grafana/
+        - https://dzx.cz/2021/04/02/go_path_traversal/
+        - https://pkg.go.dev/github.com/cyphar/filepath-securejoin#section-readme
+      cwe: "CWE-22: Path Traversal"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A01:2017 - Injection"
+      category: security
+      technology:
+        - go
