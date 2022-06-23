@@ -6,12 +6,16 @@ rules:
           ...
           services:
             ...
-      - pattern: |
-          $SERVICE:
-            ...
-            privileged: true
-    message: >-
-      Service '$SERVICE' is running in privileged mode. This grants the
+            $SERVICE:
+              ...
+              privileged: $TRUE
+      - focus-metavariable: $TRUE
+      - metavariable-regex:
+          metavariable: $TRUE
+          regex: (true)
+    fix: |
+      false
+    message: Service '$SERVICE' is running in privileged mode. This grants the
       container the equivalent of root capabilities on the host machine. This
       can lead to container escapes, privilege escalation, and other security
       concerns. Remove the 'privileged' key to disable this capability.
@@ -22,5 +26,7 @@ rules:
       category: security
       technology:
         - docker-compose
-    languages: [yaml]
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    languages:
+      - yaml
     severity: WARNING
