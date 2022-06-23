@@ -1,29 +1,73 @@
 rules:
   - id: detect-eval-with-expression
     metadata:
-      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-      owasp: "A1: Injection"
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated
+        Code ('Eval Injection')"
+      owasp:
+        - A03:2021 - Injection
+        - A07:2017 - Cross-Site Scripting (XSS)
       source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-eval-with-expression.js
       category: security
       technology:
         - javascript
     message: >-
-      Detected eval(variable), which could allow a malicious actor to run arbitrary
-      code.
-    patterns:
-      - pattern-either:
-          - pattern: eval($OBJ)
-          - pattern: window.eval($OBJ)
-          - pattern: Function(...,$OBJ)
-          - pattern: new Function(...,$OBJ)
-      - pattern-not: eval("...")
-      - pattern-not: window.eval("...")
-      - pattern-not: Function(...,"...")
-      - pattern-not: new Function(...,"...")
-      - pattern-not-inside: |
-          $OBJ = "..."
-          ...
-          $SOMETHING(..., $OBJ, ...)
+      Detected use of dynamic execution of JavaScript which may come from
+      user-input, which can lead to Cross-Site-Scripting (XSS). Where possible
+      avoid including user-input in functions which dynamically execute user-input.
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: >
+                  $PROP = new URLSearchParams($WINDOW. ...
+                  .location.search).get('...')
+                    ...
+              - pattern-inside: |
+                  $PROP = new URLSearchParams(location.search).get('...')
+                    ...
+              - pattern-inside: >
+                  $PROP = new URLSearchParams($WINDOW. ...
+                  .location.hash.substring(1)).get('...')
+                    ...
+              - pattern-inside: >
+                  $PROP = new
+                  URLSearchParams(location.hash.substring(1)).get('...')
+                    ...
+          - pattern: $PROP
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams($WINDOW. ... .location.search)
+                    ...
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams(location.search)
+                    ...
+              - pattern-inside: |
+                  $PROPS = new
+                  URLSearchParams($WINDOW. ... .location.hash.substring(1))
+                    ...
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams(location.hash.substring(1))
+                  ...
+          - pattern: $PROPS.get('...')
+      - patterns:
+          - pattern-either:
+              - pattern: location.href
+              - pattern: location.hash
+              - pattern: location.search
+              - pattern: $WINDOW. ... .location.href
+              - pattern: $WINDOW. ... .location.hash
+              - pattern: $WINDOW. ... .location.search
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: eval(<... $SINK ...>)
+              - pattern: window.eval(<... $SINK ...>)
+              - pattern: new Function(<... $SINK ...>)
+              - pattern: new Function(<... $SINK ...>)(...)
+              - pattern: setTimeout(<... $SINK ...>,...)
+              - pattern: setInterval(<... $SINK ...>,...)
+          - focus-metavariable: $SINK
     severity: WARNING
     languages:
       - javascript
