@@ -1,0 +1,26 @@
+rules:
+  - id: azure-aks-private-clusters-enabled
+    message: >-
+      Ensure that AKS enables private clusters	
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_kubernetes_cluster" "..." {
+          ...
+          private_cluster_enabled = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_kubernetes_cluster" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

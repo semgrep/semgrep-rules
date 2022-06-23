@@ -1,0 +1,26 @@
+rules:
+  - id: azure-redis-cache-public-network-access-enabled
+    message: >-
+      Ensure that Azure Cache for Redis disables public network access
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_redis_cache" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_redis_cache" "..." {
+          ...
+          public_network_access_enabled = false
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

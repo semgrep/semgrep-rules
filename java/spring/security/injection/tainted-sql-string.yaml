@@ -26,18 +26,16 @@ rules:
       - patterns:
           - pattern-either:
               - pattern-inside: |
-                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE 
-                  $SOURCE,...) {
+                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE $SOURCE,...) {
                     ...
                   }
               - pattern-inside: |
-                  $METHODNAME(..., @$REQ $TYPE 
-                  $SOURCE,...) {
+                  $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
                     ...
                   }
           - metavariable-regex:
               metavariable: $REQ
-              regex: (RequestBody|PathVariable|RequestParam)
+              regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
           - pattern: $SOURCE
     pattern-sinks:
     - patterns:

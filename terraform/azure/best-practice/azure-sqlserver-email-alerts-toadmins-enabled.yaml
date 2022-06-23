@@ -1,0 +1,24 @@
+rules:
+  - id: azure-sqlserver-email-alerts-toadmins-enabled
+    message: >-
+      Ensure that Email service and co-administrators is Enabled for MSSQL servers
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          state = "Enabled"
+          email_account_admins = true
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

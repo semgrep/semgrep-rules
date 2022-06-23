@@ -1,0 +1,27 @@
+rules:
+  - id: azure-appservice-java-version
+    message: >-
+      Ensure that Java version is the latest, if used to run the web app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ...
+            java_version = "11"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO

@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+
 class FakeModel(models.Model):
     # ok: nontext-field-must-set-null-true
     fieldChar = models.CharField(
@@ -46,3 +47,11 @@ def fake(**kwargs):
 def nope():
     # ok: nontext-field-must-set-null-true
     return fake(blank=True)
+
+def scoped():
+    from django.contrib.gis.db import models
+    class MyModel(models.Model):
+        shape = models.PolygonField(dim=3, srid=4326)
+        # ok: nontext-field-must-set-null-true
+        grouper_id = models.CharField(max_length=50, blank=True)
+

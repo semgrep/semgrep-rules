@@ -1,0 +1,36 @@
+rules:
+  - id: azure-datafactory-uses-git-repository
+    message: >-
+      Ensure that Azure Data Factory uses Git repository for source control
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_data_factory" "..." {
+          ...
+          github_configuration {
+            ...
+          }
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_data_factory" "..." {
+          ...
+          vsts_configuration {
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_data_factory" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

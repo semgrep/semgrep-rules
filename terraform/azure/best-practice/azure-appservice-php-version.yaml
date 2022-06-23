@@ -1,0 +1,27 @@
+rules:
+  - id: azure-appservice-php-version
+    message: >-
+      Ensure that PHP version is the latest, if used to run the web app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ...
+            php_version = "7.4"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO
