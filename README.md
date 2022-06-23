@@ -7,7 +7,7 @@
 | ------------ | ------------------------ | -------------------- |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
-Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules, but there are many more written by [r2c](https://r2c.dev/) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore). If there is a specific rule you are looking for, you can also search the [Semgrep registry](https://semgrep.dev/r).
+Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules, but there are many more written by [r2c](https://r2c.dev/) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore). If there is a specific rule you are looking for, you can also search the [Semgrep registry](https://semgrep.dev/r). To contribute, find details about contributing in the [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/) documentation.
 
 ## Using Semgrep rules repository
 
@@ -50,4 +50,4 @@ If you omit `--git-repo` from the pytest command, it will run the provided bench
 
 ### Rulesets
 
-Rulesets are groups of rules organized by purpose (not by language or framework) from Semgrep Registry. If you want to modify existing rulesets or create your own, please contact us at support@r2c.dev.
+Rulesets are groups of rules organized by purpose, language, or framework sourced from the Semgrep Registry. If you want to modify existing rulesets or create your own, please contact us at support@r2c.dev.
