@@ -11,7 +11,7 @@ Welcome! This repository is the standard library for [Semgrep](https://semgrep.d
 
 ## Using Semgrep rules repository
 
-Run existing and custom Semgrep rules locally with the Semrgep command line interface (Semgrep CLI) or continuously with Semgrep in CI while using Semgrep App. To start using Semgrep rules, see [Semgrep tutorial](https://semgrep.dev/learn), [Getting started with Semgrep CLI](https://semgrep.dev/docs/getting-started/), and [Getting started with Semgrep App](https://semgrep.dev/docs/semgrep-app/getting-started-with-semgrep-app/).
+Run existing and custom Semgrep rules locally with the Semgrep command line interface (Semgrep CLI) or continuously with Semgrep in CI while using Semgrep App. To start using Semgrep rules, see [Semgrep tutorial](https://semgrep.dev/learn), [Getting started with Semgrep CLI](https://semgrep.dev/docs/getting-started/), and [Getting started with Semgrep App](https://semgrep.dev/docs/semgrep-app/getting-started-with-semgrep-app/).
 
 ## Contributing
 
