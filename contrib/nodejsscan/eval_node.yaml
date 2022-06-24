@@ -46,7 +46,8 @@ rules:
               - pattern: |
                   setInterval(<... $SINK ...>, ...)
           - focus-metavariable: $SINK
-    message: User controlled data was found to enter a dynamic execution of
+    message: >-
+      User controlled data was found to enter a dynamic execution of
       JavaScript. This can lead to Remote Code Injection. Where possible do not
       dynamically execute user-input in functions such as eval(...).
     languages:
