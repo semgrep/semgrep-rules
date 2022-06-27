@@ -18,7 +18,7 @@ rules:
       technology:
         - flask
     languages: [python]
-    severity: WARNING
+    severity: INFO
   - id: avoid_hardcoded_config_SECRET_KEY
     pattern-either:
       - pattern: $M.update(SECRET_KEY="=~/.*/")
@@ -35,7 +35,7 @@ rules:
       technology:
         - flask
     languages: [python]
-    severity: ERROR
+    severity: INFO
   - id: avoid_hardcoded_config_ENV
     pattern-either:
       - pattern: $M.update(ENV="=~/^development|production$/")
@@ -52,7 +52,7 @@ rules:
       technology:
         - flask
     languages: [python]
-    severity: WARNING
+    severity: INFO
   - id: avoid_hardcoded_config_DEBUG
     pattern-either:
       - pattern: $M.update(DEBUG=True)
@@ -71,4 +71,4 @@ rules:
       technology:
         - flask
     languages: [python]
-    severity: WARNING
+    severity: INFO
