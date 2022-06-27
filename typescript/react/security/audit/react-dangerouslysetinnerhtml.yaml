@@ -29,15 +29,55 @@ rules:
       - patterns:
           - pattern-either:
               - pattern-inside: |
-                  import $S from "dompurify";
+                  import $S from "underscore.string"
                   ...
               - pattern-inside: |
-                  import * as $S from "dompurify";
+                  import * as $S from "underscore.string"
                   ...
               - pattern-inside: |
-                  import $S from "isomorphic-dompurify";
+                  import $S from "underscore.string"
                   ...
-          - pattern: $S.sanitize(...)
+              - pattern-inside: |
+                  $S = require("underscore.string")
+                  ...
+          - pattern-either:
+              - pattern: $S.escapeHTML(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import { ..., $S,... } from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("dompurify")
+                  ...
+              - pattern-inside: |
+                  import $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("isomorphic-dompurify")
+                  ...
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S(...)
+                      ...
+                  - pattern: $VALUE.sanitize(...)
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S.sanitize
+                      ...
+                  - pattern: $S(...)
+              - pattern: $S.sanitize(...)
+              - pattern: $S(...)
       - patterns:
           - pattern-either:
               - pattern-inside: |
@@ -47,12 +87,27 @@ rules:
                   import * as $S from 'xss';
                   ...
               - pattern-inside: |
+                  $S = require("xss")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
                   import $S from 'sanitize-html';
                   ...
               - pattern-inside: |
                   import * as $S from "sanitize-html";
                   ...
+              - pattern-inside: |
+                  $S = require("sanitize-html")
+                  ...
           - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $S = new Remarkable()
+                  ...
+          - pattern: $S.render(...)
     message: >-
       Detection of dangerouslySetInnerHTML from non-constant definition. This
       can inadvertently expose users to cross-site scripting (XSS) attacks if
@@ -64,7 +119,7 @@ rules:
         ('Cross-site Scripting')"
       owasp:
         - "A07:2017: - Cross-Site Scripting (XSS)"
-        - "A03:2022: - Injection"
+        - "A03:2021: - Injection"
       references:
         - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
       category: security
