@@ -36,9 +36,12 @@ If you fork this repository or create your own, you can add a special [semgrep
 
 ### Benchmarks
 
-The [benchmark job](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Arule-benchmarks) runs every weekend. It uploads a few artifacts, which can be downloaded. If you download the test logs, there are two relevant pieces of information in there: the benchmark table, which roughly shows the performance of every rule that completes in under 60 seconds, and any failed tests are rules that did not complete within 60 seconds.
+You can evaluate the quality of both Semgrep registry and your own rules. The [benchmark job](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Arule-benchmarks) runs every weekend. This job uploads a few artifacts, which can be downloaded. If you download the test logs, there are two relevant pieces of information: 
 
-To run benchmark tests locally, in your command line, use the following commands in the root directory of `semgrep-rules` local repository clone.
+- The benchmark table, which roughly shows the performance of every rule that completes in under 60 seconds.
+- Any failed tests are rules that did not complete within 60 seconds.
+
+To run benchmark tests locally, use the following commands in the root directory of `semgrep-rules` local repository clone.
 ```bash
 pipenv shell
 pipenv install --dev
@@ -46,7 +49,7 @@ export PYTHONPATH=.
 pytest --timeout=60 --rule-directory=[path_to_rule_directory] --git-repo=[git_URL] tests/performance/test_public_repos.py
 ```
 
-If you omit `--git-repo` from the pytest command, it will run the provided benchmark repo.
+To run these in our benchmark repository, skip `--git-repo` from the pytest command (last command in the code snippet above).
 
 ### Rulesets
 
