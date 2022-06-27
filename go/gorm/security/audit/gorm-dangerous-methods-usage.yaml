@@ -16,15 +16,10 @@ rules:
               - pattern: |
                   ($REQUEST : http.Request)
               - pattern: |
-                  ($REQUEST : *http.Request)
-          - pattern-either:
-              - pattern: $REQUEST.URL.Query
-              - pattern: $REQUEST.ParseForm
-              - pattern: $REQUEST.PostFormValue
-              - pattern: $REQUEST.Body
-              - pattern: $REQUEST.Header
-              - pattern: $REQUEST.Cookie
-              - pattern: $REQUEST.UserAgent
+                  ($REQUEST : *http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
     pattern-sinks:
       - patterns:
           - pattern-inside: |
