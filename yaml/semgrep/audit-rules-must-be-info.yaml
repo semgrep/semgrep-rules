@@ -1,0 +1,20 @@
+rules:
+  - id: audit-rules-must-be-info
+    message: >-
+      Audit rules must be INFO severity.
+      Either update the severity, or move the rule outside an audit/ directory.
+    severity: ERROR
+    languages: [yaml]
+    patterns:
+      - pattern-inside: "rules: [..., $RULE, ...]"
+      - pattern-inside: "$RULE"
+      - pattern-either:
+          - pattern: "severity: ERROR"
+          - pattern: "severity: WARNING"
+    paths:
+      include: [audit]
+    fix: "severity: INFO"
+    metadata:
+      category: correctness
+      technology:
+        - semgrep
