@@ -4,10 +4,10 @@ app.controller('myCtrl', function($scope, $sce) {
 $scope.userInput = 'foo';
     $scope.sayHello = function() {
      // ruleid:detect-angular-trust-as-css-method
-     $scope.trustedurl = $sce.trustAsCss($scope.html);
+     // Semgrep removed this dangerous method: $sce.trustAsCss
      input = $scope.html
      // ruleid:detect-angular-trust-as-css-method
-     $scope.trustedurl = $sce.trustAsCss(input);
+     // Semgrep removed this dangerous method: $sce.trustAsCss
 
 
      //Data is not coming from user input

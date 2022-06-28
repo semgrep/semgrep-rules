@@ -2,9 +2,13 @@ rules:
   - id: detect-angular-trust-as-js-method
     patterns:
       - pattern-either:
-          - pattern: |
-              $SOURCE = $scope.$INPUT;
-              $sce.trustAsJs($SOURCE);
+          - patterns:
+            - pattern-inside: |
+                $SOURCE = $scope.$INPUT;
+                ...
+                $sce.trustAsJs($SOURCE);
+            - pattern: |
+                $sce.trustAsJs($SOURCE);
           - pattern: |
               $sce.trustAsJs($scope.$INPUT);
       - pattern-inside: |
@@ -25,3 +29,4 @@ rules:
       technology:
         - angular
     fix: |
+      // Semgrep removed this dangerous method: $sce.trustAsJs
