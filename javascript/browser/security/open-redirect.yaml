@@ -1,7 +1,6 @@
 rules:
   - id: js-open-redirect
-    message: >-
-      The application accepts potentially user-controlled input `$PROP` which
+    message: The application accepts potentially user-controlled input `$PROP` which
       can control the location of the current window context. This can lead two
       types of vulnerabilities open-redirection and Cross-Site-Scripting
       (XSS)  with JavaScript URIs. It is recommended to validate
@@ -29,50 +28,62 @@ rules:
       - typescript
     severity: WARNING
     mode: taint
-pattern-sources:
-  - patterns:
-      - pattern-either:
-          - pattern-inside: >
-              $PROP = new URLSearchParams($WINDOW. ...
-              .location.search).get('...')
-                ...
-          - pattern-inside: |
-              $PROP = new URLSearchParams(location.search).get('...')
-                ...
-          - pattern-inside: >
-              $PROP = new URLSearchParams($WINDOW. ... .location.hash.substring(1)).get('...')
-                ...
-          - pattern-inside: |
-              $PROP = new
-              URLSearchParams(location.hash.substring(1)).get('...')
-                ...
-      - pattern: $PROP
-  - patterns:
-      - pattern-either:
-          - pattern-inside: |
-              $PROPS = new URLSearchParams($WINDOW. ... .location.search)
-                ...
-          - pattern-inside: |
-              $PROPS = new URLSearchParams(location.search)
-                ...
-          - pattern-inside: |
-              $PROPS = new URLSearchParams($WINDOW. ... .location.hash.substring(1))
-                ...
-          - pattern-inside: |
-              $PROPS = new URLSearchParams(location.hash.substring(1))
-              ...
-      - pattern: $PROPS.get('...')
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $PROP = new URLSearchParams($WINDOW. ... .location.search).get('...')
+                  ...
+              - pattern-inside: |
+                  $PROP = new URLSearchParams(location.search).get('...')
+                  ...
+              - pattern-inside: |
+                  $PROP = new URLSearchParams($WINDOW. ... .location.hash.substring(1)).get('...')
+                  ...
+              - pattern-inside: |
+                  $PROP = new URLSearchParams(location.hash.substring(1)).get('...')
+                  ...
+          - pattern: $PROP
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams($WINDOW. ... .location.search)
+                  ...
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams(location.search)
+                  ...
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams($WINDOW. ... .location.hash.substring(1))
+                  ...
+              - pattern-inside: |
+                  $PROPS = new URLSearchParams(location.hash.substring(1))
+                  ...
+          - pattern: $PROPS.get('...')
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $PROPS = new URL($WINDOW. ... .location.href)
+                  ...
+              - pattern-inside: |
+                  $PROPS = new URL(location.href)
+                  ...
+          - pattern: $PROPS.searchParams.get('...')
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $PROPS = new URL($WINDOW. ... .location.href).searchParams.get('...')
+                  ...
+              - pattern-inside: |
+                  $PROPS = new URL(location.href).searchParams.get('...')
+                  ...
+          - pattern: $PROPS
     pattern-sinks:
       - patterns:
           - pattern-either:
               - pattern: location.href = $SINK
-              - pattern: window.location.href = $SINK
-              - pattern: this.window.location.href = $SINK
-              - pattern: this.location.href = $SINK
+              - pattern: $THIS. ... .location.href = $SINK
               - pattern: location.replace($SINK)
-              - pattern: window.location.replace($SINK)
-              - pattern: this.window.location.replace($SINK)
-              - pattern: this.location.replace($SINK)
+              - pattern: $THIS. ... .location.replace($SINK)
           - focus-metavariable: $SINK
           - metavariable-pattern:
               metavariable: $SINK
