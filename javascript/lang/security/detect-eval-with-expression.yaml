@@ -20,22 +20,19 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern-inside: >
-                  $PROP = new URLSearchParams($WINDOW. ...
-                  .location.search).get('...')
+              - pattern-inside: |
+                  $PROP = new URLSearchParams($WINDOW. ... .location.search).get('...')
                     ...
               - pattern-inside: |
                   $PROP = new URLSearchParams(location.search).get('...')
                     ...
-              - pattern-inside: >
-                  $PROP = new URLSearchParams($WINDOW. ...
-                  .location.hash.substring(1)).get('...')
+              - pattern-inside: |
+                  $PROP = new URLSearchParams($WINDOW. ... .location.hash.substring(1)).get('...')
                     ...
-              - pattern-inside: >
-                  $PROP = new
-                  URLSearchParams(location.hash.substring(1)).get('...')
+              - pattern-inside: |
+                  $PROP = new URLSearchParams(location.hash.substring(1)).get('...')
                     ...
-          - pattern: $PROP
+          - focus-metavariable: $PROP
       - patterns:
           - pattern-either:
               - pattern-inside: |
@@ -52,6 +49,7 @@ rules:
                   $PROPS = new URLSearchParams(location.hash.substring(1))
                   ...
           - pattern: $PROPS.get('...')
+          - focus-metavariable: $PROPS
       - patterns:
           - pattern-either:
               - pattern: location.href
