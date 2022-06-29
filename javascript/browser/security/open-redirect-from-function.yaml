@@ -30,11 +30,9 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-          - pattern-either:
-              - patterns:
-                  - pattern: |
-                      function ... (..., $PROP, ...) { ... }
-                  - pattern: $PROP
+            - pattern-inside: |
+                function ... (..., $PROP, ...) { ... }
+            - focus-metavariable: $PROP
     pattern-sinks:
       - patterns:
           - pattern-either:
