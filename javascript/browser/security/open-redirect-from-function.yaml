@@ -7,6 +7,7 @@ rules:
       (XSS)  with JavaScript URIs. It is recommended to validate
       user-controllable  input before allowing it to control the redirection.
     metadata:
+      confidence: LOW
       cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
       owasp:
         - A10:2013 - Unvalidated Redirects and Forwards
@@ -26,7 +27,7 @@ rules:
     languages:
       - javascript
       - typescript
-    severity: WARNING
+    severity: INFO
     mode: taint
     pattern-sources:
       - patterns:
