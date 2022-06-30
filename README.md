@@ -34,23 +34,6 @@ Join [Slack](https://r2c.dev/slack) for the fastest answers to your questions! O
 If you fork this repository or create your own, you can add a special [semgrep
 -rules-test](https://github.com/marketplace/actions/semgrep-rules-test) GitHub Action to your workflow that will automatically test your rules using the latest version of Semgrep. See our [semgrep-rules-test](https://github.com/returntocorp/semgrep-rules/blob/develop/.github/workflows/semgrep-rules-test.yml).
 
-### Benchmarks
-
-You can evaluate the quality of both Semgrep registry and your own rules. The [benchmark job](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Arule-benchmarks) runs every weekend. This job uploads a few artifacts, which can be downloaded. If you download the test logs, there are two relevant pieces of information: 
-
-- The benchmark table, which roughly shows the performance of every rule that completes in under 60 seconds.
-- Any failed tests are rules that did not complete within 60 seconds.
-
-To run benchmark tests locally, use the following commands in the root directory of `semgrep-rules` local repository clone.
-```bash
-pipenv shell
-pipenv install --dev
-export PYTHONPATH=.
-pytest --timeout=60 --rule-directory=[path_to_rule_directory] --git-repo=[git_URL] tests/performance/test_public_repos.py
-```
-
-To run these in our benchmark repository, skip `--git-repo` from the pytest command (last command in the code snippet above).
-
 ### Rulesets
 
 Rulesets are groups of rules organized by purpose, language, or framework sourced from the Semgrep Registry. If you want to modify existing rulesets or create your own, please contact us at support@r2c.dev.
