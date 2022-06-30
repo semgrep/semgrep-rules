@@ -3,6 +3,8 @@ rules:
     patterns:
       - pattern: $DB.sequelize.query(...)
       - pattern-not: $DB.sequelize.query("...")
+      - pattern-not: |
+          $DB.sequelize.query("...", {..., replacements: { ..., $VAL: $INPUT, ...}, ...})
     message: >-
       Non-constant SQL query detected. Ensure this is not controlled
       by external data, otherwise this is a SQL injection.
