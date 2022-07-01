@@ -25,22 +25,25 @@ rules:
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       confidence: HIGH
     mode: taint
-    pattern-sanitizers:
-      - pattern: html.EscapeString(...)
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: "($REQUEST : *http.Request).$ANYTHING"
-              - pattern: "($REQUEST : http.Request).$ANYTHING"
+              - pattern: |
+                  ($REQUEST : *http.Request).$ANYTHING
+              - pattern: |
+                  ($REQUEST : http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
+    pattern-sanitizers:
+      - pattern: html.EscapeString(...)
     pattern-sinks:
       - patterns:
           - pattern-either:
-              - patterns:
-                  - pattern-either:
-                      - pattern: fmt.Printf("$HTMLSTR", ...)
-                      - pattern: fmt.Sprintf("$HTMLSTR", ...)
-                      - pattern: fmt.Fprintf($W, "$HTMLSTR", ...)
-                      - pattern: '"$HTMLSTR" + ...'
+              - pattern: fmt.Printf("$HTMLSTR", ...)
+              - pattern: fmt.Sprintf("$HTMLSTR", ...)
+              - pattern: fmt.Fprintf($W, "$HTMLSTR", ...)
+              - pattern: '"$HTMLSTR" + ...'
           - metavariable-pattern:
               metavariable: $HTMLSTR
               language: generic

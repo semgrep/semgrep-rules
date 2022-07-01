@@ -13,7 +13,11 @@ app.get('/', function (req, res) {
     res.send('Response</br>');
 });
 app.listen(8000);
+// ok:eval_nodejs
 eval("outside_express" + req.foo)
+// ok:eval_nodejs
 setTimeout('alert(' + req.body.name, 0);
+// ok:eval_nodejs
 setInterval(req.body.name, 0);
+// ok:eval_nodejs
 new Function('arg1', 'arg2', req.query.name)
