@@ -6,13 +6,32 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-either:
-              - pattern: flask.request.$ANYTHING
               - patterns:
-                  - pattern-inside: |
-                      @$APP.route(...)
-                      def $FUNC(..., $ROUTEVAR, ...):
-                        ...
-                  - pattern: $ROUTEVAR
+                  - pattern-either:
+                      - pattern: flask.request.form.get(...)
+                      - pattern: flask.request.form[...]
+                      - pattern: flask.request.args.get(...)
+                      - pattern: flask.request.args[...]
+                      - pattern: flask.request.values.get(...)
+                      - pattern: flask.request.values[...]
+                      - pattern: flask.request.cookies.get(...)
+                      - pattern: flask.request.cookies[...]
+                      - pattern: flask.request.stream
+                      - pattern: flask.request.headers.get(...)
+                      - pattern: flask.request.headers[...]
+                      - pattern: flask.request.data
+                      - pattern: flask.request.full_path
+                      - pattern: flask.request.url
+                      - pattern: flask.request.json
+                      - pattern: flask.request.get_json()
+                      - pattern: flask.request.view_args.get(...)
+                      - pattern: flask.request.view_args[...]
+                      - patterns:
+                          - pattern-inside: |
+                              @$APP.route(...)
+                              def $FUNC(..., $ROUTEVAR, ...):
+                                ...
+                          - pattern: $ROUTEVAR
               - patterns:
                 - pattern-inside: |
                     def $FUNC(request, ...):
