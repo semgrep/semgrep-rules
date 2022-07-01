@@ -2,13 +2,9 @@ rules:
   - id: detect-angular-trust-as-url-method
     patterns:
       - pattern-either:
-          - patterns: 
-            - pattern-inside: |
-                $SOURCE = $scope.$INPUT;
-                ...
-                $sce.trustAsUrl($SOURCE);
-            - pattern: |
-                $sce.trustAsUrl($SOURCE);
+          - pattern: |
+              $SOURCE = $scope.$INPUT;
+              $sce.trustAsUrl($SOURCE);
           - pattern: |
               $sce.trustAsUrl($scope.$INPUT);
       - pattern-inside: |
@@ -29,4 +25,3 @@ rules:
       technology:
         - angular
     fix: |
-      // Semgrep removed this dangerous method: $sce.trustAsURL(...)

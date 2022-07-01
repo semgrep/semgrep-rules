@@ -5,8 +5,8 @@ $scope.userInput = 'foo';
     $scope.sayHello = function() {
      // ruleid:detect-angular-trust-as-js-method
      $scope.trustedurl = $sce.trustAsJs($scope.html);
-     input = $scope.html
      // ruleid:detect-angular-trust-as-js-method
+     input = $scope.html
      $scope.trustedurl = $sce.trustAsJs(input);
 
 
