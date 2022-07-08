@@ -35,7 +35,7 @@ def test_send_file7
     send_file cookies.permanent.signed[:something]
 end
 
-def test_send_file4
+def test_send_file8
     # ruleid: check-send-file
     send_file request.env[:badheader]
 end

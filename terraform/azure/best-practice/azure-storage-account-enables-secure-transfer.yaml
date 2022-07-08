@@ -1,0 +1,19 @@
+rules:
+  - id: azure-storage-account-enables-secure-transfer
+    message: >-
+      Ensure that storage account enables secure transfer
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_storage_account" "..." {
+          ...
+          enable_https_traffic_only = false
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

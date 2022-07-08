@@ -1,0 +1,23 @@
+rules:
+  - id: azure-mariadb-sslenforcement-enabled
+    message: >-
+      Ensure Enforce SSL connection is set to Enabled for MariaDB servers
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_mariadb_server" "..." {
+          ...
+          ssl_enforcement_enabled = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_mariadb_server" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

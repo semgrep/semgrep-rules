@@ -1,0 +1,25 @@
+rules:
+  - id: azure-appservice-https-20-enabled
+    message: >-
+      Ensure that HTTP Version is the latest if used to run the web app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            http2_enabled = true
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

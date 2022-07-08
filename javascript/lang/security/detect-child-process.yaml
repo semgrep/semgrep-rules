@@ -11,17 +11,19 @@ rules:
       category: security
       technology:
         - javascript
+      references:
+      - https://nodejs.org/api/child_process.html
     message: >-
       Detected non-literal calls to $EXEC(). This could lead to a command
       injection vulnerability.
     patterns:
       - pattern-either:
-          - pattern: exec($CMD,...)
-          - pattern: execSync($CMD,...)
-          - pattern: spawn($CMD,...)
-          - pattern: spawnSync($CMD,...)
-      - pattern-not-inside: $EXEC("...",...)
-      - pattern-not-inside: $EXEC(["...",...],...)
+          - pattern: child_process.exec($CMD,...)
+          - pattern: child_process.execSync($CMD,...)
+          - pattern: child_process.spawn($CMD,...)
+          - pattern: child_process.spawnSync($CMD,...)
+      - pattern-not-inside: child_process.$EXEC("...",...)
+      - pattern-not-inside: child_process.$EXEC(["...",...],...)
       - pattern-not-inside: |
           $CMD = "..."
           ...

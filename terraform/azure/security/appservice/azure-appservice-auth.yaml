@@ -1,0 +1,30 @@
+rules:
+  - id: azure-appservice-auth
+    message: >-
+      Ensure App Service Authentication is set on Azure App Service
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          auth_settings {
+            ...
+            enabled = true
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

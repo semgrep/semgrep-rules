@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 function Vulnerable1(userInput) {
   const ArbitraryComponent = styled.div`
     background: url(${
-      // ruleid: react-styled-components-injection
+      // ok: react-styled-components-injection
       userInput
     });
   `
@@ -15,7 +15,7 @@ function Vulnerable2(userInput) {
 
   return styled.div`
     background: url(${
-      // ruleid: react-styled-components-injection
+      // ok: react-styled-components-injection
       input
     });
   `
@@ -25,14 +25,13 @@ function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
   return styled.div`background: ${
-      // ruleid: react-styled-components-injection
+      // ok: react-styled-components-injection
       input
     };
-  `
 }
 
 function OkTest({siteUrl, input}) {
-// ok: react-styled-components-injection
+  // ok: react-styled-components-injection
   const ArbitraryComponent = styled.div`
     background: red;
   `
@@ -41,7 +40,7 @@ function OkTest({siteUrl, input}) {
 
 function OkTest(input) {
   const css = 'red';
-// ok: react-styled-components-injection
+  // ok: react-styled-components-injection
   const ArbitraryComponent = styled.div`
     background: ${css};
   `
