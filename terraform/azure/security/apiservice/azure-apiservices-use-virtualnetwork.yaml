@@ -1,0 +1,28 @@
+rules:
+  - id: azure-apiservices-use-virtualnetwork
+    message: >-
+      Ensure that API management services use virtual networks
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_api_management" "..." {
+          ...
+          virtual_network_configuration {
+            subnet_id = ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_api_management" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

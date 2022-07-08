@@ -1,0 +1,27 @@
+rules:
+  - id: azure-appservice-used-azure-files
+    message: >-
+      Ensure that app services use Azure Files
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          storage_account {
+            ...
+            type = "AzureFiles"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO

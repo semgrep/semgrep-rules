@@ -1,0 +1,26 @@
+rules:
+  - id: azure-dataexplorer-double-encryption-enabled
+    message: >-
+      Ensure that Azure Data Explorer uses double encryption
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_kusto_cluster" "..." {
+          ...
+          double_encryption_enabled = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_kusto_cluster" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      cwe: 'CWE-320: Key Management Errors'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING
