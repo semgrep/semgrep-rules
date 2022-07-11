@@ -29,8 +29,8 @@ def test2():
     return r
 
 def test3():
-    # ruleid: use-timeout
     session = requests.Session()
+    # ruleid: use-timeout
     r = session.get(get_url())
 
     # ok: use-timeout
