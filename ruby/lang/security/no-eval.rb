@@ -20,6 +20,13 @@ end
 
 Person.human? # true
 
+# ok:ruby-eval
+Person.foo do
+  def bar?
+    true
+  end
+end
+
 # ruleid:ruby-eval
 Array.class_eval(array_second)
 

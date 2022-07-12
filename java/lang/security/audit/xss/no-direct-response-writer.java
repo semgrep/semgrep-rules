@@ -124,9 +124,9 @@ public class BenchmarkTest02388 extends HttpServlet {
             java.io.FileWriter fw = new java.io.FileWriter(fileTarget,true); //the true will append the new data
                 fw.write("hash_value=" + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true) + "\n");
             fw.close();
-            // ruleid: no-direct-response-writer
             response.getWriter().println(
-"Sensitive value '" + org.owasp.esapi.ESAPI.encoder().encodeForHTML(new String(input)) + "' hashed and stored<br/>"
+            // ruleid: no-direct-response-writer
+            "Sensitive value '" + org.owasp.esapi.ESAPI.encoder().encodeForHTML(new String(input)) + "' hashed and stored<br/>"
 );
 
         } catch (java.security.NoSuchAlgorithmException e) {
