@@ -15,7 +15,11 @@ rules:
       cwe:
         "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
         ('SQL Injection')"
-      owasp: "A1: Injection"
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
+      references:
+        - https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#tutorial-selecting-data
       technology:
         - pyramid
     mode: taint
@@ -36,9 +40,9 @@ rules:
               ...
           - pattern-either:
               - pattern: |
-                  $QUERY.$SQLFUNC("...".$FORMATFUNC(...))
+                  $QUERY.$SQLFUNC("...".$FORMATFUNC(..., $SINK, ...))
               - pattern: |
-                  $QUERY.join(...).$SQLFUNC("...".$FORMATFUNC(...))
+                  $QUERY.join(...).$SQLFUNC("...".$FORMATFUNC(..., $SINK, ...))
           - pattern: $SINK
           - metavariable-regex:
               metavariable: $SQLFUNC
