@@ -35,7 +35,7 @@ def test2():
 def test3():
     session = requests.Session()
     # ruleid: use-timeout
-    r = session.get(url)
+    r = session.get(get_url())
 
     # ok: use-timeout
     r = session.get(url, timeout=3)
