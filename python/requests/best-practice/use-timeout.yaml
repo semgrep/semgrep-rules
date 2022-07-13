@@ -1,31 +1,32 @@
 rules:
   - id: use-timeout
-    patterns:
-      - pattern-not: requests.$W(..., timeout=$N, ...)
-      - pattern-not: requests.$W(..., **$KWARGS)
-      - pattern-not: |
-          $SESSION.$W(..., timeout=$N, ...)
-      - pattern-not: |
-          $SESSION.$W(..., **$KWARGS)
-      - pattern-either:
-          - pattern: requests.request(...)
-          - pattern: requests.get(...)
-          - pattern: requests.post(...)
-          - pattern: requests.put(...)
-          - pattern: requests.delete(...)
-          - pattern: requests.head(...)
-          - pattern: requests.patch(...)
-          - patterns:
-            - pattern-inside: |
-                $SESSION = requests.Session(...)
-                ...
-            - pattern-either: 
-                - pattern: $SESSION.get(...)
-                - pattern: $SESSION.post(...)
-                - pattern: $SESSION.put(...)
-                - pattern: $SESSION.delete(...)
-                - pattern: $SESSION.head(...)
-                - pattern: $SESSION.patch(...)
+    pattern-either:
+      - patterns:
+        - pattern-not: requests.$W(..., timeout=$N, ...)
+        - pattern-not: requests.$W(..., **$KWARGS)
+        - pattern-either:
+            - pattern: requests.request(...)
+            - pattern: requests.get(...)
+            - pattern: requests.post(...)
+            - pattern: requests.put(...)
+            - pattern: requests.delete(...)
+            - pattern: requests.head(...)
+            - pattern: requests.patch(...)
+      - patterns:
+          - pattern-inside: |
+              $SESSION = requests.Session(...)
+              ...
+          - pattern-not: |
+              $SESSION.$W(..., timeout=$N, ...)
+          - pattern-not: |
+              $SESSION.$W(..., **$KWARGS)
+          - pattern-either:
+              - pattern: $SESSION.get(...)
+              - pattern: $SESSION.post(...)
+              - pattern: $SESSION.put(...)
+              - pattern: $SESSION.delete(...)
+              - pattern: $SESSION.head(...)
+              - pattern: $SESSION.patch(...)
     fix-regex:
       regex: (.*)\)$
       replacement: \1, timeout=30)
@@ -40,5 +41,7 @@ rules:
     - https://requests.readthedocs.io/en/latest/user/quickstart/#timeouts
     metadata:
       category: best-practice
+      references:
+        - https://docs.python-requests.org/en/latest/user/advanced/?highlight=timeout#timeouts
       technology:
         - requests

@@ -15,6 +15,7 @@ rules:
           end
           ...
           $CLASS.$FUNC(...)
+      - focus-metavariable: $CLASS
     message: >-
       Checks for models that do not use attr_accessible. This means there is no limiting
       of which variables can be manipulated
@@ -25,6 +26,10 @@ rules:
       references:
         - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_model_attributes.rb
       category: security
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
+      cwe: "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
       technology:
         - rails
     languages:
