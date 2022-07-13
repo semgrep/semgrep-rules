@@ -28,7 +28,7 @@ rules:
               - pattern: $SESSION.head(...)
               - pattern: $SESSION.patch(...)
     fix-regex:
-      regex: (.*)\)
+      regex: (.*)\)$
       replacement: \1, timeout=30)
     message: >-
       Detected a 'requests' call without a timeout set. By default, 'requests' calls
@@ -41,5 +41,6 @@ rules:
       category: best-practice
       references:
         - https://docs.python-requests.org/en/latest/user/advanced/?highlight=timeout#timeouts
+        - https://requests.readthedocs.io/en/latest/user/quickstart/#timeouts
       technology:
         - requests
