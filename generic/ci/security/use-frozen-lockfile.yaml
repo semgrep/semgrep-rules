@@ -55,6 +55,7 @@ rules:
     patterns:
       - pattern-regex: pipenv install\b
       - pattern-not-regex: pipenv install --ignore-pipfile
+      - pattern-not-regex: pipenv install --deploy
       - pattern-not-regex: pipenv install [\w]+
     fix: pipenv install --ignore-pipfile
     message: >-
