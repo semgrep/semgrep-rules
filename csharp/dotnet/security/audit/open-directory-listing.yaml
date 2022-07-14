@@ -2,10 +2,14 @@ rules:
 - id: open-directory-listing
   patterns:
   - pattern-either:
-    - pattern: $APP.UseDirectoryBrowser(...);
+    - pattern: (IApplicationBuilder $APP).UseDirectoryBrowser(...);
     - pattern: $BUILDER.Services.AddDirectoryBrowser(...);
-  - pattern-inside: public void Configure(...){...}
-  message: An open directory listing is potentially exposed, potentially revealing
+  - pattern-inside: |
+      public void Configure(...) {
+        ...
+      }
+  message: >-
+    An open directory listing is potentially exposed, potentially revealing
     sensitive information to attackers.
   metadata:
     category: security
@@ -13,7 +17,7 @@ rules:
     - .net
     - mvc
     owasp:
-    - "A05:2021 \u2013 Security Misconfiguration"
+    - "A05:2021 - Security Misconfiguration"
     cwe: 'CWE-548: Exposure of Information Through Directory Listing'
     references:
     - https://cwe.mitre.org/data/definitions/548.html
@@ -21,4 +25,4 @@ rules:
     - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-7.0#directory-browsing
   languages:
   - csharp
-  severity: WARNING
+  severity: INFO
