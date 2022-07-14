@@ -2,22 +2,27 @@ rules:
 - id: check-regex-dos
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern: $X
-        - pattern-inside: |
-            def $F(...,$X,...)
-              ...
-            end
-      - patterns:
-        - pattern: $X
-        - pattern-inside: |
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            cookies[...]
+        - patterns:
+          - pattern: |
+              cookies. ... .$PROPERTY[...]
+          - metavariable-regex:
+              metavariable: $PROPERTY
+              regex: (?!signed|encrypted)
+        - pattern: |
             params[...]
-      - patterns:
-        - pattern: $Y
-        - pattern-inside: |
-            $RECORD.$Y
+        - pattern: |
+            request.env[...]
+        - patterns:
+          - pattern: $Y
+          - pattern-either:
+            - pattern-inside: |
+                $RECORD.read_attribute($Y)
+            - pattern-inside: |
+                $RECORD[$Y]
   pattern-sinks:
   - patterns:
     - pattern-either:
