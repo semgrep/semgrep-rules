@@ -6,9 +6,15 @@ rules:
   - pattern-not: |
       $X.html("...",...)
   message: >-
-    JQuery's html function can lead to XSS. If the string is plain text, use the text function instead.
-    Otherwise, use a function that escapes html such as edx's HtmlUtils.setHtml.
+    JQuery's html function can lead to XSS via untrusted input.
   metadata:
+    shortDesription: "Use of JQuery's unsafe html() function."
+    help: |
+      ## Remediation
+      Avoid using JQuery's html() function. If the string is plain text, use the text() function instead.
+      Otherwise, use a function that escapes html such as edx's HtmlUtils.setHtml().
+    tags: [security]
+    precision: high
     owasp: 'A7: Cross-Site Scripting (XSS)'
     cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     references:
