@@ -8,19 +8,20 @@ rules:
           $APP.UseDeveloperExceptionPage(...); 
           ...
         }
-  message: Stacktrace information is displayed in a non-Development environment.
+  message: >-
+    Stacktrace information is displayed in a non-Development environment.
     Accidentally disclosing sensitive stack trace information in a production
     environment aids an attacker in reconnaissance and information gathering.
   metadata:
     category: security
     technology:
-      - csharp
+    - csharp
     owasp:
-      - A04:2021 – Insecure Design
+    - A04:2021 – Insecure Design
     cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
     references:
-      - https://cwe.mitre.org/data/definitions/209.html
-      - https://owasp.org/Top10/A04_2021-Insecure_Design/
+    - https://cwe.mitre.org/data/definitions/209.html
+    - https://owasp.org/Top10/A04_2021-Insecure_Design/
   languages:
-    - csharp
+  - csharp
   severity: WARNING
