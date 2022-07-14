@@ -23,6 +23,9 @@ rules:
                 $RECORD.read_attribute($Y)
             - pattern-inside: |
                 $RECORD[$Y]
+          - metavariable-regex:
+              metavariable: $RECORD
+              regex: '[A-Z]\w+'
   pattern-sinks:
   - patterns:
     - pattern-either:
