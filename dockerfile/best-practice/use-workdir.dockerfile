@@ -3,7 +3,7 @@ FROM busybox
 # ruleid: use-workdir
 RUN cd semgrep && git clone https://github.com/returntocorp/semgrep
 
-# ruleid: use-workdir
+# ok: use-workdir
 RUN pip3 install semgrep && cd ..
 
 # ok: use-workdir

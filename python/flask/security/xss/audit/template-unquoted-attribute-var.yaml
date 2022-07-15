@@ -2,27 +2,45 @@ rules:
   - id: template-unquoted-attribute-var
     message: >-
       Detected a unquoted template variable as an attribute. If unquoted, a
-      malicious actor could inject custom JavaScript handlers. To fix this,
-      add quotes around the template expression, like this: "{{ expr }}".
+      malicious actor could inject custom JavaScript handlers. To fix this, add
+      quotes around the template expression, like this: "{{ expr }}".
     metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation
+        ('Cross-site Scripting')"
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
       references:
         - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
       category: security
       technology:
         - flask
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     languages:
       - generic
     paths:
       include:
         - "*.html"
+        - "*.py"
     severity: WARNING
     patterns:
+      - pattern-either:
+          - pattern: |
+              request.$VALUE.get(...)
+          - pattern: |
+              request.$VALUE['...']
+          - pattern: |
+              $REQ = request.$VALUE.get(...)
+              ... 
+              $REQ
       - pattern-inside: <$TAG ...>
       - pattern-not-inside: ="..."
       - pattern-not-inside: ='...'
-      - pattern: "{{ ... }}"
+      - pattern-inside: |
+          {{ ... }}
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (form|data|args|cookies|headers)
     fix-regex:
       regex: "{{(.*?)}}"
       replacement: '"{{\1}}"'

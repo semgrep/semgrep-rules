@@ -8,7 +8,7 @@ rules:
     severity: WARNING
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
       references:
         - https://owasp.org/www-community/attacks/xss/
         - https://bugs.jquery.com/ticket/9521
@@ -21,14 +21,18 @@ rules:
               $(<... window ...>)
           - pattern: |
               $(<... location ...>)
-          - pattern: |
-              $X = <... window ...>;
-              ...
-              $(<... $X ...>);
-          - pattern: |
-              $X = <... location ...>;
-              ...
-              $(<... $X ...>);
+          - patterns:
+              - pattern: |
+                  $X = <... window ...>;
+                  ...
+                  $(<... $X ...>);
+              - focus-metavariable: $X
+          - patterns:
+              - pattern: |
+                  $X = <... location ...>;
+                  ...
+                  $(<... $X ...>);
+              - focus-metavariable: $X
           - patterns:
               - pattern-either:
                   - pattern-inside: |
@@ -62,6 +66,7 @@ rules:
                   $JQUERY.each(function($INDEX, $Y) {
                     ...
                   })
+              - focus-metavariable: $Y
       - pattern-not: |
           $(window)
       - pattern-not: |
