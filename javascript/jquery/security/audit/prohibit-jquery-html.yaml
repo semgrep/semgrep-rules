@@ -6,7 +6,7 @@ rules:
       - pattern-not: |
           $X.html("...",...)
     message: >-
-      JQuery's html function can lead to XSS via untrusted input.
+      JQuery's `html` function is susceptible to Cross Site Scripting (XSS) attacks. If you're just passing text, consider `text` instead. Otherwise, use a function that escapes HTML such as edX's `HtmlUtils.setHtml()`.
     metadata:
       shortDesription: "Use of JQuery's unsafe html() function."
       help: |
