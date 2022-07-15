@@ -55,7 +55,7 @@ rules:
               - pattern-inside: $LOOP.subprocess_shell($PROTOCOL, $CMD)
               - pattern-inside: asyncio.subprocess.create_subprocess_shell($CMD, ...)
               - pattern-inside: asyncio.create_subprocess_shell($CMD, ...)
-          - pattern: $CMD
+          - focus-metavariable: $CMD
           - pattern-not-inside: |
               $CMD = "..."
               ...
