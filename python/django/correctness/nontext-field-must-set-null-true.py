@@ -1,4 +1,7 @@
 from django.db import models
+from ckeditor.fields import RichTextField
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 
 class FakeModel(models.Model):
@@ -6,6 +9,8 @@ class FakeModel(models.Model):
     fieldChar = models.CharField(
         max_length=200,
         blank=True)
+    # ok: nontext-field-must-set-null-true
+    fieldPhone = PhoneNumberField()
     # ok: nontext-field-must-set-null-true
     fieldText = models.TextField(blank=True)
     # ok: nontext-field-must-set-null-true
@@ -22,6 +27,8 @@ class FakeModel(models.Model):
     fieldUUID = models.UUIDField(blank=True)
     # ok: nontext-field-must-set-null-true
     fieldManyToMany = models.ManyToManyField("self", blank=True)
+    # ok: nontext-field-must-set-null-true
+    fieldCKEditorRichtext = RichTextField(blank=True)
     # ruleid: nontext-field-must-set-null-true
     fieldInt = models.IntegerField(
         blank=True,
@@ -40,3 +47,11 @@ def fake(**kwargs):
 def nope():
     # ok: nontext-field-must-set-null-true
     return fake(blank=True)
+
+def scoped():
+    from django.contrib.gis.db import models
+    class MyModel(models.Model):
+        shape = models.PolygonField(dim=3, srid=4326)
+        # ok: nontext-field-must-set-null-true
+        grouper_id = models.CharField(max_length=50, blank=True)
+

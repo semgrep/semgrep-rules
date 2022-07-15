@@ -1,14 +1,22 @@
 rules:
-- id: hashtbl-find-outside-try
-  patterns:
-  - pattern: |
-      Hashtbl.find ...
-  - pattern-not-inside: |
-      try ... with ... -> ...
-  message: You should not use Hashtbl.find outside of a try, or you should use Hashtbl.find_opt
-  languages: [ocaml]
-  severity: WARNING
-  metadata:
-    category: best-practice
-    technology:
-    - ocaml
+  - id: hashtbl-find-outside-try
+    patterns:
+      - pattern: |
+          Hashtbl.find ...
+      - pattern-not-inside: |
+          try ... with ... -> ...
+      # TODO:
+      # We should restrict this to match-with plus exception pattern:
+      #
+      #     match ... with | exception ... -> ... | ... -> ...
+      #
+      # But first we need to switch to tree-sitter-ocaml for parsing patterns.
+      - pattern-not-inside: |
+          match ... with | ... -> ...
+    message: You should not use Hashtbl.find outside of a try, or you should use Hashtbl.find_opt
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - ocaml

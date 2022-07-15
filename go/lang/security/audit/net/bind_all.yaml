@@ -1,18 +1,21 @@
 rules:
-- id: avoid-bind-to-all-interfaces
-  message: Listening on 0.0.0.0 or empty string could unexpectedly expose the server publicly as it binds to all available
-    interfaces
-  languages: [go]
-  severity: WARNING
-  metadata:
-    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
-    owasp: 'A6: Security Misconfiguration'
-    source-rule-url: https://github.com/securego/gosec
-    category: security
-    technology:
-    - go
-  pattern-either:
-  - pattern: tls.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
-  - pattern: net.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
-  - pattern: tls.Listen($NETWORK, "=~/^:.*$/", ...)
-  - pattern: net.Listen($NETWORK, "=~/^:.*$/", ...)
+  - id: avoid-bind-to-all-interfaces
+    message: >-
+      Detected a network listener listening on 0.0.0.0 or an empty string. 
+      This could unexpectedly expose the server publicly as it binds to all available interfaces. 
+      Instead, specify another IP address that is not 0.0.0.0 nor the empty string.
+    languages: [go]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp: "A6: Security Misconfiguration"
+      source-rule-url: https://github.com/securego/gosec
+      category: security
+      technology:
+        - go
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: tls.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
+      - pattern: net.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
+      - pattern: tls.Listen($NETWORK, "=~/^:.*$/", ...)
+      - pattern: net.Listen($NETWORK, "=~/^:.*$/", ...)

@@ -1,10 +1,10 @@
 // ruleid: react-missing-noreferrer
 var Test1 = <a target='_blank' href="http://example.com/"></a>
 
-// ruleid: react-missing-noreferrer
+// ok: react-missing-noreferrer
 var Test2 = <a target="_blank" rel='noopener' href="http://example.com"></a>
 
-// ruleid: react-missing-noreferrer
+// ok: react-missing-noreferrer
 var Test3 = <a rel='noopener' target="_blank" href="http://example.com"></a>
 
 // ruleid: react-missing-noreferrer
@@ -37,7 +37,7 @@ function TestComponent2() {
 }
 
 function TestComponent3() {
-// ruleid: react-missing-noreferrer
+// ok: react-missing-noreferrer
   return React.createElement('a', {target: '_blank', href: 'http://example.com/', rel: 'noopener'});
 }
 

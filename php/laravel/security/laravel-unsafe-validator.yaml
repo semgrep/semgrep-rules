@@ -1,0 +1,29 @@
+rules:
+- id: laravel-unsafe-validator
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $R
+    - pattern-inside: |
+        public function $F(...,Request $R,...){...}
+  pattern-sinks:
+  - patterns:
+    - pattern: |
+        Rule::unique($...X)->ignore(...)
+  message: Found a request argument passed to an `ignore()` definition in a Rule constraint.  This
+    can lead to SQL injection.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      ('SQL Injection')"
+    owasp:
+    - A03:2021 - Injection
+    - A01:2017 - Injection
+    technology:
+    - php
+    - laravel
+    references:
+    - https://laravel.com/docs/9.x/validation#rule-unique

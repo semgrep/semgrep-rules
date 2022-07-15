@@ -1,0 +1,26 @@
+rules:
+  - id: azure-sqlserver-public-access-disabled
+    message: >-
+      Ensure that SQL server disables public network access
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_mssql_server" "..." {
+          ...
+          public_network_access_enabled = false
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,21 @@
+rules:
+  - id: missing-dnf-assume-yes-switch
+    severity: WARNING
+    languages: [dockerfile]
+    patterns:
+      - pattern: |
+          RUN ... dnf install ...
+      - pattern-not-inside: |
+          RUN ... dnf install ... -y ...
+      - pattern-not-inside: |
+          RUN ... dnf ... --assumeyes ...
+    message: >-
+      This 'dnf install' is missing the '-y' switch. This might stall
+      builds because it requires human intervention. Add the '-y' switch.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3038
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3038
+      category: best-practice
+      technology:
+        - dockerfile

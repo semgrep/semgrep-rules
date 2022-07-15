@@ -1,22 +1,16 @@
 rules:
-- id: react-router-redirect
-  patterns:
-  - pattern-inside: |
-      import "react-router-dom";
-      ...
-  - pattern: |
-      <Redirect to={...} />
-  - pattern-not: |
-      <Redirect to={"..."} />
-  - pattern-not: |
-      <Redirect to={{pathname: "..."}} />
-  message: >-
-    User controlled data in <Redirect /> can lead to unpredicted redirects.
-  languages:
-  - typescript
-  - javascript
-  severity: WARNING
-  metadata:
-    category: security
-    technology:
-    - react
+  - id: react-router-redirect
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    message: >-
+      this rule has been deprecated.
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING
+    metadata:
+      deprecated: true
+      category: security
+      technology:
+        - react

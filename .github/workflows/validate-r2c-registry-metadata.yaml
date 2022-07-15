@@ -1,0 +1,42 @@
+name: validate-r2c-registry-metadata
+
+# Test this workflow using github.com/nektos/act
+# > brew install act
+# > echo '{"pull_request":{"head":{"ref":develop"}},{"base":{"ref":"release"}}}' > act-env.json
+# > act pull_request --verbose --eventpath act-env.json -j validate-metadata
+
+on:
+  pull_request:
+    branches: [develop, release]
+  push:
+    branches: [develop, release]
+
+jobs:
+  validate-metadata:
+    if: github.repository == 'returntocorp/semgrep-rules'
+    name: Validate r2c registry metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: changed-files
+        name: get changed files
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "::set-output name=CHANGED_FILES::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )"
+      - id: print-changed-files
+        name: debugging step - print changed files
+        run: echo $CHANGED_FILES
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.2
+      - name: install deps
+        run: pip install jsonschema pyyaml
+      - name: validate metadata
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
+        run: |
+          python .github/scripts/validate-metadata.py -s ./metadata-schema.yaml.schm -f $CHANGED_FILES

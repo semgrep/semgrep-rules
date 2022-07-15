@@ -1,0 +1,22 @@
+rules:
+  - id: use-either-wget-or-curl
+    severity: INFO
+    languages: [dockerfile]
+    message: >-
+      'wget' and 'curl' are similar tools. Choose one and do not install the other to decrease image size.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4001
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL4001
+      category: best-practice
+      technology:
+        - dockerfile
+    pattern-either:
+      - pattern: |
+          RUN wget ...
+          ...
+          RUN curl ...
+      - pattern: |
+          RUN curl ...
+          ...
+          RUN wget ...

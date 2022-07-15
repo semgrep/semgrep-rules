@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <string.h>
 
 int main()
@@ -17,6 +18,16 @@ int main()
     // ok:c-string-equality
     if (!strcmp(s, "World")) {
         return 1;
+    }
+
+    // ok:c-string-equality
+    if (s == 0) {
+      return 1;
+    }
+
+    // ok:c-string-equality
+    if (NULL == s) {
+      return 1;
     }
 
     return 0;

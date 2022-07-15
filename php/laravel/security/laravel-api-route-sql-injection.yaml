@@ -1,0 +1,32 @@
+rules:
+- id: laravel-api-route-sql-injection
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $ARG
+    - pattern-inside: |
+        Route::$METHOD($ROUTE_NAME, function(...,$ARG,...){...})
+  pattern-sanitizers:
+  - patterns:
+    - pattern: |
+        DB::raw("...",[...])
+  pattern-sinks:
+  - patterns:
+    - pattern: |
+        DB::raw(...)
+  message: HTTP method [$METHOD] to Laravel route $ROUTE_NAME is vulnerable to SQL
+    injection via string concatentation or unsafe interpolation.
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    technology:
+    - php
+    - laravel

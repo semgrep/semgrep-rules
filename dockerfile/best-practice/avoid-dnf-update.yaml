@@ -1,0 +1,16 @@
+rules:
+  - id: avoid-dnf-update
+    severity: INFO
+    languages: [dockerfile]
+    message: >-
+      Packages in base images should be up-to-date, removing the need for
+      'dnf update'. If packages are out-of-date, consider contacting the
+      base image maintainer.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3039
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3039
+      category: best-practice
+      technology:
+        - dockerfile
+    pattern: dnf update

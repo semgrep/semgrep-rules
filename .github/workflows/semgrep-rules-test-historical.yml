@@ -1,0 +1,74 @@
+name: semgrep-rules-test-historical
+on:
+  pull_request:
+    branches:
+    - develop
+    - release
+  push:
+    branches:
+    - develop
+    - release
+jobs:
+  test-historical:
+    name: rules-test-historical
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: semgrep-rules
+        fetch-depth: 0
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.9.2
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v23.1
+      with:
+        path: semgrep-rules
+        separator: ","
+    # need to delete these directories or else we get linter errors during 
+    # the "validate" step.
+    - name: install semgrep
+      run: pip3 install semgrep
+    - name: delete stats directory
+      run: rm -rf semgrep-rules/stats
+    - name: delete fingerprints directory
+      run: rm -rf semgrep-rules/fingerprints
+    - name: grab historical semgrep version
+      run: |
+        RE_SEMVER='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+        SEMGREP_VERSION=`semgrep --version`
+        SEMGREP_VERSION_SHORT=`echo ${SEMGREP_VERSION} | sed -e "s#$RE_SEMVER#\2#"`
+        SEMGREP_OLD_VERSION="0.$(($SEMGREP_VERSION_SHORT-3)).0"
+        echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
+    - name: validate rules on historical semgrep version
+      run: |
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
+    - name: test with historical semgrep version
+      run: |
+        TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
+        echo "=== Testsuite output ==="
+        echo "${TESTSUITE_OUTPUT}"
+        echo "========================"
+        FAILURES=$(echo "${TESTSUITE_OUTPUT}" | grep -oh "test file path: .*" | sed -E "s/.*test file path: (.*)/\\1/")
+        echo "=== All test failures ==="
+        echo "${FAILURES}"
+        echo "=== Changed files ==="
+        echo ${{ steps.changed-files.outputs.all_changed_files }}
+        echo "====================="
+        PR_FAILURES=()
+        if [ ! -z "${FAILURES}" ] ; then
+          CHANGED=${{ steps.changed-files.outputs.all_changed_files }}
+          for file in ${CHANGED//,/ } ; do
+            if echo "${FAILURES}" | grep -w $file > /dev/null ; then
+              PR_FAILURES+=("${file}")
+            fi
+          done
+        fi
+        if (( ${#PR_FAILURES[@]} != 0 )) ; then
+          echo "The following test(s) failed with Semgrep v${SEMGREP_OLD_VERSION} are caused by this PR:"
+          for i in "${PR_FAILURES[@]}" ; do
+            echo $i
+          done
+          exit 1
+        fi

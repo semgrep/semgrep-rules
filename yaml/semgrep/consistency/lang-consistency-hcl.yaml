@@ -1,0 +1,18 @@
+rules:
+- fix: hcl
+  id: lang-consistency-hcl
+  languages:
+  - yaml
+  message: Found '$X' in language config which diverges from semgrep.dev normalization.
+    Please use 'hcl' instead.
+  metadata:
+    category: correctness
+    technology:
+    - semgrep
+  patterns:
+  - pattern: $X
+  - pattern-inside: 'languages: ...'
+  - metavariable-regex:
+      metavariable: $X
+      regex: ^(tf|terraform)$
+  severity: WARNING

@@ -1,23 +1,31 @@
 rules:
-- id: avoid-session-manipulation
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-276: Incorrect Default Permissions'
-    references:
-    - https://brakemanscanner.org/docs/warning_types/session_manipulation/
-    category: security
-    technology:
-    - rails
-  message: >-
-    This gets data from session using user inputs. A malicious user may be able to retrieve
-    information from your session that you didn't intend them to. Do not use user input as
-    a session key.
-  languages: [ruby]
-  severity: WARNING
-  mode: taint
-  pattern-sources:
-  - pattern: params
-  - pattern: cookies
-  - pattern: request.env
-  pattern-sinks:
-  - pattern: session[...]
+  - id: avoid-session-manipulation
+    metadata:
+      shortDescription: Allowing an attacker to manipulate the session may lead to unintended behavior.
+      tags: [security]
+      owasp: "A1: Injection"
+      cwe: "CWE-276: Incorrect Default Permissions"
+      references:
+        - https://brakemanscanner.org/docs/warning_types/session_manipulation/
+      category: security
+      technology:
+        - rails
+      help: |
+        ## Remediation
+        Session manipulation can occur when an application allows user-input in session keys. Since sessions are typically considered a source of truth (e.g. to check the logged-in user or to match CSRF tokens), allowing an attacker to manipulate the session may lead to unintended behavior.
+
+        ## References
+        [Session Manipulation](https://brakemanscanner.org/docs/warning_types/session_manipulation/)
+    message: >-
+      This gets data from session using user inputs. A malicious user may be able to retrieve
+      information from your session that you didn't intend them to. Do not use user input as
+      a session key.
+    languages: [ruby]
+    severity: WARNING
+    mode: taint
+    pattern-sources:
+      - pattern: params
+      - pattern: cookies
+      - pattern: request.env
+    pattern-sinks:
+      - pattern: session[...]

@@ -1,33 +1,50 @@
 rules:
-- id: direct-use-of-httpresponse
-  message: >-
-    Detected data rendered directly to the end user via 'HttpResponse'
-    or a similar object. This bypasses Django's built-in cross-site scripting
-    (XSS) defenses and could result in an XSS vulnerability. Use Django's
-    template engine to safely render HTML.
-  metadata:
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: 'A7: Cross-Site Scripting (XSS)'
-    references:
-    - https://docs.djangoproject.com/en/3.1/intro/tutorial03/#a-shortcut-render
-    - https://docs.djangoproject.com/en/3.1/topics/http/shortcuts/#render
-    category: security
-    technology:
-    - django
-  languages:
-  - python
-  severity: WARNING
-  patterns:
-  - pattern-not: django.http.$ANY("...", ...)
-  - pattern-not: django.http.$ANY()
-  - pattern-not: django.http.$ANY(..., content=None, ...)
-  - pattern-not: django.http.$ANY(status=...)
-  - pattern-not: django.http.HttpResponseNotAllowed([...])
-  - pattern-either:
-    - pattern: django.http.HttpResponse(...)
-    - pattern: django.http.HttpResponseBadRequest(...)
-    - pattern: django.http.HttpResponseNotFound(...)
-    - pattern: django.http.HttpResponseForbidden(...)
-    - pattern: django.http.HttpResponseNotAllowed(...)
-    - pattern: django.http.HttpResponseGone(...)
-    - pattern: django.http.HttpResponseServerError(...)
+  - id: direct-use-of-httpresponse
+    message: >-
+      Detected data rendered directly to the end user via 'HttpResponse'
+      or a similar object. This bypasses Django's built-in cross-site scripting
+      (XSS) defenses and could result in an XSS vulnerability. Use Django's
+      template engine to safely render HTML.
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: 
+      - A07:2017 - Cross-Site Scripting (XSS)
+      - A03:2021 - Injection
+      references:
+        - https://docs.djangoproject.com/en/3.1/intro/tutorial03/#a-shortcut-render
+        - https://docs.djangoproject.com/en/3.1/topics/http/shortcuts/#render
+      category: security
+      technology:
+        - django
+    languages:
+      - python
+    severity: WARNING
+    patterns:
+      - pattern-not: django.http.$ANY("...", ...)
+      - pattern-not: django.http.$ANY()
+      - pattern-not: django.http.$ANY(..., content=None, ...)
+      - pattern-not: django.http.$ANY(status=...)
+      - pattern-not: django.http.HttpResponseNotAllowed([...])
+      - pattern-either:
+          - patterns:
+            - pattern-either:
+              - pattern: django.http.HttpResponse(...)
+              - pattern: django.http.HttpResponseBadRequest(...)
+              - pattern: django.http.HttpResponseNotFound(...)
+              - pattern: django.http.HttpResponseForbidden(...)
+              - pattern: django.http.HttpResponseNotAllowed(...)
+              - pattern: django.http.HttpResponseGone(...)
+              - pattern: django.http.HttpResponseServerError(...)
+            - pattern-not: django.http.$ANY(...,content_type=$TYPE,...)
+          - patterns:
+            - pattern-either:
+              - pattern: django.http.HttpResponse(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseBadRequest(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseNotFound(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseForbidden(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseNotAllowed(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseGone(...,content_type=$TYPE,...)
+              - pattern: django.http.HttpResponseServerError(...,content_type=$TYPE,...)
+            - metavariable-regex:
+                metavariable: $TYPE
+                regex: '.*[tT][eE][xX][tT]/[hH][tT][mM][lL].*'

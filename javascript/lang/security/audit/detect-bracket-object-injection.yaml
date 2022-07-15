@@ -1,22 +1,24 @@
 rules:
-- id: detect-bracket-object-injection
-  patterns:
-  - pattern: |
-      $VAR = $OBJ[$FIELD];
-  - pattern-not: |
-      $VAR = $OBJ[($FIELD : float)];
-  - pattern-not: |
-      $VAR = $OBJ["..."];
-  - pattern-not-inside: |
-      $FIELD = ...;
-      ...
-  message: >-
-    Object injection via bracket notation via $FIELD
-  severity: WARNING
-  languages:
-  - javascript
-  - typescript
-  metadata:
-    category: security
-    technology:
-    - javascript
+  - id: detect-bracket-object-injection
+    patterns:
+    - pattern: a()
+    - pattern: b()
+    message: >-
+      This rule is deprecated.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      category: security
+      technology:
+        - javascript
+      cwe: |
+        CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')
+      owasp:
+      - A01:2017 - Injection
+      - A03:2021 - Injection
+      references:
+      - https://github.com/nodesecurity/eslint-plugin-security/issues/21
+      - https://github.com/nodesecurity/eslint-plugin-security#rules
+      deprecated: true

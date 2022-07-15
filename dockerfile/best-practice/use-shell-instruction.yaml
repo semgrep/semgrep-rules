@@ -1,0 +1,16 @@
+rules:
+  - id: use-shell-instruction
+    severity: WARNING
+    languages: [dockerfile]
+    pattern: |
+      RUN ln ... $SHELL /bin/sh
+    message: >-
+      Use the SHELL instruction to set the default shell instead of overwriting '/bin/sh'.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4005
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL4005
+      category: best-practice
+      technology:
+        - dockerfile
+    fix: SHELL ["$SHELL", "-c"]

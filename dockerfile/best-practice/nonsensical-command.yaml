@@ -1,0 +1,19 @@
+rules:
+  - id: nonsensical-command
+    patterns:
+      - pattern: RUN $CMD ...
+      - metavariable-regex:
+          metavariable: $CMD
+          regex: (shutdown|service|ps|free|top|kill|mount|ifconfig|nano|vim)
+    message: >-
+      Some commands such as `$CMD` do not make sense in a container. Do not use
+      these.
+    severity: WARNING
+    languages: [dockerfile]
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3001
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3001
+      category: best-practice
+      technology:
+        - dockerfile

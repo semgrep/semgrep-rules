@@ -135,6 +135,24 @@ func handlerOk(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func newRedirectServer(addr string, rootPath string) *http.Server {
+    return &http.Server{
+        Addr: addr,
+        Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+            // ruleid: tainted-url-host
+            target := "https://" + req.Host
+            if rootPath != "" {
+                target += "/" + strings.TrimRight(strings.TrimLeft(rootPath, "/"), "/")
+            }
+            target += req.URL.Path
+            if len(req.URL.RawQuery) > 0 {
+                target += "?" + req.URL.RawQuery
+            }
+            http.Redirect(w, req, target, http.StatusTemporaryRedirect)
+        }),
+    }
+}
+
 func main() {
     http.HandleFunc("/", handlerIndex)
     http.HandleFunc("/other", handleOther)

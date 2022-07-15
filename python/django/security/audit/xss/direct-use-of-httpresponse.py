@@ -1,4 +1,5 @@
 import urllib
+import json
 from django.db.models import Q
 from django.auth import User
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -47,3 +48,12 @@ def vote(request, question_id):
         return HttpResponseBadRequest(
             "This view can not handle method {0}\n".format(request.method), status=405
         )
+
+def endpoint():
+    # ok:direct-use-of-httpresponse
+    return HttpResponse(json.dumps({ 'status': 'ERROR', 'error': str(e) }), content_type='text/json')
+
+
+def dangerous_endpoint():
+    # ruleid:direct-use-of-httpresponse
+    return HttpResponse(json.dumps({ 'status': 'ERROR', 'error': str(e) }), content_type='text/html')

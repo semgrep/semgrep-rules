@@ -1,0 +1,32 @@
+rules:
+- id: socket-shutdown-close
+  patterns:
+    - pattern: |
+        $SOCK.shutdown(socket.$A)
+        $SOCK.close()
+    - pattern-not-inside: |
+        try:
+            ...
+        except ...:
+            ...
+            $SOCK.close()
+    - pattern-not-inside: |
+        try:
+            ...
+        finally:
+            ...
+            $SOCK.close()
+  message: >-
+      Socket is not closed if shutdown fails. When socket.shutdown fails on an
+      OSError, socket.close is not called and the code fails to clean up the socket
+      and allow garbage collection to release the memory used for it. The OSError on
+      shutdown can occur when the remote side of the connection closes the connection
+      first.
+  metadata:
+    references:
+    - https://www.paulsprogrammingnotes.com/2021/12/python-memory-leaks.html
+    category: 'correctness'
+    technology: 
+      - python
+  languages: [python]
+  severity: WARNING

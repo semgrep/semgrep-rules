@@ -1,0 +1,27 @@
+rules:
+- id: laravel-blade-form-missing-csrf
+  patterns:
+  - pattern: |
+      <form ... method="POST" ...>...</form>
+  - pattern-not: |
+      <form ... method="POST" ...>
+      @csrf
+      ...
+      </form>
+  message: Found a Blade form POST definition without the `@csrf` decorator. State-changing
+    operations using simple HTTP content types should include an antiforgery token.
+  languages:
+  - generic
+  severity: ERROR
+  paths:
+    include:
+    - '*.blade.php'
+  metadata:
+    technology:
+    - php
+    - laravel
+    - blade
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    references:
+    - https://laravel.com/docs/9.x/blade#csrf-field

@@ -1,0 +1,33 @@
+rules:
+- id: razor-template-injection
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $ARG
+    - pattern-inside: |
+        public ActionResult $METHOD(..., string $ARG,...){...}
+  pattern-sinks:
+  - pattern: |
+      Razor.Parse(...)
+  pattern-sanitizers:
+  - not_conflicting: true
+    pattern: $F(...)
+  message: User-controllable string passed to Razor.Parse.  This leads directly to
+    code execution in the context of the process.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    license: MIT
+    references:
+    - https://clement.notin.org/blog/2020/04/15/Server-Side-Template-Injection-(SSTI)-in-ASP.NET-Razor/
+    technology:
+    - .net
+    - razor
+    - asp
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
+    - A01:2017 - Injection

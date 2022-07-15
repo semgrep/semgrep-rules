@@ -1,35 +1,53 @@
 rules:
-- id: httpservlet-path-traversal
-  metadata:
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    owasp: 'A1: Injection'
-    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN
-    references:
-    - https://www.owasp.org/index.php/Path_Traversal
-    category: security
-    technology:
-    - java
-  message: >-
-    Detected a potential path traversal. A malicious actor
-    could control the location of this file, to include going backwards
-    in the directory with '../'. To address this, ensure that user-controlled
-    variables in file paths are sanitized. You may also consider using a utility
-    method such as org.apache.commons.io.FilenameUtils.getName(...) to only
-    retrieve the file name from the path.
-  patterns:
-  - pattern-inside: |
-      $RETURNTYPE $FUNC (..., HttpServletRequest $REQ, ...) {
-        ...
-      }
-  - pattern-either:
-    - pattern: |
-        $VAR = ($TYPE)$REQ.getParameter(...);
-        ...
-        new File(..., $VAR, ...);
-    - pattern: |
-        $VAR = $REQ.getParameter(...);
-        ...
-        new File(..., $VAR, ...);
-  severity: ERROR
-  languages:
-  - java
+  - id: httpservlet-path-traversal
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A1: Injection"
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN
+      references:
+        - https://www.owasp.org/index.php/Path_Traversal
+      category: security
+      technology:
+        - java
+    message: >-
+      Detected a potential path traversal. A malicious actor
+      could control the location of this file, to include going backwards
+      in the directory with '../'. To address this, ensure that user-controlled
+      variables in file paths are sanitized. You may also consider using a utility
+      method such as org.apache.commons.io.FilenameUtils.getName(...) to only
+      retrieve the file name from the path.
+    mode: taint
+    pattern-sources:
+    - patterns: 
+      - pattern-either: 
+        - pattern: |
+            (HttpServletRequest $REQ)
+        - patterns: # this pattern is a hack to get the rule to recognize `map` as tainted source when `map = cookie.getValue(user_input)` is used.
+          - pattern-inside: |
+              (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+              ...
+              for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+                ...
+              }
+          - pattern: |
+              $COOKIE.getValue(...)
+        - patterns: # use this pattern to catch cases where tainted array values are assigned to a variable (not caught by taint)
+          - pattern-inside: |
+              $TYPE[] $VALS = (HttpServletRequest $REQ).$GETFUNC(...);
+              ...
+          - pattern: |
+              $PARAM = $VALS[$INDEX];
+    pattern-sanitizers:
+    - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+    pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            (java.io.File $FILE) = ...
+        - pattern: |
+            (java.io.FileOutputStream $FOS) = ...
+        - pattern: |
+            new java.io.FileInputStream(...)
+    severity: ERROR
+    languages:
+      - java

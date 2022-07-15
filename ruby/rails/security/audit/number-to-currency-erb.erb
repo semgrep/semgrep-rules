@@ -1,0 +1,11 @@
+// ruleid: number-to-currency-erb
+<%= number_to_currency(1.02, unit: params[:currency]) %>
+
+// ruleid: number-to-currency-erb
+<%= number_to_currency(1.02, unit: params[:currency], separator: ",", delimiter: "") %>
+
+// ok: number-to-currency-erb
+<%= number_to_currency(1.02, unit: h(params[:currency])) %>
+
+// ok: number-to-currency-erb
+<%= number_to_currency(1.02, unit: h(params[:currency]), separator: ",", delimiter: "") %>

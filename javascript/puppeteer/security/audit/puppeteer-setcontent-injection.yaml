@@ -1,23 +1,23 @@
 rules:
-- id: puppeteer-setcontent-injection
-  message: >-
-    If unverified user data can reach the `setContent` method it can result in Server-Side Request Forgery vulnerabilities
-  severity: WARNING
-  metadata:
-    owasp: 'A1: Injection'
-    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
-    category: security
-    technology:
-    - puppeteer
-  languages: [javascript, typescript]
-  patterns:
-  - pattern-inside: |
-      require('puppeteer');
-      ...
-  - pattern-not-inside: |
-      require('puppeteer');
-      ...
-      var $INPUT = "...";
-      ...
-  - pattern: $PAGE.setContent($INPUT,...)
-  - pattern-not: $PAGE.setContent("...",...)
+  - id: puppeteer-setcontent-injection
+    message: >-
+      If unverified user data can reach the `setContent` method it can result in Server-Side Request Forgery vulnerabilities
+    severity: WARNING
+    metadata:
+      owasp: "A1: Injection"
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      category: security
+      technology:
+        - puppeteer
+    languages: [javascript, typescript]
+    patterns:
+      - pattern-inside: |
+          require('puppeteer');
+          ...
+      - pattern-not-inside: |
+          require('puppeteer');
+          ...
+          var $INPUT = "...";
+          ...
+      - pattern: $PAGE.setContent($INPUT,...)
+      - pattern-not: $PAGE.setContent("...",...)

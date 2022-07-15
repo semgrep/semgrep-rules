@@ -1,0 +1,20 @@
+rules:
+  - id: missing-cloudwatch-log-group-retention
+    patterns:
+      - patterns:
+          - pattern: resource "aws_cloudwatch_log_group" $ANYTHING {...}
+          - pattern-not-inside: |
+              resource "aws_cloudwatch_log_group" $ANYTHING {
+                ...
+                retention_in_days = ...
+                ...
+              }
+    message: >-
+      The AWS CloudWatch Log group is missing log retention time. By default, logs are retained indefinitely. Add `retention_in_days = <integer>` to your resource block.
+    languages: [hcl]
+    severity: WARNING
+    metadata:
+      technology:
+        - aws
+        - terraform
+      category: best-practice

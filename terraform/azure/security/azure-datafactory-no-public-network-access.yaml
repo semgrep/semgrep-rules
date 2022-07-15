@@ -1,0 +1,26 @@
+rules:
+  - id: azure-datafactory-no-public-network-access
+    message: >-
+      Ensure that Azure Data factory public network access is disabled
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_data_factory" "..." {
+          ...
+          public_network_enabled = false
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_data_factory" "..." {
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

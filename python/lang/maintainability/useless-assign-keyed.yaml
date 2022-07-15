@@ -1,16 +1,16 @@
 rules:
-- id: useless-assignment-keyed
-  message: key `$Y` in `$X` is assigned twice; the first assignment is useless
-  languages: [python]
-  severity: WARNING
-  pattern-either:
-  - pattern: |
-      $X[$Y] = ...
-      $X[$Y] = ...
-  - pattern: |
-      $X[$Y][$Z] = ...
-      $X[$Y][$Z] = ...
-  metadata:
-    category: maintainability
-    technology:
-    - python
+  - id: useless-assignment-keyed
+    message: key `$Y` in `$X` is assigned twice; the first assignment is useless
+    languages: [python]
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          $X[$Y] = ...
+          $X[$Y] = ...
+      - pattern: |
+          $X[$Y][$Z] = ...
+          $X[$Y][$Z] = ...
+    metadata:
+      category: maintainability
+      technology:
+        - python

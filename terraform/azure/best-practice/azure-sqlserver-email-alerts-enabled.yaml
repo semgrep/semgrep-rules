@@ -1,0 +1,24 @@
+rules:
+  - id: azure-sqlserver-email-alerts-enabled
+    message: >-
+      Ensure that Send Alerts To is enabled for MSSQL servers
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_mssql_server_security_alert_policy" "..." {
+          ...
+          state = "Enabled"
+          email_addresses = ["...", ...]
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

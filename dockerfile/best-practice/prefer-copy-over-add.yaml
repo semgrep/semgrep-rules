@@ -1,0 +1,23 @@
+rules:
+  - id: prefer-copy-over-add
+    severity: INFO
+    languages: [dockerfile]
+    message: >-
+      The ADD command will accept and include files from a URL and automatically extract
+      archives. This potentially exposes the container to a man-in-the-middle attack or
+      other attacks if a malicious actor can tamper with the source archive. Since
+      ADD can have this and other unexpected side effects, the use of the more explicit
+      COPY command is preferred.
+    metadata:
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+      category: best-practice
+      technology:
+        - dockerfile
+    patterns:
+      - pattern: |
+          ADD $FROM $TO
+      - metavariable-regex:
+          metavariable: $FROM
+          regex: (^[A-Za-z]+:\/\/|.*[.](gz|bz2|zip|tar)$)
+      - focus-metavariable: $FROM

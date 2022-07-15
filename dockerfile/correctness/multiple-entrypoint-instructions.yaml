@@ -1,0 +1,25 @@
+rules:
+  - id: multiple-entrypoint-instructions
+    severity: ERROR
+    languages: [dockerfile]
+    patterns:
+      - pattern: |
+          ENTRYPOINT ...
+          ...
+          $ENTRYPOINT ...
+      - metavariable-pattern:
+          metavariable: $ENTRYPOINT
+          patterns:
+            - pattern: |
+                ENTRYPOINT ...
+      - focus-metavariable: $ENTRYPOINT
+    message: >-
+      Multiple ENTRYPOINT instructions were found. Only the last one will take effect.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4004
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL4004
+        - https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index#//dash_ref_Instructions/Entry/ENTRYPOINT/0
+      category: correctness
+      technology:
+        - dockerfile

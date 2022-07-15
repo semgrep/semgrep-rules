@@ -1,0 +1,81 @@
+rules:
+- id: check-sql
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: |
+        cookies[...]
+    - patterns:
+      - pattern: |
+          cookies. ... .$PROPERTY[...]
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: (?!signed|encrypted)
+    - pattern: |
+        params[...]
+    - pattern: |
+        request.env[...]
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $X
+        - pattern-either:
+          - pattern-inside: |
+              :$KEY => $X
+          - pattern-inside: |
+              ["...",$X,...]
+      - pattern: |
+          params[...].to_i
+      - pattern: |
+          params[...].to_f
+      - patterns:
+        - pattern: |
+            params[...] ? $A : $B
+        - metavariable-pattern:
+            metavariable: $A
+            patterns:
+            - pattern-not: |
+                params[...]
+        - metavariable-pattern:
+            metavariable: $B
+            patterns:
+            - pattern-not: |
+                params[...]
+  pattern-sinks:
+  - patterns:
+    - pattern: $X
+    - pattern-not-inside: |
+        $P.where("...",...)
+    - pattern-not-inside: |
+        $P.where(:$KEY => $VAL,...)
+    - pattern-either:
+      - pattern-inside: |
+          $P.$M(...)
+      - pattern-inside: |
+          $P.$M("...",...)
+    - pattern-inside: |
+        class $P < ActiveRecord::Base
+          ...
+        end
+    - metavariable-regex:
+        metavariable: $M
+        regex: (where|find|first|last|select|minimum|maximum|calculate|sum|average)
+  message: Found potential SQL injection due to unsafe SQL query construction via
+    $X.  Where possible, prefer parameterized queries.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_sql.rb
+    category: security
+    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A03:2021 - Injection
+    - A01:2017 - Injection
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails3.1/app/models/product.rb

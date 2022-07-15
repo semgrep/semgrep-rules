@@ -1,0 +1,19 @@
+rules:
+  - id: azure-keyvault-recovery-enabled
+    message: >-
+      Ensure the key vault is recoverable
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          purge_protection_enabled = true
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,22 +1,54 @@
 rules:
   # ruleid: missing-language-field
-- id: unchecked-subprocess-call
-  patterns:
-  - pattern-either:
-    - pattern: |
-        subprocess.call(...)
-    - pattern: |
-        subprocess.call(...)
-  - pattern-not-inside: |
-      $S = subprocess.call(...)
-  - pattern-not-inside: |
-      subprocess.call(...) == $X
-  message: ''
-  severity: WARNING
-  fix: subprocess.check_call(...)
-  # ok: missing-language-field
-- id: other-rule
-  languages: [generic]
-  message: ''
-  severity: INFO
-  pattern: <div>hello</div>
+  - id: unchecked-subprocess-call
+    patterns:
+      - pattern-either:
+          - pattern: |
+              subprocess.call(...)
+          - pattern: |
+              subprocess.call(...)
+      - pattern-not-inside: |
+          $S = subprocess.call(...)
+      - pattern-not-inside: |
+          subprocess.call(...) == $X
+    message: ""
+    severity: WARNING
+    fix: subprocess.check_call(...)
+    # ok: missing-language-field
+  - id: other-rule
+    languages: [generic]
+    message: ""
+    severity: INFO
+    pattern: <div>hello</div>
+    # ok: missing-language-field
+  - id: flask-likely-xss
+    mode: join
+    join:
+      rules:
+        # ok: missing-language-field
+        - id: user-input
+          pattern: |
+            $VAR = flask.request.$SOMETHING.get(...)
+          languages: [python]
+        # ok: missing-language-field
+        - id: unescaped-extensions
+          languages: [python]
+          patterns:
+          - pattern: |
+              flask.render_template("$TEMPLATE", ..., $KWARG=$VAR, ...)
+          - metavariable-regex:
+              metavariable: '$TEMPLATE'
+              regex: ".*(?<!html)$"
+        # ruleid: missing-language-field
+        - id: template-vars
+          #languages: [generic]
+          pattern: |
+            {{ $VAR }}
+      on:
+      - 'user-input.$VAR == unescaped-extensions.$VAR'
+      - 'unescaped-extensions.$KWARG == template-vars.$VAR'
+      - 'unescaped-extensions.$TEMPLATE < template-vars.path'
+    message: >-
+      Detected a XSS vulnerability: '$VAR' is rendered
+      unsafely in '$TEMPLATE'.
+    severity: ERROR

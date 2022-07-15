@@ -1,0 +1,17 @@
+rules:
+  - id: avoid-apt-get-upgrade
+    message: >-
+      Packages in base containers should be up-to-date, removing the need
+      to upgrade or dist-upgrade. If a package is out of date, contact the maintainers.
+    languages: [dockerfile]
+    severity: WARNING
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3005
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3005
+      category: best-practice
+      technology:
+        - dockerfile
+    pattern-either:
+      - pattern: RUN ... apt-get upgrade ...
+      - pattern: RUN ... apt-get dist-upgrade ...

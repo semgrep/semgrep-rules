@@ -1,0 +1,25 @@
+rules:
+- id: aws-fsx-windows-encrypted-with-cmk
+  patterns:
+  - pattern: |
+      resource "aws_fsx_windows_file_system" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_fsx_windows_file_system" $ANYTHING {
+        ...
+        kms_key_id = ...
+        ...
+      }
+  message: >-
+    Ensure FSX Windows file system is encrypted at rest using KMS CMKs. CMKs gives you control over the encryption key in terms of access and rotation.
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: 'CWE-320: Key Management Errors'
+  languages: [hcl]
+  severity: WARNING

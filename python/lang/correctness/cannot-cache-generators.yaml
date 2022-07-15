@@ -1,0 +1,17 @@
+rules:
+- id: cannot-cache-generators
+  patterns:
+  - pattern-inside: |
+      @functools.lru_cache(...)
+      def $FUNC(...):
+          ...
+          yield ...
+  - pattern: functools.lru_cache(...)
+  message: Generators can only be consumed once, so in most cases, caching them will
+    cause an error when the already-consumed generator is retrieved from cache.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: correctness
+    technology: [python]

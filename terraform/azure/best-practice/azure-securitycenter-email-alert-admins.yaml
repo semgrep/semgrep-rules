@@ -1,0 +1,23 @@
+rules:
+  - id: azure-securitycenter-email-alert-admins
+    message: >-
+      Ensure that Send email notification for high severity alerts is set to On
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_security_center_contact" "..." {
+          ...
+          alerts_to_admins = true
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,70 @@
+rules:
+  - id: detect-angular-element-taint
+    mode: taint
+    message: >-
+      Use of angular.element can lead to XSS if user-input is treated as part of the HTML element within `$SINK`. 
+      It is recommended to contextually output encode user-input, before inserting into `$SINK`. 
+      If the HTML needs to be preseved it is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      confidence: HIGH
+      references:
+        - https://docs.angularjs.org/api/ng/function/angular.element
+        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+      category: security
+      technology:
+        - angularjs
+    severity: WARNING
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: window.location.search
+              - pattern: window.document.location.search
+              - pattern: document.location.search
+              - pattern: location.search
+              - pattern: $location.search(...)
+      - patterns:
+          - pattern-either:
+              - pattern: $DECODE(<... location.hash ...>)
+              - pattern: $DECODE(<... window.location.hash ...>)
+              - pattern: $DECODE(<... document.location.hash ...>)
+              - pattern: $DECODE(<... location.href ...>)
+              - pattern: $DECODE(<... window.location.href ...>)
+              - pattern: $DECODE(<... document.location.href ...>)
+              - pattern: $DECODE(<... document.URL ...>)
+              - pattern: $DECODE(<... window.document.URL ...>)
+              - pattern: $DECODE(<... document.location.href ...>)
+              - pattern: $DECODE(<... document.location.href ...>)
+              - pattern: $DECODE(<... $location.absUrl() ...>)
+              - pattern: $DECODE(<... $location.url() ...>)
+              - pattern: $DECODE(<... $location.hash() ...>)
+          - metavariable-regex:
+              metavariable: $DECODE
+              regex: ^(unescape|decodeURI|decodeURIComponent)$
+      - patterns:
+          - pattern-inside: $http.$METHOD(...).$CONTINUE(function $FUNC($RES) {...})
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: ^(get|delete|head|jsonp|post|put|patch)
+          - pattern: $RES.data
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  angular.element(...). ... .$SINK($QUERY)
+              - pattern-inside: |
+                  $ANGULAR = angular.element(...)
+                  ...
+                  $ANGULAR. ... .$SINK($QUERY)
+          - metavariable-regex:
+              metavariable: $SINK
+              regex: ^(after|append|html|prepend|replaceWith|wrap)$
+          - pattern: $QUERY
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern: $sce.getTrustedHtml(...)
+              - pattern: $sanitize(...)
+              - pattern: DOMPurify.sanitize(...)

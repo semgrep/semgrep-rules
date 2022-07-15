@@ -6,12 +6,12 @@ jobs:
     name: example
     runs-on: ubuntu-latest
     steps:
-    - name: dont-do-this
-      env:
-        # ruleid: allowed-unsecure-commands
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      run: |
-        echo "don't do this"
+      - name: dont-do-this
+        env:
+          # ruleid: allowed-unsecure-commands
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        run: |
+          echo "don't do this"
   another-dangerous-job:
     name: example2
     runs-on: ubuntu-latest
@@ -19,9 +19,9 @@ jobs:
       # ruleid: allowed-unsecure-commands
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-    - name: or-this
-      run: |
-        echo "seriously, dont"
+      - name: or-this
+        run: |
+          echo "seriously, dont"
   this-is-ok:
     name: example3
     runs-on: ubuntu-latest

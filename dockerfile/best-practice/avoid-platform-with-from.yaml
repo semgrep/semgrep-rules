@@ -1,0 +1,20 @@
+rules:
+  - id: avoid-platform-with-from
+    severity: INFO
+    languages: [dockerfile]
+    pattern: FROM --platform=$PLATFORM $IMAGE
+    message: >-
+      Using '--platform' with FROM restricts the image to build on a single platform.
+      Further, this must be the same as the
+      build platform.
+      If you intended to specify the target platform, use the utility 'docker buildx
+      --platform=' instead.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3029
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3029
+        - https://docs.docker.com/buildx/working-with-buildx/
+      category: best-practice
+      technology:
+        - dockerfile
+#   fix: FROM $IMAGE

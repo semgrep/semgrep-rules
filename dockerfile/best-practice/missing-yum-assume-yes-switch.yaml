@@ -1,0 +1,21 @@
+rules:
+  - id: missing-yum-assume-yes-switch
+    severity: WARNING
+    languages: [dockerfile]
+    patterns:
+      - pattern: |
+          RUN ... yum install ...
+      - pattern-not: |
+          RUN ... yum install ... -y ...
+      - pattern-not: |
+          RUN ... yum ... --assumeyes ...
+    message: >-
+      This 'yum install' is missing the '-y' switch. This might stall
+      builds because it requires human intervention. Add the '-y' switch.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3030
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3030
+      category: best-practice
+      technology:
+        - dockerfile

@@ -1,0 +1,17 @@
+rules:
+  - id: avoid-apk-upgrade
+    languages:
+      - dockerfile
+    message: >-
+      Packages in base images should be up-to-date, removing the need for
+      'apk upgrade'. If packages are out-of-date, consider contacting the
+      base image maintainer.
+    severity: INFO
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3017
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3017
+      category: best-practice
+      technology:
+        - dockerfile
+    pattern: RUN ... apk upgrade ...

@@ -1,0 +1,15 @@
+rules:
+  - id: maintainer-is-deprecated
+    severity: INFO
+    languages: [dockerfile]
+    pattern: MAINTAINER $NAME
+    message: >-
+      MAINTAINER has been deprecated.
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4000
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL4000
+      category: best-practice
+      technology:
+        - dockerfile
+    fix: "# MAINTAINER $NAME"

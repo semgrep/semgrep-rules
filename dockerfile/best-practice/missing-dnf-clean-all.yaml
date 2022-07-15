@@ -1,0 +1,17 @@
+rules:
+  - id: missing-dnf-clean-all
+    severity: WARNING
+    languages: [dockerfile]
+    patterns:
+      - pattern: RUN ... dnf ...
+      - pattern-not-inside: RUN ... && dnf clean all
+      - pattern-not-inside: RUN ... && \ dnf clean all
+    message: >-
+      This dnf command does not end with '&& dnf clean all'. Running 'dnf clean all' will remove cached data and reduce package size. (This must be performed in the same RUN step.)
+    metadata:
+      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3038
+      references:
+        - https://github.com/hadolint/hadolint/wiki/DL3038
+      category: best-practice
+      technology:
+        - dockerfile

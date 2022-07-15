@@ -21,7 +21,7 @@ class NameForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           Password:
-// ruleid: react-controlled-component-password
+// ok: react-controlled-component-password
           <input type="password" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" value="Submit" />
@@ -43,7 +43,7 @@ class Password extends React.Component {
   }
 
   render() {
-// ruleid: react-controlled-component-password
+// ok: react-controlled-component-password
     return React.createElement(
       'input',
       {

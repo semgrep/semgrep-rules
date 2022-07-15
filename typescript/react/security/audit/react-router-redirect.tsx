@@ -30,7 +30,7 @@ function App2() {
 function App3({userInput}) {
   return (
     <Route exact path="/">
-// ruleid: react-router-redirect
+// ok: react-router-redirect
       {loggedIn ? <Redirect to={userInput} /> : <PublicHomePage />}
     </Route>
   );

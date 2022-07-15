@@ -1,0 +1,25 @@
+rules:
+- id: aws-db-instance-no-logging
+  patterns:
+    - pattern: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+          enabled_cloudwatch_logs_exports = [$SOMETHING, ...]
+          ...
+        }
+  message: Database instance has no logging. Missing logs can cause missing important event information.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe: |
+      CWE-778: Insufficient Logging
+    technology:
+      - aws
+      - terraform
+    category: security

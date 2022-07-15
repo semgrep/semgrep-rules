@@ -1,0 +1,42 @@
+rules:
+- id: aws-elb-access-logs-not-enabled
+  patterns:
+    - pattern-either:
+      - pattern: |
+          resource "aws_lb" $ANYTHING {
+            ...
+          }
+      - pattern: |
+          resource "aws_alb" $ANYTHING {
+            ...
+          }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          access_logs {
+            ...
+            enabled = true
+            ...
+          }
+          ...
+        }
+    - pattern-not-inside: |
+        resource $ANYLB $ANYTHING {
+          ...
+          subnet_mapping {
+            ...
+          }
+          ...
+        } 
+  message: ELB has no logging. Missing logs can cause missing important event information.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe: |
+      CWE-778: Insufficient Logging
+    technology:
+      - aws
+      - terraform
+    category: security

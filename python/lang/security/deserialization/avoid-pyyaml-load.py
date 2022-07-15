@@ -31,6 +31,14 @@ def this_is_ok_too(stream):
     #ok:avoid-pyyaml-load
     return yaml.load_all(stream, Loader=yaml.SafeLoader)
 
+def this_is_ok_as_well(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.load(stream, Loader=yaml.BaseLoader)
+
+def this_is_ok_too_two(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.load_all(stream, Loader=yaml.BaseLoader)
+
 def check_ruamel_yaml():
     from ruamel.yaml import YAML
     yaml = YAML(typ="rt")

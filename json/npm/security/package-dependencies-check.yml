@@ -1,0 +1,48 @@
+rules:
+  - id: package-dependencies-check
+    patterns:
+      - pattern-not-regex: \"[\w-.]*\"\s*:\s*\"[\d.]+-[\w.]+\"
+      - pattern-either:
+        - pattern-regex: \"[\w-.]*\"\s*:\s*\"latest\"
+        - pattern-regex: \"[\w-.]*\"\s*:\s*\"[^~\-\^><=\"x]*[~\-\^><=x]+.*\"
+      - pattern-either:
+        - pattern-inside: |
+            "dependencies": {
+              ...
+            }
+        - pattern-inside: |
+            "devDependencies": {
+              ...
+            }
+        - pattern-inside: |
+            "optionalDependencies": {
+              ...
+            }
+        - pattern-inside: |
+            "peerDependencies": {
+              ...
+            }
+      - pattern-not-inside: |
+            "_shrinkwrap": {
+              ...
+            }
+    paths:
+      include:
+        - "*package.json"
+    message: Package dependencies with variant versions may lead to dependency hijack and confusion attacks. Better to specify an exact version or use package-lock.json for a specific version of the package.
+    languages:
+      - json
+    metadata:
+      category: security
+      vulnerability: Security Misconfiguration
+      owasp: 'A5: Security Misconfiguration'
+      cwe: 'CWE-427: Uncontrolled Search Path Element'
+      references:
+        - https://security.snyk.io/vuln/SNYK-JS-COLORS-2331906
+        - https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610
+        - https://cwe.mitre.org/data/definitions/427.html
+      technology:
+        - npm
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    severity: WARNING
+

@@ -1,0 +1,41 @@
+rules:
+  - id: pyramid-direct-use-of-response
+    message: >-
+      Detected data rendered directly to the end user via 'Response'.
+      This bypasses Pyramid's built-in cross-site scripting
+      (XSS) defenses and could result in an XSS vulnerability. Use Pyramid's
+      template engines to safely render HTML.
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A7: Cross-Site Scripting (XSS)"
+      category: security
+      technology:
+        - pyramid
+    languages:
+      - python
+    severity: ERROR
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              @pyramid.view.view_config( ... )
+              def $VIEW($REQ):
+                ...
+          - pattern: $REQ.$ANYTHING
+          - pattern-not: $REQ.dbsession
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  pyramid.request.Response.text($SINK)
+              - pattern: |
+                  pyramid.request.Response($SINK)
+              - pattern: |
+                  $REQ.response.body = $SINK
+              - pattern: |
+                  $REQ.response.text = $SINK
+              - pattern: |
+                  $REQ.response.ubody = $SINK
+              - pattern: |
+                  $REQ.response.unicode_body = $SINK
+          - pattern: $SINK

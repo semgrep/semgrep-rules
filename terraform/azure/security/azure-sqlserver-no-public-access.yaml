@@ -1,0 +1,23 @@
+rules:
+  - id: azure-sqlserver-no-public-access
+    message: >-
+      Ensure no SQL Databases allow ingress from 0.0.0.0/0 (ANY IP)
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_mysql_firewall_rule" "..." {
+          ...
+          start_ip_address    = "0.0.0.0"
+          end_ip_address      = "255.255.255.255"
+          ...
+          }
+    metadata:
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

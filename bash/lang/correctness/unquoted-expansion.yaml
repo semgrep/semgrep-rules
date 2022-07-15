@@ -1,0 +1,52 @@
+rules:
+  - id: unquoted-variable-expansion-in-command
+    languages: [bash]
+    severity: INFO
+    message: >-
+      Variable expansions must be double-quoted so as to prevent
+      being split into multiple pieces according to whitespace or
+      whichever separator is specified by the IFS variable.
+      If you really wish to split the variable's contents,
+      you may use a variable that starts with an underscore e.g.
+      $_X instead of $X, and semgrep will ignore it. If what you need
+      is an array, consider using a proper bash array.
+    metadata:
+      category: correctness
+      technology:
+        - bash
+    patterns:
+      - pattern-either:
+          # This is subtle (and not great): ...${$VAR}... is a concatenation,
+          # which is interpreted as concatenate(..., expand($VAR), ...)
+          # and won't match a simple variable expansion.
+          # This is why we need two patterns below.
+          - pattern: |
+              ... ${$VAR} ...
+          - pattern: |
+              ... ...${$VAR}... ...
+      - metavariable-regex:
+          metavariable:
+            $VAR
+            # generally safe: $# $? $$ $! $-
+            # unsafe: $* $@ $0 $15 $_ $foo $FOO
+            # unsafe but tolerated: $_foo $_FOO $_42
+          regex: "[*@0-9]|[A-Za-z].*"
+
+  - id: unquoted-command-substitution-in-command
+    languages: [bash]
+    severity: INFO
+    message: >-
+      The result of command substitution $(...) or `...`, if unquoted,
+      is split on whitespace or other separators specified by the IFS
+      variable. You should surround it with double quotes to avoid
+      splitting the result.
+    metadata:
+      category: correctness
+      technology:
+        - bash
+    patterns:
+      - pattern-either:
+          - pattern: |
+              ... $(...) ...
+          - pattern: |
+              ... ...$(...)... ...
