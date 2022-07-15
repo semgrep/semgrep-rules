@@ -6,8 +6,9 @@ rules:
             ...,
             "DEFAULT_THROTTLE_RATES": ...
           }
-      - pattern: |
+      - pattern-inside: |
           REST_FRAMEWORK = ...
+      - pattern: REST_FRAMEWORK
     message: >-
       Django REST framework configuration is missing default rate-
       limiting options. This could inadvertently allow resource
@@ -15,7 +16,9 @@ rules:
       'DEFAULT_THROTTLE_CLASSES' and 'DEFAULT_THROTTLE_RATES'
       to add rate-limiting to your application.
     metadata:
-      owasp: "A6: Security Misconfiguration"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
       cwe: "CWE-400: Uncontrolled Resource Consumption"
       references:
         - https://www.django-rest-framework.org/api-guide/throttling/#setting-the-throttling-policy
