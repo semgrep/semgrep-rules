@@ -1,0 +1,46 @@
+rules:
+- id: missing-or-broken-authorization
+  patterns:
+  - pattern: |
+      [AllowAnonymous]
+      public class $CLASS : Controller {
+        ...
+      }
+  - pattern-inside: |
+      using Microsoft.AspNetCore.Mvc;
+      ...
+  - pattern-not: |
+      [Authorize]
+      public class $CLASS : Controller {
+        ...
+      }
+  - pattern-not: |
+      [Authorize(Roles = ...)]
+      public class $CLASS : Controller {
+        ...
+      }
+  - pattern-not: |
+      [Authorize(Policy = ...)]
+      public class $CLASS : Controller {
+        ...
+      }
+  message: >-
+    Anonymous access shouldn't be allowed unless explicit by design. Access
+    control checks are missing and potentially can be bypassed. This finding violates
+    the principle of least privilege or deny by default, where access should only
+    be permitted for a specific set of roles or conforms to a custom policy or users.
+  metadata:
+    category: security
+    technology:
+    - .net
+    - mvc
+    owasp:
+    - "A01:2021 - Broken Access Control"
+    cwe: 'CWE-862: Missing Authorization'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    - https://cwe.mitre.org/data/definitions/862.html
+    - https://docs.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0
+  languages:
+  - csharp
+  severity: INFO
