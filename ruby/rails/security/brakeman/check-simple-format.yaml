@@ -1,0 +1,45 @@
+rules:
+- id: check-simple-format 
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: |
+        cookies[...]
+    - patterns:
+      - pattern: |
+          cookies. ... .$PROPERTY[...]
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: (?!signed|encrypted)
+    - pattern: |
+        params[...]
+    - pattern: |
+        request.env[...]
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: h(...)
+    - pattern: html_escape(...)
+    - pattern: html_escape_once(...)
+  pattern-sinks:
+  - pattern: simple_format(...)
+  message: >-
+    Discovered usage of the `simple_format` helper, which
+    is vulnerable to XSS in versions 4.0.0 & 4.0.1. This
+    can lead to cookies and other secrets being obtained by
+    attackers. Instead, escape user data before passing it to
+    simple_format or upgrade.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_simple_format.rb 
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')" 
+    owasp:
+    - A03:2021 - Injection
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_simple_format.rb
+
