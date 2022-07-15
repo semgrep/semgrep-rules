@@ -19,7 +19,7 @@ def run_payload3(payload: str) -> None:
 def run_payload4(payload: str) -> None:
     inperpreter = code.InteractiveInterpreter()
     # ruleid: dangerous-interactive-code-run-audit
-    inperpreter.runsource(payload)https://github.com/returntocorp/semgrep-rules.git
+    inperpreter.runsource(payload)
 
 def ok1() -> None:
     console = code.InteractiveConsole()
