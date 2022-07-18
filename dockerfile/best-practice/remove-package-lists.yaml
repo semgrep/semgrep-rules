@@ -1,8 +1,9 @@
 rules:
   - id: remove-package-lists
     patterns:
+      - pattern-not-inside: RUN ... rm -rf /var/lib/apt/lists/*
       - pattern: RUN apt-get update ...
-      - pattern-not: RUN ... rm -rf /var/lib/apt/lists/*
+      - pattern: apt-get update
     message: >-
       The package lists were not deleted after running 'apt-get update', which
       increases the size of the image.
