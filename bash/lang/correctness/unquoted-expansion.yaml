@@ -1,7 +1,7 @@
 rules:
   - id: unquoted-variable-expansion-in-command
     languages: [bash]
-    severity: WARNING
+    severity: INFO
     message: >-
       Variable expansions must be double-quoted so as to prevent
       being split into multiple pieces according to whitespace or
@@ -34,7 +34,7 @@ rules:
 
   - id: unquoted-command-substitution-in-command
     languages: [bash]
-    severity: WARNING
+    severity: INFO
     message: >-
       The result of command substitution $(...) or `...`, if unquoted,
       is split on whitespace or other separators specified by the IFS

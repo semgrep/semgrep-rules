@@ -1,0 +1,15 @@
+rules:
+  - id: useless-literal-set
+    patterns:
+      - pattern: |
+          set(..., ($X, $A), ..., ($X, $B), ...)
+      - focus-metavariable: $X
+    message: "`$X` is uselessly assigned twice inside the creation of the set"
+    languages: [python]
+    severity: ERROR
+    metadata:
+      category: maintainability
+      references:
+        - https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset
+      technology:
+        - python

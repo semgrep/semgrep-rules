@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
 function Vulnerable1(userInput) {
-// ok: react-styled-components-injection
   const ArbitraryComponent = styled.div`
-    background: url(${userInput});
+    background: url(${
+      // ok: react-styled-components-injection
+      userInput
+    });
   `
   return ArbitraryComponent
 }
@@ -11,19 +13,21 @@ function Vulnerable1(userInput) {
 function Vulnerable2(userInput) {
   const input = fooBar(userInput)
 
-// ok: react-styled-components-injection
   return styled.div`
-    background: url(${input});
+    background: url(${
+      // ok: react-styled-components-injection
+      input
+    });
   `
 }
 
 function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
-// ok: react-styled-components-injection
-  return styled.div`
-    background: ${input};
-  `
+  return styled.div`background: ${
+      // ok: react-styled-components-injection
+      input
+    };
 }
 
 function OkTest({siteUrl, input}) {

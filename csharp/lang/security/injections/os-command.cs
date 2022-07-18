@@ -4,73 +4,72 @@ namespace Injections
 {
     public class OsCommandInjection
     {
-        // ruleid: os-command-injection
         public void RunOsCommand(string command)
         {
+            // ruleid: os-command-injection
             var process = Process.Start(command);
         }
 
-        // ok: os-command-injection
         public void RunOsCommand(string command)
         {
+            // ok: os-command-injection
             var process = Process.Start("constant");
         }
 
 
-        // ruleid: os-command-injection
         public void RunOsCommandWithArgs(string command, string arguments)
         {
+            // ruleid: os-command-injection
             var process = Process.Start(command, arguments);
         }
 
-        // ok: os-command-injection
         public void RunOsCommandWithArgs(string command, string arguments)
         {
+            // ok: os-command-injection
             var process = Process.Start("constant", "constant");
         }
 
 
-        // ruleid: os-command-injection
         public void RunOsCommandWithProcessParam(string command)
         {
             Process process = new Process();
 
             process.StartInfo.FileName = command;
+            // ruleid: os-command-injection
             process.Start();
         }
 
-        // ok: os-command-injection
         public void RunOsCommandWithProcessParam(string command)
         {
             Process process = new Process();
 
             process.StartInfo.FileName = "constant";
+            // ok: os-command-injection
             process.Start();
         }
 
 
-        // ruleid: os-command-injection
         public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
         {
             Process process = new Process();
 
             process.StartInfo.FileName = command;
             process.StartInfo.Arguments = arguments;
+            // ruleid: os-command-injection
             process.Start();
         }
 
-        // ok: os-command-injection
         public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
         {
             Process process = new Process();
 
             process.StartInfo.FileName = "constant";
             process.StartInfo.Arguments = "constant";
+            // ok: os-command-injection
             process.Start();
         }
 
 
-        // ruleid: os-command-injection
         public void RunOsCommandWithStartInfo(string command)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -78,10 +77,10 @@ namespace Injections
                 FileName = command
             };
 
+            // ruleid: os-command-injection
             var process = Process.Start(processStartInfo);
         }
 
-        // ok: os-command-injection
         public void RunOsCommandWithStartInfo(string command)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -89,11 +88,11 @@ namespace Injections
                 FileName = "constant"
             };
 
+            // ok: os-command-injection
             var process = Process.Start(processStartInfo);
         }
 
 
-        // ruleid: os-command-injection
         public void RunConstantAppWithArgs(string args)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -102,10 +101,10 @@ namespace Injections
                 Arguments = args
             };
 
+            // ruleid: os-command-injection
             var process = Process.Start(processStartInfo);
         }
 
-        // ok: os-command-injection
         public void RunConstantAppWithArgs(string args)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo()
@@ -114,6 +113,7 @@ namespace Injections
                 Arguments = "constant"
             };
 
+            // ok: os-command-injection
             var process = Process.Start(processStartInfo);
         }
     }

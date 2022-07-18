@@ -109,6 +109,34 @@ resource "aws_alb_listener" "https_fs_1_2" {
   }
 }
 
+resource "aws_alb_listener" "https_fs_1_2" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "HTTPS"
+  port              = "443"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "https_fs_1_2" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "HTTPS"
+  port              = "443"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-2019-08"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
 # failure
 
 resource "aws_lb_listener" "http" {
