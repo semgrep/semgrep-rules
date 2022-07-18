@@ -15,6 +15,14 @@ rules:
                       } from "..."
                       ...
                   - pattern-not-inside: |
+                      <Buttons .../>
+                  - pattern-not-inside: |
+                      <Button .../>
+                  - pattern-not-inside: |
+                      <AnchorButton .../>
+                  - pattern-not-inside: |
+                      <$EL ... href={$FUNC($X)}></$EL>
+                  - pattern-not-inside: |
                       import $X from "..."
                       ...
                   - pattern-not-inside: |
@@ -49,19 +57,53 @@ rules:
                       metavariable: $X
                       patterns:
                         - pattern-not: |
-                            "..."+$F
+                            $FOO + $VALUE
+                        - pattern-not: |
+                            "..." + $F
                         - pattern-not: |
                             `...${$F}...`
     pattern-sanitizers:
       - patterns:
           - pattern-either:
-              - pattern-inside: |
-                  if (<... $VALUE.startsWith("$REGEX") ...>) {
-                    ...
-                  }
-          - metavariable-regex:
-              metavariable: $REGEX
-              regex: (http(s?)|#)
+              - pattern: |
+                  $A ? $VAL1 : $VAL2
+              - pattern: |
+                  $A ? $VAL2 : $VAL1
+          - metavariable-pattern:
+              metavariable: $VAL1
+              patterns:
+                - pattern: |
+                    `${...}...`
+                - pattern-not: |
+                    "..."
+                - pattern-not: |
+                    "..." + $V
+                - pattern-not: |
+                    `...${...}...`
+          - focus-metavariable: $VAL1
+      - patterns:
+          - pattern-either:
+              - pattern: validateUrl(...)
+              - pattern: getSanitizedUrl(...)
+      - patterns:
+          - pattern: |
+              `...${$X}...`
+          - pattern-not: |
+              `${$X}...`
+          - focus-metavariable: $X
+      - patterns:
+          - pattern: |
+              "..." + $VALUE
+      - patterns:
+          - pattern-inside: |
+              if (<... $SOURCE.startsWith("$REGEX") ...>) { 
+                  ... 
+              }
+      - patterns:
+          - pattern-inside: |
+              $X = [{...}];
+              ...
+          - pattern: $X.map(...)
     message: Detected a variable used in an anchor tag with the 'href' attribute. A
       malicious actor may be able to input the 'javascript:' URI, which could
       cause cross-site scripting (XSS). It is recommended to disallow
