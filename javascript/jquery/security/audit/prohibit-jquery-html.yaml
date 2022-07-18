@@ -6,11 +6,18 @@ rules:
       - pattern-not: |
           $X.html("...",...)
     message: >-
-      JQuery's `.html()` is susceptible to Cross Site Scripting (XSS) attacks. 
-      If you're just passing text, consider `.text()` instead. Otherwise, use a 
+      JQuery's `html` function is susceptible to Cross Site Scripting (XSS) attacks.
+      If you're just passing text, consider `text` instead. Otherwise, use a
       function that escapes HTML such as edX's `HtmlUtils.setHtml()`.
     metadata:
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      shortDesription: "Use of JQuery's unsafe html() function."
+      help: |
+        ## Remediation
+        Avoid using JQuery's html() function. If the string is plain text, use the text() function instead.
+        Otherwise, use a function that escapes html such as edx's HtmlUtils.setHtml().
+      tags: [security]
+      precision: high
+      owasp: 'A7: Cross-Site Scripting (XSS)'
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       references:
         - https://edx.readthedocs.io/projects/edx-developer-guide/en/latest/preventing_xss/preventing_xss.html#javascript-concat-html
