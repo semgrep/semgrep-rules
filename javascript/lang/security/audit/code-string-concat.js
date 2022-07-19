@@ -1,35 +1,19 @@
-function test1() {
-  const data = JSON.stringify(key);
-  // ruleid:code-string-concat
-  return exec(`(function(){${data}})`)
-}
-
-function test2() {
-  const data = JSON.stringify(key);
-
-  // ruleid:code-string-concat
+function test1(req,res) {
+  const data = JSON.stringify(req.query.key);
   const command = `(secret) => {${data}}`
+  // ruleid:code-string-concat
   return exec(command)
 }
 
-function test3(userInput) {
-  // ruleid:code-string-concat
+test2.post(foo, bar, function (req,res) {
+  userInput = req.params.input
   var command = "new Function('"+userInput+"')";
-  return exec(command)
-}
-
-function test4(userInput) {
   // ruleid:code-string-concat
-  var command = "eval('"+userInput+"')";
   return exec(command)
-}
+});
 
-function ok1() {
+function ok1(req,res) {
   var command = "eval('123')";
-  return exec(command)
-}
-
-function ok1() {
-  var command = "eval('123')";
+  // ok:code-string-concat
   return exec(command)
 }
