@@ -1,0 +1,41 @@
+rules:
+- id: mass-assignment
+  patterns:
+  - pattern-either:
+    - pattern: |
+        public IActionResult $METHOD(...){
+          ...
+        }
+    - pattern: |
+        public ActionResult $METHOD(...){
+          ...
+        }
+  - pattern-inside: |
+      using Microsoft.AspNetCore.Mvc;
+      ...
+  - pattern-not: |
+      public IActionResult $METHOD(..., [Bind(...)] $TYPE $ARG){
+        ...
+      }
+  - pattern-not: |
+      public ActionResult $METHOD(..., [Bind(...)] $TYPE $ARG){
+        ...
+      }
+  message: Mass assignment or Autobinding vulnerability in code allows an attacker
+    to execute over-posting attacks, which could create a new parameter in the binding
+    request and manipulate the underlying object in the application.
+  metadata:
+    category: security
+    confidence: HIGH
+    technology:
+    - .net
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
+      Attributes'
+    references:
+    - https://cwe.mitre.org/data/definitions/915.html
+    - https://github.com/OWASP/API-Security/blob/master/2019/en/src/0xa6-mass-assignment.md
+  languages:
+  - csharp
+  severity: WARNING
