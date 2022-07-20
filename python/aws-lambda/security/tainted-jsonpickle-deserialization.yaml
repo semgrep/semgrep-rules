@@ -1,0 +1,32 @@
+rules:
+- id: tainted-jsonpickle-deserialization
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context):
+          ...
+  pattern-sinks:
+  - patterns:
+    - pattern: $SINK
+    - pattern-either:
+      - pattern-inside: jsonpickle.decode($SINK,...)
+  message: >-
+    Avoid using `jsonpickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    owasp: "A8: Insecure Deserialization"
+    cwe: "CWE-502: Deserialization of Untrusted Data"
+    references:
+      - https://jsonpickle.github.io/
+    category: security
+    technology:
+      - python
+      - aws-lambda
+      - jsonpickle
+  languages:
+    - python
+  severity: WARNING
