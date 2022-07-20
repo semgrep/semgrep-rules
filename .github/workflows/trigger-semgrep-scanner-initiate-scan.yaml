@@ -1,0 +1,14 @@
+name: Trigger semgrep-scanner argo workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [release, develop]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Trigger semgrep-scanner argo workflow
+        run: |
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: $ARGO_WORKFLOWS_TOKEN"
