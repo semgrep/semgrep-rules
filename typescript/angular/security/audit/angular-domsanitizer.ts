@@ -1,4 +1,5 @@
 import { DomSanitizer, SecurityContext } from '@angular/platform-browser'
+import DOMPurify from 'dompurify'
 
 class SomeClass {
     constructor(private sanitizer: DomSanitizer){}
@@ -15,6 +16,13 @@ class SomeClass {
         // ruleid:angular-bypasssecuritytrust
         let url = this.sanitizer.bypassSecurityTrustUrl(value);
 
+
+        // ok:angular-bypasssecuritytrust
+        let url1 = this.sanitizer.bypassSecurityTrustUrl("a");
+        // ok:angular-bypasssecuritytrust
+        let html1 = this.sanitizer.bypassSecurityTrustHtml("value");
+        // ok:angular-bypasssecuritytrust
+        let html2 = this.sanitizer.bypassSecurityTrustHtml(DOMPurify.sanitize("value"))
         // ok:angular-sanitize-none-context
         let sanitized = this.sanitizer.sanitize(SecurityContext.HTML, value);
         // ruleid:angular-sanitize-none-context

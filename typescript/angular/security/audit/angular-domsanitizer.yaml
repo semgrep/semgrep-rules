@@ -1,11 +1,11 @@
 rules:
   - id: angular-bypasssecuritytrust
     message: >-
-      Detected the use of `$TRUST`. This can introduce a
-      Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided
-      input. If you have to use `$TRUST`, ensure it does not come from user-input or
-      use the appropriate prevention mechanism place e.g. input validation or sanitization 
-      depending on the context.
+      Detected the use of `$TRUST`. This can introduce a Cross-Site-Scripting
+      (XSS) vulnerability if this comes from user-provided input. If you have to
+      use `$TRUST`, ensure it does not come from user-input or use the
+      appropriate prevention mechanism place e.g. input validation or
+      sanitization depending on the context.
     languages:
       - typescript
     severity: WARNING
@@ -13,9 +13,14 @@ rules:
       references:
         - https://angular.io/api/platform-browser/DomSanitizer
         - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+      owasp:
+        - "A07:2017: - Cross-Site Scripting (XSS)"
+        - "A03:2021: - Injection"
+      confidence: LOW
       category: security
       technology:
         - angular
+        - browser
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
@@ -24,7 +29,8 @@ rules:
     pattern-sinks:
       - patterns:
           - pattern-either:
-              - pattern: $X.$TRUST(...)
+              - pattern: $X.$TRUST($Y)
+          - focus-metavariable: $Y
           - pattern-not: |
               $X.$TRUST(`...`)
           - pattern-not: |
@@ -109,3 +115,6 @@ rules:
                   $S = require("sanitize-html")
                   ...
           - pattern: $S(...)
+      - patterns:
+          - pattern: sanitizer.sanitize(...)
+          - pattern-not: sanitizer.sanitize(SecurityContext.NONE, ...);
