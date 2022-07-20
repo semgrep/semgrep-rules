@@ -1,32 +1,111 @@
 rules:
   - id: angular-bypasssecuritytrust
     message: >-
-      Bypassing the built-in sanitization could expose the application to cross-site scripting (XSS).
+      Detected the use of `$TRUST`. This can introduce a
+      Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided
+      input. If you have to use `$TRUST`, ensure it does not come from user-input or
+      use the appropriate prevention mechanism place e.g. input validation or sanitization 
+      depending on the context.
     languages:
       - typescript
     severity: WARNING
     metadata:
       references:
         - https://angular.io/api/platform-browser/DomSanitizer
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
       category: security
       technology:
         - angular
-    pattern-either:
-      - pattern: $X.bypassSecurityTrustHtml(...)
-      - pattern: $X.bypassSecurityTrustStyle(...)
-      - pattern: $X.bypassSecurityTrustScript(...)
-      - pattern: $X.bypassSecurityTrustUrl(...)
-      - pattern: $X.bypassSecurityTrustResourceUrl(...)
-  - id: angular-sanitize-none-context
-    pattern: $X.sanitize(SecurityContext.NONE, ...)
-    message: >-
-      The output is not sanitized when calling with SecurityContext.NONE.
-    languages:
-      - typescript
-    severity: WARNING
-    metadata:
-      references:
-        - https://angular.io/api/platform-browser/DomSanitizer
-      category: security
-      technology:
-        - angular
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $X
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $X.$TRUST(...)
+          - pattern-not: |
+              $X.$TRUST(`...`)
+          - pattern-not: |
+              $X.$TRUST("...")
+          - metavariable-regex:
+              metavariable: $TRUST
+              regex: (bypassSecurityTrustHtml|bypassSecurityTrustStyle|bypassSecurityTrustScript|bypassSecurityTrustUrl|bypassSecurityTrustResourceUrl)
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  $S = require("underscore.string")
+                  ...
+          - pattern-either:
+              - pattern: $S.escapeHTML(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import { ..., $S,... } from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("dompurify")
+                  ...
+              - pattern-inside: |
+                  import $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("isomorphic-dompurify")
+                  ...
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S(...)
+                      ...
+                  - pattern: $VALUE.sanitize(...)
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S.sanitize
+                      ...
+                  - pattern: $S(...)
+              - pattern: $S.sanitize(...)
+              - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  import * as $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  $S = require("xss")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'sanitize-html';
+                  ...
+              - pattern-inside: |
+                  import * as $S from "sanitize-html";
+                  ...
+              - pattern-inside: |
+                  $S = require("sanitize-html")
+                  ...
+          - pattern: $S(...)
