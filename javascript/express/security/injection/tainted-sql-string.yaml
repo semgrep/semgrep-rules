@@ -36,7 +36,6 @@ rules:
                   - metavariable-regex:
                       metavariable: $METHOD
                       regex: ^(get|post|put|head|delete|options)
-          - focus-metavariable: $REQ
           - pattern-either:
               - pattern: $REQ.query
               - pattern: $REQ.body
@@ -73,4 +72,3 @@ rules:
                       metavariable: $SQLSTR
                       regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
           - focus-metavariable: $EXPR
-          
