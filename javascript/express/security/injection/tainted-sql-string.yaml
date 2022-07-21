@@ -1,7 +1,8 @@
 rules:
   - id: tainted-sql-string
     severity: ERROR
-    message: Detected user input used to manually construct a SQL string. This is
+    message: >-
+      Detected user input used to manually construct a SQL string. This is
       usually bad practice because manual construction could accidentally result
       in a SQL injection. An attacker could use a SQL injection to steal or
       modify contents of the database. Instead, use a parameterized query which
