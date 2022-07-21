@@ -44,11 +44,12 @@ rules:
               - pattern: $REQ.headers
       - patterns:
           - pattern-either:
-              - pattern-inside: >
+              - pattern-inside: |
                   ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
                   {...}
               - pattern-inside: |
                   ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
           - pattern-either:
               - pattern: params
               - pattern: query
@@ -65,12 +66,9 @@ rules:
                       - pattern-inside: |
                           "$SQLSTR".concat($EXPR)
                       - pattern: util.format($SQLSTR, $EXPR)
+                      - pattern: |
+                          `$SQLSTR${$EXPR}...`
                   - metavariable-regex:
                       metavariable: $SQLSTR
                       regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-              - patterns:
-                  - pattern: |
-                      `...${$EXPR}...`
-                  - pattern-regex: |
-                      .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
           - focus-metavariable: $EXPR
