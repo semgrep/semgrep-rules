@@ -1,66 +1,53 @@
 rules:
-- id: node-mysql-sqli
-  severity: WARNING
-  message: >-
-    Detected tainted SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
-    You can use parameterized statements like so:
-    `connection.query('SELECT $1 from table', [userinput])`
-  languages:
-  - javascript
-  - typescript
-  mode: taint
-  metadata:
-    references:
-      - https://www.npmjs.com/package/mysql2
-    category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    technology:
-      - mysql
-      - mysql2
-  pattern-sources:
-    - patterns:
-      - pattern-either:
-        - pattern: $X + $Y
-        - pattern: $X.concat($Y)
-        - pattern: |
-            `...${...}...`
-        - patterns:
-          - pattern: |
-              [..., $X, ...].join(...)
-          - metavariable-pattern:
-              metavariable: $X
-              patterns:
-                - pattern-not: |
-                   "..."
-      - pattern-not: |
-          "..." + "..."
-      - pattern-not: |
-          $X.concat("...")
-  pattern-sinks:
-  - patterns:
-    - pattern: $QUERY
-    - pattern-either:
-      - pattern-inside: $POOL.query($QUERY, ...)
-      - pattern-inside: $POOL.execute($QUERY, ...)
-    - pattern-either:
-      - pattern-inside: |
-          require('mysql')
-          ...
-      - pattern-inside: |
-          require('mysql2')
-          ...
-      - pattern-inside: |
-          require('mysql2/promise')
-          ...
-      - pattern-inside: |
-          import 'mysql'
-          ...
-      - pattern-inside: |
-          import 'mysql2'
-          ...
-      - pattern-inside: |
-          import 'mysql2/promise'
-          ...
+  - id: node-mysql-sqli
+    severity: WARNING
+    message: >-
+      Detected a `$IMPORT` SQL statement that is tainted by user-input. This
+      could lead to SQL injection if the variable is user-controlled and is not
+      properly sanitized. In order to prevent SQL injection, it is recommended to
+      use parameterized queries or prepared statements.
+    languages:
+      - javascript
+      - typescript
+    mode: taint
+    metadata:
+      references:
+        - https://www.npmjs.com/package/mysql2
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+      category: security
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      technology:
+        - mysql
+        - mysql2
+        - javascript
+        - nodejs
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    pattern-sources:
+      - patterns:
+          - pattern-inside: function ... (..., $Y,...) {...}
+          - pattern: $Y
+    pattern-sinks:
+      - patterns:
+          - focus-metavariable: $QUERY
+          - pattern-either:
+              - pattern-inside: $POOL.query($QUERY, ...)
+              - pattern-inside: $POOL.execute($QUERY, ...)
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "$IMPORT"
+                  ...
+              - pattern-inside: |
+                  import { ... } from "$IMPORT"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "$IMPORT"
+                  ...
+              - pattern-inside: |
+                  require("$IMPORT")
+                  ...
+          - metavariable-regex:
+              metavariable: $IMPORT
+              regex: (mysql|mysql2)
