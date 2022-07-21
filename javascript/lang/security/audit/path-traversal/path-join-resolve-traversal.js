@@ -29,8 +29,8 @@ function test3(req,res) {
 
 function test4(req,res) {
     let data = req.body.path;
-    // ruleid:path-join-resolve-traversal
     data.forEach((entry) => {
+    // ruleid:path-join-resolve-traversal
         var pth = path.join(opts.path, entry);
         doSmth(pth);
     })
