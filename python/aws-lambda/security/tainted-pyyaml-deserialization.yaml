@@ -1,0 +1,41 @@
+rules:
+  - id: tainted-pyyaml-deserialization
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern: event
+      - pattern-inside: |
+          def $HANDLER(event, context):
+            ...
+    pattern-sinks:
+    - patterns:
+      - pattern: $SINK
+      - pattern-inside: |
+          import yaml
+          ...
+      - pattern-not-inside: yaml.load(..., Loader=yaml.CSafeLoader, ...)
+      - pattern-not-inside: yaml.load(..., Loader=yaml.SafeLoader, ...)
+      - pattern-not-inside: yaml.load(..., Loader=yaml.BaseLoader, ...)
+      - pattern-not-inside: yaml.load_all(..., Loader=yaml.CSafeLoader, ...)
+      - pattern-not-inside: yaml.load_all(..., Loader=yaml.SafeLoader, ...)
+      - pattern-not-inside: yaml.load_all(..., Loader=yaml.BaseLoader, ...)
+      - pattern-either:
+          - pattern-inside: yaml.load(...)
+          - pattern-inside: yaml.load_all(...)
+    message: >-
+      Avoid using `load()`. `PyYAML.load` can create arbitrary Python
+      objects. A malicious actor could exploit this to run arbitrary
+      code. Use `safe_load()` instead.
+    metadata:
+      owasp: "A8: Insecure Deserialization"
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      references:
+      - https://pyyaml.org/wiki/PyYAMLDocumentation
+      category: security
+      technology:
+        - python
+        - yaml
+        - aws-lambda
+    languages:
+      - python
+    severity: WARNING
