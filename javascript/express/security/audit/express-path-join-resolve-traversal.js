@@ -42,30 +42,11 @@ const func5 = function (req,res) {
 
 app.post('/test3', testCtrl3)
 
-app.post('/test4', function (req,res) {
-    let data = req.body.path;
-    // ruleid:express-path-join-resolve-traversal
-    data.forEach((entry) => {
-        var pth = path.join(opts.path, entry);
-        doSmth(pth);
-    })
-})
-
-
 app.post('/test5', function (req,res) {
     let data = req.body.path;
     for (let i = 0; i < data.length; i++) {
         // ruleid:express-path-join-resolve-traversal
         var pth = path.join(opts.path, data[i]);
-        doSmth(pth);
-    }
-})
-
-app.post('/test6', function test6(req,res) {
-    let data = req.body.path;
-    for (let x of data) {
-        // ruleid:express-path-join-resolve-traversal
-        var pth = path.join(opts.path, x);
         doSmth(pth);
     }
 })
