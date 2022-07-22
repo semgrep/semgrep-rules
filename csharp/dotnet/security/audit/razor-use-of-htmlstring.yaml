@@ -1,5 +1,8 @@
 rules:
-- id: use-of-htmlstring
+- id: razor-use-of-htmlstring
+  paths:
+    include:
+      - "*.cshtml"
   patterns:
   - pattern-either:
     - pattern: new ...HtmlString(...)
@@ -16,7 +19,7 @@ rules:
     technology:
     - .net
     owasp:
-    - "A03:2021 \u2013 Injection"
+    - "A03:2021: Injection"
     cwe: 'CWE-116: Improper Encoding or Escaping of Output'
     references:
     - https://cwe.mitre.org/data/definitions/116.html
