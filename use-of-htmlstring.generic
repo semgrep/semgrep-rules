@@ -1,0 +1,27 @@
+ public void RenderDescription(string description)
+ {
+     // ruleid: use-of-htmlstring
+     var newcontent = new Microsoft.AspNetCore.Html.HtmlString(description);
+ }
+
+
+ <div>
+	<div>
+        <!-- ruleid: use-of-htmlstring -->
+		<div>@(new HtmlString(description))</div>
+	</div>
+</div>
+
+ public void RenderDescription(string description)
+ {
+     // ok: use-of-htmlstring
+     var newcontent = new Microsoft.AspNetCore.Html.HtmlString(WebUtility.HtmlEncode(description));
+ }
+
+
+ <div>
+	<div>
+        <!-- ok: use-of-htmlstring -->
+		<div>@(new HtmlString(HttpUtility.HtmlEncode(description)))</div>
+	</div>
+</div>
