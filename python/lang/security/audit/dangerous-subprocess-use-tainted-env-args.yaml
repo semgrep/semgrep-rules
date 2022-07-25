@@ -1,0 +1,102 @@
+rules:
+  - id: dangerous-subprocess-use-tainted-env-args
+    mode: taint
+    options:
+      symbolic_propagation: true
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-either:
+                      - pattern: os.environ
+                      - pattern: os.environ.get('$FOO', ...)
+                      - pattern: os.environb
+                      - pattern: os.environb.get('$FOO', ...)
+                      - pattern: os.getenv('$ANYTHING', ...)
+                      - pattern: os.getenvb('$ANYTHING', ...)
+              - patterns:
+                  - pattern-either:
+                      - patterns:
+                          - pattern-either:
+                              - pattern: sys.argv
+                              - pattern: sys.orig_argv
+                      - patterns:
+                          - pattern-inside: |
+                              $PARSER = argparse.ArgumentParser(...)
+                              ...
+                          - pattern-inside: |
+                              $ARGS = $PARSER.parse_args()
+                          - pattern: <... $ARGS ...>
+                      - patterns:
+                          - pattern-inside: |
+                              $PARSER = optparse.OptionParser(...)
+                              ...
+                          - pattern-inside: |
+                              $ARGS = $PARSER.parse_args()
+                          - pattern: <... $ARGS ...>
+                      - patterns:
+                          - pattern-either:
+                              - pattern-inside: |
+                                  $OPTS, $ARGS = getopt.getopt(...)
+                                  ...
+                              - pattern-inside: |
+                                  $OPTS, $ARGS = getopt.gnu_getopt(...)
+                                  ...
+                          - pattern-either:
+                              - patterns:
+                                  - pattern-inside: |
+                                      for $O, $A in $OPTS:
+                                        ...
+                                  - pattern: $A
+                              - pattern: $ARGS
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-not: subprocess.$FUNC("...", ...)
+                  - pattern-not: subprocess.$FUNC(["...",...], ...)
+                  - pattern-not: subprocess.CalledProcessError(...)
+                  - pattern-not: subprocess.SubprocessError(...)
+                  - pattern-inside: subprocess.$FUNC($CMD, ...)
+                  - pattern: $CMD
+              - patterns:
+                  - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
+                  - pattern-inside: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c", $CMD)
+                  - pattern: $CMD
+              - patterns:
+                  - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
+                  - pattern-inside: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c", $CMD], ...)
+                  - pattern: $CMD
+              - patterns:
+                  - pattern-not: subprocess.$FUNC("=~/(python)/","...",...)
+                  - pattern-inside: subprocess.$FUNC("=~/(python)/", $CMD)
+                  - pattern: $CMD
+              - patterns:
+                  - pattern-not: subprocess.$FUNC(["=~/(python)/","...",...],...)
+                  - pattern-inside: subprocess.$FUNC(["=~/(python)/", $CMD],...)
+                  - pattern: $CMD
+    message: >-
+      Detected subprocess function '$FUNC' with user controlled data. A malicious actor
+      could leverage this to perform command injection.
+      You may consider using 'shlex.escape()'.
+    metadata:
+      owasp:
+        - A03:2020 - Injection
+        - A01:2017 - Injection
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      asvs:
+        section: "V5: Validation, Sanitization and Encoding Verification Requirements"
+        control_id: 5.3.8 OS Command Injection
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
+        version: "4"
+      references:
+        - https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess
+        - https://docs.python.org/3/library/subprocess.html
+        - https://docs.python.org/3/library/shlex.html
+        - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
+      category: security
+      technology:
+        - python
+      confidence: LOW
+    languages: [python]
+    severity: ERROR
