@@ -13,9 +13,9 @@ rules:
           - focus-metavariable: $X
           - pattern-either:
               - pattern: |
-                  {...,dangerouslySetInnerHTML: <... $X ...>,...}
+                  {...,dangerouslySetInnerHTML: $X,...}
               - pattern: |
-                  <$Y ... dangerouslySetInnerHTML={<... $X ...>} />
+                  <$Y ... dangerouslySetInnerHTML={$X} />
           - pattern-not: |
               <$Y ... dangerouslySetInnerHTML={{__html: "..."}} />
           - pattern-not: |
