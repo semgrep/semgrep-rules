@@ -9,6 +9,10 @@ jobs:
   trigger:
     runs-on: ubuntu-20.04
     steps:
+      - name: Branch name
+        run: echo "Running on branch ${GITHUB_REF##*/}"
       - name: Trigger semgrep-scanner argo workflow
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: $ARGO_WORKFLOWS_TOKEN"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan
+          -H "Authorization: $ARGO_WORKFLOWS_TOKEN"
+          -d '{"branch" : "${GITHUB_REF##*/}" }'
