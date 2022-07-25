@@ -1,0 +1,27 @@
+rules:
+- id: unsafe-cerealizer-load-start
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "@app.route('...', methods=[...])\ndef $FUNC(...):\n    ...\n"
+    - pattern: flask.request.$METAVARIABLE
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $CEREALIZER.load($...ARGS)
+      - pattern: $CEREALIZER.load($...ARGS, loader=...)
+      - pattern: $CEREALIZER.load_all($...ARGS)
+      - pattern: $CEREALIZER.load_all($...ARGS, loader=...)
+      - pattern: $CEREALIZER.safe_load($...ARGS, loader=...)
+      - pattern: $CEREALIZER.safe_load_all($...ARGS, loader=...)
+    - pattern-not: cerealizer.$M(...,loader=cerealizer.SafeLoader)
+  fix: cerealizer.safe_load_all($...ARGS, loader=cerealizer.SafeLoader)
+  message: Cerealizer's load* methods are vulnerable to lookup injection, which could
+    lead to remote code execution. Use safe_load_all instead.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE 502: Deserialization of Untrusted Data'
+    owasp: A8:2021 integrity
