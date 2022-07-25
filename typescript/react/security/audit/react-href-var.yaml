@@ -2,8 +2,13 @@ rules:
   - id: react-href-var
     mode: taint
     pattern-sources:
-      - patterns:
-          - pattern: $X
+    - patterns:
+        - pattern: |
+            function ...(..., $X, ...) { ... }
+        - focus-metavariable: $X
+    - pattern: $X.$Y
+    - pattern: $X[$Y]
+    - pattern: $F(...)
     pattern-sinks:
       - patterns:
           - pattern-either:

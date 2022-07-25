@@ -5,7 +5,7 @@ import {
 import SEMGREP_REPO1 from "../../util1";
 
 // ruleid: react-href-var
-let zzz = <Foo className={"foobar"} href={input} />;
+let zzz = <Foo className={"foobar"} href={getQuery()} />;
 
 function test1(input) {
 // ruleid: react-href-var
@@ -13,7 +13,7 @@ function test1(input) {
   return React.createElement("a", params);
 }
 
-// ruleid: react-href-var
+// ok: react-href-var
 let zzz = <Foo className={"foobar"} href={`${input}`} />;
 
 // ok: react-href-var

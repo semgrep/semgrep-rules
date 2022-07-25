@@ -4,7 +4,7 @@ rules:
       Detected the use of `$TRUST`. This can introduce a Cross-Site-Scripting
       (XSS) vulnerability if this comes from user-provided input. If you have to
       use `$TRUST`, ensure it does not come from user-input or use the
-      appropriate prevention mechanism e.g. input validation or
+      appropriate prevention mechanism place e.g. input validation or
       sanitization depending on the context.
     languages:
       - typescript
@@ -25,8 +25,13 @@ rules:
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
-      - patterns:
-          - pattern: $X
+    - patterns:
+        - pattern: |
+            function ...(..., $X, ...) { ... }
+        - focus-metavariable: $X
+    - pattern: $X.$Y
+    - pattern: $X[$Y]
+    - pattern: $F(...)
     pattern-sinks:
       - patterns:
           - pattern-either:
