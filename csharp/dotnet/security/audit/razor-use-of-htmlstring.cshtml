@@ -1,0 +1,29 @@
+ <!-- this is a test for C# from the community contributor and is left as-is for future forking into C# specific rules -->
+ public void RenderDescription(string description)
+ {
+     // ruleid: razor-use-of-htmlstring
+     var newcontent = new Microsoft.AspNetCore.Html.HtmlString(description);
+ }
+
+
+ <div>
+	<div>
+        <!-- ruleid: razor-use-of-htmlstring -->
+		<div>@(new HtmlString(description))</div>
+	</div>
+</div>
+
+<!-- this is a test for C# from the community contributor and is left as-is for future forking into C# specific rules -->
+ public void RenderDescription(string description)
+ {
+     // ok: razor-use-of-htmlstring
+     var newcontent = new Microsoft.AspNetCore.Html.HtmlString(WebUtility.HtmlEncode(description));
+ }
+
+
+ <div>
+	<div>
+        <!-- ok: razor-use-of-htmlstring -->
+		<div>@(new HtmlString(HttpUtility.HtmlEncode(description)))</div>
+	</div>
+</div>
