@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Trigger semgrep-scanner argo workflow
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: $ARGO_WORKFLOWS_TOKEN"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}"
