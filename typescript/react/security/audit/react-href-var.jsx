@@ -4,7 +4,7 @@ import {
 
 import SEMGREP_REPO1 from "../../util1";
 
-// ruleid: react-href-var
+// ok: react-href-var
 let zzz = <Foo className={"foobar"} href={getQuery()} />;
 
 function test1(input) {

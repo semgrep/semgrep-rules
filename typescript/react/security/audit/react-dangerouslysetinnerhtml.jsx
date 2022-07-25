@@ -2,7 +2,7 @@ import DOMPurify from "dompurify"
 import sanitize from "xss"
 
 function TestComponent1() {
-    // ruleid:react-dangerouslysetinnerhtml
+    // ok:react-dangerouslysetinnerhtml
   return <div dangerouslySetInnerHTML={createMarkup()} />;
 }
 
