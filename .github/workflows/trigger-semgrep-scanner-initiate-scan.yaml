@@ -13,4 +13,4 @@ jobs:
         run: echo Running on branch ${GITHUB_REF##*/}
       - name: Trigger semgrep-scanner argo workflow
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"branch" : "${GITHUB_REF##*/}" }'
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${GITHUB_REF##*/}\" }"
