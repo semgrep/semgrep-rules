@@ -31,7 +31,7 @@ rules:
                   metavariable: $FUNC
                   regex: ^(parseXmlString|parseXml)$
               - pattern: $QUERY
-    pattern-sources:
+      pattern-sources:
       - patterns:
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
@@ -47,7 +47,20 @@ rules:
               - pattern: $REQ.params
               - pattern: $REQ.cookies
               - pattern: $REQ.headers
-              - pattern: $REQ.files
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body
     metadata:
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
