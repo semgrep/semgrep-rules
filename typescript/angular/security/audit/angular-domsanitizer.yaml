@@ -25,8 +25,12 @@ rules:
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     mode: taint
     pattern-sources:
-      - patterns:
-          - pattern: $X
+    - patterns:
+        - pattern-inside: |
+            function ...(..., $X, ...) { ... }
+        - focus-metavariable: $X
+    - pattern: $X.$Y
+    - pattern: $X[...]
     pattern-sinks:
       - patterns:
           - pattern-either:
