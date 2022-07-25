@@ -1,0 +1,30 @@
+rules:
+- id: razor-use-of-htmlstring
+  paths:
+    include:
+      - "*.cshtml"
+  patterns:
+  - pattern-either:
+    - pattern: new ...HtmlString(...)
+    - pattern: '@(new ...HtmlString(...))'
+  - pattern-not-inside: '@(new ...HtmlString(...HtmlEncode(...)))'
+  - pattern-not-inside: '@(new ...HtmlString(...Encode(...)))'
+  - pattern-not-inside: new ...HtmlString(...HtmlEncode(...))
+  - pattern-not-inside: new ...HtmlString(...Encode(...))
+  message: ASP.NET Core MVC provides an HtmlString class which isn't automatically
+    encoded upon output. This should never be used in combination with untrusted input
+    as this will expose an XSS vulnerability.
+  metadata:
+    category: security
+    technology:
+    - .net
+    owasp:
+    - "A03:2021: Injection"
+    cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    references:
+    - https://cwe.mitre.org/data/definitions/116.html
+    - https://owasp.org/Top10/A03_2021-Injection/
+    - https://docs.microsoft.com/en-us/aspnet/core/security/cross-site-scripting?view=aspnetcore-6.0#html-encoding-using-razor
+  languages:
+  - generic
+  severity: WARNING

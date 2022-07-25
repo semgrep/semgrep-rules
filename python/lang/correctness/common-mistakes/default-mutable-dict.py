@@ -1,13 +1,14 @@
 import copy
 
-# ruleid: default-mutable-dict
+
 def assign_func1(default={}):
+    # ruleid: default-mutable-dict
     default["potato"] = 5
 
 
-# ruleid: default-mutable-dict
 def assign_func2(default={}):
     for x in range(10):
+        # ruleid: default-mutable-dict
         default[x] = 1
 
 
@@ -17,129 +18,129 @@ def assign_func3(default={}):
     x[3] = 2
 
 
-# ruleid: default-mutable-dict
 def assign_func4(x=1, default={}):
+    # ruleid: default-mutable-dict
     default["1"] = 1
 
 
-# ruleid: default-mutable-dict
 def assign_func5(default={}):
     if not default:
+        # ruleid: default-mutable-dict
         default["1"] = "test"
 
 
-# ruleid: default-mutable-dict
 def assign_func6(default={}, x="string"):
+    # ruleid: default-mutable-dict
     default[1] = 0
 
 
-# todoruleid: default-mutable-dict
 def assign_func7(default={}):
     if True:
         default = dict(default)
     else:
+        # ruleid: default-mutable-dict
         default[1] = 21
 
 
-# ruleid: default-mutable-dict
 def assign_func8(default={}):
     while True:
+        # ruleid: default-mutable-dict
         default[1] = 4
         break
 
 
-# ruleid: default-mutable-dict
 def update_func1(default={}):
+    # ruleid: default-mutable-dict
     default.update({1: 2})
 
 
-# ruleid: default-mutable-dict
 def update_func2(default={}):
     for x in range(10):
+        # ruleid: default-mutable-dict
         default.update({1: 2})
 
 
-# todoruleid: default-mutable-dict
 def update_func3(default={}):
     x = default
+    # ruleid: default-mutable-dict
     x.update({1: 2})
 
 
-# ruleid: default-mutable-dict
 def update_func4(x=1, default={}):
+    # ruleid: default-mutable-dict
     default.update({1: 2})
 
 
-# ruleid: default-mutable-dict
 def update_func5(default={}):
     if not default:
+        # ruleid: default-mutable-dict
         default.update({1: 2})
 
 
-# ruleid: default-mutable-dict
 def update_func6(default={}, x="string"):
+    # ruleid: default-mutable-dict
     default.update({1: 2})
 
 
-# todoruleid: default-mutable-dict
 def update_func7(default={}):
     if True:
         default = dict(default)
     else:
+        # ruleid: default-mutable-dict
         default.update({1: 2})
 
 
-# ruleid: default-mutable-dict
 def update_func8(default={}):
     while True:
+        # ruleid: default-mutable-dict
         default.update({1: 2})
         break
 
 
-# ruleid: default-mutable-dict
 def setdefault_func1(default={}):
+    # ruleid: default-mutable-dict
     default.setdefault(1, 2)
 
 
-# ruleid: default-mutable-dict
 def setdefault_func2(default={}):
     for x in range(10):
+        # ruleid: default-mutable-dict
         default.setdefault(1, 2)
 
 
-# todoruleid: default-mutable-dict
 def setdefault_func3(default={}):
     x = default
+    # ruleid: default-mutable-dict
     x.setdefault(1, 2)
 
 
-# ruleid: default-mutable-dict
 def setdefault_func4(x=1, default={}):
+    # ruleid: default-mutable-dict
     default.setdefault(1, 2)
 
 
-# ruleid: default-mutable-dict
 def setdefault_func5(default={}):
     if not default:
+        # ruleid: default-mutable-dict
         default.setdefault(1, 2)
 
 
-# ruleid: default-mutable-dict
 def setdefault_func6(default={}, x="string"):
+    # ruleid: default-mutable-dict
     default.setdefault(1, 2)
 
 
-# todoruleid: default-mutable-dict
 def setdefault_func7(default={}):
     if True:
         default = dict(default)
     else:
+        # ruleid: default-mutable-dict
         default.setdefault(1, 2)
 
 
-# ruleid: default-mutable-dict
 def setdefault_func8(default={}):
     while True:
+        # ruleid: default-mutable-dict
         default.setdefault(1, 2)
         break
 

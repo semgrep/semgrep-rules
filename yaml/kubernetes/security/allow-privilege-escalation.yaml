@@ -4,6 +4,9 @@ rules:
       - pattern-inside: |
           containers:
             ...
+      - pattern-inside: |
+          - name: $CONTAINER
+            ...
       - pattern: |
           image: ...
           ...
@@ -13,10 +16,16 @@ rules:
           securityContext:
             ...
             allowPrivilegeEscalation: false
+      - focus-metavariable: $CONTAINER
     message: >-
-      Container allows for privilege escalation via setuid or setgid binaries.
-      Add 'allowPrivilegeEscalation: false' in 'securityContext' to prevent this.
+      Container $CONTAINER allows for privilege escalation via setuid or setgid
+      binaries. Add 'allowPrivilegeEscalation: false' in 'securityContext' to
+      prevent this.
     metadata:
+      cwe: "CWE-732: Incorrect Permission Assignment for Critical Resource"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
       references:
         - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#privilege-escalation
         - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
