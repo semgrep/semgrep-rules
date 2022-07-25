@@ -8,9 +8,9 @@ rules:
           - pattern-either:
               - patterns:
                   - pattern-either:
-                      - pattern: os.environ['$ANYTHING']
+                      - pattern: os.environ
                       - pattern: os.environ.get('$FOO', ...)
-                      - pattern: os.environb['$ANYTHING']
+                      - pattern: os.environb
                       - pattern: os.environb.get('$FOO', ...)
                       - pattern: os.getenv('$ANYTHING', ...)
                       - pattern: os.getenvb('$ANYTHING', ...)
@@ -18,8 +18,8 @@ rules:
                   - pattern-either:
                       - patterns:
                           - pattern-either:
-                              - pattern: sys.argv[...]
-                              - pattern: sys.orig_argv[...]
+                              - pattern: sys.argv
+                              - pattern: sys.orig_argv
                       - patterns:
                           - pattern-inside: |
                               $PARSER = argparse.ArgumentParser(...)

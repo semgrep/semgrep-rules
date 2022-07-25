@@ -21,3 +21,8 @@ os.execl("/bin/bash", "/bin/bash", "-c", something())
 cmd = sys.argv[2]
 # ruleid:dangerous-os-exec-tainted-env-args
 os.execl("/bin/bash", "/bin/bash", "-c", cmd)
+
+cmd2 = os.environ['BAD']
+# ruleid:dangerous-os-exec-tainted-env-args
+os.execl("/bin/bash", "/bin/bash", "-c", cmd2)
+
