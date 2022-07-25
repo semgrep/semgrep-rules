@@ -2,18 +2,16 @@ rules:
   - id: raw-html-format
     severity: WARNING
     message: >-
-      User data flows into the host portion of this manually-constructed URL.
-      This could allow an attacker to send data to their own server, potentially
-      exposing sensitive data such as cookies or authorization information sent
-      with this request. They could also probe internal servers or other resources
-      that the server runnig this code can access. (This is called server-side request
-      forgery, or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist
-      for approved hosts hardcode the correct host.
+      User data flows into the host portion of this manually-constructed HTML.
+      This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from 
+      user-provided input. Consider using a sanitization library such as 
+      DOMPurify to sanitize the HTML within.
     metadata:
       owasp:
-        - A07:2017
-        - A03:2021
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+        - "A07:2017: - Cross-Site Scripting (XSS)"
+        - "A03:2021: - Injection"
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
       category: security
       technology:
         - express

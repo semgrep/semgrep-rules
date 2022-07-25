@@ -47,6 +47,7 @@ rules:
             - pattern: $REQ.params
             - pattern: $REQ.cookies
             - pattern: $REQ.headers
+            - pattern: $REQ.files
     - patterns:
         - pattern-either:
             - pattern-inside: |
@@ -61,6 +62,7 @@ rules:
             - pattern: cookies
             - pattern: headers
             - pattern: body
+            - pattern: files
     metadata:
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html

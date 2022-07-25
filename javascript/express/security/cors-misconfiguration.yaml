@@ -2,12 +2,16 @@ rules:
   - id: cors-misconfiguration
     mode: taint
     languages:
-      - js
+      - javascript
       - typescript
     metadata:
-      owasp: "A1: Injection"
+      owasp: 
+        - "A05:2021 - Security Misconfiguration"
+        - "A06:2017 - Security Misconfiguration"
       cwe: "CWE-346: Origin Validation Error"
       category: security
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
       technology:
         - express
     message: >-
@@ -17,13 +21,14 @@ rules:
     pattern-sinks:
       - patterns:
           - pattern-either:
-              - pattern: $RES.set($HEADER, ...)
-              - pattern: $RES.header($HEADER, ...)
-              - pattern: $RES.setHeader($HEADER, ...)
+              - pattern: $RES.set($HEADER, $X)
+              - pattern: $RES.header($HEADER, $X)
+              - pattern: $RES.setHeader($HEADER, $X)
               - pattern: |
-                  $RES.set({$HEADER: ...}, ...)
+                  $RES.set({$HEADER: $X}, ...)
               - pattern: |
-                  $RES.writeHead($STATUS, {$HEADER: ...}, ...)
+                  $RES.writeHead($STATUS, {$HEADER: $X}, ...)
+          - focus-metavariable: $X
           - metavariable-regex:
               metavariable: $HEADER
               regex: .*(Access-Control-Allow-Origin|access-control-allow-origin).*
