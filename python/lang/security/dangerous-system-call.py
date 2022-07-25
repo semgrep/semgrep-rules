@@ -33,6 +33,9 @@ def route_param(route_param):
     os.popen("prefix" + route_param + "suffix")
     # ruleid:dangerous-system-call
     os.popen2("prefix" + route_param + "suffix")
+    # ruleid:dangerous-system-call
+    getattr(os, "system")("prefix" + route_param + "suffix")
+
 
     return "oops!"
 

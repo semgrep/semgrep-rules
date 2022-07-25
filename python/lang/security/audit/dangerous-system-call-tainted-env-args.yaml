@@ -54,6 +54,24 @@ rules:
           - pattern-not: os.$W("...", ...)
           - pattern-either:
               - pattern: os.system(...)
+              - pattern: |
+                  $X = __import__("os")
+                  ...
+                  $X.system(...)
+              - pattern: |
+                  $X = __import__("os")
+                  ...
+                  getattr($X, "system")(...)
+              - pattern: |
+                  $X = getattr(os, "system")
+                  ...
+                  $X(...)
+              - pattern: |
+                  $X = __import__("os")
+                  ...
+                  $Y = getattr($X, "system")
+                  ...
+                  $Y(...)
               - pattern: os.popen(...)
               - pattern: os.popen2(...)
               - pattern: os.popen3(...)
