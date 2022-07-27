@@ -2,18 +2,17 @@ rules:
   - id: raw-html-format
     severity: WARNING
     message: >-
-      User data flows into the host portion of this manually-constructed URL.
-      This could allow an attacker to send data to their own server, potentially
-      exposing sensitive data such as cookies or authorization information sent
-      with this request. They could also probe internal servers or other resources
-      that the server runnig this code can access. (This is called server-side request
-      forgery, or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist
-      for approved hosts hardcode the correct host.
+      User data flows into the host portion of this manually-constructed HTML.
+      This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from 
+      user-provided input. Consider using a sanitization library such as 
+      DOMPurify to sanitize the HTML within.
     metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       owasp:
-        - A07:2017
-        - A03:2021
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+        - "A07:2017: - Cross-Site Scripting (XSS)"
+        - "A03:2021: - Injection"
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
       category: security
       technology:
         - express
@@ -23,13 +22,34 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-          - pattern-inside: |
-              require('express');
-              ...
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
               - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern: $REQ
+              - patterns:
+                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)
+          - pattern-either:
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.cookies
+              - pattern: $REQ.headers
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body
     pattern-sinks:
       - patterns:
           - pattern-either:

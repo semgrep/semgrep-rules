@@ -9,9 +9,9 @@ app.get('/test1', function (req, res) {
 });
 
 app.get('/test2', function (req, res) {
-    // ruleid: cors-misconfiguration
     res.set({
         'Content-Length': 123,
+        // ruleid: cors-misconfiguration
         'access-control-allow-origin': req.body.origin,
         'ETag': '12345'
     })

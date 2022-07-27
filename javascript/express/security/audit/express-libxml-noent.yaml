@@ -32,22 +32,37 @@ rules:
                   regex: ^(parseXmlString|parseXml)$
               - pattern: $QUERY
     pattern-sources:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
-              - pattern: $REQ.files
+    - patterns:
+        - pattern-either:
+            - pattern-inside: function ... ($REQ, $RES) {...}
+            - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+            - patterns:
+                - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                - metavariable-regex:
+                    metavariable: $METHOD
+                    regex: ^(get|post|put|head|delete|options)
+        - pattern-either:
+            - pattern: $REQ.query
+            - pattern: $REQ.body
+            - pattern: $REQ.params
+            - pattern: $REQ.cookies
+            - pattern: $REQ.headers
+            - pattern: $REQ.files
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                {...}
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response) => {...}
+        - focus-metavariable: $REQ
+        - pattern-either:
+            - pattern: params
+            - pattern: query
+            - pattern: cookies
+            - pattern: headers
+            - pattern: body
+            - pattern: files
     metadata:
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
