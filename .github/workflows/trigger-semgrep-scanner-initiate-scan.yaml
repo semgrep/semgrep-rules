@@ -24,10 +24,10 @@ jobs:
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
         run: |
-        #   echo "curl branch:"  ${{github.ref}} ", post-back: false"
-            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.ref}}\", \"repo\" : \"semgrep-rules\", \"pull-request\" : \"0000\", \"post-back\" : false }"
+            echo "curl branch:"  ${{github.ref}} ", post-back: false"
+        #   curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.ref}}\", \"repo\" : \"semgrep-rules\", \"pull-request\" : \"0000\", \"post-back\" : false }"
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
         if: github.event_name == 'pull_request'
         run: |
-        #   echo "curl branch:"  ${{github.head_ref}} ", PR:" ${{github.event.number}} ",post-back: true"
-            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"semgrep-rules\", \"pull-request\" : \"${{github.event.number}}\", \"post-back\" : true }"
+            echo "curl branch:"  ${{github.head_ref}} ", PR:" ${{github.event.number}} ",post-back: true"
+        #   curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"semgrep-rules\", \"pull-request\" : \"${{github.event.number}}\", \"post-back\" : true }"
