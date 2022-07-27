@@ -8,20 +8,15 @@ on:
     branches: [develop, release]
 jobs:
   trigger:
+    # do not run automatically if rule is posted from the playground (can still be started manually)
+    # PRs posted by first time contributors already need approval as well
+    if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
       - name: Print github.head_ref
         run: echo ${{ github.head_ref }}
       - name: Print github.ref
         run: echo ${{ github.ref }}
-      - name: Print github.triggering_actor
-        run: echo ${{github.triggering_actor}}
-      - name: Print github.actor
-        run: echo ${{github.actor}}
-      - name: Verify if member of the team
-        # ref: https://docs.github.com/en/rest/teams/members#get-team-membership-for-a-user
-        run: |
-          curl https://api.github.com/orgs/returntocorp/teams/developers/memberships/${{github.actor}} -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" 
       - name: Trigger semgrep-scanner argo workflow
         run: |
           echo 'curl here'
