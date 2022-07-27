@@ -17,7 +17,11 @@ jobs:
         run: echo ${{ github.head_ref }}
       - name: Print github.ref
         run: echo ${{ github.ref }}
+      - name: Pring github.event.issue.number
+        run: echo ${{github.event.issue.number}}
+      - name: Pring github.event.number
+        run: echo ${{github.event.number}}
       - name: Trigger semgrep-scanner argo workflow
         run: |
           echo 'curl here'
-          #  curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{steps.extract_branch.outputs.branch}}\" }"
+          #curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"semgrep-rules\", \"pull-request\" : \"${{github.event.issue.number}\", \"post-back\" : true }"
