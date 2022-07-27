@@ -2,18 +2,18 @@ import DOMPurify from "dompurify"
 import sanitize from "xss"
 
 function TestComponent1() {
-    // ruleid:react-dangerouslysetinnerhtml
+    // ok:react-dangerouslysetinnerhtml
   return <div dangerouslySetInnerHTML={createMarkup()} />;
 }
 
-function TestComponent2() {
+function TestComponent2(foo) {
     // ruleid:react-dangerouslysetinnerhtml
     let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo},a:b};
     return React.createElement('div', params);
 }
 
 function TestComponent3() {
-    // ruleid:react-dangerouslysetinnerhtml
+    // ok:react-dangerouslysetinnerhtml
   return <li className={"foobar"} dangerouslySetInnerHTML={{__html: params}} />;
 }
 
