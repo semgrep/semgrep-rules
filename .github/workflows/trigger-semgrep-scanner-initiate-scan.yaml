@@ -10,14 +10,15 @@ jobs:
   trigger:
     runs-on: ubuntu-20.04
     steps:
-      - name: Print pull request reference
-        run: echo 'Running on PR ${GITHUB_REF##*/}'
-      - name: Print branch name
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract-branch
-      - name: Find PR author
-        run: echo '${{ github.event.issue.user.login }}'
+      - name: Print github.head_ref
+        run: echo ${{ github.head_ref }}
+      - name: Print github.ref
+        run: echo ${{ github.ref }}
+      - name: Print github.triggering_actor
+        run: echo ${{github.triggering_actor}}
+      - name: Print github.actor
+        run: echo ${{github.actor}}
       - name: Trigger semgrep-scanner argo workflow
         run: |
-          echo '${{steps.extract_branch.outputs.branc}}'
+          echo 'curl here'
           #  curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{steps.extract_branch.outputs.branch}}\" }"
