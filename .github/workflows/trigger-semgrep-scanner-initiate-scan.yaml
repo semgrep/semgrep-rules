@@ -13,13 +13,13 @@ jobs:
     if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
-      - name: Print github.head_ref
+      - name: Print github.head_ref = branch that a PR is opened from
         run: echo ${{ github.head_ref }}
-      - name: Print github.ref
+      - name: Print github.ref = branch a push is completed to (only release branch in current config)
         run: echo ${{ github.ref }}
-      - name: Print github.event.issue.number
-        run: echo ${{github.event.issue.number}}
-      - name: Print github.event.number
+      - name: Print github.event_name
+        run: echo ${{github.event_name}}
+      - name: Print github.event.number = PR number to post comment back to
         run: echo ${{github.event.number}}
       - name: Trigger semgrep-scanner argo workflow
         run: |
