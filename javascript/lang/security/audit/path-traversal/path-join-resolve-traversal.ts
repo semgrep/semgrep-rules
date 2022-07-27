@@ -46,15 +46,6 @@ function test5(req,res) {
     }
 }
 
-function test6(req,res) {
-    let data = req.body.path;
-    for (let x of data) {
-        // ruleid:path-join-resolve-traversal
-        var pth = join(opts.path, x);
-        doSmth(pth);
-    }
-}
-
 function okTest1(req,res) {
     let data = ['one', 'two', 'three'];
     for (let x of data) {
