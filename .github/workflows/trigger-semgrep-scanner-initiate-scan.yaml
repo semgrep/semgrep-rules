@@ -19,7 +19,8 @@ jobs:
       - name: Print github.actor
         run: echo ${{github.actor}}
       - name: Verify if member of the team
-        run: curl \
+        run: |
+          curl \
            -H "Accept: application/vnd.github+json" \ 
            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
            https://api.github.com/orgs/returntocorp/teams/developers/memberships/${{github.actor}}
