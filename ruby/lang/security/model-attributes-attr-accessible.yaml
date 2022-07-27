@@ -2,7 +2,7 @@ rules:
   - id: model-attributes-attr-accessible
     patterns:
       - pattern-not: |
-          class $CLASS
+          class $CLASS < $TYPE
           ...
           attr_accessible :$XXX
           ...
@@ -10,11 +10,15 @@ rules:
           ...
           $CLASS.$FUNC(...)
       - pattern: |
-          class $CLASS
+          class $CLASS < $TYPE
           ...
           end
           ...
           $CLASS.$FUNC(...)
+      - metavariable-pattern:
+          metavariable: $TYPE
+          patterns:
+            - pattern-not-regex: (?i)(Error|Exception)
       - focus-metavariable: $CLASS
     message: >-
       Checks for models that do not use attr_accessible. This means there is no limiting
