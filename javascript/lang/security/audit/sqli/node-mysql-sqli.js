@@ -1,6 +1,14 @@
 var AWS = require('aws-sdk');
 const mysql = require('mysql2');
 
+
+async function test2(req,res,next) {
+
+    var createStmt = 'create temporary table ' + req.body.foo + '_jointemp (temp_seq int, '+ a + ' varchar(100)); ';
+  // ok: node-mysql-sqli -- diff rule
+  await conn.query(createStmt);
+
+}
 async function test1(input) {
   var secretsManager = new AWS.SecretsManager();
   var secretId = input.arguments[0][2];
