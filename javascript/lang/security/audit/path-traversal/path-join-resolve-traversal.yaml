@@ -9,12 +9,6 @@ rules:
           function ... (...,$X,...) {...}
       - pattern-inside: |
           function ... (...,{...,$X,...},...) {...}
-      - pattern-inside: |
-          for ($X of $SMTH) {...}
-    - pattern-not-inside: |
-        $SMTH = [...];
-        ...
-        for ($X of $SMTH) {...}
   pattern-sinks:
   - patterns:
     - pattern: $SINK
