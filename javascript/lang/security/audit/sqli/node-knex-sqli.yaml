@@ -1,12 +1,13 @@
 rules:
-  - id: node-knex-sqli
+  - id: knex-sqli-copy
     severity: WARNING
     message: >-
       Detected SQL statement that is tainted by `$REQ` object. This could
       lead to SQL injection if the variable is user-controlled and not properly
-      sanitized. In order to prevent SQL injection, it is recommended to use 
-      parameterized queries or prepared statements. For example using parameterized 
-      queries like so: `knex.raw('SELECT $1 from table', [userinput])`
+      sanitized. In order to prevent SQL injection, it is recommended to
+      use  parameterized queries or prepared statements. An example of
+      parameterized queries like so: `knex.raw('SELECT $1 from table',
+      [userinput])` can help prevent SQLi.
     languages:
       - javascript
       - typescript
@@ -16,11 +17,13 @@ rules:
       references:
         - https://knexjs.org/#Builder-fromRaw
         - https://knexjs.org/#Builder-whereRaw
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
       category: security
       owasp:
         - A03:2021 - Injection
         - A01:2017 - Injection
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+        ('SQL Injection')"
       technology:
         - express
         - nodejs
@@ -62,9 +65,9 @@ rules:
       - patterns:
           - focus-metavariable: $QUERY
           - pattern-either:
-              - pattern-inside: $KNEX. ... .fromRaw($QUERY, ...)
-              - pattern-inside: $KNEX. ... .whereRaw($QUERY, ...)
-              - pattern-inside: $KNEX. ... .raw($QUERY, ...)
+              - pattern-inside: $KNEX.fromRaw($QUERY, ...)
+              - pattern-inside: $KNEX.whereRaw($QUERY, ...)
+              - pattern-inside: $KNEX.raw($QUERY, ...)
           - pattern-either:
               - pattern-inside: |
                   require('knex')
@@ -73,5 +76,5 @@ rules:
                   import 'knex'
                   ...
     pattern-sanitizers:
-        - patterns:
+      - patterns:
           - pattern: parseInt(...)
