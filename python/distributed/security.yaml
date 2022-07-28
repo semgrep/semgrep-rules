@@ -11,9 +11,18 @@ rules:
     fix: |
       True
     message: >-
-      Initializing the a security context for Dask (`distributed`) without "require_encription" keyword argument may silently fail to provide security. See https://distributed.dask.org/en/latest/tls.html?highlight=require_encryption#parameters
+      Initializing the a security context for Dask (`distributed`) without "require_encryption" keyword argument may silently fail to provide security.
     severity: WARNING
     metadata:
+      cwe:
+        - "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp:
+        - "A09:2010 - Insufficient Transport Layer Protection"
+        - "A06:2013 - Sensitive Data Exposure"
+        - "A03:2017 - Sensitive Data Exposure"
+        - "A02:2021 - Cryptographic Failures"
+      references:
+        - https://distributed.dask.org/en/latest/tls.html?highlight=require_encryption#parameters
       category: security
       technology:
         - distributed
