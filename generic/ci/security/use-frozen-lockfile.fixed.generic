@@ -7,11 +7,15 @@ RUN yarn install --frozen-lockfile
 # ruleid: use-frozen-lockfile-yarn
 RUN yarn install --frozen-lockfile
 RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 RUN yarn install some_package
+RUN yarn install -g some_package
+RUN yarn install --global some_package
 
 RUN echo 'yarn installing foo'
 
 RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 COPY . /app
 RUN yarn build
 
@@ -21,6 +25,8 @@ RUN yarn install foo
 RUN npm install foo
 # ruleid: use-frozen-lockfile-npm
 RUN npm ci
+RUN npm install -g some_package
+RUN npm install --global some_package
 RUN npm ci
 COPY . /app
 RUN yarn build
