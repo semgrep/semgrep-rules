@@ -1,0 +1,27 @@
+rules:
+  - id: azure-appservice-python-version
+    message: >-
+      Ensure that Python version is the latest, if used to run the web app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ...
+            python_version = "3.10"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO

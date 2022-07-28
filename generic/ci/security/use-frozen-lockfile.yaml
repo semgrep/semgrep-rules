@@ -2,7 +2,10 @@ rules:
   - id: use-frozen-lockfile-yarn
     patterns:
       - pattern-regex: yarn install\b
-      - pattern-not-regex: yarn install --frozen-lockfile
+      - pattern-not-regex: yarn install --frozen-lockfile # yarn v1
+      - pattern-not-regex: yarn install --immutable # yarn berry
+      - pattern-not-regex: yarn install -g
+      - pattern-not-regex: yarn install --global
       - pattern-not-regex: yarn install [\w]+
     fix: yarn install --frozen-lockfile
     message: >-
@@ -13,14 +16,21 @@ rules:
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
         - yarn
+      references:
+        - https://classic.yarnpkg.com/lang/en/docs/cli/install/
   - id: use-frozen-lockfile-npm
     patterns:
       - pattern-regex: npm install\b
+      - pattern-not-regex: npm install -g
+      - pattern-not-regex: npm install --global
       - pattern-not-regex: npm install [\w]+
     fix: npm ci
     message: >-
@@ -31,11 +41,16 @@ rules:
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
         - npm
+      references:
+        - https://docs.npmjs.com/cli/v6/commands/npm-ci
   - id: use-frozen-lockfile-pipenv
     patterns:
       - pattern-regex: pipenv install\b
@@ -50,8 +65,13 @@ rules:
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
         - pipenv
+      references:
+        - https://pipenv-fork.readthedocs.io/en/latest/advanced.html#:~:text=pipenv%20install%20%2D%2Dignore%2Dpipfile,using%20the%20%2D%2Ddeploy%20flag.

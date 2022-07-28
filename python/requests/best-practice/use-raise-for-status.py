@@ -88,3 +88,25 @@ def f():
 def f():
     # ok:use-raise-for-status
     requests.put("").raise_for_status()
+
+def f():
+    # ok:use-raise-for-status
+    from contextlib import nullcontext
+    with nullcontext():
+        r = requests.post("")
+    r.raise_for_status()
+
+def f():
+    # ok:use-raise-for-status
+    from contextlib import nullcontext
+    with nullcontext(value) as value:
+        r = requests.post("")
+    r.raise_for_status()
+
+def f():
+    # ok:use-raise-for-status
+    with open("file.txt", mode="r") as f:
+        logging.debug("Opened file for uploading.")
+        r = requests.post("", files={"file": f})
+        logging.debug("Request finished. Closing file before checking status.")
+    r.raise_for_status()

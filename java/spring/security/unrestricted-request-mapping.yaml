@@ -1,12 +1,14 @@
 rules:
   - id: unrestricted-request-mapping
     patterns:
-      - pattern: |
+      - pattern-inside: |
           @RequestMapping(...)
           $RETURNTYPE $METHOD(...) { ... }
       - pattern-not-inside: |
           @RequestMapping(..., method = $X, ...)
           $RETURNTYPE $METHOD(...) { ... }
+      - pattern: |
+          RequestMapping
     message: >-
       Detected a method annotated with 'RequestMapping' that does not specify
       the HTTP method. CSRF protections are not enabled for GET, HEAD, TRACE,
@@ -17,7 +19,9 @@ rules:
     severity: WARNING
     metadata:
       cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
-      owasp: "A6: Security Misconfiguration"
+      owasp:
+        - A06:2017 - Security Misconfiguration
+        - A05:2021 - Security Misconfiguration
       source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING
       references:
         - https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING

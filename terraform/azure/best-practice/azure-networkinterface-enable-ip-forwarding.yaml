@@ -1,0 +1,22 @@
+rules:
+  - id: azure-networkinterface-enable-ip-forwarding
+    message: >-
+      Ensure that Network Interfaces disable IP forwarding
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_network_interface" "..." {
+          ...
+          enable_ip_forwarding = true
+          ...
+          }
+    metadata:
+      owasp:
+      - A05:2021 - Security Misconfiguration
+      cwe: 'CWE-284: Improper Access Control'
+      category: security
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

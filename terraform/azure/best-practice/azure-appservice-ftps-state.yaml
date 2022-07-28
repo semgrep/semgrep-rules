@@ -1,0 +1,33 @@
+rules:
+  - id: azure-appservice-ftps-state
+    message: >-
+      Ensure FTP deployments are disabled
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ftps_state = "FtpsOnly"
+          }
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ftps_state = "Disabled"
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

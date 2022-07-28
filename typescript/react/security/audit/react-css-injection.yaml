@@ -1,36 +1,19 @@
 rules:
   - id: react-css-injection
     patterns:
-      - pattern-either:
-          - pattern-inside: |
-              import $STYLE from "...";
-              ...
-          - pattern-inside: |
-              $STYLE = $METHOD(...);
-              ...
-          - pattern-inside: |
-              function $FUNC(...,{$STYLE},...) {
-                ...
-              }
-          - pattern-inside: |
-              function $FUNC(...,$STYLE,...) {
-                ...
-              }
-      - pattern-either:
-          - pattern: |
-              <$EL style={$STYLE} />
-          - pattern: |
-              $R.createElement($EL, {style: $STYLE}, ...)
-      - pattern-not: |
-          <$EL style={{$X:...}} />
-      - pattern-not: |
-          $R.createElement($EL, {style: {...}}, ...)
+      - pattern: a()
+      - pattern: b()
     message: >-
-      User controlled data in a `style` attribute is an anti-pattern that can lead to XSS vulnerabilities
+      this rule has been deprecated.
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      owasp:
+        - A03:2021 - Injection
+        - A07:2017 - Cross-Site Scripting (XSS)
+      references:
+        - https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
       category: security
+      deprecated: true
       technology:
         - react
     languages:

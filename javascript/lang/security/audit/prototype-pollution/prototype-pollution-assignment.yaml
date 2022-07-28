@@ -16,7 +16,11 @@ rules:
       ), blocking modifications of attributes that resolve to object prototype, using
       Map instead of object.
     metadata:
-      cwe: "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      cwe:
+        - "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
       category: security
       references:
         - https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf
@@ -26,6 +30,8 @@ rules:
     patterns:
       - pattern: |
           $X[$B] = ...
+      - pattern-not: |
+          $X[$B] = '...'
       - pattern-inside: |
           $X = $SMTH[$A]
           ...
@@ -33,10 +39,12 @@ rules:
           if (<...'constructor' ...>) {
             ...
           }
+          ...
       - pattern-not-inside: |
           if (<...'__proto__' ...>) {
             ...
           }
+          ...
       - pattern-not-inside: |
           for(var $B = $S; ...; ...) {...}
       - pattern-not-inside: |
