@@ -1,6 +1,7 @@
 import knex from "knex";
+import Knex from "knex";
 
-async function test1(input) {
+exports.handler = async (req,res,next) => {
   const connection = knex({
     client: "mysql",
     connection: {
@@ -16,10 +17,10 @@ async function test1(input) {
   await connection.raw(`
     INSERT INTO  (id, character, cartoon, link)
     VALUES(
-        '${input.id}', 
-        '${input.character}',
-        '${input.cartoon}', 
-        '${input.link}'
+        '${req.query.id}', 
+        '${req.body.character}',
+        '${req.query.cartoon}', 
+        '${req.foo.link}'
     )
     `);
 

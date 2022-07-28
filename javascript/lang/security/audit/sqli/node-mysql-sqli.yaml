@@ -2,8 +2,8 @@ rules:
   - id: node-mysql-sqli
     severity: WARNING
     message: >-
-      Detected a `$IMPORT` SQL statement that is tainted by user-input. This
-      could lead to SQL injection if the variable is user-controlled and is not
+      Detected a `$IMPORT` SQL statement that comes from a function argument. 
+      This could lead to SQL injection if the variable is user-controlled and is not
       properly sanitized. In order to prevent SQL injection, it is recommended to
       use parameterized queries or prepared statements.
     languages:
@@ -19,7 +19,9 @@ rules:
       owasp:
         - A03:2021 - Injection
         - A01:2017 - Injection
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+        ('SQL Injection')"
+      confidence: LOW
       technology:
         - mysql
         - mysql2
@@ -29,7 +31,14 @@ rules:
     pattern-sources:
       - patterns:
           - pattern-inside: function ... (..., $Y,...) {...}
-          - focus-metavariable: $Y
+          - pattern: $Y
+          - pattern-not-inside: |
+              function ... (..., $Y: number,...) {...}
+          - pattern-not-inside: $Y.query
+          - pattern-not-inside: $Y.body
+          - pattern-not-inside: $Y.params
+          - pattern-not-inside: $Y.cookies
+          - pattern-not-inside: $Y.headers
     pattern-sinks:
       - patterns:
           - focus-metavariable: $QUERY
@@ -52,3 +61,6 @@ rules:
           - metavariable-regex:
               metavariable: $IMPORT
               regex: (mysql|mysql2)
+    pattern-sanitizers:
+      - patterns:
+        - pattern: parseInt(...)
