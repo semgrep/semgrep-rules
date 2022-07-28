@@ -32,3 +32,14 @@ end
 def create
     user = User.create(person_params)
 end
+
+
+class SomeErrorClass < RuntimeError
+
+  def initialize()
+  end
+
+end
+
+#ok: model-attributes-attr-accessible
+SomeErrorClass.new()
