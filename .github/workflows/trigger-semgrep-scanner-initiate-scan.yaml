@@ -1,16 +1,31 @@
-name: Trigger semgrep-scanner argo workflow
+name: semgrep-scanner benchmarks
 
 on:
   workflow_dispatch:
   push:
-    branches: [release, develop]
-
+    branches: [release]
+  pull_request:
+    branches: [develop, release]
 jobs:
   trigger:
+    # do not run automatically if rule is posted from the playground (can still be started manually)
+    # PRs posted by first time contributors already need approval as well
+    if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
-      - name: Branch name
-        run: echo Running on branch ${GITHUB_REF##*/}
-      - name: Trigger semgrep-scanner argo workflow
+      - name: Print github.head_ref. branch that a PR is opened from
+        run: echo ${{ github.head_ref }}
+      - name: Print github.ref. branch a push is completed to (only release branch in current config)
+        run: echo ${{ github.ref }}
+      - name: Print github.event_name. either push or pull_request
+        run: echo ${{github.event_name}}
+      - name: Print github.event.number. PR issue number to post comment back to
+        run: echo ${{github.event.number}}
+      - name: Trigger semgrep-scanner argo workflow on push to release
+        if: github.event_name == 'push'
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${GITHUB_REF##*/}\" }"
+            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.ref}}\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"0000\", \"post_back\" : false }"
+      - name: Trigger semgrep-scanner argo workflow on PR to develop or release
+        if: github.event_name == 'pull_request'
+        run: |
+            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"${{github.event.number}}\", \"post_back\" : true }"
