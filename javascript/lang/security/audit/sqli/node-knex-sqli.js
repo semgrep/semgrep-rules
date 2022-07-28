@@ -1,6 +1,7 @@
 import knex from "knex";
+import Knex from "knex";
 
-async function test1(input) {
+exports.handler = async (req,res,next) => {
   const connection = knex({
     client: "mysql",
     connection: {
@@ -12,17 +13,9 @@ async function test1(input) {
     },
   });
 
-  // ruleid: node-knex-sqli
-  await connection.raw(`
-    INSERT INTO  (id, character, cartoon, link)
-    VALUES(
-        '${input.id}', 
-        '${input.character}',
-        '${input.cartoon}', 
-        '${input.link}'
-    )
-    `);
+  // ruleid: knex-sqli
+  await connection.raw(`INSERT INTO  (id) VALUES('${req.query.id}')`);
 
-  // ok: node-knex-sqli
+  // ok: knex-sqli
   await connection.raw('SELECT * FROM foobar');
 };
