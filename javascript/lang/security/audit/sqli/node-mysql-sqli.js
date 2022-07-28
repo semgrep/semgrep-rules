@@ -5,7 +5,8 @@ const mysql = require('mysql2');
 async function test2(req,res,next) {
 
     var createStmt = 'create temporary table ' + req.body.foo + '_jointemp (temp_seq int, '+ a + ' varchar(100)); ';
-  // ok: node-mysql-sqli -- diff rule
+  // ok: node-mysql-sqli
+  // diff rule
   await conn.query(createStmt);
 
 }
