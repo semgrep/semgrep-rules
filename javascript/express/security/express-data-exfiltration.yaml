@@ -4,12 +4,10 @@ rules:
     message: >-
       Depending on the context, user control data in `Object.assign` can cause web response to include data that it should not have or can lead to a mass assignment vulnerability.
     metadata:
-      owasp:
-        - "A04:2021 - Insecure Design"
       cwe: "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
       references:
+        - https://nodesecroadmap.fyi/chapter-1/threat-EXF.html
         - https://en.wikipedia.org/wiki/Mass_assignment_vulnerability
-        - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
       category: security
       technology:
         - express
@@ -22,30 +20,15 @@ rules:
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
               - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)
+              - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
+              - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
+              - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
+              - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
+              - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
+              - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
           - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - focus-metavariable: $REQ
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
+              - pattern: $REQ
+              - pattern: $REQ.$QUERY
+              - pattern: $REQ.$BODY.$PARAM
     pattern-sinks:
       - pattern: Object.assign(...)
