@@ -1,21 +1,25 @@
 rules:
   - id: hardcoded-http-auth-in-controller
-    pattern: |
-      class $CONTROLLER < ApplicationController
-        ...
-        http_basic_authenticate_with ..., :password => "...", ...
-      end
+    patterns:
+      - pattern-inside: |
+          class $CONTROLLER < ApplicationController
+            ...
+            http_basic_authenticate_with ..., :password => "$SECRET", ...
+          end
+      - focus-metavariable: $SECRET
     message: >-
       Detected hardcoded password used in basic authentication in a controller
       class. Including this password in version control could expose this
       credential. Consider refactoring to use environment variables or
       configuration files.
-    severity: ERROR
+    severity: WARNING
     metadata:
       cwe: "CWE-798: Use of Hard-coded Credentials"
       owasp:
         - A07:2021 - Identification and Authentication Failures
         - A03:2017 - Sensitive Data Exposure
+      references: 
+        - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
       source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
       category: security
       technology:
