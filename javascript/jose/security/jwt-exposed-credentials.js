@@ -1,129 +1,70 @@
-//jose
-function example30 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const token1 = JWT.sign({password: 123}, 'secret', {some: 'params'})
-}
+const jsonwt = require('jsonwebtoken')
 
-function example31 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = {one: 1, two: 2, password: 123}
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example32 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    let payload;
-    payload = {one: 1, two: 2, password: 123}
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example33 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = {}
-    payload.password = 123
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example34 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2})
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example35 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    let payload;
-    payload = Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2})
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example36 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const token1 = JWT.sign(Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
-}
-
-function example37 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const token1 = JWT.sign({user: {password: 123}}, 'secret', {some: 'params'})
-}
-
-function example38 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = {one: 1, two: 2, user: {password: 123}}
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example39 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    let payload;
-    payload = {one: 1, two: 2, user: {password: 123}}
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example40 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = {user:{}}
-    payload.user.password = 123
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example41 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const payload = Object.assign({user: {password: 123}}, {bar: 123}, {one: 1, two: 2})
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example42 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    let payload;
-    payload = Object.assign({user: {password: 123}}, {bar: 123}, {one: 1, two: 2})
-    const token1 = JWT.sign(payload, 'secret', {some: 'params'})
-}
-
-function example43 () {
-    // ruleid: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const token1 = JWT.sign(Object.assign({user: {password: 123}}, {bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
-}
-
-function exampleOk1() {
+function example1 () {
     // ok: jwt-exposed-credentials
-    const jose = require('jose')
-    const { JWK, JWT } = jose
-    const token1 = JWT.sign(Object.assign({bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
+    const token1 = jsonwt.sign({password: config}, 'secret', {some: 'params'})
 }
 
-function exampleOk2 () {
-    // ok: jwt-exposed-credentials
-    const jsonwt = require('jsonwebtoken')
-    let payload;
-    payload = {one: 1, two: 2, foo: 'bar'}
+function example2 () {
+    const payload = {one: 1, two: 2, password: "a"}
+    // ruleid: jwt-exposed-credentials
     const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
 }
+
+function example3 () {
+    let payload;
+    payload = {one: 1, two: 2, password: "a"}
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example4 () {
+    const payload = {}
+    payload.password = "a"
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example5 () {
+    const payload = Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2})
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example6 () {
+    let payload;
+    payload = Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2})
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example7 () {
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(Object.assign({password: 'bar'}, {bar: 123}, {one: 1, two: 2}), 'secret', {some: 'params'})
+}
+
+function example8 () {
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign({user: {password: "123"}}, 'secret', {some: 'params'})
+}
+
+function example9 () {
+    const payload = {one: 1, two: 2, user: {password: "123"}}
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example10 () {
+    let payload;
+    payload = {one: 1, two: 2, user: {password: "123"}}
+    // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
+function example11 () {
+    const payload = {...}
+    payload.password = "123"
+      // ruleid: jwt-exposed-credentials
+    const token1 = jsonwt.sign(payload, 'secret', {some: 'params'})
+}
+
