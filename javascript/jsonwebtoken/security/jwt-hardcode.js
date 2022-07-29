@@ -32,7 +32,7 @@ function example4() {
 function example5() {
   // ok: hardcoded-jwt-secret
   const payload = {foo: 'bar'}
-  const secret3 = process.env.SECRET || 'fallback-secret'
+  const secret3 = process.env.SECRET 
   const token5 = jsonwt.sign(payload, secret3)
 }
 
@@ -42,26 +42,6 @@ class Authentication {
     static sign(obj){
         // ruleid: hardcoded-jwt-secret
         return jsonwt.sign(obj, secret, {});
-    }
-
-    static authenticate(payload) {
-        var token = payload.token;
-        let promise = new Promise((resolve, reject) => {
-            if (token) {
-                jwt.verify(token, secret, function (err, decoded) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                         resolve(decoded);
-                    }
-                });
-            } else {
-                reject(new Error("No token provided"));
-            }
-        });
-
-        return promise;
-
     }
 }
 

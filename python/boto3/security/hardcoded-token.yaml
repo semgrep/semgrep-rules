@@ -1,44 +1,46 @@
 rules:
   - id: hardcoded-token
     message: >-
-      Hardcoded AWS access token detected. Attackers can possibly freely read this value
-      and gain access to the AWS environment. Instead, use environment variables to
-      access tokens (e.g., os.environ.get(...)) or use non version-controlled configuration
-      files.
+      A hard-coded credential was detected. It is not recommended 
+      to store credentials in source-code, as this risks secrets
+      being leaked and used by either an internal or external malicious adversary. 
+      It is recommended to use environment variables to 
+      securely provide credentials or retrieve credentials from 
+      a secure vault or HSM (Hardware Security Module).
     metadata:
       cwe: "CWE-798: Use of Hard-coded Credentials"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://pypi.org/project/flake8-boto3/
-      references:
+      referrences: 
+        - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
         - https://bento.dev/checks/boto3/hardcoded-access-token/
         - https://aws.amazon.com/blogs/security/what-to-do-if-you-inadvertently-expose-an-aws-access-key/
+      owasp:
+        - A07:2021 - Identification and Authentication Failures
+        - A03:2017 - Sensitive Data Exposure
       category: security
       technology:
         - boto3
+        - secrets
     languages: [python]
     severity: WARNING
-    pattern-either:
-    - patterns:
+    mode: taint
+    pattern-sources:
       - pattern: |
-          $W(..., aws_secret_access_key="$ACCESSKEY", ...)
-      - metavariable-regex:
-          metavariable: $ACCESSKEY
-          regex: ^[A-Za-z0-9/+=]+$
-      - metavariable-analysis:
-          metavariable: $ACCESSKEY
-          analyzer: entropy
-    - patterns:
-      - pattern: |
-          $W(..., aws_access_key_id="$KEYID", ...)
-      - metavariable-regex:
-          metavariable: $KEYID
-          regex: ^AKI
-      - metavariable-analysis:
-          metavariable: $KEYID
-          analyzer: entropy
-    - patterns:
-      - pattern: |
-          $W(..., aws_session_token="$TOKEN", ...)
-      - metavariable-analysis:
-          metavariable: $TOKEN
-          analyzer: entropy
+              "..."
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $W(...,$TOKEN="$VALUE",...)
+              - pattern: $BOTO. ... .$W(...,$TOKEN="$VALUE",...)
+          - metavariable-regex:
+              metavariable: $TOKEN
+              regex: (aws_session_token|aws_access_key_id|aws_secret_access_key)
+          - metavariable-pattern:
+              language: generic
+              metavariable: $VALUE
+              patterns:
+                - pattern-either:
+                    - pattern-regex: ^AKI
+                    - pattern-regex: ^[A-Za-z0-9/+=]+$
+          - metavariable-analysis:
+              metavariable: $VALUE
+              analyzer: entropy

@@ -1,5 +1,4 @@
 let passport = require('passport');
-// ruleid: hardcoded-passport-secret
 let JwtStrategy = require('passport-jwt').Strategy;
 let ExtractJwt = require('passport-jwt').ExtractJwt;
 
@@ -21,6 +20,7 @@ module.exports = (options)=> {
         issuer: jwtConfig.issuer,
         audience: jwtConfig.audience
     };
+    // ruleid: hardcoded-passport-secret
     passport.use(new JwtStrategy(this.passportOptions, (jwt_payload, done)=> {
         // do something
     }));

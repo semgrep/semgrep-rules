@@ -3,10 +3,10 @@ var passport = require('passport')
 module.exports = class Auth {
   constructor (config) {
     this.passport = passport
-    // ruleid: hardcoded-passport-secret
+
     var JwtStrategy = require('passport-jwt').Strategy
     this.jwt_secret = 'HARDCODED-SECRET'
-
+    // ruleid: hardcoded-passport-secret
     passport.use(new JwtStrategy({
       secretOrKey: this.jwt_secret
     }, function (payload, done) {

@@ -1,71 +1,43 @@
 rules:
   - id: java-jwt-hardcoded-secret
     message: >-
-      Hardcoded JWT secret or private key is used.
-      This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-      Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
+      A hard-coded credential was detected. It is not recommended 
+      to store credentials in source-code, as this risks secrets
+      being leaked and used by either an internal or external malicious adversary. 
+      It is recommended to use environment variables to 
+      securely provide credentials or retrieve credentials from 
+      a secure vault or HSM (Hardware Security Module).
     metadata:
-      cwe: "CWE-522: Insufficiently Protected Credentials"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      referrences: 
+        - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+      owasp:
+        - A07:2021 - Identification and Authentication Failures
+        - A03:2017 - Sensitive Data Exposure
       category: security
-      technology:
-        - jwt
-      confidence: MEDIUM
     languages: [java]
-    severity: ERROR
-    pattern-either:
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC256("...");
-      - pattern: |
-          $SECRET = "...";
-          ...
-          com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $TYPE $SECRET = "...";
-            ...
-            $RETURNTYPE $FUNC (...) {
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (Algorithm $ALG) = $ALGO.$HMAC("$Y");
+          - pattern: |
+              $SECRET = "$Y";
               ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
-              ...
-            }
-            ...
-          }
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC384("...");
-      - pattern: |
-          $SECRET = "...";
-          ...
-          com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $TYPE $SECRET = "...";
-            ...
-            $RETURNTYPE $FUNC (...) {
-              ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
-              ...
-            }
-            ...
-          }
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC512("...");
-      - pattern: |
-          $SECRET = "...";
-          ...
-          com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $TYPE $SECRET = "...";
-            ...
-            $RETURNTYPE $FUNC (...) {
-              ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
-              ...
-            }
-            ...
-          }
+              (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
+          - pattern: |
+              class $CLASS {
+                ...
+                $TYPE $SECRET = "$Y";
+                ...
+                $RETURNTYPE $FUNC (...) {
+                  ...
+                  (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
+                  ...
+                }
+                ...
+              }
+      - focus-metavariable: $Y
+      - metavariable-regex:
+          metavariable: $HMAC
+          regex: (HMAC384|HMAC256|HMAC512)
