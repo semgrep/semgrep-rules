@@ -88,7 +88,7 @@ module.exports = class Auth {
     obj1.clientSecret = 'a'
     // ruleid: hardcoded-passport-secret     
     new JwtStrategy(obj1)
-    // ok   : hardcoded-passport-secret     
+    // ok: hardcoded-passport-secret     
     new JwtStrategy(obj2)
     // ruleid: hardcoded-passport-secret      
     passport.use(new JwtStrategy({secretOrKey: this.jwt_secret}, function (payload, done) {
