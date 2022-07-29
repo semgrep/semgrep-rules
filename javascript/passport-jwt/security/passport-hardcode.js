@@ -9,8 +9,6 @@ exports.init = function(passport, router, config) {
     // ruleid: hardcoded-passport-secret
       {
         clientID: config.appId,
-        // ruleid: hardcoded-passport-secret
-
         clientSecret: 'HARDCODED-SECRET',
         callbackURL: config.publicAddress + config.callbackURL,
         enableProof: false,
