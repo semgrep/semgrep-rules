@@ -37,7 +37,6 @@ type Claims struct {
 func Signin(w http.ResponseWriter, r *http.Request) {
 
 	// Create the JWT key used to create the signature
-	// ruleid: hardcoded-jwt-key
 	var jwtKey = []byte("my_secret_key")
 	var x = "foo"
 
@@ -75,6 +74,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 
 	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// ruleid: hardcoded-jwt-key
 	tokenString, err := token.SignedString(jwtKey)
 	// ruleid: hardcoded-jwt-key
 	tokenString, err := token.SignedString([]byte("my_secret_key"))

@@ -20,13 +20,16 @@ rules:
         - secrets
       confidence: MEDIUM
     severity: WARNING
-    patterns:
-      - pattern-either:
-        - pattern: |
-            $X = []byte("$F")
-            ...
-            $TOKEN.SignedString($X)
-        - pattern: |
-            $TOKEN.SignedString([]byte("$F"))
-      - focus-metavariable: $F
-    languages: [go]
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: |
+            []byte("$F")
+        - patterns:
+          - pattern: "..."
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $TOKEN.SignedString($F)
+        - focus-metavariable: $F
