@@ -3,7 +3,6 @@ rules:
   mode: taint
   pattern-sources:
     - patterns:
-      - focus-metavariable: $ARG
       - pattern-either:
         - pattern: |
             public IActionResult $METHOD(..., $TYPE $ARG, ...){
@@ -24,6 +23,7 @@ rules:
           public ActionResult $METHOD(..., [Bind(...)] $TYPE $ARG, ...){
             ...
           }
+      - focus-metavariable: $ARG
   pattern-sinks:
     - pattern: View(...)
   message: Mass assignment or Autobinding vulnerability in code allows an attacker
