@@ -15,7 +15,8 @@ rules:
     severity: ERROR
     mode: taint
     pattern-sources:
-      - pattern: params
+    - pattern-either:
+      - pattern: params[...]
       - pattern: cookies
       - pattern: request.env
     pattern-sinks:
@@ -54,6 +55,7 @@ rules:
                     - pattern: load_file
                     - pattern: makedirs
                     - pattern: move
+                    - pattern: new
                     - pattern: open
                     - pattern: read
                     - pattern: readlines
