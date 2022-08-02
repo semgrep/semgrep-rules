@@ -3,6 +3,10 @@ name: docker
 
 on:
   workflow_dispatch:
+    inputs:
+      message_to_print:
+        type: string
+        required: false
   push:
     branches:
       - develop
@@ -83,7 +87,9 @@ jobs:
           echo "PR title did not start with 'octocat'"
           exit 1
           fi
-
+      - name: Print a message
+        run: |
+          echo "${{github.event.inputs.message_to_print}}""
       - name: Show author email
         # ruleid: run-shell-injection
         run: |
