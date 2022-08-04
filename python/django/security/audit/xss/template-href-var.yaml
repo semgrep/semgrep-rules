@@ -18,10 +18,14 @@ rules:
       technology:
         - django
     languages:
-      - regex
+      - generic
     paths:
       include:
         - "*.html"
     severity: WARNING
-    pattern-regex: |-
-      .*href\s*=\s*[\"\']?{{\s*.*
+    patterns:
+    - pattern-inside: <a ...>
+    - pattern-either:
+      - pattern: href = '{{...}}'
+      - pattern: href = "{{...}}"
+      - pattern: href = {{...}}
