@@ -1,0 +1,24 @@
+rules:
+- id: react-find-dom-copy
+  pattern-either:
+  - pattern: 'findDOMNode(...)
+
+      '
+  - pattern: '$DOM.findDOMNode(...)
+
+      '
+  message: findDOMNode is an escape hatch used to access the underlying DOM node.
+    In most cases, use of this escape hatch is discouraged because it pierces the
+    component abstraction.
+  metadata:
+    references:
+    - https://reactjs.org/docs/react-dom.html#finddomnode
+    - https://github.com/yannickcr/eslint-plugin-react/issues/678#issue-165177220
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
