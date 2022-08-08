@@ -1,16 +1,24 @@
 rules:
   - id: detect-non-literal-regexp
-    patterns:
-      - pattern-either:
-          - pattern: new RegExp($ARG, ...)
-          - pattern: RegExp($ARG, ...)
-      - pattern-not: RegExp("...", ...)
-      - pattern-not: new RegExp("...", ...)
-      - pattern-not: RegExp(/.../, ...)
-      - pattern-not: new RegExp(/.../, ...)
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: |
+            function ... (...,$ARG,...) {...}
+        - focus-metavariable: $ARG
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
+            - pattern: new RegExp($ARG, ...)
+            - pattern: RegExp($ARG, ...)
+        - pattern-not: RegExp("...", ...)
+        - pattern-not: new RegExp("...", ...)
+        - pattern-not: RegExp(/.../, ...)
+        - pattern-not: new RegExp(/.../, ...)
     message: >-
-      RegExp() called with a variable, this might allow an attacker to DOS your application
-      with a long-running regular expression.
+       RegExp() called with a `$ARG` function argument, this might 
+       allow an attacker to cause a Denial of Service (DoS) 
+       within your application as RegExP which blocks the main thread.
     languages:
       - javascript
       - typescript
