@@ -1,7 +1,8 @@
 rules:
   - id: detect-child-process
     metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command
+        ('OS Command Injection')"
       owasp:
         - A03:2021 - Injection
         - A01:2017 - Injection
@@ -11,25 +12,37 @@ rules:
       category: security
       technology:
         - javascript
-    message: >-
-      Detected non-literal calls to $EXEC(). This could lead to a command
-      injection vulnerability.
-    patterns:
-      - pattern-either:
-          - pattern: child_process.exec($CMD,...)
-          - pattern: child_process.execSync($CMD,...)
-          - pattern: child_process.spawn($CMD,...)
-          - pattern: child_process.spawnSync($CMD,...)
-      - pattern-not-inside: child_process.$EXEC("...",...)
-      - pattern-not-inside: child_process.$EXEC(["...",...],...)
-      - pattern-not-inside: |
-          $CMD = "..."
-          ...
-      - pattern-not-inside: |
-          $CMD = ["...",...]
-          ...
-      - focus-metavariable: $CMD
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    message: >- 
+      Detected calls to child_process from a function argument `$FUNC`. This could lead to a command injection if the input is 
+      user controllable, where possible avoid calls to child_process, 
+      if it is needed ensure user input is correctly sanitized or sandboxed. 
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              function ... (...,$FUNC,...) {
+                ...
+              }
+          - focus-metavariable: $FUNC
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: child_process.exec($CMD,...)
+              - pattern: child_process.execSync($CMD,...)
+              - pattern: child_process.spawn($CMD,...)
+              - pattern: child_process.spawnSync($CMD,...)
+          - pattern-not-inside: child_process.$EXEC("...",...)
+          - pattern-not-inside: child_process.$EXEC(["...",...],...)
+          - pattern-not-inside: |
+              $CMD = "..."
+              ...
+          - pattern-not-inside: |
+              $CMD = ["...",...]
+              ...
+          - focus-metavariable: $CMD
     severity: ERROR
     languages:
       - javascript
       - typescript
+    

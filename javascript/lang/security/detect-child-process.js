@@ -1,12 +1,22 @@
 const {exec, spawnSync} = require('child_process');
 
+
+function a(args) {
 // ruleid:detect-child-process
-exec(`cat *.js ${userInput}| wc -l`, (error, stdout, stderr) => {
+exec(`cat *.js ${args[0]}| wc -l`, (error, stdout, stderr) => {
   console.log(stdout)
 });
+}
 
+
+
+function a(userInput) {
 // ruleid:detect-child-process
 spawnSync(userInput);
+}
+
+
+
 
 // ok:detect-child-process
 exec('ls')
