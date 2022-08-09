@@ -1,70 +1,97 @@
 rules:
-  - id: detect-non-literal-fs-filename
-    patterns:
-      - pattern-inside: |
-          $X = require('fs')
-          ...
-      - pattern-not: $FS.$METHOD("...", ...)
-      - pattern-either:
-          - pattern: $FS.appendFile($FILE,...)
-          - pattern: $FS.appendFileSync($FILE,...)
-          - pattern: $FS.chmod($FILE,...)
-          - pattern: $FS.chmodSync($FILE,...)
-          - pattern: $FS.chown($FILE,...)
-          - pattern: $FS.chownSync($FILE,...)
-          - pattern: $FS.createReadStream($FILE,...)
-          - pattern: $FS.createWriteStream($FILE,...)
-          - pattern: $FS.exists($FILE,...)
-          - pattern: $FS.existsSync($FILE,...)
-          - pattern: $FS.lchmod($FILE,...)
-          - pattern: $FS.lchmodSync($FILE,...)
-          - pattern: $FS.lchown($FILE,...)
-          - pattern: $FS.lchownSync($FILE,...)
-          - pattern: $FS.link($FILE,...)
-          - pattern: $FS.linkSync($FILE,...)
-          - pattern: $FS.lstat($FILE,...)
-          - pattern: $FS.lstatSync($FILE,...)
-          - pattern: $FS.mkdir($FILE,...)
-          - pattern: $FS.mkdirSync($FILE,...)
-          - pattern: $FS.open($FILE,...)
-          - pattern: $FS.openSync($FILE,...)
-          - pattern: $FS.readdir($FILE,...)
-          - pattern: $FS.readdirSync($FILE,...)
-          - pattern: $FS.readFile($FILE,...)
-          - pattern: $FS.readFileSync($FILE,...)
-          - pattern: $FS.readlink($FILE,...)
-          - pattern: $FS.readlinkSync($FILE,...)
-          - pattern: $FS.realpath($FILE,...)
-          - pattern: $FS.realpathSync($FILE,...)
-          - pattern: $FS.rename($FILE,...)
-          - pattern: $FS.renameSync($FILE,...)
-          - pattern: $FS.rmdir($FILE,...)
-          - pattern: $FS.rmdirSync($FILE,...)
-          - pattern: $FS.stat($FILE,...)
-          - pattern: $FS.statSync($FILE,...)
-          - pattern: $FS.symlink($FILE,...)
-          - pattern: $FS.symlinkSync($FILE,...)
-          - pattern: $FS.truncate($FILE,...)
-          - pattern: $FS.truncateSync($FILE,...)
-          - pattern: $FS.unlink($FILE,...)
-          - pattern: $FS.unlinkSync($FILE,...)
-          - pattern: $FS.unwatchFile($FILE,...)
-          - pattern: $FS.utimes($FILE,...)
-          - pattern: $FS.utimesSync($FILE,...)
-          - pattern: $FS.watch($FILE,...)
-          - pattern: $FS.watchFile($FILE,...)
-          - pattern: $FS.writeFile($FILE,...)
-          - pattern: $FS.writeFileSync($FILE,...)
-    message: >-
-      A variable is present in the filename argument of fs calls, this might allow an
-      attacker to access anything on your system.
-    languages:
+- id: detect-non-literal-fs-filename
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern-inside: function ... (..., $ARG,...) {...}
+        - focus-metavariable: $ARG
+  pattern-sinks:
+    - patterns:
+        - pattern-either: 
+            - pattern-inside: |
+                $FS = require('fs')
+                ...
+            - pattern-inside: |
+                import * as $FS from 'fs'
+                ...
+            - pattern-inside: |
+                import $FS from 'fs'
+                ...
+            - pattern-inside: |
+                import { ..., $FS, ...} from 'fs'
+                ...
+        - pattern-not: $FS. ... .$METHOD("...", ...)
+        - pattern-either:
+            - pattern: $FS. ... .appendFile($FILE,...)
+            - pattern: $FS. ... .appendFileSync($FILE,...)
+            - pattern: $FS. ... .chmod($FILE,...)
+            - pattern: $FS. ... .chmodSync($FILE,...)
+            - pattern: $FS. ... .chown($FILE,...)
+            - pattern: $FS. ... .chownSync($FILE,...)
+            - pattern: $FS. ... .createReadStream($FILE,...)
+            - pattern: $FS. ... .createWriteStream($FILE,...)
+            - pattern: $FS. ... .exists($FILE,...)
+            - pattern: $FS. ... .existsSync($FILE,...)
+            - pattern: $FS. ... .lchmod($FILE,...)
+            - pattern: $FS. ... .lchmodSync($FILE,...)
+            - pattern: $FS. ... .lchown($FILE,...)
+            - pattern: $FS. ... .lchownSync($FILE,...)
+            - pattern: $FS. ... .link($FILE,...)
+            - pattern: $FS. ... .linkSync($FILE,...)
+            - pattern: $FS. ... .lstat($FILE,...)
+            - pattern: $FS. ... .lstatSync($FILE,...)
+            - pattern: $FS. ... .mkdir($FILE,...)
+            - pattern: $FS. ... .mkdirSync($FILE,...)
+            - pattern: $FS. ... .open($FILE,...)
+            - pattern: $FS. ... .openSync($FILE,...)
+            - pattern: $FS. ... .readdir($FILE,...)
+            - pattern: $FS. ... .readdirSync($FILE,...)
+            - pattern: $FS. ... .readFile($FILE,...)
+            - pattern: $FS. ... .readFileSync($FILE,...)
+            - pattern: $FS. ... .readlink($FILE,...)
+            - pattern: $FS. ... .readlinkSync($FILE,...)
+            - pattern: $FS. ... .realpath($FILE,...)
+            - pattern: $FS. ... .realpathSync($FILE,...)
+            - pattern: $FS. ... .rename($FILE,...)
+            - pattern: $FS. ... .renameSync($FILE,...)
+            - pattern: $FS. ... .rmdir($FILE,...)
+            - pattern: $FS. ... .rmdirSync($FILE,...)
+            - pattern: $FS. ... .stat($FILE,...)
+            - pattern: $FS. ... .statSync($FILE,...)
+            - pattern: $FS. ... .symlink($FILE,...)
+            - pattern: $FS. ... .symlinkSync($FILE,...)
+            - pattern: $FS. ... .truncate($FILE,...)
+            - pattern: $FS. ... .truncateSync($FILE,...)
+            - pattern: $FS. ... .unlink($FILE,...)
+            - pattern: $FS. ... .unlinkSync($FILE,...)
+            - pattern: $FS. ... .unwatchFile($FILE,...)
+            - pattern: $FS. ... .utimes($FILE,...)
+            - pattern: $FS. ... .utimesSync($FILE,...)
+            - pattern: $FS. ... .watch($FILE,...)
+            - pattern: $FS. ... .watchFile($FILE,...)
+            - pattern: $FS. ... .writeFile($FILE,...)
+            - pattern: $FS. ... .writeFileSync($FILE,...)
+        - focus-metavariable: $FILE
+  message: >-
+      Detected function `$ARG` enter fs module. An attacker could 
+      potentially control the location of this file, to include going 
+      backwards in the directory with '../'. To address this, 
+      ensure that user-controlled variables in file paths are validated.
+  languages:
+    - typescript
+    - javascript
+  severity: WARNING
+  metadata:
+    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path
+      Traversal')"
+    references:
+      - https://owasp.org/www-community/attacks/Path_Traversal
+    owasp:
+      - A01:2021 - Broken Access Control
+      - A05:2017 - Broken Access Control
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-fs-filename.js
+    category: security
+    technology:
       - typescript
-      - javascript
-    severity: WARNING
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-fs-filename.js
-      category: security
-      technology:
-        - typescript
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  
