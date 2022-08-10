@@ -1,5 +1,5 @@
-const {readFile} = require('fs/promises')
-const fs = require('fs')
+import * as fs from 'fs/promises';
+import {readFile} from 'fs';
 
 function test1(fileName) {
   // ruleid:detect-non-literal-fs-filename
