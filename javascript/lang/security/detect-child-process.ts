@@ -1,5 +1,5 @@
-const {exec, spawnSync} = require('child_process');
-const cp = require('child_process'); 
+import { exec } from 'child_process'
+import * as cp from 'child_process';
 
 function a(args) {
   // ruleid:detect-child-process
