@@ -37,20 +37,21 @@ rules:
             - pattern-inside: function ... ($REQ, $RES) {...}
             - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
             - patterns:
-                - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                - pattern-either:
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
                 - metavariable-regex:
                     metavariable: $METHOD
-                    regex: ^(get|post|put|head|delete|options)
+                    regex: ^(get|post|put|head|delete|options)$
         - pattern-either:
             - pattern: $REQ.query
             - pattern: $REQ.body
             - pattern: $REQ.params
             - pattern: $REQ.cookies
             - pattern: $REQ.headers
-            - pattern: $REQ.files
     - patterns:
         - pattern-either:
-            - pattern-inside: |
+            - pattern-inside: >
                 ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
                 {...}
             - pattern-inside: |
@@ -62,7 +63,6 @@ rules:
             - pattern: cookies
             - pattern: headers
             - pattern: body
-            - pattern: files
     metadata:
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
