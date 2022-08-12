@@ -3,32 +3,10 @@ rules:
     languages: [generic]
     severity: INFO
     message: >-
-      Translated strings will not be escaped when rendered in a template.
-      This leads to a vulnerability where translators could include malicious script tags in their translations.
-      Consider using `force_escape` to explicitly escape a translated text.
+      This rule is deprecated. It will no longer produce findings.
     patterns:
-      - pattern-either:
-          - pattern: |
-              {% translate...%}
-          - pattern: |
-              {% trans...%}
-      - pattern-not: |
-          {% translate...as...%}
-      - pattern-not: |
-          {% trans...as...%}
-      - pattern-not-inside: |
-          {%...filter...force_escape...%}
-          ...
-          ...
-          ...
-          ...
-          ...
-          ...
-          ...
-          ...
-          ...
-          ...
-          {%...endfilter...%}
+    - pattern: a()
+    - pattern: b()
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       owasp: "A7: Cross-Site Scripting (XSS)"
@@ -38,3 +16,4 @@ rules:
       category: security
       technology:
         - django
+      deprecated: true
