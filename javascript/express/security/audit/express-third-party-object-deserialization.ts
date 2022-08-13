@@ -3,7 +3,7 @@ var serialize_to_js = require('serialize-to-js');
 
 module.exports.value = function (req,res){
 	// ruleid: express-third-party-object-deserialization
-	node_serialize.unserialize(req.files.products.data.toString('utf8'))
+	node_serialize.unserialize(req.query.products)
 	// ok: express-third-party-object-deserialization
 	fake.unserialize(req.files)
 }
