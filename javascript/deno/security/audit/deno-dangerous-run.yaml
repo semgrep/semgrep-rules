@@ -9,27 +9,25 @@ rules:
     message: >-
       Detected non-literal calls to Deno.run(). This could lead to a command
       injection vulnerability.
-    pattern-either:
+    mode: taint
+    pattern-sources:
       - patterns:
+          - pattern-inside: function ... (..., $ARG,...) {...}
+          - focus-metavariable: $ARG
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
           - pattern: |
-              Deno.run({cmd: [$CMD,...]},...)
-          - pattern-not-inside: |
-              $CMD = "..."
-              ...
-          - pattern-not: |
-              Deno.run({cmd: ["...",...]},...)
-      - patterns:
-          - pattern-either:
+              Deno.run({cmd: [$INPUT,...]},...)
+          - pattern: |
+              Deno.run({cmd: ["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$INPUT,...]},...)
+          - patterns:
               - pattern: |
-                  Deno.run({cmd: ["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...]},...)
-              - patterns:
-                  - pattern: |
-                      Deno.run({cmd: [$CMD,"-c",$ARG,...]},...)
-                  - pattern-inside: |
-                      $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
-                      ...
-          - pattern-not: |
-              Deno.run({cmd: [$CMD,"-c","...",...]},...)
+                  Deno.run({cmd: [$CMD,"-c",$INPUT,...]},...)
+              - pattern-inside: |
+                  $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+                  ...
+        - focus-metavariable: $INPUT
     severity: ERROR
     languages:
       - javascript

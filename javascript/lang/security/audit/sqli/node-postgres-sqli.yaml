@@ -1,35 +1,16 @@
 rules:
   - id: node-postgres-sqli
-    patterns:
-      - pattern-either:
-          - patterns:
-              - pattern-either:
-                  - pattern: |
-                      $DB.query(...,$QUERY,...)
-                  - pattern: |
-                      $DB.query(..., $QUERY, ...).$INTFUNC(...)
-              - pattern-either:
-                  - pattern-inside: |
-                      $QUERY = $X + $Y
-                      ...
-                  - pattern-inside: |
-                      $QUERY += $X
-                      ...
-                  - pattern-inside: |
-                      $QUERY = $X.concat($Y)
-                      ...
-              - pattern-not-inside: |
-                  $QUERY += "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = "..." + "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = $X.concat("...")
-                  ...
-          - pattern: $DB.query(..., $X + $Y, ...)
-          - pattern: $DB.query(..., $X.concat($Y), ...)
-      - pattern-either:
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              function ... (...,$FUNC,...) {
+                ...
+              }
+          - focus-metavariable: $FUNC
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
           - pattern-inside: |
               const { $CLIENT } = require('pg')
               ...
@@ -43,10 +24,10 @@ rules:
               $NEWPOOL.connect((..., $DB, ...) => {
                   ...
               })
-      - pattern-not: $DB.query(..., "..." + "...", ...)
-      - pattern-not: $DB.query(..., $X.concat("..."), ...)
+        - pattern: $DB.query($QUERY,...)
+        - focus-metavariable: $QUERY
     languages:
-      - js
+      - javascript
       - typescript
     message: >-
       Detected string concatenation with a non-literal variable in a node-postgres

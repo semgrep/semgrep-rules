@@ -1,7 +1,7 @@
 rules:
   - id: node-mssql-sqli
     languages:
-      - js
+      - javascript
       - typescript
     message: >-
       Detected string concatenation with a non-literal variable in a
@@ -18,45 +18,27 @@ rules:
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       references:
         - https://node-postgres.com/features/queries
-    patterns:
-      - pattern-inside: |
-          require('mssql')
-          ...
-      - pattern-inside: |
-          $REQ = $POOL.request(...)
-          ...
-      - pattern-either:
-          - patterns:
-              - pattern-either:
-                  - pattern: |
-                      $REQ.query($QUERY,...)
-                  - pattern: |
-                      $REQ.query($QUERY, ...).$INTFUNC(...)
-              - pattern-either:
-                  - pattern-inside: |
-                      $QUERY = $X + $Y
-                      ...
-                  - pattern-inside: |
-                      $QUERY += $X
-                      ...
-                  - pattern-inside: |
-                      $QUERY = $X.concat($Y)
-                      ...
-                  - pattern-inside: |
-                      $QUERY = `...${...}...`
-                      ...
-              - pattern-not-inside: |
-                  $QUERY += "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = "..." + "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = $X.concat("...")
-                  ...
-          - pattern: $REQ.query($X + $Y, ...)
-          - pattern: $REQ.query($X.concat($Y), ...)
-          - pattern: $REQ.query(`...${...}...`, ...)
-      - pattern-not: $REQ.query("..." + "...", ...)
-      - pattern-not: $REQ.query($X.concat("..."), ...)
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              function ... (...,$FUNC,...) {
+                ...
+              }
+          - focus-metavariable: $FUNC
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              require('mssql');
+              ...
+          - pattern-inside: |
+              import 'mssql';
+              ...
+        - pattern-inside: |
+            $REQ = $POOL.request(...)
+            ...
+        - pattern: |
+            $REQ.query($QUERY,...)
+        - focus-metavariable: $QUERY
     severity: WARNING
