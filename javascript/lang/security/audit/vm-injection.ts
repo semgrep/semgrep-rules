@@ -1,5 +1,5 @@
-const vm = require('vm')
-const { runInContext } = require('vm')
+import * as vm from 'vm';
+import { runInContext } from 'vm';
 
 function test1(userInput) {
     var input = userInput.something || ''
