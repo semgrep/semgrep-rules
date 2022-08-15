@@ -3,7 +3,7 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // ruleid: jwt-securitytoken-no-expiry-validation
+                    // ruleid: jwt-tokenvalidationparameters-no-expiry-validation
                     ValidateLifetime = false,
                     RequireSignedTokens = true,
                     ValidateIssuer = false,
@@ -16,10 +16,19 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // ok: jwt-securitytoken-no-expiry-validation
+                    // ok: jwt-tokenvalidationparameters-no-expiry-validation
                     ValidateLifetime = true,
                     RequireSignedTokens = true,
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
+
+TokenValidationParameters parameters = new TokenValidationParameters();
+parameters.RequireExpirationTime = false;
+parameters.ValidateAudience = false;
+parameters.ValidateIssuer = false;
+// ruleid: jwt-tokenvalidationparameters-no-expiry-validation
+parameters.ValidateLifetime = false;
+// ok: jwt-tokenvalidationparameters-no-expiry-validation
+parameters.ValidateLifetime = true;
