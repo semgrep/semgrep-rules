@@ -37,6 +37,12 @@ rules:
       You can use parameterized statements like so:
       `client.query('SELECT $1 from table', [userinput])`
     metadata:
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe: >
+        CWE-89: Improper Neutralization of Special Elements used in an SQL
+        Command ('SQL Injection')
       references:
         - https://node-postgres.com/features/queries
       category: security

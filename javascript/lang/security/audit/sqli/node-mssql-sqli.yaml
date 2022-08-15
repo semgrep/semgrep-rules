@@ -12,12 +12,18 @@ rules:
       You can use parameterized statements like so:
       `$REQ.input('USER_ID', mssql.Int, id);`
     metadata:
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe: >
+        CWE-89: Improper Neutralization of Special Elements used in an SQL
+        Command ('SQL Injection')
       category: security
       technology:
         - mssql
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       references:
-        - https://node-postgres.com/features/queries
+        - https://www.npmjs.com/package/mssql
     mode: taint
     pattern-sources:
       - patterns:

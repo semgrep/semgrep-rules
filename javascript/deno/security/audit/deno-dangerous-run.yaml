@@ -2,10 +2,12 @@ rules:
   - id: deno-dangerous-run
     metadata:
       cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A1: Injection"
+      owasp: "A03:2021 - Injection"
       category: security
       technology:
         - deno
+      references:
+        - https://deno.land/manual/examples/subprocess#simple-example
     message: >-
       Detected non-literal calls to Deno.run(). This could lead to a command
       injection vulnerability.
