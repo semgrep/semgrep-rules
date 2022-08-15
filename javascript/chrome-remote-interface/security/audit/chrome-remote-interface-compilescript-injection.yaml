@@ -10,14 +10,31 @@ rules:
       technology:
         - chrome-remote-interface
     languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('chrome-remote-interface');
-          ...
-      - pattern-not-inside: |
-          var $INPUT = "...";
-          ...
-      - pattern: |
-          $RUNTIME.compileScript({expression: $INPUT},...)
-      - pattern-not: |-
-          $RUNTIME.compileScript({expression: "..."},...)
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: function ... (..., $ARG,...) {...}
+          - focus-metavariable: $ARG
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              require('chrome-remote-interface');
+              ...
+          - pattern-inside: |
+              import 'chrome-remote-interface';
+              ...
+        - pattern-either:
+          - pattern: |
+              $RUNTIME.compileScript({expression: $SINK},...)
+          - pattern: |
+              $RUNTIME.evaluate({expression: $SINK},...)
+          - pattern: |
+              $PAGE.navigate({url: $SINK},...)
+          - pattern: |
+              $RUNTIME.printToPDF({headerTemplate: $SINK},...)
+          - pattern: |
+              $RUNTIME.printToPDF({footerTemplate: $SINK},...)
+          - pattern: |
+              $PAGE.setDocumentContent({html: $SINK},...)
+        - focus-metavariable: $SINK
