@@ -32,3 +32,6 @@ include(__DIR__ . 'constant.php');
 
 // ok: file-inclusion
 include_safe(__DIR__ . $user_input);
+
+// ok: file-inclusion
+require_once(CONFIG_DIR . '/constant.php');
