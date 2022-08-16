@@ -7,22 +7,14 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     }
     else
     {
-        // ruleid: missing-hsts-header
         app.UseExceptionHandler("/Error");
     }
-    // ruleid: missing-hsts-header
     app.UseHttpsRedirection();    
-    // ruleid: missing-hsts-header      
     app.UseStaticFiles();
-    // ruleid: missing-hsts-header      
     app.UseRouting();
-    // ruleid: missing-hsts-header      
     app.UseAuthentication();
-    // ruleid: missing-hsts-header      
     app.UseAuthorization();
-    // ruleid: missing-hsts-header      
     app.UseSession();
-    // ruleid: missing-hsts-header      
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapRazorPages();
