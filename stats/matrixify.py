@@ -4,10 +4,12 @@
 # Run: python matrixify.py .
 
 import logging
+from nis import match
 import yaml
 import os
 import json
 import sys
+import re
 
 from collections import defaultdict
 from typing import Dict, List, Set, Any
@@ -132,22 +134,37 @@ def is_high_confidence(rule: Dict[str, Any]) -> bool:
 # Fixes rules that have wacky owasp tags, like not having both the name and number, having misspellings, being mislabelled, etc
 def normalize_owasp(owasp: str) -> str:
     if "A01:2017" in owasp or "A03:2021" in owasp:
-        return "A1: Injection"
+        return "Injection"
     if "A01:2021" in owasp:
-        return "A5: Broken Access Control"
+        return "Broken Access Control"
     if "A02:2017" in owasp:
-        return "A2: Broken Authentication"
+        return "Broken Authentication"
     if "A03:2017" in owasp or "A02:2021" in owasp: # Maps "Cryptographic Failures" to "Sensitive Data Exposure"
-        return "A3: Sensitive Data Exposure"
+        return "Sensitive Data Exposure"
     if "A05:2021" in owasp or "A06:2017" in owasp:
-        return "A6: Security Misconfiguration"
+        return "Security Misconfiguration"
     if "A05:2017" in owasp:
-        return "A5: Broken Access Control"
+        return "Broken Access Control"
     if "A07:2017" in owasp:
-        return "A7: Cross-Site Scripting (XSS)"
+        return "Cross-Site Scripting"
     if "A10:2021" in owasp:
-        return "A10:2021 - Server-Side Request Forgery (SSRF)"
-    return owasp
+        return "Server-Side Request Forgery"
+
+    match = re.search(r'^A(0?[1-9]|10):([\D].+)$', owasp)
+    if match is None:
+        #do smth
+        match = re.search(r'^.*A[01][0-9]:[0-9]{4}:?(\s+.*)$', owasp)
+        if match is None:
+            return owasp
+        else:
+            result = match.group(1)
+    else:
+        result = match.group(2)
+    result = result.replace('\u2013', '')
+    result = result.replace('- ', '')
+    result = re.sub(r'\(\S*\)$', '', result)
+    result = result.strip()
+    return result
 
 if __name__ == "__main__":
     import argparse
