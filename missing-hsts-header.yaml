@@ -1,5 +1,6 @@
-id: missing-hsts-header
-pattern-either:
+rules:
+- id: missing-hsts-header
+  pattern-either:
   - patterns:
       - pattern-inside: |
           public void Configure(...) {
@@ -28,18 +29,18 @@ pattern-either:
               (IServiceCollection $SERVICES).AddHsts(...);
               ...
           }
-message: The HSTS HTTP response security header is missing, allowing interaction
-  and communication to be sent over the insecure HTTP protocol.
-metadata:
-  category: security
-  technology:
+  message: The HSTS HTTP response security header is missing, allowing interaction
+    and communication to be sent over the insecure HTTP protocol.
+  metadata:
+    category: security
+    technology:
     - dotnet
-  owasp:
+    owasp:
     - A02:2021 – Cryptographic Failures
-  cwe: "CWE-346: Origin Validation Error"
-  references:
+    cwe: "CWE-346: Origin Validation Error"
+    references:
     - https://cwe.mitre.org/data/definitions/346.html
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
-languages:
+  languages:
   - csharp
-severity: WARNING
+  severity: WARNING
