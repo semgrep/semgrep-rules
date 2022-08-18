@@ -7,6 +7,57 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from jinja2 import Environment, BaseLoader
+
+html_template_str = """
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>High signal rule coverage</title>
+	<style type="text/css">
+    .container{max-width:1200px;margin-right:auto;margin-left:auto}
+    .lang-block{width:100%;margin-top:25px}
+    .heatmap-wrapper{float:left;width:50%}
+    .heatmap{width:100%}
+    .clearfix{overflow:auto}
+    .clearfix::after{content:"";clear:both;display:table}
+	</style>
+</head>
+<body>
+  <div class="container">
+    {% for figure in pics %}
+    <div class="lang-block clearfix">
+      {% for img in figure %}
+      <div class="heatmap-wrapper">
+        <a href="{{ img }}" target="_blank">
+          <img class="heatmap" src="{{ img }}">
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
+"""
+
+html_template = Environment(loader=BaseLoader).from_string(html_template_str)
+
+supported_langs = [
+  'go',
+  'ruby',
+  'java',
+  'kotlin',
+  'php',
+  'python',
+  'csharp',
+  'javascript',
+  'scala',
+  'typescript',
+]
+
 cwe_to_category = {
   "CSRF": [352],
   "XSS": [79,80,279,116],
@@ -46,18 +97,6 @@ frameworks_to_columns = {
   'scala': ['play'],
   'typescript': ['angular', 'react']
 }
-
-def get_owasp(rule: Dict[str, Any]) -> List[str]:
-  try:
-    output = rule.get("metadata", {}).get("owasp", "")
-    if type(output) == str: # Ensure that we're returning lists
-      if output == "":
-        return ["Not OWASP Related"]
-      return [output.strip()]
-    output = [o.strip() for o in output]
-    return output
-  except Exception:
-    return [""]
 
 def parse_cwe_number(cwe: str) -> int:
   match = re.search(r'^[cC][wW][eE]-(\d*)', cwe)
@@ -100,12 +139,17 @@ def get_technology(rule: Dict[str, Any]) -> List[str]:
     return ["Uncategorized Technology"]
 
 def get_lang(path: str) -> str:
-  return path.split(os.path.sep)[1].strip()
+  parts = path.split(os.path.sep)
+  if len(parts) > 1:
+    lang = parts[0].strip()
+    if lang in supported_langs:
+      return lang
+  return None
 
 def get_framework(path: str) -> str:
   s = path.split(os.path.sep)
   if len(s) > 2:
-    lang = s[1]
+    lang = s[0]
     if "contrib" in path:
       return s[s.index("contrib")+1].strip()
     return s[s.index(lang)+1].strip()
@@ -140,61 +184,84 @@ def is_high_confidence(rule: Dict[str, Any]) -> bool:
 def is_higsignal(rule: Dict[str, Any], path: str) -> bool:
   return is_security(path) and (is_high_confidence(rule) or (is_taint(rule) and not is_audit(path)))
 
-def produce_heatmap(index: List, columns: List, data: List, title: str, vmax: int):
+def is_lowsignal(rule: Dict[str, Any], path: str) -> bool:
+  return is_security(path) and not is_higsignal(rule=rule, path=path)
+
+def produce_heatmap(index: List, columns: List, data: List, title: str, vmax: int, color: str = 'green'):
   df = pd.DataFrame(data=data, index=index, columns=columns)
-  cmap = sns.light_palette("#5B2F80", as_cmap=True)
+  cmap = sns.light_palette(color, as_cmap=True)
   fig, (ax) = plt.subplots(1)
   sns.heatmap(df, ax=ax, annot=True, cmap=cmap, cbar=False, vmin=0, vmax=vmax)
   ax.set_title(title)
   return fig
 
-def print_results(coverage_map: Dict[str, Any], output_directory: str):
-  vmax = 0
+def print_results(coverage_maps: Dict[str, Any], output_directory: str = '.'):
   dataframes = {}
-  for lang in coverage_map:
-    tier_1 = category_to_tier.get('1')
-    columns = ['lang'] + frameworks_to_columns.get(lang, []) + ['other']
-    data = []
+  for key in coverage_maps:
+    coverage_map = coverage_maps[key]['data']
+    vmax = 0
+    for lang in coverage_map:
+      tier_1 = category_to_tier.get('1')
+      columns = ['lang'] + frameworks_to_columns.get(lang, []) + ['other']
+      data = []
 
-    for i in range(len(tier_1)):
-      data.append([0] * len(columns))
+      for i in range(len(tier_1)):
+        data.append([0] * len(columns))
 
-    for framework in coverage_map[lang]:
-      for category in coverage_map[lang][framework]:
-        try:
-          cat_index = tier_1.index(category)
-        except Exception:
-          continue
+      for framework in coverage_map[lang]:
+        for category in coverage_map[lang][framework]:
+          try:
+            cat_index = tier_1.index(category)
+          except Exception:
+            continue
 
-        try:
-          framework_index = columns.index(framework)
-        except Exception:
-          framework_index = len(columns) - 1
+          try:
+            framework_index = columns.index(framework)
+          except Exception:
+            framework_index = len(columns) - 1
 
-        data[cat_index][framework_index] += coverage_map[lang][framework][category]
+          data[cat_index][framework_index] += coverage_map[lang][framework][category]
 
-        if data[cat_index][framework_index] > vmax:
-          vmax = data[cat_index][framework_index]
-    
-    dataframes[lang] = {
-      'index': tier_1,
-      'columns': columns,
-      'data': data
-    }
+          if data[cat_index][framework_index] > vmax:
+            vmax = data[cat_index][framework_index]
+      
+      if lang not in dataframes:
+        dataframes[lang] = {}
+
+      dataframes[lang][key] = {
+        'index': tier_1,
+        'columns': columns,
+        'data': data
+      }
   
-  for lang in dataframes:
-    figure = produce_heatmap(
-      index=dataframes[lang]['index'],
-      columns=dataframes[lang]['columns'],
-      data=dataframes[lang]['data'],
-      title=lang,
-      vmax=vmax
-      )
-    
-    figure.savefig(f"{lang}.png", transparent=True, bbox_inches='tight')
+  figures = []
 
-def produce_coverage_matrix(dirs: List[str], output_directory: str = 'output', is_filtered: Callable = is_higsignal):
+  for lang in dataframes:
+    lang_figures = []
+    for key in dataframes[lang]:
+      figure = produce_heatmap(
+        index=dataframes[lang][key]['index'],
+        columns=dataframes[lang][key]['columns'],
+        data=dataframes[lang][key]['data'],
+        title=f"{lang} - {key}",
+        vmax=vmax,
+        color=coverage_maps[key]['color']
+        )
+      
+      fig_file = f"{lang}_{len(lang_figures)}.svg"
+      figure.savefig(os.path.join(output_directory, fig_file), transparent=True, bbox_inches='tight')
+      figure.clf()
+      plt.close(figure)
+      lang_figures.append(fig_file)
+    figures.append(lang_figures)
+  
+  html_content = html_template.render(pics=figures)
+  with open(os.path.join(output_directory, "coverage.html"), "w") as f:
+    f.write(html_content)
+
+def generate_coverage_matrix(dirs: List[str], is_filtered: Callable = is_higsignal):
   coverage_map = {}
+
   for directory in dirs:
     for dirpath, dirnames, filenames in os.walk(directory):
       for filename in filenames:
@@ -202,6 +269,14 @@ def produce_coverage_matrix(dirs: List[str], output_directory: str = 'output', i
         rel_path = os.path.relpath(path=path, start=directory)
         if not is_rule(rel_path):
           continue
+        
+        lang = get_lang(rel_path)
+        if lang is None:
+          continue
+
+        if coverage_map.get(lang) is None:
+          coverage_map[lang] = {}
+
         with open(path, "r") as fin:
           rules = yaml.safe_load(fin)
           for rule in rules.get("rules", []):
@@ -212,24 +287,9 @@ def produce_coverage_matrix(dirs: List[str], output_directory: str = 'output', i
 
             cwe = get_cwe(rule)
             category = get_category(cwe)
-            lang = get_lang(rel_path)
-            # owasp = get_owasp(rule)
-            # technology = get_technology(rule)
             framework = get_framework(rel_path)
-            if lang is not None and framework is not None and category is not None:
-              """
-              coverage_map = {
-                lang: {
-                  framework: {
-                    category: 1
-                  }
-                }
-              }
-              """
 
-              if coverage_map.get(lang) is None:
-                coverage_map[lang] = {}
-              
+            if lang is not None and framework is not None and category is not None:
               if coverage_map[lang].get(framework) is None:
                 coverage_map[lang][framework] = {}
               
@@ -237,15 +297,31 @@ def produce_coverage_matrix(dirs: List[str], output_directory: str = 'output', i
                 coverage_map[lang][framework][category] = 1
               else:
                 coverage_map[lang][framework][category] += 1
+  return coverage_map
 
-  print_results(coverage_map=coverage_map, output_directory=output_directory)
+def produce_html_matrix(dirs: List[str], output_directory: str = 'output'):
+  matrix_hs = generate_coverage_matrix(dirs=dirs)
+  matrix_low = generate_coverage_matrix(dirs=dirs, is_filtered=is_lowsignal)
+
+  coverage = {
+    'High confidence + Taint': {
+      'color': '#5B2F80',
+      'data': matrix_hs
+    },
+    'Low confidence + Audit': {
+      'color': '#00c292',
+      'data': matrix_low
+    }
+  }
+
+  print_results(coverage_maps=coverage, output_directory=output_directory)
 
 if __name__ == "__main__":
   import argparse
 
   parser = argparse.ArgumentParser()
-  parser.add_argument("--output-directory", "-o", help="directory to output results to")
+  parser.add_argument("--output-directory", "-o", help="directory to output results to", default='.')
   parser.add_argument("--dir", "-d", action='append', help="directories to scan", required=True)
 
   args = parser.parse_args()
-  produce_coverage_matrix(dirs=args.dir, output_directory=args.output_directory)
+  produce_html_matrix(dirs=args.dir, output_directory=args.output_directory)
