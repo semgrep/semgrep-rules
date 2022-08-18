@@ -8,7 +8,7 @@ function example(userInput) {
             const html = '<html>test</html>';
             // ok
             await Page.setDocumentContent({frameId, html});
-            // ruleid:chrome-remote-interface-setdocumentcontent-injection
+            // chrome-remote-interface-setdocumentcontent-injection
             await Page.setDocumentContent({frameId, html: userInput});
         } catch (err) {
             console.error(err);
