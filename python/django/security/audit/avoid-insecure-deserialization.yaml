@@ -50,6 +50,8 @@ rules:
             regex: dump|dump_session|dumps|load|load_session|loads 
       - patterns:
         - pattern: yaml.$YAMLFUNC(...)
+        - pattern-not: yaml.$YAMLFUNC(..., Dumper=SafeDumper, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Dumper=yaml.SafeDumper, ...)
         - metavariable-regex:
             metavariable: $YAMLFUNC
             regex: dump|dump_all|load|load_all
