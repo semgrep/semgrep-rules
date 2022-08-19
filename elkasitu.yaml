@@ -1,0 +1,17 @@
+rules:
+- id: django-migration-slow-default
+  patterns:
+  - pattern: migrations.AddField(..., model_name=$N, ...)
+  - pattern-not: migrations.AddField(..., field=models.$F(..., null=True, ...), ...)
+  - pattern-inside: operations = [...]
+  - pattern-not-inside: migrations.RunSQL(..., state_operations=[...], ...)
+  message: Adding a NOT NULL column to an existing table without an explicit SQL default
+    can make the upgrade process very slow if the table is big enough.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - django
+    rule-origin-note: published from rules/django-migration-slow-default.yaml in None
