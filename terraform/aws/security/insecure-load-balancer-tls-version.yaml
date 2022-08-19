@@ -4,7 +4,9 @@ rules:
       - pattern-either:
           - patterns:
               - pattern: ssl_policy = $ANYTHING
+              - pattern-not-inside: ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
               - pattern-not-inside: ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
+              - pattern-not-inside: ssl_policy = "ELBSecurityPolicy-FS-1-2-2019-08"
           - patterns:
               - pattern: protocol = "HTTP"
               - pattern-not-inside: |

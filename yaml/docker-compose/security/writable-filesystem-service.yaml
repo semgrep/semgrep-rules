@@ -17,6 +17,7 @@ rules:
             image: ...
             ...
             read_only: true
+      - focus-metavariable: $SERVICE
     message: >-
       Service '$SERVICE' is running with a writable root filesystem. This may
       allow malicious applications to download and run additional payloads, or
@@ -24,6 +25,10 @@ rules:
       something temporarily consider using a tmpfs. Add 'read_only: true' to this
       service to prevent this.
     metadata:
+      cwe: "CWE-732: Incorrect Permission Assignment for Critical Resource"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
       references:
         - https://docs.docker.com/compose/compose-file/compose-file-v3/#domainname-hostname-ipc-mac_address-privileged-read_only-shm_size-stdin_open-tty-user-working_dir
         - https://blog.atomist.com/security-of-docker-kubernetes/

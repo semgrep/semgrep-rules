@@ -16,3 +16,23 @@ def foo
   Shell.cat("/var/log/www/access.log")
 
 end
+
+def foo2(param1)
+  # ok: avoid-tainted-shell-call
+  new(params).call
+end
+
+def foo3(param1, param2, param3)
+  # ok: avoid-tainted-shell-call
+  new(param1, params2, param3).execute
+end
+
+def foo4(param1, param2)
+  # ok: avoid-tainted-shell-call
+  new(param1, param2).execute
+end
+
+def foo5(param1, param2, param3)
+  # ok: avoid-tainted-shell-call
+  new(param1, param2, param3).execute
+end

@@ -15,7 +15,17 @@ function bad1() {
     return <ReactMarkdown astPlugins={[parseHtml]} allowDangerousHtml children={markdown} />;
 }
 
+function bad2() {
+// ruleid: react-markdown-insecure-html
+    return <ReactMarkdown astPlugins={[parseHtml]} escapeHtml={false} children={markdown} />;
+}
+
 function ok1() {
 // ok: react-markdown-insecure-html
     return <ReactMarkdown renderers={renderers} children={markdown} />;
+}
+
+function ok2() {
+// ok: react-markdown-insecure-html
+    return <ReactMarkdown renderers={renderers} escapeHtml={true} children={markdown} />;
 }

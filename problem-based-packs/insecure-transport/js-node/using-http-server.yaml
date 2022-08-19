@@ -6,7 +6,9 @@ rules:
       in which the attacker is able to read sensitive information.
     metadata:
       vulnerability: Insecure Transport
-      owasp: "A3: Sensitive Data Exposure"
+      owasp:
+        - A02:2021 - Cryptographic Failures
+        - A03:2017 - Sensitive Data Exposure
       cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       references:
         - https://nodejs.org/api/http.html#http_class_http_agent
@@ -26,3 +28,4 @@ rules:
               $HTTP.$FUNC(...);
           - pattern: |
               new $HTTP.$FUNC2(...);
+      - pattern: $HTTP

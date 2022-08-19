@@ -58,8 +58,11 @@ rules:
       - pattern-not-regex: pipenv install --deploy
       - pattern-not-regex: pipenv install [\w]+
     fix: pipenv install --ignore-pipfile
+      - pattern: a()
+      - pattern: b()
+      - pattern: c()
     message: >-
-      To ensure reproducable and deterministic builds, use `pipenv install --ignore-pipfile` rather than `pipenv install` in scripts. This will use the lockfile rather than updating it.
+      This rule has been deprecated.
     languages:
       - generic
     severity: INFO
@@ -73,6 +76,26 @@ rules:
         - dockerfile
         - javascript
         - typescript
-        - pipenv
       references:
-        - https://pipenv-fork.readthedocs.io/en/latest/advanced.html#:~:text=pipenv%20install%20%2D%2Dignore%2Dpipfile,using%20the%20%2D%2Ddeploy%20flag.
+        - https://r2c.dev
+  - id: use-frozen-lockfile-pip
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    message: >-
+      This rule has been deprecated.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+      references:
+        - https://r2c.dev

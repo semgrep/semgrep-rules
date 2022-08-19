@@ -4,20 +4,40 @@ rules:
       If unverified user data can reach the `compileScript` method it can result in Server-Side Request Forgery vulnerabilities
     severity: WARNING
     metadata:
-      owasp: "A1: Injection"
+      owasp: 
+        - A10:2021 - Server-Side Request Forgery (SSRF)
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       category: security
       technology:
         - chrome-remote-interface
+      references:
+      - https://github.com/cyrus-and/chrome-remote-interface
     languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('chrome-remote-interface');
-          ...
-      - pattern-not-inside: |
-          var $INPUT = "...";
-          ...
-      - pattern: |
-          $RUNTIME.compileScript({expression: $INPUT},...)
-      - pattern-not: |-
-          $RUNTIME.compileScript({expression: "..."},...)
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: function ... (..., $ARG,...) {...}
+          - focus-metavariable: $ARG
+    pattern-sinks:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              require('chrome-remote-interface');
+              ...
+          - pattern-inside: |
+              import 'chrome-remote-interface';
+              ...
+        - pattern-either:
+          - pattern: |
+              $RUNTIME.compileScript({expression: $SINK},...)
+          - pattern: |
+              $RUNTIME.evaluate({expression: $SINK},...)
+          - pattern: |
+              $PAGE.navigate({url: $SINK},...)
+          - pattern: |
+              $RUNTIME.printToPDF({headerTemplate: $SINK},...)
+          - pattern: |
+              $RUNTIME.printToPDF({footerTemplate: $SINK},...)
+          - pattern: |
+              $PAGE.setDocumentContent({html: $SINK},...)
+        - focus-metavariable: $SINK

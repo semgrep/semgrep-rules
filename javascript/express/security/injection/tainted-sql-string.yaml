@@ -2,12 +2,13 @@ rules:
   - id: tainted-sql-string
     severity: ERROR
     message: >-
-      Detected user input used to manually construct a SQL string. This is usually
-      bad practice because manual construction could accidentally result in a SQL
-      injection. An attacker could use a SQL injection to steal or modify contents
-      of the database. Instead, use a parameterized query which is available
-      by default in most database engines. Alternatively, consider using an
-      object-relational mapper (ORM) such as Sequelize which will protect your queries.
+      Detected user input used to manually construct a SQL string. This is
+      usually bad practice because manual construction could accidentally result
+      in a SQL injection. An attacker could use a SQL injection to steal or
+      modify contents of the database. Instead, use a parameterized query which
+      is available by default in most database engines. Alternatively, consider
+      using an object-relational mapper (ORM) such as Sequelize which will
+      protect your queries.
     metadata:
       owasp:
         - A01:2017 - Injection
@@ -20,34 +21,54 @@ rules:
       category: security
       technology:
         - express
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     languages:
       - javascript
       - typescript
     mode: taint
     pattern-sources:
       - patterns:
-          - pattern-inside: |
-              require('express');
-              ...
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
               - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern: $REQ
+              - patterns:
+                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)
+          - pattern-either:
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.cookies
+              - pattern: $REQ.headers
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body
     pattern-sinks:
       - patterns:
           - pattern-either:
               - patterns:
                   - pattern-either:
-                      - pattern: |
+                      - pattern-inside: |
                           "$SQLSTR" + $EXPR
+                      - pattern-inside: |
+                          "$SQLSTR".concat($EXPR)
+                      - pattern: util.format($SQLSTR, $EXPR)
                       - pattern: |
-                          "$SQLSTR".concat(...)
-                      - pattern: util.format($SQLSTR, ...)
+                          `$SQLSTR${$EXPR}...`
                   - metavariable-regex:
                       metavariable: $SQLSTR
                       regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-              - patterns:
-                  - pattern: |
-                      `...${...}...`
-                  - pattern-regex: |
-                      .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+          - focus-metavariable: $EXPR

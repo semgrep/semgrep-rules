@@ -12,7 +12,7 @@ async function example(userInput) {
         await Page.enable();
         // ok
         await Page.navigate({url: 'https://github.com'});
-        // ruleid:chrome-remote-interface-navigate-injection
+        // chrome-remote-interface-navigate-injection
         await Page.navigate({url: userInput});
         await Page.loadEventFired();
     } catch (err) {

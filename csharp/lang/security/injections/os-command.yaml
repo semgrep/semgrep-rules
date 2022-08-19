@@ -2,10 +2,12 @@ rules:
   - id: os-command-injection
     severity: ERROR
     languages:
-      - C#
+      - csharp
     metadata:
       cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A1: Injection"
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
       references:
         - https://owasp.org/www-community/attacks/Command_Injection
       category: security
@@ -20,137 +22,44 @@ rules:
       - pattern-inside: |
           using System.Diagnostics;
           ...
+      - pattern-inside: |
+          public $T $F(..., $ARG, ...)
+          {
+            ...
+          }
       - pattern-either:
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ... Process.Start($X, ...);
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ... Process.Start(..., $X);
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
+          - patterns:
+            - pattern: |
+                Process.Start($ARG, ...);
+            - focus-metavariable: $ARG
+          - patterns:
+            - pattern-inside: |
+                Process $PROC = new Process();
                 ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.FileName = $X;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.Arguments = $X;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.Arguments = ... + $X;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.Arguments = $X + ...;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.Arguments = ... + $X + ...;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $X, ...)
-              {
-                ...
-                string $Z = ... + $X;
-                ...
-                Process $Y = new Process();
-                ...
-                $Y.StartInfo.Arguments = $Z;
-                ...
-                $Y.Start();
-                ...
-              }
-          - pattern: |
-              public $T $F(..., $Y, ...)
-              {
-                ...
-                ProcessStartInfo $X = new ProcessStartInfo()
-                {
-                  ..., FileName = $Y, ...
-                };
-                ...
-                Process.Start($X);
-              }
-          - pattern: |
-              public $T $F(..., $Y, ...)
-              {
-                ...
-                ProcessStartInfo $X = new ProcessStartInfo()
-                {
-                  ..., Arguments = $Y, ...
-                };
-                ...
-                Process.Start($X);
-              }
-          - pattern: |
-              public $T $F(..., $Y, ...)
-              {
-                ...
-                ProcessStartInfo $X = new ProcessStartInfo()
-                {
-                  ..., Arguments = ... + $Y, ...
-                };
-                ...
-                Process.Start($X);
-              }
-          - pattern: |
-              public $T $F(..., $Y, ...)
-              {
-                ...
-                ProcessStartInfo $X = new ProcessStartInfo()
-                {
-                  ..., Arguments = $Y + ..., ...
-                };
-                ...
-                Process.Start($X);
-              }
-          - pattern: |
-              public $T $F(..., $Y, ...)
-              {
-                ...
-                ProcessStartInfo $X = new ProcessStartInfo()
-                {
-                  ..., Arguments = ... + $Y + ..., ...
-                };
-                ...
-                Process.Start($X);
-              }
+            - pattern-either:
+              - pattern-inside: |
+                  $PROC.StartInfo.FileName = $ARG;
+                  ...
+              - pattern-inside: |
+                  $PROC.StartInfo.Arguments = <... $ARG ...>;
+                  ...
+            - pattern: |
+                $PROC.Start();
+          - patterns:
+            - patterns:
+              - pattern-inside: |
+                  ProcessStartInfo $PSINFO = new ProcessStartInfo()
+                  {
+                    ...
+                  };
+                  ...
+              - pattern-either:
+                - pattern-inside: |
+                    FileName = $ARG;
+                    ...
+                - pattern-inside: |
+                    Arguments = <... $ARG ...>;
+                    ...
+            - pattern: |
+                Process.Start($PSINFO);
+            - focus-metavariable: $PSINFO
