@@ -35,3 +35,6 @@ include_safe(__DIR__ . $user_input);
 
 // ok: file-inclusion
 require_once(CONFIG_DIR . '/constant.php');
+
+// ok: file-inclusion
+require_once( dirname( __FILE__ ) . '/admin.php' );
