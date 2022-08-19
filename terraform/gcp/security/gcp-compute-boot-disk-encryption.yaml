@@ -1,0 +1,27 @@
+rules:
+- id: gcp-compute-boot-disk-encryption
+  patterns:
+    - pattern: |
+        resource "google_compute_instance" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "google_compute_instance" $ANYTHING {
+          ...
+          boot_disk {
+            disk_encryption_key_raw = ...
+          }
+          ...
+        }
+  message: Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK)	
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: |
+      CWE-311: Missing Encryption of Sensitive Data
+    technology:
+      - terraform
+      - gcp
+    category: security
