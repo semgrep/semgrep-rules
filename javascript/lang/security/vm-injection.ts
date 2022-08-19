@@ -80,7 +80,7 @@ function test4(userInput) {
 function okTest4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-    // ok: vm-njection
+    // ok: vm-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 

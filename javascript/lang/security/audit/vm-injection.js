@@ -25,7 +25,6 @@ function testOk1(userInput) {
         foo: 1
     }
     vm.createContext(sandbox)
-    // ok: vm-runincontext-context-injection
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
@@ -50,7 +49,6 @@ function testOk1(userInput) {
     var sandbox = {
         foo: 1
     }
-    // ok: vm-runinnewcontext-context-injection
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
@@ -66,7 +64,6 @@ function okTest3(userInput) {
     const code = `
         var x = 1;
     `
-    // ok: vm-runinthiscontext-code-injection
     vm.runInThisContext(code)
 }
 
@@ -80,7 +77,6 @@ function test4(userInput) {
 function okTest4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-    // ok: vm-compilefunction-code-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
@@ -94,7 +90,6 @@ function test5(userInput) {
 function okTest5(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-    // ok: vm-compilefunction-context-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
@@ -112,7 +107,6 @@ function test6(userInput) {
 }
 
 function okTest6(userInput) {
-    // ok: vm-script-code-injection
     const script = new vm.Script(`
         function add(a, b) {
           return a + b;
