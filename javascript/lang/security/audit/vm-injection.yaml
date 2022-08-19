@@ -1,7 +1,7 @@
 rules:
   - id: vm-runincontext-context-injection
     message: >-
-      Make sure that unverified user data can not reach vm.runInContext.
+      this rule has been deprecated.
     severity: WARNING
     languages:
       - javascript
@@ -14,56 +14,9 @@ rules:
         - javascript
       references:
       - https://nodejs.org/dist/latest-v16.x/docs/api/vm.html
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-inside: function ... (..., $ARG,...) {...}
-          - focus-metavariable: $ARG
-    pattern-sinks:
-      - patterns:
-        - pattern-either: 
-          - pattern-inside: |
-              $VM = require('vm')
-              ...
-          - pattern-inside: |
-              import * as $VM from 'vm'
-              ...
-          - pattern-inside: |
-              import $VM from 'vm'
-              ...
-        - pattern-either:
-          - pattern: $VM.runInContext($CODE,$INPUT,...)
-          - pattern: $VM.runInContext($INPUT,...)
-          - pattern: $VM.runInNewContext($CODE,$INPUT,...)
-          - pattern: $VM.runInNewContext($INPUT,...)
-          - pattern: $VM.runInThisContext($INPUT,...)
-          - pattern: $VM.compileFunction($INPUT,...)
-          - pattern: |
-                $VM.compileFunction($CODE,$PARAMS,{parsingContext: $INPUT},...)
-          - pattern: |
-                $OPTS = {parsingContext: $INPUT};
-                ...
-                $VM.compileFunction($CODE,$PARAMS,$OPTS,...)
-          - pattern: new $VM.Script($INPUT,...)
-          - pattern: new $VM.SourceTextModule($INPUT,...)
-        - focus-metavariable: $INPUT
-      - patterns:
-        - pattern-either:
-          - pattern: vm.runInContext($CODE,$INPUT,...)
-          - pattern: vm.runInContext($INPUT,...)
-          - pattern: vm.runInNewContext($CODE,$INPUT,...)
-          - pattern: vm.runInNewContext($INPUT,...)
-          - pattern: vm.runInThisContext($INPUT,...)
-          - pattern: vm.compileFunction($INPUT,...)
-          - pattern: |
-                vm.compileFunction($CODE,$PARAMS,{parsingContext: $INPUT},...)
-          - pattern: |
-                $OPTS = {parsingContext: $INPUT};
-                ...
-                vm.compileFunction($CODE,$PARAMS,$OPTS,...)
-          - pattern: new vm.Script($INPUT,...)
-          - pattern: new vm.SourceTextModule($INPUT,...)
-        - focus-metavariable: $INPUT
+    patterns:
+      - pattern: a()
+      - pattern: b()
   - id: vm-runinnewcontext-context-injection
     message: >-
       this rule has been deprecated.
