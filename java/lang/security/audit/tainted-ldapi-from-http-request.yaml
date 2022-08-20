@@ -2,7 +2,7 @@ rules:
   - id: tainted-ldapi-from-http-request
     message: >-
       Detected input from a HTTPServletRequest going into an LDAP query.
-      This could lead to LDAP injection if the input is not properly santized,
+      This could lead to LDAP injection if the input is not properly sanitized,
       which could result in attackers modifying objects in the LDAP tree structure.
       Ensure data passed to an LDAP query is not controllable or properly sanitize
       the data.

@@ -8,9 +8,9 @@ rules:
       technology:
         - javascript
     message: >-
-      Detected the use of require(variable). Calling require with a non-literal argument
-      might
-      allow an attacker to load an run arbitrary code, or access arbitrary files.
+      Detected the use of require(variable). Calling require with a non-literal
+      argument might allow an attacker to load and run arbitrary code, or
+      access arbitrary files.
     patterns:
       - pattern: require($OBJ)
       - pattern-not: require(process.env.$ENVVAR)
