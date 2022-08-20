@@ -1,53 +1,33 @@
 rules:
   - id: ruby-pg-sqli
-    patterns:
-      - pattern-either:
-          - patterns:
-              - pattern: $CON.$METHOD($QUERY)
-              - pattern-either:
-                  - pattern-inside: |
-                      $QUERY = $X + $Y
-                      ...
-                  - pattern-inside: |
-                      $QUERY += $X
-                      ...
-                  - pattern-inside: |
-                      $QUERY.concat(..., $X, ...)
-                      ...
-                  - pattern-inside: |
-                      $QUERY << $X
-                      ...
-              - pattern-not-inside: |
-                  $QUERY << '...'
-                  ...
-              - pattern-not-inside: |
-                  $QUERY.concat("...")
-                  ...
-              - pattern-not-inside: |
-                  $QUERY += "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = "..." + "..."
-                  ...
-          - pattern: $CON.$METHOD(..., $X + $Y, ...)
-          - pattern: $CON.$METHOD(..., $X.concat($Y), ...)
-          - pattern: $CON.$METHOD(..., $X << $Y, ...)
-      - pattern-either:
-          - pattern-inside: |
-              $CON = PG.connect(...)
-              ...
-          - pattern-inside: |
-              $CON = PG::Connection.open(...)
-              ...
-          - pattern-inside: |
-              $CON = PG::Connection.new(...)
-              ...
-      - pattern-not: $CON.$METHOD(..., "..." + "...", ...)
-      - pattern-not: $CON.$METHOD(..., "...".concat("..."), ...)
-      - pattern-not: $CON.$METHOD(..., "..." << "...", ...)
-      - metavariable-regex:
-          metavariable: $METHOD
-          regex: ^(exec|exec_params|exec_prepared)$
+    mode: taint
+    pattern-sources:
+        - pattern-either:
+            - pattern: |
+                    params
+            - pattern: |
+                    cookies
+    pattern-sinks:
+        - patterns:
+            - pattern-either:
+                - pattern-inside: |
+                    $CON = PG.connect(...)
+                    ...
+                - pattern-inside: |
+                    $CON = PG::Connection.open(...)
+                    ...
+                - pattern-inside: |
+                    $CON = PG::Connection.new(...)
+                    ...
+            - pattern-either: 
+                - pattern: |
+                    $CON.$METHOD($X,...)
+                - pattern: |
+                    $CON.$METHOD $X, ...
+            - focus-metavariable: $X
+            - metavariable-regex:
+                metavariable: $METHOD
+                regex: ^(exec|exec_params)$
     languages:
       - ruby
     message: >-

@@ -16,8 +16,18 @@ rules:
     languages:
       - ruby
     severity: WARNING
-    pattern-either:
-      - pattern: |
-          params[$VAR].to_json
-      - pattern: |
-          JSON.encode(params[$VAR])
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern: |
+            params
+        - pattern-not: |
+            cookies
+    pattern-sinks:
+      - pattern-either:
+        - patterns:
+          - focus-metavariable: $X
+          - pattern: |
+              $X.to_json
+        - pattern: |
+            JSON.encode(...)
