@@ -1,0 +1,23 @@
+rules:
+    - id: gcp-gke-nodepool-auto-upgrade-enabled
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_container_node_pool" "..." {
+              ...
+              management {
+                ...
+                auto_upgrade = false
+                ...
+              }
+              ...
+              }
+      message: >-
+        Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

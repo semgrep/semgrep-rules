@@ -1,0 +1,22 @@
+rules:
+- id: gcp-kms-rotation-period
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_kms_crypto_key" "..." {
+            ...
+            rotation_period = "$ROTATION"
+            ...
+          }
+    - metavariable-comparison:
+        metavariable: $ROTATION
+        comparison: $ROTATION > 7776000
+  message: >-
+    Ensure KMS encryption keys are rotated within a period of 90 days
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

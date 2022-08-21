@@ -1,0 +1,25 @@
+rules:
+- id: gcp-gke-enabled-vpc-flow-logs
+  patterns:
+    - pattern-inside: |
+        resource "google_container_cluster" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" $ANYTHING {
+          ...
+          enable_intranode_visibility = true
+          ...
+        }
+  message: Enable VPC Flow Logs and Intranode Visibility
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe: |
+      CWE-778: Insufficient Logging
+    technology:
+      - terraform
+      - gcp
+    category: security

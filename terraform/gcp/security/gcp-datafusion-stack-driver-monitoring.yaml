@@ -1,0 +1,25 @@
+rules:
+- id: gcp-datafusion-stack-driver-monitoring
+  patterns:
+    - pattern-inside: |
+        resource "google_data_fusion_instance" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "google_data_fusion_instance" $ANYTHING {
+          ...
+          enable_stackdriver_monitoring = true        
+          ...
+        }
+  message: Ensure Datafusion has stack driver monitoring enabled.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe: |
+      CWE-778: Insufficient Logging
+    technology:
+      - terraform
+      - gcp
+    category: security

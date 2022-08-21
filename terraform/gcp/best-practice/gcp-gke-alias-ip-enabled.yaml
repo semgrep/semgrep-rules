@@ -1,0 +1,27 @@
+rules:
+- id: gcp-gke-alias-ip-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        ip_allocation_policy {
+          ...
+          use_ip_aliases = "false"
+          ...
+        }
+        ...
+        }
+  message: >-
+    Ensure Kubernetes Cluster is created with Alias IP ranges enabled
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

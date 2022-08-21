@@ -1,0 +1,41 @@
+rules:
+- id: gcp-gke-basic-auth
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        master_auth {
+          client_certificate_config {
+            ...
+          }
+        }
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        master_auth {
+          ...
+          username = ""
+          password = ""
+          ...
+        }
+        ...
+        }
+  message: >-
+    Ensure GKE basic auth is disabled	
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

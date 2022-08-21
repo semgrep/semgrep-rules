@@ -1,0 +1,30 @@
+rules:
+- id: gcp-gke-kubernetes-rbac-google-groups
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        authenticator_groups_config {
+          ...
+          security_group = "..."
+          ...
+        }
+        ...
+        }
+  message: >-
+    Manage Kubernetes RBAC users with Google Groups for GKE
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
