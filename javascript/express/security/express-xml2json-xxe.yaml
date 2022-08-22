@@ -37,9 +37,11 @@ rules:
               - pattern: $REQ.params
               - pattern: $REQ.cookies
               - pattern: $REQ.headers
+              - pattern: $REQ.files.$ANYTHING.data.toString('utf8')
+              - pattern: $REQ.files.$ANYTHING['data'].toString('utf8')
       - patterns:
           - pattern-either:
-              - pattern-inside: >
+              - pattern-inside: |
                   ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
                   {...}
               - pattern-inside: |
@@ -51,6 +53,8 @@ rules:
               - pattern: cookies
               - pattern: headers
               - pattern: body
+              - pattern: files.$ANYTHING.data.toString('utf8')
+              - pattern: files.$ANYTHING['data'].toString('utf8')
     pattern-sinks:
       - patterns:
         - pattern-either:
