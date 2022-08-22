@@ -32,5 +32,26 @@ rules:
               $V = request.$W[...]
               ...
               exec(..., $V, ...)
+          - pattern: |
+              loop = asyncio.get_running_loop()
+              ...
+              await loop.run_in_executor(None, exec, request.$W[...])
+          - pattern: |
+              $V = request.$W[...]
+              ...
+              loop = asyncio.get_running_loop()
+              ...
+              await loop.run_in_executor(None, exec, $V)
+          - pattern: |
+              loop = asyncio.get_running_loop()
+              ...
+              await loop.run_in_executor(None, exec, request.$W.get(...))
+          - pattern: |
+              $V = request.$W.get(...)
+              ...
+              loop = asyncio.get_running_loop()
+              ...
+              await loop.run_in_executor(None, exec, $V)
+
     languages: [python]
     severity: WARNING
