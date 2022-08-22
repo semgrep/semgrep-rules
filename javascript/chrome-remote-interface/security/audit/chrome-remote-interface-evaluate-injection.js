@@ -8,9 +8,9 @@ async function example(userInput) {
         const script1 = "document.querySelector('p').textContent"
         // ok
         const result = await Runtime.evaluate({expression: script1});
-        // ruleid:chrome-remote-interface-evaluate-injection
+        // chrome-remote-interface-evaluate-injection
         const result2 = await Runtime.evaluate({expression: userInput});
-        // ruleid:chrome-remote-interface-evaluate-injection
+        // chrome-remote-interface-evaluate-injection
         const result3 = await Runtime.evaluate({expression: 'var x = 123;' + userInput});
     } catch (err) {
         console.error(err);
