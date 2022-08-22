@@ -53,6 +53,8 @@ rules:
         - pattern: yaml.$YAMLFUNC(...)
         - pattern-not: yaml.$YAMLFUNC(..., Dumper=SafeDumper, ...)
         - pattern-not: yaml.$YAMLFUNC(..., Dumper=yaml.SafeDumper, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Loader=SafeLoader, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Loader=yaml.SafeLoader, ...)
         - metavariable-regex:
             metavariable: $YAMLFUNC
             regex: dump|dump_all|load|load_all
