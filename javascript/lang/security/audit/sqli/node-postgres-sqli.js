@@ -1,8 +1,8 @@
-function  bad1() {
+function  bad1(userInput) {
     const { Client } = require('pg')
     const client = new Client()
     await client.connect()
-    query = "SELECT name FROM users WHERE age=" + req.FormValue("age")
+    let query = "SELECT name FROM users WHERE age=" + userInput
     // ruleid: node-postgres-sqli
     const res = await client.query(query)
     console.log(res.rows[0].message) // Hello world!
@@ -10,10 +10,10 @@ function  bad1() {
 }
 
 
-function bad2() {
+function bad2(req) {
     const { Client, Pool } = require('pg')
     const pool = new Pool()
-    query = "SELECT name FROM users WHERE age="
+    let query = "SELECT name FROM users WHERE age="
     query += req.FormValue("age")
     // ruleid: node-postgres-sqli
     const res = await pool.query(query)
@@ -25,14 +25,15 @@ function bad3(userinput) {
     const { Client } = require('pg')
     const client = new Client()
     await client.connect()
-    query = "SELECT name FROM users WHERE age=".concat(userinput)
-    // ruleid: node-postgres-sqli
+    let query = "SELECT name FROM users WHERE age=".concat(userinput)
+    // "string".concat(...) not working for taint mode
+    // todruleid: node-postgres-sqli
     const res = await client.query(query)
     console.log(res.rows[0].message) // Hello world!
     await client.end()
 }
 
-function bad4() {
+function bad4(req) {
     const { Pool } = require('pg')
     const pool = new Pool()
     pool.on('error', (err, client) => {
@@ -56,9 +57,24 @@ function bad4() {
 function bad5(userinput) {
     const { Pool } = require('pg')
     const pool = new Pool()
-    // ruleid: node-postgres-sqli
+    // "string".concat(...) not working for taint mode
+    // todruleid: node-postgres-sqli
     pool
       .query('SELECT * FROM users WHERE id ='.concat(userinput))
+      .then(res => console.log('user:', res.rows[0]))
+      .catch(err =>
+        setImmediate(() => {
+          throw err
+        })
+      )
+}
+
+function bad6(userinput) {
+    const { Pool } = require('pg')
+    const pool = new Pool()
+    pool
+      // ruleid: node-postgres-sqli
+      .query('SELECT * FROM users WHERE id =' + userinput)
       .then(res => console.log('user:', res.rows[0]))
       .catch(err =>
         setImmediate(() => {
