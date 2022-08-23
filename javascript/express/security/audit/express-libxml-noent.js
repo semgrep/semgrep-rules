@@ -6,7 +6,7 @@ module.exports.foo =  function(req, res) {
 	// ruleid: express-libxml-noent
 	libxmljs.parseXmlString(req.files.products.data.toString('utf8'), {noent:true,noblanks:true})
 	// ruleid: express-libxml-noent
-	libxmljs.parseXml(req.files.products.data.toString('utf8'), {noent:true,noblanks:true})
+	libxmljs.parseXml(req.query.products, {noent:true,noblanks:true})
 	// ok: express-libxml-noent
 	libxmljs.parseXml(req.files.products.data.toString('utf8'), {noent:false,noblanks:true})
 	// ruleid: express-libxml-noent
