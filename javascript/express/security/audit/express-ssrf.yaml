@@ -42,7 +42,7 @@ rules:
                       - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
                   - metavariable-regex:
                       metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)
+                      regex: ^(get|post|put|head|delete|options)$
           - pattern-either:
               - pattern: $REQ.query
               - pattern: $REQ.body
@@ -51,11 +51,12 @@ rules:
               - pattern: $REQ.headers
       - patterns:
           - pattern-either:
-              - pattern-inside: >
+              - pattern-inside: |
                   ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
                   {...}
               - pattern-inside: |
                   ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
           - pattern-either:
               - pattern: params
               - pattern: query

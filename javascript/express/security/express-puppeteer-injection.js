@@ -6,8 +6,8 @@ const puppeteer = require('puppeteer')
 app.get('/', async (req, res) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-    // ruleid: express-puppeteer-injection
     const url = `https://${req.query.name}`
+    // ruleid: express-puppeteer-injection
     await page.goto(url)
 
     await page.screenshot({path: 'example.png'})
@@ -31,8 +31,8 @@ app.post('/test', async (req, res) => {
 const controller = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    // ruleid: express-puppeteer-injection
     const body = req.body.foo;
+    // ruleid: express-puppeteer-injection
     await page.setContent('<html>' + body + '</html>');
 
     await page.screenshot({path: 'example.png'});
@@ -56,8 +56,8 @@ app.post('/test2', async (req, res) => {
 const controller2 = async (req, res) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    // ruleid: express-puppeteer-injection
     const body = req.body.foo;
+    // ruleid: express-puppeteer-injection
     await page.evaluate('alert(' + body + ')');
 
     await page.screenshot({path: 'example.png'});
