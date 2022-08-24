@@ -18,6 +18,10 @@
     data = cookies['some_field']
     # ruleid: bad-deserialization
     obj = Oj.object_load(data)
+    # ruleid: bad-deserialization
+    obj = Oj.load(data)
+   # ok: bad-deserialization
+   obj = Oj.load(data,options=some_safe_options)
  end
 
  def ok_deserialization
