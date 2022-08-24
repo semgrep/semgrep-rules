@@ -1,51 +1,19 @@
 rules:
   - id: dangerous-exec
-    pattern-either:
-      - patterns:
+    mode: taint
+    pattern-sources:
+        - patterns:
+            - pattern: |
+                    def $F(...,$ARG,...)
+                        ...
+                    end
+            - focus-metavariable: $ARG
+        - pattern: params
+        - pattern: cookies
+    pattern-sinks:
+     - patterns:
           - pattern: |
-              $EXEC(...)
-          - pattern-not: |
-              $EXEC("...",...)
-          - pattern-not: |
-              $EXEC(["...",...],...)
-          - pattern-not: |
-              $EXEC({...},"...",...)
-          - pattern-not: |
-              $EXEC({...},["...",...],...)
-          - metavariable-regex:
-              metavariable: $EXEC
-              regex: ^(system|exec|spawn|Process.exec|Process.spawn|Open3.capture2|Open3.capture2e|Open3.capture3|Open3.popen2|Open3.popen2e|Open3.popen3|IO.popen|Gem::Util.popen|PTY.spawn)$
-      - patterns:
-          - pattern-either:
-              - pattern: |
-                  $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",...)
-              - pattern: |
-                  $EXEC({...},"=~/(sh|bash|ksh|csh|tcsh|zsh)/",...)
-              - pattern: |
-                  $EXEC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/",...],...)
-              - pattern: |
-                  $EXEC({...},["=~/(sh|bash|ksh|csh|tcsh|zsh)/",...],...)
-          - pattern-not: |
-              $EXEC("...","...",...)
-          - pattern-not: |
-              $EXEC(["...","...",...],...)
-          - pattern-not: |
-              $EXEC({...},"...","...",...)
-          - pattern-not: |
-              $EXEC({...},["...","...",...],...)
-          - metavariable-regex:
-              metavariable: $EXEC
-              regex: ^(system|exec|spawn|Process.exec|Process.spawn|Open3.capture2|Open3.capture2e|Open3.capture3|Open3.popen2|Open3.popen2e|Open3.popen3|IO.popen|Gem::Util.popen|PTY.spawn)$
-      - patterns:
-          - pattern-either:
-              - pattern: |
-                  $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
-              - pattern: |
-                  $EXEC({...},"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
-              - pattern: |
-                  $EXEC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
-              - pattern: |
-                  $EXEC({...},["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
+                $EXEC(...)
           - pattern-not: |
               $EXEC("...","...","...",...)
           - pattern-not: |
