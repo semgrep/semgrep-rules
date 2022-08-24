@@ -28,7 +28,8 @@ def bad4(userinput)
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     query = "SELECT name FROM users WHERE age="
     query << params[userinput]
-    # ruleid: ruby-pg-sqli
+    # passes on 0.111.0 and higher
+    # todoruleid: ruby-pg-sqli
     con.exec(query)
 end
 
