@@ -1,12 +1,14 @@
 rules:
   - id: file-inclusion
     patterns:
-      - pattern: $FUNC(...);
-      - pattern-not: $FUNC("...");
-      - pattern-not: $FUNC(__DIR__ . "...");
+      - pattern-inside: $FUNC(...);
+      - pattern: $VAR
       - metavariable-regex:
           metavariable: $FUNC
           regex: \b(include|include_once|require|require_once)\b
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: \W?\$.+
     message: >-
       Detected non-constant file inclusion. This can lead to local file inclusion (LFI) or remote file inclusion (RFI) if user input reaches this statement. LFI and RFI could lead to sensitive files being obtained by attackers. Instead, explicitly specify what to include. If that is not a viable solution, validate user input thoroughly.
     metadata:
