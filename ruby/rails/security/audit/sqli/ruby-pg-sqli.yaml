@@ -1,6 +1,10 @@
 rules:
   - id: ruby-pg-sqli
     mode: taint
+    pattern-propagators:
+      - pattern: $X << $Y
+        from: $Y
+        to: $X
     pattern-sources:
         - pattern-either:
             - pattern: |
