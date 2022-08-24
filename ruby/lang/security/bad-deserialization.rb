@@ -9,7 +9,7 @@
     # ok: bad-deserialization
     obj = YAML.load(data)
 
-    o = Klass.new("hello\n")
+    o = Klass.new(params['hello'])
     data = CSV.dump(o)
     # ruleid: bad-deserialization
     obj = CSV.load(data)
@@ -17,7 +17,7 @@
     o = Klass.new("hello\n")
     data = cookies['some_field']
     # ruleid: bad-deserialization
-    obj = data.object_load()
+    obj = Oj.object_load(data)
  end
 
  def ok_deserialization

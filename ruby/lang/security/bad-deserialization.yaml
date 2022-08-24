@@ -16,7 +16,9 @@ rules:
           - pattern: |
               Marshal.restore(...)
           - pattern: |
-              object_load(...)
+              Oj.object_load(...)
+          - pattern: |
+              Oj.load($X)
     message: >-
       Checks for unsafe deserialization. Objects in Ruby can be serialized into strings,
       then later loaded from strings. However, uses of load and object_load can cause remote code execution.
