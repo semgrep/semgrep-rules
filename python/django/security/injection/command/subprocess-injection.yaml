@@ -6,8 +6,15 @@ rules:
     symbolic_propagation: true
   pattern-sources:
   - patterns:
-      - pattern: request.$ANYTHING
-      - pattern-not: request.build_absolute_uri
+    - pattern-inside: |
+        def $FUNC(..., $REQUEST, ...):
+          ...
+    - focus-metavariable: $REQUEST
+    - metavariable-pattern:
+        metavariable: $REQUEST
+        patterns:
+        - pattern: request
+        - pattern-not-inside: request.build_absolute_uri
   pattern-sinks:
   - patterns:
     - pattern-either:
