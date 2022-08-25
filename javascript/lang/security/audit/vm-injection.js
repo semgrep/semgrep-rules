@@ -56,7 +56,7 @@ function test3(userInput) {
     const code = `
         var x = ${userInput};
     `
-    //  vm-runinthiscontext-code-injection
+    //  vm-runincontext-context-injection
     vm.runInThisContext(code)
 }
 
@@ -70,7 +70,7 @@ function okTest3(userInput) {
 function test4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + ${userInput}`
-    //  vm-compilefunction-code-injection
+    //  vm-runincontext-context-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
