@@ -26,8 +26,8 @@ function bad3(userinput) {
     const client = new Client()
     await client.connect()
     let query = "SELECT name FROM users WHERE age=".concat(userinput)
-    // "string".concat(...) not working for taint mode
-    // todruleid: node-postgres-sqli
+    // passes on 0.111.0 and higher
+    // todoruleid: node-postgres-sqli
     const res = await client.query(query)
     console.log(res.rows[0].message) // Hello world!
     await client.end()
@@ -42,7 +42,8 @@ function bad4(req) {
     })
     pool.connect((err, client, done) => {
       if (err) throw err
-      // ruleid: node-postgres-sqli
+      // passes on 0.111.0 and higher
+      // todoruleid: node-postgres-sqli
       client.query("SELECT name FROM users WHERE age=" + req.FormValue("age"), (err, res) => {
         done()
         if (err) {
@@ -57,9 +58,8 @@ function bad4(req) {
 function bad5(userinput) {
     const { Pool } = require('pg')
     const pool = new Pool()
-    // "string".concat(...) not working for taint mode
-    // todruleid: node-postgres-sqli
     pool
+      // ruleid: node-postgres-sqli
       .query('SELECT * FROM users WHERE id ='.concat(userinput))
       .then(res => console.log('user:', res.rows[0]))
       .catch(err =>
