@@ -1,44 +1,37 @@
 rules:
   - id: ruby-eval
     message: >-
-      Use of eval detected. This can lead to attackers running arbitrary code. Ensure external data
+      Use of eval with user-controllable input detected. This can lead to attackers running arbitrary code. Ensure external data
       does not reach here, otherwise this is a security vulnerability.
       Consider other ways to do this without eval.
     languages: [ruby]
     severity: WARNING
-    pattern-either:
+    mode: taint
+    pattern-sources:
+      - pattern-either:
+        - pattern: params[...]
+        - pattern: cookies[...]
+        - patterns:
+          - pattern: |
+              RubyVM::InstructionSequence.compile(...)
+          - pattern-not: |
+              RubyVM::InstructionSequence.compile("...")
+    pattern-sinks:
       - patterns:
         - pattern-either:
-          - pattern: $EVAL(...)
-          - pattern: $BIND.$EVAL(...)
-          - pattern: |
-              $VM.compile(...).$EVAL
-          - patterns:
-              - pattern-inside: |
-                  $IS = $VM.compile(...)
-                  ...
-              - pattern: |
-                  $IS.$EVAL
-        - focus-metavariable: $EVAL
-        - metavariable-pattern:
-            metavariable: $EVAL
-            pattern: eval
-      - patterns:
-          - pattern-either:
-              - pattern: |
-                  $CLASS.$EVAL do
-                    ...
-                  end
-              - pattern: |
-                  $CLASS.$EVAL(...)
-          - focus-metavariable: $EVAL
-          - metavariable-pattern:
-              metavariable: $EVAL
-              patterns:
-                - pattern-either:
-                    - pattern: class_eval
-                    - pattern: instance_eval
-                    - pattern: module_eval
+            - pattern: $X.eval
+            - pattern: $X.class_eval
+            - pattern: $X.instance_eval
+            - pattern: $X.module_eval
+            - pattern: $X.eval(...)
+            - pattern: $X.class_eval(...)
+            - pattern: $X.instance_eval(...)
+            - pattern: $X.module_eval(...)
+            - pattern: eval(...)
+            - pattern: class_eval(...)
+            - pattern: module_eval(...)
+            - pattern: instance_eval(...)
+        - pattern-not: $M("...",...)
     metadata:
       source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_evaluation.rb
       category: security
@@ -52,3 +45,4 @@ rules:
         - https://owasp.org/www-community/attacks/Code_Injection
       technology:
         - ruby
+        - rails
