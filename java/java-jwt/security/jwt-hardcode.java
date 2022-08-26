@@ -48,6 +48,7 @@ abstract class App2
 
     public void bad2() {
         try {
+            // ruleid: java-jwt-hardcoded-secret
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                 .withIssuer("auth0")
