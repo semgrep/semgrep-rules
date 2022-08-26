@@ -1,0 +1,26 @@
+rules:
+- id: gcp-sqlserver-no-public-ip
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_sql_database_instance" "..." {
+        ...
+        ip_configuration {
+          ...
+          ipv4_enabled = true
+          ...
+        }
+        ...
+        }
+  message: >-
+    Ensure Cloud SQL database does not have public IP
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
