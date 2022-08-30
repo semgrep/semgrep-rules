@@ -22,6 +22,10 @@ rules:
     message: >-
       Calling assert with user input is equivalent to eval'ing.
     metadata:
+      owasp: 
+        - "A01:2017 - Injection"
+        - "A03:2021 - Injection"
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
       references:
         - https://www.php.net/manual/en/function.assert
         - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/AssertsSniff.php
