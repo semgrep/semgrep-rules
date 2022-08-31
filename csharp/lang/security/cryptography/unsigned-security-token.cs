@@ -1,6 +1,6 @@
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-​
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ruleid: unsigned-security-token
