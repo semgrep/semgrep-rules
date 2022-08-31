@@ -9,9 +9,8 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {  
             app.UseExceptionHandler("/Error");  
         }  
-​
 }
-​
+
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)  
 {  
         if (env.IsDevelopment())  
@@ -23,5 +22,4 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {  
             app.UseExceptionHandler("/Error");  
         }  
-​
 }
