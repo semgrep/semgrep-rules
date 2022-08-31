@@ -50,7 +50,7 @@ public ActionResult LogOn(LogOnModel model, string returnUrl)
         }
     }
 }
-​
+
 [HttpPost]
 public ActionResult LogOn(LogOnModel model, string returnUrl)
 {
