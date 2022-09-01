@@ -26,13 +26,12 @@ rules:
   mode: taint
   pattern-sinks:
   - patterns:
-    - pattern-inside: '$WRITER = csv.writer(...)
+    - pattern-inside: |
+        $WRITER = csv.writer(...)
 
         ...
 
         $WRITER.$WRITE(...)
-
-        '
     - pattern: $WRITER.$WRITE(...)
     - metavariable-regex:
         metavariable: $WRITE
@@ -61,6 +60,9 @@ rules:
           - pattern: flask.request.view_args.get(...)
           - pattern: flask.request.view_args[...]
       - patterns:
-        - pattern: "@$APP.route($ROUTE, ...)\ndef $FUNC(..., $ROUTEVAR, ...):\n  ...\n"
+        - pattern: |
+            @$APP.route($ROUTE, ...)
+            def $FUNC(..., $ROUTEVAR, ...):
+              ...
         - focus-metavariable: $ROUTEVAR
   severity: ERROR

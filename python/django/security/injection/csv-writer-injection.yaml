@@ -26,20 +26,21 @@ rules:
   mode: taint
   pattern-sinks:
   - patterns:
-    - pattern-inside: '$WRITER = csv.writer(...)
+    - pattern-inside: |
+        $WRITER = csv.writer(...)
 
         ...
 
         $WRITER.$WRITE(...)
-
-        '
     - pattern: $WRITER.$WRITE(...)
     - metavariable-regex:
         metavariable: $WRITE
         regex: ^(writerow|writerows|writeheader)$
   pattern-sources:
   - patterns:
-    - pattern-inside: "def $FUNC(..., $REQUEST, ...):\n  ...\n"
+    - pattern-inside: |
+        def $FUNC(..., $REQUEST, ...):
+          ...
     - focus-metavariable: $REQUEST
     - metavariable-pattern:
         metavariable: $REQUEST
