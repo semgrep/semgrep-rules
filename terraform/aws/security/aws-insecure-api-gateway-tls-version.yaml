@@ -1,5 +1,20 @@
 rules:
 - id: aws-insecure-api-gateway-tls-version
+  languages:
+  - terraform
+  message: Detected AWS API Gateway to be using an insecure version of TLS. To fix
+    this issue make sure to set "security_policy" equal to "TLS_1_2".
+  metadata:
+    category:
+    - security
+    cwe: "CWE-16: Configuration"
+    cwe:"CWE-326: Inadequate Encryption Strength"
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    technology:
+    - aws
+    - terraform
   patterns:
   - pattern-either:
     - pattern: |
@@ -29,18 +44,4 @@ rules:
                   ...
               }
           }
-  message: Detected AWS API Gateway to be using an insecure version of TLS. To fix
-    this issue make sure to set "security_policy" equal to "TLS_1_2".
-  languages:
-  - terraform
   severity: WARNING
-  metadata:
-    cwe:"CWE-326: Inadequate Encryption Strength"
-    owasp:
-    - A02:2021 - Cryptographic Failures
-    - A03:2017 - Sensitive Data Exposure
-    category:
-    - security
-    technology:
-    - aws
-    - terraform

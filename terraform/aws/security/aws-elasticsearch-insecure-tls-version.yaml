@@ -1,5 +1,20 @@
 rules:
 - id: aws-elasticsearch-insecure-tls-version
+  languages:
+  - terraform
+  message: Detected an AWS Elasticsearch domain using an insecure version of TLS.
+    To fix this, set "tls_security_policy" equal to "Policy-Min-TLS-1-2-2019-07".
+  metadata:
+    category:
+    - security
+    cwe: "CWE-16: Configuration"
+    cwe:"CWE-326: Inadequate Encryption Strength"
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    technology:
+    - aws
+    - terraform
   pattern: |
     resource "aws_elasticsearch_domain" $ANYTHING {
       ...
@@ -11,18 +26,4 @@ rules:
       }
       ...
     }
-  message: Detected an AWS Elasticsearch domain using an insecure version of TLS.
-    To fix this, set "tls_security_policy" equal to "Policy-Min-TLS-1-2-2019-07".
-  languages:
-  - terraform
   severity: WARNING
-  metadata:
-    cwe:"CWE-326: Inadequate Encryption Strength"
-    owasp:
-    - A02:2021 - Cryptographic Failures
-    - A03:2017 - Sensitive Data Exposure
-    category:
-    - security
-    technology:
-    - aws
-    - terraform

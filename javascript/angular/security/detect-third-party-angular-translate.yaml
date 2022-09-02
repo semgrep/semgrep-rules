@@ -1,43 +1,44 @@
 rules:
-  - id: detect-angular-translateprovider-useStrategy-method
-    patterns:
-      - pattern: |
-          $translateSanitization.useStrategy();
-      - pattern-inside: |
-          app.controller(..., function($scope,$sce){
-          ...
-          });
-    message: >-
-      If the $translateSanitization.useStrategy is set to null or blank this can be dangerous.
-    languages:
-      - javascript
-    severity: WARNING
-    metadata:
-      references:
-        - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angular
-        - typescript
-  - id: detect-angular-translateprovider-translations-method
-    patterns:
-      - pattern: |
-          $translateProvider.translations(...,$SOURCE);
-      - pattern-inside: |
-          app.controller(..., function($scope,$sce){
-          ...
-          });
-    message: >-
-      The use of $translateProvider.translations method can be dangerous if user input is provided to this API.
-    languages:
-      - javascript
-    severity: WARNING
-    metadata:
-      references:
-        - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angular
-        - typescript
+- id: detect-angular-translateprovider-useStrategy-method
+  languages:
+  - javascript
+  message: If the $translateSanitization.useStrategy is set to null or blank this
+    can be dangerous.
+  metadata:
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    technology:
+    - angular
+    - typescript
+  patterns:
+  - pattern: |
+      $translateSanitization.useStrategy();
+  - pattern-inside: |
+      app.controller(..., function($scope,$sce){
+      ...
+      });
+  severity: WARNING
+- id: detect-angular-translateprovider-translations-method
+  languages:
+  - javascript
+  message: The use of $translateProvider.translations method can be dangerous if user
+    input is provided to this API.
+  metadata:
+    category: security
+    references:
+    - https://docs.angularjs.org/api/ng/service/$sce#trustAsUrl
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    technology:
+    - angular
+    - typescript
+  patterns:
+  - pattern: |
+      $translateProvider.translations(...,$SOURCE);
+  - pattern-inside: |
+      app.controller(..., function($scope,$sce){
+      ...
+      });
+  severity: WARNING

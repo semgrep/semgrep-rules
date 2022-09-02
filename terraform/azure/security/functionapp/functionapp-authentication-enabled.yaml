@@ -1,41 +1,43 @@
 rules:
-  - id: functionapp-authentication-enabled
-    message: >-
-      Enabling authentication ensures that all communications in the application are authenticated.
-      The `auth_settings` block needs to be filled out with the appropriate auth backend settings
-    patterns:
-      - pattern: resource
-      - pattern-not-inside: |
-          resource "azurerm_function_app" "..." {
+- id: functionapp-authentication-enabled
+  languages:
+  - hcl
+  message: Enabling authentication ensures that all communications in the application
+    are authenticated. The `auth_settings` block needs to be filled out with the appropriate
+    auth backend settings
+  metadata:
+    category: security
+    cwe: "CWE-16: Configuration"
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/function_app#enabled
+    technology:
+    - terraform
+    - azure
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_function_app" "..." {
+      ...
+        auth_settings {
           ...
-            auth_settings {
-              ...
-              enabled = true
-              ...
-            }
+          enabled = true
           ...
+        }
+      ...
+      }
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_function_app" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_function_app" "..." {
+        ...
+          auth_settings {
+            ...
+            enabled = false
+            ...
           }
-      - pattern-either:
-          - pattern-inside: |
-              resource "azurerm_function_app" "..." {
-              ...
-              }
-          - pattern-inside: |
-              resource "azurerm_function_app" "..." {
-              ...
-                auth_settings {
-                  ...
-                  enabled = false
-                  ...
-                }
-              ...
-              }
-    metadata:
-      category: security
-      technology:
-        - terraform
-        - azure
-      references:
-        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/function_app#enabled
-    languages: [hcl]
-    severity: INFO
+        ...
+        }
+  severity: INFO

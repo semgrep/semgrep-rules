@@ -1,28 +1,29 @@
 rules:
-  - id: docker-arbitrary-container-run
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              $CLIENT = docker.from_env()
-              ...
-          - pattern-inside: |
-              $CLIENT = docker.DockerClient(...)
-              ...
-      - pattern-either:
-          - pattern: |
-              $CLIENT.containers.run(...)
-          - pattern: |
-              $CLIENT.containers.create(...)
-      - pattern-not: |
-          $CLIENT.containers.run("...",...)
-      - pattern-not: |
-          $CLIENT.containers.create("...",...)
-    message: >-
-      If unverified user data can reach the `run` or `create` method it can result in running arbitrary container.
-    languages:
-      - python
-    severity: WARNING
-    metadata:
-      category: security
-      technology:
-        - docker
+- id: docker-arbitrary-container-run
+  languages:
+  - python
+  message: If unverified user data can reach the `run` or `create` method it can result
+    in running arbitrary container.
+  metadata:
+    category: security
+    cwe: "CWE-16: Configuration"
+    technology:
+    - docker
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $CLIENT = docker.from_env()
+        ...
+    - pattern-inside: |
+        $CLIENT = docker.DockerClient(...)
+        ...
+  - pattern-either:
+    - pattern: |
+        $CLIENT.containers.run(...)
+    - pattern: |
+        $CLIENT.containers.create(...)
+  - pattern-not: |
+      $CLIENT.containers.run("...",...)
+  - pattern-not: |
+      $CLIENT.containers.create("...",...)
+  severity: WARNING

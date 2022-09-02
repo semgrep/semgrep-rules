@@ -1,24 +1,25 @@
 rules:
-  - id: wildcard-assume-role
-    patterns:
-      - pattern-inside: |
-          "Statement": [...]
-      - pattern-inside: |
-          {..., "Effect": "Allow", ..., "Action": "sts:AssumeRole", ...}
-      - pattern: |
-          "Principal": {..., "AWS": "*", ...}
-    message: >-
-      Detected wildcard access granted to sts:AssumeRole. This means anyone with your
-      AWS account ID and the name of the role can assume the role. Instead, limit to
-      a specific identity in your account, like this: `arn:aws:iam::<account_id>:root`.
-    metadata:
-      category: security
-      technology:
-        - aws
-      references:
-        - https://rhinosecuritylabs.com/aws/assume-worst-aws-assume-role-enumeration/
-      owasp:
-        - A06:2017 - Security Misconfiguration
-        - A05:2021 - Security Misconfiguration
-    languages: [json]
-    severity: ERROR
+- id: wildcard-assume-role
+  languages:
+  - json
+  message: 'Detected wildcard access granted to sts:AssumeRole. This means anyone
+    with your AWS account ID and the name of the role can assume the role. Instead,
+    limit to a specific identity in your account, like this: `arn:aws:iam::<account_id>:root`.'
+  metadata:
+    category: security
+    cwe: "CWE-16: Configuration"
+    owasp:
+    - A06:2017 - Security Misconfiguration
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://rhinosecuritylabs.com/aws/assume-worst-aws-assume-role-enumeration/
+    technology:
+    - aws
+  patterns:
+  - pattern-inside: |
+      "Statement": [...]
+  - pattern-inside: |
+      {..., "Effect": "Allow", ..., "Action": "sts:AssumeRole", ...}
+  - pattern: |
+      "Principal": {..., "AWS": "*", ...}
+  severity: ERROR

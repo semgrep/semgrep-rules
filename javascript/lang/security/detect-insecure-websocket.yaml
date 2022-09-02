@@ -1,15 +1,18 @@
 rules:
-  - id: detect-insecure-websocket
-    pattern-regex: \bws:\/\/
-    languages: [regex]
-    message: Insecure WebSocket Detected. WebSocket Secure (wss) should be used for all WebSocket connections.
-    metadata:
-      asvs:
-        section: "V13: API and Web Service Verification Requirements"
-        control_id: 13.5.1 Insecure WebSocket
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x21-V13-API.md#v135-websocket-security-requirements
-        version: "4"
-      category: security
-      technology:
-        - regex
-    severity: ERROR
+- id: detect-insecure-websocket
+  languages:
+  - regex
+  message: Insecure WebSocket Detected. WebSocket Secure (wss) should be used for
+    all WebSocket connections.
+  metadata:
+    asvs:
+      control_id: 13.5.1 Insecure WebSocket
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x21-V13-API.md#v135-websocket-security-requirements
+      section: 'V13: API and Web Service Verification Requirements'
+      version: '4'
+    category: security
+    cwe: "CWE-16: Configuration"
+    technology:
+    - regex
+  pattern-regex: \bws:\/\/
+  severity: ERROR

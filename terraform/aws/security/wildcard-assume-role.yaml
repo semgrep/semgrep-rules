@@ -1,31 +1,32 @@
 rules:
-  - id: wildcard-assume-role
-    patterns:
+- id: wildcard-assume-role
+  languages:
+  - hcl
+  message: 'Detected wildcard access granted to sts:AssumeRole. This means anyone
+    with your AWS account ID and the name of the role can assume the role. Instead,
+    limit to a specific identity in your account, like this: `arn:aws:iam::<account_id>:root`.'
+  metadata:
+    category: security
+    cwe: "CWE-16: Configuration"
+    owasp:
+    - A06:2017 - Security Misconfiguration
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://rhinosecuritylabs.com/aws/assume-worst-aws-assume-role-enumeration/
+    technology:
+    - aws
+  patterns:
+  - pattern-inside: |
+      resource "aws_iam_role" $NAME {
+        ...
+      }
+  - pattern: assume_role_policy = "$STATEMENT"
+  - metavariable-pattern:
+      language: json
+      metavariable: $STATEMENT
+      patterns:
       - pattern-inside: |
-          resource "aws_iam_role" $NAME {
-            ...
-          }
-      - pattern: assume_role_policy = "$STATEMENT"
-      - metavariable-pattern:
-          metavariable: $STATEMENT
-          language: json
-          patterns:
-            - pattern-inside: |
-                {..., "Effect": "Allow", ..., "Action": "sts:AssumeRole", ...}
-            - pattern: |
-                "Principal": {..., "AWS": "*", ...}
-    message: >-
-      Detected wildcard access granted to sts:AssumeRole. This means anyone with your
-      AWS account ID and the name of the role can assume the role. Instead, limit to
-      a specific identity in your account, like this: `arn:aws:iam::<account_id>:root`.
-    metadata:
-      category: security
-      technology:
-        - aws
-      references:
-        - https://rhinosecuritylabs.com/aws/assume-worst-aws-assume-role-enumeration/
-      owasp:
-        - A06:2017 - Security Misconfiguration
-        - A05:2021 - Security Misconfiguration
-    languages: [hcl]
-    severity: ERROR
+          {..., "Effect": "Allow", ..., "Action": "sts:AssumeRole", ...}
+      - pattern: |
+          "Principal": {..., "AWS": "*", ...}
+  severity: ERROR

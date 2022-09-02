@@ -1,26 +1,27 @@
 rules:
-  - id: detect-angular-trust-as-method
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-inside: |
-              app.controller(..., function($scope,$sce) {
-              ...
-              });
-          - pattern: $scope.$X
-    pattern-sinks:
-      - pattern: $sce.trustAs(...)
-      - pattern: $sce.trustAsHtml(...)
-    message: >-
-      The use of $sce.trustAs can be dangerous if unsanitized user input flows through this API.
-    languages:
-      - javascript
-      - typescript
-    metadata:
-      references:
-        - https://docs.angularjs.org/api/ng/service/$sce
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angular
-    severity: WARNING
+- id: detect-angular-trust-as-method
+  languages:
+  - javascript
+  - typescript
+  message: The use of $sce.trustAs can be dangerous if unsanitized user input flows
+    through this API.
+  metadata:
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://docs.angularjs.org/api/ng/service/$sce
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    technology:
+    - angular
+  mode: taint
+  pattern-sinks:
+  - pattern: $sce.trustAs(...)
+  - pattern: $sce.trustAsHtml(...)
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        app.controller(..., function($scope,$sce) {
+        ...
+        });
+    - pattern: $scope.$X
+  severity: WARNING

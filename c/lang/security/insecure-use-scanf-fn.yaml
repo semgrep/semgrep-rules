@@ -1,16 +1,17 @@
 rules:
-  - id: insecure-use-scanf-fn
-    pattern: scanf(...)
-    message: >-
-      Avoid using 'scanf()'. This function, when used improperly, does not consider
-      buffer boundaries and can lead to buffer overflows. Use 'fgets()' instead
-      for reading input.
-    metadata:
-      references:
-        - http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html
-      category: security
-      technology:
-        - c
-      confidence: HIGH
-    languages: [c]
-    severity: WARNING
+- id: insecure-use-scanf-fn
+  languages:
+  - c
+  message: Avoid using 'scanf()'. This function, when used improperly, does not consider
+    buffer boundaries and can lead to buffer overflows. Use 'fgets()' instead for
+    reading input.
+  metadata:
+    category: security
+    confidence: HIGH
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    references:
+    - http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html
+    technology:
+    - c
+  pattern: scanf(...)
+  severity: WARNING

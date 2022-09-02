@@ -1,18 +1,19 @@
 rules:
-  - id: exec-use
-    patterns:
-      - pattern: $FUNC(...);
-      - pattern-not: $FUNC('...', ...);
-      - metavariable-regex:
-          metavariable: $FUNC
-          regex: exec|passthru|proc_open|popen|shell_exec|system|pcntl_exec
-    message: >-
-      Executing non-constant commands. This can lead to command injection.
-    metadata:
-      references:
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/SystemExecFunctionsSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: exec-use
+  languages:
+  - php
+  message: Executing non-constant commands. This can lead to command injection.
+  metadata:
+    category: security
+    cwe: "CWE-16: Configuration"
+    references:
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/SystemExecFunctionsSniff.php
+    technology:
+    - php
+  patterns:
+  - pattern: $FUNC(...);
+  - pattern-not: $FUNC('...', ...);
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: exec|passthru|proc_open|popen|shell_exec|system|pcntl_exec
+  severity: ERROR

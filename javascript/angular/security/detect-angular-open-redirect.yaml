@@ -1,25 +1,26 @@
 rules:
-  - id: detect-angular-open-redirect
-    message: >-
-      Use of $window.location.href can lead to open-redirect if user input is used for redirection.
-    languages:
-      - javascript
-      - typescript
-    metadata:
-      asvs:
-        section: V5 Validation, Sanitization and Encoding
-        control_id: 5.5.1 Insecue Redirect
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v51-input-validation
-        version: "4"
-      references:
-        - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angular
-    severity: ERROR
-    patterns:
-      - pattern: |
-          $window.location.href = ...
-      - pattern-not: |
-          $window.location.href = "..."
+- id: detect-angular-open-redirect
+  languages:
+  - javascript
+  - typescript
+  message: Use of $window.location.href can lead to open-redirect if user input is
+    used for redirection.
+  metadata:
+    asvs:
+      control_id: 5.5.1 Insecue Redirect
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v51-input-validation
+      section: V5 Validation, Sanitization and Encoding
+      version: '4'
+    category: security
+    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    technology:
+    - angular
+  patterns:
+  - pattern: |
+      $window.location.href = ...
+  - pattern-not: |
+      $window.location.href = "..."
+  severity: ERROR

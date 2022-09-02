@@ -1,14 +1,15 @@
 rules:
-  - id: info-leak-on-non-formated-string
-    message: >-
-      Use %s, %d, %c... to format your variables, otherwise this could leak information.
-    metadata:
-      references:
-        - http://nebelwelt.net/files/13PPREW.pdf
-      category: security
-      technology:
-        - c
-      confidence: MEDIUM
-    languages: [c]
-    severity: WARNING
-    pattern: printf(argv[$NUM]);
+- id: info-leak-on-non-formated-string
+  languages:
+  - c
+  message: Use %s, %d, %c... to format your variables, otherwise this could leak information.
+  metadata:
+    category: security
+    confidence: MEDIUM
+    cwe: "CWE-134: Use of Externally-Controlled Format String"
+    references:
+    - http://nebelwelt.net/files/13PPREW.pdf
+    technology:
+    - c
+  pattern: printf(argv[$NUM]);
+  severity: WARNING

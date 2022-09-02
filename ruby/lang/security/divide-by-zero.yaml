@@ -1,25 +1,25 @@
 rules:
-  - id: divide-by-zero
-    message: >-
-      Detected a possible ZeroDivisionError.
-    metadata:
-      references:
-        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_divide_by_zero.rb
-      category: security
-      technology:
-        - ruby
-      confidence: MEDIUM
-    languages:
-      - ruby
-    severity: WARNING
-    mode: taint
-    pattern-sources:
-    - patterns:
-      - pattern: $VAR
-      - metavariable-regex:
-          metavariable: $VAR
-          regex: ^\d*(?!\.)$
-    pattern-sinks:
-    - patterns:
-      - pattern-inside: $NUMER / 0
-      - pattern: $NUMER
+- id: divide-by-zero
+  languages:
+  - ruby
+  message: Detected a possible ZeroDivisionError.
+  metadata:
+    category: security
+    confidence: MEDIUM
+    cwe: "CWE-16: Configuration"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_divide_by_zero.rb
+    technology:
+    - ruby
+  mode: taint
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: $NUMER / 0
+    - pattern: $NUMER
+  pattern-sources:
+  - patterns:
+    - pattern: $VAR
+    - metavariable-regex:
+        metavariable: $VAR
+        regex: ^\d*(?!\.)$
+  severity: WARNING
