@@ -29,7 +29,7 @@ def bad4(userinput)
     query = "SELECT name FROM users WHERE age="
     query << params[userinput]
     # passes on 0.111.0 and higher
-    # todoruleid: ruby-pg-sqli
+    # ruleid: ruby-pg-sqli
     con.exec(query)
 end
 

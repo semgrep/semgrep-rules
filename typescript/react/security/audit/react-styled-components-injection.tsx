@@ -24,10 +24,12 @@ function Vulnerable2(userInput) {
 function Vulnerable3(nevermind, {userInput}) {
   const input = '#' + userInput;
 
-  return styled.div`background: ${
+  return styled.div`
+    background: ${
       // ok: react-styled-components-injection
       input
     };
+  `
 }
 
 function OkTest({siteUrl, input}) {
