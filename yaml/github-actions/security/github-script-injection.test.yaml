@@ -1,0 +1,69 @@
+name: test-script-run
+
+on:
+- push
+
+jobs:
+  script-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run script 1
+        uses: actions/github-script@v6
+        if: steps.report-diff.outputs.passed == 'true'
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/file.txt', {encoding: 'utf8'});
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '${{ github.event.pull_request.title }}' + body
+            })
+
+            return true;
+
+      - name: Run script 2
+        uses: actions/github-script@latest
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/${{ github.event.issue.title }}.txt', {encoding: 'utf8'});
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thanks for reporting!'
+            })
+
+            return true;
+
+      - name: Ok script 1
+        uses: not-github/custom-action@latest
+        with:
+          # ok: github-script-injection
+          script: |
+            return ${{ github.event.issue.title }};
+
+      - name: Ok script 2
+        uses: actions/github-script@latest
+        with:
+          # ok: github-script-injection
+          script: |
+            console.log('${{ github.event.workflow_run.artifacts_url }}');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thanks for reporting!'
+            })
+
+            return true;
