@@ -27,7 +27,7 @@ function bad3(userinput) {
     await client.connect()
     let query = "SELECT name FROM users WHERE age=".concat(userinput)
     // passes on 0.111.0 and higher
-    // todoruleid: node-postgres-sqli
+    // ruleid: node-postgres-sqli
     const res = await client.query(query)
     console.log(res.rows[0].message) // Hello world!
     await client.end()
@@ -43,7 +43,7 @@ function bad4(req) {
     pool.connect((err, client, done) => {
       if (err) throw err
       // passes on 0.111.0 and higher
-      // todoruleid: node-postgres-sqli
+      // ruleid: node-postgres-sqli
       client.query("SELECT name FROM users WHERE age=" + req.FormValue("age"), (err, res) => {
         done()
         if (err) {
