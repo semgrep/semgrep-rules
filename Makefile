@@ -1,8 +1,34 @@
+# List of folders containing Semgrep rule files (with a .yml suffix).
+#
+# This is meant to exclude folders that don't contain rule files and
+# may contain .yml files that are not Semgrep rules and would result
+# in errors.
+#
+RULE_FOLDERS = $(shell ls -d */ | grep -v '^stats')
+
+# This is for running using a dev version of semgrep such as:
+#
+#    PIPENV_PIPFILE=~/semgrep/cli/Pipfile SEMGREP='pipenv run semgrep' make
+#
+SEMGREP ?= semgrep
+
+#
+# Check rule validity and check that semgrep finds the expected findings.
+#
+# The semgrep repo also runs this as part of its CI.
+#
 test:
-	semgrep --validate --config=$$PWD/python $$PWD
-	semgrep --validate --config=$$PWD/c $$PWD
-	semgrep --validate --config=$$PWD/javascript $$PWD
-	semgrep --validate --config=$$PWD/java $$PWD
-	semgrep --validate --config=$$PWD/go $$PWD
-	semgrep --validate --config=$$PWD/ocaml $$PWD
-	semgrep --test --strict --test-ignore-todo --quiet $$PWD
+	for root in $(RULE_FOLDERS); do \
+	  echo "======== validate rule files in $$root ========"; \
+	  time -p $(SEMGREP) --validate \
+	    --strict --disable-version-check \
+	    --metrics=off --verbose \
+	    --config="$$root"; \
+	done
+	for root in $(RULE_FOLDERS); do \
+	  echo "========= test rules in $$root ========="; \
+	  time -p $(SEMGREP) --test --test-ignore-todo \
+	    --strict --disable-version-check \
+	    --metrics=off --verbose \
+	    "$$root"; \
+	done
