@@ -17,18 +17,27 @@ SEMGREP ?= semgrep
 #
 # The semgrep repo also runs this as part of its CI.
 #
+.PHONY: test
 test:
+	$(MAKE) validate
+	$(MAKE) test-only
+
+.PHONY: validate
+validate:
 	for root in $(RULE_FOLDERS); do \
 	  echo "======== validate rule files in $$root ========"; \
 	  time -p $(SEMGREP) --validate \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
 	    --config="$$root"; \
-	done
+	done 2>&1
+
+.PHONY: test-only
+test-only:
 	for root in $(RULE_FOLDERS); do \
 	  echo "========= test rules in $$root ========="; \
 	  time -p $(SEMGREP) --test --test-ignore-todo \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
 	    "$$root"; \
-	done
+	done 2>&1
