@@ -22,22 +22,29 @@ test:
 	$(MAKE) validate
 	$(MAKE) test-only
 
+# stdout is redirected to stderr so as to see the whole output in the correct
+# order when running this from pytest.
+# (pytest captures stdout and stderr separately and prints them later,
+# if at all).
+#
 .PHONY: validate
 validate:
+	set -eu; \
 	for root in $(RULE_FOLDERS); do \
 	  echo "======== validate rule files in $$root ========"; \
 	  time -p $(SEMGREP) --validate \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
 	    --config="$$root"; \
-	done 2>&1
+	done >&2
 
 .PHONY: test-only
 test-only:
+	set -eu; \
 	for root in $(RULE_FOLDERS); do \
 	  echo "========= test rules in $$root ========="; \
 	  time -p $(SEMGREP) --test --test-ignore-todo \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
 	    "$$root"; \
-	done 2>&1
+	done >&2
