@@ -9,7 +9,8 @@ rules:
         ...
         }
   message: >-
-    Ensure that IP forwarding is not enabled on Instances	
+    Ensure that IP forwarding is not enabled on Instances. This lets the instance act as a traffic router and
+    receive traffic not intended for it, which may route traffic through unintended passages.	
   metadata:
     owasp:
     - A01:2021 - Broken Access Control
@@ -19,4 +20,4 @@ rules:
       - terraform
       - gcp
   languages: [hcl]
-  severity: WARNING
+  severity: INFO
