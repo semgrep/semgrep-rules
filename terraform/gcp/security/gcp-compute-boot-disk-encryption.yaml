@@ -13,6 +13,14 @@ rules:
           }
           ...
         }
+    - pattern-not-inside: |
+        resource "google_compute_instance" $ANYTHING {
+          ...
+          boot_disk {
+            kms_key_self_link = ...
+          }
+          ...
+        }
   message: Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK)
   languages: [hcl]
   severity: WARNING
