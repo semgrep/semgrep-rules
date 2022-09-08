@@ -10,13 +10,10 @@ rules:
       technology:
         - javascript
     message: >-
-      Detected the use of require(variable). Calling require with a non-literal
-      argument might allow an attacker to load and run arbitrary code, or
-      access arbitrary files.
+      This rule is deprecated.
     patterns:
-      - pattern: require($OBJ)
-      - pattern-not: require(process.env.$ENVVAR)
-      - pattern-not: require('...')
+    - pattern: a()
+    - pattern: b()
     severity: WARNING
     languages:
       - javascript
