@@ -35,7 +35,7 @@ validate:
 	  time -p $(SEMGREP) --validate \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
-	    --config="$$root"; \
+	    --config="./$$root"; \
 	done >&2
 
 .PHONY: test-only
@@ -46,5 +46,5 @@ test-only:
 	  time -p $(SEMGREP) --test --test-ignore-todo \
 	    --strict --disable-version-check \
 	    --metrics=off --verbose \
-	    "$$root"; \
+	    "./$$root"; \
 	done >&2
