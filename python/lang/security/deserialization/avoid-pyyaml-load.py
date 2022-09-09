@@ -7,6 +7,9 @@ yaml.load("!!python/object/new:os.system [echo EXPLOIT!]")
 #ruleid:avoid-pyyaml-load
 yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]")
 
+#ruleid:avoid-pyyaml-load
+yaml.full_load("!!python/object/new:os.system [echo EXPLOIT!]")
+
 def thing(**kwargs):
     #ruleid:avoid-pyyaml-load
     yaml.load("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
@@ -14,6 +17,10 @@ def thing(**kwargs):
 def other_thing(**kwargs):
     #ruleid:avoid-pyyaml-load
     yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
+
+def other_thing_two(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.full_load("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
 
 def this_is_ok(stream):
     #ok:avoid-pyyaml-load
