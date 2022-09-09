@@ -4,7 +4,8 @@
 # may contain .yml files that are not Semgrep rules and would result
 # in errors.
 #
-RULE_FOLDERS = $(shell ls -d */ | grep -v '^stats')
+RULE_FOLDERS = $(shell ls -d */ \
+                | grep -v '^\(stats\|trusted_python\|fingerprints\)/\?$')
 
 # This is for running using a dev version of semgrep such as:
 #
