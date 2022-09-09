@@ -4,8 +4,12 @@ app.controller('myCtrl', function($scope,$sanitize) {
     $scope.foo = getData();
     // ok: detect-angular-element-methods
     angular.element('div').html('hi')
-    // ruleid: detect-angular-element-methods
+    // ok: detect-angular-element-methods
     angular.element('div').html($rootScope.foo)
-    // ruleid: detect-angular-element-methods
+    // ok: detect-angular-element-methods
     angular.element('div').html($scope.foo)
+    // ruleid: detect-angular-element-methods
+    angular.element('div').html($rootScope)
+    // ruleid: detect-angular-element-methods
+    angular.element('div').html($scope)
 });
