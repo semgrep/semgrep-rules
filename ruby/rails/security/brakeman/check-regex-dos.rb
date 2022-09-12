@@ -14,6 +14,10 @@ def some_rails_controller
   foo = Record.read_attribute("some_attribute")
   #ruleid: check-regex-dos
   Regexp.new(foo).match("some_string")
+
+  bar = ENV['someEnvVar']
+  #ok: check-regex-dos
+  Regexp.new(bar).match("some_string")
 end
 
 def use_params_in_regex
