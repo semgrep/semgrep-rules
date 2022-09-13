@@ -1,13 +1,11 @@
 rules:
   - id: non-constant-sql-query
     patterns:
-      - pattern: $DB.sequelize.query(...)
-      - pattern-not: $DB.sequelize.query("...")
-      - pattern-not: |
-          $DB.sequelize.query("...", {..., replacements: { ..., $VAL: $INPUT, ...}, ...})
+      - pattern: a()
+      - pattern: b()
     message: >-
-      Non-constant SQL query detected. Ensure this is not controlled
-      by external data, otherwise this is a SQL injection.
+      This rule has been deprecated.
+      It duplicates `javascript/sequelize/security/audit/sequelize-raw-query` rule.
     metadata:
       owasp:
         - "A01:2017 - Injection"

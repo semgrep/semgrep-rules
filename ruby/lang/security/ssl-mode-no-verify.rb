@@ -1,4 +1,4 @@
-# cf. https://github.com/presidentbeef/brakeman/blob/df2ac8c98a649a5f7b47a42bc17d2ce4ab0e26ec/docs/warning_types/ssl_verification_bypass/index.markdown
+# cf. https://github.com/presidentbeef/brakeman/blob/v3.6.2/docs/warning_types/ssl_verification_bypass/index.markdown 
 
 require "net/https"
 require "uri"

@@ -8,7 +8,7 @@ const models = require('../models/index')
 const challenges = require('../data/datacache').challenges
 
 function okTest() {
-// ok:non-constant-sql-query
+// non-constant-sql-query
 nock('https://api.url.com')
     .get('/endpoint')
     .query({ limit: '100' })
@@ -18,7 +18,7 @@ module.exports = function searchProducts () {
   return (req, res, next) => {
     let criteria = req.query.q === 'undefined' ? '' : req.query.q || ''
     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)
-    // ruleid:non-constant-sql-query
+    // non-constant-sql-query
     models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`)
       .then(([products]) => {
         const dataString = JSON.stringify(products)
@@ -41,7 +41,7 @@ module.exports = function searchProducts () {
         }
         if (utils.notSolved(challenges.dbSchemaChallenge)) {
           let solved = true
-          // ok:non-constant-sql-query
+          // non-constant-sql-query
           models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]) => {
             const tableDefinitions = utils.queryResultToJson(data)
             if (tableDefinitions.data && tableDefinitions.data.length) {
