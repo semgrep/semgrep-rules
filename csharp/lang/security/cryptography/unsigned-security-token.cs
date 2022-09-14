@@ -1,6 +1,6 @@
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-​
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ruleid: unsigned-security-token
@@ -9,10 +9,9 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                     ValidateAudience = false
                 };
             });
-​
+
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-​
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ok: unsigned-security-token

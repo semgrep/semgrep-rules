@@ -2,19 +2,18 @@ rules:
   - id: detect-non-literal-require
     metadata:
       cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-      owasp: "A1: Injection"
+      owasp: "A01:2017 - Injection"
       source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-require.js
+      references:
+      - https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-require.js
       category: security
       technology:
         - javascript
     message: >-
-      Detected the use of require(variable). Calling require with a non-literal argument
-      might
-      allow an attacker to load an run arbitrary code, or access arbitrary files.
+      This rule is deprecated.
     patterns:
-      - pattern: require($OBJ)
-      - pattern-not: require(process.env.$ENVVAR)
-      - pattern-not: require('...')
+    - pattern: a()
+    - pattern: b()
     severity: WARNING
     languages:
       - javascript
