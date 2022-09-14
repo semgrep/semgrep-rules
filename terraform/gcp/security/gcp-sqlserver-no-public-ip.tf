@@ -88,7 +88,7 @@ resource "google_sql_database_instance" "fail_not_list" {
     disk_size       = "20"
     disk_type       = "PD_SSD"
 
-    ip_configuration = {
+    ip_configuration {
       ipv4_enabled    = true
       private_network = "projects/gcp-bridgecrew-deployment/global/networks/default"
       require_ssl     = "false"
