@@ -1,0 +1,29 @@
+rules:
+- id: gcp-artifact-registry-private-repo-iam-binding
+  patterns:
+    - pattern: resource
+    - pattern-either:
+      - pattern-inside: |
+          resource "google_artifact_registry_repository_iam_binding" "..." {
+          ...
+          members = [ ..., "allAuthenticatedUsers", ...]
+          ...
+          }
+      - pattern-inside: |
+          resource "google_artifact_registry_repository_iam_binding" "..." {
+          ...
+          members = [ ..., "allUsers", ...]
+          ...
+          }
+  message: >-
+    Ensure that Artifact Registry repositories are not anonymously or publicly accessible	
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
