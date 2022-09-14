@@ -18,10 +18,18 @@ rules:
       - typescript
     severity: WARNING
     metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+        - "A04:2004 - Cross-Site Scripting (XSS) Flaws"
+        - "A01:2007 - Cross-Site Scripting (XSS)"
+        - "A02:2010 - Cross-Site Scripting (XSS)"
+        - "A03:2013 - Cross-Site Scripting (XSS)"
+        - "A07:2017 - Cross-Site Scripting (XSS)"
+        - "A03:2021 - Injection"
       references:
         - https://docs.angularjs.org/api/ng/service/$sce#trustAsHtml
         - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
       category: security
       technology:
         - angular
-    fix: |

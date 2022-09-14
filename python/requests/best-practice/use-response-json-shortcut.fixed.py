@@ -7,4 +7,4 @@ r = requests.get("https://example.org")
 payload = r.json()
 
 # ruleid: python.requests.best-practice.use-response-json-shortcut
-payload = json.loads(r.text)
+payload = r.json()

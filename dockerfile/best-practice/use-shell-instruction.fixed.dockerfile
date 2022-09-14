@@ -7,10 +7,10 @@ RUN apk add --update-cache bash=4.3.42-r3
 
 # Use bash as the default shell
 # ruleid: use-shell-instruction
-RUN ln -sfv /bin/bash /bin/sh
+SHELL ["/bin/bash", "-c"]
 
 # ruleid: use-shell-instruction
-RUN ln -sfv /bin/zsh /bin/sh
+SHELL ["/bin/zsh", "-c"]
 
 # ok: use-shell-instruction
 SHELL ["/bin/bash", "-c"]

@@ -10,7 +10,7 @@ rules:
   pattern-sinks:
   - patterns:
     - pattern-inside: |
-        render ...
+        render $T
   message: Found a call to `render $T` after calling `$T.save`. Do not call `render`
     after calling `save` on an ActiveRecord object.  Reloading the page will cause
     the state-changing operation to be repeated which may cause undesirable side
@@ -18,7 +18,7 @@ rules:
   languages:
   - ruby
   severity: WARNING
-  fix: redirect_to ...
+  fix: redirect_to $T
   metadata:
     references:
     - https://guides.rubyonrails.org/getting_started.html#creating-a-new-article
