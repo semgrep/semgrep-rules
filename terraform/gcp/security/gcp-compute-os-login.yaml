@@ -1,0 +1,24 @@
+rules:
+- id: gcp-compute-os-login
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_compute_instance" "..." {
+        ...
+        metadata = {
+            enable-oslogin = false
+        }
+        ...
+        }
+  message: >-
+    Ensure that no instance in the project overrides the project setting for enabling OSLogin (OSLogin needs to be enabled in project metadata for all instances)	
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

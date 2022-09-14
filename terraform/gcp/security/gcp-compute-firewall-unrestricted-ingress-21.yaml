@@ -1,0 +1,37 @@
+rules:
+- id: gcp-compute-firewall-unrestricted-ingress-21
+  patterns:
+    - pattern: resource
+    - pattern-either:
+      - pattern-inside: |
+          resource "google_compute_firewall" "..." {
+          ...
+          allow {
+            protocol = "tcp"
+            ports    = [21]
+          }
+          source_ranges = ["0.0.0.0/0"]
+          ...
+          }
+      - pattern-inside: |
+          resource "google_compute_firewall" "..." {
+          ...
+          allow {
+            protocol = "tcp"
+            ports    = [..., "21", ...]
+          }
+          source_ranges = ["0.0.0.0/0"]
+          ...
+          }
+  message: >-
+    Ensure Google compute firewall ingress does not allow unrestricted FTP access
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
