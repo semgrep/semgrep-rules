@@ -5,21 +5,48 @@ rules:
     severity: WARNING
     languages: [javascript, typescript]
     metadata:
-      owasp: "A1: Injection"
+      owasp: "A03:2021 - Injection"
       cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
       category: security
       technology:
         - express
-    patterns:
-      - pattern-either:
-          - pattern-inside: function ... ($REQ, $RES) {...}
-          - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-      - pattern-either:
-          - pattern: $RES.render(<... $REQ.$QUERY.$FOO ...>,...)
-          - pattern: $RES.render(<... $REQ.$BODY ...>,...)
+      references:
+        - http://expressjs.com/en/4x/api.html#res.render
+    mode: taint
+    pattern-sources:
+    - patterns:
+        - pattern-either:
+            - pattern-inside: function ... ($REQ, $RES) {...}
+            - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+            - patterns:
+                - pattern-either:
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+                - metavariable-regex:
+                    metavariable: $METHOD
+                    regex: ^(get|post|put|head|delete|options)$
+        - pattern-either:
+            - pattern: $REQ.query
+            - pattern: $REQ.body
+            - pattern: $REQ.params
+            - pattern: $REQ.cookies
+            - pattern: $REQ.headers
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                {...}
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response) => {...}
+        - focus-metavariable: $REQ
+        - pattern-either:
+            - pattern: params
+            - pattern: query
+            - pattern: cookies
+            - pattern: headers
+            - pattern: body
+    pattern-sinks:
+        - patterns:
+            - pattern-either:
+                - pattern: $RES.render($SINK, ...)
+            - focus-metavariable: $SINK

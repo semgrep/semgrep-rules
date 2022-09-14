@@ -1,0 +1,13 @@
+server:
+  port: 8081
+management:
+  endpoints:
+    web:
+      # ok: spring-actuator-dangerous-endpoints-enabled-yaml
+      base-path: /internal
+      exposure:
+        # ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+        include:
+          - "health"  # Should be OK (but will still be shown in the output)
+          - "prometheus"  # Should match
+          - "logfile"  # Should match

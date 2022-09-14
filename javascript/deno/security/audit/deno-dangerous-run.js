@@ -7,8 +7,8 @@ async function okTest() {
 }
 
 async function test1(userInput) {
-// ruleid: deno-dangerous-run
   const p = Deno.run({
+    // ruleid: deno-dangerous-run
     cmd: [userInput, "hello"],
     stdout: "piped",
     stderr: "piped",
@@ -18,8 +18,8 @@ async function test1(userInput) {
 }
 
 async function test1(userInput) {
-// ruleid: deno-dangerous-run
   const p = Deno.run({
+    // ruleid: deno-dangerous-run
     cmd: ["bash", "-c", userInput],
     stdout: "piped",
     stderr: "piped",

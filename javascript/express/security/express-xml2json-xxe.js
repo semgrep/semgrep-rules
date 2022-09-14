@@ -5,8 +5,8 @@ function test1() {
     const port = 3000
 
     app.get('/', (req, res) => {
-        // ruleid: express-xml2json-xxe
         const xml = req.query.xml
+        // ruleid: express-xml2json-xxe
         const content = xml2json.toJson(xml, {coerce: true, object: true});
         res.send(content)
     })

@@ -33,13 +33,3 @@ RUN yarn build
 
 RUN echo 'npm installing foo'
 
-
-# ruleid: use-frozen-lockfile-pipenv
-RUN pipenv install
-# another case with a trailing space
-# ruleid: use-frozen-lockfile-pipenv
-RUN pipenv install
-RUN pipenv install some_package
-RUN pipenv install --ignore-pipfile
-
-RUN echo 'pipenv installing foo'
