@@ -38,7 +38,7 @@ resource "google_pubsub_topic_iam_binding" "fail2" {
 }
 
 # fail
-# ruleid: gcp-pubsub-private-topic
+# ruleid: gcp-pubsub-private-topic-iam-binding
 resource "google_pubsub_topic_iam_binding" "fail3" {
   cluster = "my-public-topic-binding3"
   role    = "roles/pubsub.editor"
@@ -49,7 +49,7 @@ resource "google_pubsub_topic_iam_binding" "fail3" {
 }
 
 # fail
-# ruleid: gcp-pubsub-private-topic
+# ruleid: gcp-pubsub-private-topic-iam-binding
 resource "google_pubsub_topic_iam_binding" "fail4" {
   cluster = "my-public-topic-binding4"
   role    = "roles/pubsub.publisher"
