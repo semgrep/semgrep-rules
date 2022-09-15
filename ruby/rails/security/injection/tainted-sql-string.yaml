@@ -41,10 +41,10 @@ rules:
                 - focus-metavariable: $X
             - patterns:
                 - pattern: |
-                    "...#{$EXPR}..."
+                    "$SQLVERB#{$EXPR}..."
                 - pattern-not-inside: |
                     $FUNC("...",  "...#{$EXPR}...",...)
-                - focus-metavariable: $EXPR
+                - focus-metavariable: $SQLVERB
                 - pattern-regex: (?i)(select|delete|insert|create|update|alter|drop)\b
             - patterns:
                 - pattern-either:
