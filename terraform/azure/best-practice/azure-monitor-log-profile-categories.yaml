@@ -1,0 +1,27 @@
+rules:
+  - id: azure-monitor-log-profile-categories
+    message: >-
+      Ensure audit profile captures all the activities
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_monitor_log_profile" "..." {
+          ...
+          categories = [
+          "Action",
+          "Delete",
+          "Write",
+          ]
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_monitor_log_profile" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

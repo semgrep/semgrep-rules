@@ -1,0 +1,39 @@
+rules:
+  - id: azure-network-watcher-flowlog-period
+    message: Ensure that Network Security Group Flow Log retention period is 90 days
+      or greater
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_network_watcher_flow_log" "..." {
+          ...
+          retention_policy {
+          ...
+          enabled = true
+          days = $DAYS
+          ...
+          }
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_network_watcher_flow_log" "..." {
+          ...
+          retention_policy {
+          ...
+          enabled = true
+          days = 0
+          ...
+          }
+          ...
+          }
+      - metavariable-comparison:
+          metavariable: $DAYS
+          comparison: $DAYS < 90
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages:
+      - hcl
+    severity: WARNING

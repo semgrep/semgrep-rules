@@ -18,11 +18,13 @@ rules:
           - pattern: |
               <$EL allowDangerousHtml />
           - pattern: |
+              <$EL escapeHtml={false} />
+          - pattern: |
               <$EL transformLinkUri=... />
           - pattern: |
               <$EL transformImageUri=... />
     message: >-
-      Overwriting `transformLinkUri` or `transformImageUri` to something insecure or turning `allowDangerousHtml` on, will open code up to XSS vectors.
+      Overwriting `transformLinkUri` or `transformImageUri` to something insecure, or turning `allowDangerousHtml` on, or turning `escapeHtml` off, will open the code up to XSS vectors.
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       owasp: "A7: Cross-Site Scripting (XSS)"

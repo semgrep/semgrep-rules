@@ -1,32 +1,14 @@
 rules:
   - id: dangerous-subprocess-use
-    pattern-either:
-      - patterns:
-          - pattern-not: subprocess.$FUNC("...", ...)
-          - pattern-not: subprocess.$FUNC(["...",...], ...)
-          - pattern-not: subprocess.CalledProcessError(...)
-          - pattern-not: subprocess.SubprocessError(...)
-          - pattern: subprocess.$FUNC(...)
-      - patterns:
-          - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
-          - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
-      - patterns:
-          - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
-          - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
-      - patterns:
-          - pattern: subprocess.$FUNC("=~/(python)/",...)
-          - pattern-not: subprocess.$FUNC("=~/(python)/","...",...)
-      - patterns:
-          - pattern: subprocess.$FUNC(["=~/(python)/",...],...)
-          - pattern-not: subprocess.$FUNC(["=~/(python)/","...",...],...)
+    patterns:
+    - pattern: a()
+    - pattern: b()
     message: >-
-      Detected subprocess function '$FUNC' without a static string. If this data can
-      be
-      controlled by a malicious actor, it may be an instance of command injection.
-      Audit the use of this call to ensure it is not controllable by an external resource.
-      You may consider using 'shlex.escape()'.
+      This rule is deprecated. It will no longer produce findings.
     metadata:
-      owasp: "A1: Injection"
+      owasp:
+        - A03:2020 - Injection
+        - A01:2017 - Injection
       cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
       asvs:
         section: "V5: Validation, Sanitization and Encoding Verification Requirements"
@@ -37,8 +19,11 @@ rules:
         - https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess
         - https://docs.python.org/3/library/subprocess.html
         - https://docs.python.org/3/library/shlex.html
+        - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
       category: security
       technology:
         - python
+      confidence: LOW
+      deprecated: true
     languages: [python]
-    severity: ERROR
+    severity: INFO 

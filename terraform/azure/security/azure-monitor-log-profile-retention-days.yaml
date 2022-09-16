@@ -1,0 +1,39 @@
+rules:
+- id: azure-monitor-log-profile-retention-days
+  message: Ensure that Activity Log Retention is set 365 days or greater
+  patterns:
+    - pattern: resource
+    - pattern-either:
+        - pattern-inside: |
+            resource "azurerm_monitor_log_profile" "..." {
+            ...
+            retention_policy {
+            ...
+            enabled = true
+            days = $DAYS
+            ...
+            }
+            ...
+            }
+    - pattern-not-inside: |
+        resource "azurerm_monitor_log_profile" "..." {
+        ...
+        retention_policy {
+        ...
+        enabled = false
+        days = 0
+        ...
+        }
+        ...
+        }
+    - metavariable-comparison:
+        metavariable: $DAYS
+        comparison: $DAYS < 365
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - azure
+  languages:
+    - hcl
+  severity: WARNING

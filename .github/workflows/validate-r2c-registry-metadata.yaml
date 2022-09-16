@@ -28,6 +28,8 @@ jobs:
         run: |
           echo "::set-output name=CHANGED_FILES::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )"
       - id: print-changed-files
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
         name: debugging step - print changed files
         run: echo $CHANGED_FILES
       - uses: actions/setup-python@v2

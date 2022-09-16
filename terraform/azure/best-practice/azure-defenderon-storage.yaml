@@ -1,0 +1,27 @@
+rules:
+  - id: azure-defenderon-storage
+    message: >-
+      Ensure that Azure Defender is set to On for Storage
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Standard"
+          resource_type = "StorageAccounts"
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Free"
+          resource_type = "StorageAccounts"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

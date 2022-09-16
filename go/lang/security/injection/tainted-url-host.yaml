@@ -40,7 +40,13 @@ rules:
                       metavariable: $URLSTR
                       regex: \w+://.*
     pattern-sources:
-      - pattern-either:
-          - pattern: "($REQUEST : *http.Request).$ANYTHING"
-          - pattern: "($REQUEST : http.Request).$ANYTHING"
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  ($REQUEST : *http.Request).$ANYTHING
+              - pattern: |
+                  ($REQUEST : http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
     severity: WARNING

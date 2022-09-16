@@ -1,0 +1,27 @@
+rules:
+  - id: azure-defenderon-container-registry
+    message: >-
+      Ensure that Azure Defender is set to On for Container
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Standard"
+          resource_type = "ContainerRegistry"
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Free"
+          resource_type = "ContainerRegistry"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -1,0 +1,27 @@
+rules:
+  - id: azure-functionapp-http-version-latest
+    message: >-
+      Ensure that HTTP Version is the latest if used to run the Function app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_function_app" "..." {
+          ...
+          site_config {
+            ...
+            http2_enabled = true
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_function_app" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

@@ -2,12 +2,16 @@ rules:
   - id: cors-misconfiguration
     mode: taint
     languages:
-      - js
+      - javascript
       - typescript
     metadata:
-      owasp: "A1: Injection"
+      owasp: 
+        - "A05:2021 - Security Misconfiguration"
+        - "A06:2017 - Security Misconfiguration"
       cwe: "CWE-346: Origin Validation Error"
       category: security
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
       technology:
         - express
     message: >-
@@ -17,13 +21,14 @@ rules:
     pattern-sinks:
       - patterns:
           - pattern-either:
-              - pattern: $RES.set($HEADER, ...)
-              - pattern: $RES.header($HEADER, ...)
-              - pattern: $RES.setHeader($HEADER, ...)
+              - pattern: $RES.set($HEADER, $X)
+              - pattern: $RES.header($HEADER, $X)
+              - pattern: $RES.setHeader($HEADER, $X)
               - pattern: |
-                  $RES.set({$HEADER: ...}, ...)
+                  $RES.set({$HEADER: $X}, ...)
               - pattern: |
-                  $RES.writeHead($STATUS, {$HEADER: ...}, ...)
+                  $RES.writeHead($STATUS, {$HEADER: $X}, ...)
+          - focus-metavariable: $X
           - metavariable-regex:
               metavariable: $HEADER
               regex: .*(Access-Control-Allow-Origin|access-control-allow-origin).*
@@ -32,12 +37,30 @@ rules:
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
               - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-              - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-              - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-              - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-              - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-              - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+                  - metavariable-regex:
+                      metavariable: $METHOD
+                      regex: ^(get|post|put|head|delete|options)$
           - pattern-either:
-              - pattern: $REQ.$QUERY
-              - pattern: $REQ.$BODY.$PARAM
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.cookies
+              - pattern: $REQ.headers
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                  {...}
+              - pattern-inside: |
+                  ({ $REQ }: Request,$RES: Response) => {...}
+          - focus-metavariable: $REQ
+          - pattern-either:
+              - pattern: params
+              - pattern: query
+              - pattern: cookies
+              - pattern: headers
+              - pattern: body

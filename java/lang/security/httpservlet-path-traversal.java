@@ -117,3 +117,5 @@ public class BenchmarkTest00045 extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Couldn't open FileOutputStream on file: '" + fileName + "'");
         }
+    }
+}

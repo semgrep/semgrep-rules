@@ -1,7 +1,8 @@
 rules:
   - id: avoid-insecure-deserialization
     metadata:
-      owasp: "A8: Insecure Deserialization"
+      owasp: 
+      - "A08:2017 - Insecure Deserialization"
       cwe: "CWE-502: Deserialization of Untrusted Data"
       references:
         - https://docs.python.org/3/library/pickle.html
@@ -50,6 +51,10 @@ rules:
             regex: dump|dump_session|dumps|load|load_session|loads 
       - patterns:
         - pattern: yaml.$YAMLFUNC(...)
+        - pattern-not: yaml.$YAMLFUNC(..., Dumper=SafeDumper, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Dumper=yaml.SafeDumper, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Loader=SafeLoader, ...)
+        - pattern-not: yaml.$YAMLFUNC(..., Loader=yaml.SafeLoader, ...)
         - metavariable-regex:
             metavariable: $YAMLFUNC
             regex: dump|dump_all|load|load_all

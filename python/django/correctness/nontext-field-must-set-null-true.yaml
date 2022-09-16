@@ -14,14 +14,18 @@ rules:
       - pattern-not: $F = django.db.models.UUIDField(...)
       - pattern-not: $F = django.db.models.ManyToManyField(...)
       - pattern-not: $F = django.db.models.NullBooleanField(...)
+      - pattern-not: $F = django.contrib.gis.db.models.$MODEL(...)
       - pattern-not: $F = phonenumber_field.modelfields.PhoneNumberField(...)
       - pattern-not: $F = ckeditor.fields.RichTextField(...)
       - pattern-not: $F = $X(..., null=True, blank=True, ...)
       - pattern: $F = $X(..., blank=True, ...)
     message: null=True should be set if blank=True is set on non-text fields.
-    languages: [python]
+    languages:
+      - python
     severity: ERROR
     metadata:
       category: correctness
+      references:
+        - https://docs.djangoproject.com/en/4.0/ref/models/fields/#null
       technology:
         - django

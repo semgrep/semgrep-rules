@@ -1,6 +1,6 @@
  def bad_deserialization
     o = Klass.new("hello\n")
-    data = Marshal.dump(o)
+    data = params['data']
     # ruleid: bad-deserialization
     obj = Marshal.load(data)
 
@@ -9,15 +9,19 @@
     # ok: bad-deserialization
     obj = YAML.load(data)
 
-    o = Klass.new("hello\n")
+    o = Klass.new(params['hello'])
     data = CSV.dump(o)
     # ruleid: bad-deserialization
     obj = CSV.load(data)
 
     o = Klass.new("hello\n")
-    data = CSV.dump(o)
+    data = cookies['some_field']
     # ruleid: bad-deserialization
-    obj = data.object_load()
+    obj = Oj.object_load(data)
+    # ruleid: bad-deserialization
+    obj = Oj.load(data)
+   # ok: bad-deserialization
+   obj = Oj.load(data,options=some_safe_options)
  end
 
  def ok_deserialization

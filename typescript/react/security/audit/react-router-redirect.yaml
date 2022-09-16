@@ -1,22 +1,22 @@
 rules:
   - id: react-router-redirect
     patterns:
-      - pattern-inside: |
-          import "react-router-dom";
-          ...
-      - pattern: |
-          <Redirect to={...} />
-      - pattern-not: |
-          <Redirect to={"..."} />
-      - pattern-not: |
-          <Redirect to={{pathname: "..."}} />
+      - pattern: a()
+      - pattern: b()
     message: >-
-      User controlled data in <Redirect /> can lead to unpredicted redirects.
+      this rule has been deprecated.
     languages:
       - typescript
       - javascript
-    severity: WARNING
+    severity: INFO
     metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
+      deprecated: true
       category: security
       technology:
         - react
+      references:
+        - https://v5.reactrouter.com/web/api/Redirect
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+        - https://r2c.dev

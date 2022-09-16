@@ -1,21 +1,15 @@
 rules:
   - id: react-no-refs
-    pattern-either:
-      - pattern: <$EL ref=... />
-      - pattern: $REACT.createRef(...)
-      - pattern: $REACT.useRef(...)
-      - pattern: createRef(...)
-      - pattern: useRef(...)
+    patterns:
+      - pattern: a()
+      - pattern: b()
     message: >-
-      `ref` usage found. refs give direct DOM access and may create a possibility for XSS, 
-      which could cause sensitive information such as user cookies
-      to be retrieved by an attacker. 
-      Instead, avoid direct DOM manipulation or 
-      use DOMPurify to sanitize HTML before writing it into the page.
+      this rule has been deprecated.
     metadata:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
       category: security
+      deprecated: true
       technology:
         - react
       references:
@@ -23,4 +17,4 @@ rules:
     languages:
       - typescript
       - javascript
-    severity: WARNING
+    severity: INFO

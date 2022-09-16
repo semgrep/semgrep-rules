@@ -16,11 +16,16 @@ rules:
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
         - yarn
+      references:
+        - https://classic.yarnpkg.com/lang/en/docs/cli/install/
   - id: use-frozen-lockfile-npm
     patterns:
       - pattern-regex: npm install\b
@@ -36,27 +41,55 @@ rules:
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
         - npm
+      references:
+        - https://docs.npmjs.com/cli/v6/commands/npm-ci
   - id: use-frozen-lockfile-pipenv
     patterns:
-      - pattern-regex: pipenv install\b
-      - pattern-not-regex: pipenv install --ignore-pipfile
-      - pattern-not-regex: pipenv install [\w]+
-    fix: pipenv install --ignore-pipfile
+      - pattern: a()
+      - pattern: b()
     message: >-
-      To ensure reproducable and deterministic builds, use `pipenv install --ignore-pipfile` rather than `pipenv install` in scripts. This will use the lockfile rather than updating it.
+      This rule has been deprecated.
     languages:
       - generic
     severity: INFO
     metadata:
       category: security
       cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
       technology:
         - dockerfile
         - javascript
         - typescript
-        - pipenv
+      references:
+        - https://r2c.dev
+  - id: use-frozen-lockfile-pip
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    message: >-
+      This rule has been deprecated.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe: "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - A09:2017 - Using Components with Known Vulnerabilities
+        - A09:2021 - Vulnerable and Outdated Components
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+      references:
+        - https://r2c.dev

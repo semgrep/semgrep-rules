@@ -1,62 +1,160 @@
 rules:
   - id: raw-html-concat
-    message: >-
-      User controlled data in a HTML string may result in XSS
+    message: User controlled data in a HTML string may result in XSS
     languages:
       - javascript
       - typescript
     severity: WARNING
     metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
+      cwe: 
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: 
+        - "A07:2017 - Cross-Site Scripting (XSS)"
+        - "A01:2017 - Injection"
+        - "A03:2021 - Injection"
       references:
         - https://owasp.org/www-community/attacks/xss/
       category: security
       technology:
         - browser
-    patterns:
-      - pattern-either:
-          - patterns:
-              - pattern: $STRING + $EXPR
-              - pattern-not: $STRING + "..."
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: <$TAG ...
-          - patterns:
-              - pattern: $EXPR + $STRING
-              - pattern-not: '"..." + $STRING'
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: "... </$TAG"
-          - patterns:
-              - pattern: "[..., $STRING, ...].join(...)"
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: <$TAG ...
-          - patterns:
-              - pattern: "[..., $STRING, ...].join(...)"
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: "... </$TAG"
-          - patterns:
-              - pattern: $VAR += $STRING
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: <$TAG ...
-          - patterns:
-              - pattern: $VAR += $STRING
-              - metavariable-pattern:
-                  metavariable: $STRING
-                  language: generic
-                  patterns:
-                    - pattern: "... </$TAG"
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: location.href
+              - pattern: location.hash
+              - pattern: location.search
+              - pattern: $WINDOW. ... .location.href
+              - pattern: $WINDOW. ... .location.hash
+              - pattern: $WINDOW. ... .location.search
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern: $STRING + $EXPR
+                  - pattern-not: $STRING + "..."
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: <$TAG ...
+              - patterns:
+                  - pattern: $EXPR + $STRING
+                  - pattern-not: '"..." + $STRING'
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: ... </$TAG
+              - patterns:
+                  - pattern: "[..., $STRING, ...].join(...)"
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: <$TAG ...
+              - patterns:
+                  - pattern: "[..., $STRING, ...].join(...)"
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: ... </$TAG
+              - patterns:
+                  - pattern: $VAR += $STRING
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: <$TAG ...
+              - patterns:
+                  - pattern: $VAR += $STRING
+                  - metavariable-pattern:
+                      metavariable: $STRING
+                      language: generic
+                      patterns:
+                        - pattern: ... </$TAG
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  $S = require("underscore.string")
+                  ...
+          - pattern-either:
+              - pattern: $S.escapeHTML(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import { ..., $S,... } from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("dompurify")
+                  ...
+              - pattern-inside: |
+                  import $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("isomorphic-dompurify")
+                  ...
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S(...)
+                      ...
+                  - pattern: $VALUE.sanitize(...)
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S.sanitize
+                      ...
+                  - pattern: $S(...)
+              - pattern: $S.sanitize(...)
+              - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  import * as $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  $S = require("xss")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'sanitize-html';
+                  ...
+              - pattern-inside: |
+                  import * as $S from "sanitize-html";
+                  ...
+              - pattern-inside: |
+                  $S = require("sanitize-html")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $S = new Remarkable()
+                  ...
+          - pattern: $S.render(...)

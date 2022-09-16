@@ -13,7 +13,7 @@ rules:
       arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
       the correct host, or ensure that the user data can only affect the path or parameters.
     metadata:
-      cwe: "CWE-918: SSRF"
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp:
         - A10:2021 - Server-Side Request Forgery (SSRF)
       references:
@@ -27,18 +27,16 @@ rules:
       - patterns:
           - pattern-either:
               - pattern-inside: |
-                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE 
-                  $SOURCE,...) {
+                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE $SOURCE,...) {
                     ...
                   }
               - pattern-inside: |
-                  $METHODNAME(..., @$REQ $TYPE
-                  $SOURCE,...) {
+                  $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
                     ...
                   }
           - metavariable-regex:
               metavariable: $REQ
-              regex: (RequestBody|PathVariable|RequestParam)
+              regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
           - pattern: $SOURCE
     pattern-sinks:
     - pattern-either:

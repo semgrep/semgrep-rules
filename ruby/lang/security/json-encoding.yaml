@@ -7,6 +7,11 @@ rules:
       The affected Rails versions are 3.0.x, 3.1.x, 3.2.x, 4.1.x, 4.2.x.
       To fix, either upgrade or add an initializer.
     metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+        - A03:2021 - Injection
+        - A01:2017 - Injection
       references:
         - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_encoding.rb
         - https://groups.google.com/g/rubyonrails-security/c/7VlB_pck3hU/m/3QZrGIaQW6cJ
@@ -16,8 +21,18 @@ rules:
     languages:
       - ruby
     severity: WARNING
-    pattern-either:
-      - pattern: |
-          params[$VAR].to_json
-      - pattern: |
-          JSON.encode(params[$VAR])
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern: |
+            params
+        - pattern-not: |
+            cookies
+    pattern-sinks:
+      - pattern-either:
+        - patterns:
+          - focus-metavariable: $X
+          - pattern: |
+              $X.to_json
+        - pattern: |
+            JSON.encode(...)

@@ -1,0 +1,26 @@
+rules:
+- id: gcp-dataflow-private-job
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_dataflow_job" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_dataflow_job" "..." {
+        ...
+        ip_configuration = "WORKER_IP_PRIVATE"
+        ...
+        }
+  message: >-
+    Ensure Dataflow jobs are private
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
