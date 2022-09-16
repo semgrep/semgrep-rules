@@ -1,20 +1,18 @@
 rules:
-- id: missing-template-string-indicator
-  message: >-
-    This looks like a JavaScript template string. Are you missing a '$' in front of
-    '{...}'?
-  metadata:
-    category: correctness
-    technology:
-    - js
-  languages:
-  - js
-  - ts
-  severity: ERROR
-  patterns:
-  - pattern-inside: |
-      `...`
-  - pattern: $STR
-  - metavariable-regex:
-      metavariable: $STR
-      regex: .*[^$]+{[^{}]*}.*
+  - id: missing-template-string-indicator
+    patterns:
+      - pattern-inside: |
+          `...`
+      - pattern: $STR
+      - metavariable-regex:
+          metavariable: $STR
+          regex: .*[^$]+{[^{}]*}.*
+    languages: [js, ts]
+    message: >-
+      This looks like a JavaScript template string. Are you missing a '$' in front of
+      '{...}'?
+    severity: ERROR
+    metadata:
+      category: correctness
+      technology:
+        - js

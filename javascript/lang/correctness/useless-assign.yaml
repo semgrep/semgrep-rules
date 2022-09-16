@@ -1,18 +1,18 @@
 rules:
-- id: useless-assignment
-  message: '`$X` is assigned twice; the first assignment is useless'
-  metadata:
-    category: correctness
-    technology:
-    - javascript
-  languages:
-  - javascript
-  - typescript
-  severity: WARNING
-  patterns:
-  - pattern: |
-      $X = $Y;
-      $X = $Z;
-  - pattern-not: |
-      $X = $Y;
-      $X = <... $X ...>;
+  - id: useless-assignment
+    patterns:
+      - pattern: |
+          $X = $Y;
+          $X = $Z;
+      - pattern-not: |
+          $X = $Y;
+          $X = <... $X ...>;
+    message: "`$X` is assigned twice; the first assignment is useless"
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - javascript
