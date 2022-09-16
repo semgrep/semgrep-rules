@@ -1,36 +1,46 @@
 rules:
-  - id: deno-dangerous-run
-    metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A03:2021 - Injection"
-      category: security
-      technology:
-        - deno
-      references:
-        - https://deno.land/manual/examples/subprocess#simple-example
-    message: >-
-      Detected non-literal calls to Deno.run(). This could lead to a command
-      injection vulnerability.
-    mode: taint
-    pattern-sources:
+- id: deno-dangerous-run
+  message: >-
+    Detected non-literal calls to Deno.run(). This could lead to a command
+    injection vulnerability.
+  metadata:
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - deno
+    references:
+    - https://deno.land/manual/examples/subprocess#simple-example
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: function ... (..., $ARG,...) {...}
+    - focus-metavariable: $ARG
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          Deno.run({cmd: [$INPUT,...]},...)
+      - pattern: |
+          Deno.run({cmd: ["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$INPUT,...]},...)
       - patterns:
-          - pattern-inside: function ... (..., $ARG,...) {...}
-          - focus-metavariable: $ARG
-    pattern-sinks:
-      - patterns:
-        - pattern-either:
-          - pattern: |
-              Deno.run({cmd: [$INPUT,...]},...)
-          - pattern: |
-              Deno.run({cmd: ["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$INPUT,...]},...)
-          - patterns:
-              - pattern: |
-                  Deno.run({cmd: [$CMD,"-c",$INPUT,...]},...)
-              - pattern-inside: |
-                  $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
-                  ...
-        - focus-metavariable: $INPUT
-    severity: ERROR
-    languages:
-      - javascript
-      - typescript
+        - pattern: |
+            Deno.run({cmd: [$CMD,"-c",$INPUT,...]},...)
+        - pattern-inside: |
+            $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+            ...
+    - focus-metavariable: $INPUT

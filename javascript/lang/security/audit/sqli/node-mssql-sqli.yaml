@@ -1,50 +1,56 @@
 rules:
-  - id: node-mssql-sqli
-    languages:
-      - javascript
-      - typescript
-    message: >-
-      Detected string concatenation with a non-literal variable in a
-      `mssql` JS SQL statement. This could lead to SQL injection if the variable is
-      user-controlled
-      and not properly sanitized. In order to prevent SQL injection,
-      used parameterized queries or prepared statements instead.
-      You can use parameterized statements like so:
-      `$REQ.input('USER_ID', mssql.Int, id);`
-    metadata:
-      owasp:
-        - A01:2017 - Injection
-        - A03:2021 - Injection
-      cwe: >
-        CWE-89: Improper Neutralization of Special Elements used in an SQL
-        Command ('SQL Injection')
-      category: security
-      technology:
-        - mssql
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-      references:
-        - https://www.npmjs.com/package/mssql
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-inside: |
-              function ... (...,$FUNC,...) {
-                ...
-              }
-          - focus-metavariable: $FUNC
-    pattern-sinks:
-      - patterns:
-        - pattern-either:
-          - pattern-inside: |
-              require('mssql');
-              ...
-          - pattern-inside: |
-              import 'mssql';
-              ...
-        - pattern-inside: |
-            $REQ = $POOL.request(...)
-            ...
-        - pattern: |
-            $REQ.query($QUERY,...)
-        - focus-metavariable: $QUERY
-    severity: WARNING
+- id: node-mssql-sqli
+  message: >-
+    Detected string concatenation with a non-literal variable in a
+    `mssql` JS SQL statement. This could lead to SQL injection if the variable is
+    user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `$REQ.input('USER_ID', mssql.Int, id);`
+  metadata:
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    category: security
+    technology:
+    - mssql
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    references:
+    - https://www.npmjs.com/package/mssql
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        function ... (...,$FUNC,...) {
+          ...
+        }
+    - focus-metavariable: $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          require('mssql');
+          ...
+      - pattern-inside: |
+          import 'mssql';
+          ...
+    - pattern-inside: |
+        $REQ = $POOL.request(...)
+        ...
+    - pattern: |
+        $REQ.query($QUERY,...)
+    - focus-metavariable: $QUERY

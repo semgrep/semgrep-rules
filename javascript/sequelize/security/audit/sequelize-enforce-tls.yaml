@@ -1,50 +1,59 @@
 rules:
-  - id: sequelize-enforce-tls
-    message: >-
-      If TLS is disabled on server side (Postgresql server),
-      Sequelize establishes connection without TLS and no
-      error will be thrown. To prevent MITN (Man In The Middle)
-      attack, TLS must be enforce by Sequelize.
-      Set "ssl: true" or define settings "ssl: {...}"
-    metadata:
-      owasp: "A6: Security Misconfiguration"
-      references:
-        - https://node-postgres.com/features/ssl
-        - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
-        - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
-        - https://nodejs.org/api/tls.html#tls_tls_default_min_version
-      category: security
-      technology:
-        - sequelize
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
-    patterns:
-      - pattern: |
-          {
-            host: $HOST,
-            database: $DATABASE,
-            dialect: $DIALECT
-           }
-      - pattern-not: |
-          {
-            host: $HOST,
-            database: $DATABASE,
-            dialect: "postgres",
-            dialectOptions: {
-                ssl: true
-            }
-          }
-      - pattern-not: |
-          {
-            host: $HOST,
-            database: $DATABASE,
-            dialect: $DIALECT,
-            dialectOptions: {
-              ssl: { ... }
-            }
-          }
-      - metavariable-regex:
-          metavariable: $DIALECT
-          regex: '[''"](mariadb|mysql|postgres)[''"]'
+- id: sequelize-enforce-tls
+  message: >-
+    If TLS is disabled on server side (Postgresql server),
+    Sequelize establishes connection without TLS and no
+    error will be thrown. To prevent MITN (Man In The Middle)
+    attack, TLS must be enforce by Sequelize.
+    Set "ssl: true" or define settings "ssl: {...}"
+  metadata:
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://node-postgres.com/features/ssl
+    - https://nodejs.org/api/tls.html#tls_class_tls_tlssocket
+    - https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
+    - https://nodejs.org/api/tls.html#tls_tls_default_min_version
+    category: security
+    technology:
+    - sequelize
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern: |
+      {
+        host: $HOST,
+        database: $DATABASE,
+        dialect: $DIALECT
+       }
+  - pattern-not: |
+      {
+        host: $HOST,
+        database: $DATABASE,
+        dialect: "postgres",
+        dialectOptions: {
+            ssl: true
+        }
+      }
+  - pattern-not: |
+      {
+        host: $HOST,
+        database: $DATABASE,
+        dialect: $DIALECT,
+        dialectOptions: {
+          ssl: { ... }
+        }
+      }
+  - metavariable-regex:
+      metavariable: $DIALECT
+      regex: "['\"](mariadb|mysql|postgres)['\"]"

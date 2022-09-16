@@ -1,71 +1,78 @@
 rules:
-  - id: raw-html-format
-    severity: WARNING
-    message: >-
-      User data flows into the host portion of this manually-constructed HTML.
-      This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from 
-      user-provided input. Consider using a sanitization library such as 
-      DOMPurify to sanitize the HTML within.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp:
-        - "A07:2017: - Cross-Site Scripting (XSS)"
-        - "A03:2021: - Injection"
-      references:
-        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
-      category: security
-      technology:
-        - express
-    languages:
-      - javascript
-      - typescript
-    mode: taint
-    pattern-sources:
+- id: raw-html-format
+  message: >-
+    User data flows into the host portion of this manually-constructed HTML.
+    This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from  user-provided input.
+    Consider using a sanitization library such as  DOMPurify to sanitize the HTML within.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
       - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)$
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
       - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - focus-metavariable: $REQ
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
-    pattern-sinks:
+        - pattern-either:
+          - pattern: '"$HTMLSTR" + $EXPR'
+          - pattern: '"$HTMLSTR".concat(...)'
+          - pattern: util.format($HTMLSTR, ...)
+        - metavariable-pattern:
+            metavariable: $HTMLSTR
+            language: generic
+            pattern: <$TAG ...
       - patterns:
-          - pattern-either:
-              - patterns:
-                  - pattern-either:
-                      - pattern: '"$HTMLSTR" + $EXPR'
-                      - pattern: '"$HTMLSTR".concat(...)'
-                      - pattern: util.format($HTMLSTR, ...)
-                  - metavariable-pattern:
-                      metavariable: $HTMLSTR
-                      language: generic
-                      pattern: <$TAG ...
-              - patterns:
-                  - pattern: |
-                      `...`
-                  - pattern-regex: |
-                      .*<\w+.*
+        - pattern: |
+            `...`
+        - pattern-regex: |
+            .*<\w+.*

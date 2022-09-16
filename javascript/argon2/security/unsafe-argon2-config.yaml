@@ -1,24 +1,8 @@
 rules:
 - id: unsafe-argon2-config
-  mode: taint
-  pattern-sources:
-    - patterns:
-      - pattern-inside: |
-          $ARGON = require('argon2');
-          ...
-      - pattern: |
-          {type: ...}
-  pattern-sanitizers:
-    - patterns:
-      - pattern: |
-          {type: $ARGON.argon2id}
-          ...
-  pattern-sinks:
-      - patterns:
-        - pattern: |
-            $Y
-        - pattern-inside: |
-            $ARGON.hash(...,$Y)
+  message: >-
+    Prefer Argon2id where possible. Per RFC9016, section 4 IETF recommends selecting Argon2id unless you
+    can guarantee an adversary has no direct access to the computing environment.
   metadata:
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
@@ -26,12 +10,38 @@ rules:
     - https://www.cs.tau.ac.il/~tromer/papers/cache-joc-20090619.pdf
     - https://datatracker.ietf.org/doc/html/rfc9106#section-4
     category: security
+    cwe:
+    - 'CWE-916: Use of Password Hash With Insufficient Computational Effort'
     technology:
     - argon2
     - cryptography
-  message: >-
-    Prefer Argon2id where possible. Per RFC9016, section 4 IETF recommends selecting Argon2id unless you can guarantee an adversary has no direct access to the computing environment.
-  severity: WARNING
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - vuln
+    impact: LOW
+    likelihood: HIGH
+    confidence: MEDIUM
   languages:
   - javascript
   - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $ARGON = require('argon2');
+        ...
+    - pattern: |
+        {type: ...}
+  pattern-sinks:
+  - patterns:
+    - pattern: |
+        $Y
+    - pattern-inside: |
+        $ARGON.hash(...,$Y)
+  pattern-sanitizers:
+  - patterns:
+    - pattern: |
+        {type: $ARGON.argon2id}
+        ...

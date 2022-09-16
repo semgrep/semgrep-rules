@@ -1,32 +1,42 @@
 rules:
-  - id: sequelize-raw-query
-    message: >-
-      Avoiding SQL string concatenation: untrusted input concatenated with raw
-      SQL query can result in SQL Injection. Data replacement or data binding
-      should be used.
-      See https://sequelize.org/master/manual/raw-queries.html
-    metadata:
-      category: security
-      technology:
-        - sequelize
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-      owasp: "A1: Injection"
-      references:
-        - https://sequelize.org/master/manual/raw-queries.html
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
-    pattern-either:
-      - pattern: |
-          $DATABASE.sequelize.query(`...${...}...`, ...)
-      - pattern: |
-          $QUERY = `...${...}...`
-          ...
-          $DATABASE.sequelize.query($QUERY, ...)
-      - pattern: |
-          $DATABASE.sequelize.query($SQL + $VALUE, ...)
-      - pattern: |
-          $QUERY = $SQL + $VALUE
-          ...
-          $DATABASE.sequelize.query($QUERY, ...)
+- id: sequelize-raw-query
+  message: >-
+    Avoiding SQL string concatenation: untrusted input concatenated with raw
+    SQL query can result in SQL Injection. Data replacement or data binding
+    should be used.
+    See https://sequelize.org/master/manual/raw-queries.html
+  metadata:
+    category: security
+    technology:
+    - sequelize
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://sequelize.org/master/manual/raw-queries.html
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern-either:
+  - pattern: |
+      $DATABASE.sequelize.query(`...${...}...`, ...)
+  - pattern: |
+      $QUERY = `...${...}...`
+      ...
+      $DATABASE.sequelize.query($QUERY, ...)
+  - pattern: |
+      $DATABASE.sequelize.query($SQL + $VALUE, ...)
+  - pattern: |
+      $QUERY = $SQL + $VALUE
+      ...
+      $DATABASE.sequelize.query($QUERY, ...)

@@ -1,27 +1,40 @@
 rules:
-  - id: jwt-exposed-data
-    message: >-
-      The object is passed strictly to jsonwebtoken.sign(...)
-      Make sure that sensitive information is not exposed through JWT token payload.
-    severity: WARNING
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-522: Insufficiently Protected Credentials"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-      asvs:
-        section: "V3: Session Management Verification Requirements"
-        control_id: 3.5.3 Insecue Stateless Session Tokens
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
-        version: "4"
-      category: security
-      technology:
-        - jwt
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          $JWT = require('jsonwebtoken');
-          ...
-      - pattern-either:
-          - pattern-inside: function (...,$INPUT,...) {...}
-          - pattern-inside: function $F(...,$INPUT,...) {...}
-      - pattern: $JWT.sign($INPUT,...)
+- id: jwt-exposed-data
+  message: >-
+    The object is passed strictly to jsonwebtoken.sign(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  metadata:
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    asvs:
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.5.3 Insecue Stateless Session Tokens
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+      version: '4'
+    category: security
+    technology:
+    - jwt
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      $JWT = require('jsonwebtoken');
+      ...
+  - pattern-either:
+    - pattern-inside: function (...,$INPUT,...) {...}
+    - pattern-inside: function $F(...,$INPUT,...) {...}
+  - pattern: $JWT.sign($INPUT,...)

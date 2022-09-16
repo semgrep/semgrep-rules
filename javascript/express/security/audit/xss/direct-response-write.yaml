@@ -1,106 +1,114 @@
 rules:
-  - id: direct-response-write
-    message: >-
-      Detected directly writing to a Response object from user-defined input. This bypasses
-      any HTML escaping and may expose your application to a Cross-Site-scripting
-      (XSS) vulnerability. Instead, use 'resp.render()' to render
-      safely escaped HTML.
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    metadata:
-      references: 
-        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
-      owasp: 
-        - A03:2021 - Injection
-        - A07:2017 - Cross-Site Scripting (XSS)
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      category: security
-      technology:
-        - express
-    mode: taint
-    pattern-sources:
+- id: direct-response-write
+  message: >-
+    Detected directly writing to a Response object from user-defined input. This bypasses
+    any HTML escaping and may expose your application to a Cross-Site-scripting
+    (XSS) vulnerability. Instead, use 'resp.render()' to render
+    safely escaped HTML.
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
       - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)
-          - pattern-not-inside: |
-              function ... ($REQ, $RES) {
-                  ...
-                  $RES.$SET('Content-Type', '$TYPE')
-              }
-          - pattern-not-inside: |
-              $APP.$METHOD(..., function $FUNC($REQ, $RES) {
-                  ...
-                  $RES.$SET('Content-Type', '$TYPE')
-              })
-          - pattern-not-inside: |
-              function ... ($REQ, $RES, $NEXT) {
-                  ...
-                  $RES.$SET('Content-Type', '$TYPE')
-              }
-          - pattern-not-inside: |
-              function ... ($REQ, $RES) {
-                  ...
-                  $RES.set('$TYPE')
-              }
-          - pattern-not-inside: |
-              $APP.$METHOD(..., function $FUNC($REQ, $RES) {
-                  ...
-                  $RES.set('$TYPE')
-              })
-          - pattern-not-inside: |
-              function ... ($REQ, $RES, $NEXT) {
-                  ...
-                  $RES.set('$TYPE')
-              }
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - pattern-not-inside: |
-              ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-              {
-                  ...
-                  $RES.$SET('Content-Type', '$TYPE')
-              }
-          - pattern-not-inside: |
-              ({ $REQ }: Request,$RES: Response) => {
-                  ...
-                  $RES.$SET('Content-Type', '$TYPE')
-              }
-          - pattern-not-inside: |
-              ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-              {
-                  ...
-                  $RES.set('$TYPE')
-              }
-          - pattern-not-inside: |
-              ({ $REQ }: Request,$RES: Response) => {
-                  ...
-                  $RES.$SET('$TYPE')
-              }
-          - focus-metavariable: $REQ
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: body
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern: $RES.write($ARG)
-              - pattern: $RES.send($ARG)
-          - focus-metavariable: $ARG
+        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)
+    - pattern-not-inside: |
+        function ... ($REQ, $RES) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        $APP.$METHOD(..., function $FUNC($REQ, $RES) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        })
+    - pattern-not-inside: |
+        function ... ($REQ, $RES, $NEXT) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        function ... ($REQ, $RES) {
+            ...
+            $RES.set('$TYPE')
+        }
+    - pattern-not-inside: |
+        $APP.$METHOD(..., function $FUNC($REQ, $RES) {
+            ...
+            $RES.set('$TYPE')
+        })
+    - pattern-not-inside: |
+        function ... ($REQ, $RES, $NEXT) {
+            ...
+            $RES.set('$TYPE')
+        }
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+        {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response) => {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+        {
+            ...
+            $RES.set('$TYPE')
+        }
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response) => {
+            ...
+            $RES.$SET('$TYPE')
+        }
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $RES.write($ARG)
+      - pattern: $RES.send($ARG)
+    - focus-metavariable: $ARG

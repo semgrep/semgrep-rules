@@ -1,22 +1,32 @@
 rules:
-  - id: detect-buffer-noassert
-    metadata:
-      cwe: "CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer"
-      source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-buffer-noassert.js
-      category: security
-      technology:
-        - javascript
-    message: >-
-      Detected usage of noassert in Buffer API, which allows the offset the be beyond
-      the
-      end of the buffer. This could result in writing or reading beyond the end of the
-      buffer.
-    patterns:
-      - pattern: $OBJ.$API(..., true)
-      - metavariable-regex:
-          metavariable: $API
-          regex: (read|write)(U?Int8|(U?Int(16|32)|Float|Double)(LE|BE))
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
+- id: detect-buffer-noassert
+  message: >-
+    Detected usage of noassert in Buffer API, which allows the offset the be beyond
+    the
+    end of the buffer. This could result in writing or reading beyond the end of the
+    buffer.
+  metadata:
+    cwe:
+    - 'CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-buffer-noassert.js
+    category: security
+    technology:
+    - javascript
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    references:
+    - https://cwe.mitre.org/data/definitions/119.html
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern: $OBJ.$API(..., true)
+  - metavariable-regex:
+      metavariable: $API
+      regex: (read|write)(U?Int8|(U?Int(16|32)|Float|Double)(LE|BE))

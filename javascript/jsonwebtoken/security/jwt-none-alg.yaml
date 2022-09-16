@@ -1,27 +1,39 @@
 rules:
-  - id: jwt-none-alg
-    message: >-
-      Detected use of the 'none' algorithm in a JWT token.
-      The 'none' algorithm assumes the integrity of the token has already
-      been verified. This would allow a malicious actor to forge a JWT token
-      that will automatically be verified. Do not explicitly use the 'none'
-      algorithm. Instead, use an algorithm such as 'HS256'.
-    metadata:
-      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-      asvs:
-        section: "V3: Session Management Verification Requirements"
-        control_id: 3.5.3 Insecue Stateless Session Tokens
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
-        version: "4"
-      category: security
-      technology:
-        - jwt
-    languages: [javascript, typescript]
-    severity: ERROR
-    patterns:
-      - pattern-inside: |
-          $JWT = require("jsonwebtoken");
-          ...
-      - pattern: $JWT.verify($P, $X, {algorithms:[...,'none',...]},...)
+- id: jwt-none-alg
+  message: >-
+    Detected use of the 'none' algorithm in a JWT token.
+    The 'none' algorithm assumes the integrity of the token has already
+    been verified. This would allow a malicious actor to forge a JWT token
+    that will automatically be verified. Do not explicitly use the 'none'
+    algorithm. Instead, use an algorithm such as 'HS256'.
+  metadata:
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    asvs:
+      section: 'V3: Session Management Verification Requirements'
+      control_id: 3.5.3 Insecue Stateless Session Tokens
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v35-token-based-session-management
+      version: '4'
+    category: security
+    technology:
+    - jwt
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern-inside: |
+      $JWT = require("jsonwebtoken");
+      ...
+  - pattern: $JWT.verify($P, $X, {algorithms:[...,'none',...]},...)

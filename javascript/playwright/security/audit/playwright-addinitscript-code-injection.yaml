@@ -1,22 +1,36 @@
 rules:
-  - id: playwright-addinitscript-code-injection
-    message: >-
-      If unverified user data can reach the `addInitScript` method it can result in Server-Side Request Forgery vulnerabilities
-    severity: WARNING
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - playwright
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('playwright');
-          ...
-      - pattern-not-inside: |
-          var $INPUT = function $FNAME(...){...};
-          ...
-      - pattern: $CONTEXT.addInitScript($INPUT,...)
-      - pattern-not: $CONTEXT.addInitScript("...",...)
-      - pattern-not: $CONTEXT.addInitScript(function(...){...},...)
+- id: playwright-addinitscript-code-injection
+  message: >-
+    If unverified user data can reach the `addInitScript` method it can result in Server-Side Request
+    Forgery vulnerabilities
+  metadata:
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - playwright
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      require('playwright');
+      ...
+  - pattern-not-inside: |
+      var $INPUT = function $FNAME(...){...};
+      ...
+  - pattern: $CONTEXT.addInitScript($INPUT,...)
+  - pattern-not: $CONTEXT.addInitScript("...",...)
+  - pattern-not: $CONTEXT.addInitScript(function(...){...},...)

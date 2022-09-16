@@ -1,40 +1,50 @@
 rules:
-  - id: insufficient-postmessage-origin-validation
-    pattern-either:
-      - patterns:
-          - pattern: |
-              window.addEventListener('message', $FUNC, ...)
-          - metavariable-pattern:
-              metavariable: $FUNC
-              patterns:
-                - pattern: |
-                    function($OBJ) { ... }
-                - pattern-not: |
-                    function($OBJ) { ... if (<... $OBJ.origin ...>) { ... } ... }
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  function $FNAME($OBJ) { $CONTEXT }
-                  ...
-              - pattern-inside: |
-                  $FNAME = (...) => { $CONTEXT }
-                  ...
-          - pattern: |
-              window.addEventListener('message', $FNAME,...)
-          - metavariable-pattern:
-              metavariable: $CONTEXT
-              patterns:
-                - pattern-not: |
-                    ... if (<... $OBJ.origin ...>) { ... } ...
-    message: >-
-      No validation of origin is done by the addEventListener API. It may be possible to exploit this flaw to perform Cross Origin attacks such as Cross-Site Scripting(XSS).
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-345: Insufficient Verification of Data Authenticity"
-      category: security
-      technology:
-        - browser
+- id: insufficient-postmessage-origin-validation
+  message: >-
+    No validation of origin is done by the addEventListener API. It may be possible to exploit this flaw
+    to perform Cross Origin attacks such as Cross-Site Scripting(XSS).
+  metadata:
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-345: Insufficient Verification of Data Authenticity'
+    category: security
+    technology:
+    - browser
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern-either:
+  - patterns:
+    - pattern: |
+        window.addEventListener('message', $FUNC, ...)
+    - metavariable-pattern:
+        patterns:
+        - pattern: |
+            function($OBJ) { ... }
+        - pattern-not: |
+            function($OBJ) { ... if (<... $OBJ.origin ...>) { ... } ... }
+        metavariable: $FUNC
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          function $FNAME($OBJ) { $CONTEXT }
+          ...
+      - pattern-inside: |
+          $FNAME = (...) => { $CONTEXT }
+          ...
+    - pattern: |
+        window.addEventListener('message', $FNAME,...)
+    - metavariable-pattern:
+        patterns:
+        - pattern-not: |
+            ... if (<... $OBJ.origin ...>) { ... } ...
+        metavariable: $CONTEXT

@@ -1,15 +1,25 @@
 rules:
-  - id: wildcard-postmessage-configuration
-    message: >-
-      The target origin of the window.postMessage() API is set to "*". This could allow for information disclosure due to the possibility of any origin allowed to receive the message.
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-345: Insufficient Verification of Data Authenticity"
-      category: security
-      technology:
-        - browser
-    pattern: $OBJECT.postMessage(...,'*')
+- id: wildcard-postmessage-configuration
+  message: >-
+    The target origin of the window.postMessage() API is set to "*". This could allow for information
+    disclosure due to the possibility of any origin allowed to receive the message.
+  metadata:
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-345: Insufficient Verification of Data Authenticity'
+    category: security
+    technology:
+    - browser
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern: $OBJECT.postMessage(...,'*')

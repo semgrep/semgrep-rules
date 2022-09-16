@@ -1,63 +1,75 @@
 rules:
-  - id: express-phantom-injection
-    message: >-
-      If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
-    metadata:
-      owasp: "A03:2021 - Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - express
-      references:
-        - https://phantomjs.org/page-automation.html
-    severity: ERROR
-    languages: [javascript, typescript]
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)$
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - focus-metavariable: $REQ
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
-    pattern-sinks:
+- id: express-phantom-injection
+  message: >-
+    If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery
+    vulnerabilities
+  metadata:
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - express
+    references:
+    - https://phantomjs.org/page-automation.html
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
       - patterns:
         - pattern-either:
-          - pattern-inside: |
-              require('phantom');
-              ...
-          - pattern-inside: |
-              import 'phantom';
-              ...
-        - pattern-either:
-            - pattern: $PAGE.open($SINK,...)
-            - pattern: $PAGE.setContent($SINK,...)
-            - pattern: $PAGE.openUrl($SINK,...)
-            - pattern: $PAGE.evaluateJavaScript($SINK,...)
-            - pattern: $PAGE.property("content",$SINK,...)
-        - focus-metavariable: $SINK
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          require('phantom');
+          ...
+      - pattern-inside: |
+          import 'phantom';
+          ...
+    - pattern-either:
+      - pattern: $PAGE.open($SINK,...)
+      - pattern: $PAGE.setContent($SINK,...)
+      - pattern: $PAGE.openUrl($SINK,...)
+      - pattern: $PAGE.evaluateJavaScript($SINK,...)
+      - pattern: $PAGE.property("content",$SINK,...)
+    - focus-metavariable: $SINK
