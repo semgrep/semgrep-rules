@@ -1,30 +1,33 @@
 rules:
 - id: gcp-build-workers-private
   patterns:
-    - pattern: resource
-    - pattern-inside: |
-        resource "google_cloudbuild_worker_pool" "..." {
+  - pattern: resource
+  - pattern-inside: |
+      resource "google_cloudbuild_worker_pool" "..." {
+      ...
+      }
+  - pattern-not-inside: |
+      resource "google_cloudbuild_worker_pool" "..." {
+      ...
+      worker_config {
         ...
-        }
-    - pattern-not-inside: |
-        resource "google_cloudbuild_worker_pool" "..." {
+        no_external_ip = true
         ...
-        worker_config {
-          ...
-          no_external_ip = true
-          ...
-        }
-        ...
-        }
+      }
+      ...
+      }
   message: >-
     Ensure Cloud build workers are private	
   metadata:
     owasp:
     - A01:2021 - Broken Access Control
-    cwe: 'CWE-284: Improper Access Control'
+    cwe:
+    - 'CWE-284: Improper Access Control'
     category: security
     technology:
-      - terraform
-      - gcp
+    - terraform
+    - gcp
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
   languages: [hcl]
   severity: WARNING
