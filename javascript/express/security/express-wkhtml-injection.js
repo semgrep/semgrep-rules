@@ -17,13 +17,13 @@ app.post('/ok', async (req, res) => {
 })
 
 app.post('/test', async (req, res) => {
-    // ruleid: express-wkhtmltopdf-injection
+    // todo: another-rule
     const img = wkhtmltoimage.generate(req.body, { output: 'vuln.pdf' })
     res.send(img)
 })
 
 app.post('/test-ok', async (req, res) => {
-    // ok: express-wkhtmltopdf-injection
+    // todo: another-rule
     const data = '<html></html>'
     const img = wkhtmltoimage.generate(data, { output: 'vuln.pdf' })
     res.send(img)

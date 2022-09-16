@@ -7,7 +7,6 @@ function test1(userInput) {
         foo: input
     }
     vm.createContext(sandbox)
-    //ruleid: vm-runincontext-context-injection
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
