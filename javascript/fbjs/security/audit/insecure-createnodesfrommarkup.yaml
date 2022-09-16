@@ -1,20 +1,32 @@
 rules:
-  - id: insecure-createnodesfrommarkup
-    patterns:
-      - pattern-either:
-          - pattern: createNodesFromMarkup(...)
-          - pattern: $X.createNodesFromMarkup(...)
-      - pattern-not: createNodesFromMarkup("...",...)
-      - pattern-not: $X.createNodesFromMarkup("...",...)
-    message: >-
-      User controlled data in a `createNodesFromMarkup` is an anti-pattern that can lead to XSS vulnerabilities
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      category: security
-      technology:
-        - fbjs
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
+- id: insecure-createnodesfrommarkup
+  message: >-
+    User controlled data in a `createNodesFromMarkup` is an anti-pattern that can lead to XSS vulnerabilities
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - fbjs
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: createNodesFromMarkup(...)
+    - pattern: $X.createNodesFromMarkup(...)
+  - pattern-not: createNodesFromMarkup("...",...)
+  - pattern-not: $X.createNodesFromMarkup("...",...)

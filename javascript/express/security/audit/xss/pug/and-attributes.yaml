@@ -1,23 +1,33 @@
 rules:
-  - id: template-and-attributes
-    message: >-
-      Detected a unescaped variables using '&attributes'.
-      If external data can reach these locations,
-      your application is exposed to a cross-site scripting (XSS)
-      vulnerability. If you must do this, ensure no external data
-      can reach this location.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://pugjs.org/language/attributes.html#attributes
-      category: security
-      technology:
-        - express
-    languages:
-      - regex
-    paths:
-      include:
-        - "*.pug"
-    severity: WARNING
-    pattern-regex: .*&attributes.*
+- id: template-and-attributes
+  message: >-
+    Detected a unescaped variables using '&attributes'.
+    If external data can reach these locations,
+    your application is exposed to a cross-site scripting (XSS)
+    vulnerability. If you must do this, ensure no external data
+    can reach this location.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://pugjs.org/language/attributes.html#attributes
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - regex
+  severity: WARNING
+  paths:
+    include:
+    - '*.pug'
+  pattern-regex: .*&attributes.*

@@ -1,26 +1,36 @@
 rules:
-  - id: unknown-value-with-script-tag
-    patterns:
-      - pattern-inside: |
-          $UNK = $ANYFUNC(...);
-          ...
-          $OTHERFUNC(..., <... $UNK ...>, ...);
-      - pattern: $OTHERFUNC(..., <... "=~/.*<script.*/" ...>, ...)
-      - pattern: $UNK
-    message: >-
-      Cannot determine what '$UNK' is and it is used with a '<script>' tag. This
-      could be susceptible to cross-site scripting (XSS). Ensure '$UNK' is not
-      externally controlled, or sanitize this data.
-    metadata:
-      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      references:
-        - https://www.developsec.com/2017/11/09/xss-in-a-script-tag/
-        - https://github.com/juice-shop/juice-shop/blob/1ceb8751e986dacd3214a618c37e7411be6bc11a/routes/videoHandler.ts#L68
-      category: security
-      technology:
-        - javascript
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
+- id: unknown-value-with-script-tag
+  message: >-
+    Cannot determine what '$UNK' is and it is used with a '<script>' tag. This
+    could be susceptible to cross-site scripting (XSS). Ensure '$UNK' is not
+    externally controlled, or sanitize this data.
+  metadata:
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    references:
+    - https://www.developsec.com/2017/11/09/xss-in-a-script-tag/
+    - https://github.com/juice-shop/juice-shop/blob/1ceb8751e986dacd3214a618c37e7411be6bc11a/routes/videoHandler.ts#L68
+    category: security
+    technology:
+    - javascript
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      $UNK = $ANYFUNC(...);
+      ...
+      $OTHERFUNC(..., <... $UNK ...>, ...);
+  - pattern: $OTHERFUNC(..., <... "=~/.*<script.*/" ...>, ...)
+  - pattern: $UNK

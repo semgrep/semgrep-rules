@@ -1,33 +1,45 @@
 rules:
-  - id: sandbox-code-injection
-    message: >-
-      Make sure that unverified user data can not reach `sandbox`.
-    severity: WARNING
-    languages: [javascript, typescript]
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-      category: security
-      technology:
-        - sandbox
-    patterns:
+- id: sandbox-code-injection
+  message: >-
+    Make sure that unverified user data can not reach `sandbox`.
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    category: security
+    technology:
+    - sandbox
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      $SANDBOX = require('sandbox');
+      ...
+  - pattern-not-inside: |
+      $CODE = "...";
+      ...
+  - pattern-either:
+    - patterns:
       - pattern-inside: |
-          $SANDBOX = require('sandbox');
-          ...
-      - pattern-not-inside: |
-          $CODE = "...";
-          ...
-      - pattern-either:
-          - patterns:
-              - pattern-inside: |
-                  $S = new $SANDBOX(...);
-                  ...
-              - pattern: $S.run($CODE,...);
-          - pattern: |
-              new $SANDBOX(...).run($CODE,...);
-      - pattern-not-inside: |
           $S = new $SANDBOX(...);
           ...
-          $S.run("...",...);
-      - pattern-not-inside: |-
-          new $SANDBOX(...).run("...",...);
+      - pattern: $S.run($CODE,...);
+    - pattern: |
+        new $SANDBOX(...).run($CODE,...);
+  - pattern-not-inside: |
+      $S = new $SANDBOX(...);
+      ...
+      $S.run("...",...);
+  - pattern-not-inside: |-
+      new $SANDBOX(...).run("...",...);
