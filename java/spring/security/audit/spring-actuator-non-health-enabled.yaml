@@ -1,0 +1,30 @@
+rules:
+  - id: spring-actuator-dangerous-endpoints-enabled
+    patterns:
+      - pattern: management.endpoints.web.exposure.include=$...ACTUATORS
+      - metavariable-comparison:
+          metavariable: $...ACTUATORS
+          # We accept the health actuator, as it is usually harmless (and exposed by default either way)
+          # We ignore the wildcard (*), as it is handled in another rule
+          comparison: not str($...ACTUATORS) in ["health","*"]
+    message: Spring Boot Actuators "$...ACTUATORS" are enabled. Depending on the actuators, this can pose a significant security risk. 
+      Please double-check if the actuators are needed and properly secured.
+    severity: WARNING
+    languages:
+      - generic
+    options:
+      # Limit matches to a single line to work with a limitation of the generic parser
+      generic_ellipsis_max_span: 0
+    metadata:
+      cwe:
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp: 
+        - "A06:2017 - Security Misconfiguration"
+        - "A05:2021 - Security Misconfiguration"
+      references:
+        - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
+        - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
+        - https://blog.maass.xyz/spring-actuator-security-part-1-stealing-secrets-using-spring-actuators
+      category: security
+      technology:
+        - spring
