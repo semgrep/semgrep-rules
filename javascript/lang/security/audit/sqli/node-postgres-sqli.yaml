@@ -1,51 +1,54 @@
 rules:
-  - id: node-postgres-sqli
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-inside: |
-              function ... (...,$FUNC,...) {
-                ...
-              }
-          - focus-metavariable: $FUNC
-    pattern-sinks:
-      - patterns:
-        - pattern-either:
-          - pattern-inside: |
-              const { $CLIENT } = require('pg')
+- id: node-postgres-sqli
+  message: >-
+    Detected string concatenation with a non-literal variable in a node-postgres
+    JS SQL statement. This could lead to SQL injection if the variable is user-controlled
+    and not properly sanitized. In order to prevent SQL injection,
+    used parameterized queries or prepared statements instead.
+    You can use parameterized statements like so:
+    `client.query('SELECT $1 from table', [userinput])`
+  metadata:
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    references:
+    - https://node-postgres.com/features/queries
+    category: security
+    technology:
+    - node-postgres
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        function ... (...,$FUNC,...) {
+          ...
+        }
+    - focus-metavariable: $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          const { $CLIENT } = require('pg')
+          ...
+          $DB = new $CLIENT(...)
+          ...
+      - pattern-inside: |
+          const { $POOL } = require('pg')
+          ...
+          const $NEWPOOL = new $POOL(...)
+          ...
+          $NEWPOOL.connect((..., $DB, ...) => {
               ...
-              $DB = new $CLIENT(...)
-              ...
-          - pattern-inside: |
-              const { $POOL } = require('pg')
-              ...
-              const $NEWPOOL = new $POOL(...)
-              ...
-              $NEWPOOL.connect((..., $DB, ...) => {
-                  ...
-              })
-        - pattern: $DB.query($QUERY,...)
-        - focus-metavariable: $QUERY
-    languages:
-      - javascript
-      - typescript
-    message: >-
-      Detected string concatenation with a non-literal variable in a node-postgres
-      JS SQL statement. This could lead to SQL injection if the variable is user-controlled
-      and not properly sanitized. In order to prevent SQL injection,
-      used parameterized queries or prepared statements instead.
-      You can use parameterized statements like so:
-      `client.query('SELECT $1 from table', [userinput])`
-    metadata:
-      owasp:
-        - A01:2017 - Injection
-        - A03:2021 - Injection
-      cwe: >
-        CWE-89: Improper Neutralization of Special Elements used in an SQL
-        Command ('SQL Injection')
-      references:
-        - https://node-postgres.com/features/queries
-      category: security
-      technology:
-        - node-postgres
-    severity: WARNING
+          })
+    - pattern: $DB.query($QUERY,...)
+    - focus-metavariable: $QUERY

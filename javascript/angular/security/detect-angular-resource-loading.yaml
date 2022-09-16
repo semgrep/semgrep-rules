@@ -1,24 +1,36 @@
 rules:
-  - id: detect-angular-resource-loading
-    pattern-either:
-      - pattern: |
-          $sceDelegateProvider.resourceUrlWhitelist([...,'**',...]);
-      - patterns:
-          - pattern: |
-              $sceDelegateProvider.resourceUrlWhitelist([...,$DOM,...]);
-          - metavariable-regex:
-              metavariable: $DOM
-              regex: ^'.*\*\*.+'$
-    message: >-
-      $sceDelegateProvider allowlisting can introduce security issues if wildcards are used.
-    languages:
-      - javascript
-      - typescript
-    metadata:
-      references:
-        - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angular
-    severity: WARNING
+- id: detect-angular-resource-loading
+  message: >-
+    $sceDelegateProvider allowlisting can introduce security issues if wildcards are used.
+  metadata:
+    references:
+    - https://docs.angularjs.org/api/ng/service/$sce#trustAsJs
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    category: security
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    technology:
+    - angular
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern-either:
+  - pattern: |
+      $sceDelegateProvider.resourceUrlWhitelist([...,'**',...]);
+  - patterns:
+    - pattern: |
+        $sceDelegateProvider.resourceUrlWhitelist([...,$DOM,...]);
+    - metavariable-regex:
+        metavariable: $DOM
+        regex: ^'.*\*\*.+'$

@@ -14,12 +14,12 @@ function test1() {
         expires: expiryDate
       }
     }
-    // ruleid: express-cookie-session-default-name
+    // todo: express-cookie-session-default-name
     app.use(session(opts))
 }
 
 function test2() {
-    // ruleid: express-cookie-session-no-secure
+    // todo: express-cookie-session-no-secure
     app.use(session(Object.assign({
       keys: ['key1', 'key2'],
       name: 'foo'
@@ -34,7 +34,7 @@ function test2() {
 }
 
 function test3() {
-    // ruleid: express-cookie-session-no-httponly
+    // todo: express-cookie-session-no-httponly
     app.use(session({
       keys: ['key1', 'key2'],
       name: 'foo',
@@ -62,7 +62,7 @@ function test4() {
         expires: new Date(Date.now() + 60 * 60 * 1000)
       }
     }
-    // ruleid: express-cookie-session-no-domain
+    // todo: express-cookie-session-no-domain
     app.use(session(opts))
 }
 
@@ -83,7 +83,7 @@ function test5() {
            opts.cookie.expires = expiryDate
     }
 
-    // ruleid: express-cookie-session-no-path
+    // todo: express-cookie-session-no-path
     app.use(session(opts))
 }
 

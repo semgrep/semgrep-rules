@@ -1,23 +1,37 @@
 rules:
-  - id: shelljs-exec-injection
-    message: >-
-      If unverified user data can reach the `exec` method it can result in Remote Code Execution
-    severity: ERROR
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      category: security
-      technology:
-        - shelljs
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('shelljs');
-          ...
-      - pattern-not-inside: |
-          require('shelljs');
-          ...
-          var $INPUT = "...";
-          ...
-      - pattern: $SHELL.exec($INPUT,...)
-      - pattern-not: $SHELL.exec("...",...)
+- id: shelljs-exec-injection
+  message: >-
+    If unverified user data can reach the `exec` method it can result in Remote Code Execution
+  metadata:
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    category: security
+    technology:
+    - shelljs
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern-inside: |
+      require('shelljs');
+      ...
+  - pattern-not-inside: |
+      require('shelljs');
+      ...
+      var $INPUT = "...";
+      ...
+  - pattern: $SHELL.exec($INPUT,...)
+  - pattern-not: $SHELL.exec("...",...)

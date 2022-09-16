@@ -1,56 +1,66 @@
 rules:
-  - id: dangerous-spawn-shell
-    metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A03:2021 - Injection"
-      source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-child-process.js
-      category: security
-      technology:
-        - javascript
-      references:
-        - https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#do-not-use-dangerous-functions
-    message: >-
-      Detected non-literal calls to $EXEC(). This could lead to a command
-      injection vulnerability.
-    mode: taint
-    pattern-sources:
-    - patterns:
-        - pattern-inside: |
-            function ... (...,$FUNC,...) {
-              ...
-            }
-        - focus-metavariable: $FUNC
-    pattern-sinks:
+- id: dangerous-spawn-shell
+  message: >-
+    Detected non-literal calls to $EXEC(). This could lead to a command
+    injection vulnerability.
+  metadata:
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-child-process.js
+    category: security
+    technology:
+    - javascript
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#do-not-use-dangerous-functions
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        function ... (...,$FUNC,...) {
+          ...
+        }
+    - focus-metavariable: $FUNC
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          require('child_process')
+          ...
+      - pattern-inside: |
+          import 'child_process'
+          ...
+    - pattern-either:
+      - pattern: spawn(...)
+      - pattern: spawnSync(...)
+      - pattern: $CP.spawn(...)
+      - pattern: $CP.spawnSync(...)
+    - pattern-either:
+      - pattern: |
+          $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",["-c", $ARG, ...],...)
       - patterns:
-        - pattern-either:
-            - pattern-inside: |
-                require('child_process')
-                ...
-            - pattern-inside: |
-                import 'child_process'
-                ...
-        - pattern-either:
-            - pattern: spawn(...)
-            - pattern: spawnSync(...)
-            - pattern: $CP.spawn(...)
-            - pattern: $CP.spawnSync(...)
-        - pattern-either:
-          - pattern: |
-              $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",["-c", $ARG, ...],...)
-          - patterns:
-              - pattern: $EXEC($CMD,["-c", $ARG, ...],...)
-              - pattern-inside: |
-                  $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
-                  ...
-          - pattern: |
-              $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",[$ARG, ...],...)
-          - patterns:
-              - pattern: $EXEC($CMD,[$ARG, ...],...)
-              - pattern-inside: |
-                  $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
-                  ...
-        - focus-metavariable: $ARG
-    severity: ERROR
-    languages:
-      - javascript
-      - typescript
+        - pattern: $EXEC($CMD,["-c", $ARG, ...],...)
+        - pattern-inside: |
+            $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+            ...
+      - pattern: |
+          $EXEC("=~/(sh|bash|ksh|csh|tcsh|zsh)/",[$ARG, ...],...)
+      - patterns:
+        - pattern: $EXEC($CMD,[$ARG, ...],...)
+        - pattern-inside: |
+            $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/"
+            ...
+    - focus-metavariable: $ARG

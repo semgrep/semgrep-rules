@@ -1,17 +1,32 @@
 rules:
 - id: dynamodb-request-object
-  mode: taint
+  message: >-
+    Detected DynamoDB query params that are tainted by `$EVENT` object. This could lead to NoSQL injection
+    if the variable is user-controlled
+    and not properly sanitized. Explicitly assign query params instead of passing data from `$EVENT` directly
+    to DynamoDB client.
   metadata:
-    cwe: "CWE-943: Improper Neutralization of Special Elements in Data Query Logic"
-    owasp: "A1: Injection"
+    cwe:
+    - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+    owasp:
+    - A01:2017 - Injection
     category: security
     technology:
     - javascript
     - aws-lambda
     - dynamodb
-  message: >-
-    Detected DynamoDB query params that are tainted by `$EVENT` object. This could lead to NoSQL injection if the variable is user-controlled
-    and not properly sanitized. Explicitly assign query params instead of passing data from `$EVENT` directly to DynamoDB client.
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
   pattern-sources:
   - patterns:
     - pattern: $EVENT
@@ -28,18 +43,14 @@ rules:
           $FUNC = function ($EVENT, ...) {...}
           ...
           exports.handler = $FUNC
-  pattern-sanitizers:
-  - patterns:
-    - pattern: |
-        {...}
   pattern-sinks:
   - patterns:
     - pattern: $SINK
     - pattern-inside: |
         $DC.$METHOD($SINK, ...)
     - metavariable-regex:
-        metavariable: "$METHOD"
-        regex: "(query|send|scan|delete|put|transactWrite|update|batchExecuteStatement|executeStatement|executeTransaction|transactWriteItems)"
+        metavariable: $METHOD
+        regex: (query|send|scan|delete|put|transactWrite|update|batchExecuteStatement|executeStatement|executeTransaction|transactWriteItems)
     - pattern-either:
       - pattern-inside: |
           $DC = new $AWS.DocumentClient(...);
@@ -53,7 +64,7 @@ rules:
       - pattern-inside: |
           $DC = DynamoDBDocumentClient.from(...);
           ...
-  severity: ERROR
-  languages:
-    - javascript
-    - typescript
+  pattern-sanitizers:
+  - patterns:
+    - pattern: |
+        {...}

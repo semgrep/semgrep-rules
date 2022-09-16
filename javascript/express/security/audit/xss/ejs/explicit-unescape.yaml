@@ -1,27 +1,37 @@
 rules:
-  - id: template-explicit-unescape
-    message: >-
-      Detected an explicit unescape in an EJS template, using
-      '<%- ... %>' If external data can reach these locations,
-      your application is exposed to a cross-site scripting (XSS)
-      vulnerability. Use '<%= ... %>' to escape this data. If you
-      need escaping, ensure no external data can reach this location.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - http://www.managerjs.com/blog/2015/05/will-ejs-escape-save-me-from-xss-sorta/
-      category: security
-      technology:
-        - express
-    languages:
-      - regex
-    paths:
-      include:
-        - "*.ejs"
-        - "*.html"
-    severity: WARNING
-    pattern-regex: <%-((?!include).)*?%>
-    fix-regex:
-      regex: <%-(.*?)%>
-      replacement: <%=\1%>
+- id: template-explicit-unescape
+  message: >-
+    Detected an explicit unescape in an EJS template, using
+    '<%- ... %>' If external data can reach these locations,
+    your application is exposed to a cross-site scripting (XSS)
+    vulnerability. Use '<%= ... %>' to escape this data. If you
+    need escaping, ensure no external data can reach this location.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - http://www.managerjs.com/blog/2015/05/will-ejs-escape-save-me-from-xss-sorta/
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - regex
+  severity: WARNING
+  paths:
+    include:
+    - '*.ejs'
+    - '*.html'
+  pattern-regex: <%-((?!include).)*?%>
+  fix-regex:
+    regex: <%-(.*?)%>
+    replacement: <%=\1%>
