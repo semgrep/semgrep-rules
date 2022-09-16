@@ -16,7 +16,11 @@ rules:
       # Limit matches to a single line to work with a limitation of the generic parser
       generic_ellipsis_max_span: 0
     metadata:
-      owasp: "A6: Security Misconfiguration"
+      cwe:
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp: 
+        - "A06:2017 - Security Misconfiguration"
+        - "A05:2021 - Security Misconfiguration"
       references:
         - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
         - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
