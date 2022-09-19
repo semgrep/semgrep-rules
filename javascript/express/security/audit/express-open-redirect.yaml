@@ -57,44 +57,56 @@ rules:
             - pattern: cookies
             - pattern: headers
             - pattern: body
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING)
-              - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING + $...ANYTHING)
-              - pattern: $RES.redirect(`$HTTP${$REQ. ... .$ANYTHING}...`)
-              - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...])
-              - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...] + $...ANYTHING)
-              - pattern: $RES.redirect(`$HTTP${$REQ.$ANYTHING[...]}...`)
-          - metavariable-regex:
-              metavariable: $HTTP
-              regex: ^https?:\/\/$
-          - pattern-either:
-              - pattern: $REQ. ... .$ANYTHING
-              - pattern: $REQ.$ANYTHING['...']
-      - patterns:
-          - pattern-either:
-              - pattern: $RES.redirect($REQ. ... .$ANYTHING)
-              - pattern: $RES.redirect($REQ. ... .$ANYTHING + $...ANYTHING)
-              - pattern: $RES.redirect(`${$REQ. ... .$ANYTHING}...`)
-          - pattern: $REQ. ... .$ANYTHING
-      - patterns:
-          - pattern-either:
-              - pattern: $RES.redirect($REQ.$ANYTHING['...'])
-              - pattern: $RES.redirect($REQ.$ANYTHING['...'] + $...FOO)
-              - pattern: $RES.redirect(`${$REQ.$ANYTHING['...']}...`)
-          - pattern: $REQ.$ANYTHING['...']
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  $ASSIGN = $REQ. ... .$ANYTHING
-                  ...
-              - pattern-inside: |
-                  $ASSIGN = $REQ.$ANYTHING['...']
-                  ...                  
-          - pattern-either:
-              - pattern: $RES.redirect($ASSIGN)
-              - pattern: $RES.redirect($ASSIGN + $...FOO)
-              - pattern: $RES.redirect(`${$ASSIGN}...`)
-          - pattern: $ASSIGN
-          
+  pattern-sinks:
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING + $...ANYTHING)
+            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$ANYTHING}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...])
+            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...] + $...ANYTHING)
+            - pattern: $RES.redirect(`$HTTP${$REQ.$ANYTHING[...]}...`)
+        - metavariable-regex:
+            metavariable: $HTTP
+            regex: ^https?:\/\/$
+        - pattern-either:
+            - pattern: $REQ. ... .$ANYTHING
+            - pattern: $REQ.$ANYTHING['...']
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ. ... .$ANYTHING)
+            - pattern: $RES.redirect($REQ. ... .$ANYTHING + $...ANYTHING)
+            - pattern: $RES.redirect(`${$REQ. ... .$ANYTHING}...`)
+        - pattern: $REQ. ... .$ANYTHING
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ.$ANYTHING['...'])
+            - pattern: $RES.redirect($REQ.$ANYTHING['...'] + $...FOO)
+            - pattern: $RES.redirect(`${$REQ.$ANYTHING['...']}...`)
+        - pattern: $REQ.$ANYTHING['...']
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$ANYTHING
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$ANYTHING['...']
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$ANYTHING + $...A
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$ANYTHING['...'] + $...A
+                ...     
+            - pattern-inside: |
+                $ASSIGN = `${$REQ. ... .$ANYTHING}...`
+                ...
+            - pattern-inside: |
+                $ASSIGN = `${$REQ.$ANYTHING['...']}...`
+                ...                    
+        - pattern-either:
+            - pattern: $RES.redirect($ASSIGN)
+            - pattern: $RES.redirect($ASSIGN + $...FOO)
+            - pattern: $RES.redirect(`${$ASSIGN}...`)
+        - pattern: $ASSIGN
+        
