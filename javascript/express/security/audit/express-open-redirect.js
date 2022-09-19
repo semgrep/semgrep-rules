@@ -12,11 +12,26 @@ module.exports.redirect = function (req, res) {
 	res.redirect(config_value.foo+req)
 
 	// ruleid: express-open-redirect
-	res.redirect(req.query.url)
+	res.redirect(req.body.url)
 	// ruleid: express-open-redirect
 	res.redirect(`${req.query.url}/fooo`)
 	// ruleid: express-open-redirect
 	res.redirect(req.query.url+config_value.url)
+
+
+	// ruleid: express-open-redirect
+	res.redirect(req.body['url'])
+	// ruleid: express-open-redirect
+	res.redirect(`${req.body['url']}/fooo`)
+	// ruleid: express-open-redirect
+	res.redirect(req.body['url']+config_value.url)
+
+	// ruleid: express-open-redirect
+	res.redirect("https://"+req.body['url'])
+	// ruleid: express-open-redirect
+	res.redirect(`https://${req.body['url']}/fooo`)
+	// ruleid: express-open-redirect
+	res.redirect("https://"+req.body['url']+config_value.url)
 
 	// todo: express-open-redirect
 	res.redirect("https://google.com"+req.query.url)
