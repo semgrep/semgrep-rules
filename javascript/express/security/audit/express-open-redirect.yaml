@@ -60,9 +60,12 @@ rules:
   pattern-sinks:
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect($HTTP+$REQ. ... .$ANYTHING)
-            - pattern: $RES.redirect($HTTP+$REQ. ... .$ANYTHING + $...ANYTHING)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING + $...ANYTHING)
             - pattern: $RES.redirect(`$HTTP${$REQ. ... .$ANYTHING}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...])
+            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...] + $...ANYTHING)
+            - pattern: $RES.redirect(`$HTTP${$REQ.$ANYTHING[...]}...`)
         - metavariable-regex: 
               metavariable: $HTTP
               regex: ^https?:\/\/$
@@ -74,16 +77,10 @@ rules:
             - pattern: $RES.redirect($REQ. ... .$ANYTHING)
             - pattern: $RES.redirect($REQ. ... .$ANYTHING + $...ANYTHING)
             - pattern: $RES.redirect(`${$REQ. ... .$ANYTHING}...`)
-            - pattern: $RES.redirect(`https://${$REQ. ... .$ANYTHING}...`)
-            - pattern: $RES.redirect("https://"+$REQ. ... .$ANYTHING + $...ANYTHING)
         - pattern: $REQ. ... .$ANYTHING
     - patterns:
         - pattern-either:
             - pattern: $RES.redirect($REQ.$ANYTHING['...'])
             - pattern: $RES.redirect($REQ.$ANYTHING['...'] + $...FOO)
             - pattern: $RES.redirect(`${$REQ.$ANYTHING['...']}...`)
-            - pattern: $RES.redirect("https://"+$REQ.$ANYTHING['...'])
-            - pattern: $RES.redirect("https://"+$REQ.$ANYTHING['...'] + $...FOO)
-            - pattern: $RES.redirect(`https://${$REQ.$ANYTHING['...']}...`)
         - pattern: $REQ.$ANYTHING['...']
-        
