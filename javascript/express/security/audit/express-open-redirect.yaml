@@ -1,6 +1,6 @@
 rules:
 - id: express-open-redirect
-  message: The application redirects to a URL specified by user-supplied input ($QUERY) that is not validated.
+  message: The application redirects to a URL specified by user-supplied input `$REQ` that is not validated.
     This could redirect users to malicious locations. Consider using an allow-list approach to validate
     URLs, or warn users they are being redirected to a third-party website.
   metadata:
@@ -17,70 +17,97 @@ rules:
     - vuln
     likelihood: HIGH
     impact: MEDIUM
-    confidence: MEDIUM
+    confidence: HIGH
   languages:
   - javascript
   - typescript
   severity: WARNING
+  options:
+    taint_unify_mvars: true
+    symbolic_propagation: true
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: function ... ($REQ, $RES) {...}
-      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-      - patterns:
+    - patterns:
         - pattern-either:
-          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-        - metavariable-regex:
-            metavariable: $METHOD
-            regex: ^(get|post|put|head|delete|options)$
-    - pattern-either:
-      - pattern: $REQ.query
-      - pattern: $REQ.body
-      - pattern: $REQ.params
-      - pattern: $REQ.cookies
-      - pattern: $REQ.headers
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-          {...}
-      - pattern-inside: |
-          ({ $REQ }: Request,$RES: Response) => {...}
-    - focus-metavariable: $REQ
-    - pattern-either:
-      - pattern: params
-      - pattern: query
-      - pattern: cookies
-      - pattern: headers
-      - pattern: body
+            - pattern-inside: function ... ($REQ, $RES) {...}
+            - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+            - patterns:
+                - pattern-either:
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+                - metavariable-regex:
+                    metavariable: $METHOD
+                    regex: ^(get|post|put|head|delete|options)$
+        - pattern-either:
+            - pattern: $REQ.query
+            - pattern: $REQ.body
+            - pattern: $REQ.params
+            - pattern: $REQ.cookies
+            - pattern: $REQ.headers
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                {...}
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response) => {...}
+        - focus-metavariable: $REQ
+        - pattern-either:
+            - pattern: params
+            - pattern: query
+            - pattern: cookies
+            - pattern: headers
+            - pattern: body
   pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: function ... ($REQ, $RES) {...}
-      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-      - patterns:
-        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...A)
+            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$VALUE}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...])
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...A)
+            - pattern: $RES.redirect(`$HTTP${$REQ.$VALUE[...]}...`)
         - metavariable-regex:
-            metavariable: $METHOD
-            regex: ^(get|post|put|head|delete|options)
-    - pattern-either:
-      - pattern-inside: $RES.redirect($QUERY)
-    - pattern-not-inside: $RES.redirect("..."+<... $REQ ...>)
-    - pattern-not-inside: $RES.redirect(`$FOO${<... $REQ ...>}...`)
-    - pattern-not-inside: $RES.redirect($VAR. ...+<... $REQ ...>)
-    - pattern: $QUERY
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-          {...}
-      - pattern-inside: |
-          ({ $REQ }: Request,$RES: Response) => {...}
-    - pattern-either:
-      - pattern-inside: $RES.redirect($QUERY)
-    - pattern-not-inside: $RES.redirect("..."+<... $REQ ...>)
-    - pattern-not-inside: $RES.redirect(`$FOO${<... $REQ ...>}...`)
-    - pattern-not-inside: $RES.redirect($VAR. ...+<... $REQ ...>)
-    - pattern: $QUERY
+            metavariable: $HTTP
+            regex: ^https?:\/\/$
+        - pattern-either:
+            - pattern: $REQ. ... .$VALUE
+            - pattern: $REQ.$VALUE['...']
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ. ... .$VALUE)
+            - pattern: $RES.redirect($REQ. ... .$VALUE + $...A)
+            - pattern: $RES.redirect(`${$REQ. ... .$VALUE}...`)
+        - pattern: $REQ. ... .$VALUE
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ.$VALUE['...'])
+            - pattern: $RES.redirect($REQ.$VALUE['...'] + $...A)
+            - pattern: $RES.redirect(`${$REQ.$VALUE['...']}...`)
+        - pattern: $REQ.$VALUE['...']
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$VALUE
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$VALUE['...']
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$VALUE + $...A
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$VALUE['...'] + $...A
+                ...     
+            - pattern-inside: |
+                $ASSIGN = `${$REQ. ... .$VALUE}...`
+                ...
+            - pattern-inside: |
+                $ASSIGN = `${$REQ.$VALUE['...']}...`
+                ...                    
+        - pattern-either:
+            - pattern: $RES.redirect($ASSIGN)
+            - pattern: $RES.redirect($ASSIGN + $...FOO)
+            - pattern: $RES.redirect(`${$ASSIGN}...`)
+        - pattern: $ASSIGN
+        
