@@ -26,6 +26,20 @@ module.exports.redirect = function (req, res) {
 	// ruleid: express-open-redirect
 	res.redirect(a+config_value.url)
 
+	// ok: express-open-redirect
+	res.redirect(c+a)
+	// ok: express-open-redirect
+	res.redirect(`${c}${a}/fooo`)
+	// ok: express-open-redirect
+	res.redirect(c+a+config_value.url)
+
+	// ok: express-open-redirect
+	res.redirect(c)
+	// ok: express-open-redirect
+	res.redirect(`${c}`)
+	// ok: express-open-redirect
+	res.redirect(c+config_value.url)
+
 	// ruleid: express-open-redirect
 	res.redirect(req.body['url'])
 	// ruleid: express-open-redirect
