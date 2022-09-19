@@ -61,10 +61,10 @@ rules:
     - patterns:
         - pattern-either:
             - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE)
-            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...VALUE)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...FOO)
             - pattern: $RES.redirect(`$HTTP${$REQ. ... .$VALUE}...`)
             - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...])
-            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...VALUE)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...FOO)
             - pattern: $RES.redirect(`$HTTP${$REQ.$VALUE[...]}...`)
         - metavariable-regex:
             metavariable: $HTTP
@@ -75,7 +75,7 @@ rules:
     - patterns:
         - pattern-either:
             - pattern: $RES.redirect($REQ. ... .$VALUE)
-            - pattern: $RES.redirect($REQ. ... .$VALUE + $...VALUE)
+            - pattern: $RES.redirect($REQ. ... .$VALUE + $...FOO)
             - pattern: $RES.redirect(`${$REQ. ... .$VALUE}...`)
         - pattern: $REQ. ... .$VALUE
     - patterns:
