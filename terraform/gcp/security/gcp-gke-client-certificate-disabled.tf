@@ -1,5 +1,4 @@
-# fail
-# ruleid: gcp-gke-client-certificate-disabled
+# ok: gcp-gke-client-certificate-disabled
 resource "google_container_cluster" "fail" {
   name               = "marcellus-wallace"
   location           = "us-central1-a"
@@ -11,7 +10,8 @@ resource "google_container_cluster" "fail" {
   }
 }
 
-# ok: gcp-gke-client-certificate-disabled
+# fail
+# ruleid: gcp-gke-client-certificate-disabled
 resource "google_container_cluster" "success" {
   name               = "marcellus-wallace"
   location           = "us-central1-a"
