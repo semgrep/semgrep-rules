@@ -60,52 +60,20 @@ rules:
   pattern-sinks:
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE)
-            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...A)
-            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$VALUE}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ...)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... + $...A)
+            - pattern: $RES.redirect(`$HTTP${$REQ. ...}...`)
             - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...])
             - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...A)
             - pattern: $RES.redirect(`$HTTP${$REQ.$VALUE[...]}...`)
         - metavariable-regex:
             metavariable: $HTTP
             regex: ^https?:\/\/$
-        - pattern-either:
-            - pattern: $REQ. ... .$VALUE
-            - pattern: $REQ.$VALUE['...']
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect($REQ. ... .$VALUE)
-            - pattern: $RES.redirect($REQ. ... .$VALUE + $...A)
-            - pattern: $RES.redirect(`${$REQ. ... .$VALUE}...`)
-        - pattern: $REQ. ... .$VALUE
-    - patterns:
-        - pattern-either:
+            - pattern: $RES.redirect($REQ. ...)
+            - pattern: $RES.redirect($REQ. ... + $...A)
+            - pattern: $RES.redirect(`${$REQ. ...}...`)
             - pattern: $RES.redirect($REQ.$VALUE['...'])
             - pattern: $RES.redirect($REQ.$VALUE['...'] + $...A)
             - pattern: $RES.redirect(`${$REQ.$VALUE['...']}...`)
-        - pattern: $REQ.$VALUE['...']
-    - patterns:
-        - pattern-either:
-            - pattern-inside: |
-                $ASSIGN = $REQ. ... .$VALUE
-                ...
-            - pattern-inside: |
-                $ASSIGN = $REQ.$VALUE['...']
-                ...
-            - pattern-inside: |
-                $ASSIGN = $REQ. ... .$VALUE + $...A
-                ...
-            - pattern-inside: |
-                $ASSIGN = $REQ.$VALUE['...'] + $...A
-                ...     
-            - pattern-inside: |
-                $ASSIGN = `${$REQ. ... .$VALUE}...`
-                ...
-            - pattern-inside: |
-                $ASSIGN = `${$REQ.$VALUE['...']}...`
-                ...                    
-        - pattern-either:
-            - pattern: $RES.redirect($ASSIGN)
-            - pattern: $RES.redirect($ASSIGN + $...FOO)
-            - pattern: $RES.redirect(`${$ASSIGN}...`)
-        - pattern: $ASSIGN
