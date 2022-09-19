@@ -1,5 +1,28 @@
 rules:
 - id: awscdk-bucket-encryption
+  message: >-
+    Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED"
+    to the bucket props
+    for Bucket construct $X
+  metadata:
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    category: security
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+  languages:
+  - typescript
+  severity: ERROR
   pattern-either:
   - patterns:
     - pattern-inside: |
@@ -23,14 +46,3 @@ rules:
         const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS, ...})
     - pattern-not: |
         const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.S3_MANAGED, ...})
-  message: >-
-    Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED" to the bucket props
-    for Bucket construct $X
-  languages: [typescript]
-  severity: ERROR
-  metadata:
-    category: security
-    technology:
-    - AWS-CDK
-    references:
-    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html

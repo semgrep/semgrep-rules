@@ -1,25 +1,31 @@
 rules:
-  - id: react-jwt-decoded-property
-    patterns:
-      - pattern-inside: |
-          import jwt_decode from "jwt-decode";
-          ...
-      - pattern-inside: |
-          $DECODED = jwt_decode($TOKEN,...);
-          ...
-      - pattern: $DECODED.$PROPERTY
-    message: >-
-      Property decoded from JWT token without verifying and cannot be trustworthy.
-    languages:
-      - typescript
-      - javascript
-    severity: INFO
-    metadata:
-      cwe: "CWE-922: Insecure Storage of Sensitive Information"
-      references:
-        - https://pragmaticwebsecurity.com/articles/oauthoidc/localstorage-xss.html
-      category: security
-      owasp: 
-        - "A03:2017: - Sensitive Data Exposure"
-      technology:
-        - react
+- id: react-jwt-decoded-property
+  message: >-
+    Property decoded from JWT token without verifying and cannot be trustworthy.
+  metadata:
+    cwe:
+    - 'CWE-922: Insecure Storage of Sensitive Information'
+    references:
+    - https://pragmaticwebsecurity.com/articles/oauthoidc/localstorage-xss.html
+    category: security
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - react
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern-inside: |
+      import jwt_decode from "jwt-decode";
+      ...
+  - pattern-inside: |
+      $DECODED = jwt_decode($TOKEN,...);
+      ...
+  - pattern: $DECODED.$PROPERTY
