@@ -1,6 +1,6 @@
 rules:
 - id: express-open-redirect
-  message: The application redirects to a URL specified by user-supplied input ($QUERY) that is not validated.
+  message: The application redirects to a URL specified by user-supplied input `$REQ` that is not validated.
     This could redirect users to malicious locations. Consider using an allow-list approach to validate
     URLs, or warn users they are being redirected to a third-party website.
   metadata:
@@ -60,53 +60,52 @@ rules:
   pattern-sinks:
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING)
-            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$ANYTHING + $...ANYTHING)
-            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$ANYTHING}...`)
-            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...])
-            - pattern: $RES.redirect("$HTTP"+$REQ.$ANYTHING[...] + $...ANYTHING)
-            - pattern: $RES.redirect(`$HTTP${$REQ.$ANYTHING[...]}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...VALUE)
+            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$VALUE}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...])
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...VALUE)
+            - pattern: $RES.redirect(`$HTTP${$REQ.$VALUE[...]}...`)
         - metavariable-regex:
             metavariable: $HTTP
             regex: ^https?:\/\/$
         - pattern-either:
-            - pattern: $REQ. ... .$ANYTHING
-            - pattern: $REQ.$ANYTHING['...']
+            - pattern: $REQ. ... .$VALUE
+            - pattern: $REQ.$VALUE['...']
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect($REQ. ... .$ANYTHING)
-            - pattern: $RES.redirect($REQ. ... .$ANYTHING + $...ANYTHING)
-            - pattern: $RES.redirect(`${$REQ. ... .$ANYTHING}...`)
-        - pattern: $REQ. ... .$ANYTHING
+            - pattern: $RES.redirect($REQ. ... .$VALUE)
+            - pattern: $RES.redirect($REQ. ... .$VALUE + $...VALUE)
+            - pattern: $RES.redirect(`${$REQ. ... .$VALUE}...`)
+        - pattern: $REQ. ... .$VALUE
     - patterns:
         - pattern-either:
-            - pattern: $RES.redirect($REQ.$ANYTHING['...'])
-            - pattern: $RES.redirect($REQ.$ANYTHING['...'] + $...FOO)
-            - pattern: $RES.redirect(`${$REQ.$ANYTHING['...']}...`)
-        - pattern: $REQ.$ANYTHING['...']
+            - pattern: $RES.redirect($REQ.$VALUE['...'])
+            - pattern: $RES.redirect($REQ.$VALUE['...'] + $...FOO)
+            - pattern: $RES.redirect(`${$REQ.$VALUE['...']}...`)
+        - pattern: $REQ.$VALUE['...']
     - patterns:
         - pattern-either:
             - pattern-inside: |
-                $ASSIGN = $REQ. ... .$ANYTHING
+                $ASSIGN = $REQ. ... .$VALUE
                 ...
             - pattern-inside: |
-                $ASSIGN = $REQ.$ANYTHING['...']
+                $ASSIGN = $REQ.$VALUE['...']
                 ...
             - pattern-inside: |
-                $ASSIGN = $REQ. ... .$ANYTHING + $...A
+                $ASSIGN = $REQ. ... .$VALUE + $...A
                 ...
             - pattern-inside: |
-                $ASSIGN = $REQ.$ANYTHING['...'] + $...A
+                $ASSIGN = $REQ.$VALUE['...'] + $...A
                 ...     
             - pattern-inside: |
-                $ASSIGN = `${$REQ. ... .$ANYTHING}...`
+                $ASSIGN = `${$REQ. ... .$VALUE}...`
                 ...
             - pattern-inside: |
-                $ASSIGN = `${$REQ.$ANYTHING['...']}...`
+                $ASSIGN = `${$REQ.$VALUE['...']}...`
                 ...                    
         - pattern-either:
             - pattern: $RES.redirect($ASSIGN)
             - pattern: $RES.redirect($ASSIGN + $...FOO)
             - pattern: $RES.redirect(`${$ASSIGN}...`)
         - pattern: $ASSIGN
-        
