@@ -44,3 +44,39 @@ int okay_code2() {
     other_func(var->myname);
     return 0;
 }
+
+struct NAME {
+  char first_name[32];
+  int auth;
+};
+int bad_code3(){
+    struct NAME *var;
+    var = malloc(sizeof(auth));
+    // ruleid: use-after-free
+    free(var);
+    if(var->auth){
+        printf("you have logged in already");
+    }
+    else{
+        printf("you do not have the permision to log in.");
+    }
+    return 0;
+
+}
+
+
+int ok_code3(){
+    struct NAME *var;
+    var = malloc(sizeof(auth));
+    // ruleid: use-after-free
+    free(var);
+    var=NULL
+    if(var->auth){
+        printf("you have logged in already");
+    }
+    else{
+        printf("you do not have the permision to log in.");
+    }
+    return 0;
+
+}
