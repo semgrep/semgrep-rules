@@ -23,6 +23,20 @@ rules:
               $VAR = NULL;
               ...
               $FUNC(..., $VAR->$MEMBER, ...);
+      - patterns:
+          - pattern: |
+              free($VAR);
+              ...
+              if ($VAR->$MEMBER) ...
+
+          - pattern-not: |
+              free($VAR);
+              ...
+              $VAR = NULL;
+              ...
+              if($VAR->$MEMBER) ...     
+          
+
     message: >-
       Variable '$VAR' was used after being freed. This can lead to undefined behavior.
     metadata:
