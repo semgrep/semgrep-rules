@@ -1,0 +1,24 @@
+rules:
+    - id: gcp-postgresql-log-lock-waits
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                  name  = "log_lock_waits"
+                  value = "off"
+                  ...
+                }
+                ...
+              }
+      message: >-
+        Ensure PostgreSQL database 'log_lock_waits' flag is set to 'on'
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING
