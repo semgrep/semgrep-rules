@@ -1,0 +1,37 @@
+rules:
+- id: gcp-gke-network-policy-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        network_policy {
+          ...
+          enabled = false
+          ...
+        }
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        datapath_provider = "ADVANCED_DATAPATH"
+        network_policy {
+          ...
+          enabled = false
+          ...
+        }
+        ...
+        }
+  message: >-
+    Ensure Network Policy is enabled on Kubernetes Engine Clusters
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

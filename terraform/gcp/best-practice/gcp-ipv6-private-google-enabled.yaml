@@ -1,0 +1,29 @@
+rules:
+- id: gcp-ipv6-private-google-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_compute_subnetwork" "..." {
+            ...
+          }
+    - pattern-not-inside: |
+          resource "google_compute_subnetwork" "..." {
+            ...
+            private_ipv6_google_access = "ENABLE_OUTBOUND_VM_ACCESS_TO_GOOGLE"
+            ...
+          }
+    - pattern-not-inside: |
+          resource "google_compute_subnetwork" "..." {
+            ...
+            private_ipv6_google_access = "ENABLE_BIDIRECTIONAL_ACCESS_TO_GOOGLE"
+            ...
+          }
+  message: >-
+    Ensure that Private google access is enabled for IPV6
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

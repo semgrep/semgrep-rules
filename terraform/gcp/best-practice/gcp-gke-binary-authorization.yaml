@@ -1,0 +1,23 @@
+rules:
+- id: gcp-gke-binary-authorization
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        enable_binary_authorization = true
+        ...
+        }
+  message: >-
+    Ensure use of Binary Authorization	
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING
