@@ -68,9 +68,9 @@ int bad_code3(){
 int ok_code3(){
     struct NAME *var;
     var = malloc(sizeof(auth));
-    // ruleid: use-after-free
+    // ok: use-after-free
     free(var);
-    var=NULL
+    var=NULL;
     if(var->auth){
         printf("you have logged in already");
     }
