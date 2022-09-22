@@ -5,7 +5,6 @@ rules:
       - java
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
-      owasp: "A8: Insecure Deserialization"
       references:
         - https://access.redhat.com/blogs/766093/posts/3162112
       category: security
@@ -53,6 +52,9 @@ rules:
     patterns:
       - pattern: |
           @Path("...")
+          public $RETURNTYPE $METHOD(...) { ...}
+      - pattern-not-inside: |
+          @GET
           public $RETURNTYPE $METHOD(...) { ...}
       - pattern-not-inside: |
           @Path("...")

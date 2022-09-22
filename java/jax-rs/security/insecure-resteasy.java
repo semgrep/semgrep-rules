@@ -40,6 +40,15 @@ public class PoC_resource {
         return result;
     }
 
+
+    // ok: default-resteasy-provider-abuse
+    @GET
+    @Path("/tenantmode")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTenantMode() {
+        return kubernetesService.getMessage();
+    }
+
 }
 
 
