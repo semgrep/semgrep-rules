@@ -42,7 +42,7 @@ fi
 #
 set_rule_folders() {
   rule_folders=$(find . -mindepth 1 -maxdepth 1 -type d \
-    | grep -v '^./\(stats\|trusted_python\|fingerprints\|scripts\)/\?$')
+    | grep -v '^./\(\..*\|stats\|trusted_python\|fingerprints\|scripts\)/\?$')
   if [[ -z "$rule_folders" ]]; then
     error "Cannot find any rule folders to scan in $(pwd)"
   fi
