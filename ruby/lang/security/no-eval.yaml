@@ -9,8 +9,8 @@ rules:
     mode: taint
     pattern-sources:
       - pattern-either:
-        - pattern: params[...]
-        - pattern: cookies[...]
+        - pattern: params
+        - pattern: cookies
         - patterns:
           - pattern: |
               RubyVM::InstructionSequence.compile(...)

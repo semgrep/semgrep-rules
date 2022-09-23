@@ -18,12 +18,12 @@ a = %q{def hello() "Hello there!" end}
 Thing.module_eval(a)
 puts Thing.new.hello()
 b = params['something']
-#ruleid:ruby-eval
+# ruleid:ruby-eval
 Thing.module_eval(b)
 
-#ruleid:ruby-eval
+# ruleid:ruby-eval
 eval(b)
-#ruleid:ruby-eval
+# ruleid:ruby-eval
 eval(b,some_binding)
 
 def get_binding(param)
@@ -36,8 +36,14 @@ b.eval("some_func")
 # ok:ruby-eval
 eval("some_func",b)
 
-#ruleid:ruby-eval
+# ruleid:ruby-eval
 eval(params['cmd'],b)
+
+# ruleid:ruby-eval
+eval(params.dig('cmd'))
+
+# ruleid:ruby-eval
+eval(cookies.delete('foo'))
 
 # ruleid:ruby-eval
 RubyVM::InstructionSequence.compile(foo).eval
