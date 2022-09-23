@@ -1,94 +1,105 @@
 rules:
-  - id: path-traversal-open
-    languages:
-      - python
-    severity: ERROR
-    message: >-
-      Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise it could result
-      in path traversal attacks.
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      owasp: "A1: Injection"
-      references:
-        - https://owasp.org/www-community/attacks/Path_Traversal
-      category: security
-      technology:
-        - flask
-    pattern-either:
-      - patterns:
-          - pattern: open(...)
-          - pattern-either:
-              - pattern-inside: |
-                  @$APP.route($ROUTE, ...)
-                  def $FUNC(..., $ROUTEVAR, ...):
-                    ...
-                    open(..., <... $ROUTEVAR ...>, ...)
-              - pattern-inside: |
-                  @$APP.route($ROUTE, ...)
-                  def $FUNC(..., $ROUTEVAR, ...):
-                    ...
-                    with open(..., <... $ROUTEVAR ...>, ...) as $FD:
-                      ...
-              - pattern-inside: |
-                  @$APP.route($ROUTE, ...)
-                  def $FUNC(..., $ROUTEVAR, ...):
-                    ...
-                    $INTERM = <... $ROUTEVAR ...>
-                    ...
-                    open(..., <... $INTERM ...>, ...)
-      - pattern: open(..., <... flask.request.$W.get(...) ...>, ...)
-      - pattern: open(..., <... flask.request.$W[...] ...>, ...)
-      - pattern: open(..., <... flask.request.$W(...) ...>, ...)
-      - pattern: open(..., <... flask.request.$W ...>, ...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
+- id: path-traversal-open
+  languages:
+  - python
+  severity: ERROR
+  message: >-
+    Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise
+    it could result
+    in path traversal attacks.
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    references:
+    - https://owasp.org/www-community/attacks/Path_Traversal
+    category: security
+    technology:
+    - flask
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+  pattern-either:
+  - patterns:
+    - pattern: open(...)
+    - pattern-either:
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            open(..., <... $ROUTEVAR ...>, ...)
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            with open(..., <... $ROUTEVAR ...>, ...) as $FD:
               ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
-              ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-              open(<... $INTERM ...>, ...)
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W.get(...) ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W[...] ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W(...) ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
-      - patterns:
-          - pattern-inside: |
-              $INTERM = <... flask.request.$W ...>
-              ...
-              with open(<... $INTERM ...>, ...) as $F:
-                ...
-          - pattern: open(...)
+      - pattern-inside: |
+          @$APP.route($ROUTE, ...)
+          def $FUNC(..., $ROUTEVAR, ...):
+            ...
+            $INTERM = <... $ROUTEVAR ...>
+            ...
+            open(..., <... $INTERM ...>, ...)
+  - pattern: open(..., <... flask.request.$W.get(...) ...>, ...)
+  - pattern: open(..., <... flask.request.$W[...] ...>, ...)
+  - pattern: open(..., <... flask.request.$W(...) ...>, ...)
+  - pattern: open(..., <... flask.request.$W ...>, ...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        open(<... $INTERM ...>, ...)
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W.get(...) ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
+          ...
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W[...] ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
+          ...
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W(...) ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
+          ...
+    - pattern: open(...)
+  - patterns:
+    - pattern-inside: |
+        $INTERM = <... flask.request.$W ...>
+        ...
+        with open(<... $INTERM ...>, ...) as $F:
+          ...
+    - pattern: open(...)

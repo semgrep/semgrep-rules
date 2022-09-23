@@ -1,24 +1,34 @@
 rules:
-  - id: global-autoescape-off
-    message: >-
-      Autoescape is globally disbaled for this Django application. If you are
-      rendering any web pages, this exposes your application to cross-site
-      scripting (XSS) vulnerabilities. Remove 'autoescape: False' or set it
-      to 'True'.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://docs.djangoproject.com/en/3.1/ref/settings/#templates
-        - https://docs.djangoproject.com/en/3.1/topics/templates/#django.template.backends.django.DjangoTemplates
-      category: security
-      technology:
-        - django
-    languages:
-      - python
-    severity: WARNING
-    pattern: |
-      {..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': False, ...}, ...}
-    fix-regex:
-      regex: (autoescape.*?)False
-      replacement: \1True
+- id: global-autoescape-off
+  message: >-
+    Autoescape is globally disbaled for this Django application. If you are
+    rendering any web pages, this exposes your application to cross-site
+    scripting (XSS) vulnerabilities. Remove 'autoescape: False' or set it
+    to 'True'.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://docs.djangoproject.com/en/3.1/ref/settings/#templates
+    - https://docs.djangoproject.com/en/3.1/topics/templates/#django.template.backends.django.DjangoTemplates
+    category: security
+    technology:
+    - django
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - python
+  severity: WARNING
+  pattern: |
+    {..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': False, ...}, ...}
+  fix-regex:
+    regex: (autoescape.*?)False
+    replacement: \1True

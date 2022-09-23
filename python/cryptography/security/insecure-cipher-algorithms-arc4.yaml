@@ -1,0 +1,27 @@
+rules:
+- id: insecure-cipher-algorithm-arc4
+  pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
+  message: >-
+    Detected ARC4 cipher algorithm which is considered insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  metadata:
+    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    bandit-code: B304
+    references:
+    - https://tools.ietf.org/html/rfc5469
+    category: security
+    technology:
+    - cryptography
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  severity: WARNING
+  languages:
+  - python

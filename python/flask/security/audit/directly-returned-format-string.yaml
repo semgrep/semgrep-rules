@@ -1,61 +1,72 @@
 rules:
-  - id: directly-returned-format-string
-    message: >-
-      Detected Flask route directly returning a formatted string. This
-      is subject to cross-site scripting if user input can reach the string.
-      Consider using the template engine instead and rendering pages with
-      'render_template()'.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      category: security
-      technology:
-        - flask
-    languages:
-      - python
-    severity: WARNING
-    mode: taint
-    pattern-sources:
-    - pattern-either:
-      - patterns:
-        - pattern-inside: |
-            @$APP.route(...)
-            def $FUNC(..., $PARAM, ...):
-              ...
-        - pattern: $PARAM
-      - pattern: |
-          request.$FUNC.get(...)
-      - pattern: | 
-          request.$FUNC(...)
-      - pattern:
-          request.$FUNC[...]
-    pattern-sinks:
+- id: directly-returned-format-string
+  message: >-
+    Detected Flask route directly returning a formatted string. This
+    is subject to cross-site scripting if user input can reach the string.
+    Consider using the template engine instead and rendering pages with
+    'render_template()'.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - flask
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - python
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern-either:
     - patterns:
-      - pattern-not-inside: return "..."
-      - pattern-either: 
-        - pattern: return "...".format(...)
-        - pattern: return "..." % ...
-        - pattern: return "..." + ...
-        - pattern: return ... + "..."
-        - pattern: return f"...{...}..."
-        - patterns:
-          - pattern: return $X
-          - pattern-either:
-              - pattern-inside: |
-                  $X = "...".format(...)
-                  ...
-              - pattern-inside: |
-                  $X = "..." % ...
-                  ...
-              - pattern-inside: |
-                  $X = "..." + ...
-                  ...
-              - pattern-inside: |
-                  $X = ... + "..."
-                  ...
-              - pattern-inside: |
-                  $X = f"...{...}..."
-                  ...
-          - pattern-not-inside: |
-              $X = "..."
+      - pattern-inside: |
+          @$APP.route(...)
+          def $FUNC(..., $PARAM, ...):
+            ...
+      - pattern: $PARAM
+    - pattern: |
+        request.$FUNC.get(...)
+    - pattern: |
+        request.$FUNC(...)
+    - pattern: request.$FUNC[...]
+  pattern-sinks:
+  - patterns:
+    - pattern-not-inside: return "..."
+    - pattern-either:
+      - pattern: return "...".format(...)
+      - pattern: return "..." % ...
+      - pattern: return "..." + ...
+      - pattern: return ... + "..."
+      - pattern: return f"...{...}..."
+      - patterns:
+        - pattern: return $X
+        - pattern-either:
+          - pattern-inside: |
+              $X = "...".format(...)
               ...
+          - pattern-inside: |
+              $X = "..." % ...
+              ...
+          - pattern-inside: |
+              $X = "..." + ...
+              ...
+          - pattern-inside: |
+              $X = ... + "..."
+              ...
+          - pattern-inside: |
+              $X = f"...{...}..."
+              ...
+        - pattern-not-inside: |
+            $X = "..."
+            ...

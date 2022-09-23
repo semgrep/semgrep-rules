@@ -1,40 +1,50 @@
 rules:
-  - id: tainted-pickle-deserialization
-    mode: taint
-    pattern-sources:
-    - patterns:
-      - pattern: event
-      - pattern-inside: |
-          def $HANDLER(event, context):
-            ...
-    pattern-sinks:
-    - patterns:
-      - pattern: $SINK
-      - pattern-either:
-        - pattern-inside: pickle.load($SINK,...)
-        - pattern-inside: pickle.loads($SINK,...)
-        - pattern-inside: _pickle.load($SINK,...)
-        - pattern-inside: _pickle.loads($SINK,...)
-        - pattern-inside: cPickle.load($SINK,...)
-        - pattern-inside: cPickle.loads($SINK,...)
-        - pattern-inside: dill.load($SINK,...)
-        - pattern-inside: dill.loads($SINK,...)
-        - pattern-inside: shelve.open($SINK,...)
-    message: >-
-      Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
-      When unpickling, the serialized data could be manipulated to run arbitrary code.
-      Instead, consider serializing the relevant data as JSON or a similar text-based
-      serialization format.
-    metadata:
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      references:
-        - https://docs.python.org/3/library/pickle.html
-        - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
-      category: security
-      technology:
-        - python
-        - aws-lambda
-    languages:
-      - python
-    severity: WARNING
+- id: tainted-pickle-deserialization
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: event
+    - pattern-inside: |
+        def $HANDLER(event, context):
+          ...
+  pattern-sinks:
+  - patterns:
+    - pattern: $SINK
+    - pattern-either:
+      - pattern-inside: pickle.load($SINK,...)
+      - pattern-inside: pickle.loads($SINK,...)
+      - pattern-inside: _pickle.load($SINK,...)
+      - pattern-inside: _pickle.loads($SINK,...)
+      - pattern-inside: cPickle.load($SINK,...)
+      - pattern-inside: cPickle.loads($SINK,...)
+      - pattern-inside: dill.load($SINK,...)
+      - pattern-inside: dill.loads($SINK,...)
+      - pattern-inside: shelve.open($SINK,...)
+  message: >-
+    Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
+    When unpickling, the serialized data could be manipulated to run arbitrary code.
+    Instead, consider serializing the relevant data as JSON or a similar text-based
+    serialization format.
+  metadata:
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
+    category: security
+    technology:
+    - python
+    - aws-lambda
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - python
+  severity: WARNING

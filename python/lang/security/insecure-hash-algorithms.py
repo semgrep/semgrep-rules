@@ -2,20 +2,9 @@
 
 import hashlib
 
-# ruleid:insecure-hash-algorithm-md5
-hashlib.md5(1)
-# ruleid:insecure-hash-algorithm-md5
-hashlib.md5(1).hexdigest()
-
-# ruleid:insecure-hash-algorithm-md5
-abc = str.replace(hashlib.md5("1"), "###")
-
-# ruleid:insecure-hash-algorithm-md5
-print(hashlib.md5("1"))
 
 # ruleid:insecure-hash-algorithm-sha1
 hashlib.sha1(1)
 
 # ok:insecure-hash-algorithm-sha1
-# ok:insecure-hash-algorithm-md5
 hashlib.sha256(1)

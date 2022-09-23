@@ -1,43 +1,46 @@
 rules:
-  - id: tainted-sql-string
-    message: >-
-      Detected user input used to manually construct a SQL string. This is usually
-      bad practice because manual construction could accidentally result in a SQL
-      injection. An attacker could use a SQL injection to steal or modify contents
-      of the database. Instead, use a parameterized query which is available
-      by default in most database engines. Alternatively, consider using the Django
-      object-relational mappers (ORM) instead of raw SQL queries.
-    metadata:
-      cwe: >
-        CWE-89: Improper Neutralization of Special Elements used in an SQL
-        Command ('SQL Injection')
-      owasp:
-        - A01:2017 - Injection
-        - A03:2021 - Injection
-      references:
-        - https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
-      category: security
-      technology:
-        - django
-    severity: ERROR
-    languages:
-      - python
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern: request.$ANYTHING
-          - pattern-not: request.build_absolute_uri
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern: |
-                  "$SQLSTR" + ...
-              - pattern: |
-                  "$SQLSTR" % ...
-              - pattern: |
-                  "$SQLSTR".format(...)
-              - pattern: |
-                  f"$SQLSTR{...}..."
-          - metavariable-regex:
-              metavariable: $SQLSTR
-              regex: \s*(?i)(select|delete|insert|create|update|alter|drop)\b.*
+- id: tainted-sql-string
+  message: >-
+    Detected user input used to manually construct a SQL string. This is usually
+    bad practice because manual construction could accidentally result in a SQL
+    injection. An attacker could use a SQL injection to steal or modify contents
+    of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using the Django
+    object-relational mappers (ORM) instead of raw SQL queries.
+  metadata:
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection
+    category: security
+    technology:
+    - django
+    subcategory:
+    - audit
+    impact: LOW
+    likelihood: MEDIUM
+    confidence: LOW
+  severity: ERROR
+  languages:
+  - python
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: request.$ANYTHING
+    - pattern-not: request.build_absolute_uri
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          "$SQLSTR" + ...
+      - pattern: |
+          "$SQLSTR" % ...
+      - pattern: |
+          "$SQLSTR".format(...)
+      - pattern: |
+          f"$SQLSTR{...}..."
+    - metavariable-regex:
+        metavariable: $SQLSTR
+        regex: \s*(?i)(select|delete|insert|create|update|alter|drop)\b.*
