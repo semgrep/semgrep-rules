@@ -1,28 +1,38 @@
 rules:
-  - id: avoid-bind-to-all-interfaces
-    message: >-
-      Running `socket.bind` to 0.0.0.0, ::, or empty string could unexpectedly
-      expose the server publicly as it binds to all available interfaces. Consider
-      instead getting correct address from an environment variable or
-      configuration file.
-    metadata:
-      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
-      owasp: "A6: Security Misconfiguration"
-      category: security
-      technology:
-        - python
-    languages: [python]
-    severity: INFO
-    pattern-either:
-      - pattern: |
-          $S = socket.socket(...)
-          ...
-          $S.bind(("0.0.0.0", ...))
-      - pattern: |
-          $S = socket.socket(...)
-          ...
-          $S.bind(("::", ...))
-      - pattern: |
-          $S = socket.socket(...)
-          ...
-          $S.bind(("", ...))
+- id: avoid-bind-to-all-interfaces
+  message: >-
+    Running `socket.bind` to 0.0.0.0, ::, or empty string could unexpectedly
+    expose the server publicly as it binds to all available interfaces. Consider
+    instead getting correct address from an environment variable or
+    configuration file.
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    category: security
+    technology:
+    - python
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [python]
+  severity: INFO
+  pattern-either:
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("0.0.0.0", ...))
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("::", ...))
+  - pattern: |
+      $S = socket.socket(...)
+      ...
+      $S.bind(("", ...))

@@ -1,32 +1,39 @@
 rules:
-  - id: secure-set-cookie
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              $RESP = flask.make_response(...)
-              ...
-          - pattern-inside: |
-              $RESP = flask.Response(...)
-              ...
-      - pattern-not: $RESPONSE.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
-      - pattern-not: $RESPONSE.set_cookie(..., **$A)
-      - pattern: $RESPONSE.set_cookie(...)
-    message: >-
-      Found a Flask cookie without secure, httponly, or samesite correctly set. Flask
-      cookies should be handled securely by setting secure=True, httponly=True, and
-      samesite='Lax' in response.set_cookie(...). If these parameters are not properly
-      set, your cookies are not properly protected and are at risk of being stolen by
-      an attacker. Include the 'secure=True', 'httponly=True', samesite='Lax' arguments
-      or set these to be true in the Flask configuration.
-    metadata:
-      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
-      owasp: "A3: Sensitive Data Exposure"
-      references:
-        - https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/
-        - https://bento.dev/checks/flask/secure-set-cookie/
-        - https://flask.palletsprojects.com/en/1.1.x/security/#set-cookie-options
-      category: security
-      technology:
-        - flask
-    languages: [python]
-    severity: WARNING
+- id: secure-set-cookie
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $RESP = flask.make_response(...)
+        ...
+    - pattern-inside: |
+        $RESP = flask.Response(...)
+        ...
+  - pattern-not: $RESPONSE.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
+  - pattern-not: $RESPONSE.set_cookie(..., **$A)
+  - pattern: $RESPONSE.set_cookie(...)
+  message: >-
+    Found a Flask cookie without secure, httponly, or samesite correctly set. Flask
+    cookies should be handled securely by setting secure=True, httponly=True, and
+    samesite='Lax' in response.set_cookie(...). If these parameters are not properly
+    set, your cookies are not properly protected and are at risk of being stolen by
+    an attacker. Include the 'secure=True', 'httponly=True', samesite='Lax' arguments
+    or set these to be true in the Flask configuration.
+  metadata:
+    cwe:
+    - "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/
+    - https://bento.dev/checks/flask/secure-set-cookie/
+    - https://flask.palletsprojects.com/en/1.1.x/security/#set-cookie-options
+    category: security
+    technology:
+    - flask
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [python]
+  severity: WARNING

@@ -1,49 +1,57 @@
 rules:
-  - id: dynamic-urllib-use-detected
-    patterns:
-      - pattern-not: urllib.$W("...")
-      - pattern-not: urllib.request.$W("...")
-      - pattern-not: $OPENER.$W("...")
+- id: dynamic-urllib-use-detected
+  patterns:
+  - pattern-not: urllib.$W("...")
+  - pattern-not: urllib.request.$W("...")
+  - pattern-not: $OPENER.$W("...")
+  - pattern-either:
+    - pattern: urllib.urlopen(...)
+    - pattern: urllib.request.urlopen(...)
+    - pattern: urllib.urlretrieve(...)
+    - pattern: urllib.request.urlretrieve(...)
+    - patterns:
       - pattern-either:
-          - pattern: urllib.urlopen(...)
-          - pattern: urllib.request.urlopen(...)
-          - pattern: urllib.urlretrieve(...)
-          - pattern: urllib.request.urlretrieve(...)
-          - patterns:
-              - pattern-either:
-                  - pattern-inside: |
-                      $OPENER = urllib.URLopener(...)
-                      ...
-                  - pattern-inside: |
-                      $OPENER = urllib.request.URLopener(...)
-                      ...
-                  - pattern-inside: |
-                      $OPENER = urllib.FancyURLopener(...)
-                      ...
-                  - pattern-inside: |
-                      $OPENER = urllib.request.FancyURLopener(...)
-                      ...
-              - pattern-either:
-                  - pattern: $OPENER.open(...)
-                  - pattern: $OPENER.retrieve(...)
-    message: >-
-      Detected a dynamic value being used with urllib. urllib supports 'file://' schemes,
-      so a dynamic value controlled by a malicious actor may allow them to read arbitrary
-      files.
-      Audit uses of urllib calls to ensure user data cannot control the URLs, or consider
-      using the 'requests' library instead.
-    metadata:
-      cwe: "CWE-939: Improper Authorization in Handler for Custom URL Scheme"
-      owasp: "A1: Injection"
-      source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/blacklists/calls.py#L163
-      bandit-code: B310
-      asvs:
-        section: "V5: Validation, Sanitization and Encoding Verification Requirements"
-        control_id: 5.2.4 Dyanmic Code Execution Features
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements
-        version: "4"
-      category: security
-      technology:
-        - python
-    languages: [python]
-    severity: WARNING
+        - pattern-inside: |
+            $OPENER = urllib.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.URLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.FancyURLopener(...)
+            ...
+        - pattern-inside: |
+            $OPENER = urllib.request.FancyURLopener(...)
+            ...
+      - pattern-either:
+        - pattern: $OPENER.open(...)
+        - pattern: $OPENER.retrieve(...)
+  message: >-
+    Detected a dynamic value being used with urllib. urllib supports 'file://' schemes,
+    so a dynamic value controlled by a malicious actor may allow them to read arbitrary
+    files.
+    Audit uses of urllib calls to ensure user data cannot control the URLs, or consider
+    using the 'requests' library instead.
+  metadata:
+    cwe:
+    - 'CWE-939: Improper Authorization in Handler for Custom URL Scheme'
+    owasp: 'A1: Injection'
+    source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/blacklists/calls.py#L163
+    bandit-code: B310
+    asvs:
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.2.4 Dyanmic Code Execution Features
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements
+      version: '4'
+    category: security
+    technology:
+    - python
+    references:
+    - https://cwe.mitre.org/data/definitions/939.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [python]
+  severity: WARNING
