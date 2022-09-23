@@ -40,6 +40,12 @@ eval("some_func",b)
 eval(params['cmd'],b)
 
 # ruleid:ruby-eval
+eval(params.dig('cmd'))
+
+# ruleid:ruby-eval
+eval(cookies.delete('foo'))
+
+# ruleid:ruby-eval
 RubyVM::InstructionSequence.compile(foo).eval
 
 # ok:ruby-eval
