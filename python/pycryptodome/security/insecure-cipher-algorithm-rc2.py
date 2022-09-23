@@ -15,17 +15,17 @@ from Crypto.Hash import SHA
 from Crypto import Random
 from Crypto.Util import Counter
 
-key = b'Super secret key'
-plaintext = b'Encrypt me'
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycrypto_xor.new(key)
-msg = cipher.encrypt(plaintext)
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycryptodomex_xor.new(key)
-msg = cipher.encrypt(plaintext)
+key = b'Sixteen byte key'
+iv = Random.new().read(pycrypto_arc2.block_size)
+# ruleid:insecure-cipher-algorithm-rc2
+cipher = pycrypto_arc2.new(key, pycrypto_arc2.MODE_CFB, iv)
+msg = iv + cipher.encrypt(b'Attack at dawn')
+# ruleid:insecure-cipher-algorithm-rc2
+cipher = pycryptodomex_arc2.new(key, pycryptodomex_arc2.MODE_CFB, iv)
+msg = iv + cipher.encrypt(b'Attack at dawn')
 
 key = b'Sixteen byte key'
-# ok:insecure-cipher-algorithm-xor
+# ok:insecure-cipher-algorithm-rc2
 cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
 plaintext = cipher.decrypt(ciphertext)
 try:

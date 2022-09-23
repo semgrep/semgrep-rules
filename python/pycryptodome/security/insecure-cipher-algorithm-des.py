@@ -15,17 +15,24 @@ from Crypto.Hash import SHA
 from Crypto import Random
 from Crypto.Util import Counter
 
-key = b'Super secret key'
-plaintext = b'Encrypt me'
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycrypto_xor.new(key)
-msg = cipher.encrypt(plaintext)
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycryptodomex_xor.new(key)
-msg = cipher.encrypt(plaintext)
+
+
+key = b'-8B key-'
+plaintext = b'We are no longer the knights who say ni!'
+nonce = Random.new().read(pycrypto_des.block_size/2)
+ctr = Counter.new(pycrypto_des.block_size*8/2, prefix=nonce)
+# ruleid:insecure-cipher-algorithm-des
+cipher = pycrypto_des.new(key, pycrypto_des.MODE_CTR, counter=ctr)
+msg = nonce + cipher.encrypt(plaintext)
+nonce = Random.new().read(pycryptodomex_des.block_size/2)
+ctr = Counter.new(pycryptodomex_des.block_size*8/2, prefix=nonce)
+# ruleid:insecure-cipher-algorithm-des
+cipher = pycryptodomex_des.new(key, pycryptodomex_des.MODE_CTR, counter=ctr)
+msg = nonce + cipher.encrypt(plaintext)
+
 
 key = b'Sixteen byte key'
-# ok:insecure-cipher-algorithm-xor
+# ok:insecure-cipher-algorithm-des
 cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
 plaintext = cipher.decrypt(ciphertext)
 try:

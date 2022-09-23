@@ -15,17 +15,24 @@ from Crypto.Hash import SHA
 from Crypto import Random
 from Crypto.Util import Counter
 
-key = b'Super secret key'
-plaintext = b'Encrypt me'
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycrypto_xor.new(key)
-msg = cipher.encrypt(plaintext)
-# ruleid:insecure-cipher-algorithm-xor
-cipher = pycryptodomex_xor.new(key)
-msg = cipher.encrypt(plaintext)
+
+iv = Random.new().read(bs)
+key = b'An arbitrarily long key'
+plaintext = b'docendo discimus '
+plen = bs - divmod(len(plaintext),bs)[1]
+padding = [plen]*plen
+padding = pack('b'*plen, *padding)
+bs = pycrypto_blowfish.block_size
+# ruleid:insecure-cipher-algorithm-blowfish
+cipher = pycrypto_blowfish.new(key, pycrypto_blowfish.MODE_CBC, iv)
+msg = iv + cipher.encrypt(plaintext + padding)
+bs = pycryptodomex_blowfish.block_size
+# ruleid:insecure-cipher-algorithm-blowfish
+cipher = pycryptodomex_blowfish.new(key, pycryptodomex_blowfish.MODE_CBC, iv)
+msg = iv + cipher.encrypt(plaintext + padding)
 
 key = b'Sixteen byte key'
-# ok:insecure-cipher-algorithm-xor
+# ok:insecure-cipher-algorithm-blowfish
 cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
 plaintext = cipher.decrypt(ciphertext)
 try:
