@@ -1,32 +1,36 @@
 rules:
-  - id: log4j-message-lookup-injection
-    metadata:
-      cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
-      owasp: 
-        - "A03:2021 - Injection"
-        - "A01:2017 - Injection"
-      source-rule-url: https://www.lunasec.io/docs/blog/log4j-zero-day/
-      references:
-        - https://issues.apache.org/jira/browse/LOG4J2-3198
-        - https://www.lunasec.io/docs/blog/log4j-zero-day/
-        - https://logging.apache.org/log4j/2.x/manual/lookups.html
-      category: security
-      technology:
-        - java
-      confidence: MEDIUM
-    message:
-      Possible Lookup injection into Log4j messages. Lookups provide a way to add values to the Log4j messages at arbitrary
-      places. If the message parameter contains an attacker controlled string, the attacker could inject arbitrary lookups,
-      for instance '${java:runtime}'. This could lead to information disclosure or even remote code execution if 'log4j2.formatMsgNoLookups'
-      is enabled. This was enabled by default until version 2.15.0.
-    mode: taint
-    pattern-sources:
-    - patterns:
-        - pattern: public $T $M(...)
-    pattern-sinks:
-    - patterns:
-        - pattern: |
-            (org.apache.log4j.Logger $L).$M(...)
-    severity: WARNING
-    languages:
-      - java
+- id: log4j-message-lookup-injection
+  metadata:
+    cwe:
+    - "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+    owasp:
+    - A03:2021 - Injection
+    source-rule-url: https://www.lunasec.io/docs/blog/log4j-zero-day/
+    references:
+    - https://issues.apache.org/jira/browse/LOG4J2-3198
+    - https://www.lunasec.io/docs/blog/log4j-zero-day/
+    - https://logging.apache.org/log4j/2.x/manual/lookups.html
+    category: security
+    technology:
+    - java
+    confidence: LOW
+    subcategory:
+    - audit
+    likelihood: LOLW
+    impact: HIGH
+  message: Possible Lookup injection into Log4j messages. Lookups provide a way to add values to the Log4j
+    messages at arbitrary places. If the message parameter contains an attacker controlled string, the
+    attacker could inject arbitrary lookups, for instance '${java:runtime}'. This could lead to information
+    disclosure or even remote code execution if 'log4j2.formatMsgNoLookups' is enabled. This was enabled
+    by default until version 2.15.0.
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: public $T $M(...)   # audit rule until it can checked < 2.15.0
+  pattern-sinks:
+  - patterns:
+    - pattern: |
+        (org.apache.log4j.Logger $L).$M(...)
+  severity: WARNING
+  languages:
+  - java

@@ -1,48 +1,63 @@
 rules:
-  - id: spring-sqli
-    mode: taint
-    pattern-sources:
-    - patterns:
-        - pattern: $ARG
+- id: spring-sqli
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $ARG
+    - pattern-inside: |
+        public $T $M (..., String $ARG,...){...}
+  pattern-sanitizers:
+  - not_conflicting: true
+    patterns:
+    - pattern: $A
+    - pattern-inside: |
+        new $TYPE(...,$A,...);
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $A
         - pattern-inside: |
-            public $T $M (..., String $ARG,...){...}
-    pattern-sanitizers:
-        - not_conflicting: true
-          patterns:
-            - pattern: $A
-            - pattern-inside: |
-                new $TYPE(...,$A,...);
-    pattern-sinks:
-    - patterns:
-        - pattern-either:
-            - patterns:
-                - pattern: $A
-                - pattern-inside: |
-                    new PreparedStatementCreatorFactory($A,...);
-            - patterns:
-                - pattern: $A
-                - pattern-inside: |
-                    (JdbcTemplate $T).$M($A,...)
-            - patterns:
-                - pattern: (String $A)
-                - pattern-inside: |
-                    (JdbcTemplate $T).batchUpdate(...)
-            - patterns:
-                - pattern: $A
-                - pattern-inside: |
-                    NamedParameterBatchUpdateUtils.$M($A,...)
-            - patterns:
-                - pattern: $A
-                - pattern-inside: |
-                    BatchUpdateUtils.$M($A,...)
-    message: >-
-      Detected a string argument from a public method contract in a raw SQL statement. This could lead to SQL
-      injection if variables in the SQL statement are not properly sanitized.
-      Use a prepared statements (java.sql.PreparedStatement) instead. You
-      can obtain a PreparedStatement using 'connection.prepareStatement'.
-    languages: [java]
-    severity: WARNING
-    metadata:
-      category: security
-      technology:
-        - spring
+            new PreparedStatementCreatorFactory($A,...);
+      - patterns:
+        - pattern: $A
+        - pattern-inside: |
+            (JdbcTemplate $T).$M($A,...)
+      - patterns:
+        - pattern: (String $A)
+        - pattern-inside: |
+            (JdbcTemplate $T).batchUpdate(...)
+      - patterns:
+        - pattern: $A
+        - pattern-inside: |
+            NamedParameterBatchUpdateUtils.$M($A,...)
+      - patterns:
+        - pattern: $A
+        - pattern-inside: |
+            BatchUpdateUtils.$M($A,...)
+  message: >-
+    Detected a string argument from a public method contract in a raw SQL statement. This could lead to
+    SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Use a prepared statements (java.sql.PreparedStatement) instead. You
+    can obtain a PreparedStatement using 'connection.prepareStatement'.
+  languages: [java]
+  severity: WARNING
+  metadata:
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    category: security
+    technology:
+    - spring
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
