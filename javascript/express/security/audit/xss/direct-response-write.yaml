@@ -96,11 +96,6 @@ rules:
             ...
             $RES.set('$TYPE')
         }
-    - pattern-not-inside: |
-        ({ $REQ }: Request,$RES: Response) => {
-            ...
-            $RES.$SET('$TYPE')
-        }
     - focus-metavariable: $REQ
     - pattern-either:
       - pattern: params
@@ -112,3 +107,108 @@ rules:
       - pattern: $RES.write($ARG)
       - pattern: $RES.send($ARG)
     - focus-metavariable: $ARG
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          import * as $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          import $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          $S = require("underscore.string")
+          ...
+    - pattern-either:
+      - pattern: $S.escapeHTML(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from "dompurify"
+          ...
+      - pattern-inside: |
+          import { ..., $S,... } from "dompurify"
+          ...
+      - pattern-inside: |
+          import * as $S from "dompurify"
+          ...
+      - pattern-inside: |
+          $S = require("dompurify")
+          ...
+      - pattern-inside: |
+          import $S from "isomorphic-dompurify"
+          ...
+      - pattern-inside: |
+          import * as $S from "isomorphic-dompurify"
+          ...
+      - pattern-inside: |
+          $S = require("isomorphic-dompurify")
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $VALUE = $S(...)
+            ...
+        - pattern: $VALUE.sanitize(...)
+      - patterns:
+        - pattern-inside: |
+            $VALUE = $S.sanitize
+            ...
+        - pattern: $S(...)
+      - pattern: $S.sanitize(...)
+      - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'xss';
+          ...
+      - pattern-inside: |
+          import * as $S from 'xss';
+          ...
+      - pattern-inside: |
+          $S = require("xss")
+          ...
+    - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'sanitize-html';
+          ...
+      - pattern-inside: |
+          import * as $S from "sanitize-html";
+          ...
+      - pattern-inside: |
+          $S = require("sanitize-html")
+          ...
+    - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $S = new Remarkable()
+          ...
+    - pattern: $S.render(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'express-xss-sanitizer';
+          ...
+      - pattern-inside: |
+          import * as $S from "express-xss-sanitizer";
+          ...
+      - pattern-inside: |
+          const { ..., $S, ... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          var { ..., $S, ... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          let { ...,$S,... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          $S = require("express-xss-sanitizer")
+          ...
+    - pattern: $S(...)
+    
