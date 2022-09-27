@@ -37,14 +37,13 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
 
 func MyHandlerExplicit(w http.ResponseWriter, r *http.Request) {
     session, err := store.Get(r, "blah-session")
-    // ruleid: handler-assignment-from-multiple-sources
     var user_id int = session.Values["user_id"].(int)
 
     if !ValidateUser(user_id) {
         http.Error(w, "Error", http.StatusInternalServerError)
         return
     }
-
+    // ruleid: handler-assignment-from-multiple-sources
     user_id = r.query.params.user_id
     user_obj := RetrieveUser(user_id)
     user_obj.account_id = r.query.params.account_id
