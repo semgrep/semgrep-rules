@@ -1,71 +1,81 @@
 rules:
-  - id: url-rewriting
-    message: >-
-      URL rewriting has significant security risks.
-      Since session ID appears in the URL, it may be easily seen by third parties.
-    metadata:
-      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#URL_REWRITING
-      category: security
-      technology:
-        - java
-    severity: WARNING
-    languages: [java]
-    pattern-either:
-      - pattern: |
-          $X $METHOD(...,HttpServletResponse $RES,...) {
-            ...
-            $RES.encodeURL(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...,HttpServletResponse $RES,...) {
-            ...
-            $RES.encodeUrl(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...,HttpServletResponse $RES,...) {
-            ...
-            $RES.encodeRedirectURL(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...,HttpServletResponse $RES,...) {
-            ...
-            $RES.encodeRedirectUrl(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...) {
-            ...
-            HttpServletResponse $RES = ...;
-            ...
-            $RES.encodeURL(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...) {
-            ...
-            HttpServletResponse $RES = ...;
-            ...
-            $RES.encodeUrl(...);
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...) {
-            ...
-            HttpServletResponse $RES = ...;
-            ...
-            $RES.encodeRedirectURL(...);
-            ...
-          }
-      - pattern: |-
-          $X $METHOD(...) {
-            ...
-            HttpServletResponse $RES = ...;
-            ...
-            $RES.encodeRedirectUrl(...);
-            ...
-          }
+- id: url-rewriting
+  message: >-
+    URL rewriting has significant security risks.
+    Since session ID appears in the URL, it may be easily seen by third parties.
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#URL_REWRITING
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.encodeURL(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.encodeUrl(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.encodeRedirectURL(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,HttpServletResponse $RES,...) {
+        ...
+        $RES.encodeRedirectUrl(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.encodeURL(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.encodeUrl(...);
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.encodeRedirectURL(...);
+        ...
+      }
+  - pattern: |-
+      $X $METHOD(...) {
+        ...
+        HttpServletResponse $RES = ...;
+        ...
+        $RES.encodeRedirectUrl(...);
+        ...
+      }

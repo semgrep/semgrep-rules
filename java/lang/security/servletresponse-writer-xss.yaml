@@ -1,27 +1,39 @@
 rules:
-  - id: servletresponse-writer-xss
-    message: >-
-      Cross-site scripting detected in HttpServletResponse writer with variable '$VAR'.
-      User
-      input was detected going directly from the HttpServletRequest into output. Ensure
-      your
-      data is properly encoded using org.owasp.encoder.Encode.forHtml: 'Encode.forHtml($VAR)'.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XSS_SERVLET
-      category: security
-      technology:
-        - java
-    severity: ERROR
-    patterns:
-      - pattern-inside: $TYPE $FUNC(..., HttpServletResponse $RESP, ...) { ... }
-      - pattern-inside: $VAR = $REQ.getParameter(...); ...
-      - pattern-either:
-          - pattern: $RESP.getWriter(...).write(..., $VAR, ...);
-          - pattern: |
-              $WRITER = $RESP.getWriter(...);
-              ...
-              $WRITER.write(..., $VAR, ...);
-    languages:
-      - java
+- id: servletresponse-writer-xss
+  message: >-
+    Cross-site scripting detected in HttpServletResponse writer with variable '$VAR'.
+    User
+    input was detected going directly from the HttpServletRequest into output. Ensure
+    your
+    data is properly encoded using org.owasp.encoder.Encode.forHtml: 'Encode.forHtml($VAR)'.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#XSS_SERVLET
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  severity: ERROR
+  patterns:
+  - pattern-inside: $TYPE $FUNC(..., HttpServletResponse $RESP, ...) { ... }
+  - pattern-inside: $VAR = $REQ.getParameter(...); ...
+  - pattern-either:
+    - pattern: $RESP.getWriter(...).write(..., $VAR, ...);
+    - pattern: |
+        $WRITER = $RESP.getWriter(...);
+        ...
+        $WRITER.write(..., $VAR, ...);
+  languages:
+  - java

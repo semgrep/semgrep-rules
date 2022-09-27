@@ -1,27 +1,37 @@
 rules:
-  - id: tainted-xpath-from-http-request 
-    message: >-
-      Detected input from a HTTPServletRequest going into a XPath evaluate or compile command. 
-      This could lead to xpath injection if variables passed into the evaluate or compile commands are not properly sanitized.
-      Xpath injection could lead to unauthorized access to sensitive information in XML documents.
-      Instead, thoroughly sanitize user input or use parameterized xpath queries if you can.
-    languages: [java]
-    severity: WARNING
-    mode: taint
-    pattern-sources:
-    - patterns:
+- id: tainted-xpath-from-http-request
+  message: >-
+    Detected input from a HTTPServletRequest going into a XPath evaluate or compile command.  This could
+    lead to xpath injection if variables passed into the evaluate or compile commands are not properly
+    sanitized.
+    Xpath injection could lead to unauthorized access to sensitive information in XML documents.
+    Instead, thoroughly sanitize user input or use parameterized xpath queries if you can.
+  languages: [java]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: |
+        (HttpServletRequest $REQ).$FUNC(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
       - pattern: |
-          (HttpServletRequest $REQ).$FUNC(...)
-    pattern-sinks:
-    - patterns:
-      - pattern-either:
-        - pattern: |
-            (javax.xml.xpath.XPath $XP).evaluate(...)
-        - pattern: |
-            (javax.xml.xpath.XPath $XP).compile(...).evaluate(...)
-    metadata:
-      category: security
-      technology:
-        - java
-      cwe: "CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
-      owasp: "A01: Injection"
+          (javax.xml.xpath.XPath $XP).evaluate(...)
+      - pattern: |
+          (javax.xml.xpath.XPath $XP).compile(...).evaluate(...)
+  metadata:
+    category: security
+    technology:
+    - java
+    cwe:
+    - "CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM

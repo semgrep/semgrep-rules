@@ -9,7 +9,7 @@ public class PoC_resource {
     @POST
     @Path("/concat")
     @Produces(MediaType.APPLICATION_JSON)
-    // ruleid: insecure-resteasy-deserialization
+    // todoid: insecure-resteasy-deserialization
     @Consumes({"*/*"})
     public Map<String, String> doConcat(Pair pair) {
         HashMap<String, String> result = new HashMap<String, String>();
@@ -31,7 +31,7 @@ public class PoC_resource {
     @POST
     @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
-    // ok: insecure-resteasy-deserialization
+    // todook: insecure-resteasy-deserialization
     @Consumes(MediaType.APPLICATION_JSON)
     public Map<String, Integer> doCount(ArrayList<Object> elements) {
         HashMap<String, Integer> result = new HashMap<String, Integer>();

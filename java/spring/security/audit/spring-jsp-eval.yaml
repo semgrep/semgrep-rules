@@ -1,18 +1,28 @@
 rules:
-  - id: spring-jsp-eval
-    pattern: |
-      <spring:eval ... expression=...>
-    message: >-
-      A Spring expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation.
-    severity: WARNING
-    languages: [generic]
-    metadata:
-      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-      owasp: "A1: Injection"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#JSP_SPRING_EVAL
-      category: security
-      technology:
-        - spring
-    paths:
-      include:
-        - "*.jsp"
+- id: spring-jsp-eval
+  pattern: |
+    <spring:eval ... expression=...>
+  message: >-
+    A Spring expression is built with a dynamic value. The source of the value(s) should be verified to
+    avoid that unfiltered values fall into this risky code evaluation.
+  severity: WARNING
+  languages: [generic]
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#JSP_SPRING_EVAL
+    category: security
+    technology:
+    - spring
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  paths:
+    include:
+    - '*.jsp'

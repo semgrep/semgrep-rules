@@ -1,40 +1,50 @@
 rules:
-  - id: spring-unvalidated-redirect
-    message: >-
-      Application redirects a user to a destination URL specified by a user supplied parameter that is not validated.
-    metadata:
-      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-      owasp: "A1: Injection"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT
-      category: security
-      technology:
-        - spring
-    severity: WARNING
-    languages: [java]
-    pattern-either:
-      - pattern: |
-          $X $METHOD(...,String $URL,...) {
-            return "redirect:" + $URL;
-          }
-      - pattern: |
-          $X $METHOD(...,String $URL,...) {
-            ...
-            String $REDIR = "redirect:" + $URL;
-            ...
-            return $REDIR;
-            ...
-          }
-      - pattern: |
-          $X $METHOD(...,String $URL,...) {
-            ...
-            new ModelAndView("redirect:" + $URL);
-            ...
-          }
-      - pattern: |-
-          $X $METHOD(...,String $URL,...) {
-            ...
-            String $REDIR = "redirect:" + $URL;
-            ...
-            new ModelAndView($REDIR);
-            ...
-          }
+- id: spring-unvalidated-redirect
+  message: >-
+    Application redirects a user to a destination URL specified by a user supplied parameter that is not
+    validated.
+  metadata:
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp:
+    - A01:2021 - Broken Access Control
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#UNVALIDATED_REDIRECT
+    category: security
+    technology:
+    - spring
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+  - pattern: |
+      $X $METHOD(...,String $URL,...) {
+        return "redirect:" + $URL;
+      }
+  - pattern: |
+      $X $METHOD(...,String $URL,...) {
+        ...
+        String $REDIR = "redirect:" + $URL;
+        ...
+        return $REDIR;
+        ...
+      }
+  - pattern: |
+      $X $METHOD(...,String $URL,...) {
+        ...
+        new ModelAndView("redirect:" + $URL);
+        ...
+      }
+  - pattern: |-
+      $X $METHOD(...,String $URL,...) {
+        ...
+        String $REDIR = "redirect:" + $URL;
+        ...
+        new ModelAndView($REDIR);
+        ...
+      }

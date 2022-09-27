@@ -1,33 +1,43 @@
 rules:
-  - id: insecure-hostname-verifier
-    message: >-
-      Insecure HostnameVerifier implementation detected. This will accept
-      any SSL certificate with any hostname, which creates the possibility
-      for man-in-the-middle attacks.
-    metadata:
-      cwe: "CWE-295: Improper Certificate Validation"
-      owasp: "A6: Security Misconfiguration"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_HOSTNAME_VERIFIER
-      asvs:
-        section: V9 Communications Verification Requirements
-        control_id: 9.2.1 Weak TLS
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
-        version: "4"
-      category: security
-      technology:
-        - java
-    severity: WARNING
-    languages: [java]
-    pattern-either:
-      - pattern: |
-          class $CLASS implements HostnameVerifier {
-            ...
-            public boolean verify(...) { return true; }
-          }
-      - pattern: |-
-          new HostnameVerifier(...){
-            public boolean verify(...) {
-              return true;
-            }
-          }
-      - pattern: import org.apache.http.conn.ssl.NoopHostnameVerifier;
+- id: insecure-hostname-verifier
+  message: >-
+    Insecure HostnameVerifier implementation detected. This will accept
+    any SSL certificate with any hostname, which creates the possibility
+    for man-in-the-middle attacks.
+  metadata:
+    cwe:
+    - 'CWE-295: Improper Certificate Validation'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A07:2021 - Identification and Authentication Failures
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_HOSTNAME_VERIFIER
+    asvs:
+      section: V9 Communications Verification Requirements
+      control_id: 9.2.1 Weak TLS
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+      version: '4'
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  severity: WARNING
+  languages: [java]
+  pattern-either:
+  - pattern: |
+      class $CLASS implements HostnameVerifier {
+        ...
+        public boolean verify(...) { return true; }
+      }
+  - pattern: |-
+      new HostnameVerifier(...){
+        public boolean verify(...) {
+          return true;
+        }
+      }
+  - pattern: import org.apache.http.conn.ssl.NoopHostnameVerifier;

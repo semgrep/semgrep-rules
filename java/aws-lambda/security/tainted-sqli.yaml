@@ -36,12 +36,11 @@ rules:
           (java.util.Map<String, Object> $STMT) = $PATH.queryForMap(...);
       - pattern: |
           (org.springframework.jdbc.support.rowset.SqlRowSet $STMT) = ...;
-      - patterns: 
+      - patterns:
         - pattern-inside: |
             (String $SQL) = "$SQLSTR" + ...;
             ...
-        - pattern:
-            $PATH.$SQLCMD(..., $SQL, ...);
+        - pattern: $PATH.$SQLCMD(..., $SQL, ...);
         - metavariable-regex:
             metavariable: $SQLSTR
             regex: (?i)(^SELECT.* | ^INSERT.* | ^UPDATE.*)
@@ -51,8 +50,20 @@ rules:
   metadata:
     category: security
     technology:
-      - sql
-      - java
-      - aws-lambda
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: "A01: Injection"
+    - sql
+    - java
+    - aws-lambda
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM

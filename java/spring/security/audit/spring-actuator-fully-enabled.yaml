@@ -1,24 +1,31 @@
 rules:
-  - id: spring-actuator-fully-enabled
-    pattern: management.endpoints.web.exposure.include=*
-    message: >-
-      Spring Boot Actuator is fully enabled. This exposes sensitive endpoints such as /actuator/env, /actuator/logfile, /actuator/heapdump and others.
-      Unless you have Spring Security enabled or another means to protect these endpoints, this functionality is available without authentication, causing a severe security risk.
-    severity: WARNING
-    languages: [generic]
-    paths:
-      include:
-        - "*properties"
-    metadata:
-      cwe:
-        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
-      owasp: 
-        - "A06:2017 - Security Misconfiguration"
-        - "A05:2021 - Security Misconfiguration"
-      references:
-        - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
-        - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
-        - https://blog.maass.xyz/spring-actuator-security-part-1-stealing-secrets-using-spring-actuators
-      category: security
-      technology:
-        - spring
+- id: spring-actuator-fully-enabled
+  pattern: management.endpoints.web.exposure.include=*
+  message: >-
+    Spring Boot Actuator is fully enabled. This exposes sensitive endpoints such as /actuator/env, /actuator/logfile,
+    /actuator/heapdump and others.
+    Unless you have Spring Security enabled or another means to protect these endpoints, this functionality
+    is available without authentication, causing a severe security risk.
+  severity: WARNING
+  languages: [generic]
+  paths:
+    include:
+    - '*properties'
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
+    - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
+    - https://blog.maass.xyz/spring-actuator-security-part-1-stealing-secrets-using-spring-actuators
+    category: security
+    technology:
+    - spring
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
