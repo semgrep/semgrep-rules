@@ -1,0 +1,82 @@
+rules:
+- id: express-ssrf
+  message: >-
+    The following request $REQ1.$METHOD1($QUERY) was found to be crafted
+    from user-input which can lead to Server-Side Request Forgery (SSRF)
+    vulnerabilities. It is recommended where possible to not allow user-input
+    to craft the base request, but to be treated as part of the path or query
+    parameter. When user-input is necessary to craft the request, it is
+    recommeneded to follow OWASP best practices to prevent abuse. 
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    technology:
+    - express
+    category: security
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - patterns:
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $REQ1 = require('request')
+            ...
+        - pattern-inside: |
+            import * as $REQ1 from 'request'
+            ...
+        - pattern-inside: |
+            import $REQ1 from 'request'
+            ...
+      - pattern-either:
+        - pattern-inside: $REQ1.$METHOD1($QUERY)
+      - pattern: $QUERY
+      - metavariable-regex:
+          metavariable: $METHOD1
+          regex: ^(get|post|put|patch|del|head|delete)

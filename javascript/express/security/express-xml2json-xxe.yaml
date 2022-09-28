@@ -1,42 +1,80 @@
 rules:
-  - id: express-xml2json-xxe
-    message: >-
-      Make sure that unverified user data can not reach the XML Parser,
-      as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
-    metadata:
-      owasp: "A4: XML External Entities (XXE)"
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      asvs:
-        section: V5 Validation, Sanitization and Encoding
-        control_id: 5.5.2 Insecue XML Deserialization
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
-        version: "4"
-      category: security
-      technology:
-        - express
-    severity: ERROR
-    languages: [javascript, typescript]
-    patterns:
+- id: express-xml2json-xxe
+  message: >-
+    Make sure that unverified user data can not reach the XML Parser,
+    as it can result in XML External or Internal Entity (XXE) Processing vulnerabilities
+  metadata:
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    category: security
+    technology:
+    - express
+    references:
+    - https://www.npmjs.com/package/xml2json
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - patterns:
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+      - pattern: $REQ.files.$ANYTHING.data.toString('utf8')
+      - pattern: $REQ.files.$ANYTHING['data'].toString('utf8')
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+      - pattern: files.$ANYTHING.data.toString('utf8')
+      - pattern: files.$ANYTHING['data'].toString('utf8')
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
       - pattern-inside: |
           require('xml2json');
           ...
-      - pattern-either:
-          - pattern-inside: function ... ($REQ, $RES) {...}
-          - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-      - pattern-either:
-          - pattern: $EXPAT.toJson(<... $REQ.$QUERY.$FOO ...>,...)
-          - pattern: $EXPAT.toJson(<... $REQ.$BODY ...>,...)
-          - pattern: |
-              $INPUT = <... $REQ.$QUERY.$FOO ...>;
-              ...
-              $EXPAT.toJson(<... $INPUT ...>,...);
-          - pattern: |-
-              $INPUT = <... $REQ.$BODY ...>;
-              ...
-              $EXPAT.toJson(<... $INPUT ...>,...);
+      - pattern-inside: |
+          import 'xml2json';
+          ...
+    - pattern: $EXPAT.toJson($SINK,...)
+    - focus-metavariable: $SINK

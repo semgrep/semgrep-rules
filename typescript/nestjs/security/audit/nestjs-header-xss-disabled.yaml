@@ -1,20 +1,34 @@
 rules:
-  - id: nestjs-header-xss-disabled
-    pattern: |
-      class $CN {
-          ...
-          @Header("=~/[Xx]-[Xx][Ss][Ss]-[Pp][Rr][Oo][Tt][Ee][Cc][Tt][Ii][Oo][Nn]/", '0')
-          $FN(...) {
-              ...
-          }
-          ...
-      }
-    message: >-
-      X-XSS-Protection header is set to 0. This will disable the browser's XSS Filter.
-    languages:
-      - typescript
-    severity: WARNING
-    metadata:
-      category: security
-      technology:
-        - nestjs
+- id: nestjs-header-xss-disabled
+  message: >-
+    X-XSS-Protection header is set to 0. This will disable the browser's XSS Filter.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    category: security
+    technology:
+    - nestjs
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  severity: WARNING
+  pattern: |
+    class $CN {
+        ...
+        @Header("=~/[Xx]-[Xx][Ss][Ss]-[Pp][Rr][Oo][Tt][Ee][Cc][Tt][Ii][Oo][Nn]/", '0')
+        $FN(...) {
+            ...
+        }
+        ...
+    }

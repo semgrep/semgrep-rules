@@ -1,34 +1,43 @@
 rules:
-  - id: pyramid-set-cookie-samesite-unsafe-default
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              @pyramid.view.view_config(...)
-              def $VIEW($REQUEST):
-                  ...
-                  $RESPONSE = $REQUEST.response
-                  ...
-          - pattern-inside: |
-              def $VIEW(...):
-                  ...
-                  $RESPONSE = pyramid.httpexceptions.HTTPFound(...)
-                  ...
-      - pattern-not: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
-      - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
-      - pattern: $RESPONSE.set_cookie(...)
-    fix-regex:
-      regex: (.*)\)
-      replacement: \1, samesite='Lax')
-    message: >-
-      Found a Pyramid cookie using an unsafe value for the samesite option.
-      Pyramid cookies should be handled securely by setting samesite='Lax' in response.set_cookie(...).
-      If this parameter is not properly set, your cookies are not properly protected and
-      are at risk of being stolen by an attacker.
-    metadata:
-      cwe: "CWE-1275: Sensitive Cookie with Improper SameSite Attribute"
-      owasp: "A3: Sensitive Data Exposure"
-      category: security
-      technology:
-        - pyramid
-    languages: [python]
-    severity: WARNING
+- id: pyramid-set-cookie-samesite-unsafe-default
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        @pyramid.view.view_config(...)
+        def $VIEW($REQUEST):
+            ...
+            $RESPONSE = $REQUEST.response
+            ...
+    - pattern-inside: |
+        def $VIEW(...):
+            ...
+            $RESPONSE = pyramid.httpexceptions.HTTPFound(...)
+            ...
+  - pattern-not: $RESPONSE.set_cookie(..., samesite=$SAMESITE, ...)
+  - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
+  - pattern: $RESPONSE.set_cookie(...)
+  fix-regex:
+    regex: (.*)\)
+    replacement: \1, samesite='Lax')
+  message: >-
+    Found a Pyramid cookie using an unsafe value for the samesite option.
+    Pyramid cookies should be handled securely by setting samesite='Lax' in response.set_cookie(...).
+    If this parameter is not properly set, your cookies are not properly protected and
+    are at risk of being stolen by an attacker.
+  metadata:
+    cwe:
+    - 'CWE-1275: Sensitive Cookie with Improper SameSite Attribute'
+    owasp:
+    - A01:2021 - Broken Access Control
+    category: security
+    technology:
+    - pyramid
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM
+  languages: [python]
+  severity: WARNING

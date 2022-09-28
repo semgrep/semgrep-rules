@@ -1,47 +1,55 @@
 rules:
-  - id: insecure-openerdirector-open-ftp
-    message: >-
-      Detected an unsecured transmission channel. 'OpenerDirector.open(...)' is
-      being used with 'ftp://'. Information sent over this connection will be
-      unencrypted. Consider using SFTP instead. urllib does not support SFTP,
-      so consider a library which supports SFTP.
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
-      references:
-        - https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector.open
-      category: security
-      technology:
-        - urllib
-    severity: WARNING
-    languages: [python]
-    pattern-either:
-      - pattern: urllib.request.OpenerDirector(...).open("=~/^[Ff][Tt][Pp]://.*/", ...)
-      - patterns:
-          - pattern-inside: |
-              $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
-              ...
-          - pattern: $OPENERDIRECTOR.open("=~/^[Ff][Tt][Pp]://.*/", ...)
-      - patterns:
-          - pattern-inside: |
-              $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
-              ...
-          - pattern: |
-              $URL = "=~/^[Ff][Tt][Pp]://.*/"
-              ...
-              $OPENERDIRECTOR.open($URL, ...)
-      - pattern: |
-          $URL = "=~/^[Ff][Tt][Pp]://.*/"
+- id: insecure-openerdirector-open-ftp
+  message: >-
+    Detected an unsecured transmission channel. 'OpenerDirector.open(...)' is
+    being used with 'ftp://'. Information sent over this connection will be
+    unencrypted. Consider using SFTP instead. urllib does not support SFTP,
+    so consider a library which supports SFTP.
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector.open
+    category: security
+    technology:
+    - urllib
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  severity: WARNING
+  languages: [python]
+  pattern-either:
+  - pattern: urllib.request.OpenerDirector(...).open("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
+        ...
+    - pattern: $OPENERDIRECTOR.open("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - patterns:
+    - pattern-inside: |
+        $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
+        ...
+    - pattern: |
+        $URL = "=~/^[Ff][Tt][Pp]://.*/"
+        ...
+        $OPENERDIRECTOR.open($URL, ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.OpenerDirector(...).open($URL, ...)
+  - patterns:
+    - pattern-inside: |
+        def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
           ...
-          urllib.request.OpenerDirector(...).open($URL, ...)
+    - pattern-either:
+      - pattern: urllib.request.OpenerDirector(...).open($URL, ...)
       - patterns:
-          - pattern-inside: |
-              def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-                ...
-          - pattern-either:
-              - pattern: urllib.request.OpenerDirector(...).open($URL, ...)
-              - patterns:
-                  - pattern-inside: |
-                      $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
-                      ...
-                  - pattern: $OPENERDIRECTOR.open($URL, ...)
+        - pattern-inside: |
+            $OPENERDIRECTOR = urllib.request.OpenerDirector(...)
+            ...
+        - pattern: $OPENERDIRECTOR.open($URL, ...)

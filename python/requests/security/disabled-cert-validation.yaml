@@ -1,28 +1,36 @@
 rules:
-  - id: disabled-cert-validation
-    message: >-
-      Certificate verification has been explicitly disabled. This
-      permits insecure connections to insecure servers. Re-enable
-      certification validation.
-    metadata:
-      cwe: "CWE-295: Improper Certificate Validation"
-      owasp: "A3: Sensitive Data Exposure"
-      references:
-        - https://stackoverflow.com/questions/41740361/is-it-safe-to-disable-ssl-certificate-verification-in-pythonss-requests-lib
-      category: security
-      technology:
-        - requests
-    languages: [python]
-    severity: ERROR
-    pattern-either:
-      - pattern: requests.put(..., verify=False, ...)
-      - pattern: requests.patch(..., verify=False, ...)
-      - pattern: requests.delete(..., verify=False, ...)
-      - pattern: requests.head(..., verify=False, ...)
-      - pattern: requests.options(..., verify=False, ...)
-      - pattern: requests.request(..., verify=False, ...)
-      - pattern: requests.get(..., verify=False, ...)
-      - pattern: requests.post(..., verify=False, ...)
-    fix-regex:
-      regex: verify(\s)*=(\s)*False
-      replacement: verify=True
+- id: disabled-cert-validation
+  message: >-
+    Certificate verification has been explicitly disabled. This
+    permits insecure connections to insecure servers. Re-enable
+    certification validation.
+  metadata:
+    cwe:
+    - 'CWE-295: Improper Certificate Validation'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://stackoverflow.com/questions/41740361/is-it-safe-to-disable-ssl-certificate-verification-in-pythonss-requests-lib
+    category: security
+    technology:
+    - requests
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [python]
+  severity: ERROR
+  pattern-either:
+  - pattern: requests.put(..., verify=False, ...)
+  - pattern: requests.patch(..., verify=False, ...)
+  - pattern: requests.delete(..., verify=False, ...)
+  - pattern: requests.head(..., verify=False, ...)
+  - pattern: requests.options(..., verify=False, ...)
+  - pattern: requests.request(..., verify=False, ...)
+  - pattern: requests.get(..., verify=False, ...)
+  - pattern: requests.post(..., verify=False, ...)
+  fix-regex:
+    regex: verify(\s)*=(\s)*False
+    replacement: verify=True

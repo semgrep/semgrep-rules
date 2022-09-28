@@ -5,10 +5,17 @@ $(function ($) {
     $.sceditor.formats.bbcode
         .set('align', {
             html: function (element, attrs, content) {
+                if(content){
+                    const newContent = content;
+                } else{
+                    const qP = new URLSearchParams(location.search);
+                    const newContent = qP.get('someKey');
+                }
+                
                 var x = `<div align="left">${content}</div>`
 
                 // ruleid: raw-html-concat
-                return '<div align="' + (attrs.defaultattr || 'left') + '">' + content + '</div>';
+                return '<div align="' + (attrs.defaultattr || 'left') + '">' + newContent + '</div>';
             },
             isInline: false
         });
@@ -42,13 +49,14 @@ $(function ($) {
           },
           html: function (token, attrs, content) {
               var data = '';
-
+              var content = content ?? someFunc(location.search);
               if (attrs.pid)
                   data += ' data-pid="' + attrs.pid + '"';
               if (attrs.dateline)
                   data += ' data-dateline="' + attrs.dateline + '"';
               if (typeof attrs.defaultattr !== "undefined")
-                  // ruleid: raw-html-concat
+                  // not a fully-formed HTML element - this is probably an incomplete string used elsewhere
+                  // ok: raw-html-concat
                   content = '<cite>' + attrs.defaultattr.replace(/ /g, '&nbsp;') + '</cite>' + content;
 
               // ruleid: raw-html-concat
@@ -65,66 +73,13 @@ $(function ($) {
 
 });
 
+// cookie test case (removed) - cookies are not reliably user-controllable strings in modern software
 //https://github.com/AmauriC/tarteaucitron.js/blob/92d0af3a93ed807f711862830bc4ead3d84a0752/tarteaucitron.js
-
-var tarteaucitron = {
-    "version": 20200730,
-    "cdn": cdn,
-    "user": {},
-    "lang": {},
-    "services": {},
-    "added": [],
-    "idprocessed": [],
-    "state": [],
-    "launch": [],
-    "parameters": {},
-    "isAjax": false,
-    "reloadThePage": false,
-    "events": {
-        "init": function () {},
-        "load": function () {},
-    },
-    "number": function () {
-        "use strict";
-        var cookies = document.cookie.split(';'),
-            nb = (document.cookie !== '') ? cookies.length : 0,
-            html = '';
-
-        cookies = cookies.sort(function (a, b) {
-            namea = a.split('=', 1).toString().replace(/ /g, '');
-            nameb = b.split('=', 1).toString().replace(/ /g, '');
-            c = (tarteaucitron.cookie.owner[namea] !== undefined) ? tarteaucitron.cookie.owner[namea] : '0';
-            d = (tarteaucitron.cookie.owner[nameb] !== undefined) ? tarteaucitron.cookie.owner[nameb] : '0';
-            if (c + a > d + b) { return 1; }
-            if (c + a < d + b) { return -1; }
-            return 0;
-        });
-
-        if (document.cookie !== '') {
-            for (i = 0; i < nb; i += 1) {
-                // ruleid: raw-html-concat
-                html += '<li class="tarteaucitronCookiesListMain">';
-                // ruleid: raw-html-concat
-                html += '    <div class="tarteaucitronCookiesListRight">' + cookies[i].split('=').slice(1).join('=') + '</div>';
-                // ruleid: raw-html-concat
-                html += '</li>';
-            }
-        } else {
-            // ruleid: raw-html-concat
-            html += '<div class="tarteaucitronCookiesListMain">';
-            // ruleid: raw-html-concat
-            html += '    <div class="tarteaucitronCookiesListLeft"><strong>-</strong></div>';
-            // ruleid: raw-html-concat
-            html += '    <div class="tarteaucitronCookiesListRight"></div>';
-            // ruleid: raw-html-concat
-            html += '</div>';
-        }
-    }
-};
 
 //https://github.com/mbraak/jqTree/blob/d6b8d11c4ebd7aa4a60498786bc94724b6f6ffda/lib/dragAndDropHandler.js
 var DragElement = /** @class */ (function () {
     function DragElement(nodeName, offsetX, offsetY, $tree) {
+        var nodeName = nodeName ?? new URLSearchParams(location.hash.substring(1)).get('someKey');
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         // ruleid: raw-html-concat

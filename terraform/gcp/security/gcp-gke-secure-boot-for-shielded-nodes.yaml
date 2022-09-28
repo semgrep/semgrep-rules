@@ -1,0 +1,27 @@
+rules:
+- id: gcp-gke-secure-boot-for-shielded-nodes
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_container_cluster" "..." {
+          ...
+          }
+    - pattern-not-inside: |
+          resource "google_container_cluster" "..." {
+          ...
+          shielded_instance_config {
+            ...
+            enable_secure_boot = true
+            ...
+          }
+          ...
+          }
+  message: >-
+    Ensure Secure Boot for Shielded GKE Nodes is Enabled	
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

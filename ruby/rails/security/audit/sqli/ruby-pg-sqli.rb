@@ -2,15 +2,16 @@ require 'pg'
 
 def bad1()
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
-    query = "SELECT name FROM users WHERE age=" + req.FormValue("age")
+    query = "SELECT name FROM users WHERE age=" + params['age']
     # ruleid: ruby-pg-sqli
     con.exec query
 end
 
 def bad2(user_input)
+    age = params[user_input]
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     query = "SELECT name FROM users WHERE age="
-    query += user_input
+    query += age
     # ruleid: ruby-pg-sqli
     con.exec query
 end
@@ -18,7 +19,7 @@ end
 def bad3(userinput)
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     query = "SELECT name FROM users WHERE age="
-    query.concat(userinput)
+    query.concat(cookies[userinput])
     # ruleid: ruby-pg-sqli
     con.exec query
 end
@@ -26,7 +27,8 @@ end
 def bad4(userinput)
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     query = "SELECT name FROM users WHERE age="
-    query << userinput
+    query << params[userinput]
+    # passes on 0.111.0 and higher
     # ruleid: ruby-pg-sqli
     con.exec(query)
 end
@@ -34,19 +36,19 @@ end
 def bad5()
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     # ruleid: ruby-pg-sqli
-    con.exec_params("SELECT name FROM users WHERE age=" + req.FormValue("age"))
+    con.exec_params("SELECT name FROM users WHERE age=" + params['age'])
 end
 
 def bad6()
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     # ruleid: ruby-pg-sqli
-    con.exec_params("SELECT name FROM users WHERE age=".concat(req.FormValue("age")))
+    con.exec_params("SELECT name FROM users WHERE age=".concat(cookies['age']),some_params)
 end
 
 def bad7(userinput)
     con = PG.connect :dbname => 'testdb', :user => 'janbodnar'
     # ruleid: ruby-pg-sqli
-    con.exec_params("SELECT name FROM users WHERE age=" << userinput)
+    con.exec_params("SELECT name FROM users WHERE age=" << params[userinput])
 end
 
 def ok1()

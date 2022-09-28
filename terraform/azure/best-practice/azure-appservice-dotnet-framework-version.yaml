@@ -1,0 +1,27 @@
+rules:
+  - id: azure-appservice-dotnet-framework-version
+    message: >-
+      Ensure that Net Framework version is the latest, if used as a part of the web app
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          site_config {
+            ...
+            dotnet_framework_version = "v6.0"
+            ...
+          }
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_app_service" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: INFO

@@ -1,22 +1,32 @@
 rules:
-  - id: jwt-python-hardcoded-secret
-    message: >-
-      Hardcoded JWT secret or private key is used.
-      This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-      Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
-    metadata:
-      cwe: "CWE-522: Insufficiently Protected Credentials"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-      category: security
-      technology:
-        - jwt
-    pattern-either:
-      - pattern: |
-          jwt.encode($X, "...", ...)
-      - pattern: |
-          $SECRET = "..."
-          ...
-          jwt.encode($X, $SECRET, ...)
-    languages: [python]
-    severity: ERROR
+- id: jwt-python-hardcoded-secret
+  message: >-
+    Hardcoded JWT secret or private key is used.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets
+    in environment variables)
+  metadata:
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    references:
+    - https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    category: security
+    technology:
+    - jwt
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  patterns:
+  - pattern: |
+      jwt.encode($X, $SECRET, ...)
+  - focus-metavariable: $SECRET
+  - pattern: |
+      "..."
+  languages: [python]
+  severity: ERROR

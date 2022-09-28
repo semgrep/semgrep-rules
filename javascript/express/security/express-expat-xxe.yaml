@@ -1,75 +1,86 @@
 rules:
-  - id: express-expat-xxe
-    mode: taint
-    message: >-
-      Make sure that unverified user data can not reach the XML Parser, as it
-      can result in XML External or Internal Entity (XXE) Processing
-      vulnerabilities.
-    metadata:
-      owasp: 
-        - A04:2017 - XML External Entities (XXE)
-        - A03:2021 - Injection
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      asvs:
-        section: V5 Validation, Sanitization and Encoding
-        control_id: 5.5.2 Insecue XML Deserialization
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
-        version: "4"
-      category: security
-      technology:
-        - express
-    severity: ERROR
-    languages:
-      - javascript
-      - typescript
-    pattern-sources:
+- id: express-expat-xxe
+  message: >-
+    Make sure that unverified user data can not reach the XML Parser, as it
+    can result in XML External or Internal Entity (XXE) Processing
+    vulnerabilities.
+  metadata:
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    references:
+    - https://github.com/astro/node-expat
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
       - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)$
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
-      - patterns:
-          - pattern-either:
-              - pattern-inside: >
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  $XML = require('node-expat')
-                  ...
-              - pattern-inside: |
-                  import $XML from 'node-expat'
-                  ...
-              - pattern-inside: |
-                  import * as $XML from 'node-expat'
-                  ...
-          - pattern-either:
-              - pattern-inside: |
-                  $PARSER = new $XML.Parser(...);
-                  ...
-          - pattern-either:
-              - pattern-inside: $PARSER.parse($QUERY)
-              - pattern: $PARSER.write($QUERY)
-          - pattern: $QUERY
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $XML = require('node-expat')
+          ...
+      - pattern-inside: |
+          import $XML from 'node-expat'
+          ...
+      - pattern-inside: |
+          import * as $XML from 'node-expat'
+          ...
+    - pattern-either:
+      - pattern-inside: |
+          $PARSER = new $XML.Parser(...);
+          ...
+    - pattern-either:
+      - pattern-inside: $PARSER.parse($QUERY)
+      - pattern: $PARSER.write($QUERY)
+    - pattern: $QUERY

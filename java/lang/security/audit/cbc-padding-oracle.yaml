@@ -1,23 +1,37 @@
 rules:
-  - id: cbc-padding-oracle
-    message: >-
-      Using CBC with PKCS5Padding is susceptible to padding oracle attacks. A malicious
-      actor
-      could discern the difference between plaintext with valid or invalid padding.
-      Further,
-      CBC mode does not include any integrity checks. See https://find-sec-bugs.github.io/bugs.htm#CIPHER_INTEGRITY.
-      Use 'AES/GCM/NoPadding' instead.
-    metadata:
-      cwe: "CWE-696: Incorrect Behavior Order"
-      owasp: "A3: Sensitive Data Exposure"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PADDING_ORACLE
-      references:
-        - https://capec.mitre.org/data/definitions/463.html
-      category: security
-      technology:
-        - java
-    severity: WARNING
-    fix: $CIPHER.getInstance("AES/GCM/NoPadding");
-    languages:
-      - java
-    pattern: $CIPHER.getInstance("=~/.*\/CBC\/PKCS5Padding/");
+- id: cbc-padding-oracle
+  message: >-
+    Using CBC with PKCS5Padding is susceptible to padding oracle attacks. A malicious
+    actor
+    could discern the difference between plaintext with valid or invalid padding.
+    Further,
+    CBC mode does not include any integrity checks.
+    Use 'AES/GCM/NoPadding' instead.
+  metadata:
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PADDING_ORACLE
+    references:
+    - https://capec.mitre.org/data/definitions/463.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+    - https://find-sec-bugs.github.io/bugs.htm#CIPHER_INTEGRITY
+    category: security
+    technology:
+    - java
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  severity: WARNING
+  fix: |
+    "AES/GCM/NoPadding"
+  languages:
+  - java
+  patterns:
+  - pattern-inside: Cipher.getInstance("=~/.*\/CBC\/PKCS5Padding/")
+  - pattern: |
+      "=~/.*\/CBC\/PKCS5Padding/"

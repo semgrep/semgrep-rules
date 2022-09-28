@@ -1,0 +1,26 @@
+rules:
+- id: gcp-gke-use-cos-image
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_container_node_pool" "..." {
+          ...
+          }
+    - pattern-not-inside: |
+          resource "google_container_node_pool" "..." {
+          ...
+          node_config {
+            ...
+            image_type = "COS"
+          }
+          ...
+          }
+  message: >-
+    Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

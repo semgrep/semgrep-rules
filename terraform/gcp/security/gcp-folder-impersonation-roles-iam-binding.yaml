@@ -1,0 +1,23 @@
+rules:
+- id: gcp-folder-impersonation-roles-iam-binding
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_folder_iam_binding" "..." {
+          ...
+          role = "roles/editor"
+          members = [ ... ]
+          ...
+          }
+  message: >-
+    Ensure no roles that enable to impersonate and manage all service accounts are used at a folder level	
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

@@ -1,0 +1,40 @@
+rules:
+- id: gcp-compute-shielded-vm
+  patterns:
+  - pattern: resource
+  - pattern-either:
+    - pattern-inside: |
+        resource "google_compute_instance" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "google_compute_instance" "..." {
+        ...
+        shielded_instance_config {
+          ...
+          enable_integrity_monitoring = false
+          ...
+        }
+        ...
+        }
+  - pattern-not-inside: |
+      resource "google_compute_instance" "..." {
+      ...
+      shielded_instance_config {
+        ...
+        enable_integrity_monitoring = true
+        ...
+      }
+      ...
+      }
+  message: >-
+    Ensure Compute instances are launched with Shielded VM enabled
+  metadata:
+    category: best-practice
+    technology:
+    - terraform
+    - gcp
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+  languages: [hcl]
+  severity: WARNING

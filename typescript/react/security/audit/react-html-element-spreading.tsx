@@ -1,11 +1,11 @@
 function Test1(props) {
-// ruleid: react-html-element-spreading
+// ok: react-html-element-spreading
   const el = < div {...props} >123</div>;
   return el;
 }
 
 function Test1(props) {
-// ruleid: react-html-element-spreading
+// ok: react-html-element-spreading
   const el = <a {...props} >123</a>;
   return el;
 }

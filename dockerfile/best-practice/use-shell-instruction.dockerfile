@@ -9,5 +9,8 @@ RUN apk add --update-cache bash=4.3.42-r3
 # ruleid: use-shell-instruction
 RUN ln -sfv /bin/bash /bin/sh
 
+# ruleid: use-shell-instruction
+RUN ln -sfv /bin/zsh /bin/sh
+
 # ok: use-shell-instruction
 SHELL ["/bin/bash", "-c"]

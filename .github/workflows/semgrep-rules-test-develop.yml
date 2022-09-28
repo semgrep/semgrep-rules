@@ -10,7 +10,7 @@ jobs:
   # Note: if you change this test there will likely need to be a
   # corresponding change in returntocorp/semgrep
   test-develop:
-    name: rules-test-latest
+    name: rules-test-develop
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,7 +22,9 @@ jobs:
       run: rm -rf semgrep-rules/fingerprints
     - name: validate rules
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep --validate --config /src
+        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep"
+        make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
     - name: test with semgrep develop branch
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep --test --test-ignore-todo /src
+        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep"
+        make -C "$GITHUB_WORKSPACE"/semgrep-rules test-only

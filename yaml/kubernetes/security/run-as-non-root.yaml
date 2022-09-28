@@ -4,26 +4,33 @@ rules:
       - pattern-inside: |
           containers:
             ...
-      - pattern: |
-          image: ...
-          ...
       - pattern-not: |
-          image: ...
-          ...
-          securityContext:
+          - name: $NAME
+            image: ...
             ...
-            runAsNonRoot: true
-    message: >-
-      Container allows for running applications as root. This can result in
-      privilege escalation attacks. Add 'runAsNonRoot: true' in 'securityContext'
-      to prevent this.
+            securityContext:
+              ...
+              runAsNonRoot: $VALUE
+      - pattern: |
+          - name: $NAME
+            image: ...
+            ...
+      - focus-metavariable: $NAME
+    message: "Container allows for running applications as root. This can result in
+      privilege escalation attacks. Add 'runAsNonRoot: true' in
+      'securityContext' to prevent this."
     metadata:
       references:
         - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
         - https://kubernetes.io/docs/concepts/policy/pod-security-policy/
         - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-2-set-a-user
       category: security
+      cwe: "CWE-250: Execution with Unnecessary Privileges"
+      owasp:
+        - A05:2017 - Security Misconfiguration        
+        - A06:2017 - Security Misconfiguration
       technology:
         - kubernetes
-    languages: [yaml]
+    languages:
+      - yaml
     severity: WARNING

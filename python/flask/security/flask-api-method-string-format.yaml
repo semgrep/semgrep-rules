@@ -1,27 +1,36 @@
 rules:
-  - id: flask-api-method-string-format
-    patterns:
-      - pattern-either:
-          - pattern: |
-              def $METHOD(...,$ARG,...):
-                ...
-                $STRING = "...".format(...,$ARG,...)
-                ...
-                ... = requests.$REQMETHOD($STRING,...)
-          - pattern: |
-              def $METHOD(...,$ARG,...):
-                ...
-                ... = requests.$REQMETHOD("...".format(...,$ARG,...),...)
-      - pattern-inside: |
-          class $CLASS(...):
-            method_decorators = ...
-            ...
-    message: >-
-      Method $METHOD in API controller $CLASS provides user arg $ARG to requests method $REQMETHOD
-    severity: ERROR
-    languages:
-      - python
-    metadata:
-      category: security
-      technology:
-        - flask
+- id: flask-api-method-string-format
+  patterns:
+  - pattern-either:
+    - pattern: |
+        def $METHOD(...,$ARG,...):
+          ...
+          $STRING = "...".format(...,$ARG,...)
+          ...
+          ... = requests.$REQMETHOD($STRING,...)
+    - pattern: |
+        def $METHOD(...,$ARG,...):
+          ...
+          ... = requests.$REQMETHOD("...".format(...,$ARG,...),...)
+  - pattern-inside: |
+      class $CLASS(...):
+        method_decorators = ...
+        ...
+  message: >-
+    Method $METHOD in API controller $CLASS provides user arg $ARG to requests method $REQMETHOD
+  severity: ERROR
+  languages:
+  - python
+  metadata:
+    cwe:
+    - 'CWE-134: Use of Externally-Controlled Format String'
+    category: security
+    technology:
+    - flask
+    references:
+    - https://cwe.mitre.org/data/definitions/134.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

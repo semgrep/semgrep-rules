@@ -6,17 +6,18 @@ app.get('/protected', jwt({ secret: 'shhhhhhared-secret' }), function(req, res) 
     res.sendStatus(200);
 });
 
+// ruleid: express-jwt-hardcoded-secret
 let hardcodedSecret = 'shhhhhhared-secret'
 
-// ruleid: express-jwt-hardcoded-secret
 app.get('/protected2', jwt({ secret: hardcodedSecret }), function(req, res) {
+    
     if (!req.user.admin) return res.sendStatus(401);
     res.sendStatus(200);
 });
 
 let secret = "hardcode"
-// ruleid: express-jwt-hardcoded-secret
-const opts = Object.assign({issuer: 'http://issuer'}, {secret})
+
+const opts = Object.assign({issuer: 'http://issuer'}, {secret: secret})
 
 app.get('/protected3', jwt(opts), function(req, res) {
     if (!req.user.admin) return res.sendStatus(401);

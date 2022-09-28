@@ -1,5 +1,27 @@
 rules:
 - id: awscdk-bucket-grantpublicaccessmethod
+  message: Using the GrantPublicAccess method on bucket contruct $X will make the objects in the bucket
+    world accessible. Verify if this is intentional.
+  metadata:
+    cwe:
+    - 'CWE-306: Missing Authentication for Critical Function'
+    category: security
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-overview.html
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+  languages:
+  - ts
+  severity: WARNING
   pattern-either:
   - patterns:
     - pattern-inside: |
@@ -17,14 +39,3 @@ rules:
         const $X = new $Y.Bucket(...)
         ...
         $X.grantPublicAccess(...)
-  message: Using the GrantPublicAccess method on bucket contruct $X will make the objects in the bucket world accessible.
-    Verify if this is intentional.
-  languages: [ts]
-  severity: WARNING
-  metadata:
-    cwe: 'CWE-306: Missing Authentication for Critical Function'
-    category: security
-    technology:
-    - AWS-CDK
-    references:
-    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-overview.html

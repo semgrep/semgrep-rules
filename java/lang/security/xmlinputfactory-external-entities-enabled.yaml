@@ -1,24 +1,34 @@
 rules:
-  - id: xmlinputfactory-external-entities-enabled
-    severity: ERROR
-    metadata:
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      owasp: "A4: XML External Entities (XXE)"
-      asvs:
-        section: V5 Validation, Sanitization and Encoding
-        control_id: 5.5.2 Insecue XML Deserialization
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
-        version: "4"
-      references:
-        - https://www.blackhat.com/docs/us-15/materials/us-15-Wang-FileCry-The-New-Age-Of-XXE-java-wp.pdf
-      category: security
-      technology:
-        - java
-    message: >-
-      XML external entities are enabled for this XMLInputFactory. This is vulnerable
-      to XML external entity
-      attacks. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities"
-      to false.
-    pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
-    languages:
-      - java
+- id: xmlinputfactory-external-entities-enabled
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    references:
+    - https://www.blackhat.com/docs/us-15/materials/us-15-Wang-FileCry-The-New-Age-Of-XXE-java-wp.pdf
+    category: security
+    technology:
+    - java
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  message: >-
+    XML external entities are enabled for this XMLInputFactory. This is vulnerable
+    to XML external entity
+    attacks. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities"
+    to false.
+  pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+  languages:
+  - java

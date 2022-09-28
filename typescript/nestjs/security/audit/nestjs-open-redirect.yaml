@@ -1,23 +1,34 @@
 rules:
-  - id: nestjs-open-redirect
-    patterns:
-      - pattern: |
-          return {url: $URL}
-      - pattern-inside: |
-          class $CN {
-              @Redirect(...)
-              $FN(...) {
-                  ...
-              }
+- id: nestjs-open-redirect
+  message: >-
+    Untrusted user input in {url: ...} can result in Open Redirect vulnerability.
+  metadata:
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    category: security
+    technology:
+    - nestjs
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern: |
+      return {url: $URL}
+  - pattern-inside: |
+      class $CN {
+          @Redirect(...)
+          $FN(...) {
+              ...
           }
-      - pattern-not: |
-          return {url: "..."}
-    message: >-
-      Untrusted user input in {url: ...} can result in Open Redirect vulnerability.
-    languages:
-      - typescript
-    severity: WARNING
-    metadata:
-      category: security
-      technology:
-        - nestjs
+      }
+  - pattern-not: |
+      return {url: "..."}

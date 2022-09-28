@@ -13,8 +13,10 @@ rules:
     - pattern-either:
       - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, $CMD, ...)
       - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, [$CMD, ...], ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...], ...)
+      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
+          ...)
+      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
+          ...], ...)
   message: >-
     Detected subprocess function '$LOOP.subprocess_exec' with argument tainted by `event` object.
     If this data can be controlled by a malicious actor, it may be an
@@ -22,13 +24,16 @@ rules:
     not controllable by an external resource. You may consider using
     'shlex.escape()'.
   metadata:
-    owasp: "A1: Injection"
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
     asvs:
-      section: "V5: Validation, Sanitization and Encoding Verification Requirements"
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
       control_id: 5.3.8 OS Command Injection
       control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
-      version: "4"
+      version: '4'
     references:
     - https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.loop.subprocess_exec
     - https://docs.python.org/3/library/shlex.html
@@ -37,6 +42,13 @@ rules:
     - python
     - aws-lambda
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
   languages:
   - python
   severity: ERROR

@@ -11,7 +11,7 @@ app.get('/test', async (req, res) => {
     });
 
     // ruleid: express-phantom-injection
-    const status = await page.property('content', req.get('name'));
+    const status = await page.property('content', req.headers['name']);
 
     // ruleid: express-phantom-injection
     await page.setContent(req.query.q);

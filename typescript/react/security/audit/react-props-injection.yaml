@@ -1,39 +1,30 @@
 rules:
-  - id: react-props-injection
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              import $PROPS from "...";
-              ...
-          - pattern-inside: |
-              $PROPS = $METHOD(...);
-              ...
-          - pattern-inside: |
-              function $FUNC(...,$PROPS,...) {
-                ...
-              }
-      - pattern-either:
-          - pattern: |
-              <$EL {...<... $PROPS ...>} />
-          - pattern: |
-              <$EL {...$F(<... $PROPS ...>)} />
-          - pattern: |
-              React.createElement($EL, <... $PROPS ...>)
-          - pattern: |
-              React.createElement($EL, $F(<... $PROPS ...>))
-      - pattern-not-inside: |
-          React.createElement($EL, {$ATTR: ...})
-    message: >-
-      Injecting props into a new React Element may introduce an XSS vulnerability if the props contains a user-controllable object (such as a `dangerouslySetInnerHTML` expression).
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
-      category: security
-      technology:
-        - react
-    languages:
-      - typescript
-      - javascript
-    severity: WARNING
+- id: react-props-injection
+  message: >-
+    this rule has been deprecated.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    deprecated: true
+    references:
+    - https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
+    category: security
+    technology:
+    - react
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()

@@ -1,0 +1,27 @@
+rules:
+- id: gcp-gke-ensure-integrity-monitoring
+  patterns:
+    - pattern-inside: |
+        resource "google_container_cluster" $ANYTHING {
+          ...
+          node_config {
+            ...
+            shielded_instance_config {
+              enable_integrity_monitoring = false
+            }
+            ...
+          }     
+          ...
+        }
+  message: Ensure Integrity Monitoring for Shielded GKE Nodes is Enabled
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe: |
+      CWE-778: Insufficient Logging
+    technology:
+      - terraform
+      - gcp
+    category: security

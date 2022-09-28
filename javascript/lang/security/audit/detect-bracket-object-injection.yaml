@@ -1,22 +1,29 @@
 rules:
-  - id: detect-bracket-object-injection
-    patterns:
-      - pattern: |
-          $VAR = $OBJ[$FIELD];
-      - pattern-not: |
-          $VAR = $OBJ[($FIELD : float)];
-      - pattern-not: |
-          $VAR = $OBJ["..."];
-      - pattern-not-inside: |
-          $FIELD = ...;
-          ...
-    message: >-
-      Detected user input used in bracket notation accessor. This could lead to object injection through $FIELD, which could grant access to every property available in the object and therefore sensitive information. Instead, avoid the use of user input in property name fields or create a whitelist of allowed input.
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
-    metadata:
-      category: security
-      technology:
-        - javascript
+- id: detect-bracket-object-injection
+  message: >-
+    This rule is deprecated.
+  metadata:
+    category: security
+    technology:
+    - javascript
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://github.com/nodesecurity/eslint-plugin-security/issues/21
+    - https://github.com/nodesecurity/eslint-plugin-security#rules
+    deprecated: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()

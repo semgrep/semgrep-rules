@@ -1,0 +1,22 @@
+rules:
+    - id: gcp-storage-bucket-not-public-iam-member
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+            resource "google_storage_bucket_iam_member" "..." {
+            ...
+            member = "allUsers"
+            ...
+            }
+      message: >-
+        Ensure that Container Registry repositories are not anonymously or publicly accessible
+      metadata:
+        owasp:
+        - A01:2021 - Broken Access Control
+        cwe: 'CWE-284: Improper Access Control'
+        category: security
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

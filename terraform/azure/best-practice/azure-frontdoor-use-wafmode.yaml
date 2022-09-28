@@ -1,0 +1,23 @@
+rules:
+  - id: azure-frontdoor-use-wafmode
+    message: >-
+      Ensure that Azure Front Door uses WAF and configured in “Detection” or “Prevention” modes
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_frontdoor_firewall_policy" "..." {
+          ...
+          policy_settings {
+            ...
+            enabled = false
+            ...
+          }
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

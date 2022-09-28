@@ -1,66 +1,72 @@
 rules:
 - id: node-mysql-sqli
-  severity: WARNING
   message: >-
-    Detected tainted SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
-    You can use parameterized statements like so:
-    `connection.query('SELECT $1 from table', [userinput])`
+    Detected a `$IMPORT` SQL statement that comes from a function argument.  This could lead to SQL injection
+    if the variable is user-controlled and is not
+    properly sanitized. In order to prevent SQL injection, it is recommended to
+    use parameterized queries or prepared statements.
+  metadata:
+    references:
+    - https://www.npmjs.com/package/mysql2
+    - https://www.npmjs.com/package/mysql
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    category: security
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    confidence: LOW
+    technology:
+    - mysql
+    - mysql2
+    - javascript
+    - nodejs
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
   languages:
   - javascript
   - typescript
+  severity: WARNING
   mode: taint
-  metadata:
-    references:
-      - https://www.npmjs.com/package/mysql2
-    category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    technology:
-      - mysql
-      - mysql2
   pattern-sources:
-    - patterns:
-      - pattern-either:
-        - pattern: $X + $Y
-        - pattern: $X.concat($Y)
-        - pattern: |
-            `...${...}...`
-        - patterns:
-          - pattern: |
-              [..., $X, ...].join(...)
-          - metavariable-pattern:
-              metavariable: $X
-              patterns:
-                - pattern-not: |
-                   "..."
-      - pattern-not: |
-          "..." + "..."
-      - pattern-not: |
-          $X.concat("...")
+  - patterns:
+    - pattern-inside: function ... (..., $Y,...) {...}
+    - pattern: $Y
+    - pattern-not-inside: |
+        function ... (..., $Y: number,...) {...}
+    - pattern-not-inside: $Y.query
+    - pattern-not-inside: $Y.body
+    - pattern-not-inside: $Y.params
+    - pattern-not-inside: $Y.cookies
+    - pattern-not-inside: $Y.headers
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
       - pattern-inside: $POOL.query($QUERY, ...)
       - pattern-inside: $POOL.execute($QUERY, ...)
     - pattern-either:
       - pattern-inside: |
-          require('mysql')
+          import $S from "$IMPORT"
           ...
       - pattern-inside: |
-          require('mysql2')
+          import { ... } from "$IMPORT"
           ...
       - pattern-inside: |
-          require('mysql2/promise')
+          import * as $S from "$IMPORT"
           ...
       - pattern-inside: |
-          import 'mysql'
+          require("$IMPORT")
           ...
-      - pattern-inside: |
-          import 'mysql2'
-          ...
-      - pattern-inside: |
-          import 'mysql2/promise'
-          ...
+    - metavariable-regex:
+        metavariable: $IMPORT
+        regex: (mysql|mysql2)
+  pattern-sanitizers:
+  - patterns:
+    - pattern: parseInt(...)

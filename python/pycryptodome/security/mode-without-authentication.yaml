@@ -1,0 +1,43 @@
+rules:
+- id: crypto-mode-without-authentication
+  message: >-
+    An encryption mode of operation is being used without proper message authentication.  This can potentially
+    result in the encrypted content to be decrypted by an attacker.  Consider instead use an AEAD mode
+    of operation like GCM. 
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    technology:
+    - cryptography
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            AES.new(..., $PYCRYPTODOME_MODE)
+      - pattern-not-inside: |
+          AES.new(..., $PYCRYPTODOME_MODE)
+          ...
+          HMAC.new
+      - metavariable-pattern:
+          metavariable: $PYCRYPTODOME_MODE
+          patterns:
+          - pattern-either:
+            - pattern: AES.MODE_CBC
+            - pattern: AES.MODE_CTR
+            - pattern: AES.MODE_CFB
+            - pattern: AES.MODE_OFB

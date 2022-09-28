@@ -1,0 +1,58 @@
+rules:
+- id: js-open-redirect-from-function
+  message: >-
+    The application accepts potentially user-controlled input `$PROP` which
+    can control the location of the current window context. This can lead two
+    types of vulnerabilities open-redirection and Cross-Site-Scripting
+    (XSS)  with JavaScript URIs. It is recommended to validate
+    user-controllable  input before allowing it to control the redirection.
+  metadata:
+    confidence: LOW
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp:
+    - A01:2021 - Broken Access Control
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.1 Insecue Redirect
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v51-input-validation
+      version: '4'
+    category: security
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    technology:
+    - browser
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: INFO
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        function ... (..., $PROP, ...) { ... }
+    - focus-metavariable: $PROP
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: location.href = $SINK
+      - pattern: window.location.href = $SINK
+      - pattern: this.window.location.href = $SINK
+      - pattern: this.location.href = $SINK
+      - pattern: location.replace($SINK)
+      - pattern: window.location.replace($SINK)
+      - pattern: this.window.location.replace($SINK)
+      - pattern: this.location.replace($SINK)
+    - focus-metavariable: $SINK
+    - metavariable-pattern:
+        patterns:
+        - pattern-not: |
+            "..." + $VALUE
+        - pattern-not: |
+            `...${$VALUE}`
+        metavariable: $SINK

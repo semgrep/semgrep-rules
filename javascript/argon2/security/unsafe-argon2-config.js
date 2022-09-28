@@ -28,7 +28,7 @@ const prepareSavingBad = (user) => {
 
 
   return argon2
-    // TODO - this requires inter-function taint
+    // ruleid:unsafe-argon2-config
     .hash(user.Password, hashSettings)
     .then((hash) => ({ ...user, Password: hash }))
     .catch((err) => console.error(`Error during hashing: ${err}`));

@@ -1,0 +1,84 @@
+rules:
+- id: dangerous-testcapi-run-in-subinterp-tainted-env-args
+  mode: taint
+  options:
+    symbolic_propagation: true
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: os.environ
+          - pattern: os.environ.get('$FOO', ...)
+          - pattern: os.environb
+          - pattern: os.environb.get('$FOO', ...)
+          - pattern: os.getenv('$ANYTHING', ...)
+          - pattern: os.getenvb('$ANYTHING', ...)
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-either:
+              - pattern: sys.argv
+              - pattern: sys.orig_argv
+          - patterns:
+            - pattern-inside: |
+                $PARSER = argparse.ArgumentParser(...)
+                ...
+            - pattern-inside: |
+                $ARGS = $PARSER.parse_args()
+            - pattern: <... $ARGS ...>
+          - patterns:
+            - pattern-inside: |
+                $PARSER = optparse.OptionParser(...)
+                ...
+            - pattern-inside: |
+                $ARGS = $PARSER.parse_args()
+            - pattern: <... $ARGS ...>
+          - patterns:
+            - pattern-either:
+              - pattern-inside: |
+                  $OPTS, $ARGS = getopt.getopt(...)
+                  ...
+              - pattern-inside: |
+                  $OPTS, $ARGS = getopt.gnu_getopt(...)
+                  ...
+            - pattern-either:
+              - patterns:
+                - pattern-inside: |
+                    for $O, $A in $OPTS:
+                      ...
+                - pattern: $A
+              - pattern: $ARGS
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          _testcapi.run_in_subinterp($PAYLOAD, ...)
+      - pattern-inside: |
+          test.support.run_in_subinterp($PAYLOAD, ...)
+    - pattern: $PAYLOAD
+    - pattern-not: |
+        _testcapi.run_in_subinterp("...", ...)
+    - pattern-not: |
+        test.support.run_in_subinterp("...", ...)
+  message: >-
+    Found user controlled content in `run_in_subinterp`.
+    This is dangerous  because it allows a malicious actor to run arbitrary Python code.
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
+    category: security
+    technology:
+    - python
+    confidence: MEDIUM
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+  severity: WARNING
+  languages:
+  - python

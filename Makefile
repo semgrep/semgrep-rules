@@ -1,11 +1,17 @@
+#
+# Check rule validity and check that semgrep finds the expected findings.
+#
+# The semgrep repo also runs this as part of its CI for consistency.
+#
+.PHONY: test
 test:
-	semgrep --validate --config=$$PWD/python $$PWD
-	semgrep --validate --config=$$PWD/c $$PWD
-	semgrep --validate --config=$$PWD/javascript $$PWD
-	semgrep --validate --config=$$PWD/java $$PWD
-	semgrep --validate --config=$$PWD/go $$PWD
-	semgrep --validate --config=$$PWD/ocaml $$PWD
-	semgrep --test --strict --test-ignore-todo --quiet $$PWD
+	$(MAKE) validate
+	$(MAKE) test-only
 
-output:
-	semgrep --test --strict --test-ignore-todo --quiet --save-test-output-tar $$PWD
+.PHONY: validate
+validate:
+	./scripts/run-tests validate
+
+.PHONY: test-only
+test-only:
+	./scripts/run-tests test

@@ -1,0 +1,40 @@
+rules:
+- id: gcp-compute-firewall-unrestricted-ingress-22
+  patterns:
+  - pattern: resource
+  - pattern-either:
+    - pattern-inside: |
+        resource "google_compute_firewall" "..." {
+        ...
+        allow {
+          protocol = "tcp"
+          ports    = [22]
+        }
+        source_ranges = ["0.0.0.0/0"]
+        ...
+        }
+    - pattern-inside: |
+        resource "google_compute_firewall" "..." {
+        ...
+        allow {
+          protocol = "tcp"
+          ports    = [..., "22", ...]
+        }
+        source_ranges = ["0.0.0.0/0"]
+        ...
+        }
+  message: >-
+    Ensure Google compute firewall ingress does not allow unrestricted SSH access
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+    - terraform
+    - gcp
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+  languages: [hcl]
+  severity: WARNING

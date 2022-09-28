@@ -18,10 +18,15 @@ rules:
             security_opt:
               - ...
               - no-new-privileges:true
+      - focus-metavariable: $SERVICE
     message: >-
       Service '$SERVICE' allows for privilege escalation via setuid or setgid
       binaries. Add 'no-new-privileges:true' in 'security_opt' to prevent this.
     metadata:
+      cwe: "CWE-732: Incorrect Permission Assignment for Critical Resource"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
       references:
         - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
         - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
