@@ -21,6 +21,12 @@ jobs:
         run: echo ${{github.event_name}}
       - name: Print github.event.number. PR issue number to post comment back to
         run: echo ${{github.event.number}}
+      - name: Print $GITHUB_SHA . The commit hash that triggered the github workflow
+        run: echo $GITHUB_SHA
+      - name: Print github.sha . The commit hash that triggered the github workflow
+        run: echo ${{github.sha}}
+      - name: Print github.ref . The git ref that triggered the github workflow
+        run: echo ${{github.ref}}
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
         run: |
@@ -28,4 +34,4 @@ jobs:
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
         if: github.event_name == 'pull_request'
         run: |
-            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"${{github.event.number}}\", \"post_back\" : true }"
+            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"${{github.repository}}\", \"commit\" : \"${{github.event.pull_request.head.sha}}\"}"
