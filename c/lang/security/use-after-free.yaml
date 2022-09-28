@@ -9,9 +9,10 @@ rules:
       - pattern: |
           $VAR->$ACCESSOR
     pattern-sanitizers:
-      - pattern: |
-          $VAR = NULL;
-          ...
+        - patterns:
+          - pattern: |
+              $VAR = NULL;
+          - focus-metavariable: $VAR
     message: >-
       Variable '$VAR' was used after being freed. This can lead to undefined behavior.
     metadata:
