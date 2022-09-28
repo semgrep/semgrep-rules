@@ -1,16 +1,25 @@
 rules:
-  - id: flask-wtf-csrf-disabled
-    message: >-
-      Setting 'WTF_CSRF_ENABLED' to 'False' explicitly disables CSRF protection.
-    metadata:
-      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
-      owasp: "A6: Security Misconfiguration"
-      references:
-        - https://flask-wtf.readthedocs.io/en/stable/csrf.html
-      category: security
-      technology:
-        - flask
-    severity: WARNING
-    languages:
-      - python
-    pattern: $APP.config['WTF_CSRF_ENABLED'] = False
+- id: flask-wtf-csrf-disabled
+  message: >-
+    Setting 'WTF_CSRF_ENABLED' to 'False' explicitly disables CSRF protection.
+  metadata:
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://flask-wtf.readthedocs.io/en/stable/csrf.html
+    category: security
+    technology:
+    - flask
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  severity: WARNING
+  languages:
+  - python
+  pattern: $APP.config['WTF_CSRF_ENABLED'] = False

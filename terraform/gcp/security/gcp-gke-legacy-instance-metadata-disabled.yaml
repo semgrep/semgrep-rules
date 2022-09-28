@@ -1,0 +1,32 @@
+rules:
+- id: gcp-gke-legacy-instance-metadata-disabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        min_master_version = 1.12
+        ...
+        }
+    - pattern-not-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        min_master_version = 1.13
+        ...
+        }
+  message: >-
+    Ensure legacy Compute Engine instance metadata APIs are Disabled
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

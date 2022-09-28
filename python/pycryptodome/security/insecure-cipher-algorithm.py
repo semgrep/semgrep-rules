@@ -15,53 +15,6 @@ from Crypto.Hash import SHA
 from Crypto import Random
 from Crypto.Util import Counter
 
-key = b'Sixteen byte key'
-iv = Random.new().read(pycrypto_arc2.block_size)
-# ruleid:insecure-cipher-algorithm-rc2
-cipher = pycrypto_arc2.new(key, pycrypto_arc2.MODE_CFB, iv)
-msg = iv + cipher.encrypt(b'Attack at dawn')
-# ruleid:insecure-cipher-algorithm-rc2
-cipher = pycryptodomex_arc2.new(key, pycryptodomex_arc2.MODE_CFB, iv)
-msg = iv + cipher.encrypt(b'Attack at dawn')
-
-key = b'Very long and confidential key'
-nonce = Random.new().read(16)
-tempkey = SHA.new(key+nonce).digest()
-# ruleid:insecure-cipher-algorithm-rc4
-cipher = pycrypto_arc4.new(tempkey)
-msg = nonce + cipher.encrypt(b'Open the pod bay doors, HAL')
-# ruleid:insecure-cipher-algorithm-rc4
-cipher = pycryptodomex_arc4.new(tempkey)
-msg = nonce + cipher.encrypt(b'Open the pod bay doors, HAL')
-
-iv = Random.new().read(bs)
-key = b'An arbitrarily long key'
-plaintext = b'docendo discimus '
-plen = bs - divmod(len(plaintext),bs)[1]
-padding = [plen]*plen
-padding = pack('b'*plen, *padding)
-bs = pycrypto_blowfish.block_size
-# ruleid:insecure-cipher-algorithm-blowfish
-cipher = pycrypto_blowfish.new(key, pycrypto_blowfish.MODE_CBC, iv)
-msg = iv + cipher.encrypt(plaintext + padding)
-bs = pycryptodomex_blowfish.block_size
-# ruleid:insecure-cipher-algorithm-blowfish
-cipher = pycryptodomex_blowfish.new(key, pycryptodomex_blowfish.MODE_CBC, iv)
-msg = iv + cipher.encrypt(plaintext + padding)
-
-key = b'-8B key-'
-plaintext = b'We are no longer the knights who say ni!'
-nonce = Random.new().read(pycrypto_des.block_size/2)
-ctr = Counter.new(pycrypto_des.block_size*8/2, prefix=nonce)
-# ruleid:insecure-cipher-algorithm-des
-cipher = pycrypto_des.new(key, pycrypto_des.MODE_CTR, counter=ctr)
-msg = nonce + cipher.encrypt(plaintext)
-nonce = Random.new().read(pycryptodomex_des.block_size/2)
-ctr = Counter.new(pycryptodomex_des.block_size*8/2, prefix=nonce)
-# ruleid:insecure-cipher-algorithm-des
-cipher = pycryptodomex_des.new(key, pycryptodomex_des.MODE_CTR, counter=ctr)
-msg = nonce + cipher.encrypt(plaintext)
-
 key = b'Super secret key'
 plaintext = b'Encrypt me'
 # ruleid:insecure-cipher-algorithm-xor
@@ -72,10 +25,6 @@ cipher = pycryptodomex_xor.new(key)
 msg = cipher.encrypt(plaintext)
 
 key = b'Sixteen byte key'
-# ok:insecure-cipher-algorithm-rc2
-# ok:insecure-cipher-algorithm-rc4
-# ok:insecure-cipher-algorithm-des
-# ok:insecure-cipher-algorithm-blowfish
 # ok:insecure-cipher-algorithm-xor
 cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
 plaintext = cipher.decrypt(ciphertext)

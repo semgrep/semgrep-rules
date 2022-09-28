@@ -1,0 +1,25 @@
+rules:
+- id: gcp-memory-store-for-redis-intransit-encryption
+  patterns:
+    - pattern: |
+        resource "google_redis_instance" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "google_redis_instance" $ANYTHING {
+          ...
+          transit_encryption_mode = "SERVER_AUTHENTICATION"
+          ...
+        }
+  message: Ensure Memorystore for Redis uses intransit encryption
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe: |
+      CWE-311: Missing Encryption of Sensitive Data
+    technology:
+      - terraform
+      - gcp
+    category: security

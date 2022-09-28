@@ -1,71 +1,81 @@
 rules:
-  - id: ldap-injection
-    message: >-
-      Detected non-constant data passed into an LDAP query. If this data can be
-      controlled by an external user, this is an LDAP injection.
-      Ensure data passed to an LDAP query is not controllable; or properly sanitize
-      the data.
-    metadata:
-      cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
-      owasp: "A1: Injection"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_INJECTION
-      asvs:
-        section: "V5: Validation, Sanitization and Encoding Verification Requirements"
-        control_id: 5.3.7 Injection
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
-        version: "4"
-      category: security
-      technology:
-        - java
-    severity: WARNING
-    languages: [java]
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                InitialDirContext $CTX = ...;
-                ...
-              }
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                DirContext $CTX = ...;
-                ...
-              }
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                InitialLdapContext $CTX = ...;
-                ...
-              }
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                LdapContext $CTX = ...;
-                ...
-              }
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                LdapCtx $CTX = ...;
-                ...
-              }
-          - pattern-inside: |
-              $X $METHOD(...) {
-                ...
-                EventDirContext $CTX = ...;
-                ...
-              }
-      - pattern: |
-          $X $METHOD(...) {
-            ...
-            $CTX.search($Y,$INPUT,...);
-            ...
-          }
-      - pattern-not: |
-          $X $METHOD(...) {
-            ...
-            $CTX.search($Y,"...",...);
-            ...
-          }
+- id: ldap-injection
+  message: >-
+    Detected non-constant data passed into an LDAP query. If this data can be
+    controlled by an external user, this is an LDAP injection.
+    Ensure data passed to an LDAP query is not controllable; or properly sanitize
+    the data.
+  metadata:
+    cwe:
+    - "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_INJECTION
+    asvs:
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.3.7 Injection
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements
+      version: '4'
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  severity: WARNING
+  languages: [java]
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          InitialDirContext $CTX = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          DirContext $CTX = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          InitialLdapContext $CTX = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          LdapContext $CTX = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          LdapCtx $CTX = ...;
+          ...
+        }
+    - pattern-inside: |
+        $X $METHOD(...) {
+          ...
+          EventDirContext $CTX = ...;
+          ...
+        }
+  - pattern: |
+      $X $METHOD(...) {
+        ...
+        $CTX.search($Y,$INPUT,...);
+        ...
+      }
+  - pattern-not: |
+      $X $METHOD(...) {
+        ...
+        $CTX.search($Y,"...",...);
+        ...
+      }

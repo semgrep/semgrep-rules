@@ -1,20 +1,31 @@
 rules:
-  - id: jwt-python-exposed-data
-    message: >-
-      The object is passed strictly to jwt.encode(...)
-      Make sure that sensitive information is not exposed through JWT token payload.
-    severity: WARNING
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-522: Insufficiently Protected Credentials"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-      category: security
-      technology:
-        - jwt
-    languages: [python]
-    patterns:
-      - pattern-inside: |
-          def $FUNC(...,$INPUT,...):
-            ...
-      - pattern: |-
-          jwt.encode($INPUT,...)
+- id: jwt-python-exposed-data
+  message: >-
+    The object is passed strictly to jwt.encode(...)
+    Make sure that sensitive information is not exposed through JWT token payload.
+  severity: WARNING
+  metadata:
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    category: security
+    technology:
+    - jwt
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [python]
+  patterns:
+  - pattern-inside: |
+      def $FUNC(...,$INPUT,...):
+        ...
+  - pattern: |-
+      jwt.encode($INPUT,...)

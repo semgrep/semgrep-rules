@@ -1,0 +1,19 @@
+rules:
+- id: gcp-gke-enable-shielded-nodes
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_container_cluster" "..." {
+          ...
+          enable_shielded_nodes = false
+          ...
+          }
+  message: >-
+    Ensure Shielded GKE Nodes are Enabled
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

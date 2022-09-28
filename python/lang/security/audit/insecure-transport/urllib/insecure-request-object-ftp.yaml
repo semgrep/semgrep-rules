@@ -1,27 +1,35 @@
 rules:
-  - id: insecure-request-object-ftp
-    message: >-
-      Detected a 'urllib.request.Request()' object using an insecure transport
-      protocol, 'ftp://'. This connection will not be encrypted. Consider using
-      SFTP instead. urllib does not support SFTP natively, so consider using
-      a library which supports SFTP.
-    metadata:
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
-      references:
-        - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
-      category: security
-      technology:
-        - urllib
-    severity: WARNING
-    languages: [python]
-    pattern-either:
-      - pattern: urllib.request.Request("=~/^[Ff][Tt][Pp]://.*/", ...)
-      - pattern: |
-          $URL = "=~/^[Ff][Tt][Pp]://.*/"
-          ...
-          urllib.request.Request($URL, ...)
-      - pattern: |-
-          def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
-            ...
-            urllib.request.Request($URL, ...)
+- id: insecure-request-object-ftp
+  message: >-
+    Detected a 'urllib.request.Request()' object using an insecure transport
+    protocol, 'ftp://'. This connection will not be encrypted. Consider using
+    SFTP instead. urllib does not support SFTP natively, so consider using
+    a library which supports SFTP.
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
+    category: security
+    technology:
+    - urllib
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  severity: WARNING
+  languages: [python]
+  pattern-either:
+  - pattern: urllib.request.Request("=~/^[Ff][Tt][Pp]://.*/", ...)
+  - pattern: |
+      $URL = "=~/^[Ff][Tt][Pp]://.*/"
+      ...
+      urllib.request.Request($URL, ...)
+  - pattern: |-
+      def $FUNC(..., $URL = "=~/^[Ff][Tt][Pp]://.*/", ...):
+        ...
+        urllib.request.Request($URL, ...)

@@ -1,0 +1,26 @@
+rules:
+    - id: gcp-sub-network-private-google-enabled
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+            resource "google_compute_subnetwork" "..." {
+            ...
+            }
+        - pattern-not-inside: |
+            resource "google_compute_subnetwork" "..." {
+            ...
+            private_ip_google_access = true
+            ...
+            }
+      message: >-
+        Ensure that private_ip_google_access is enabled for Subnet
+      metadata:
+        owasp:
+        - A01:2021 - Broken Access Control
+        cwe: 'CWE-284: Improper Access Control'
+        category: security
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

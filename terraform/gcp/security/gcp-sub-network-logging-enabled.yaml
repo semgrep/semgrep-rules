@@ -1,0 +1,27 @@
+rules:
+    - id: gcp-sub-network-logging-enabled
+      patterns:
+        - pattern: |
+            resource "google_compute_subnetwork" $ANYTHING {
+              ...
+            }
+        - pattern-not-inside: |
+            resource "google_compute_subnetwork" $ANYTHING {
+              ...
+              log_config {
+                ...
+              }        
+              ...
+            }
+      message: Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network
+      languages: [hcl]
+      severity: WARNING
+      metadata:
+        owasp:
+        - A09:2021 - Security Logging and Monitoring Failures
+        cwe: |
+          CWE-778: Insufficient Logging
+        technology:
+          - terraform
+          - gcp
+        category: security

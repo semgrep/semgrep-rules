@@ -20,7 +20,6 @@ class RegistryMetadataValidator(Draft7Validator):
         "references": "Please include at least one URL with more information about this rule in a metadata field called 'references'.",
         "technology": "Please include a metadata field called 'technology' that is a list of relevent tech stacks. For example: [python, flask], or [javascript, jwt].",
         "category": "Please include a metadata field called 'technology' that is one of {self.category_enum}",
-        "owasp": "Please include an 'owasp' metadata field for security rules. Format: Ann:yyyy, where nn is the OWASP top ten number and yyyy is the OWASP top ten year. See https://owasp.org/Top10/ for more info.",
         "cwe": "Please include a 'cwe' metadata field for security rules. Format: CWE-nnn, where nnn is the CWE number. See https://cwe.mitre.org/ for more info.",
     }
 

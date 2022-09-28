@@ -1,0 +1,29 @@
+rules:
+  - id: gcp-postgresql-log-min-message
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "google_sql_database_instance" "..." {
+            ...
+            database_flags {
+              ...
+              name  = "log_min_messages"
+              value = "$VALUE"
+              ...
+            }
+            ...
+          }
+      - metavariable-pattern:
+          metavariable: $VALUE
+          language: generic
+          patterns:
+            - pattern-not-regex: (?i)(DEBUG5|DEBUG4|DEBUG3|DEBUG2|DEBUG1|INFO|NOTICE|WARNING|ERROR|LOG|FATAL|PANIC)
+    message: Ensure PostgreSQL database 'log_min_messages' flag is set to a valid value
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - gcp
+    languages:
+      - hcl
+    severity: WARNING

@@ -1,0 +1,25 @@
+rules:
+    - id: gcp-storage-versioning-enabled
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_storage_bucket" "..." {
+              ...
+              }
+        - pattern-not-inside: |
+              resource "google_storage_bucket" "..." {
+              ...
+              versioning = {
+                enabled = true
+              }
+              ...
+              }
+      message: >-
+        Ensure Cloud storage has versioning enabled
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

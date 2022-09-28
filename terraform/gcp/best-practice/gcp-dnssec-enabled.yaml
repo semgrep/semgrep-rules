@@ -1,0 +1,25 @@
+rules:
+    - id: gcp-dnssec-enabled
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+            resource "google_dns_managed_zone" "..." {
+            ...
+            }
+        - pattern-not-inside: |
+            resource "google_dns_managed_zone" "..." {
+            ...
+            dnssec_config {
+                state = on
+            }
+            ...
+            }
+      message: >-
+          Ensure that RSASHA1 is not used for the zone-signing and key-signing keys in Cloud DNS DNSSEC	
+      metadata:
+          category: best-practice
+          technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

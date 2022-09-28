@@ -1,31 +1,41 @@
 rules:
-  - id: formatted-sql-query
-    message: >-
-      Detected possible formatted SQL query. Use parameterized queries instead.
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-      references:
-        - https://stackoverflow.com/questions/775296/mysql-parameterized-queries
-      category: security
-      technology:
-        - python
-    severity: WARNING
-    languages:
-      - python
-    pattern-either:
-      - pattern: $DB.execute("..." % ...)
-      - pattern: $DB.execute("...".format(...))
-      - pattern: $DB.execute(f"...")
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  $SQL = "..." % ...
-                  ...
-              - pattern-inside: |
-                  $SQL = "...".format(...)
-                  ...
-              - pattern-inside: |
-                  $SQL = f"...{$X}..."
-                  ...
-          - pattern: $DB.execute($SQL)
+- id: formatted-sql-query
+  message: >-
+    Detected possible formatted SQL query. Use parameterized queries instead.
+  metadata:
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    references:
+    - https://stackoverflow.com/questions/775296/mysql-parameterized-queries
+    category: security
+    technology:
+    - python
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  severity: WARNING
+  languages:
+  - python
+  pattern-either:
+  - pattern: $DB.execute("..." % ...)
+  - pattern: $DB.execute("...".format(...))
+  - pattern: $DB.execute(f"...")
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $SQL = "..." % ...
+          ...
+      - pattern-inside: |
+          $SQL = "...".format(...)
+          ...
+      - pattern-inside: |
+          $SQL = f"...{$X}..."
+          ...
+    - pattern: $DB.execute($SQL)

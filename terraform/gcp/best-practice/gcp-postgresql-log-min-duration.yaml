@@ -1,0 +1,32 @@
+rules:
+    - id: gcp-postgresql-log-min-duration
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                }
+                ...
+              }
+        - pattern-not-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                  name  = "log_min_duration_statement"
+                  value = "-1"
+                  ...
+                }
+                ...
+              }
+      message: >-
+        Ensure PostgreSQL database 'log_min_duration_statement' flag is set to '-1'
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

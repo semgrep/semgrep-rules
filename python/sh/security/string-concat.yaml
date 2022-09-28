@@ -1,18 +1,30 @@
 rules:
-  - id: string-concat
-    languages: [python]
-    severity: ERROR
-    message: >-
-      Detected string concatenation or formatting in a call to a command via 'sh'.
-      This could be a command injection vulnerability if the data is user-controlled.
-      Instead, use a list and append the argument.
-    metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A1: Injection"
-      category: security
-      technology:
-        - sh
-    pattern-either:
-      - pattern: sh.$BIN($X + $Y)
-      - pattern: sh.$BIN($X.format(...))
-      - pattern: sh.$BIN(f"...{...}...")
+- id: string-concat
+  languages: [python]
+  severity: ERROR
+  message: >-
+    Detected string concatenation or formatting in a call to a command via 'sh'.
+    This could be a command injection vulnerability if the data is user-controlled.
+    Instead, use a list and append the argument.
+  metadata:
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - sh
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  pattern-either:
+  - pattern: sh.$BIN($X + $Y)
+  - pattern: sh.$BIN($X.format(...))
+  - pattern: sh.$BIN(f"...{...}...")

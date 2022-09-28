@@ -1,21 +1,34 @@
 rules:
-  - id: puppeteer-exposed-chrome-devtools
-    message: >-
-      Remote debugging protocol does not perform any authentication, so exposing it too widely can be a security risk.
-    severity: WARNING
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-      category: security
-      technology:
-        - puppeteer
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          require('puppeteer');
-          ...
-      - pattern-either:
-          - pattern-regex: --remote-debugging-address
-          - pattern-regex: --remote-debugging-port
-          - pattern-regex: --remote-debugging-socket-name
-          - pattern-regex: --remote-debugging-targets
+- id: puppeteer-exposed-chrome-devtools
+  message: >-
+    Remote debugging protocol does not perform any authentication, so exposing it too widely can be a
+    security risk.
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    category: security
+    technology:
+    - puppeteer
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      require('puppeteer');
+      ...
+  - pattern-either:
+    - pattern-regex: --remote-debugging-address
+    - pattern-regex: --remote-debugging-port
+    - pattern-regex: --remote-debugging-socket-name
+    - pattern-regex: --remote-debugging-targets

@@ -1,22 +1,32 @@
 rules:
-  - id: react-router-redirect
-    patterns:
-      - pattern: a()
-      - pattern: b()
-    message: >-
-      this rule has been deprecated.
-    languages:
-      - typescript
-      - javascript
-    severity: INFO
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
-      deprecated: true
-      category: security
-      technology:
-        - react
-      references:
-        - https://v5.reactrouter.com/web/api/Redirect
-        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
-        - https://r2c.dev
+- id: react-router-redirect
+  message: >-
+    this rule has been deprecated.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    deprecated: true
+    category: security
+    technology:
+    - react
+    references:
+    - https://v5.reactrouter.com/web/api/Redirect
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    - https://r2c.dev
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()
