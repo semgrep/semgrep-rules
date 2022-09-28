@@ -1,26 +1,35 @@
 rules:
-  - id: html-in-template-string
-    message: >-
-      This template literal looks like HTML and has interpolated variables.
-      These variables are not HTML-encoded by default. If the variables contain
-      HTML tags, these may be interpreted by the browser, resulting in cross-site
-      scripting (XSS).
-    metadata:
-      cwe: "CWE-116: Improper Encoding or Escaping of Output"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      category: security
-      technology:
-        - javascript
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    patterns:
-      - pattern-either:
-        - pattern: |
-            `$HTML${$VAR}...`
-        - pattern: |
-            `...${$VAR}$HTML`
-      - metavariable-regex:
-          metavariable: $HTML
-          regex: ".*</?[a-zA-Z]"
+- id: html-in-template-string
+  message: >-
+    This template literal looks like HTML and has interpolated variables.
+    These variables are not HTML-encoded by default. If the variables contain
+    HTML tags, these may be interpreted by the browser, resulting in cross-site
+    scripting (XSS).
+  metadata:
+    cwe:
+    - 'CWE-116: Improper Encoding or Escaping of Output'
+    owasp:
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - javascript
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        `$HTML${$VAR}...`
+    - pattern: |
+        `...${$VAR}$HTML`
+  - metavariable-regex:
+      metavariable: $HTML
+      regex: .*</?[a-zA-Z]

@@ -1,5 +1,28 @@
 rules:
 - id: awscdk-codebuild-project-public
+  message: CodeBuild Project $X is set to have a public URL. This will make the build results, logs, artifacts
+    publically accessible, including builds prior to the project being public. Ensure this is acceptable
+    for the project.
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-306: Missing Authentication for Critical Function'
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/codebuild/latest/userguide/public-builds.html
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - ts
+  severity: WARNING
   pattern-either:
   - patterns:
     - pattern-inside: |
@@ -13,14 +36,3 @@ rules:
         ...
     - pattern: |
         const $X = new $Y.Project(..., {..., badge: true, ...})
-  message: CodeBuild Project $X is set to have a public URL. This will make the build results, logs, artifacts publically
-    accessible, including builds prior to the project being public. Ensure this is acceptable for the project.
-  languages: [ts]
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-306: Missing Authentication for Critical Function'
-    technology:
-    - AWS-CDK
-    references:
-    - https://docs.aws.amazon.com/codebuild/latest/userguide/public-builds.html

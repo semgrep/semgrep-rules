@@ -1,81 +1,113 @@
 rules:
-  - id: express-open-redirect
-    message: The application redirects to a URL specified by user-supplied input
-      ($QUERY) that is not validated. This could redirect users to malicious
-      locations. Consider using an allow-list approach to validate URLs, or warn
-      users they are being redirected to a third-party website.
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    mode: taint
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)
-          - pattern-either:
-              - pattern-inside: $RES.redirect($QUERY)
-          - pattern-not-inside: $RES.redirect("..."+<... $REQ ...>)
-          - pattern-not-inside: $RES.redirect(`$FOO${<... $REQ ...>}...`)
-          - pattern-not-inside: $RES.redirect($VAR. ...+<... $REQ ...>)
-          - pattern: $QUERY
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - pattern-either:
-              - pattern-inside: $RES.redirect($QUERY)
-          - pattern-not-inside: $RES.redirect("..."+<... $REQ ...>)
-          - pattern-not-inside: $RES.redirect(`$FOO${<... $REQ ...>}...`)
-          - pattern-not-inside: $RES.redirect($VAR. ...+<... $REQ ...>)
-          - pattern: $QUERY
-    pattern-sources:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)$
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - focus-metavariable: $REQ
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
-    metadata:
-      technology:
-        - express
-      references:
-        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
-      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
-      category: security
-      owasp:
-        - A10:2013 - Unvalidated Redirects and Forwards
+- id: express-open-redirect
+  message: The application redirects to a URL specified by user-supplied input `$REQ` that is not validated.
+    This could redirect users to malicious locations. Consider using an allow-list approach to validate
+    URLs, or warn users they are being redirected to a third-party website.
+  metadata:
+    technology:
+    - express
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    category: security
+    owasp:
+    - A01:2021 - Broken Access Control
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  options:
+    taint_unify_mvars: true
+    symbolic_propagation: true
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern-either:
+            - pattern-inside: function ... ($REQ, $RES) {...}
+            - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+            - patterns:
+                - pattern-either:
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+                    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+                - metavariable-regex:
+                    metavariable: $METHOD
+                    regex: ^(get|post|put|head|delete|options)$
+        - pattern-either:
+            - pattern: $REQ.query
+            - pattern: $REQ.body
+            - pattern: $REQ.params
+            - pattern: $REQ.cookies
+            - pattern: $REQ.headers
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+                {...}
+            - pattern-inside: |
+                ({ $REQ }: Request,$RES: Response) => {...}
+        - focus-metavariable: $REQ
+        - pattern-either:
+            - pattern: params
+            - pattern: query
+            - pattern: cookies
+            - pattern: headers
+            - pattern: body
+  pattern-sinks:
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE)
+            - pattern: $RES.redirect("$HTTP"+$REQ. ... .$VALUE + $...A)
+            - pattern: $RES.redirect(`$HTTP${$REQ. ... .$VALUE}...`)
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...])
+            - pattern: $RES.redirect("$HTTP"+$REQ.$VALUE[...] + $...A)
+            - pattern: $RES.redirect(`$HTTP${$REQ.$VALUE[...]}...`)
+        - metavariable-regex:
+            metavariable: $HTTP
+            regex: ^https?:\/\/$
+        - pattern-either:
+            - pattern: $REQ. ... .$VALUE
+            - pattern: $REQ.$VALUE['...']
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ. ... .$VALUE)
+            - pattern: $RES.redirect($REQ. ... .$VALUE + $...A)
+            - pattern: $RES.redirect(`${$REQ. ... .$VALUE}...`)
+        - pattern: $REQ. ... .$VALUE
+    - patterns:
+        - pattern-either:
+            - pattern: $RES.redirect($REQ.$VALUE['...'])
+            - pattern: $RES.redirect($REQ.$VALUE['...'] + $...A)
+            - pattern: $RES.redirect(`${$REQ.$VALUE['...']}...`)
+        - pattern: $REQ.$VALUE['...']
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$VALUE
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$VALUE['...']
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ. ... .$VALUE + $...A
+                ...
+            - pattern-inside: |
+                $ASSIGN = $REQ.$VALUE['...'] + $...A
+                ...     
+            - pattern-inside: |
+                $ASSIGN = `${$REQ. ... .$VALUE}...`
+                ...
+            - pattern-inside: |
+                $ASSIGN = `${$REQ.$VALUE['...']}...`
+                ...                    
+        - pattern-either:
+            - pattern: $RES.redirect($ASSIGN)
+            - pattern: $RES.redirect($ASSIGN + $...FOO)
+            - pattern: $RES.redirect(`${$ASSIGN}...`)
+        - pattern: $ASSIGN
+        

@@ -1,26 +1,29 @@
 rules:
 - id: gcp-compute-template-public-ip
   patterns:
-    - pattern: resource
-    - pattern-inside: |
-        resource "google_compute_instance_template" "..." {
+  - pattern: resource
+  - pattern-inside: |
+      resource "google_compute_instance_template" "..." {
+      ...
+      network_interface {
         ...
-        network_interface {
-          ...
-          network = "default"
-          ...
-        }
+        network = "default"
         ...
-        }
+      }
+      ...
+      }
   message: >-
     Ensure that Compute instances do not have public IP addresses	
   metadata:
     owasp:
     - A01:2021 - Broken Access Control
-    cwe: 'CWE-284: Improper Access Control'
+    cwe:
+    - 'CWE-284: Improper Access Control'
     category: security
     technology:
-      - terraform
-      - gcp
+    - terraform
+    - gcp
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
   languages: [hcl]
   severity: WARNING

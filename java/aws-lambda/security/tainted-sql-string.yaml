@@ -13,10 +13,20 @@ rules:
     references:
     - https://owasp.org/www-community/attacks/SQL_Injection
     category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     technology:
     - aws-lambda
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
   mode: taint
   pattern-sources:
   - patterns:

@@ -1,47 +1,53 @@
 rules:
-  - id: java-jwt-hardcoded-secret
-    message: >-
-      A hard-coded credential was detected. It is not recommended 
-      to store credentials in source-code, as this risks secrets
-      being leaked and used by either an internal or external malicious adversary. 
-      It is recommended to use environment variables to 
-      securely provide credentials or retrieve credentials from 
-      a secure vault or HSM (Hardware Security Module).
-    metadata:
-      cwe: "CWE-798: Use of Hard-coded Credentials"
-      references: 
-        - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
-      owasp:
-        - A07:2021 - Identification and Authentication Failures
-        - A03:2017 - Sensitive Data Exposure
-      technology:
-        - java
-        - secrets
-        - jwt
-      category: security
-    languages: [java]
-    severity: WARNING
-    patterns:
-      - pattern-either:
-          - pattern: |
-              (Algorithm $ALG) = $ALGO.$HMAC("$Y");
-          - pattern: |
-              $SECRET = "$Y";
-              ...
-              (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
-          - pattern: |
-              class $CLASS {
-                ...
-                $TYPE $SECRET = "$Y";
-                ...
-                $RETURNTYPE $FUNC (...) {
-                  ...
-                  (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
-                  ...
-                }
-                ...
-              }
-      - focus-metavariable: $Y
-      - metavariable-regex:
-          metavariable: $HMAC
-          regex: (HMAC384|HMAC256|HMAC512)
+- id: java-jwt-hardcoded-secret
+  message: >-
+    A hard-coded credential was detected. It is not recommended  to store credentials in source-code,
+    as this risks secrets
+    being leaked and used by either an internal or external malicious adversary.  It is recommended to
+    use environment variables to  securely provide credentials or retrieve credentials from  a secure
+    vault or HSM (Hardware Security Module).
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    technology:
+    - java
+    - secrets
+    - jwt
+    category: security
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [java]
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        (Algorithm $ALG) = $ALGO.$HMAC("$Y");
+    - pattern: |
+        $SECRET = "$Y";
+        ...
+        (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
+    - pattern: |
+        class $CLASS {
+          ...
+          $TYPE $SECRET = "$Y";
+          ...
+          $RETURNTYPE $FUNC (...) {
+            ...
+            (Algorithm $ALG) = $ALGO.$HMAC($SECRET);
+            ...
+          }
+          ...
+        }
+  - focus-metavariable: $Y
+  - metavariable-regex:
+      metavariable: $HMAC
+      regex: (HMAC384|HMAC256|HMAC512)

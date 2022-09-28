@@ -1,0 +1,29 @@
+rules:
+    - id: gcp-pubsub-private-topic-iam-binding
+      patterns:
+        - pattern: resource
+        - pattern-either:
+          - pattern-inside: |
+              resource "google_pubsub_topic_iam_binding" "..." {
+              ...
+              members = [ ..., "allAuthenticatedUsers", ...]
+              ...
+              }
+          - pattern-inside: |
+              resource "google_pubsub_topic_iam_binding" "..." {
+              ...
+              members = [ ..., "allUsers", ...]
+              ...
+              }
+      message: >-
+        Ensure that Pub/Sub Topics are not anonymously or publicly accessible
+      metadata:
+        owasp:
+        - A01:2021 - Broken Access Control
+        cwe: 'CWE-284: Improper Access Control'
+        category: security
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

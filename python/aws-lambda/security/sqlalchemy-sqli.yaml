@@ -3,7 +3,8 @@ rules:
   languages:
   - python
   message: >-
-    Detected SQL statement that is tainted by `event` object. This could lead to SQL injection if the variable is user-controlled
+    Detected SQL statement that is tainted by `event` object. This could lead to SQL injection if the
+    variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
     used parameterized queries or prepared statements instead.
     You can use parameterized statements like so:
@@ -11,13 +12,23 @@ rules:
   mode: taint
   metadata:
     references:
-      - https://docs.sqlalchemy.org/en/14/core/connections.html#sqlalchemy.engine.Connection.execute
+    - https://docs.sqlalchemy.org/en/14/core/connections.html#sqlalchemy.engine.Connection.execute
     category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     technology:
-      - aws-lambda
-      - sqlalchemy
+    - aws-lambda
+    - sqlalchemy
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
   pattern-sinks:
   - patterns:
     - pattern: $QUERY

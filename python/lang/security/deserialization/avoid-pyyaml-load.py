@@ -2,18 +2,35 @@ import yaml
 
 
 #ruleid:avoid-pyyaml-load
-yaml.load("!!python/object/new:os.system [echo EXPLOIT!]")
-
-#ruleid:avoid-pyyaml-load
-yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]")
+yaml.unsafe_load("!!python/object/new:os.system [echo EXPLOIT!]")
 
 def thing(**kwargs):
     #ruleid:avoid-pyyaml-load
-    yaml.load("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
+    yaml.unsafe_load("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
 
 def other_thing(**kwargs):
     #ruleid:avoid-pyyaml-load
-    yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]", **kwargs)
+    yaml.load("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.Loader, **kwargs)
+
+def other_thing_two(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.load("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.UnsafeLoader, **kwargs)
+
+def other_thing_three(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.load("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.CLoader, **kwargs)
+
+def other_thing_four(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.Loader, **kwargs)
+
+def other_thing_five(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.UnsafeLoader, **kwargs)
+
+def other_thing_six(**kwargs):
+    #ruleid:avoid-pyyaml-load
+    yaml.load_all("!!python/object/new:os.system [echo EXPLOIT!]", Loader=yaml.CLoader, **kwargs)
 
 def this_is_ok(stream):
     #ok:avoid-pyyaml-load

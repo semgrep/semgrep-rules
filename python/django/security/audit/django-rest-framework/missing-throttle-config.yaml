@@ -1,29 +1,36 @@
 rules:
-  - id: missing-throttle-config
-    patterns:
-      - pattern-not-inside: |
-          REST_FRAMEWORK = {
-            ...,
-            "DEFAULT_THROTTLE_RATES": ...
-          }
-      - pattern-inside: |
-          REST_FRAMEWORK = ...
-      - pattern: REST_FRAMEWORK
-    message: >-
-      Django REST framework configuration is missing default rate-
-      limiting options. This could inadvertently allow resource
-      starvation or Denial of Service (DoS) attacks. Add
-      'DEFAULT_THROTTLE_CLASSES' and 'DEFAULT_THROTTLE_RATES'
-      to add rate-limiting to your application.
-    metadata:
-      owasp:
-        - A05:2021 - Security Misconfiguration
-        - A06:2017 - Security Misconfiguration
-      cwe: "CWE-400: Uncontrolled Resource Consumption"
-      references:
-        - https://www.django-rest-framework.org/api-guide/throttling/#setting-the-throttling-policy
-      category: security
-      technology:
-        - django
-    severity: WARNING
-    languages: [python]
+- id: missing-throttle-config
+  patterns:
+  - pattern-not-inside: |
+      REST_FRAMEWORK = {
+        ...,
+        "DEFAULT_THROTTLE_RATES": ...
+      }
+  - pattern-inside: |
+      REST_FRAMEWORK = ...
+  - pattern: REST_FRAMEWORK
+  message: >-
+    Django REST framework configuration is missing default rate-
+    limiting options. This could inadvertently allow resource
+    starvation or Denial of Service (DoS) attacks. Add
+    'DEFAULT_THROTTLE_CLASSES' and 'DEFAULT_THROTTLE_RATES'
+    to add rate-limiting to your application.
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    cwe:
+    - 'CWE-400: Uncontrolled Resource Consumption'
+    references:
+    - https://www.django-rest-framework.org/api-guide/throttling/#setting-the-throttling-policy
+    category: security
+    technology:
+    - django
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  severity: WARNING
+  languages: [python]

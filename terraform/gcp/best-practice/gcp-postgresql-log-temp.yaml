@@ -1,0 +1,32 @@
+rules:
+    - id: gcp-postgresql-log-temp
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                }
+                ...
+              }
+        - pattern-not-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                  name  = "log_temp_files"
+                  value = "0"
+                  ...
+                }
+                ...
+              }
+      message: >-
+        Ensure PostgreSQL database 'log_temp_files' flag is set to '0'
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

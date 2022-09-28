@@ -9,18 +9,30 @@ rules:
     vulnerability.
   metadata:
     source-rule-url: https://bandit.readthedocs.io/en/latest/plugins/b605_start_process_with_a_shell.html
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     asvs:
-      section: "V5: Validation, Sanitization and Encoding Verification Requirements"
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
       control_id: 5.2.4 Dyanmic Code Execution Features
       control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements
-      version: "4"
+      version: '4'
     category: security
     technology:
-      - python
-  languages:
     - python
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - python
   severity: ERROR
   pattern-sources:
   - patterns:

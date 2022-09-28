@@ -1,0 +1,22 @@
+rules:
+- id: gcp-gke-legacy-auth-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+        resource "google_container_cluster" "..." {
+        ...
+        enable_legacy_abac = true
+        ...
+        }
+  message: >-
+    Ensure Legacy Authorization is set to Disabled on Kubernetes Engine Clusters
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe: 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

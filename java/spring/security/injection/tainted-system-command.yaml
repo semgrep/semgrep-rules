@@ -1,54 +1,60 @@
 rules:
-  - id: tainted-system-command
-    languages:
-      - java
-    severity: ERROR
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE $SOURCE,...) {
-                    ...
-                  }
-              - pattern-inside: |
-                  $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
-                    ...
-                  }
-          - metavariable-regex:
-              metavariable: $REQ
-              regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
-          - pattern: $SOURCE
-    pattern-sinks:
+- id: tainted-system-command
+  languages:
+  - java
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
     - pattern-either:
-      - pattern: (Runtime $RUNTIME).exec(...)
-      - pattern: (Runtime $RUNTIME).loadLibrary(...)
-      - pattern: Runtime.getRuntime(...).exec(...)
-      - pattern: Runtime.getRuntime(...).loadLibrary(...)
-      - pattern: new ProcessBuilder($ONEARG)
-      - patterns:
-        - pattern: new ProcessBuilder(...)
-        - pattern-not: new ProcessBuilder("...", ...)
-    message: >-
-      Detected user input entering a method which executes a system command.
-      This could result in a command injection vulnerability, which allows an
-      attacker to inject an arbitrary system command onto the server. The attacker
-      could download malware onto or steal data from the server. Instead, use
-      ProcessBuilder, separating the command into individual arguments, like this:
-      `new ProcessBuilder("ls", "-al", targetDirectory)`. Further, make sure you
-      hardcode or allowlist the actual command so that attackers can't run arbitrary commands.
-    metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command
-        ('OS Command Injection')"
-      owasp:
-        - A03:2021 - Injection
-        - A01:2017 - Injection
-      category: security
-      technology:
-        - java
-        - spring
-      confidence: HIGH
-      references:
-      - https://www.stackhawk.com/blog/command-injection-java/
-      - https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html
-      
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ($LOOKUP) $TYPE $SOURCE,...) {
+            ...
+          }
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
+            ...
+          }
+    - metavariable-regex:
+        metavariable: $REQ
+        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
+    - pattern: $SOURCE
+  pattern-sinks:
+  - pattern-either:
+    - pattern: (Runtime $RUNTIME).exec(...)
+    - pattern: (Runtime $RUNTIME).loadLibrary(...)
+    - pattern: Runtime.getRuntime(...).exec(...)
+    - pattern: Runtime.getRuntime(...).loadLibrary(...)
+    - pattern: new ProcessBuilder($ONEARG)
+    - patterns:
+      - pattern: new ProcessBuilder(...)
+      - pattern-not: new ProcessBuilder("...", ...)
+  message: >-
+    Detected user input entering a method which executes a system command.
+    This could result in a command injection vulnerability, which allows an
+    attacker to inject an arbitrary system command onto the server. The attacker
+    could download malware onto or steal data from the server. Instead, use
+    ProcessBuilder, separating the command into individual arguments, like this:
+    `new ProcessBuilder("ls", "-al", targetDirectory)`. Further, make sure you
+    hardcode or allowlist the actual command so that attackers can't run arbitrary commands.
+  metadata:
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - java
+    - spring
+    confidence: HIGH
+    references:
+    - https://www.stackhawk.com/blog/command-injection-java/
+    - https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html
+
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM

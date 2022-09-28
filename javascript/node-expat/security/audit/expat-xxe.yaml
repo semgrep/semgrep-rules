@@ -1,71 +1,85 @@
 rules:
-  - id: expat-xxe
-    message: >-
-      If unverified user data can reach the XML Parser it can result in XML External or
-      Internal Entity (XXE) Processing vulnerabilities
-    metadata:
-      owasp: "A4: XML External Entities (XXE)"
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      category: security
-      technology:
-        - node-expat
-    severity: WARNING
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-either:
-          - pattern: |
-              var $EXPAT = require('node-expat');
-              ...
-              new $EXPAT.Parser(...);
-              ...
-              $PARSER.parse(...);
-          - pattern: |
-              var $EXPAT = require('node-expat');
-              ...
-              new $EXPAT.Parser(...);
-              ...
-              $PARSER.write(...);
-          - pattern: |
-              require('node-expat');
-              ...
-              new Parser(...);
-              ...
-              $PARSER.parse(...);
-          - pattern: |
-              require('node-expat');
-              ...
-              new Parser(...);
-              ...
-              $PARSER.write(...);
-      - pattern-not: |
-          var $EXPAT = require('node-expat');
-          ...
-          new $EXPAT.Parser(...);
-          ...
-          $PARSER.parse("...");
-      - pattern-not: |
-          var $EXPAT = require('node-expat');
-          ...
-          new $EXPAT.Parser(...);
-          ...
-          $PARSER.write("...");
-      - pattern-not: |
-          require('node-expat');
-          ...
-          new Parser(...);
-          ...
-          $PARSER.parse("...");
-      - pattern-not: |
-          require('node-expat');
-          ...
-          new Parser(...);
-          ...
-          $PARSER.write("...");
-      - pattern-not: |
-          $X = "...";
-          ...
-          $PARSER.parse($X);
-      - pattern-not: |-
-          $X = "...";
-          ...
-          $PARSER.write($X);
+- id: expat-xxe
+  message: >-
+    If unverified user data can reach the XML Parser it can result in XML External or
+    Internal Entity (XXE) Processing vulnerabilities
+  metadata:
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    category: security
+    technology:
+    - node-expat
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: |
+        var $EXPAT = require('node-expat');
+        ...
+        new $EXPAT.Parser(...);
+        ...
+        $PARSER.parse(...);
+    - pattern: |
+        var $EXPAT = require('node-expat');
+        ...
+        new $EXPAT.Parser(...);
+        ...
+        $PARSER.write(...);
+    - pattern: |
+        require('node-expat');
+        ...
+        new Parser(...);
+        ...
+        $PARSER.parse(...);
+    - pattern: |
+        require('node-expat');
+        ...
+        new Parser(...);
+        ...
+        $PARSER.write(...);
+  - pattern-not: |
+      var $EXPAT = require('node-expat');
+      ...
+      new $EXPAT.Parser(...);
+      ...
+      $PARSER.parse("...");
+  - pattern-not: |
+      var $EXPAT = require('node-expat');
+      ...
+      new $EXPAT.Parser(...);
+      ...
+      $PARSER.write("...");
+  - pattern-not: |
+      require('node-expat');
+      ...
+      new Parser(...);
+      ...
+      $PARSER.parse("...");
+  - pattern-not: |
+      require('node-expat');
+      ...
+      new Parser(...);
+      ...
+      $PARSER.write("...");
+  - pattern-not: |
+      $X = "...";
+      ...
+      $PARSER.parse($X);
+  - pattern-not: |-
+      $X = "...";
+      ...
+      $PARSER.write($X);

@@ -1,28 +1,40 @@
 rules:
-  - id: sax-xxe
-    message: >-
-      Use of 'ondoctype' in 'sax' library detected. By default, 'sax'
-      won't do anything with custom DTD entity definitions. If you're
-      implementing a custom DTD entity definition, be sure not to introduce
-      XML External Entity (XXE) vulnerabilities, or be absolutely sure that
-      external entities received from a trusted source while processing XML.
-    metadata:
-      owasp: "A4: XML External Entities (XXE)"
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      references:
-        - https://github.com/Leonidas-from-XIV/node-xml2js/issues/415
-        - https://github.com/isaacs/sax-js
-      category: security
-      technology:
-        - sax
-    severity: WARNING
-    languages: [javascript, typescript]
-    pattern-either:
-      - pattern: |
-          require('sax');
-          ...
-          $PARSER.ondoctype = ...;
-      - pattern: |-
-          require('sax');
-          ...
-          $PARSER.on('doctype',...);
+- id: sax-xxe
+  message: >-
+    Use of 'ondoctype' in 'sax' library detected. By default, 'sax'
+    won't do anything with custom DTD entity definitions. If you're
+    implementing a custom DTD entity definition, be sure not to introduce
+    XML External Entity (XXE) vulnerabilities, or be absolutely sure that
+    external entities received from a trusted source while processing XML.
+  metadata:
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    references:
+    - https://github.com/Leonidas-from-XIV/node-xml2js/issues/415
+    - https://github.com/isaacs/sax-js
+    category: security
+    technology:
+    - sax
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern-either:
+  - pattern: |
+      require('sax');
+      ...
+      $PARSER.ondoctype = ...;
+  - pattern: |-
+      require('sax');
+      ...
+      $PARSER.on('doctype',...);

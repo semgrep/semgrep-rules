@@ -1,91 +1,28 @@
 rules:
-  - id: react-missing-noreferrer
-    pattern-either:
-      - patterns:
-          - pattern: |
-              <$X target="_blank" />
-          - pattern-not: |
-              <$X target="_blank" rel="..." />
-          - pattern-not: |
-              <$X href="=~/^\/[^\/]/i" />
-          - pattern-not: |
-              <$X to="=~/^\/[^\/]/i" />
-      - patterns:
-          - pattern-inside: |
-              <$X target="_blank" rel=$REL />
-          - pattern-not-inside: |
-              <$X href="=~/^\/[^\/]/i" rel=$REL />
-          - pattern-not-inside: |
-              <$X to="=~/^\/[^\/]/i" rel=$REL />
-          - metavariable-pattern:
-              metavariable: $REL
-              language: generic
-              patterns:
-              - pattern-not-regex: .*noopener.*
-              - pattern-not-regex: .*noreferrer.*
-      - patterns:
-          - pattern: |
-              React.createElement($A, {target: '_blank'},...)
-          - pattern-not: |
-              React.createElement($A, {rel: '...'},...)
-          - pattern-not: |
-              React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
-      - patterns:
-          - pattern: |
-              React.createElement($A, {target: '_blank', rel: $REL},...)
-          - pattern-not: |
-              React.createElement($A, {href: '=~/^\/[^\/]/i'},...)
-          - metavariable-pattern:
-              metavariable: $REL
-              language: generic
-              patterns:
-              - pattern-not-regex: .*noopener.*
-              - pattern-not-regex: .*noreferrer.*
-      - patterns:
-          - pattern: |
-              $P = {target: '_blank'};
-              ...
-              React.createElement($A, $P,...);
-          - pattern-not: |
-              $P = {rel: '...'};
-              ...
-              React.createElement($A, $P,...);
-          - pattern-not: |
-              $P = {href: '=~/^\/[^\/]/i'};
-              ...
-              React.createElement($A, $P,...);
-      - patterns:
-          - pattern: |
-              $P = {target: '_blank', rel: $REL};
-              ...
-              React.createElement($A, $P,...);
-          - pattern-not: |
-              $P = {href: '=~/^\/[^\/]/i'};
-              ...
-              React.createElement($A, $P,...);
-          - metavariable-pattern:
-              metavariable: $REL
-              language: generic
-              patterns:
-              - pattern-not-regex: .*noopener.*
-              - pattern-not-regex: .*noreferrer.*
-    message: >-
-      This anchor tag with 'target="_blank"' is missing 'noreferrer' or 'noopener'.
-      A page opened with 'target="_blank"' can access the window object of the origin page.
-      This means it can manipulate the 'window.opener' property, which could redirect the origin page to a malicious URL.
-      This is called reverse tabnabbing. To prevent this, include 'rel=noreferrer' or 'rel=noopener' on this tag.
-    metadata:
-      confidence: MEDIUM
-      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
-      owasp: 
-        - "A03:2017: - Sensitive Data Exposure"
-      references:
-        - https://web.dev/external-anchors-use-rel-noopener/
-        - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
-      category: security
-      technology:
-        - react
-    languages:
-      - typescript
-      - javascript
-    severity: INFO
+- id: react-missing-noreferrer
+  message: >-
+    This rule has been deprecated.
+  metadata:
+    confidence: LOW
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://web.dev/external-anchors-use-rel-noopener/
+    - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
+    category: security
+    technology:
+    - react
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()

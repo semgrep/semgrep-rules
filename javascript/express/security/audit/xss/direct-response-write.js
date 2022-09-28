@@ -1,6 +1,7 @@
 
 const express = require('express')
 const router = express.Router()
+var xss = require("xss");
 
 
 
@@ -16,6 +17,14 @@ router.get('/greet-template', (req, res) => {
     // ok: direct-response-write
     res.render('index', { user_name: name });
 })
+
+//template handle escaping
+router.get('/greet-template', (req, res) => {
+    a = req.query.name
+    // ok: direct-response-write
+    res.send('<h1> Hello :' + xss(a) + "</h1>")
+})
+
 
 module.exports = router
 

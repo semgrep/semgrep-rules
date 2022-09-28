@@ -1,27 +1,39 @@
 rules:
-  - id: spawn-git-clone
-    message: >-
-      Git allows shell commands to be specified in ext URLs for remote repositories.
-      For example, git clone 'ext::sh -c whoami% >&2' will execute the whoami command
-      to try to connect to a remote repository.
-      Make sure that the URL is not controlled by external input.
-    metadata:
-      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-      owasp: "A1: Injection"
-      category: security
-      technology:
-        - git
-    languages:
-      - javascript
-      - typescript
-    severity: ERROR
-    patterns:
-      - pattern-either:
-          - pattern: spawn('git', ['clone',...,$F])
-          - pattern: $X.spawn('git', ['clone',...,$F])
-          - pattern: spawn('git', ['clone',...,$P,$F])
-          - pattern: $X.spawn('git', ['clone',...,$P,$F])
-      - pattern-not: spawn('git', ['clone',...,"..."])
-      - pattern-not: $X.spawn('git', ['clone',...,"..."])
-      - pattern-not: spawn('git', ['clone',...,"...","..."])
-      - pattern-not: $X.spawn('git', ['clone',...,"...","..."])
+- id: spawn-git-clone
+  message: >-
+    Git allows shell commands to be specified in ext URLs for remote repositories.
+    For example, git clone 'ext::sh -c whoami% >&2' will execute the whoami command
+    to try to connect to a remote repository.
+    Make sure that the URL is not controlled by external input.
+  metadata:
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - git
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: spawn('git', ['clone',...,$F])
+    - pattern: $X.spawn('git', ['clone',...,$F])
+    - pattern: spawn('git', ['clone',...,$P,$F])
+    - pattern: $X.spawn('git', ['clone',...,$P,$F])
+  - pattern-not: spawn('git', ['clone',...,"..."])
+  - pattern-not: $X.spawn('git', ['clone',...,"..."])
+  - pattern-not: spawn('git', ['clone',...,"...","..."])
+  - pattern-not: $X.spawn('git', ['clone',...,"...","..."])
