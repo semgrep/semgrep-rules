@@ -1,18 +1,33 @@
 rules:
-  - id: html-raw-json
-    patterns:
-      - pattern-either:
-          - pattern: "@Html.Raw(Json.Encode(...))"
-          - pattern: "@Html.Raw(JsonConvert.SerializeObject(...))"
-          - pattern: "@Html.Raw(...ToJson(...))"
-    message: Unencoded JSON in HTML context is vulnerable to cross-site scripting, because `</script>` is not properly encoded.
-    languages:
-      - generic
-    metadata:
-      category: security
-      technology:
-        - razor
-    paths:
-      include:
-        - "*.cshtml"
-    severity: ERROR
+- id: html-raw-json
+  patterns:
+  - pattern-either:
+    - pattern: '@Html.Raw(Json.Encode(...))'
+    - pattern: '@Html.Raw(JsonConvert.SerializeObject(...))'
+    - pattern: '@Html.Raw(...ToJson(...))'
+  message: Unencoded JSON in HTML context is vulnerable to cross-site scripting, because `</script>` is
+    not properly encoded.
+  languages:
+  - generic
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    category: security
+    technology:
+    - razor
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  paths:
+    include:
+    - '*.cshtml'
+  severity: ERROR

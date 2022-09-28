@@ -1,39 +1,48 @@
 rules:
-  - id: insecure-typefilterlevel-full
-    severity: WARNING
-    languages:
-      - C#
-    metadata:
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      owasp: "A8: Insecure Deserialization"
-      references:
-        - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.formatters.typefilterlevel?view=net-6.0
-        - https://www.synacktiv.com/en/publications/izi-izi-pwn2own-ics-miami.html
-      category: security
-      technology:
-        - .net
-      confidence: HIGH
-    message: >-
-      Using a .NET remoting service can lead to RCE, even if you try to configure TypeFilterLevel.
-      Recommended to switch from .NET Remoting to WCF https://docs.microsoft.com/en-us/dotnet/framework/wcf/migrating-from-net-remoting-to-wcf
-    pattern-either:
+- id: insecure-typefilterlevel-full
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.formatters.typefilterlevel?view=net-6.0
+    - https://www.synacktiv.com/en/publications/izi-izi-pwn2own-ics-miami.html
+    category: security
+    technology:
+    - .net
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+  message: >-
+    Using a .NET remoting service can lead to RCE, even if you try to configure TypeFilterLevel.
+    Recommended to switch from .NET Remoting to WCF https://docs.microsoft.com/en-us/dotnet/framework/wcf/migrating-from-net-remoting-to-wcf
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: new BinaryServerFormatterSinkProvider { TypeFilterLevel = $LEVEL }
       - patterns:
-          - pattern-either:
-              - pattern: new BinaryServerFormatterSinkProvider { TypeFilterLevel = $LEVEL }
-              - patterns:
-                  - pattern-inside: |
-                      $TYPE $SP = new BinaryServerFormatterSinkProvider(...);
-                      ...
-                  - pattern: |
-                      $SP.TypeFilterLevel = $LEVEL
-          - metavariable-regex:
-              metavariable: $LEVEL
-              regex: (.*)TypeFilterLevel\.(Full|Low)
-      - patterns:
-          - pattern-inside: |
-              $DICT["typeFilterLevel"] = $VAL;
-              ...
-          - pattern: new BinaryServerFormatterSinkProvider(..., $DICT, ...)
-          - metavariable-regex:
-              metavariable: $VAL
-              regex: (\"Full\"|\"Low\")
+        - pattern-inside: |
+            $TYPE $SP = new BinaryServerFormatterSinkProvider(...);
+            ...
+        - pattern: |
+            $SP.TypeFilterLevel = $LEVEL
+    - metavariable-regex:
+        metavariable: $LEVEL
+        regex: (.*)TypeFilterLevel\.(Full|Low)
+  - patterns:
+    - pattern-inside: |
+        $DICT["typeFilterLevel"] = $VAL;
+        ...
+    - pattern: new BinaryServerFormatterSinkProvider(..., $DICT, ...)
+    - metavariable-regex:
+        metavariable: $VAL
+        regex: (\"Full\"|\"Low\")

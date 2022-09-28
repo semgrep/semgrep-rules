@@ -12,8 +12,8 @@ rules:
   pattern-sanitizers:
   - not_conflicting: true
     pattern: $F(...)
-  message: User-controllable string passed to Razor.Parse.  This leads directly to
-    code execution in the context of the process.
+  message: User-controllable string passed to Razor.Parse.  This leads directly to code execution in the
+    context of the process.
   languages:
   - csharp
   severity: WARNING
@@ -30,4 +30,9 @@ rules:
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp:
     - A03:2021 - Injection
-    - A01:2017 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

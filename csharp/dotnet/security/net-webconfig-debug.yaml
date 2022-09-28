@@ -15,14 +15,20 @@ rules:
   severity: WARNING
   paths:
     include:
-      - "*web.config*"
-  metadata: 
+    - '*web.config*'
+  metadata:
     category: security
-    cwe: "CWE-11: ASP.NET Misconfiguration: Creating Debug Binary"
-    owasp: 'A5: Security Misconfiguration'
+    cwe:
+    - 'CWE-11: ASP.NET Misconfiguration: Creating Debug Binary'
+    owasp:
+    - A05:2021 - Security Misconfiguration
     technology:
     - .net
-    confidence: HIGH
+    confidence: LOW
     references:
-      - https://web.archive.org/web/20190919105353/https://blogs.msdn.microsoft.com/prashant_upadhyay/2011/07/14/why-debugfalse-in-asp-net-applications-in-production-environment/
-      - https://msdn.microsoft.com/en-us/library/e8z01xdh.aspx
+    - https://web.archive.org/web/20190919105353/https://blogs.msdn.microsoft.com/prashant_upadhyay/2011/07/14/why-debugfalse-in-asp-net-applications-in-production-environment/
+    - https://msdn.microsoft.com/en-us/library/e8z01xdh.aspx
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW

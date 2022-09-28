@@ -1,34 +1,39 @@
 rules:
-  - id: regular-expression-dos-infinite-timeout
-    severity: WARNING
-    languages:
-      - C#
-    metadata:
-      cwe: "CWE-1333: Inefficient Regular Expression Complexity"
-      owasp: "A1: Injection"
-      references:
-        - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
-        - https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.infinitematchtimeout
-        - https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0
-      category: security
-      technology:
-        - .net
-      confidence: MEDIUM
-    message: >-
-      Specifying the regex timeout leaves the system vulnerbale to a regex-based Denial of Service (DoS) attack. 
-      Consider setting the timeout to a short amount of time like 2 or 3 seconds.
-      If you are sure you need an infinite timeout, double check that your context meets the conditions outlined in the "Notes to Callers" section at the bottom of this page: 
-      https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0
-    patterns:
-      - pattern-inside: |
-          using System.Text.RegularExpressions;
-          ...
-      - pattern-either:
-          - pattern: new Regex(..., TimeSpan.InfiniteMatchTimeout)
-          - patterns:
-              - pattern: new Regex(..., TimeSpan.FromSeconds($TIME))
-              - metavariable-comparison:
-                  metavariable: $TIME
-                  comparison: $TIME > 5
-          - pattern: new Regex(..., TimeSpan.FromMinutes(...))
-          - pattern: new Regex(..., TimeSpan.FromHours(...))
+- id: regular-expression-dos-infinite-timeout
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe:
+    - 'CWE-1333: Inefficient Regular Expression Complexity'
+    owasp: 'A1: Injection'
+    references:
+    - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+    - https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.infinitematchtimeout
+    - https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0
+    category: security
+    technology:
+    - .net
+    confidence: MEDIUM
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  message: >-
+    Specifying the regex timeout leaves the system vulnerbale to a regex-based Denial of Service (DoS)
+    attack.  Consider setting the timeout to a short amount of time like 2 or 3 seconds.
+    If you are sure you need an infinite timeout, double check that your context meets the conditions
+    outlined in the "Notes to Callers" section at the bottom of this page:  https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0
+  patterns:
+  - pattern-inside: |
+      using System.Text.RegularExpressions;
+      ...
+  - pattern-either:
+    - pattern: new Regex(..., TimeSpan.InfiniteMatchTimeout)
+    - patterns:
+      - pattern: new Regex(..., TimeSpan.FromSeconds($TIME))
+      - metavariable-comparison:
+          metavariable: $TIME
+          comparison: $TIME > 5
+    - pattern: new Regex(..., TimeSpan.FromMinutes(...))
+    - pattern: new Regex(..., TimeSpan.FromHours(...))
