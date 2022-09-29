@@ -1,15 +1,27 @@
 rules:
-- id: dynamic-finders 
+- id: dynamic-finders
   metadata:
-    owasp: 'A1: Injection'
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command"
-    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_dynamic_finders.rb 
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_dynamic_finders.rb
     category: security
     technology:
     - rails
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
   message: >-
-    Discovered an application that uses MySQL and find_by_* dynamic finders 
-    on potentially sensitive fields. There is a vulnerability in MySQL integer conversion, which could case "0" to match any string,
+    Discovered an application that uses MySQL and find_by_* dynamic finders  on potentially sensitive
+    fields. There is a vulnerability in MySQL integer conversion, which could case "0" to match any string,
     and could therefore lead to sensitive data being exposed. Instead, upgrade to Rails version 4.
   languages: [ruby]
   severity: WARNING
@@ -26,4 +38,3 @@ rules:
   - pattern: $X.find_by_code(...)
   - pattern: $X.find_by_private(...)
   - pattern: $X.find_by_reset(...)
-      

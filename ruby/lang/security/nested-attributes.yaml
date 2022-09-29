@@ -1,19 +1,28 @@
 rules:
-  - id: nested-attributes
-    message: >-
-      Checks for models that enable nested attributes. A vulnerability in nested_attributes_for
-      results in an attacker
-      begin able to change parameters apart from the ones intended by the developer.
-      Affected Rails versions: 3.0.0, 2.3.9.
-      Fix: don't use accepts_nested_attributes_for or upgrade Rails version.
-    metadata:
-      references:
-        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_nested_attributes.rb
-        - https://groups.google.com/g/rubyonrails-security/c/-fkT0yja_gw/discussion
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: WARNING
-    pattern: accepts_nested_attributes_for
+- id: nested-attributes
+  message: >-
+    This rule has been deprecated 
+  metadata:
+    cwe:
+    - 'CWE-20: Improper Input Validation'
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_nested_attributes.rb
+    - https://groups.google.com/g/rubyonrails-security/c/-fkT0yja_gw/discussion
+    category: security
+    technology:
+    - ruby
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - ruby
+  severity: WARNING
+  patterns:
+  - pattern: a()
+  - pattern: b()

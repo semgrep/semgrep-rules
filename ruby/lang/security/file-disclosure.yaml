@@ -1,20 +1,32 @@
 rules:
-  - id: file-disclosure
-    message: >-
-      Special requests can determine whether a file exists on a filesystem that's outside
-      the Rails app's
-      root directory. To fix this, set config.serve_static_assets = false.
-    metadata:
-      references:
-        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_file_disclosure.rb
-        - https://groups.google.com/g/rubyonrails-security/c/23fiuwb1NBA/m/MQVM1-5GkPMJ
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: ERROR
-    pattern: config.serve_static_assets = true
-    fix-regex:
-      regex: =(\s)*true
-      replacement: = false
+- id: file-disclosure
+  message: >-
+    Special requests can determine whether a file exists on a filesystem that's outside
+    the Rails app's
+    root directory. To fix this, set config.serve_static_assets = false.
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_file_disclosure.rb
+    - https://groups.google.com/g/rubyonrails-security/c/23fiuwb1NBA/m/MQVM1-5GkPMJ
+    category: security
+    technology:
+    - ruby
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - ruby
+  severity: ERROR
+  pattern: config.serve_static_assets = true
+  fix-regex:
+    regex: =(\s)*true
+    replacement: = false
