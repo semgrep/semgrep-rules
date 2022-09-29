@@ -1,19 +1,28 @@
-
 rules:
 - id: laravel-sql-injection
   metadata:
-    owasp: 'A3: Injection'
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     category: security
     technology:
     - laravel
-    references: 
+    references:
     - https://laravel.com/docs/8.x/queries
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
   severity: WARNING
   message: >-
     Detected a SQL query based on user input.
-    This could lead to SQL injection, which could potentially result in sensitive data being exfiltrated by attackers. 
-    Instead, use parameterized queries and prepared statements.
+    This could lead to SQL injection, which could potentially result in sensitive data being exfiltrated
+    by attackers.  Instead, use parameterized queries and prepared statements.
   languages: [php]
   mode: taint
   pattern-sources:
