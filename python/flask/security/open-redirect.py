@@ -1,7 +1,9 @@
+from flask import request, redirect
 from flask import Flask, redirect, request, url_for
 from werkzeug.urls import url_parse
 
 app = Flask(__name__)
+
 
 @app.route("open_redirect/")
 def open_redirect():
@@ -10,11 +12,22 @@ def open_redirect():
     print("something")
     return redirect(url)
 
+
 @app.route("not_open_redirect/")
 def not_open_redirect():
-    # ok: open-redirect
-    url = "/about/"
-    return redirect(url)
+
+    page = request.args.get("page")
+    if page == "about":
+        # ok: open-redirect
+        url = "/about/"
+        return redirect(url)
+    elif page == "test":
+        # ok: open-redirect
+        redirect(f"{request.path}/")
+    else:
+        # ok: open-redirect
+        redirect(request.path + "?failed")
+
 
 @app.route("filter")
 def filter():
@@ -24,9 +37,10 @@ def filter():
         next_page = url_for('main.index')
     return redirect(next_page)
 
-from flask import request, redirect
 
 # cf. https://github.com/mideind/Netskrafl/blob/2e1933ad0710a4425c319fde3b92b2a70729ed80/netskrafl.py#L1712
+
+
 @app.route("/userprefs", methods=["GET", "POST"])
 @auth_required()
 def userprefs():
