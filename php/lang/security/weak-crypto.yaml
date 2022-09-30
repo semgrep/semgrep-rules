@@ -1,18 +1,28 @@
 rules:
-  - id: weak-crypto
-    patterns:
-      - pattern: $FUNC(...);
-      - metavariable-regex:
-          metavariable: $FUNC
-          regex: crypt|md5|md5_file|sha1|sha1_file|str_rot13
-    message: >-
-      Detected usage of weak crypto function. Consider using stronger alternatives.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/book.sodium.php
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/CryptoFunctionsSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: weak-crypto
+  patterns:
+  - pattern: $FUNC(...);
+  - metavariable-regex:
+      metavariable: $FUNC
+      regex: crypt|md5|md5_file|sha1|sha1_file|str_rot13
+  message: >-
+    Detected usage of weak crypto function. Consider using stronger alternatives.
+  metadata:
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    references:
+    - https://www.php.net/manual/en/book.sodium.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/CryptoFunctionsSniff.php
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages: [php]
+  severity: ERROR

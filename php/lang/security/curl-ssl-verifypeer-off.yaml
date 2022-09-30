@@ -1,23 +1,33 @@
 rules:
-  - id: curl-ssl-verifypeer-off
-    patterns:
-      - pattern-either:
-          - pattern: |
-              $ARG = $IS_VERIFIED;
-              ...
-              curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $ARG);
-          - pattern: curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $IS_VERIFIED)
-      - metavariable-regex:
-          metavariable: $IS_VERIFIED
-          regex: 0|false|null
-    message: >-
-      SSL verification is disabled but should not be (currently CURLOPT_SSL_VERIFYPEER=
-      $IS_VERIFIED)
-    metadata:
-      references:
-        - https://www.saotn.org/dont-turn-off-curlopt_ssl_verifypeer-fix-php-configuration/
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: curl-ssl-verifypeer-off
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $ARG = $IS_VERIFIED;
+        ...
+        curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $ARG);
+    - pattern: curl_setopt(..., CURLOPT_SSL_VERIFYPEER, $IS_VERIFIED)
+  - metavariable-regex:
+      metavariable: $IS_VERIFIED
+      regex: 0|false|null
+  message: >-
+    SSL verification is disabled but should not be (currently CURLOPT_SSL_VERIFYPEER=
+    $IS_VERIFIED)
+  metadata:
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://www.saotn.org/dont-turn-off-curlopt_ssl_verifypeer-fix-php-configuration/
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM
+  languages: [php]
+  severity: ERROR

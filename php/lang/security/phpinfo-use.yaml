@@ -1,14 +1,24 @@
 rules:
-  - id: phpinfo-use
-    pattern: phpinfo(...);
-    message: >-
-      The 'phpinfo' function may reveal sensitive information about your environment.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/function.phpinfo
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PhpinfosSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: phpinfo-use
+  pattern: phpinfo(...);
+  message: >-
+    The 'phpinfo' function may reveal sensitive information about your environment.
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    references:
+    - https://www.php.net/manual/en/function.phpinfo
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PhpinfosSniff.php
+    category: security
+    technology:
+    - php
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [php]
+  severity: ERROR
