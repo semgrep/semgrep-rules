@@ -13,19 +13,24 @@ rules:
     - pattern: var $NODE = $NAV.Select("..." + $INPUT + "...");
     - pattern: Object $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
     - pattern: var $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
-  message: XPath queries are constructed dynamically on user-controlled input. This
-    vulnerability in code could lead to an XPath Injection exploitation.
+  message: XPath queries are constructed dynamically on user-controlled input. This vulnerability in code
+    could lead to an XPath Injection exploitation.
   metadata:
     category: security
     technology:
     - .net
     owasp:
-    - "A03:2021 - Injection Failures"
-    cwe: 'CWE-643: Improper Neutralization of Data within XPath Expressions (''XPath
-      Injection'')'
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
     references:
     - https://owasp.org/Top10/A03_2021-Injection/
     - https://cwe.mitre.org/data/definitions/643.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   languages:
   - csharp
   severity: ERROR

@@ -18,20 +18,26 @@ rules:
     - pattern: Regex.Replace($INPUT, ...)
     - pattern: $ENCODER.LdapFilterEncode($INPUT)
     - pattern: $ENCODER.LdapDistinguishedNameEncode($INPUT)
-  message: LDAP queries are constructed dynamically on user-controlled input. This
-    vulnerability in code could lead to an arbitrary LDAP query execution.
+  message: LDAP queries are constructed dynamically on user-controlled input. This vulnerability in code
+    could lead to an arbitrary LDAP query execution.
   metadata:
     category: security
     technology:
     - .net
     owasp:
-    - "A03:2021 - Injection Failures"
-    cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query
-      ('LDAP Injection')"
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
     references:
     - https://owasp.org/Top10/A03_2021-Injection/
     - https://cwe.mitre.org/data/definitions/90
     - https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html#safe-c-sharp-net-tba-example
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: MEDIUM
+    confidence: MEDIUM
   languages:
   - csharp
   severity: ERROR

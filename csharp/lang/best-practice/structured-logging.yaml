@@ -1,50 +1,49 @@
 rules:
 - id: structured-logging
   patterns:
-    - pattern-either:
+  - pattern-either:
       # Serilog
-      - pattern: $LOG.Debug($"...")
-      - pattern: $LOG.Error($"...")
-      - pattern: $LOG.Fatal($"...")
-      - pattern: $LOG.Information($"...")
-      - pattern: $LOG.Verbose($"...")
-      - pattern: $LOG.Warning($"...")
-      # Microsoft.Extensions.Logging
-      - pattern: $LOG.LogCritical($"...")
-      - pattern: $LOG.LogDebug($"...")
-      - pattern: $LOG.LogError($"...")
-      - pattern: $LOG.LogInformation($"...")
-      - pattern: $LOG.LogTrace($"...")
-      - pattern: $LOG.LogWarning($"...")
-      # NLog
-      # Debug, Error, Fatal are already present above in Serilog
-      - pattern: $LOG.Info($"...")
-      - pattern: $LOG.Trace($"...")
-      - pattern: $LOG.Warn($"...")
-    - metavariable-regex:
-        metavariable: $LOG
-        regex: .*(log|LOG|Log)
+    - pattern: $LOG.Debug($"...")
+    - pattern: $LOG.Error($"...")
+    - pattern: $LOG.Fatal($"...")
+    - pattern: $LOG.Information($"...")
+    - pattern: $LOG.Verbose($"...")
+    - pattern: $LOG.Warning($"...")
+    - pattern: $LOG.LogCritical($"...")
+    - pattern: $LOG.LogDebug($"...")
+    - pattern: $LOG.LogError($"...")
+    - pattern: $LOG.LogInformation($"...")
+    - pattern: $LOG.LogTrace($"...")
+    - pattern: $LOG.LogWarning($"...")
+    - pattern: $LOG.Info($"...")
+    - pattern: $LOG.Trace($"...")
+    - pattern: $LOG.Warn($"...")
+  - metavariable-regex:
+      metavariable: $LOG
+      regex: .*(log|LOG|Log)
   message: >-
-      String interpolation in log message obscures the distinction between
-      variables and the log message. Use structured logging instead, where the
-      variables are passed as additional arguments and the interpolation is performed
-      by the logging library. This reduces the possibility of log injection and makes
-      it easier to search through logs.
+    String interpolation in log message obscures the distinction between
+    variables and the log message. Use structured logging instead, where the
+    variables are passed as additional arguments and the interpolation is performed
+    by the logging library. This reduces the possibility of log injection and makes
+    it easier to search through logs.
   languages: [csharp]
   severity: INFO
   metadata:
     cwe:
-      - "CWE-117: Improper Output Neutralization for Logs"
+    - 'CWE-117: Improper Output Neutralization for Logs'
     owasp:
-      - "A09:2021 - Security Logging and Monitoring Failures"
+    - A09:2021 - Security Logging and Monitoring Failures
     technology:
-      - .net
-      - serilog
-      - nlog
-    confidence: MEDIUM
+    - .net
+    - serilog
+    - nlog
+    confidence: LOW
     references:
-      - https://github.com/NLog/NLog/wiki/How-to-use-structured-logging
-      - https://softwareengineering.stackexchange.com/questions/312197/benefits-of-structured-logging-vs-basic-logging
-    category:
-      - security
-      - best-practice
+    - https://github.com/NLog/NLog/wiki/How-to-use-structured-logging
+    - https://softwareengineering.stackexchange.com/questions/312197/benefits-of-structured-logging-vs-basic-logging
+    category: best-practice
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW

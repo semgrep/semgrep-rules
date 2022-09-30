@@ -17,12 +17,19 @@ rules:
     - .net
     - mvc
     owasp:
-    - "A05:2021 - Security Misconfiguration"
-    cwe: 'CWE-548: Exposure of Information Through Directory Listing'
+    - A06:2017 - Security Misconfiguration
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-548: Exposure of Information Through Directory Listing'
     references:
     - https://cwe.mitre.org/data/definitions/548.html
     - https://owasp.org/Top10/A05_2021-Security_Misconfiguration/
     - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-7.0#directory-browsing
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
   languages:
   - csharp
   severity: INFO
