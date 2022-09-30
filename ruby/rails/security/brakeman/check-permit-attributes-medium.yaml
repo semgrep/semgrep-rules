@@ -5,16 +5,16 @@ rules:
   - metavariable-regex:
       metavariable: $ATTRIBUTE
       regex: .*(role|banned).*
-  message: Calling `permit` on security-critical properties like `$ATTRIBUTE` may
-    leave your application vulnerable to mass assignment.
+  message: Calling `permit` on security-critical properties like `$ATTRIBUTE` may leave your application
+    vulnerable to mass assignment.
   languages:
   - ruby
   severity: WARNING
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_permit_attributes.rb
     category: security
-    cwe: 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
-      Attributes'
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
     owasp:
     - A08:2021 - Software and Data Integrity Failures
     technology:
@@ -22,3 +22,8 @@ rules:
     - rails
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

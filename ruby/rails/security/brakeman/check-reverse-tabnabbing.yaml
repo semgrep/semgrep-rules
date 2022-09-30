@@ -40,18 +40,24 @@ rules:
               link_to '...', '...', ...
           - pattern-not: |
               link_to '...', target: ...
-  message: Setting an anchor target of `_blank` without the `noopener` or `noreferrer`
-    attribute allows reverse tabnabbing on Internet Explorer, Opera, and Android Webview.
+  message: Setting an anchor target of `_blank` without the `noopener` or `noreferrer` attribute allows
+    reverse tabnabbing on Internet Explorer, Opera, and Android Webview.
   languages:
   - generic
   severity: WARNING
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_reverse_tabnabbing.rb
     category: security
-    cwe: 'CWE-1022: Use of Web Link to Untrusted Target with window.opener Access'
+    cwe:
+    - 'CWE-1022: Use of Web Link to Untrusted Target with window.opener Access'
     technology:
     - ruby
     - rails
     references:
     - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#browser_compatibility
     - https://github.com/presidentbeef/brakeman/blob/3f5d5d5/test/apps/rails5/app/views/users/show.html.erb
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

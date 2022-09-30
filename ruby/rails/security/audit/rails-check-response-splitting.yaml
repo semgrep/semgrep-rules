@@ -1,34 +1,38 @@
 rules:
-  - id: rails-check-response-splitting
-    pattern-either:
+- id: rails-check-response-splitting
+  pattern-either:
+  - pattern-either:
+    - pattern: gem 'rails', '2.3'
+    - patterns:
       - pattern-either:
-        - pattern: gem 'rails', '2.3'
-        - patterns:
-          - pattern-either:
-            - pattern: gem 'rails', '2.3.$PATCH'
-            - pattern: gem 'rails', '~> 2.3.$PATCH'
-          - metavariable-comparison:
-              metavariable: $PATCH
-              comparison: $PATCH < 14
-    message: Rails versions 2.3.14 are vulnerable to response splitting, allowing header injection (CVE-2011-3186). Upgrade to 2.3.14 or greater.
-    languages:
-      - generic
-    severity: WARNING
-    paths:
-      include:
-        - "*Gemfile"
-        - gems.rb
-    metadata:
-      cwe: "CWE-94:	Improper Control of Generation of Code ('Code Injection')"
-      owasp:
-        - "A01:2017 - Injection"
-        - "A03:2021 - Injection"
-        - "A09:2017 - Using Components with Known Vulnerabilities"
-        - "A06:2021 - Vulnerable and Outdated Components"
-      technology:
-        - rails
-      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_response_splitting.rb
-      category: security
-      references:
-        - https://groups.google.com/d/topic/rubyonrails-security/b_yTveAph2g/discussion 
-    
+        - pattern: gem 'rails', '2.3.$PATCH'
+        - pattern: gem 'rails', '~> 2.3.$PATCH'
+      - metavariable-comparison:
+          metavariable: $PATCH
+          comparison: $PATCH < 14
+  message: Rails versions 2.3.14 are vulnerable to response splitting, allowing header injection (CVE-2011-3186).
+    Upgrade to 2.3.14 or greater.
+  languages:
+  - generic
+  severity: WARNING
+  paths:
+    include:
+    - '*Gemfile'
+    - gems.rb
+  metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
+    technology:
+    - rails
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_response_splitting.rb
+    category: security
+    references:
+    - https://groups.google.com/d/topic/rubyonrails-security/b_yTveAph2g/discussion
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

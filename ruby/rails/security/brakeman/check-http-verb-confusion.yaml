@@ -13,16 +13,17 @@ rules:
       elsif ...
         ...
       end
-  message: Found an improperly constructed control flow block with `request.get?`.
-    Rails will route HEAD requests as GET requests but they will fail the `request.get?`
-    check, potentially causing unexpected behavior unless an `elif` condition is used.
+  message: Found an improperly constructed control flow block with `request.get?`. Rails will route HEAD
+    requests as GET requests but they will fail the `request.get?` check, potentially causing unexpected
+    behavior unless an `elif` condition is used.
   languages:
   - ruby
   severity: ERROR
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_verb_confusion.rb
     category: security
-    cwe: 'CWE-650: Trusting HTTP Permission Methods on the Server Side'
+    cwe:
+    - 'CWE-650: Trusting HTTP Permission Methods on the Server Side'
     owasp:
     - A04:2021 - Insecure Design
     technology:
@@ -30,3 +31,8 @@ rules:
     - rails
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails6/app/controllers/accounts_controller.rb
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM

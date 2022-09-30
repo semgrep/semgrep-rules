@@ -1,26 +1,35 @@
 rules:
-  - id: cookie-missing-httponly
-    metadata:
-      cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
-      owasp: "A3: Sensitive Data Exposure"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#HTTPONLY_COOKIE
-      category: security
-      technology:
-        - kt
-    message: >-
-      A cookie was detected without setting the 'HttpOnly' flag. The 'HttpOnly' flag
-      for cookies instructs the browser to forbid client-side scripts from reading the
-      cookie. Set the 'HttpOnly' flag by calling 'cookie.setHttpOnly(true);'
-    severity: WARNING
-    languages: [kt]
-    patterns:
+- id: cookie-missing-httponly
+  metadata:
+    cwe:
+    - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#HTTPONLY_COOKIE
+    category: security
+    technology:
+    - kt
+    references:
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  message: >-
+    A cookie was detected without setting the 'HttpOnly' flag. The 'HttpOnly' flag
+    for cookies instructs the browser to forbid client-side scripts from reading the
+    cookie. Set the 'HttpOnly' flag by calling 'cookie.setHttpOnly(true);'
+  severity: WARNING
+  languages: [kt]
+  patterns:
+  - pattern-not-inside: |
+      $COOKIE.setValue("")
+      ...
+  - pattern-either:
+    - pattern: $COOKIE.setHttpOnly(false)
+    - patterns:
       - pattern-not-inside: |
-          $COOKIE.setValue("")
+          $COOKIE.setHttpOnly(...)
           ...
-      - pattern-either:
-          - pattern: $COOKIE.setHttpOnly(false)
-          - patterns:
-              - pattern-not-inside: |
-                  $COOKIE.setHttpOnly(...)
-                  ...
-              - pattern: $RESPONSE.addCookie($COOKIE)
+      - pattern: $RESPONSE.addCookie($COOKIE)

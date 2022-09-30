@@ -1,5 +1,5 @@
 rules:
-- id: laravel-cookie-null-domain 
+- id: laravel-cookie-null-domain
   patterns:
   - pattern: |
       'cookie'
@@ -21,21 +21,27 @@ rules:
         'domain' => env('$NAME', $DEFAULT),
         ...
       ];
-  # TODO: add insecure default tests (where $DEFAULT is insecure)
   message: >-
-    Found a configuration file where the domain attribute 
-    is not set to null. It is recommended (unless you are using sub-domain 
-    route registrations) to set this attribute to null so that only the
+    Found a configuration file where the domain attribute  is not set to null. It is recommended (unless
+    you are using sub-domain  route registrations) to set this attribute to null so that only the
     same origin can set the cookie, thus protecting your cookies. 
   languages:
   - php
   severity: ERROR
   metadata:
     category: security
-    cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
-    owasp: "A03:2017 - Sensitive Data Exposure"
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
     technology:
     - php
     - laravel
     references:
-    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md 
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

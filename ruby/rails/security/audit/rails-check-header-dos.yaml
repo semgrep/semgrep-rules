@@ -1,45 +1,53 @@
 rules:
-  - id: rails-check-header-dos
-    languages:
-      - generic
-    patterns:
+- id: rails-check-header-dos
+  languages:
+  - generic
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: gem 'rails', '3.$Y'
+      - metavariable-comparison:
+          metavariable: $Y
+          comparison: $Y <= 2
+    - patterns:
       - pattern-either:
-          - patterns:
-              - pattern: gem 'rails', '3.$Y'
-              - metavariable-comparison:
-                  metavariable: $Y
-                  comparison: $Y <= 2
-          - patterns:
-              - pattern-either:
-                  - pattern: gem 'rails', '3.0.$Z'
-                  - pattern: gem 'rails', '3.1.$Z'
-          - patterns:
-              - pattern: gem 'rails', '3.2.$Z'
-              - metavariable-comparison:
-                  metavariable: $Z
-                  comparison: $Z < 16
-          - patterns:
-              - pattern: gem 'rails', '4.0.$Z'
-              - metavariable-comparison:
-                  metavariable: $Z
-                  comparison: $Z == 0 or $Z == 1
-    message: >-
-      Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
-      DoS attack (CVE-2013-6414). This can cause your service to be 
-      taken down for substantial amount of time. Instead, upgrade to 
-      4.0.2 or 3.2.16 or higher.
-    severity: WARNING
-    metadata:
-      technology:
-        - rails
-      category: security
-      cwe: "CWE-20: Improper Input Validation"
-      owasp:
-        - "A09:2017 - Using Components with Known Vulnerabilities"
-        - "A06:2021 - Vulnerable and Outdated Components"
-      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_header_dos.rb
-    paths:
-      include:
-        - "*Gemfile"
-        - "gems.rb"
+        - pattern: gem 'rails', '3.0.$Z'
+        - pattern: gem 'rails', '3.1.$Z'
+    - patterns:
+      - pattern: gem 'rails', '3.2.$Z'
+      - metavariable-comparison:
+          metavariable: $Z
+          comparison: $Z < 16
+    - patterns:
+      - pattern: gem 'rails', '4.0.$Z'
+      - metavariable-comparison:
+          metavariable: $Z
+          comparison: $Z == 0 or $Z == 1
+  message: >-
+    Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a
+    DoS attack (CVE-2013-6414). This can cause your service to be  taken down for substantial amount of
+    time. Instead, upgrade to  4.0.2 or 3.2.16 or higher.
+  severity: WARNING
+  metadata:
+    technology:
+    - rails
+    category: security
+    cwe:
+    - 'CWE-20: Improper Input Validation'
+    owasp:
+    - A03:2021 - Injection
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_header_dos.rb
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  paths:
+    include:
+    - '*Gemfile'
+    - gems.rb
 

@@ -45,13 +45,20 @@ rules:
   severity: ERROR
   metadata:
     category: security
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      ('SQL Injection')"
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp:
-    - A03:2021 - Injection
     - A01:2017 - Injection
+    - A03:2021 - Injection
     technology:
     - php
     - laravel
     references:
     - https://laravel.com/docs/9.x/validation#rule-unique
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM

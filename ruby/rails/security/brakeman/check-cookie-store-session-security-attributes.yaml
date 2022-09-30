@@ -14,9 +14,8 @@ rules:
   - metavariable-regex:
       metavariable: $KEY
       regex: ^(session_)?(http_?only|secure)$
-  message: Found a Rails `cookie_store` session configuration setting the `$KEY` attribute
-    to `false`. If using a cookie-based session store, the HttpOnly and Secure flags
-    should be set.
+  message: Found a Rails `cookie_store` session configuration setting the `$KEY` attribute to `false`.
+    If using a cookie-based session store, the HttpOnly and Secure flags should be set.
   languages:
   - ruby
   severity: WARNING
@@ -25,7 +24,6 @@ rules:
     category: security
     cwe:
     - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
-    - "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp:
     - A05:2021 - Security Misconfiguration
     technology:
@@ -33,3 +31,8 @@ rules:
     - rails
     references:
     - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
