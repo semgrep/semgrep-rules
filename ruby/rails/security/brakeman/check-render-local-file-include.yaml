@@ -8,10 +8,10 @@ rules:
   - patterns:
     - pattern: |
         render ...
-  message: Found request parameters in a call to `render`. This can allow end users
-    to request arbitrary local files which may result in leaking sensitive information
-    persisted on disk. Where possible, avoid letting users specify template paths for `render`.
-    If you must allow user input, use an allow-list of known templates or normalize the user-supplied value with `File.basename(...)`.
+  message: Found request parameters in a call to `render`. This can allow end users to request arbitrary
+    local files which may result in leaking sensitive information persisted on disk. Where possible, avoid
+    letting users specify template paths for `render`. If you must allow user input, use an allow-list
+    of known templates or normalize the user-supplied value with `File.basename(...)`.
   languages:
   - ruby
   severity: WARNING
@@ -20,11 +20,19 @@ rules:
     - ruby
     - rails
     category: security
-    cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
     owasp:
+    - A05:2017 - Broken Access Control
     - A01:2021 - Broken Access Control
-    - A05:2021 - Broken Access Control
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_render.rb
     references:
     - https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/07-Input_Validation_Testing/11.1-Testing_for_Local_File_Inclusion
     - https://github.com/presidentbeef/brakeman/blob/f74cb53/test/apps/rails2/app/controllers/home_controller.rb#L48-L60
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM

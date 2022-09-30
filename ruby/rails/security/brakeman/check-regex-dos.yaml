@@ -2,30 +2,30 @@ rules:
 - id: check-regex-dos
   mode: taint
   pattern-sources:
-    - patterns:
-      - pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          cookies[...]
+      - patterns:
         - pattern: |
-            cookies[...]
-        - patterns:
-          - pattern: |
-              cookies. ... .$PROPERTY[...]
-          - metavariable-regex:
-              metavariable: $PROPERTY
-              regex: (?!signed|encrypted)
-        - pattern: |
-            params[...]
-        - pattern: |
-            request.env[...]
-        - patterns:
-          - pattern: $Y
-          - pattern-either:
-            - pattern-inside: |
-                $RECORD.read_attribute($Y)
-            - pattern-inside: |
-                $RECORD[$Y]
-          - metavariable-regex:
-              metavariable: $RECORD
-              regex: '[A-Z][a-z]+'
+            cookies. ... .$PROPERTY[...]
+        - metavariable-regex:
+            metavariable: $PROPERTY
+            regex: (?!signed|encrypted)
+      - pattern: |
+          params[...]
+      - pattern: |
+          request.env[...]
+      - patterns:
+        - pattern: $Y
+        - pattern-either:
+          - pattern-inside: |
+              $RECORD.read_attribute($Y)
+          - pattern-inside: |
+              $RECORD[$Y]
+        - metavariable-regex:
+            metavariable: $RECORD
+            regex: '[A-Z][a-z]+'
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -39,20 +39,28 @@ rules:
             Regexp.new(...)
   message: >-
     Found a potentially user-controllable argument in the construction of a regular expressions.
-    This may result in excessive resource consumption when applied to certain inputs, or when the user is allowed to control the match target.
+    This may result in excessive resource consumption when applied to certain inputs, or when the user
+    is allowed to control the match target.
     Avoid allowing users to specify regular expressions processed by the server.
-    If you must support user-controllable input in a regular expression, use an allow-list to restrict the expressions users may supply to limit catastrophic backtracking.
+    If you must support user-controllable input in a regular expression, use an allow-list to restrict
+    the expressions users may supply to limit catastrophic backtracking.
   languages:
   - ruby
   severity: ERROR
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_regex_dos.rb
     category: security
-    cwe: 'CWE-1333: Inefficient Regular Expression Complexity'
+    cwe:
+    - 'CWE-1333: Inefficient Regular Expression Complexity'
     owasp:
-      - A09:2004 - Application Denial of Service
+    - A09:2004 - Application Denial of Service
     technology:
     - ruby
     - rails
     references:
     - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM

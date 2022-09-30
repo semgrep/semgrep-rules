@@ -25,22 +25,27 @@ rules:
           $Y.method(...)
       - pattern-inside: |
           $Y.tap(...)
-  message: Found user-controllable input to a reflection method.  This may allow a
-    user to alter program behavior and potentially execute arbitrary instructions
-    in the context of the process.  Do not provide arbitrary user input to `tap`,
-    `method`, or `to_proc`
+  message: Found user-controllable input to a reflection method.  This may allow a user to alter program
+    behavior and potentially execute arbitrary instructions in the context of the process.  Do not provide
+    arbitrary user input to `tap`, `method`, or `to_proc`
   languages:
   - ruby
   severity: ERROR
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_unsafe_reflection_methods.rb
     category: security
-    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp:
     - A03:2021 - Injection
-    - A01:2017 - Injection
     technology:
     - ruby
     - rails
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails6/app/controllers/groups_controller.rb
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
