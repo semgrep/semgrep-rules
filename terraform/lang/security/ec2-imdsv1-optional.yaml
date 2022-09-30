@@ -1,19 +1,30 @@
 rules:
-  - id: ec2-imdsv1-optional
-    languages:
-      - hcl
-    message: >-
-      AWS EC2 Instance allowing use of the IMDSv1
-    metadata:
-      references:
-        - https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service
-        - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options
-      category: security
-      technology:
-        - terraform
-        - aws
-    patterns:
-      - pattern: http_tokens = "optional"
-      - pattern-inside: |
-          metadata_options { ... }
-    severity: ERROR
+- id: ec2-imdsv1-optional
+  languages:
+  - hcl
+  message: >-
+    AWS EC2 Instance allowing use of the IMDSv1
+  metadata:
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    references:
+    - https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  patterns:
+  - pattern: http_tokens = "optional"
+  - pattern-inside: |
+      metadata_options { ... }
+  severity: ERROR

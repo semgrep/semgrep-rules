@@ -1,28 +1,39 @@
 rules:
-  - id: storage-enforce-https
-    message: >-
-      Detected a Storage that was not configured to deny action by default. Add `enable_https_traffic_only = true`
-      in your resource block.
-    patterns:
-      - pattern-not-inside: |
-          resource "azurerm_storage_account" "..." {
-          ...
-            enable_https_traffic_only = true
-          ...
-          }
-      - pattern-inside: |
-          resource "azurerm_storage_account" "..." {
-          ...
-            enable_https_traffic_only = false
-          ...
-          }
-    metadata:
-      category: security
-      technology:
-        - terraform
-        - azure
-      references:
-        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#enable_https_traffic_only
-        - https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer
-    languages: [hcl]
-    severity: WARNING
+- id: storage-enforce-https
+  message: >-
+    Detected a Storage that was not configured to deny action by default. Add `enable_https_traffic_only
+    = true`
+    in your resource block.
+  patterns:
+  - pattern-not-inside: |
+      resource "azurerm_storage_account" "..." {
+      ...
+        enable_https_traffic_only = true
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_storage_account" "..." {
+      ...
+        enable_https_traffic_only = false
+      ...
+      }
+  metadata:
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#enable_https_traffic_only
+    - https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: WARNING
