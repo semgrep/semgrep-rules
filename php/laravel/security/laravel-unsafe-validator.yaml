@@ -3,15 +3,43 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $R
-    - pattern-inside: |
+    - pattern: |
         public function $F(...,Request $R,...){...}
+    - focus-metavariable: $R
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          $this->$PROPERTY
+      - pattern: |
+          $this->$PROPERTY->$GET
+    - metavariable-pattern:
+        metavariable: $PROPERTY
+        patterns:
+        - pattern-either:
+          - pattern: query
+          - pattern: request
+          - pattern: headers
+          - pattern: cookies
+          - pattern: cookie
+          - pattern: files
+          - pattern: file
+          - pattern: allFiles
+          - pattern: input
+          - pattern: all
+          - pattern: post
+          - pattern: json
+    - pattern-either:
+      - pattern-inside: |
+          class $CL extends Illuminate\Http\Request {...}
+      - pattern-inside: |
+          class $CL extends Illuminate\Foundation\Http\FormRequest {...}
   pattern-sinks:
   - patterns:
     - pattern: |
-        Rule::unique($...X)->ignore(...)
-  message: Found a request argument passed to an `ignore()` definition in a Rule constraint.  This can
-    lead to SQL injection.
+        Illuminate\Validation\Rule::unique(...)->ignore(...,$IGNORE,...)
+    - focus-metavariable: $IGNORE
+  message: Found a request argument passed to an `ignore()` definition in a Rule constraint.  This
+    can lead to SQL injection.
   languages:
   - php
   severity: ERROR
