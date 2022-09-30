@@ -1,18 +1,28 @@
 rules:
-  - id: skip-tls-verify-service
-    pattern: |
-      spec:
-        ...
-        insecureSkipTLSVerify: true
-    message: >-
-      Service is disabling TLS certificate verification when communicating with
-      the server. This makes your HTTPS connections insecure. Remove the
-      'insecureSkipTLSVerify: true' key to secure communication.
-    metadata:
-      references:
-        - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#apiservice-v1-apiregistration-k8s-io
-      category: security
-      technology:
-        - kubernetes
-    languages: [yaml]
-    severity: WARNING
+- id: skip-tls-verify-service
+  pattern: |
+    spec:
+      ...
+      insecureSkipTLSVerify: true
+  message: >-
+    Service is disabling TLS certificate verification when communicating with
+    the server. This makes your HTTPS connections insecure. Remove the
+    'insecureSkipTLSVerify: true' key to secure communication.
+  metadata:
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    references:
+    - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#apiservice-v1-apiregistration-k8s-io
+    category: security
+    technology:
+    - kubernetes
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [yaml]
+  severity: WARNING
