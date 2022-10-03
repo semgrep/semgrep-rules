@@ -1,4 +1,90 @@
 rules:
+- id: use-of-md5
+  message: >-
+    Detected MD5 hash algorithm which is considered insecure. MD5 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://github.com/securego/gosec#available-rules
+    category: security
+    technology:
+    - go
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+  pattern-either:
+  - pattern: |
+      md5.New()
+  - pattern: |
+      md5.Sum(...)
+- id: use-of-sha1
+  message: >-
+    Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic
+    signature. Use SHA256 or SHA3 instead.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://github.com/securego/gosec#available-rules
+    category: security
+    technology:
+    - go
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  pattern-either:
+  - pattern: |
+      sha1.New()
+  - pattern: |
+      sha1.Sum(...)
+- id: use-of-DES
+  message: >-
+    Detected DES cipher algorithm which is insecure. The algorithm is
+    considered weak and has been deprecated. Use AES instead.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://github.com/securego/gosec#available-rules
+    category: security
+    technology:
+    - go
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  pattern-either:
+  - pattern: |
+      des.NewTripleDESCipher(...)
+  - pattern: |
+      des.NewCipher(...)
 - id: use-of-rc4
   message: >-
     Detected RC4 cipher algorithm which is insecure. The algorithm has many
@@ -18,9 +104,9 @@ rules:
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: MEDIUM
-    confidence: HIGH
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
   pattern: |-
     rc4.NewCipher(...)

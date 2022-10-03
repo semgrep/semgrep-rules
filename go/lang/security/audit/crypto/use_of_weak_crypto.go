@@ -22,7 +22,7 @@ func test_des() {
 	var tripleDESKey []byte
 	tripleDESKey = append(tripleDESKey, ede2Key[:16]...)
 	tripleDESKey = append(tripleDESKey, ede2Key[:8]...)
-	// todoid: use-of-DES
+	// ruleid: use-of-DES
 	_, err := des.NewTripleDESCipher(tripleDESKey)
 	if err != nil {
 		panic(err)
@@ -46,12 +46,12 @@ func test_md5() {
 		}
 	}()
 
-	// todoid: use-of-md5
+	// ruleid: use-of-md5
 	h := md5.New()
 	if _, err := io.Copy(h, f); err != nil {
 		log.Fatal(err)
 	}
-	// todoid: use-of-md5
+	// ruleid: use-of-md5
 	fmt.Printf("%x", md5.Sum(nil))
 }
 
@@ -69,11 +69,11 @@ func test_sha1() {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	// todoid: use-of-sha1
+	// ruleid: use-of-sha1
 	h := sha1.New()
 	if _, err := io.Copy(h, f); err != nil {
 		log.Fatal(err)
 	}
-	// todoid: use-of-sha1
+	// ruleid: use-of-sha1
 	fmt.Printf("%x", sha1.Sum(nil))
 }
