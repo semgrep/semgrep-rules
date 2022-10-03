@@ -13,14 +13,14 @@ rules:
       - pattern-inside: |
           {..., "Effect": "Allow", ...}
       - pattern-either:
-          - pattern: |
-              "Principal": "*"
-          - pattern: |
-              "Principal": {..., "AWS": "*", ...}
-          - pattern-inside: |
-              "Principal": {..., "AWS": ..., ...}
-          - pattern-regex: |
-              (^\"arn:aws:iam::\*:(.*)\"$)
+        - pattern: |
+            "Principal": "*"
+        - pattern: |
+            "Principal": {..., "AWS": "*", ...}
+        - pattern-inside: |
+            "Principal": {..., "AWS": ..., ...}
+        - pattern-regex: |
+            (^\"arn:aws:iam::\*:(.*)\"$)
   message: >-
     Detected wildcard access granted to Glacier Vault. This means anyone within your
     AWS account ID can perform actions on Glacier resources. Instead, limit to
@@ -31,6 +31,15 @@ rules:
     - aws
     owasp:
     - A05:2021 - Security Misconfiguration
-    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   languages: [hcl]
   severity: ERROR

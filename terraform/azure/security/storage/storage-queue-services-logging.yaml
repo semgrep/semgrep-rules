@@ -1,42 +1,53 @@
 rules:
-  - id: storage-queue-services-logging
-    message: >-
-      Storage Analytics logs detailed information about successful and failed requests to a storage service.
-      This information can be used to monitor individual requests and to diagnose issues with a storage service.
-      Requests are logged on a best-effort basis.
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              resource "azurerm_storage_account" "..." {
-                ...
-                    queue_properties  {
-                      ...
-                    }
-                ...
-              }
-          - pattern-inside: |
-              resource "azurerm_storage_account" "..." {
+- id: storage-queue-services-logging
+  message: >-
+    Storage Analytics logs detailed information about successful and failed requests to a storage service.
+    This information can be used to monitor individual requests and to diagnose issues with a storage
+    service.
+    Requests are logged on a best-effort basis.
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_storage_account" "..." {
+          ...
+              queue_properties  {
                 ...
               }
-      - pattern-not-inside: |
-          resource "azurerm_storage_account" "..." {
-            ...
-                  queue_properties  {
-                    ...
-                    logging {
-                      ...
-                    }
-                    ...
-                  }
-            ...
-          }
-    metadata:
-      category: security
-      technology:
-        - terraform
-        - azure
-      references:
-        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#logging
-        - https://docs.microsoft.com/en-us/azure/storage/common/storage-analytics-logging?tabs=dotnet
-    languages: [hcl]
-    severity: WARNING
+          ...
+        }
+    - pattern-inside: |
+        resource "azurerm_storage_account" "..." {
+          ...
+        }
+  - pattern-not-inside: |
+      resource "azurerm_storage_account" "..." {
+        ...
+              queue_properties  {
+                ...
+                logging {
+                  ...
+                }
+                ...
+              }
+        ...
+      }
+  metadata:
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#logging
+    - https://docs.microsoft.com/en-us/azure/storage/common/storage-analytics-logging?tabs=dotnet
+    owasp:
+    - A10:2017 - Insufficient Logging & Monitoring
+    - A09:2021 - Security Logging and Monitoring Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

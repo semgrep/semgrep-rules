@@ -1,28 +1,39 @@
 rules:
-  - id: ecr-image-scan-on-push
-    patterns:
-      - pattern: resource
-      - pattern-not-inside: |
-          resource "aws_ecr_repository" "..." {
-            ...
-            image_scanning_configuration {
-              ...
-              scan_on_push=true
-              ...
-            }
-            ...
-          }
-      - pattern-inside: |
-          resource "aws_ecr_repository" "..." {
-            ...
-          }
-    languages:
-      - hcl
-    message: >-
-      The ECR Repository isn't configured to scan images on push
-    severity: WARNING
-    metadata:
-      category: security
-      technology:
-        - terraform
-        - aws
+- id: ecr-image-scan-on-push
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "aws_ecr_repository" "..." {
+        ...
+        image_scanning_configuration {
+          ...
+          scan_on_push=true
+          ...
+        }
+        ...
+      }
+  - pattern-inside: |
+      resource "aws_ecr_repository" "..." {
+        ...
+      }
+  languages:
+  - hcl
+  message: >-
+    The ECR Repository isn't configured to scan images on push
+  severity: WARNING
+  metadata:
+    cwe:
+    - 'CWE-1104: Use of Unmaintained Third Party Components'
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A06:2021 - Vulnerable and Outdated Components
+    references:
+    - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

@@ -26,13 +26,18 @@ rules:
   severity: WARNING
   metadata:
     owasp:
-    - A02:2021 - Cryptographic Failures
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
     cwe:
-    - |
-      CWE-311: Missing Encryption of Sensitive Data
+    - 'CWE-311: Missing Encryption of Sensitive Data'
     technology:
     - terraform
     - gcp
     category: security
     references:
     - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

@@ -1,28 +1,36 @@
 rules:
 - id: aws-rds-backup-no-retention
   patterns:
-    - pattern-either: 
-      - pattern: |
-          resource "aws_rds_cluster" $ANYTHING {
-            ...
-            backup_retention_period = 0
-            ...
-          }
-      - pattern: |
-          resource "aws_db_instance" $ANYTHING {
-            ...
-            backup_retention_period = 0
-            ...
-          }
-  message: The AWS RDS has no retention. Missing retention can cause losing important event information. To fix this, set a `backup_retention_period`.
+  - pattern-either:
+    - pattern: |
+        resource "aws_rds_cluster" $ANYTHING {
+          ...
+          backup_retention_period = 0
+          ...
+        }
+    - pattern: |
+        resource "aws_db_instance" $ANYTHING {
+          ...
+          backup_retention_period = 0
+          ...
+        }
+  message: The AWS RDS has no retention. Missing retention can cause losing important event information.
+    To fix this, set a `backup_retention_period`.
   languages: [hcl]
   severity: WARNING
   metadata:
     owasp:
-    - A09:2021 - Security Logging and Monitoring Failures
-    cwe: |
-      CWE-778: Insufficient Logging
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
     technology:
-      - aws
-      - terraform
+    - aws
+    - terraform
     category: security
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

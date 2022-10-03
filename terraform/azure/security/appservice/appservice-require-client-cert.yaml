@@ -1,33 +1,44 @@
 rules:
-  - id: appservice-require-client-cert
-    message: >-
-      Detected an AppService that was not configured to use a client certificate. Add `client_cert_enabled = true`
-      in your resource block.
-    patterns:
-      - pattern: resource
-      - pattern-not-inside: |
-          resource "azurerm_app_service" "..." {
-          ...
-            client_cert_enabled = true
-          ...
-          }
-      - pattern-either:
-          - pattern-inside: |
-              resource "azurerm_app_service" "..." {
-              ...
-              }
-          - pattern-inside: |
-              resource "azurerm_app_service" "..." {
-              ...
-                client_cert_enabled = false
-              ...
-              }
-    metadata:
-      category: security
-      technology:
-        - terraform
-        - azure
-      references:
-        - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#client_cert_enabled
-    languages: [hcl]
-    severity: INFO
+- id: appservice-require-client-cert
+  message: >-
+    Detected an AppService that was not configured to use a client certificate. Add `client_cert_enabled
+    = true`
+    in your resource block.
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_app_service" "..." {
+      ...
+        client_cert_enabled = true
+      ...
+      }
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_app_service" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_app_service" "..." {
+        ...
+          client_cert_enabled = false
+        ...
+        }
+  metadata:
+    cwe:
+    - 'CWE-295: Improper Certificate Validation'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service#client_cert_enabled
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A07:2021 - Identification and Authentication Failures
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: INFO
