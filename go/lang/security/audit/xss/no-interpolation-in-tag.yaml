@@ -1,31 +1,38 @@
 rules:
-  - id: no-interpolation-in-tag
-    message: >-
-      Detected template variable interpolation in an HTML tag.
-      This is potentially vulnerable to cross-site scripting (XSS)
-      attacks because a malicious actor has control over HTML
-      but without the need to use escaped characters. Use explicit
-      tags instead.
-    metadata:
-      cwe:
-        "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site\
-        \ Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://github.com/golang/go/issues/19669
-        - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
-      category: security
-      technology:
-        - generic
-      confidence: MEDIUM
-    languages:
-      - generic
-    severity: WARNING
-    paths:
-      include:
-        - "*.html"
-        - "*.thtml"
-        - "*.gohtml"
-        - "*.tmpl"
-        - "*.tpl"
-    pattern: <{{ ... }} ... >
+- id: no-interpolation-in-tag
+  message: >-
+    Detected template variable interpolation in an HTML tag.
+    This is potentially vulnerable to cross-site scripting (XSS)
+    attacks because a malicious actor has control over HTML
+    but without the need to use escaped characters. Use explicit
+    tags instead.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://github.com/golang/go/issues/19669
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
+    category: security
+    technology:
+    - generic
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  languages:
+  - generic
+  severity: WARNING
+  paths:
+    include:
+    - '*.html'
+    - '*.thtml'
+    - '*.gohtml'
+    - '*.tmpl'
+    - '*.tpl'
+  pattern: <{{ ... }} ... >

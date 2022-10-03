@@ -1,51 +1,56 @@
 rules:
-  - id: go-ssti
-    patterns:
+- id: go-ssti
+  patterns:
+  - pattern-inside: |
+      import ("html/template")
+      ...
+  - pattern: $TEMPLATE = fmt.Sprintf("...", $ARG, ...)
+  - patterns:
+    - pattern-either:
       - pattern-inside: |
-          import ("html/template")
+          func $FN(..., $REQ *http.Request, ...){
           ...
-      - pattern: $TEMPLATE = fmt.Sprintf("...", $ARG, ...)
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  func $FN(..., $REQ *http.Request, ...){
-                  ...
-                  }
-              - pattern-inside: |
-                  func $FN(..., $REQ http.Request, ...){
-                  ...
-                  }
-              - pattern-inside: |
-                  func(..., $REQ *http.Request, ...){
-                  ...
-                  }
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  $ARG := $REQ.URL.Query().Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
-              - pattern-inside: |
-                  $ARG := $REQ.Form.Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
-              - pattern-inside: |
-                  $ARG := $REQ.PostForm.Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
-    message: >-
-      A server-side template injection occurs when an attacker is able to use
-      native template syntax to inject a malicious payload into a template, which 
-      is then executed server-side. When using "html/template" always check that 
-      user inputs are validated and sanitized before included within the template.
-    languages: [go]
-    severity: ERROR
-    metadata:
-      category: security
-      cwe: "CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine"
-      references:
-        - https://www.onsecurity.io/blog/go-ssti-method-research/
-        - http://blog.takemyhand.xyz/2020/05/ssti-breaking-gos-template-engine-to.html
-      technology:
-        - go
-      confidence: HIGH
+          }
+      - pattern-inside: |
+          func $FN(..., $REQ http.Request, ...){
+          ...
+          }
+      - pattern-inside: |
+          func(..., $REQ *http.Request, ...){
+          ...
+          }
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $ARG := $REQ.URL.Query().Get(...)
+          ...
+          $T, $ERR := $TMPL.Parse($TEMPLATE)
+      - pattern-inside: |
+          $ARG := $REQ.Form.Get(...)
+          ...
+          $T, $ERR := $TMPL.Parse($TEMPLATE)
+      - pattern-inside: |
+          $ARG := $REQ.PostForm.Get(...)
+          ...
+          $T, $ERR := $TMPL.Parse($TEMPLATE)
+  message: >-
+    A server-side template injection occurs when an attacker is able to use
+    native template syntax to inject a malicious payload into a template, which  is then executed server-side.
+    When using "html/template" always check that  user inputs are validated and sanitized before included
+    within the template.
+  languages: [go]
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine'
+    references:
+    - https://www.onsecurity.io/blog/go-ssti-method-research/
+    - http://blog.takemyhand.xyz/2020/05/ssti-breaking-gos-template-engine-to.html
+    technology:
+    - go
+    confidence: MEDIUM
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH

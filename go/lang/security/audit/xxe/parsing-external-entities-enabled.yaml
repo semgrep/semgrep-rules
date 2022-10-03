@@ -1,26 +1,33 @@
 rules:
-  - id: parsing-external-entities-enabled
-    patterns:
-      - pattern-inside: |
-          import ("github.com/lestrrat-go/libxml2/parser")
-          ...
-      - pattern: $PARSER := parser.New(parser.XMLParseNoEnt)
-    message: >-
-      Detected enabling of "XMLParseNoEnt", which allows parsing of 
-      external entities and can lead to XXE if user controlled data is parsed 
-      by the library. Instead, do not enable "XMLParseNoEnt" or be sure
-      to adequately sanitize user-controlled data when it is being parsed by this library.
-    languages:
-      - go
-    severity: WARNING
-    metadata:
-      category: security
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      owasp:
-        - "A05:2021 - Security Misconfiguration"
-      references:
-        - https://knowledge-base.secureflag.com/vulnerabilities/xml_injection/xml_entity_expansion_go_lang.html
-        - https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
-      technology:
-        - libxml2
-      confidence: MEDIUM
+- id: parsing-external-entities-enabled
+  patterns:
+  - pattern-inside: |
+      import ("github.com/lestrrat-go/libxml2/parser")
+      ...
+  - pattern: $PARSER := parser.New(parser.XMLParseNoEnt)
+  message: >-
+    Detected enabling of "XMLParseNoEnt", which allows parsing of  external entities and can lead to XXE
+    if user controlled data is parsed  by the library. Instead, do not enable "XMLParseNoEnt" or be sure
+    to adequately sanitize user-controlled data when it is being parsed by this library.
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://knowledge-base.secureflag.com/vulnerabilities/xml_injection/xml_entity_expansion_go_lang.html
+    - https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+    technology:
+    - libxml2
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
