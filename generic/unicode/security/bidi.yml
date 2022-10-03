@@ -1,17 +1,16 @@
-# note: this runs about 30-300% faster with pattern-regex vs pattern
 rules:
 - id: contains-bidirectional-characters
   patterns:
   - pattern-either:
-    - pattern-regex: ‪             # left-to-right embedding (LRE)
-    - pattern-regex: ‫             # right-to-left embedding (RLE)
-    - pattern-regex: ‭             # left-to-right override (LRO)
-    - pattern-regex: ‮             # right-to-left override (RLO)
-    - pattern-regex: ⁦             # left-to-right isolate (LRI)
-    - pattern-regex: ⁧             # right-to-left isolate (RLI)
-    - pattern-regex: ⁨             # first strong isolate (FSI)
-    - pattern-regex: ‬             # pop directional formatting (PDF)
-    - pattern-regex: ⁩             # pop directional isolate (PDI)
+    - pattern-regex: "\u202A"
+    - pattern-regex: "\u202B"
+    - pattern-regex: "\u202D"
+    - pattern-regex: "\u202E"
+    - pattern-regex: "\u2066"
+    - pattern-regex: "\u2067"
+    - pattern-regex: "\u2068"
+    - pattern-regex: "\u202C"
+    - pattern-regex: "\u2069"
   message: >-
     This code contains bidirectional (bidi) characters. While this is useful for support
     of right-to-left languages such as Arabic or Hebrew, it can also be used to trick
@@ -21,12 +20,21 @@ rules:
     If this is not what you were expecting, please review this code in an editor that
     can reveal hidden Unicode characters.
   metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     category: security
     technology:
     - unicode
     references:
     - https://trojansource.codes/
-    confidence: MEDIUM
+    confidence: LOW
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
   languages:
   - bash
   - c
