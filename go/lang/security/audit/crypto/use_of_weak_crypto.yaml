@@ -20,9 +20,9 @@ rules:
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
   pattern-either:
   - pattern: |
       md5.New()
@@ -48,10 +48,10 @@ rules:
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   pattern-either:
   - pattern: |
       sha1.New()
@@ -76,10 +76,10 @@ rules:
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   pattern-either:
   - pattern: |
       des.NewTripleDESCipher(...)
@@ -104,9 +104,9 @@ rules:
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   pattern: |-
     rc4.NewCipher(...)
