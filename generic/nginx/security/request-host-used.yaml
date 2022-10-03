@@ -1,26 +1,35 @@
 rules:
-  - id: request-host-used
-    pattern-either:
-      - pattern: $http_host
-      - pattern: $host
-    paths:
-      include:
-        - "*conf*"
-        - "*nginx*"
-        - "*vhost*"
-        - sites-available/*
-        - sites-enabled/*
-    languages:
-      - generic
-    severity: WARNING
-    message: >-
-      '$http_host' and '$host' variables may contain a malicious value from attacker controlled 'Host' request header.
-      Use an explicitly configured host value or a allowlist for validation.
-    metadata:
-      references:
-        - https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md
-        - https://portswigger.net/web-security/host-header
-      category: security
-      technology:
-        - nginx
-      confidence: MEDIUM
+- id: request-host-used
+  pattern-either:
+  - pattern: $http_host
+  - pattern: $host
+  paths:
+    include:
+    - '*conf*'
+    - '*nginx*'
+    - '*vhost*'
+    - sites-available/*
+    - sites-enabled/*
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    '$http_host' and '$host' variables may contain a malicious value from attacker controlled 'Host' request
+    header.
+    Use an explicitly configured host value or a allowlist for validation.
+  metadata:
+    cwe:
+    - 'CWE-290: Authentication Bypass by Spoofing'
+    references:
+    - https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md
+    - https://portswigger.net/web-security/host-header
+    category: security
+    technology:
+    - nginx
+    confidence: MEDIUM
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
