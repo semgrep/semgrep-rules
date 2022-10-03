@@ -1,18 +1,32 @@
 rules:
-  - id: json-entity-escape
-    pattern-either:
-      - pattern: |
-          ActiveSupport.escape_html_entities_in_json = false
-      - pattern: |
-          config.active_support.escape_html_entities_in_json = false
-    message: >-
-      Checks if HTML escaping is globally disabled for JSON output. This could lead
-      to XSS.
-    metadata:
-      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_entity_escape.rb
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: WARNING
+- id: json-entity-escape
+  pattern-either:
+  - pattern: |
+      ActiveSupport.escape_html_entities_in_json = false
+  - pattern: |
+      config.active_support.escape_html_entities_in_json = false
+  message: >-
+    Checks if HTML escaping is globally disabled for JSON output. This could lead
+    to XSS.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_entity_escape.rb
+    category: security
+    technology:
+    - ruby
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - ruby
+  severity: WARNING

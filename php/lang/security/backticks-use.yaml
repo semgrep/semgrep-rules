@@ -1,14 +1,24 @@
 rules:
-  - id: backticks-use
-    pattern: "`...`;"
-    message: >-
-      Backticks use may lead to command injection vulnerabilities.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/language.operators.execution.php
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/BackticksSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: backticks-use
+  pattern: '`...`;'
+  message: >-
+    Backticks use may lead to command injection vulnerabilities.
+  metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    references:
+    - https://www.php.net/manual/en/language.operators.execution.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/BackticksSniff.php
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  languages: [php]
+  severity: ERROR

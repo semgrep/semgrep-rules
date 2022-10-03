@@ -12,15 +12,24 @@ rules:
         ...
       }
   message: >-
-    Ensure AWS Redshift cluster is encrypted at rest using KMS CMKs. CMKs gives you control over the encryption key in terms of access and rotation.
+    Ensure AWS Redshift cluster is encrypted at rest using KMS CMKs. CMKs gives you control over the encryption
+    key in terms of access and rotation.
   metadata:
     category: security
     technology:
     - terraform
     - aws
     owasp:
-    - A02:2021 - Cryptographic Failures
-    cwe: |
-      CWE-320: Key Management Errors
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
   languages: [hcl]
   severity: WARNING

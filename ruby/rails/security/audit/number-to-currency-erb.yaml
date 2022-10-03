@@ -1,18 +1,28 @@
 rules:
 - id: number-to-currency-erb
   metadata:
-    owasp: 'A3: Injection'
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross Site Scripting')"
-    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_number_to_currency.rb 
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_number_to_currency.rb
     category: security
     technology:
     - rails
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
   message: >-
     Detected user input flowing into number_to_currency helper.
-    One of the parameters to the helper (unit) is 
-    not escaped correctly and could 
-    lead to XSS, which in turn could lead to 
-    sensitive data being exfiltrated. Instead, sanitize
+    One of the parameters to the helper (unit) is  not escaped correctly and could  lead to XSS, which
+    in turn could lead to  sensitive data being exfiltrated. Instead, sanitize
     data with the 'html_escape' or 'h' function
     before passing it into `number_to_currency`
     or upgrade to Rails 4.0.2 or 3.2.16.
@@ -20,8 +30,8 @@ rules:
   severity: WARNING
   paths:
     include:
-      - "*.erb"
-  patterns: 
+    - '*.erb'
+  patterns:
   - pattern-either:
     - pattern: |
         <%= ... number_to_currency(..., unit: params[:$UNIT], ...) ... %>
@@ -31,4 +41,3 @@ rules:
       <%= ... number_to_currency(..., h(unit: params[:$UNIT]), ...) ... %>
   - pattern-not: |
       <%= ... number_to_currency(..., h(unit: params[:$UNIT])) ... %>
-

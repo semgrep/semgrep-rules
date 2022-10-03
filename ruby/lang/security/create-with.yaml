@@ -1,23 +1,32 @@
 rules:
-  - id: create-with
-    patterns:
-      - pattern-not: |
-          $FUNC.create_with($PARAMSB.permit(...))
-      - pattern: |
-          $FUNC.create_with($PARAMSA)
-    message: >-
-      Checks for strong parameter bypass through usage of create_with. Create_with bypasses
-      strong parameter protection, which
-      could allow attackers to set arbitrary attributes on models. To fix this vulnerability,
-      either remove all create_with calls
-      or use the permit function to specify tags that are allowed to be set.
-    metadata:
-      references:
-        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_create_with.rb
-        - https://groups.google.com/g/rubyonrails-security/c/M4chq5Sb540/m/CC1Fh0Y_NWwJ
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: ERROR
+- id: create-with
+  patterns:
+  - pattern-not: |
+      $FUNC.create_with($PARAMSB.permit(...))
+  - pattern: |
+      $FUNC.create_with($PARAMSA)
+  message: >-
+    Checks for strong parameter bypass through usage of create_with. Create_with bypasses
+    strong parameter protection, which
+    could allow attackers to set arbitrary attributes on models. To fix this vulnerability,
+    either remove all create_with calls
+    or use the permit function to specify tags that are allowed to be set.
+  metadata:
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_create_with.rb
+    - https://groups.google.com/g/rubyonrails-security/c/M4chq5Sb540/m/CC1Fh0Y_NWwJ
+    category: security
+    technology:
+    - ruby
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - ruby
+  severity: ERROR

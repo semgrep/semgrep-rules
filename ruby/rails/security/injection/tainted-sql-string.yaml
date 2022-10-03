@@ -1,61 +1,65 @@
 rules:
 - id: tainted-sql-string
   languages:
-    - ruby
+  - ruby
   severity: ERROR
-  message: Detected user input used to manually construct a SQL string. This is
-    usually bad practice because manual construction could accidentally result
-    in a SQL injection. An attacker could use a SQL injection to steal or
-    modify contents of the database. Instead, use a parameterized query which
-    is available by default in most database engines. Alternatively, consider
-    using an object-relational mapper (ORM) such as ActiveRecord which will
-    protect your queries.
+  message: Detected user input used to manually construct a SQL string. This is usually bad practice because
+    manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection
+    to steal or modify contents of the database. Instead, use a parameterized query which is available
+    by default in most database engines. Alternatively, consider using an object-relational mapper (ORM)
+    such as ActiveRecord which will protect your queries.
   metadata:
-    cwe: >
-      CWE-89: Improper Neutralization of Special Elements used in an SQL
-      Command ('SQL Injection')
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
     owasp:
-      - A01:2017 - Injection
-      - A03:2021 - Injection
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
     category: security
     technology:
-      - rails
+    - rails
     references:
-      - https://rorsecurity.info/portfolio/ruby-on-rails-sql-injection-cheat-sheet
+    - https://rorsecurity.info/portfolio/ruby-on-rails-sql-injection-cheat-sheet
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
   mode: taint
   pattern-sources:
-    - patterns:
-        - pattern-either:
-            - pattern: params
-            - pattern: request
+  - patterns:
+    - pattern-either:
+      - pattern: params
+      - pattern: request
   pattern-sinks:
-    - patterns:
+  - patterns:
+    - pattern-either:
+      - patterns:
         - pattern-either:
-            - patterns:
-                - pattern-either:
-                    - pattern: |
-                        $RECORD.where($X,...)
-                    - pattern: |
-                        $RECORD.find(..., :conditions => $X,...)
-                - focus-metavariable: $X
-            - patterns:
-                - pattern: |
-                    "$SQLVERB#{$EXPR}..."
-                - pattern-not-inside: |
-                    $FUNC("...",  "...#{$EXPR}...",...)
-                - focus-metavariable: $SQLVERB
-                - pattern-regex: (?i)(select|delete|insert|create|update|alter|drop)\b
-            - patterns:
-                - pattern-either:
-                    - pattern: Kernel::sprintf("$SQLSTR", $EXPR)
-                    - pattern: |
-                        "$SQLSTR" + $EXPR
-                    - pattern: |
-                        "$SQLSTR" % $EXPR
-                - pattern-not-inside: |
-                    $FUNC("...",  "...#{$EXPR}...",...)
-                - focus-metavariable: $EXPR
-                - metavariable-regex:
-                    metavariable: $SQLSTR
-                    regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+          - pattern: |
+              $RECORD.where($X,...)
+          - pattern: |
+              $RECORD.find(..., :conditions => $X,...)
+        - focus-metavariable: $X
+      - patterns:
+        - pattern: |
+            "$SQLVERB#{$EXPR}..."
+        - pattern-not-inside: |
+            $FUNC("...",  "...#{$EXPR}...",...)
+        - focus-metavariable: $SQLVERB
+        - pattern-regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+      - patterns:
+        - pattern-either:
+          - pattern: Kernel::sprintf("$SQLSTR", $EXPR)
+          - pattern: |
+              "$SQLSTR" + $EXPR
+          - pattern: |
+              "$SQLSTR" % $EXPR
+        - pattern-not-inside: |
+            $FUNC("...",  "...#{$EXPR}...",...)
+        - focus-metavariable: $EXPR
+        - metavariable-regex:
+            metavariable: $SQLSTR
+            regex: (?i)(select|delete|insert|create|update|alter|drop)\b

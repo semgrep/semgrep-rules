@@ -1,20 +1,30 @@
 rules:
-  - id: unlink-use
-    patterns:
-      - pattern: unlink(...)
-      - pattern-not: unlink("...",...)
-    message: >-
-      Using user input when deleting files with `unlink()` is potentially dangerous.
-      A malicious actor could use this to modify
-      or access files they have no right to.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/function.unlink
-        - https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control.html
-      category: security
-      technology:
-        - php
-      owasp: "A5: Broken Access Control"
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-    languages: [php]
-    severity: WARNING
+- id: unlink-use
+  patterns:
+  - pattern: unlink(...)
+  - pattern-not: unlink("...",...)
+  message: >-
+    Using user input when deleting files with `unlink()` is potentially dangerous.
+    A malicious actor could use this to modify
+    or access files they have no right to.
+  metadata:
+    references:
+    - https://www.php.net/manual/en/function.unlink
+    - https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control.html
+    category: security
+    technology:
+    - php
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages: [php]
+  severity: WARNING

@@ -1,23 +1,29 @@
 rules:
-  - id: memory-marshal-create-span
-    severity: WARNING
-    languages:
-      - C#
-    metadata:
-      cwe:
-        - "CWE-125: Out-of-bounds Read"
-        - "CWE-787: Out-of-bounds Write"
-      owasp: 
-        - "A04:2021 - Insecure Design"
-      references:
-        - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal.createspan?view=net-6.0
-        - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal.createreadonlyspan?view=net-6.0
-      category: security
-      technology:
-        - .net
-      confidence: LOW
-    message: >-
-      MemoryMarshal.CreateSpan and MemoryMarshal.CreateReadOnlySpan should be used with caution, as the length argument is not checked.
-    pattern-either:
-      - pattern: MemoryMarshal.CreateSpan(...)
-      - pattern: MemoryMarshal.CreateReadOnlySpan(...)
+- id: memory-marshal-create-span
+  severity: WARNING
+  languages:
+  - C#
+  metadata:
+    cwe:
+    - 'CWE-125: Out-of-bounds Read'
+    owasp:
+    - A04:2021 - Insecure Design
+    references:
+    - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal.createspan?view=net-6.0
+    - https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal.createreadonlyspan?view=net-6.0
+    category: security
+    technology:
+    - .net
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  message: >-
+    MemoryMarshal.CreateSpan and MemoryMarshal.CreateReadOnlySpan should be used with caution, as the
+    length argument is not checked.
+  pattern-either:
+  - pattern: MemoryMarshal.CreateSpan(...)
+  - pattern: MemoryMarshal.CreateReadOnlySpan(...)

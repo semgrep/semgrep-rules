@@ -1,57 +1,61 @@
 rules:
-  - id: unsafe-path-combine
-    mode: taint
-    pattern-sources:
-      - patterns:
-          - pattern: $A
-          - pattern-inside: |
-              Path.Combine(...,$A,...)
-          - pattern-inside: |
-              public $TYPE $M(...,$A,...){...}
-          - pattern-not-inside: |
-              <... Path.GetFileName($A) != $A ...>
-    pattern-sinks:
-      - patterns:
-          - pattern: $X
-          - pattern-inside: |
-              File.$METHOD($X,...)
-          - metavariable-regex:
-              metavariable: $METHOD
-              regex: (?i)^(read|write)
-    pattern-sanitizers:
-      - pattern: |
-          Path.GetFileName(...)
-      - patterns:
-          - pattern-inside: |
-              $X = Path.GetFileName(...);
-              ...
-          - pattern: $X
-      - patterns:
-          - pattern: $X
-          - pattern-inside: |
-              if(<... Path.GetFileName($X) != $X ...>){
-                ...
-                throw new $EXCEPTION(...);
-              }
-              ...
-    message: String argument $A is used to read or write data from a file via
-      Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied
-      data this can lead to path traversal.
-    languages:
-      - csharp
-    severity: WARNING
-    metadata:
-      category: security
-      confidence: MEDIUM
-      license: MIT
-      references:
-        - https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/
-        - https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks
-      technology:
-        - .net
-      cwe:
-        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory
-          ('Path Traversal')"
-      owasp:
-        - A05:2017 - Broken Access Control
-        - A01:2021 - Broken Access Control
+- id: unsafe-path-combine
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: $A
+    - pattern-inside: |
+        Path.Combine(...,$A,...)
+    - pattern-inside: |
+        public $TYPE $M(...,$A,...){...}
+    - pattern-not-inside: |
+        <... Path.GetFileName($A) != $A ...>
+  pattern-sinks:
+  - patterns:
+    - pattern: $X
+    - pattern-inside: |
+        File.$METHOD($X,...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: (?i)^(read|write)
+  pattern-sanitizers:
+  - pattern: |
+      Path.GetFileName(...)
+  - patterns:
+    - pattern-inside: |
+        $X = Path.GetFileName(...);
+        ...
+    - pattern: $X
+  - patterns:
+    - pattern: $X
+    - pattern-inside: |
+        if(<... Path.GetFileName($X) != $X ...>){
+          ...
+          throw new $EXCEPTION(...);
+        }
+        ...
+  message: String argument $A is used to read or write data from a file via Path.Combine without direct
+    sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: MEDIUM
+    license: MIT
+    references:
+    - https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks
+    technology:
+    - .net
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM

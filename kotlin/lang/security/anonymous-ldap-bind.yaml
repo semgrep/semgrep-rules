@@ -1,21 +1,33 @@
 rules:
-  - id: anonymous-ldap-bind
-    metadata:
-      cwe: "CWE-287: Improper Authentication"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ANONYMOUS
-      category: security
-      technology:
-        - kotlin
-    message: >-
-      Detected anonymous LDAP bind.
-      This permits anonymous users to execute LDAP statements. Consider enforcing
-      authentication for LDAP. See https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
-      for more information.
-    severity: WARNING
-    pattern: |
-      $ENV.put($CTX.SECURITY_AUTHENTICATION, "none")
-      ...
-      $DCTX = InitialDirContext($ENV, ...)
-    languages:
-      - kt
+- id: anonymous-ldap-bind
+  metadata:
+    cwe:
+    - 'CWE-287: Improper Authentication'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A07:2021 - Identification and Authentication Failures
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#LDAP_ANONYMOUS
+    category: security
+    technology:
+    - kotlin
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  message: >-
+    Detected anonymous LDAP bind.
+    This permits anonymous users to execute LDAP statements. Consider enforcing
+    authentication for LDAP. See https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
+    for more information.
+  severity: WARNING
+  pattern: |
+    $ENV.put($CTX.SECURITY_AUTHENTICATION, "none")
+    ...
+    $DCTX = InitialDirContext($ENV, ...)
+  languages:
+  - kt

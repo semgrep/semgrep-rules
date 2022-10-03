@@ -115,4 +115,57 @@ class ChartofAccount extends Controller
 
         return redirect(url("/accounting/chart_of_accounts"))->withSuccess("Successfully updated!");
     }
+
+    function update_account_post2(Request $request){
+        $validate = Validator::make($request->all(),[
+            "accounting_code" => [
+              // ruleid: laravel-unsafe-validator
+              Rule::unique("chart_of_accounts")->ignore($id, $request->input('column')),
+              "required"
+            ],
+        ]);
+
+        if($validate->fails()){
+            return redirect(url("/accounting/chart_of_accounts"))->withErrors($validate);
+        }
+
+        $newaccount = \App\ChartOfAccount::find($request->chart_id);
+        $newaccount->accounting_code = $request->accounting_code;
+        $newaccount->accounting_name = $request->accounting_name;
+        $newaccount->category = $request->category;
+        $newaccount->save();
+
+        return redirect(url("/accounting/chart_of_accounts"))->withSuccess("Successfully updated!");
+    }
+}
+
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+
+class TestRequest extends FormRequest
+{
+    public function rules()
+    {
+
+      $id = $this->query->get('hello');
+      // ruleid: laravel-unsafe-validator
+      $test_unique1 = Rule::unique('users')->ignore($id);
+
+      $hello = 1;
+      // ruleid: laravel-unsafe-validator
+      $test_unique2 = Rule::unique('users')->ignore($hello, $this->input('hello'));
+
+      // ok: laravel-unsafe-validator
+      $ok_unique = Rule::unique('users')->ignore($this->user()->id);
+
+      return [
+        'title' => [
+          'required',
+           $test_unique1,
+           $test_unique2
+        ]
+      ];
+    }
 }

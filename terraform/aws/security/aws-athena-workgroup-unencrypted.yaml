@@ -1,36 +1,37 @@
 rules:
 - id: aws-athena-workgroup-unencrypted
   patterns:
-    - pattern: |
-        resource "aws_athena_workgroup" $ANYTHING {
+  - pattern: |
+      resource "aws_athena_workgroup" $ANYTHING {
+        ...
+        configuration {
           ...
-          configuration {
+          result_configuration {
             ...
-            result_configuration {
+          }
+          ...
+        }
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_athena_workgroup" $ANYTHING {
+        ...
+        configuration {
+          ...
+          result_configuration {
+            ...
+            encryption_configuration {
               ...
             }
             ...
           }
           ...
         }
-    - pattern-not-inside: |
-        resource "aws_athena_workgroup" $ANYTHING {
-          ...
-          configuration {
-            ...
-            result_configuration {
-              ...
-              encryption_configuration {
-                ...
-              }
-              ...
-            }
-            ...
-          }
-          ...
-        }
+        ...
+      }
   message: >-
-    The AWS Athena Work Group is unencrypted. The AWS KMS encryption key protects backups in the work group. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
+    The AWS Athena Work Group is unencrypted. The AWS KMS encryption key protects backups in the work
+    group. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
   languages: [hcl]
   severity: WARNING
   metadata:
@@ -39,5 +40,14 @@ rules:
     - terraform
     - aws
     owasp:
-    - A02:2021 - Cryptographic Failures
-    cwe: 'CWE-311: Missing Encryption of Sensitive Data'
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

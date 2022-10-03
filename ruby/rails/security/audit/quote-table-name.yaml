@@ -1,22 +1,34 @@
 rules:
 - id: quote-table-name
   metadata:
-    owasp: 'A3: Injection'
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_quote_table_name.rb
     category: security
     technology:
     - rails
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
   message: >-
     Detected usage of `quote_table_name`, which has a vulnerability
     allowing malicious users to inject arbitrary SQL into a query.
-    This is fixed in Rails versions 3.0.10, 2.3.13, and 3.1.0.rc5 and above. 
-    If updating your Rails version is not possible, sanitize input thoroughly before passing it to
+    This is fixed in Rails versions 3.0.10, 2.3.13, and 3.1.0.rc5 and above.  If updating your Rails version
+    is not possible, sanitize input thoroughly before passing it to
     a `quote_table_name` call.
   languages: [ruby]
   severity: WARNING
   mode: taint
   pattern-sources:
-    - pattern: params[$X]
+  - pattern: params[$X]
   pattern-sinks:
-    - pattern: quote_table_name(...)
+  - pattern: quote_table_name(...)

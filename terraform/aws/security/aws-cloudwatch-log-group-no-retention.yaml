@@ -1,25 +1,33 @@
 rules:
 - id: aws-cloudwatch-log-group-no-retention
   patterns:
-    - pattern: |
-        resource "aws_cloudwatch_log_group" $ANYTHING {
-          ...
-        }
-    - pattern-not-inside: |
-        resource "aws_cloudwatch_log_group" $ANYTHING {
-          ...
-          retention_in_days = ...
-          ...
-        }
-  message: The AWS CloudWatch Log Group has no retention. Missing retention in log groups can cause losing important event information.
+  - pattern: |
+      resource "aws_cloudwatch_log_group" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_cloudwatch_log_group" $ANYTHING {
+        ...
+        retention_in_days = ...
+        ...
+      }
+  message: The AWS CloudWatch Log Group has no retention. Missing retention in log groups can cause losing
+    important event information.
   languages: [hcl]
   severity: WARNING
   metadata:
     owasp:
-    - A09:2021 - Security Logging and Monitoring Failures
-    cwe: |
-      CWE-778: Insufficient Logging
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
     technology:
-      - aws
-      - terraform
+    - aws
+    - terraform
     category: security
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

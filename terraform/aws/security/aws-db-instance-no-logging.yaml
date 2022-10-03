@@ -1,25 +1,33 @@
 rules:
 - id: aws-db-instance-no-logging
   patterns:
-    - pattern: |
-        resource "aws_db_instance" $ANYTHING {
-          ...
-        }
-    - pattern-not-inside: |
-        resource "aws_db_instance" $ANYTHING {
-          ...
-          enabled_cloudwatch_logs_exports = [$SOMETHING, ...]
-          ...
-        }
+  - pattern: |
+      resource "aws_db_instance" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_db_instance" $ANYTHING {
+        ...
+        enabled_cloudwatch_logs_exports = [$SOMETHING, ...]
+        ...
+      }
   message: Database instance has no logging. Missing logs can cause missing important event information.
   languages: [hcl]
   severity: WARNING
   metadata:
     owasp:
-    - A09:2021 - Security Logging and Monitoring Failures
-    cwe: |
-      CWE-778: Insufficient Logging
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
     technology:
-      - aws
-      - terraform
+    - aws
+    - terraform
     category: security
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: LOW
+    confidence: MEDIUM

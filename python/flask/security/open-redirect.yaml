@@ -32,6 +32,9 @@ rules:
         $V = flask.request.$W
         ...
         flask.redirect(<... $V ...>, ...)
+  - pattern-not: flask.redirect(flask.request.path)
+  - pattern-not: flask.redirect(flask.request.path + ...)
+  - pattern-not: flask.redirect(f"{flask.request.path}...")
   message: >-
     Data from request is passed to redirect().
     This is an open redirect and could be exploited.

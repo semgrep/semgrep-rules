@@ -1,20 +1,30 @@
 rules:
-  - id: unserialize-use
-    patterns:
-      - pattern: unserialize(...)
-      - pattern-not: unserialize("...",...)
-    message: >-
-      Calling `unserialize()` with user input in the pattern can lead to arbitrary code
-      execution.
-      Consider using JSON or structured data approaches (e.g. Google Protocol Buffers).
-    metadata:
-      references:
-        - https://www.php.net/manual/ru/function.unserialize.php
-        - https://owasp.org/www-project-top-ten/2017/A8_2017-Insecure_Deserialization.html
-      category: security
-      technology:
-        - php
-      owasp: "A8: Insecure Deserialization"
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-    languages: [php]
-    severity: WARNING
+- id: unserialize-use
+  patterns:
+  - pattern: unserialize(...)
+  - pattern-not: unserialize("...",...)
+  message: >-
+    Calling `unserialize()` with user input in the pattern can lead to arbitrary code
+    execution.
+    Consider using JSON or structured data approaches (e.g. Google Protocol Buffers).
+  metadata:
+    references:
+    - https://www.php.net/manual/ru/function.unserialize.php
+    - https://owasp.org/www-project-top-ten/2017/A8_2017-Insecure_Deserialization.html
+    category: security
+    technology:
+    - php
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [php]
+  severity: WARNING

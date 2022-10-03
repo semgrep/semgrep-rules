@@ -1,28 +1,36 @@
 rules:
-  - id: rails-check-page-caching-cve
-    patterns:
-      - pattern-inside: |
-          class $CONTROLLER < $BIGCONTROLLER
-          ...
-          end
-      - pattern: |
-          caches_page :$ACTION
-    message: >-
-      All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable to arbitrary file write and remote code execution (CVE-2020-8159) when using caching methods. Update to version 1.2.1 or greater or remove calls to 'caches_page'.
-    languages:
-      - ruby
-    severity: WARNING
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      owasp:
-        - "A01:2017 - Injection"
-        - "A03:2021 - Injection"
-        - "A09:2017 - Using Components with Known Vulnerabilities"
-        - "A06:2021 - Vulnerable and Outdated Components"
-      technology:
-        - rails
-      category: security
-      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_page_caching_cve.rb
-      references:
-        - https://nvd.nist.gov/vuln/detail/CVE-2020-8159
-        - https://groups.google.com/g/rubyonrails-security/c/CFRVkEytdP8
+- id: rails-check-page-caching-cve
+  patterns:
+  - pattern-inside: |
+      class $CONTROLLER < $BIGCONTROLLER
+      ...
+      end
+  - pattern: |
+      caches_page :$ACTION
+  message: >-
+    All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable to arbitrary file write
+    and remote code execution (CVE-2020-8159) when using caching methods. Update to version 1.2.1 or greater
+    or remove calls to 'caches_page'.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    technology:
+    - rails
+    category: security
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_page_caching_cve.rb
+    references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2020-8159
+    - https://groups.google.com/g/rubyonrails-security/c/CFRVkEytdP8
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

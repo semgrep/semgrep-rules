@@ -8,19 +8,25 @@ rules:
         ...
       </system.web>
   message: >-
-    OWASP guidance recommends disabling tracing for production applications to prevent accidental leakage of sensitive application information.
+    OWASP guidance recommends disabling tracing for production applications to prevent accidental leakage
+    of sensitive application information.
   languages: [generic]
   severity: WARNING
   paths:
     include:
-      - "*web.config*"
-  metadata: 
+    - '*web.config*'
+  metadata:
     category: security
-    cwe: "CWE-1323: Improper Management of Sensitive Trace Data"
+    cwe:
+    - 'CWE-1323: Improper Management of Sensitive Trace Data'
     owasp: 'A5: Security Misconfiguration'
     technology:
-      - .net
-    confidence: HIGH
+    - .net
+    confidence: LOW
     references:
-      - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#asp-net-web-forms-guidance
-      - https://msdn.microsoft.com/en-us/library/e8z01xdh.aspx
+    - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#asp-net-web-forms-guidance
+    - https://msdn.microsoft.com/en-us/library/e8z01xdh.aspx
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM

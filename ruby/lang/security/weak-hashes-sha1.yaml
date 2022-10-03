@@ -1,20 +1,30 @@
 rules:
-  - id: weak-hashes-sha1
-    message: >-
-      Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision
-      by Google, which could lead to vulnerabilities.
-      Use SHA256, SHA3 or other hashing functions instead.
-    metadata:
-      references:
-        - https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html
-        - https://shattered.io/
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: WARNING
-    pattern-either:
-      - pattern: Digest::SHA1.$FUNC
-      - pattern: OpenSSL::Digest::SHA1.$FUNC
-      - pattern: OpenSSL::HMAC.$FUNC("sha1",...)
+- id: weak-hashes-sha1
+  message: >-
+    Should not use SHA1 to generate hashes. There is a proven SHA1 hash collision
+    by Google, which could lead to vulnerabilities.
+    Use SHA256, SHA3 or other hashing functions instead.
+  metadata:
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    references:
+    - https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html
+    - https://shattered.io/
+    category: security
+    technology:
+    - ruby
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - ruby
+  severity: WARNING
+  pattern-either:
+  - pattern: Digest::SHA1.$FUNC
+  - pattern: OpenSSL::Digest::SHA1.$FUNC
+  - pattern: OpenSSL::HMAC.$FUNC("sha1",...)
