@@ -2,15 +2,15 @@ rules:
 - id: contains-bidirectional-characters
   patterns:
   - pattern-either:
-    - pattern-regex: ‪
-    - pattern-regex: ‫
-    - pattern-regex: ‭
-    - pattern-regex: ‮
-    - pattern-regex: ⁦
-    - pattern-regex: ⁧
-    - pattern-regex: ⁨
-    - pattern-regex: ‬
-    - pattern-regex: ⁩
+    - pattern-regex: ‪             # left-to-right embedding (LRE)
+    - pattern-regex: ‫             # right-to-left embedding (RLE)
+    - pattern-regex: ‭             # left-to-right override (LRO)
+    - pattern-regex: ‮             # right-to-left override (RLO)
+    - pattern-regex: ⁦             # left-to-right isolate (LRI)
+    - pattern-regex: ⁧             # right-to-left isolate (RLI)
+    - pattern-regex: ⁨             # first strong isolate (FSI)
+    - pattern-regex: ‬             # pop directional formatting (PDF)
+    - pattern-regex: ⁩             # pop directional isolate (PDI)
   message: >-
     This code contains bidirectional (bidi) characters. While this is useful for support
     of right-to-left languages such as Arabic or Hebrew, it can also be used to trick
