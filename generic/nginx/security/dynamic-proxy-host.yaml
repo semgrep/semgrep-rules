@@ -1,26 +1,35 @@
 rules:
-  - id: dynamic-proxy-host
-    paths:
-      include:
-        - "*.conf"
-        - "*.vhost"
-        - sites-available/*
-        - sites-enabled/*
-    languages:
-      - generic
-    severity: WARNING
-    message: >-
-      The host for this proxy URL is dynamically determined. This can be dangerous if the host can be injected by an
-      attacker because it may forcibly alter destination of the proxy.
-      Consider hardcoding acceptable destinations and retrieving them with 'map' or something similar.
-    metadata:
-      source-rule-url: https://github.com/yandex/gixy/blob/master/docs/en/plugins/ssrf.md
-      references:
-        - https://nginx.org/en/docs/http/ngx_http_map_module.html
-      category: security
-      technology:
-        - nginx
-      confidence: MEDIUM
-    pattern-either:
-      - pattern: proxy_pass $SCHEME://$$HOST ...;
-      - pattern: proxy_pass $$SCHEME://$$HOST ...;
+- id: dynamic-proxy-host
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    The host for this proxy URL is dynamically determined. This can be dangerous if the host can be injected
+    by an
+    attacker because it may forcibly alter destination of the proxy.
+    Consider hardcoding acceptable destinations and retrieving them with 'map' or something similar.
+  metadata:
+    source-rule-url: https://github.com/yandex/gixy/blob/master/docs/en/plugins/ssrf.md
+    references:
+    - https://nginx.org/en/docs/http/ngx_http_map_module.html
+    category: security
+    technology:
+    - nginx
+    confidence: MEDIUM
+    cwe:
+    - "CWE-441: Unintended Proxy or Intermediary ('Confused Deputy')"
+    owasp:
+    - A01:2021 - Broken Access Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  pattern-either:
+  - pattern: proxy_pass $SCHEME://$$HOST ...;
+  - pattern: proxy_pass $$SCHEME://$$HOST ...;

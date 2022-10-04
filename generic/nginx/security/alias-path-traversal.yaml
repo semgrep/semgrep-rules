@@ -1,32 +1,45 @@
 rules:
-  - id: alias-path-traversal
-    patterns:
-      - pattern: |
-          location ... {
-            ...
-            alias .../;
-            ...
-          }
-      - pattern-not-inside: location /.../ { ... ... }
-    paths:
-      include:
-        - "*.conf"
-        - "*.vhost"
-        - sites-available/*
-        - sites-enabled/*
-    fix-regex:
-      regex: location\s+([A-Za-z0-9/-_\.]+)
-      replacement: location \1/
-    languages:
-      - generic
-    severity: WARNING
-    message: >-
-      The alias in this location block is subject to a path traversal
-      because the location path does not end in a path separator (e.g., '/').
-      To fix, add a path separator to the end of the path.
-    metadata:
-      source-rule-url: https://github.com/yandex/gixy/blob/master/docs/en/plugins/aliastraversal.md
-      category: security
-      technology:
-        - nginx
-      confidence: HIGH
+- id: alias-path-traversal
+  patterns:
+  - pattern: |
+      location ... {
+        ...
+        alias .../;
+        ...
+      }
+  - pattern-not-inside: location /.../ { ... ... }
+  paths:
+    include:
+    - '*.conf'
+    - '*.vhost'
+    - sites-available/*
+    - sites-enabled/*
+  fix-regex:
+    regex: location\s+([A-Za-z0-9/-_\.]+)
+    replacement: location \1/
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    The alias in this location block is subject to a path traversal
+    because the location path does not end in a path separator (e.g., '/').
+    To fix, add a path separator to the end of the path.
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    source-rule-url: https://github.com/yandex/gixy/blob/master/docs/en/plugins/aliastraversal.md
+    category: security
+    technology:
+    - nginx
+    confidence: LOW
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW

@@ -1,4 +1,3 @@
-# note: this runs about 30-300% faster with pattern-regex vs pattern
 rules:
 - id: contains-bidirectional-characters
   patterns:
@@ -21,12 +20,21 @@ rules:
     If this is not what you were expecting, please review this code in an editor that
     can reveal hidden Unicode characters.
   metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     category: security
     technology:
     - unicode
     references:
     - https://trojansource.codes/
-    confidence: MEDIUM
+    confidence: LOW
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
   languages:
   - bash
   - c
