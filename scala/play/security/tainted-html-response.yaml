@@ -3,15 +3,26 @@ rules:
   mode: taint
   metadata:
     category: security
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: "A7: Cross-Site Scripting (XSS)"
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
     technology:
     - scala
     - play
-    confidence: HIGH
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
   message: >-
-    Detected a request with potential user-input going into an `Ok()` response. 
-    This bypasses any view or template environments, including HTML escaping, which may
+    Detected a request with potential user-input going into an `Ok()` response.  This bypasses any view
+    or template environments, including HTML escaping, which may
     expose this application to cross-site scripting (XSS) vulnerabilities.
     Consider using a view technology such as Twirl which automatically escapes HTML views.
   pattern-sources:
@@ -87,4 +98,4 @@ rules:
             }
   severity: WARNING
   languages:
-    - scala
+  - scala

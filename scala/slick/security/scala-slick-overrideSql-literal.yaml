@@ -7,16 +7,27 @@ rules:
       $QUERY = "..."
       ...
   message: >-
-      Detected a formatted string in a SQL statement.
-      This could lead to SQL injection if variables in the SQL statement are not properly sanitized.
-      Avoid using non literal values in `overrideSql(...)`.
+    Detected a formatted string in a SQL statement.
+    This could lead to SQL injection if variables in the SQL statement are not properly sanitized.
+    Avoid using non literal values in `overrideSql(...)`.
   languages: [scala]
   severity: ERROR
   metadata:
     category: security
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     technology:
     - scala
     - slick
-    confidence: MEDIUM
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH

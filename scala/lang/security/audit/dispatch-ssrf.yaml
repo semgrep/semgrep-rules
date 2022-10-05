@@ -1,27 +1,31 @@
 rules:
 - id: dispatch-ssrf
   patterns:
-    - pattern: url($URL)
+  - pattern: url($URL)
+  - pattern-inside: |
+      import dispatch._
+      ...
+  - pattern-either:
     - pattern-inside: |
-        import dispatch._
-        ...
-    - pattern-either:
-      - pattern-inside: |
-          def $FUNC(..., $URL: $T, ...) = $A {
-            ...
-          }
-      - pattern-inside: |
-          def $FUNC(..., $URL: $T, ...) = {
-            ...
-          }
+        def $FUNC(..., $URL: $T, ...) = $A {
+          ...
+        }
+    - pattern-inside: |
+        def $FUNC(..., $URL: $T, ...) = {
+          ...
+        }
   message: >-
     A parameter being passed directly into `url` most likely lead to SSRF.
-    This could allow an attacker to send data to their own server, potentially exposing sensitive data sent with this request.
+    This could allow an attacker to send data to their own server, potentially exposing sensitive data
+    sent with this request.
     They could also probe internal servers or other resources that the server runnig this code can access.
-    Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the correct host.
+    Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the correct
+    host.
   metadata:
-    cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-    owasp: "A1: Injection"
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
     references:
     - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
     - https://dispatchhttp.org/Dispatch.html
@@ -29,6 +33,12 @@ rules:
     technology:
     - scala
     - dispatch
-    confidence: MEDIUM
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
   languages: [scala]
   severity: WARNING
