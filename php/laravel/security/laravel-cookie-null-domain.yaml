@@ -21,6 +21,9 @@ rules:
         'domain' => env('$NAME', $DEFAULT),
         ...
       ];
+  paths:
+    include:
+    - '*session.php'
   message: >-
     Found a configuration file where the domain attribute  is not set to null. It is recommended (unless
     you are using sub-domain  route registrations) to set this attribute to null so that only the
