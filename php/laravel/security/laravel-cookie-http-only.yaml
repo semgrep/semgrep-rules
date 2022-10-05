@@ -21,6 +21,9 @@ rules:
         'http_only' => env('$NAME', $DEFAULT),
         ...
       ];
+  paths:
+    include:
+    - '*session.php'
   message: >-
     Found a configuration file where the HttpOnly attribute  is not set to true. Setting `http_only` to
     true makes sure  that your cookies are inaccessible from Javascript, which
