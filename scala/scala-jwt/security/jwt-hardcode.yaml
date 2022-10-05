@@ -1,72 +1,83 @@
 rules:
-  - id: scala-jwt-hardcoded-secret
-    languages:
-      - scala
-    message: >-
-      Hardcoded JWT secret or private key is used.
-      This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-      Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
-    metadata:
-      category: security
-      cwe: "CWE-522: Insufficiently Protected Credentials"
-      owasp: "A2: Broken Authentication"
-      source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-      technology:
-        - jwt
-      confidence: HIGH
-    pattern-either:
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC256("...");
-      - pattern: |
-          $SECRET = "...";
+- id: scala-jwt-hardcoded-secret
+  languages:
+  - scala
+  message: >-
+    Hardcoded JWT secret or private key is used.
+    This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets
+    in environment variables)
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    source-rule-url: https://r2c.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    technology:
+    - jwt
+    confidence: HIGH
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+  pattern-either:
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC256("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $DECL $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
           ...
           com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $DECL $SECRET = "...";
-            ...
-            def $FUNC (...): $RETURNTYPE = {
-              ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC256($SECRET);
-              ...
-            }
-            ...
-          }
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC384("...");
-      - pattern: |
-          $SECRET = "...";
+          ...
+        }
+        ...
+      }
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC384("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $DECL $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
           ...
           com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $DECL $SECRET = "...";
-            ...
-            def $FUNC (...): $RETURNTYPE = {
-              ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC384($SECRET);
-              ...
-            }
-            ...
-          }
-      - pattern: |
-          com.auth0.jwt.algorithms.Algorithm.HMAC512("...");
-      - pattern: |
-          $SECRET = "...";
+          ...
+        }
+        ...
+      }
+  - pattern: |
+      com.auth0.jwt.algorithms.Algorithm.HMAC512("...");
+  - pattern: |
+      $SECRET = "...";
+      ...
+      com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
+  - pattern: |
+      class $CLASS {
+        ...
+        $DECL $SECRET = "...";
+        ...
+        def $FUNC (...): $RETURNTYPE = {
           ...
           com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
-      - pattern: |
-          class $CLASS {
-            ...
-            $DECL $SECRET = "...";
-            ...
-            def $FUNC (...): $RETURNTYPE = {
-              ...
-              com.auth0.jwt.algorithms.Algorithm.HMAC512($SECRET);
-              ...
-            }
-            ...
-          }
-    severity: ERROR
+          ...
+        }
+        ...
+      }
+  severity: ERROR

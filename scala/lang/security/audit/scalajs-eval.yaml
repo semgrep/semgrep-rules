@@ -24,20 +24,28 @@ rules:
         import scala.scalajs.$X
         ...
   message: >-
-    `eval()` function evaluates JavaScript code represented as a string. Executing JavaScript from a string is an enormous security risk.
+    `eval()` function evaluates JavaScript code represented as a string. Executing JavaScript from a string
+    is an enormous security risk.
     It is far too easy for a bad actor to run arbitrary code when you use `eval()`.
-    Do not use eval(). Alternatively: 
-    Ensure evaluated content is not definable by external sources.
-    If it’s not possible, strip everything except alphanumeric characters from an input provided for the command string and arguments.
+    Do not use eval(). Alternatively:  Ensure evaluated content is not definable by external sources.
+    If it’s not possible, strip everything except alphanumeric characters from an input provided for the
+    command string and arguments.
   metadata:
     references:
-      - https://www.scala-js.org/doc/
-    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-    owasp: "A1: Injection"
+    - https://www.scala-js.org/doc/
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
     category: security
     technology:
-      - scala
-      - scala-js
-    confidence: HIGH
+    - scala
+    - scala-js
+    confidence: LOW
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
   languages: [scala]
   severity: WARNING
