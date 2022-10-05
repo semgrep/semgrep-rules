@@ -1,39 +1,18 @@
 rules:
 - id: use-after-free
-  pattern-either:
-  - patterns:
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern: free($VAR);
+        - focus-metavariable: $VAR
+  pattern-sinks:
     - pattern: |
-        free($VAR);
-        ...
-        $VAR->$FUNC(...);
-    - pattern-not: |
-        free($VAR);
-        ...
-        $VAR = NULL;
-        ...
-        $VAR->$FUNC(...);
-  - patterns:
-    - pattern: |
-        free($VAR);
-        ...
-        $FUNC(..., $VAR->$MEMBER, ...);
-    - pattern-not: |
-        free($VAR);
-        ...
-        $VAR = NULL;
-        ...
-        $FUNC(..., $VAR->$MEMBER, ...);
-  - patterns:
-    - pattern: |
-        free($VAR);
-        ...
-        if ($VAR->$MEMBER) ...
-    - pattern-not: |
-        free($VAR);
-        ...
-        $VAR = NULL;
-        ...
-        if($VAR->$MEMBER) ...     
+        $VAR->$ACCESSOR
+  pattern-sanitizers:
+      - patterns:
+        - pattern: |
+            $VAR = NULL;
+        - focus-metavariable: $VAR  
   message: >-
     Variable '$VAR' was used after being freed. This can lead to undefined behavior.
   metadata:
