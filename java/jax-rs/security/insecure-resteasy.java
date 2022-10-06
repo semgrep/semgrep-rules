@@ -31,7 +31,7 @@ public class PoC_resource {
     @POST
     @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
-    // todook: insecure-resteasy-deserialization
+    // todo: insecure-resteasy-deserialization
     @Consumes(MediaType.APPLICATION_JSON)
     public Map<String, Integer> doCount(ArrayList<Object> elements) {
         HashMap<String, Integer> result = new HashMap<String, Integer>();
