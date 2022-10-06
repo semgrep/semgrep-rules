@@ -1,31 +1,68 @@
 rules:
-- id: default-resteasy-provider-abuse
+- id: insecure-resteasy-deserialization
+  message: >-
+    When a Restful webservice endpoint is configured to use wildcard  mediaType {*/*} as a value for the
+    @Consumes annotation, an attacker  could abuse the SerializableProvider by sending a HTTP Request
+    with a  Content-Type of application/x-java-serialized-object. The body of that  request would be processed
+    by the SerializationProvider and could  contain a malicious payload, which may lead to arbitrary code
+    execution  when calling the $Y.getObject method.
   severity: WARNING
-  languages:
-  - java
   metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
     cwe:
     - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2021-top25: true
+    cwe2022-top25: true
     owasp:
     - A08:2017 - Insecure Deserialization
     - A08:2021 - Software and Data Integrity Failures
     references:
     - https://access.redhat.com/blogs/766093/posts/3162112
-    category: security
-    technology:
-    - jax-rs
-    confidence: LOW
-    cwe2022-top25: true
-    cwe2021-top25: true
     subcategory:
     - audit
-    likelihood: LOW
-    impact: MEDIUM
+    technology:
+    - jax-rs
+  languages:
+  - java
+  pattern-either:
+  - pattern: |
+      @Consumes({"application/x-java-serialized-object"})
+  - pattern: |
+      @Consumes({"*/*"})
+  - pattern: |
+      @Consumes("*/*")
+  - pattern: |
+      @Consumes({MediaType.WILDCARD_TYPE})
+- id: default-resteasy-provider-abuse
   message: >-
     When a Restful webservice endpoint isn't configured with a @Consumes  annotation, an attacker could
     abuse the SerializableProvider by sending a  HTTP Request with a Content-Type of application/x-java-serialized-object.  The
     body of that request would be processed by the SerializationProvider  and could contain a malicious
     payload, which may lead to arbitrary code  execution.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://access.redhat.com/blogs/766093/posts/3162112
+    subcategory:
+    - audit
+    technology:
+    - jax-rs
+  languages:
+  - java
   patterns:
   - pattern: |
       @Path("...")
