@@ -8,13 +8,21 @@ rules:
     execution  when calling the $Y.getObject method.
   severity: WARNING
   metadata:
-    confidence: MEDIUM
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
     category: security
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2021-top25: true
+    cwe2022-top25: true
     owasp:
     - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
     references:
     - https://access.redhat.com/blogs/766093/posts/3162112
+    subcategory:
+    - audit
     technology:
     - jax-rs
   languages:
