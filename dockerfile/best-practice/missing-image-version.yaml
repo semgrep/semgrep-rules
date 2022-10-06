@@ -1,36 +1,36 @@
 rules:
-  - id: missing-image-version
-    patterns:
-      - pattern: FROM $IMAGE
-      - pattern-not: FROM $IMAGE:$VERSION
-      - pattern-not: FROM $IMAGE@$DIGEST
-      - pattern-not: FROM $IMAGE:$VERSION@$DIGEST
-      - pattern-not: FROM scratch
-      - pattern-not-inside: |
-          FROM $FIRSTIMAGE:$VERSION
-          ...
-          FROM $IMAGE
-      - pattern-not-inside: |
-          FROM $FIRSTIMAGE:$IMAGE@$DIGEST
-          ...
-          FROM $IMAGE
-      - pattern-not-inside: |
-          FROM $FIRSTIMAGE:$VERSION@$DIGEST
-          ...
-          FROM $IMAGE
-      - pattern-not-inside: |
-          FROM scratch
-          ...
-          FROM $IMAGE
-    message: >-
-      Images should be tagged with an explicit version to produce
-      deterministic container images.
-    severity: WARNING
-    languages: [dockerfile]
-    metadata:
-      source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3006
-      references:
-        - https://github.com/hadolint/hadolint/wiki/DL3006
-      category: best-practice
-      technology:
-        - dockerfile
+- id: missing-image-version
+  message: >-
+    Images should be tagged with an explicit version to produce
+    deterministic container images.
+  severity: WARNING
+  metadata:
+    category: best-practice
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3006
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3006
+    technology:
+    - dockerfile
+  languages: [dockerfile]
+  patterns:
+  - pattern: FROM $IMAGE
+  - pattern-not: FROM $IMAGE:$VERSION
+  - pattern-not: FROM $IMAGE@$DIGEST
+  - pattern-not: FROM $IMAGE:$VERSION@$DIGEST
+  - pattern-not: FROM scratch
+  - pattern-not-inside: |
+      FROM $FIRSTIMAGE:$VERSION
+      ...
+      FROM $IMAGE
+  - pattern-not-inside: |
+      FROM $FIRSTIMAGE:$IMAGE@$DIGEST
+      ...
+      FROM $IMAGE
+  - pattern-not-inside: |
+      FROM $FIRSTIMAGE:$VERSION@$DIGEST
+      ...
+      FROM $IMAGE
+  - pattern-not-inside: |
+      FROM scratch
+      ...
+      FROM $IMAGE
