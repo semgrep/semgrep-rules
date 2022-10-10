@@ -21,6 +21,9 @@ rules:
         'secure' => env('$NAME', $DEFAULT),
         ...
       ];
+  paths:
+    include:
+    - '*session.php'
   message: >-
     Found a configuration file where the secure attribute is not set to 'true'.
     Setting 'secure' to 'true' prevents the client from transmitting the cookie  over unencrypted channels

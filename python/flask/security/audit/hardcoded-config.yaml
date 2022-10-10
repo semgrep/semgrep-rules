@@ -1,26 +1,101 @@
 rules:
+- id: avoid_hardcoded_config_TESTING
+  message: Hardcoded variable `TESTING` detected. Use environment variables or config files instead
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-489: Active Debug Code'
+    owasp:
+    - A06:2021 - Security Misconfiguration
+    references:
+    - https://bento.dev/checks/flask/avoid-hardcoded-config/
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
+    subcategory:
+    - audit
+    technology:
+    - flask
+  languages: [python]
+  pattern-either:
+  - pattern: $M.config['TESTING'] = True
+  - pattern: $M.config['TESTING'] = False
+  - pattern: $M.update(TESTING=True, ...)
+  - pattern: $M.update(TESTING=False, ...)
+- id: avoid_hardcoded_config_SECRET_KEY
+  message: Hardcoded variable `SECRET_KEY` detected. Use environment variables or config files instead
+  severity: ERROR
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-489: Active Debug Code'
+    owasp:
+    - A06:2021 - Security Misconfiguration
+    references:
+    - https://bento.dev/checks/flask/avoid-hardcoded-config/
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
+    subcategory:
+    - audit
+    technology:
+    - flask
+  languages: [python]
+  pattern-either:
+  - pattern: $M.update(SECRET_KEY="=~/.*/")
+  - pattern: $M.config['SECRET_KEY'] = "=~/.*/"
+- id: avoid_hardcoded_config_ENV
+  message: Hardcoded variable `ENV` detected. Set this by using FLASK_ENV environment variable
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-489: Active Debug Code'
+    owasp:
+    - A06:2021 - Security Misconfiguration
+    references:
+    - https://bento.dev/checks/flask/avoid-hardcoded-config/
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
+    subcategory:
+    - audit
+    technology:
+    - flask
+  languages: [python]
+  pattern-either:
+  - pattern: $M.update(ENV="=~/^development|production$/")
+  - pattern: $M.config['ENV'] = "=~/^development|production$/"
 - id: avoid_hardcoded_config_DEBUG
+  message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-489: Active Debug Code'
+    owasp:
+    - A06:2021 - Security Misconfiguration
+    references:
+    - https://bento.dev/checks/flask/avoid-hardcoded-config/
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
+    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
+    subcategory:
+    - audit
+    technology:
+    - flask
+  languages: [python]
   pattern-either:
   - pattern: $M.update(DEBUG=True)
   - pattern: $M.update(DEBUG=False)
   - pattern: $M.config['DEBUG'] = True
   - pattern: $M.config['DEBUG'] = False
-  message: Hardcoded variable `DEBUG` detected. Set this by using FLASK_DEBUG environment variable
-  metadata:
-    cwe:
-    - 'CWE-489: Active Debug Code'
-    owasp: 'A6: Security Misconfiguration'
-    references:
-    - https://bento.dev/checks/flask/avoid-hardcoded-config/
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#builtin-configuration-values
-    - https://flask.palletsprojects.com/en/1.1.x/config/?highlight=configuration#environment-and-debug-features
-    category: security
-    technology:
-    - flask
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-  languages: [python]
-  severity: WARNING

@@ -1,31 +1,43 @@
 rules:
 - id: dangerous-shell-run
   patterns:
-    - pattern: Seq($SH, "-c", $CMD, ...)
-    - pattern-not: Seq($SH, "-c", "...", ...)
-    - pattern-inside: |
-        import sys.process
-        ...
-    - pattern-not-inside: |
-        $CMD = "..."
-        ...
-    - pattern-either:
-      - pattern-inside: Seq(...).!
-      - pattern-inside: Seq(...).!!
-      - pattern-inside: Seq(...).lazyLines
-    - metavariable-regex:
-        metavariable: $SH
-        regex: '"(sh|bash|ksh|csh|tcsh|zsh)"'
+  - pattern: Seq($SH, "-c", $CMD, ...)
+  - pattern-not: Seq($SH, "-c", "...", ...)
+  - pattern-inside: |
+      import sys.process
+      ...
+  - pattern-not-inside: |
+      $CMD = "..."
+      ...
+  - pattern-either:
+    - pattern-inside: Seq(...).!
+    - pattern-inside: Seq(...).!!
+    - pattern-inside: Seq(...).lazyLines
+  - metavariable-regex:
+      metavariable: $SH
+      regex: '"(sh|bash|ksh|csh|tcsh|zsh)"'
   message: >-
     Found dynamic content used for the external process.
-    This is dangerous if arbitrary data can reach this function call because it allows a malicious actor to execute commands.
+    This is dangerous if arbitrary data can reach this function call because it allows a malicious actor
+    to execute commands.
     Ensure your variables are not controlled by users or sufficiently sanitized.
   languages: [scala]
   severity: ERROR
-  metadata: 
+  metadata:
     category: security
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     technology:
     - scala
-    confidence: MEDIUM
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH

@@ -13,21 +13,32 @@ rules:
       regex: \w*
   message: >-
     Raw html content controlled by a variable detected. You may be accidentally bypassing secure methods
-    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability, which could
-    let attackers steal sensitive user data. Try to avoid using `Html()` or consider properly sanitizing input data.
+    of rendering HTML by manually constructing HTML and this could create a cross-site scripting vulnerability,
+    which could
+    let attackers steal sensitive user data. Try to avoid using `Html()` or consider properly sanitizing
+    input data.
   languages: [generic]
   severity: WARNING
   paths:
     include:
-      - "*.html"
+    - '*.html'
   metadata:
     category: security
-    cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp: "A7: Cross-Site Scripting (XSS)"
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
     references:
-      - https://www.playframework.com/documentation/2.8.x/ScalaTemplates#Escaping
+    - https://www.playframework.com/documentation/2.8.x/ScalaTemplates#Escaping
     technology:
     - scala
     - play
     - twirl
-    confidence: MEDIUM
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM

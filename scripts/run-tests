@@ -29,7 +29,7 @@ error() {
 # e.g.
 #   PIPENV_PIPFILE=~/semgrep/cli/Pipfile SEMGREP='pipenv run semgrep' make test
 #
-if [[ -z "$SEMGREP" ]]; then
+if [[ -z "${SEMGREP-}" ]]; then
   SEMGREP="semgrep"
 fi
 
