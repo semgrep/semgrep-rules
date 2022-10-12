@@ -13,20 +13,33 @@ jobs:
     if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
-      - name: Print github.head_ref. branch that a PR is opened from
-        run: echo ${{ github.head_ref }}
-      - name: Print github.ref. branch a push is completed to (only release branch in current config)
-        run: echo ${{ github.ref }}
-      - name: Print github.event_name. either push or pull_request
-        run: echo ${{github.event_name}}
-      - name: Print github.event.number. PR issue number to post comment back to
-        run: echo ${{github.event.number}}
-      - name: Print $GITHUB_SHA . The commit hash that triggered the github workflow
-        run: echo $GITHUB_SHA
-      - name: Print github.sha . The commit hash that triggered the github workflow
-        run: echo ${{github.sha}}
-      - name: Print github.ref . The git ref that triggered the github workflow
-        run: echo ${{github.ref}}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: changed-files
+        name: get changed files
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "::set-output name=CHANGED_FILES::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )"
+      - id: changed-langs
+        name: get changed langs
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "::set-output name=CHANGED_LANGS::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs -0 | awk -F/ '{print $1}' | sed -E '/^$|.github|bash|contrib|fingerprints|generic|json|problem-based-packs|scripts|stats|trusted_python|yaml/d' )"
+      - id: print-changed-files
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
+        name: debugging step - print changed files
+        run: echo $CHANGED_FILES
+      - id: print-changed-langs
+        env:
+          CHANGED_LANGS: ${{ steps.changed-langs.outputs.CHANGED_LANGS }}
+        name: debugging step - print changed langs
+        run: echo $CHANGED_LANGS
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
         run: |
