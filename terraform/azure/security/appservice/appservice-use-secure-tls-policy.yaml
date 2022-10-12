@@ -5,8 +5,9 @@ rules:
     "1.2"`
     in your resource block.
   patterns:
-  - pattern: min_tls_version = $ANYTHING
-  - pattern-not-inside: min_tls_version = "1.2"
+  - pattern-regex: site_config\s*{\n?(\s*#.*\n)*\s*min_tls_version\s*=\s*"\d\.\d"\n?\s*}
+  - pattern-not-regex: 
+      \s*min_tls_version\s*=\s*"1.2"
   metadata:
     cwe:
     - 'CWE-326: Inadequate Encryption Strength'
