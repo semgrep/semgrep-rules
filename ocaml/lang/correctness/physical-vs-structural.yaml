@@ -1,13 +1,15 @@
 rules:
   - id: physical-equal
     pattern: $X == $Y
-    message: You probably want the structural inequality operator =
+    message: You probably want the structural equality operator =
     languages: [ocaml]
     severity: WARNING
     metadata:
       category: correctness
       technology:
         - ocaml
+      references:
+        - https://v2.ocaml.org/api/Stdlib.html#1_Comparisons
   - id: physical-not-equal
     pattern: $X != $Y
     message: You probably want the structural inequality operator <>
@@ -17,3 +19,5 @@ rules:
       category: correctness
       technology:
         - ocaml
+      references:
+        - https://v2.ocaml.org/api/Stdlib.html#1_Comparisons
