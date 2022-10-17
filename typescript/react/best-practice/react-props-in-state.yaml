@@ -43,7 +43,9 @@ rules:
               metavariable: $PROP
               regex: ^(?!default|initial).*$
     message: >-
-      It is a bad practice to stop the data flow in rendering by copying props into state.
+      Copying a prop into state in React -- this is bad practice as all updates
+      to it are ignored. Instead, read props directly in your component and avoid
+      copying props into state.
     metadata:
       references:
         - https://overreacted.io/writing-resilient-components/#principle-1-dont-stop-the-data-flow

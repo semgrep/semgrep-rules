@@ -1,10 +1,13 @@
 rules:
 - id: overly-permissive-file-permission
   message: >-
+    Detected file permissions that are overly permissive (read, write, and execute).
     It is generally a bad practices to set overly permissive file permission such
     as read+write+exec for all users.
     If the file affected is a configuration, a binary, a script or sensitive data,
     it can lead to privilege escalation or information leakage.
+    Instead, follow the principle of least privilege and give users only the 
+    permissions they need.
   severity: WARNING
   languages: [java]
   metadata:

@@ -1,8 +1,10 @@
 rules:
 - id: path-join-resolve-traversal
   message: >-
-    Possible writing/reading outside of the destination,
-    make sure that the target path is nested in the intended destination.
+    Detected possible user input going into a `path.join` or `path.resolve`
+    function. This could possibly lead to a path traversal vulnerability, 
+    where the attacker can access arbitrary files stored in the file system.
+    Instead, be sure to sanitize or validate user input first.
   metadata:
     owasp:
     - A05:2017 - Broken Access Control
