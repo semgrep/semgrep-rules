@@ -19,9 +19,7 @@ jobs:
       - id: changed-files
         name: get changed files
         run: |
-          git diff --name-only origin/develop origin/update-semgrep-scanner-trigger| xargs -0 | sed '/^$/d' | sed '/^\(.github\|bash|contrib|fingerprints|generic|json|problem-based-packs|scripts|stats|trusted_python|yaml\)/d' | tr '\n' ' '
-          CHANGED_FILES=$(git diff --name-only origin/develop origin/update-semgrep-scanner-trigger| xargs -0 | sed '/^$/d' | sed '/^\(.github\|bash|contrib|fingerprints|generic|json|problem-based-packs|scripts|stats|trusted_python|yaml\)/d' | tr '\n' ' ')
-          echo "changed_files=\"$CHANGED_FILES\"" >> GITHUB_ENV
+          CHANGED_FILES=$(git diff --name-only origin/develop origin/update-semgrep-scanner-trigger| xargs -0 | sed '/^$/d' | sed '/^\(.github\|bash|contrib|fingerprints|generic|json|problem-based-packs|scripts|stats|trusted_python|yaml\)/d' | tr '\n' ' '); echo "changed_files=\"$CHANGED_FILES\"" >> GITHUB_ENV
       - id: print-changed-files
         name: debugging step - print changed files
         run: echo "${{env.changed_files}}"
