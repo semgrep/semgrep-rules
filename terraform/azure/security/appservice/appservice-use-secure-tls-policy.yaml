@@ -6,6 +6,10 @@ rules:
     in your resource block.
   patterns:
   - pattern: min_tls_version = $ANYTHING
+  - pattern-inside: |
+      resource "azurerm_app_service" "$NAME" {
+        ...
+      }
   - pattern-not-inside: min_tls_version = "1.2"
   metadata:
     cwe:

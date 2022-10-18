@@ -1,0 +1,74 @@
+on:
+  # pull_request_target:
+  workflow_run:
+    workflows: ["smth-else"]
+    types:
+    - completed
+  pull_request:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: workflow-run-target-code-checkout
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head.sha }}
+
+      - uses: actions/setup-node@v1
+      - run: |
+          npm install
+          npm build
+
+      - uses: completely/fakeaction@v2
+        with:
+          arg1: ${{ secrets.supersecret }}
+
+      - uses: fakerepo/comment-on-pr@v1
+        with:
+          message: |
+            Thank you!
+
+  build2:
+    name: Build and test 2
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: workflow-run-target-code-checkout
+      - uses: actions/checkout@v2.3.4
+        with:
+          ref: ${{ github.event.workflow_run.head.sha }}
+
+      - uses: actions/setup-node@v1
+      - run: |
+          npm install
+          npm build
+
+      - uses: completely/fakeaction@v2
+        with:
+          arg1: ${{ secrets.supersecret }}
+
+      - uses: fakerepo/comment-on-pr@v1
+        with:
+          message: |
+            Thank you!
+
+  this-is-safe-because-no-checkout:
+    name: Echo
+    runs-on: ubuntu-latest
+    steps:
+      # ok: workflow-run-target-code-checkout
+      - name: echo
+        run: |
+          echo "Hello, world"
+
+  spelling:
+    name: Spell checking
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: workflow-run-target-code-checkout
+      - name: checkout-merge
+        if: contains(github.event_name, 'pull_request')
+        uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{github.event.workflow_run.number}}/merge
