@@ -27,16 +27,16 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern: '[..., $STRING, ...].join(...)'
+      - pattern: |
+          [..., $STRING, ...].join(...)
       - metavariable-pattern:
-          patterns:
-          - pattern: <$TAG ...
           metavariable: $STRING
           language: generic
-    - patterns:
-      - pattern: '[..., $STRING, ...].join(...)'
-      - metavariable-pattern:
           patterns:
-          - pattern: '... </$TAG'
-          metavariable: $STRING
-          language: generic
+              - pattern-either: 
+                  - pattern: |
+                      ... </$TAG
+                  - pattern: |
+                      <$TAG ...
+      - pattern-not: |
+          [..., "$HARDCODED", ...].join("...")

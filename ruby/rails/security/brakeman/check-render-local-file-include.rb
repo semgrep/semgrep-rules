@@ -9,3 +9,11 @@
     #ruleid: check-render-local-file-include
     render :file => "/some/path/#{page}"
   end
+
+  def test_param_ok
+    map = make_map
+    thing = map[params.id]
+    # ok: check-render-local-file-include
+    render :file => "/some/path/#{thing}"
+  end
+    
