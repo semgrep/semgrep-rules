@@ -45,6 +45,8 @@ jobs:
         run: |
             curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.ref}}\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"0000\", \"post_back\" : false }"
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
         if: github.event_name == 'pull_request'
         run: |
           curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"${{github.event.repository.name}}\", \"commit\" : \"${{github.event.pull_request.head.sha}}\", \"changed_files\" : \"$CHANGED_FILES\"}"
