@@ -1,0 +1,12 @@
+rules:
+- id: jwt-verify-token
+  patterns:
+  - pattern-inside: "def $FUNC(...):\n  ...\n"
+  - pattern-either:
+    - pattern: decode=jwt.decode(..., verify=False,...)
+  message: JWT Library set to False, This is an Auth bypass vulnerability.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: correctness
