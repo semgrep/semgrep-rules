@@ -1,0 +1,24 @@
+rules:
+  - id: use_deprecated_cipher_algorithm
+    patterns:
+      - pattern: $KEYTYPE.Create(...);
+      - metavariable-pattern:
+          metavariable: $KEYTYPE
+          pattern-either:
+            - pattern: DES
+            - pattern: RC2
+    message: Usage of deprecated cipher algorithm detected
+    languages:
+      - csharp
+    severity: ERROR
+    metadata:
+      cwe:
+        - CWE-327: Use of a Broken or Risky Cryptographic Algorithm
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      technology:
+        - .net
+      category: security
+      references:
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rc2?view=net-6.0#remarks
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rc2?view=net-6.0#remarks

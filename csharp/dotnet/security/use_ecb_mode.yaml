@@ -1,0 +1,28 @@
+rules:
+  - id: use_ecb_mode
+    patterns:
+      - pattern-either:
+          - pattern: ($KEYTYPE $KEY).EncryptEcb(...);
+          - pattern: ($KEYTYPE $KEY).DecryptEcb(...);
+          - pattern: ($KEYTYPE $KEY).Mode = CipherMode.ECB;
+      - metavariable-pattern:
+          metavariable: $KEYTYPE
+          pattern-either:
+            - pattern: SymmetricAlgorithm
+            - pattern: Aes
+            - pattern: Rijndael
+            - pattern: DES
+            - pattern: TripleDES
+            - pattern: RC2
+    message: Usage of ECB mode detected
+    languages:
+      - csharp
+    severity: WARNING
+    metadata:
+      cwe:
+        - CWE-327: Use of a Broken or Risky Cryptographic Algorithm
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      technology:
+        - .net
+      category: security
