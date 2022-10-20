@@ -7,7 +7,9 @@ rules:
           pattern-either:
             - pattern: DES
             - pattern: RC2
-    message: Usage of deprecated cipher algorithm detected
+    message: |
+      Usage of deprecated cipher algorithm detected.
+      Use Aes or ChaCha20Poly1305 instead.
     languages:
       - csharp
     severity: ERROR
@@ -20,5 +22,7 @@ rules:
         - .net
       category: security
       references:
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.des?view=net-6.0#remarks
         - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rc2?view=net-6.0#remarks
-        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rc2?view=net-6.0#remarks
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.aes?view=net-6.0
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.chacha20poly1305?view=net-6.0
