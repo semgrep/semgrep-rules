@@ -1,0 +1,16 @@
+rules:
+- id: msg.sender-not-used-in-transferFrom
+  patterns:
+  - pattern-regex: transferFrom\(
+  - pattern-not-regex: transferFrom\(msg.sender
+  message: msg.sender is not being used when calling erc20.transferFrom
+  languages:
+  - solidity
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - solidity
+    cwe: 'CWE 285: The software does not perform or incorrectly performs an authorization
+      check when an actor attempts to access a resource or perform an action.'
+    owasp: A1:2021 access
