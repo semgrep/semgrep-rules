@@ -1,0 +1,49 @@
+rules:
+- id: sql-injection-yii-framework-potential-apps3c
+  languages:
+    - php
+  severity: INFO
+  message: >-
+      Detected a SQL operation with Yii framework with a concatenated 
+      value. This could lead to SQL injection if variables in the SQL 
+      statement are not properly sanitized.
+  pattern-either:  
+
+    - patterns:
+
+      - pattern-either:
+
+        #- pattern: $SELECT(...) # Too many false positives
+        #- pattern: $AAA->$SELECT(...) # Too many false positives
+
+        - pattern: $SELECT($AAA . $BBB) 
+        - pattern: $SELECT([...,$AAA . $BBB,...]) 
+        - pattern: $OBJ->$SELECT($AAA . $BBB) 
+        - pattern: $OBJ->$SELECT([...,$AAA . $BBB,...]) 
+
+
+      - metavariable-regex:
+          metavariable: $SELECT
+          regex: (^(select|insert|update|delete|selectDistinct|from|where|andWhere|orWhere|join|leftJoin|rightJoin|crossJoin|naturalJoin|group|having|order|orderBy|limit|offset|union)$)
+
+
+    - patterns:
+
+      - pattern-either:
+
+        #- pattern: $SELECT(...) # Too many false positives
+        #- pattern: $AAA->$SELECT(...) # Too many false positives
+
+        - pattern: $SELECT($FORMATSTRING) 
+        - pattern: $SELECT([...,$FORMATSTRING,...]) 
+        - pattern: $OBJ->$SELECT($FORMATSTRING) 
+        - pattern: $OBJ->$SELECT([...,$FORMATSTRING,...])
+
+
+      - metavariable-regex:
+          metavariable: $SELECT
+          regex: (^(select|insert|update|delete|selectDistinct|from|where|andWhere|orWhere|join|leftJoin|rightJoin|crossJoin|naturalJoin|group|having|order|orderBy|limit|offset|union)$)    
+
+      - metavariable-regex:
+          metavariable: $FORMATSTRING
+          regex: (^.*\{.*\}.*$)

@@ -1,0 +1,31 @@
+rules:
+- id: xss-yii-framework-potential-apps3c
+  languages:
+    - php
+  severity: WARNING
+  message: >-
+      Detects potential XSS with YII framework when the content of PHP 
+      variables is put in HTML code using <?= => blocks without making
+      use of YII XSS-safe filters.
+
+  patterns:
+
+    - pattern-inside: $EXTERNAL    
+
+    - patterns:
+
+      - pattern-not-inside: HtmlPurifier::process(...)
+      - pattern-not-inside: Html::encode(...)
+
+      - patterns: 
+        - pattern: $VAR
+        - metavariable-regex:
+            metavariable: $VAR
+            regex: (^\$[a-zA-Z0-9]+$)
+
+
+    - metavariable-regex:
+        metavariable: $EXTERNAL
+        regex: (\<\?\=.*\>)
+
+

@@ -1,0 +1,35 @@
+rules:
+- id: auth-bypass-yii-framework-potential-apps3c
+  languages:
+    - php
+  severity: WARNING
+  message: >-
+      Authentication and authorization checks are often implemented in 
+      "beforeAction" functions in Yii framework. When an authentication
+      or authorization check is failed, the user is usually redirected to 
+      a login page or to an exception one. The "beforeAction must return 
+      "false" also if the user is redirected, otherwise the code protected 
+      by the "beforeAction" function is executed before the redirection, 
+      posing a secrious security risk.
+
+  patterns:  
+
+      - pattern-inside: |
+          function beforeAction(...) {
+            ...
+          }
+
+      - patterns:
+
+        - pattern: return $RETVAL;
+
+        - pattern-not: return true;
+        - pattern-not: return false;
+        - pattern-not: return $AAAA.beforeAction(...);
+        - pattern-not: return $AAAA::beforeAction(...);
+        - pattern-not: return beforeAction(...);
+
+
+
+
+

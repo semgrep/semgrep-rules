@@ -1,0 +1,449 @@
+rules:
+- id: sql-injection-yii-framework-apps3c
+  languages:
+    - php
+  severity: WARNING
+  message: >-
+      Detected a formatted string in a Yii SQL operation with a concatenated 
+      value that came from a function argument. This could lead to SQL
+      injection if variables in the SQL statement are not properly sanitized.
+  patterns:
+
+    - pattern-either:
+        - pattern-inside: |
+            function $FUNC(...,$PAR,...) {
+              ...
+            }
+        - pattern-inside: |
+            function $FUNC(...,$PAR = $PVAL,...) {
+              ...
+            }    
+
+    - pattern-either:
+
+      # SELECT WITH PARAM AS ARGUMENT
+      - pattern: $SELECT([...,$PRE . <... $PAR ...> . $POST,...])
+      - pattern: $SELECT([...,<... $PAR ...> . $POST,...])
+      - pattern: $SELECT([...,$PRE . <... $PAR ...>,...])
+      #- pattern: $SELECT([...,<... $PAR ...>,...]) #Too many false positives
+      - pattern: $SELECT([...,$PAR,...])
+
+      - pattern: $SELECT($PRE . <... $PAR ...> . $POST,...)
+      - pattern: $SELECT(<... $PAR ...> . $POST,...)
+      - pattern: $SELECT($PRE . <... $PAR ...>,...)
+      #- pattern: $SELECT(<... $PAR ...>,...) #Too many false positives
+      - pattern: $SELECT($PAR,...)
+
+      - pattern: $SELECT($PRE . <... $PAR ...> . $POST)
+      - pattern: $SELECT(<... $PAR ...> . $POST)
+      - pattern: $SELECT($PRE . <... $PAR ...>)
+      #- pattern: $SELECT(<... $PAR ...>) #Too many false positives
+      - pattern: $SELECT($PAR)
+
+      - pattern: $AAA->$SELECT([...,$PRE . <... $PAR ...> . $POST,...])
+      - pattern: $AAA->$SELECT([...,<... $PAR ...> . $POST,...])
+      - pattern: $AAA->$SELECT([...,$PRE . <... $PAR ...>,...])
+      #- pattern: $AAA->$SELECT([...,<... $PAR ...>,...]) #Too many false positives
+      - pattern: $AAA->$SELECT([...,$PAR,...])
+
+      - pattern: $AAA->$SELECT($PRE . <... $PAR ...> . $POST,...)
+      - pattern: $AAA->$SELECT(<... $PAR ...> . $POST,...)
+      - pattern: $AAA->$SELECT($PRE . <... $PAR ...>,...)
+      #- pattern: $AAA->$SELECT(<... $PAR ...>,...) #Too many false positives
+      - pattern: $AAA->$SELECT($PAR,...)
+
+      - pattern: $AAA->$SELECT($PRE . <... $PAR ...> . $POST)
+      - pattern: $AAA->$SELECT(<... $PAR ...> . $POST)
+      - pattern: $AAA->$SELECT($PRE . <... $PAR ...>)
+      #- pattern: $AAA->$SELECT(<... $PAR ...>) #Too many false positives    
+      - pattern: $AAA->$SELECT($PAR)
+
+      # SELECT WITH ARGUMENT COPIED FROM PARAM (1 time, if >1 times it does not work)
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT($COPY,...);
+
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $SELECT([...,<... $COPY ...>,...]); #Too many false positives
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $SELECT([...,$COPY,...]);
+
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT($COPY,...);
+
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR;
+      #      ...
+      #      $AAA->$SELECT([...,<... $COPY ...>,...]); #Too many false positives      
+      - pattern: |
+            $COPY = $PAR;
+            ...
+            $AAA->$SELECT([...,$COPY,...]);
+
+      # SELECT WITH ARGUMENT COPIED FROM FIELD OF PARAM WITH -> (1 time, if >1 times it does not work)
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT($COPY,...);
+
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $SELECT([...,<... $COPY ...>,...]); #Too many false positives
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $SELECT([...,$COPY,...]);
+
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT($COPY,...);
+
+
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR->$ARGUM;
+      #      ...
+      #      $AAA->$SELECT([...,<... $COPY ...>,...]); #Too many false positives   
+      - pattern: |
+            $COPY = $PAR->$ARGUM;
+            ...
+            $AAA->$SELECT([$COPY,...]);
+
+
+
+      # SELECT WITH ARGUMENT COPIED FROM FIELD OF PARAM WITH . (1 time, if >1 times it does not work)
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT($COPY,...);
+
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $SELECT([...,<... $COPY ...>,...]); #Too many false positives
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $SELECT([...,$COPY,...]);
+
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>); #Too many false positives
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($COPY);
+
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT(<... $COPY ...> . $POST,...);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($PRE . <... $COPY ...>,...);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $AAA->$SELECT(<... $COPY ...>,...); #Too many false positives
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT($COPY,...);
+
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT([...,<... $COPY ...> . $POST,...]);
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT([...,$PRE . <... $COPY ...>,...]);
+      #- pattern: |
+      #      $COPY = $PAR.$ARGUM;
+      #      ...
+      #      $AAA->$SELECT([...,<... $COPY ...>,...]); #Too many false positives 
+      - pattern: |
+            $COPY = $PAR.$ARGUM;
+            ...
+            $AAA->$SELECT([...,$COPY,...]);        
+
+    - metavariable-regex:
+        metavariable: $SELECT
+        regex: (^(select|insert|update|delete|selectDistinct|from|where|andWhere|orWhere|join|leftJoin|rightJoin|crossJoin|naturalJoin|group|having|order|orderBy|limit|offset|union)$)
+
+    
