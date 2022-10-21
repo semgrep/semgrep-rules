@@ -1,0 +1,25 @@
+rules:
+- id: regex_dos
+  patterns:
+  - pattern: '$A = re.compile("$B", ...)
+
+      ...
+
+      $A.$METHOD(...)
+
+      '
+  - metavariable-analysis:
+      analyzer: redos
+      metavariable: $B
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: (?!(escape)|(purge))
+  message: Ensure that the regex used is safe from regular expression denial of service.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    owasp: 'A6: Security Misconfiguration'
+    cwe: 'CWE-185: Incorrect Regular Expression'
+    category: security
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
