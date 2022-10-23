@@ -1,13 +1,10 @@
 rules:
 - id: regex_dos
   patterns:
-  - pattern: '$A = re.compile("$B", ...)
-
-      ...
-
-      $A.$METHOD(...)
-
-      '
+  - pattern: |
+     $A = re.compile("$B", ...)
+     ...
+     $A.$METHOD(...)
   - metavariable-analysis:
       analyzer: redos
       metavariable: $B
@@ -20,6 +17,10 @@ rules:
   severity: WARNING
   metadata:
     owasp: 'A6: Security Misconfiguration'
-    cwe: 'CWE-185: Incorrect Regular Expression'
+    cwe: 'CWE-1333: Inefficient Regular Expression Complexity'
     category: security
+    technology:
+    - python
+    references:
+    - https://cwe.mitre.org/data/definitions/1333.html
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
