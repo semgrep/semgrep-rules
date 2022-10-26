@@ -42,11 +42,13 @@ public class CommandInjection {
             Process process;
             if (!isWindows) {
                 process =
+                        // deepruleid: tainted-system-command
                         new ProcessBuilder(new String[] {"sh", "-c", "ping -c 2 " + ipAddress})
                                 .redirectErrorStream(true)
                                 .start();
             } else {
                 process =
+                        // deepruleid: tainted-system-command
                         new ProcessBuilder(new String[] {"cmd", "/c", "ping -n 2 " + ipAddress})
                                 .redirectErrorStream(true)
                                 .start();
