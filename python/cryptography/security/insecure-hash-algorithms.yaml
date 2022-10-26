@@ -1,9 +1,14 @@
 rules:
 - id: insecure-hash-algorithm-sha1
-  pattern: cryptography.hazmat.primitives.hashes.SHA1(...)
-  fix-regex:
-    regex: SHA1
-    replacement: SHA256
+  patterns: 
+    - pattern: cryptography.hazmat.primitives.hashes.$SHA(...)
+    - metavariable-pattern:
+        metavariable: $SHA
+        pattern: |
+          SHA1
+    - focus-metavariable: $SHA
+  fix: |
+    SHA256
   message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
