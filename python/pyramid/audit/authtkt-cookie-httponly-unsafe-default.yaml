@@ -1,18 +1,17 @@
 rules:
 - id: pyramid-authtkt-cookie-httponly-unsafe-default
   patterns:
-  - pattern-either:
-    - patterns:
-      - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., httponly=$HTTPONLY, ...)
-      - pattern-not: pyramid.authentication.AuthTktCookieHelper(..., **$PARAMS)
-      - pattern: pyramid.authentication.AuthTktCookieHelper(...)
-    - patterns:
-      - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., httponly=$HTTPONLY, ...)
-      - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
-      - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
-  fix-regex:
-    regex: (.*)\)
-    replacement: \1, httponly=True)
+      - pattern: pyramid.authentication.$FUNC($...PARAMS)
+      - metavariable-pattern:
+          metavariable: $FUNC
+          pattern-either:
+            - pattern: AuthTktCookieHelper
+            - pattern: AuthTktAuthenticationPolicy
+      - pattern-not: pyramid.authentication.$FUNC(..., httponly=$HTTPONLY, ...)
+      - pattern-not: pyramid.authentication.$FUNC(..., **$PARAMS, ...)
+      - focus-metavariable: $...PARAMS
+  fix: |
+    $...PARAMS, httponly=True
   message: >-
     Found a Pyramid Authentication Ticket cookie without the httponly option correctly set. Pyramid
     cookies should be handled securely by setting httponly=True.
