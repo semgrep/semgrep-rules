@@ -1,0 +1,24 @@
+rules:
+  - id: metadata-impact-incorrect-value
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern: |
+          impact: $VALUE
+      - pattern-not: |
+          impact: LOW
+      - pattern-not: |
+          impact: MEDIUM
+      - pattern-not: |
+          impact: HIGH
+    message: >-
+      Semgrep rule metadata impact: $VALUE, but it must be LOW, MEDIUM, or HIGH. For more information visit: https://semgrep.dev/TODO
+    languages:
+      - yaml
+    severity: WARNING

@@ -1,0 +1,24 @@
+rules:
+  - id: metadata-subcategory
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            subcategory: $VALUE
+    message: >
+      Missing subcategory field.
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

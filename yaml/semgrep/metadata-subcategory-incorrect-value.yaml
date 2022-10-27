@@ -1,0 +1,29 @@
+rules:
+  - id: metadata-subcategory-incorrect-value
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern: |
+          subcategory: 
+            - $VALUE
+      - pattern-not: |
+          subcategory: 
+            - vuln
+      - pattern-not: |
+          subcategory: 
+            - audit
+      - pattern-not: |
+          subcategory: 
+            - guardrail
+    message: >
+      Semgrep rule likelihood: $VALUE detected, but the value must be vuln,
+      audit, or guardrail. For more information visit: https://semgrep.dev/TODO
+    languages:
+      - yaml
+    severity: WARNING

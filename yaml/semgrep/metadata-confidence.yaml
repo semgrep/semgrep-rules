@@ -1,0 +1,24 @@
+rules:
+  - id: metadata-confidence
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            confidence: $VALUE
+    message: >
+      Missing confidence field.
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

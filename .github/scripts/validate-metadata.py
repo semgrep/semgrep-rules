@@ -19,8 +19,12 @@ class RegistryMetadataValidator(Draft7Validator):
     required_property_messages = {
         "references": "Please include at least one URL with more information about this rule in a metadata field called 'references'.",
         "technology": "Please include a metadata field called 'technology' that is a list of relevent tech stacks. For example: [python, flask], or [javascript, jwt].",
-        "category": "Please include a metadata field called 'technology' that is one of {self.category_enum}",
+        "category": "Please include a metadata field called 'category' that is one of {self.category_enum}",
         "cwe": "Please include a 'cwe' metadata field for security rules. Format: CWE-nnn, where nnn is the CWE number. See https://cwe.mitre.org/ for more info.",
+        "likelihood": "Please include a 'likelihood' metadata field for security rules. Format: TODO. See https://TODO/ for more info.",
+        "impact": "Please include a 'impact' metadata field for security rules. Format: TODO. See https://TODO/ for more info.",
+        "confidence": "Please include a 'confidence' metadata field for security rules. Format: TODO. See https://TODO/ for more info.",
+        "subcategory": "Please include a 'subcategory' metadata field for security rules. Format: TODO. See https://TODO/ for more info.",
     }
 
     def __init__(self, *args, **kwargs):

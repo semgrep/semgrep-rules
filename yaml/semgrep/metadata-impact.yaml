@@ -1,0 +1,24 @@
+rules:
+  - id: metadata-impact
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            impact: $VALUE
+    message: >
+      Missing impact field.
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - semgrep

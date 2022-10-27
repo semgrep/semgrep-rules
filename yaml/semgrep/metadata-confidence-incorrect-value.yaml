@@ -1,0 +1,25 @@
+rules:
+  - id: metadata-confidence-incorrect-value
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern: |
+          confidence: $VALUE
+      - pattern-not: |
+          confidence: LOW
+      - pattern-not: |
+          confidence: MEDIUM
+      - pattern-not: |
+          confidence: HIGH
+    message: >
+      Semgrep rule confidence: $VALUE detected, but the value must be LOW,
+      MEDIUM, or HIGH. For more information visit: https://semgrep.dev/TODO
+    languages:
+      - yaml
+    severity: WARNING
