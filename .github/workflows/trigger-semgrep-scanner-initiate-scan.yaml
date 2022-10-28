@@ -28,7 +28,7 @@ jobs:
       - id: changed-langs
         name: get changed langs
         run: |
-          CHANGED_LANGS=$(echo "${{ env.changed_files }}" | sed 's/ /\n/g' | sed 's/^\([^/]*\).*/\1/' | tr '\n' ' ')
+          CHANGED_LANGS=$(echo "${{ env.changed_files }}" | sed 's/ /\n/g' | sed 's/^\([^/]*\).*/\1/' | sort -u | tr '\n' ' ')
           echo "changed_langs=$CHANGED_LANGS" >> $GITHUB_ENV
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
