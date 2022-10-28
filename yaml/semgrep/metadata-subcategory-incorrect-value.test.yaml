@@ -4,7 +4,7 @@ rules:
       If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the server.
     severity: LOW
     languages: [javascript, typescript]
-    # ok: metadata-subcategory
+    # ok: metadata-subcategory-incorrect-value
     metadata:
       owasp: "A03:2021 - Injection"
       cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
@@ -25,12 +25,14 @@ rules:
       If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the server.
     severity: LOW
     languages: [javascript, typescript]
-    # ruleid: metadata-subcategory
     metadata:
       owasp: "A03:2021 - Injection"
       cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
       source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html
       category: security
+      # ruleid: metadata-subcategory-incorrect-value
+      subcategory: 
+        - potato
       technology:
         - express
       references:
