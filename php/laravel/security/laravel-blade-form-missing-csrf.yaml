@@ -1,37 +1,67 @@
 rules:
 - id: laravel-blade-form-missing-csrf
-  patterns:
-  - pattern: |
-      <form ... method="POST" ...>...</form>
-  - pattern-not: |
-      <form ... method="POST" ...>
-      @csrf
-      ...
-      </form>
-  message: Found a Blade form POST definition without the `@csrf` decorator. State-changing operations
-    using simple HTTP content types should include an antiforgery token.
-  languages:
-  - generic
-  severity: ERROR
-  paths:
-    include:
-    - '*.blade.php'
+  message: >-
+    Detected a form executing a state-changing HTTP method `$METHOD` to route definition
+    `$...ROUTE` without a Laravel CSRF decorator or explicit CSRF token implementation.
+    If this form modifies sensitive state this will open your application to Cross-Site
+    Request Forgery (CSRF) attacks.
+  severity: WARNING
   metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://laravel.com/docs/9.x/csrf
+    subcategory:
+    - audit
     technology:
     - php
     - laravel
     - blade
-    category: security
-    cwe:
-    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    references:
-    - https://laravel.com/docs/9.x/blade#csrf-field
-    owasp:
-    - A01:2021 - Broken Access Control
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
+  languages:
+  - generic
+  paths:
+    include:
+    - '*.blade.php'
+  patterns:
+  - pattern: |
+      action="$...ROUTE"
+  - pattern-inside: |
+      <form ... method="$METHOD" ... >
+      ...
+  - pattern-not-inside: |
+      <!-- ... ... ... ... ... ... ... -->
+  - metavariable-pattern:
+      metavariable: $...ROUTE
+      language: generic
+      patterns:
+      - pattern-not-regex: \A\s*\Z
+      - pattern-not: '#'
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: (?i)(post|put|patch|delete)
+  - pattern-not-inside: |
+      <form ...>
+      ...
+      ...
+      ...
+      @csrf
+  - pattern-not-inside: |
+      <form ...>
+      ...
+      ...
+      ...
+      csrf_field()
+  - pattern-not-inside: |
+      <form ...>
+      ...
+      ...
+      ...
+      csrf_token()
