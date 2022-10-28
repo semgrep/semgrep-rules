@@ -77,7 +77,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             # ruleid: global-autoescape-off
-            'autoescape': False
+            'autoescape': True
         },
     },
 ]

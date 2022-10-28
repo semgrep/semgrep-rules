@@ -27,8 +27,13 @@ rules:
   languages:
   - python
   severity: WARNING
-  pattern: |
-    {..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': False, ...}, ...}
-  fix-regex:
-    regex: (autoescape.*?)False
-    replacement: \1True
+  patterns:
+    - pattern: |
+        {..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': $FALSE, ...}, ...}
+    - metavariable-pattern: 
+        metavariable: $FALSE
+        pattern: |
+          False
+    - focus-metavariable: $FALSE
+  fix: |
+    True
