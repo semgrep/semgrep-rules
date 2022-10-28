@@ -1,0 +1,24 @@
+rules:
+- id: PYSEC-2021-437
+  patterns:
+  - pattern-inside: "\"dependency\": [\n   ...\n]\n"
+  - pattern: "{\n  \"id\": \"PYSEC-2021-437\",\n  \"tool\": \"$TOOL\",\n  \"project\"\
+      : \"$PROJECT\",\n  \"project_version\": \"$COMMIT\",\n  \"dependency_name\"\
+      : \"$DEPENDENCY\",\n  \"dependency_finding_version\": \"$VERSION\",\n  \"dependency_fix_versions\"\
+      : [$FIX_VERSIONS],\n  ...\n}\n"
+  message: "PYSEC-2021-437 found in project $PROJECT:$COMMIT, by $TOOL in dependency\
+    \ $DEPENDENCY version $VERSION\n\nA flaw was found in python-pip in the way it\
+    \ handled Unicode separators in git references. A remote attacker could possibly\
+    \ use this issue to install a different revision on a repository. The highest\
+    \ threat from this vulnerability is to data integrity. This is fixed in python-pip\
+    \ version 21.1.\n\nFixed Versions: $FIX_VERSIONS\n\nAliases:\n\n- CVE-2021-3572\n\
+    \n- GHSA-5xp3-jfq3-5q8x\n\n  \nVulnerability published: 2021-11-10T18:15:00Z\n\
+    \nVulnerability modified: 2021-11-29T23:42:09.374676Z\n\nReferences:\n\n- {'type':\
+    \ 'REPORT', 'url': 'https://bugzilla.redhat.com/show_bug.cgi?id=1962856'}\n\n\
+    - {'type': 'ADVISORY', 'url': 'https://github.com/advisories/GHSA-5xp3-jfq3-5q8x'}\n"
+  languages:
+  - json
+  severity: WARNING
+  metadata:
+    rule-origin-note: published from PYSEC-2021-437.yaml in https://gitlab.com/vidaid/CryptVFS.git
+    category: security
