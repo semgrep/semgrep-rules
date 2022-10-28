@@ -32,7 +32,13 @@ rules:
   pattern-sources:
   - patterns:
     - pattern-either:
-      - pattern: $scope
+      - patterns:
+        - pattern-inside: |
+            function(..., $SCOPE, ...) { ... }
+        - focus-metavariable: $SCOPE
+        - metavariable-regex:
+            metavariable: $SCOPE
+            regex: ^\$scope$
       - pattern: $rootScope
       - pattern: $injector.get('$rootScope')
       - pattern: $injector.get('$scope')
