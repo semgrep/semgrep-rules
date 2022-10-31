@@ -1,58 +1,58 @@
 <?php
 
-    //ruleid: php-ssrf
     function test1(){
+ 	//ruleid: php-ssrf
         $ch = curl_init($_GET['r']);
     }
 
-    //ruleid: php-ssrf
     function test2(){
-        $url = $_GET['r'];
+        //ruleid: php-ssrf
+	$url = $_GET['r'];
         $ch = curl_init($url);
     }
 
-    //ruleid: php-ssrf
     function test3(){
         $ch = curl_init();
+        //ruleid: php-ssrf
         curl_setopt($ch, CURLOPT_URL, $_POST['image_url']);
     }
 
-    //ruleid: php-ssrf
     function test4(){
         $ch = curl_init();
+        //ruleid: php-ssrf
         $url = $_GET['r'];
         curl_setopt($ch, CURLOPT_URL, $url);
     }
 
-    //ruleid: php-ssrf
     function test5(){
+        //ruleid: php-ssrf
         $url = $_GET['r'];
         $file = fopen($url, 'rb');
     }
 
-    //ruleid: php-ssrf
     function test6(){
+        //ruleid: php-ssrf
         $file = fopen($_POST['r'], 'rb');
     }
 
-    //ruleid: php-ssrf
     function test7(){
+        //ruleid: php-ssrf
         $url = $_POST['r'];
         $file = file_get_contents($url);
     }
 
-    //ruleid: php-ssrf
     function test8(){
+        //ruleid: php-ssrf
         $file = file_get_contents($_POST['r']);
     }
 
-    //ok: php-ssrf
     function test9(){
+        //ok: php-ssrf
         $file = file_get_contents("index.php");
     }
 
-    //ok: php-ssrf
     function test10(){
+        //ok: php-ssrf
         $url = $_POST['r'];
         $file = fopen("/tmp/test.txt", 'rb');
     }
