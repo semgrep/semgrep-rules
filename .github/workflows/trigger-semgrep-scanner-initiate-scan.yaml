@@ -13,25 +13,30 @@ jobs:
     if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
-      - name: Print github.head_ref. branch that a PR is opened from
-        run: echo ${{ github.head_ref }}
-      - name: Print github.ref. branch a push is completed to (only release branch in current config)
-        run: echo ${{ github.ref }}
-      - name: Print github.event_name. either push or pull_request
-        run: echo ${{github.event_name}}
-      - name: Print github.event.number. PR issue number to post comment back to
-        run: echo ${{github.event.number}}
-      - name: Print $GITHUB_SHA . The commit hash that triggered the github workflow
-        run: echo $GITHUB_SHA
-      - name: Print github.sha . The commit hash that triggered the github workflow
-        run: echo ${{github.sha}}
-      - name: Print github.ref . The git ref that triggered the github workflow
-        run: echo ${{github.ref}}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: changed-files
+        name: get changed files
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/develop origin/update-semgrep-scanner-trigger| xargs -0 | sed '/^$/d' | sed -r '/^(.github|bash|contrib|fingerprints|generic|json|problem-based-packs|scripts|stats|trusted_python|yaml)/d' | sed -n '/.*yaml/p' | tr '\n' ' ')
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_ENV
+      - id: print-changed-files
+        name: debugging step - print changed files
+        run: |
+          echo "${{ env.changed_files }}"
+      - id: changed-langs
+        name: get changed langs
+        run: |
+          CHANGED_LANGS=$(echo "${{ env.changed_files }}" | sed 's/ /\n/g' | sed 's/^\([^/]*\).*/\1/' | sort -u | tr '\n' ' ')
+          echo "changed_langs=$CHANGED_LANGS" >> $GITHUB_ENV
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
         run: |
             curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.ref}}\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"0000\", \"post_back\" : false }"
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
         if: github.event_name == 'pull_request'
         run: |
-            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"${{github.repository}}\", \"commit\" : \"${{github.event.pull_request.head.sha}}\"}"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"${{github.head_ref}}\", \"repo\" : \"${{github.event.repository.name}}\", \"commit\" : \"${{github.event.pull_request.head.sha}}\", \"changed_files\" : \"${{ env.changed_files }}\" , \"langs\" : \"${{ env.changed_langs }}\"}"
