@@ -23,5 +23,9 @@ var clean = DOMPurify.sanitize(dirty, {RETURN_DOM_FRAGMENT: true, RETURN_DOM_IMP
 document.body.appendChild(clean);
 
 // ruleid: harden-dompurify-usage
-var yikes = DOMPurify.sanitize(dirty, {RETURN_DOM: true});
+var yikes = DOMPurify.sanitize(dirty, {RETURN_DOM: true})
 document.body.innerHTML = yikes;
+
+
+// ruleid: harden-dompurify-usage
+dosomethingsketchy(DOMPurify.sanitize(dirty, {RETURN_DOM: true}));
