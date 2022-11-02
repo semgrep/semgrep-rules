@@ -34,14 +34,16 @@ class BadDocumentBuilderFactory{
     public void BadDocumentBuilderFactory() throws  ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
-        dbf.newDocumentBuilder();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.newDocumentBuilder();
     }
 
     public void BadDocumentBuilderFactory2() throws  ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setFeature("somethingElse", true);
         //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
-        dbf.newDocumentBuilder();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.newDocumentBuilder();
     }
 }
 
@@ -67,7 +69,8 @@ class BadDocumentBuilderFactoryStatic {
 
     public void doSomething(){
         //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
-        dbf.newDocumentBuilder();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.newDocumentBuilder();
     }
 
 }
@@ -104,7 +107,8 @@ class OneMoreBadDocumentBuilderFactory {
             dbf = newFactory();
         }
         //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
-        dbf.newDocumentBuilder();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.newDocumentBuilder();
     }
 
     private DocumentBuilderFactory newFactory(){
