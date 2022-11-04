@@ -76,10 +76,10 @@ func runcommand5(s string) (string, error) {
 }
 
 func runcommand6(s string) (string, error) {
-
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	// might not have user context
 	// ruleid:dangerous-exec-command
-	cmd := exec.CommandContext($CTX,"/bin/env", "bash", "-c", s)
+	cmd := exec.CommandContext(ctx, "/bin/env", "bash", "-c", s)
 	stdoutStderr, err := cmd.CombinedOutput()
 
 	if err != nil {
