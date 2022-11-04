@@ -1,0 +1,43 @@
+rules:
+  - id: use_weak_rng_for_keygeneration
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: (System.Random $RNG).NextBytes($KEY); ...
+          - pattern: $KEY
+    pattern-sinks:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: ($KEYTYPE $CIPHER).Key = $SINK;
+              - pattern: $SINK
+              - metavariable-pattern:
+                  metavariable: $KEYTYPE
+                  pattern-either:
+                    - pattern: SymmetricAlgorithm
+                    - pattern: Aes
+                    - pattern: Rijndael
+                    - pattern: DES
+                    - pattern: TripleDES
+                    - pattern: RC2
+          - pattern: new AesGcm(...)
+          - pattern: new AesCcm(...)
+          - pattern: new ChaCha20Poly1305(...)
+    message: You are using an insecure random number generator (RNG) to create a
+      cryptographic key. System.Random must never be used for cryptographic
+      purposes. Use System.Security.Cryptography.RandomNumberGenerator instead.
+    languages:
+      - csharp
+    severity: ERROR
+    metadata:
+      cwe:
+        - 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      technology:
+        - .net
+      category: security
+      references:
+        - https://learn.microsoft.com/en-us/dotnet/api/system.random?view=net-6.0#remarks
+        - https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator?view=net-6.0
+        - https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.aesgcm?view=net-6.0#constructors
+        - https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.symmetricalgorithm.key?view=net-6.0#system-security-cryptography-symmetricalgorithm-key

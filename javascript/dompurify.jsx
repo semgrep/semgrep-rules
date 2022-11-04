@@ -25,3 +25,7 @@ document.body.appendChild(clean);
 // ruleid: harden-dompurify-usage
 var yikes = DOMPurify.sanitize(dirty, {})
 document.body.innerHTML = yikes;
+
+
+// ruleid: harden-dompurify-usage
+dosomethingsketchy(DOMPurify.sanitize(dirty, {}));
