@@ -14,13 +14,16 @@ rules:
             ...
             subcategory: $VALUE
     message: >
-      Missing subcategory field.
+      Missing subcategory field. Please include a subcategory field, 
+      this tells tells users and Semgrep App about the rule type,  We use a list of either
+      vulnerability, audit, or guardrail. For more information visit 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
     languages:
       - yaml
     severity: WARNING
     metadata:
       references:
-        - https://semgrep.dev/docs/writing-rules/rule-syntax/#TODO
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
       category: correctness
       technology:
         - semgrep

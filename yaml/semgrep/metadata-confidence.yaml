@@ -14,13 +14,16 @@ rules:
             ...
             confidence: $VALUE
     message: >
-      Missing confidence field.
+      Missing confidence field. Please include a confidence field, 
+      this tells users and Semgrep App about the rule and if it should be actioned on, 
+      we use LOW, MEDIUM, and HIGH indicators. For more information visit 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
     languages:
       - yaml
     severity: WARNING
     metadata:
       references:
-        - https://semgrep.dev/docs/writing-rules/rule-syntax/#TODO
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository
       category: correctness
       technology:
         - semgrep
