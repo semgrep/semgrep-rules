@@ -79,7 +79,7 @@ func runcommand6(s string) (string, error) {
 
 	// might not have user context
 	// ruleid:dangerous-exec-command
-	cmd := exec.Command("/bin/env", "bash", "-c", s)
+	cmd := exec.CommandContext($CTX,"/bin/env", "bash", "-c", s)
 	stdoutStderr, err := cmd.CombinedOutput()
 
 	if err != nil {
