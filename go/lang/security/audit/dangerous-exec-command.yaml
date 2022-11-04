@@ -22,6 +22,11 @@ rules:
           exec.Command("...","...","...",...)
       - pattern-not: |
           exec.CommandContext($CTX,"...","...","...",...)
+    - pattern-either:
+        - pattern: |
+            exec.Command("=~/\/bin\/env/","=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$CMD,...)
+        - pattern: |
+            exec.CommandContext($CTX,"=~/bin/env","=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$CMD,...)
   - pattern-inside: |
       import "os/exec"
       ...
