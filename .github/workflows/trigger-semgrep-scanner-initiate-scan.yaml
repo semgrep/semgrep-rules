@@ -36,12 +36,14 @@ jobs:
         run: |
           CHANGED_LANGS=$(echo "$CHANGED_FILES" | sed 's/ /\n/g' | sed 's/^\([^/]*\).*/\1/' | sort -u | tr '\n' ' ')
           echo "changed_langs=$CHANGED_LANGS" >> $GITHUB_ENV
+          CHANGED_LANG_COUNT=$(echo "$CHANGED_LANGS" | wc -w)
+          echo "changed_lang_count=$CHANGED_LANG_COUNT" >> $GITHUB_ENV
       - name: Trigger semgrep-scanner argo workflow on push to release
         if: github.event_name == 'push'
         env:
           GH_REF: ${{ github.ref }}
         run: |
-            curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"$GH_REF\", \"repo\" : \"semgrep-rules\", \"pull_request\" : \"0000\", \"post_back\" : false }"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo-testing -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{ \"repo\": \"semgrep-rules\", \"branch\" : \"$GH_REF\"}"
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
         env:
           CHANGED_FILES: ${{ env.changed_files }}
@@ -49,6 +51,8 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           REPO_NAME: ${{ github.event.repository.name }}
           PR_HEAD_SHA: ${{github.event.pull_request.head.sha}}
-        if: github.event_name == 'pull_request'
+        if: |
+          github.event_name == 'pull_request' &&
+          env.changed_lang_count > 1
         run: |
           curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"$HEAD_REF\", \"repo\" : \"$REPO_NAME\", \"commit\" : \"$PR_HEAD_SHA\", \"changed_files\" : \"$CHANGED_FILES\" , \"langs\" : \"$CHANGED_LANGS\"}"
