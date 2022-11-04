@@ -9,6 +9,10 @@ rules:
               $DATA = json.dumps($...VAR)
               ...
               return $DATA
+      - pattern-inside: |
+          @app.route(...)
+          def $X():
+            ...
       - metavariable-pattern:
           metavariable: $JSONDUMPS
           pattern: json.dumps($...VAR)
@@ -24,3 +28,5 @@ rules:
       category: best-practice
       technology:
         - flask
+      references:
+        - https://flask.palletsprojects.com/en/2.2.x/api/#flask.json.jsonify
