@@ -30,4 +30,26 @@ rules:
       Use 'https://' instead.
     languages:
       - python
-    severity: WARNING
+    severity: INFO
+    metadata:
+      owasp:
+      - A03:2017 - Sensitive Data Exposure
+      - A02:2021 - Cryptographic Failures
+      cwe:
+      - 'CWE-319: Cleartext Transmission of Sensitive Information'
+      asvs:
+        section: V9 Communications Verification Requirements
+        control_id: 9.1.1 Weak TLS
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x17-V9-Communications.md#v92-server-communications-security-requirements
+        version: '4'
+      category: security
+      technology:
+      - requests
+      references:
+      - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+      subcategory:
+      - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: MEDIUM
+  
