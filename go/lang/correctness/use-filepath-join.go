@@ -2,7 +2,7 @@ package main
 
 import (
 	"path"
-	"filepath"
+	"path/filepath"
 )
 
 func main() {
@@ -34,5 +34,5 @@ func main(a *http.Request) {
 	fmt.Println(path.Join(p.Path, "baz"))
 
 	// ok: use-filepath-join
-	fmt.Println(path.Join(a.Path, "baz"))
+	fmt.Println(filepath.Join(a.Path, "baz"))
 }
