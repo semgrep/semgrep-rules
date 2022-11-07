@@ -1,20 +1,23 @@
 package main
 
 import (
+	"filepath"
 	"path"
-	"path/filepath"
 )
 
-func main() {
+func a() {
 	dir := getDir()
 
-	// ruleid: use-filepath-join
-	var path = path.Join(getDir())
+	// ok: use-filepath-join
+	var p = path.Join(getDir())
 	// ok: use-filepath-join
 	var fpath = filepath.Join(getDir())
+
+	// ruleid: use-filepath-join
+	path.Join("/", path.Base(p))
 }
 
-func main() {
+func a() {
 	url, err := url.Parse("http://foo:666/bar")
 	if err != nil {
 		panic(err)
@@ -24,15 +27,14 @@ func main() {
 	fmt.Println(path.Join(url.Path, "baz"))
 }
 
-func main(a *http.Request) {
-	p, err := path.Parse("/opt/foo/bar")
-	if err != nil {
-		panic(err)
-	}
-
+func a(p string) {
 	// ruleid: use-filepath-join
-	fmt.Println(path.Join(p.Path, "baz"))
+	fmt.Println(path.Join(p, "baz"))
+
+	// ok: use-filepath-join
+	fmt.Println(path.Join("asdf", "baz"))
 
 	// ok: use-filepath-join
 	fmt.Println(filepath.Join(a.Path, "baz"))
 }
+
