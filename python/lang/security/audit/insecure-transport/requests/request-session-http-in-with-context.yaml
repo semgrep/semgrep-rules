@@ -5,9 +5,11 @@ rules:
   mode: taint
   pattern-sources:
     - patterns:
-        - pattern: $URL
+        - pattern: |
+            "$URL"
         - metavariable-pattern:
             metavariable: $URL
+            language: regex
             patterns:
               - pattern-regex: http://
               - pattern-not-regex: >-
