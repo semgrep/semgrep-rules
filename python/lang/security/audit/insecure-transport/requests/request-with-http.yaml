@@ -30,31 +30,24 @@ rules:
     confidence: LOW
   languages: [python]
   severity: WARNING
-  pattern-either:
-  - pattern: requests.$W("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
-  - pattern: |
-      $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
-      ...
-      requests.$W($URL, ...)
-  - pattern: |
-      def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
-        ...
-        requests.$W($URL, ...)
-  - pattern: requests.request($METHOD, "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
-  - pattern: |
-      $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
-      ...
-      requests.request($METHOD, $URL, ...)
-  - pattern: |
-      def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
-        ...
-        requests.request($METHOD, $URL, ...)
-  - pattern: requests.Request($METHOD, "=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
-  - pattern: |
-      $URL = "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"
-      ...
-      requests.Request($METHOD, $URL, ...)
-  - pattern: |
-      def $FUNC(..., $URL = "=~/^[Hh][Tt][Tt][Pp]://.*/", ...):
-        ...
-        requests.Request($METHOD, $URL, ...)
+  options:
+      symbolic_propagation: true
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern: $URL
+        - metavariable-pattern:
+            metavariable: $URL
+            patterns:
+              - pattern-regex: http://
+              - pattern-not-regex: >-
+                  .*://localhost
+              - pattern-not-regex: >-
+                  .*://127\.0\.0\.1
+  pattern-sinks:
+    - patterns:
+        - pattern-either:
+            - pattern: requests.$W($SINK, ...)
+            - pattern: requests.request($METHOD, $SINK, ...)
+            - pattern: requests.Request($METHOD, $SINK, ...)
+        - focus-metavariable: $SINK
