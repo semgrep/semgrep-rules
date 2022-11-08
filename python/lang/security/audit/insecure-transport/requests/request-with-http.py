@@ -9,7 +9,6 @@ def test1_ok():
     requests.get("https://example.com")
 
 def test2():
-    # ruleid: request-with-http
     url = "http://example.com"
     # ruleid: request-with-http
     requests.post(url)
@@ -19,26 +18,30 @@ def test2_ok():
     url = "https://example.com"
     requests.post(url)
 
-# ruleid: request-with-http
 def test3(url = "http://example.com"):
+    # ruleid: request-with-http
     requests.delete(url)
 
-# ok: request-with-http
 def test3_ok(url = "https://example.com"):
+    # ok: request-with-http
     requests.delete(url)
 
-# ruleid: request-with-http
 def test4(url = "http://example.com"):
+    # ruleid: request-with-http
     requests.request("HEAD", url, timeout=30)
 
-# ok: request-with-http
 def test4_ok(url = "https://example.com"):
+    # ok: request-with-http
     requests.request("HEAD", url, timeout=30)
 
-# ruleid: request-with-http
 def test5(url = "http://example.com"):
+    # ruleid: request-with-http
     requests.Request("HEAD", url, timeout=30)
 
-# ok: request-with-http
 def test5_ok(url = "https://example.com"):
+    # ok: request-with-http
+    requests.Request("HEAD", url, timeout=30)
+
+def test_localhost_ok(url = "http://localhost/blah"):
+    # ok: request-with-http
     requests.Request("HEAD", url, timeout=30)
