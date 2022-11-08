@@ -35,13 +35,10 @@ rules:
     - patterns:
         - pattern-either:
             - pattern-inside: |
-                function ...({..., $X, ...}) { ... }
+                function ...({..., $X: string, ...}) { ... }
             - pattern-inside: |
-                function ...(..., $X, ...) { ... }
+                function ...(..., $X: string, ...) { ... }
         - focus-metavariable: $X
-        - pattern-either:
-            - pattern: $X.$Y
-            - pattern: $X[...]
   pattern-sinks:
   - patterns:
     - pattern-either:
