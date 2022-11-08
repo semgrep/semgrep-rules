@@ -9,7 +9,7 @@ let zzz = <Foo className={"foobar"} href={getQuery()} />;
 
 function test1(input) {
 // ruleid: react-href-var
-  const params = {href: input};
+  const params = {href: input.a};
   return React.createElement("a", params);
 }
 
