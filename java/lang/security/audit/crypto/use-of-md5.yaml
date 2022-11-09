@@ -23,8 +23,12 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: HIGH
-  pattern-either:
-  - pattern: |
-      java.security.MessageDigest.getInstance("MD5", ...);
-  - pattern: |
-      $DU.getMd5Digest().digest(...)
+  patterns:
+    - pattern: |
+       java.security.MessageDigest.getInstance($ALGO, ...);
+    - metavariable-regex:
+        metavariable: "$ALGO"
+        regex: (.MD5.)
+    - focus-metavariable: $ALGO
+  fix: |
+    "SHA-512"

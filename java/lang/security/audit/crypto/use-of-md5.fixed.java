@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class Bad{
   public byte[] bad1(String password) {
     // ruleid: use-of-md5
-    MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+    MessageDigest md5Digest = MessageDigest.getInstance("SHA-512");
     md5Digest.update(password.getBytes());
     byte[] hashValue = md5Digest.digest();
     return hashValue;
@@ -18,7 +18,7 @@ public class Bad{
 
   public void bad3() {
       // ruleid: use-of-md5
-      java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+      java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-512");
       byte[] input = {(byte) '?'};
       Object inputParam = param;
       if (inputParam instanceof String) input = ((String) inputParam).getBytes();
