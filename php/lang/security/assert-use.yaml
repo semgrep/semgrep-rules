@@ -1,17 +1,41 @@
 rules:
-  - id: assert-use
-    patterns:
-      - pattern: assert($ASSERT, ...);
-      # - pattern-not: assert(<... $ASSERT ...>, ...); - https://github.com/returntocorp/semgrep/issues/2035
-      - pattern-not: assert("...", ...);
-    message: >-
-      Calling assert with user input is equivalent to eval'ing.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/function.assert
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/AssertsSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: assert-use
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: $_GET
+        - pattern: $_POST
+        - pattern: $_COOKIE
+        - pattern: $_REQUEST
+        - pattern: $_SERVER
+    - patterns:
+      - pattern: |
+          Route::$METHOD($ROUTENAME, function(..., $ARG, ...) { ... })
+      - focus-metavariable: $ARG
+  pattern-sinks:
+  - patterns:
+    - pattern: assert($SINK, ...);
+    - pattern-not: assert("...", ...);
+    - pattern: $SINK
+  message: >-
+    Calling assert with user input is equivalent to eval'ing.
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    references:
+    - https://www.php.net/manual/en/function.assert
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/AssertsSniff.php
+    category: security
+    technology:
+    - php
+    confidence: HIGH
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+  languages: [php]
+  severity: ERROR

@@ -43,3 +43,12 @@ resource "azurerm_app_service" "bad_example" {
       min_tls_version = "1.1"
   }
 }
+
+# not an azure resource
+
+resource "google_compute_ssl_policy" "modern_TLS_policy" {
+  # ok: appservice-use-secure-tls-policy
+  min_tls_version = "TLS_1_2"
+  name            = "modern-ssl-policy"
+  profile         = "MODERN"
+}

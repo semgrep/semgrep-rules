@@ -1,0 +1,24 @@
+rules:
+    - id: gcp-postgresql-log-checkpoints
+      patterns:
+        - pattern: resource
+        - pattern-inside: |
+              resource "google_sql_database_instance" "..." {
+                ...
+                database_flags {
+                  ...
+                  name  = "log_checkpoints"
+                  value = "off"
+                  ...
+                }
+                ...
+              }
+      message: >-
+        Ensure PostgreSQL database 'log_checkpoints' flag is set to 'on'
+      metadata:
+        category: best-practice
+        technology:
+          - terraform
+          - gcp
+      languages: [hcl]
+      severity: WARNING

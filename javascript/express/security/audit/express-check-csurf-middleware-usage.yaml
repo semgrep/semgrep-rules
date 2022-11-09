@@ -1,0 +1,49 @@
+rules:
+- id: express-check-csurf-middleware-usage
+  message: >-
+    A CSRF middleware was not detected in your express application. Ensure you are either using one  such
+    as `csurf` or `csrf` (see rule references) and/or you are properly doing CSRF validation in
+    your routes with a token or cookies.
+  metadata:
+    category: security
+    references:
+    - https://www.npmjs.com/package/csurf
+    - https://www.npmjs.com/package/csrf
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - javascript
+    - typescript
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: INFO
+  patterns:
+  - pattern-inside: |
+      $EXPRESS = require('express')
+      ...
+  - pattern-not-inside: |
+      import {$CSRF} from 'csurf'
+      ...
+  - pattern-not-inside: |
+      require('csurf')
+      ...
+  - pattern-not-inside: | # filter out applications that use this alternate csrf library
+      import {$CSRF} from 'csrf'
+      ...
+  - pattern-not-inside: | # filter out applications that use this alternate csrf library
+      require('csrf')
+      ...
+  - pattern: |
+      $APP = $EXPRESS()

@@ -1,71 +1,75 @@
 rules:
-  - id: express-res-sendfile
-    message: The application processes user-input, this is passed to res.sendFile
-      which can allow an attacker to arbitrarily read files on the system
-      through path traversal. It is recommended to perform input validation in
-      addition to canonicalizing the path. This allows you to validate the path
-      against the intended directory it should be accessing.
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    mode: taint
-    pattern-sources:
+- id: express-res-sendfile
+  message: The application processes user-input, this is passed to res.sendFile which can allow an attacker
+    to arbitrarily read files on the system through path traversal. It is recommended to perform input
+    validation in addition to canonicalizing the path. This allows you to validate the path against the
+    intended directory it should be accessing.
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+    technology:
+    - express
+    category: security
+    cwe:
+    - 'CWE-73: External Control of File Name or Path'
+    owasp:
+    - A04:2021 - Insecure Design
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
       - patterns:
-          - pattern-either:
-              - pattern-inside: function ... ($REQ, $RES) {...}
-              - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
-                      - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
-                  - metavariable-regex:
-                      metavariable: $METHOD
-                      regex: ^(get|post|put|head|delete|options)$
-          - pattern-either:
-              - pattern: $REQ.query
-              - pattern: $REQ.body
-              - pattern: $REQ.params
-              - pattern: $REQ.cookies
-              - pattern: $REQ.headers
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  - patterns:
+    - pattern-either:
       - patterns:
-          - pattern-either:
-              - pattern-inside: >
-                  ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
-                  {...}
-              - pattern-inside: |
-                  ({ $REQ }: Request,$RES: Response) => {...}
-          - pattern-either:
-              - pattern: params
-              - pattern: query
-              - pattern: cookies
-              - pattern: headers
-              - pattern: body
-      - patterns:
-          - pattern-either:
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: |
-                          function ... (...,$REQ: $TYPE, ...) {...}
-                  - metavariable-regex:
-                      metavariable: $TYPE
-                      regex: ^(string|String)
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: $RES.$METH($QUERY,...)
-          - pattern-not-inside: $RES.$METH($QUERY,$OPTIONS)
-          - metavariable-regex:
-              metavariable: $METH
-              regex: ^(sendfile|sendFile)$
-          - pattern: $QUERY
-    metadata:
-      references:
-        - https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
-      technology:
-        - express
-      category: security
-      cwe: "CWE-73: External Control of File Name or Path (4.6)"
-      owasp:
-        - A05:2017 - Broken Access Control
-        - A01:2021 - Broken Access Control
+        - pattern-either:
+          - pattern-inside: |
+              function ... (...,$REQ: $TYPE, ...) {...}
+        - metavariable-regex:
+            metavariable: $TYPE
+            regex: ^(string|String)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: $RES.$METH($QUERY,...)
+    - pattern-not-inside: $RES.$METH($QUERY,$OPTIONS)
+    - metavariable-regex:
+        metavariable: $METH
+        regex: ^(sendfile|sendFile)$
+    - pattern: $QUERY

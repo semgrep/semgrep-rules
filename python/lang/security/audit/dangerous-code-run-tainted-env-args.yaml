@@ -1,0 +1,104 @@
+rules:
+- id: dangerous-interactive-code-run-tainted-env-args
+  mode: taint
+  options:
+    symbolic_propagation: true
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: os.environ
+          - pattern: os.environ.get('$FOO', ...)
+          - pattern: os.environb
+          - pattern: os.environb.get('$FOO', ...)
+          - pattern: os.getenv('$ANYTHING', ...)
+          - pattern: os.getenvb('$ANYTHING', ...)
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-either:
+              - pattern: sys.argv
+              - pattern: sys.orig_argv
+          - patterns:
+            - pattern-inside: |
+                $PARSER = argparse.ArgumentParser(...)
+                ...
+            - pattern-inside: |
+                $ARGS = $PARSER.parse_args()
+            - pattern: <... $ARGS ...>
+          - patterns:
+            - pattern-inside: |
+                $PARSER = optparse.OptionParser(...)
+                ...
+            - pattern-inside: |
+                $ARGS = $PARSER.parse_args()
+            - pattern: <... $ARGS ...>
+          - patterns:
+            - pattern-either:
+              - pattern-inside: |
+                  $OPTS, $ARGS = getopt.getopt(...)
+                  ...
+              - pattern-inside: |
+                  $OPTS, $ARGS = getopt.gnu_getopt(...)
+                  ...
+            - pattern-either:
+              - patterns:
+                - pattern-inside: |
+                    for $O, $A in $OPTS:
+                      ...
+                - pattern: $A
+              - pattern: $ARGS
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $X = code.InteractiveConsole(...)
+          ...
+      - pattern-inside: |
+          $X = code.InteractiveInterpreter(...)
+          ...
+    - pattern-either:
+      - pattern-inside: |
+          $X.push($PAYLOAD,...)
+      - pattern-inside: |
+          $X.runsource($PAYLOAD,...)
+      - pattern-inside: |
+          $X.runcode(code.compile_command($PAYLOAD),...)
+      - pattern-inside: |
+          $PL = code.compile_command($PAYLOAD,...)
+          ...
+          $X.runcode($PL,...)
+    - pattern: $PAYLOAD
+    - pattern-not: |
+        $X.push("...",...)
+    - pattern-not: |
+        $X.runsource("...",...)
+    - pattern-not: |
+        $X.runcode(code.compile_command("..."),...)
+    - pattern-not: |
+        $PL = code.compile_command("...",...)
+        ...
+        $X.runcode($PL,...)
+  message: >-
+    Found user controlled data inside InteractiveConsole/InteractiveInterpreter method.
+    This is dangerous if external data can reach this function call because it allows
+    a malicious actor to run arbitrary Python code.
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
+    category: security
+    technology:
+    - python
+    confidence: MEDIUM
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+  severity: WARNING
+  languages:
+  - python

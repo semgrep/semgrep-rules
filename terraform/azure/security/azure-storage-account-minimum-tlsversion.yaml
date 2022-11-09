@@ -1,0 +1,41 @@
+rules:
+- id: azure-storage-account-minimum-tlsversion
+  message: >-
+    Ensure Storage Account is using the latest version of TLS encryption
+  patterns:
+  - pattern: resource
+  - pattern-inside: |
+      resource "azurerm_storage_account" "..." {
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_storage_account" "..." {
+      ...
+      min_tls_version = "TLS1_2"
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_storage_account" "..." {
+      ...
+      min_tls_version = "TLS1_3"
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

@@ -10,7 +10,7 @@ public class Foo{
     }
 
     private void SomeFunction3(string arg1){
-        //ok
+        //ok: correctness-sslcertificatetrust-handshake-no-trust
         var collection = SslCertificateTrust.CreateForX509Collection(certCollection);
     }
 
@@ -25,7 +25,7 @@ public class Foo{
     }
 
     private void SomeFunction6(string arg1){
-        //ok
+        //ok: correctness-sslcertificatetrust-handshake-no-trust
         var collection = SslCertificateTrust.CreateForX509Store(certCollection);
     }
 }

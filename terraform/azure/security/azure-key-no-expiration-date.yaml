@@ -1,0 +1,34 @@
+rules:
+- id: azure-key-no-expiration-date
+  message: >-
+    Ensure that the expiration date is set on all keys
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_key_vault_key" "..." {
+      ...
+      expiration_date = "..."
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_key_vault_key" "..." {
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: WARNING

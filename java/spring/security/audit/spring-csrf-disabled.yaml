@@ -1,19 +1,30 @@
 rules:
-  - id: spring-csrf-disabled
-    message: >-
-      CSRF is disabled for this configuration. This is a security risk.
-    metadata:
-      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
-      owasp: "A6: Security Misconfiguration"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_PROTECTION_DISABLED
-      asvs:
-        section: V4 Access Control
-        control_id: 4.2.2 CSRF
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V4-Access-Control.md#v42-operation-level-access-control
-        version: "4"
-      category: security
-      technology:
-        - spring
-    severity: WARNING
-    languages: [java]
-    pattern: $OBJ.csrf(...).disable(...)
+- id: spring-csrf-disabled
+  message: >-
+    CSRF is disabled for this configuration. This is a security risk.
+  metadata:
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp:
+    - A01:2021 - Broken Access Control
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SPRING_CSRF_PROTECTION_DISABLED
+    asvs:
+      section: V4 Access Control
+      control_id: 4.2.2 CSRF
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V4-Access-Control.md#v42-operation-level-access-control
+      version: '4'
+    category: security
+    technology:
+    - spring
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  severity: WARNING
+  languages: [java]
+  pattern: $OBJ.csrf(...).disable(...)

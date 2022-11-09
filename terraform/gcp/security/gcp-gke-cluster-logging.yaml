@@ -1,0 +1,28 @@
+rules:
+- id: gcp-gke-cluster-logging
+  patterns:
+  - pattern: |
+      resource "google_container_cluster" $ANYTHING {
+        ...
+        logging_service = "none"
+        ...
+      }
+  message: Ensure logging is set to Enabled on Kubernetes Engine Clusters
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    technology:
+    - terraform
+    - gcp
+    category: security
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

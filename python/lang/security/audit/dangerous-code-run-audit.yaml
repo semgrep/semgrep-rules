@@ -1,0 +1,54 @@
+rules:
+- id: dangerous-interactive-code-run-audit
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X.push($PAYLOAD,...)
+    - pattern: |
+        $X.runsource($PAYLOAD,...)
+    - pattern: |
+        $X.runcode(code.compile_command($PAYLOAD),...)
+    - pattern: |
+        $PL = code.compile_command($PAYLOAD,...)
+        ...
+        $X.runcode($PL,...)
+  - pattern-either:
+    - pattern-inside: |
+        $X = code.InteractiveConsole(...)
+        ...
+    - pattern-inside: |
+        $X = code.InteractiveInterpreter(...)
+        ...
+  - pattern-not: |
+      $X.push("...",...)
+  - pattern-not: |
+      $X.runsource("...",...)
+  - pattern-not: |
+      $X.runcode(code.compile_command("..."),...)
+  - pattern-not: |
+      $PL = code.compile_command("...",...)
+      ...
+      $X.runcode($PL,...)
+  message: >-
+    Found dynamic content inside InteractiveConsole/InteractiveInterpreter method.
+    This is dangerous if external data can reach this function call because it allows
+    a malicious actor to run arbitrary Python code.
+    Ensure no external data reaches here.
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
+    category: security
+    technology:
+    - python
+    confidence: LOW
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+  severity: WARNING
+  languages:
+  - python

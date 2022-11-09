@@ -12,14 +12,19 @@ rules:
   severity: WARNING
   paths:
     include:
-      - "*.sbt*"
-  metadata: 
+    - '*.sbt*'
+  metadata:
     category: security
-    cwe: "CWE-489: Active Debug Code"
+    cwe:
+    - 'CWE-489: Active Debug Code'
     owasp: 'A5: Security Misconfiguration'
     technology:
     - scala
     - sbt
     references:
-      - https://docs.scala-lang.org/overviews/compiler-options/index.html
-    confidence: HIGH
+    - https://docs.scala-lang.org/overviews/compiler-options/index.html
+    confidence: MEDIUM
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW

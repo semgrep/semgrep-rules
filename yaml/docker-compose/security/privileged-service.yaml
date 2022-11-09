@@ -1,26 +1,43 @@
 rules:
-  - id: privileged-service
-    patterns:
-      - pattern-inside: |
-          version: ...
+- id: privileged-service
+  patterns:
+  - pattern-inside: |
+      version: ...
+      ...
+      services:
+        ...
+        $SERVICE:
           ...
-          services:
-            ...
-      - pattern: |
-          $SERVICE:
-            ...
-            privileged: true
-    message: >-
-      Service '$SERVICE' is running in privileged mode. This grants the
-      container the equivalent of root capabilities on the host machine. This
-      can lead to container escapes, privilege escalation, and other security
-      concerns. Remove the 'privileged' key to disable this capability.
-    metadata:
-      references:
-        - https://www.trendmicro.com/en_us/research/19/l/why-running-a-privileged-container-in-docker-is-a-bad-idea.html
-        - https://containerjournal.com/topics/container-security/why-running-a-privileged-container-is-not-a-good-idea/
-      category: security
-      technology:
-        - docker-compose
-    languages: [yaml]
-    severity: WARNING
+          privileged: $TRUE
+  - focus-metavariable: $TRUE
+  - metavariable-regex:
+      metavariable: $TRUE
+      regex: (true)
+  fix: |
+    false
+  message: >-
+    Service '$SERVICE' is running in privileged mode. This grants the
+    container the equivalent of root capabilities on the host machine. This
+    can lead to container escapes, privilege escalation, and other security
+    concerns. Remove the 'privileged' key to disable this capability.
+  metadata:
+    cwe:
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A06:2017 - Security Misconfiguration
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://www.trendmicro.com/en_us/research/19/l/why-running-a-privileged-container-in-docker-is-a-bad-idea.html
+    - https://containerjournal.com/topics/container-security/why-running-a-privileged-container-is-not-a-good-idea/
+    category: security
+    technology:
+    - docker-compose
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+  languages:
+  - yaml
+  severity: WARNING

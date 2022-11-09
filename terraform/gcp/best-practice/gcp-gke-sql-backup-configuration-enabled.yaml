@@ -1,0 +1,31 @@
+rules:
+- id: gcp-gke-sql-backup-configuration-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_sql_database_instance" "..." {
+          ...
+          }
+    - pattern-not-inside: |
+          resource "google_sql_database_instance" "..." {
+          ...
+          settings {
+            ...
+            backup_configuration {
+              ...
+              enabled = true
+              ...
+            }
+            ...
+          }
+          ...
+          }
+  message: >-
+    Ensure all Cloud SQL database instance have backup configuration enabled
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

@@ -1,18 +1,31 @@
 rules:
 - id: tainted-eval
-  mode: taint
-  metadata:
-    cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
-    owasp: "A1: Injection"
-    category: security
-    technology:
-    - javascript
-    - aws-lambda
   message: >-
     The `eval()` function evaluates JavaScript code represented as a string.
     Executing JavaScript from a string is an enormous security risk.
     It is far too easy for a bad actor to run arbitrary code when you use `eval()`.
     Ensure evaluated content is not definable by external sources.
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - javascript
+    - aws-lambda
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
   pattern-sources:
   - patterns:
     - pattern: $EVENT
@@ -33,10 +46,6 @@ rules:
   - patterns:
     - pattern: $CODE
     - pattern-either:
-        - pattern: eval($CODE)
-        - pattern: Function(...,$CODE)
-        - pattern: new Function(...,$CODE)
-  severity: WARNING
-  languages:
-    - javascript
-    - typescript
+      - pattern: eval($CODE)
+      - pattern: Function(...,$CODE)
+      - pattern: new Function(...,$CODE)

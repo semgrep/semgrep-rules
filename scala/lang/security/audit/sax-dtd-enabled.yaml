@@ -43,16 +43,29 @@ rules:
       ...
       $SR.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
   message: >-
-    XML processor being instantiated without calling the `setFeature` functions that are generally used for disabling entity processing.
-    User controlled data in XML Parsers can result in XML Internal Entity Processing vulnerabilities like the disclosure of confidential data, denial of service, Server Side Request Forgery (SSRF), port scanning.
+    XML processor being instantiated without calling the `setFeature` functions that are generally used
+    for disabling entity processing.
+    User controlled data in XML Parsers can result in XML Internal Entity Processing vulnerabilities like
+    the disclosure of confidential data, denial of service, Server Side Request Forgery (SSRF), port scanning.
     Make sure to disable entity processing functionality.
   languages: [scala]
   severity: WARNING
   metadata:
-    cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-    owasp: "A4: XML External Entities (XXE)"
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
     source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
     category: security
     technology:
     - scala
     confidence: HIGH
+    references:
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM

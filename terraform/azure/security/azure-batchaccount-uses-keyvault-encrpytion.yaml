@@ -1,0 +1,36 @@
+rules:
+- id: azure-batchaccount-uses-keyvault-encrpytion
+  message: >-
+    Ensure that Azure Batch account uses key vault to encrypt data
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_batch_account" "..." {
+      ...
+      key_vault_reference {
+        ...
+      }
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_batch_account" "..." {
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

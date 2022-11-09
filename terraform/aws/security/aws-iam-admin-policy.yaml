@@ -22,7 +22,8 @@ rules:
         - pattern: |
             {..., "Action": [...], "Resource": "*", ...}
   message: >-
-    Detected admin access granted in your policy. This means anyone with this policy can perform administrative actions. Instead, limit actions and resources to what you need according to least privilege.
+    Detected admin access granted in your policy. This means anyone with this policy can perform administrative
+    actions. Instead, limit actions and resources to what you need according to least privilege.
   metadata:
     category: security
     technology:
@@ -30,6 +31,15 @@ rules:
     - terraform
     owasp:
     - A05:2021 - Security Misconfiguration
-    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
   languages: [hcl]
   severity: ERROR

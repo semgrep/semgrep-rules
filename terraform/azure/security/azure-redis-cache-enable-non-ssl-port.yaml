@@ -1,0 +1,31 @@
+rules:
+- id: azure-redis-cache-enable-non-ssl-port
+  message: >-
+    Ensure that only SSL are enabled for Cache for Redis
+  patterns:
+  - pattern: resource
+  - pattern-inside: |
+      resource "azurerm_redis_cache" "..." {
+      ...
+      enable_non_ssl_port = true
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

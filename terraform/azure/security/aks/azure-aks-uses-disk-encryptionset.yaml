@@ -1,0 +1,34 @@
+rules:
+- id: azure-aks-uses-disk-encryptionset
+  message: >-
+    Ensure that AKS uses disk encryption set
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_kubernetes_cluster" "..." {
+      ...
+      disk_encryption_set_id = "..."
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_kubernetes_cluster" "..." {
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

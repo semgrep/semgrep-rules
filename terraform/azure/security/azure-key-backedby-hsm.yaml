@@ -1,0 +1,40 @@
+rules:
+- id: azure-key-backedby-hsm
+  message: >-
+    Ensure that key vault key is backed by HSM
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_key_vault_key" "..." {
+      ...
+      key_type = "EC-HSM"
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_key_vault_key" "..." {
+      ...
+      key_type = "RSA-HSM"
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_key_vault_key" "..." {
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

@@ -1,27 +1,37 @@
 rules:
-  - id: react-jwt-in-localstorage
-    patterns:
-      - pattern-inside: |
-          import jwt_decode from "jwt-decode";
-          ...
-      - pattern-either:
-          - pattern: |
-              $DECODED = jwt_decode($TOKEN,...);
-              ...
-              localStorage.setItem($NAME, <... $TOKEN ...>);
-          - pattern: |
-              $DECODED = jwt_decode(...);
-              ...
-              localStorage.setItem($NAME, <... $DECODED ...>);
-    message: >-
-      Storing JWT tokens in localStorage known to be a bad practice, consider moving your tokens from localStorage to a HTTP cookie.
-    metadata:
-      references:
-        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
-      category: security
-      technology:
-        - react
-    languages:
-      - typescript
-      - javascript
-    severity: WARNING
+- id: react-jwt-in-localstorage
+  message: >-
+    Storing JWT tokens in localStorage known to be a bad practice, consider moving your tokens from localStorage
+    to a HTTP cookie.
+  metadata:
+    cwe:
+    - 'CWE-922: Insecure Storage of Sensitive Information'
+    references:
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+    category: security
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - react
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern-inside: |
+      import jwt_decode from "jwt-decode";
+      ...
+  - pattern-either:
+    - pattern: |
+        $DECODED = jwt_decode($TOKEN,...);
+        ...
+        localStorage.setItem($NAME, <... $TOKEN ...>);
+    - pattern: |
+        $DECODED = jwt_decode(...);
+        ...
+        localStorage.setItem($NAME, <... $DECODED ...>);

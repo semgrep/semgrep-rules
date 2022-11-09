@@ -1,0 +1,44 @@
+rules:
+- id: jwt-tokenvalidationparameters-no-expiry-validation
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $LIFETIME = $FALSE
+      - pattern-inside: new TokenValidationParameters {...}
+    - patterns:
+      - pattern: |
+          (TokenValidationParameters $OPTS). ... .$LIFETIME = $FALSE
+  - metavariable-regex:
+      metavariable: $LIFETIME
+      regex: (RequireExpirationTime|ValidateLifetime)
+  - metavariable-regex:
+      metavariable: $FALSE
+      regex: (false)
+  - focus-metavariable: $FALSE
+  fix: |
+    true
+  message: >-
+    The TokenValidationParameters.$LIFETIME is set to $FALSE, this means the  JWT tokens lifetime is not
+    validated. This can lead to an  JWT token being used after it has expired, which has security implications.  It
+    is recommended to validate the JWT lifetime to ensure only valid tokens are used.
+  metadata:
+    category: security
+    technology:
+    - csharp
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-613: Insufficient Session Expiration'
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/
+    - https://cwe.mitre.org/data/definitions/613.html
+    - https://docs.microsoft.com/en-us/dotnet/api/microsoft.identitymodel.tokens.tokenvalidationparameters?view=azure-dotnet
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  languages:
+  - csharp
+  severity: WARNING

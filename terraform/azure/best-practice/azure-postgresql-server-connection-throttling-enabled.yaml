@@ -1,0 +1,24 @@
+rules:
+  - id: azure-postgresql-server-connection-throttling-enabled
+    message: >-
+      Ensure server parameter connection_throttling is set to ON for PostgreSQL Database Server
+    patterns:
+      - pattern: resource
+      - pattern-inside: |
+          resource "azurerm_postgresql_configuration" "..." {
+          ...
+          }
+      - pattern-not-inside: |
+          resource "azurerm_postgresql_configuration" "..." {
+          ...
+          name = "connection_throttling"
+          value = "on"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

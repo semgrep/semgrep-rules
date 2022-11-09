@@ -1,0 +1,50 @@
+rules:
+- id: laravel-cookie-null-domain
+  patterns:
+  - pattern: |
+      'cookie'
+  - pattern-inside: |
+      return [
+        ...,
+        'cookie' => env(...),
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'domain' => null,
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'domain' => env('$NAME', $DEFAULT),
+        ...
+      ];
+  paths:
+    include:
+    - '*session.php'
+  message: >-
+    Found a configuration file where the domain attribute  is not set to null. It is recommended (unless
+    you are using sub-domain  route registrations) to set this attribute to null so that only the
+    same origin can set the cookie, thus protecting your cookies. 
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - php
+    - laravel
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

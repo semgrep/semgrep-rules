@@ -1,0 +1,50 @@
+rules:
+- id: laravel-cookie-http-only
+  patterns:
+  - pattern: |
+      'cookie'
+  - pattern-inside: |
+      return [
+        ...,
+        'cookie' => env(...),
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'http_only' => true,
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'http_only' => env('$NAME', $DEFAULT),
+        ...
+      ];
+  paths:
+    include:
+    - '*session.php'
+  message: >-
+    Found a configuration file where the HttpOnly attribute  is not set to true. Setting `http_only` to
+    true makes sure  that your cookies are inaccessible from Javascript, which
+    mitigates XSS attacks. Instead, set the 'http_only' like so:
+    `http_only` => true 
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    technology:
+    - php
+    - laravel
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

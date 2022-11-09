@@ -1,0 +1,35 @@
+rules:
+- id: gcp-gke-nodepool-integrity-monitoring
+  patterns:
+  - pattern-inside: |
+      resource "google_container_node_pool" $ANYTHING {
+        ...
+        node_config {
+          ...
+          shielded_instance_config {
+            enable_integrity_monitoring = false
+          }
+          ...
+        }     
+        ...
+      }
+  message: Ensure Integrity Monitoring for Shielded GKE Nodes is Enabled
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    technology:
+    - terraform
+    - gcp
+    category: security
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

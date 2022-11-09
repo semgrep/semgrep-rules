@@ -27,20 +27,28 @@ rules:
           const_get(...)
       - pattern-inside: |
           qualified_const_get(...)
-  message: Found user-controllable input to Ruby reflection functionality.  This allows a remote user to influence runtime behavior, up to and including arbitrary remote code execution. Do not provide user-controllable input to reflection functionality.
-    Do not call symbol conversion on user-controllable input.
+  message: Found user-controllable input to Ruby reflection functionality.  This allows a remote user
+    to influence runtime behavior, up to and including arbitrary remote code execution. Do not provide
+    user-controllable input to reflection functionality. Do not call symbol conversion on user-controllable
+    input.
   languages:
   - ruby
   severity: ERROR
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_unsafe_reflection.rb
     category: security
-    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp:
     - A03:2021 - Injection
-    - A01:2017 - Injection
     technology:
     - ruby
     - rails
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails2/app/controllers/application_controller.rb
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

@@ -1,0 +1,23 @@
+rules:
+  - id: azure-postgresql-flexi-server-geo-backup-enabled
+    message: >-
+      Ensure that PostgreSQL Flexible server enables geo-redundant backups
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_postgresql_flexible_server" "..." {
+          ...
+          geo_redundant_backup_enabled = true
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_postgresql_flexible_server" "..." {
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

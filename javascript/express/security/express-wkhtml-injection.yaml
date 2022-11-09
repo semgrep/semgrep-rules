@@ -1,77 +1,66 @@
 rules:
-  - id: express-wkhtmltoimage-injection
-    message: >-
-      If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - express
-    severity: ERROR
-    languages: [javascript, typescript]
-    patterns:
+- id: express-wkhtmltopdf-injection
+  message: >-
+    If unverified user data can reach the `wkhtmltopdf` methods it can result in Server-Side Request Forgery
+    vulnerabilities
+  metadata:
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    category: security
+    technology:
+    - express
+    references:
+    - https://www.npmjs.com/package/wkhtmltopdf
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - patterns:
+        - pattern-either:
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, $NEXT) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)$
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
       - pattern-inside: |
-          $WK = require('wkhtmltoimage');
-          ...
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
       - pattern-inside: |
-          require('express');
-          ...
-      - pattern-either:
-          - pattern-inside: function ... ($REQ, $RES) {...}
-          - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-      - pattern-either:
-          - pattern: $WK.generate(<... $REQ.$QUERY.$FOO ...>,...)
-          - pattern: $WK.generate(<... $REQ.$BODY ...>,...)
-          - pattern: |
-              $INPUT = <... $REQ.$QUERY.$FOO ...>;
-              ...
-              $WK.generate(<... $INPUT ...>,...);
-          - pattern: |
-              $INPUT = <... $REQ.$BODY ...>;
-              ...
-              $WK.generate(<... $INPUT ...>,...);
-  - id: express-wkhtmltopdf-injection
-    message: >-
-      If unverified user data can reach the `phantom` methods it can result in Server-Side Request Forgery vulnerabilities
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      category: security
-      technology:
-        - express
-    severity: ERROR
-    languages: [javascript, typescript]
-    patterns:
-      - pattern-inside: |
-          $WK = require('wkhtmltopdf');
-          ...
-      - pattern-inside: |
-          require('express');
-          ...
-      - pattern-either:
-          - pattern-inside: function ... ($REQ, $RES) {...}
-          - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-      - pattern-either:
-          - pattern: $WK(<... $REQ.$QUERY.$FOO ...>,...)
-          - pattern: $WK(<... $REQ.$BODY ...>,...)
-          - pattern: |
-              $INPUT = <... $REQ.$QUERY.$FOO ...>;
-              ...
-              $WK(<... $INPUT ...>,...);
-          - pattern: |-
-              $INPUT = <... $REQ.$BODY ...>;
-              ...
-              $WK(<... $INPUT ...>,...);
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: |
+        $WK = require('wkhtmltopdf');
+        ...
+    - pattern: $WK($SINK,...)
+    - focus-metavariable: $SINK

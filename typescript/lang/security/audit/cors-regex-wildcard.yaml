@@ -1,20 +1,31 @@
 rules:
-  - id: cors-regex-wildcard
-    languages:
-      - ts
-    message: "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
-    patterns:
-      - pattern-either:
-          - pattern: const $CORS = [...,$PATTERN,...]
-          - pattern: const $CORS = $PATTERN
-      - metavariable-regex:
-          metavariable: $PATTERN
-          regex: .+?(?<!\\).\..+(?<!\\)\..+
-      - metavariable-regex:
-          metavariable: $CORS
-          regex: (?i)cors
-    metadata:
-      category: security
-      technology:
-        - cors
-    severity: WARNING
+- id: cors-regex-wildcard
+  message: "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
+  metadata:
+    cwe:
+    - 'CWE-183: Permissive List of Allowed Inputs'
+    category: security
+    technology:
+    - cors
+    owasp:
+    - A04:2021 - Insecure Design
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - ts
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: const $CORS = [...,$PATTERN,...]
+    - pattern: const $CORS = $PATTERN
+  - metavariable-regex:
+      metavariable: $PATTERN
+      regex: .+?(?<!\\).\..+(?<!\\)\..+
+  - metavariable-regex:
+      metavariable: $CORS
+      regex: (?i)cors

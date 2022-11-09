@@ -7,9 +7,9 @@ rules:
       import slick.$DEPS
       ...
   message: >-
-      Detected a formatted string in a SQL statement. This could lead to SQL
-      injection if variables in the SQL statement are not properly sanitized.
-      Avoid using `#$variable` and use `$variable` in `sql"..."` strings instead.
+    Detected a formatted string in a SQL statement. This could lead to SQL
+    injection if variables in the SQL statement are not properly sanitized.
+    Avoid using `#$variable` and use `$variable` in `sql"..."` strings instead.
   languages: [scala]
   severity: ERROR
   metadata:
@@ -17,9 +17,18 @@ rules:
     references:
     - https://scala-slick.org/doc/3.3.3/sql.html#splicing-literal-values
     category: security
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     technology:
     - scala
     - slick
-    confidence: MEDIUM
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH

@@ -1,34 +1,48 @@
 rules:
-  - id: overly-permissive-file-permission
-    message: >-
-      It is generally a bad practices to set overly permissive file permission such
-      as read+write+exec for all users.
-      If the file affected is a configuration, a binary, a script or sensitive data,
-      it can lead to privilege escalation or information leakage.
-    severity: WARNING
-    languages: [java]
-    metadata:
-      cwe: "CWE-276: Incorrect Default Permissions"
-      owasp: "A6: Security Misconfiguration"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#OVERLY_PERMISSIVE_FILE_PERMISSION
-      category: security
-      technology:
-        - java
-    pattern-either:
-      - pattern: java.nio.file.Files.setPosixFilePermissions($FILE, java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
-      - pattern: |
-          $TYPE $P = java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/");
-          ...
-          java.nio.file.Files.setPosixFilePermissions($FILE, $P);
-      - pattern: |
-          $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_READ);
-          ...
-          java.nio.file.Files.setPosixFilePermissions($FILE, $P);
-      - pattern: |
-          $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_WRITE);
-          ...
-          java.nio.file.Files.setPosixFilePermissions($FILE, $P);
-      - pattern: |-
-          $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_EXECUTE);
-          ...
-          java.nio.file.Files.setPosixFilePermissions($FILE, $P);
+- id: overly-permissive-file-permission
+  message: >-
+    Detected file permissions that are overly permissive (read, write, and execute).
+    It is generally a bad practices to set overly permissive file permission such
+    as read+write+exec for all users.
+    If the file affected is a configuration, a binary, a script or sensitive data,
+    it can lead to privilege escalation or information leakage.
+    Instead, follow the principle of least privilege and give users only the 
+    permissions they need.
+  severity: WARNING
+  languages: [java]
+  metadata:
+    cwe:
+    - 'CWE-276: Incorrect Default Permissions'
+    owasp:
+    - A01:2021 - Broken Access Control
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#OVERLY_PERMISSIVE_FILE_PERMISSION
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  pattern-either:
+  - pattern: java.nio.file.Files.setPosixFilePermissions($FILE, java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
+  - pattern: |
+      $TYPE $P = java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/");
+      ...
+      java.nio.file.Files.setPosixFilePermissions($FILE, $P);
+  - pattern: |
+      $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_READ);
+      ...
+      java.nio.file.Files.setPosixFilePermissions($FILE, $P);
+  - pattern: |
+      $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_WRITE);
+      ...
+      java.nio.file.Files.setPosixFilePermissions($FILE, $P);
+  - pattern: |-
+      $P.add(java.nio.file.attribute.PosixFilePermission.OTHERS_EXECUTE);
+      ...
+      java.nio.file.Files.setPosixFilePermissions($FILE, $P);

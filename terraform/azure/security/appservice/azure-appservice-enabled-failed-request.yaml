@@ -1,0 +1,39 @@
+rules:
+- id: azure-appservice-enabled-failed-request
+  message: >-
+    Ensure that App service enables failed request tracing
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_app_service" "..." {
+      ...
+      logs {
+        ...
+        failed_request_tracing_enabled = true
+        ...
+      }
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_app_service" "..." {
+      ...
+      }
+  metadata:
+    owasp:
+    - A10:2017 - Insufficient Logging & Monitoring
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

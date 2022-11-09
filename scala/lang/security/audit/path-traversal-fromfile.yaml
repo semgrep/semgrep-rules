@@ -1,47 +1,59 @@
 rules:
-  - id: path-traversal-fromfile
-    metadata:
-      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
-      owasp:
-        - A01:2021 - Broken Access Control
-      category: security
-      technology:
-        - scala
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-      resources:
-        - https://find-sec-bugs.github.io/bugs.htm
-      confidence: MEDIUM
-    message: >-
-      Flags cases of possible path traversal. If an unfiltered parameter is passed into 'fromFile', file from an arbitrary filesystem
-      location could be read. This could lead to sensitive data exposure and other provles. Instead, sanitize the user input
-      instead of performing direct string concatenation.
-    severity: WARNING
-    languages:
-      - scala
-    patterns:
+- id: path-traversal-fromfile
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    category: security
+    technology:
+    - scala
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    resources:
+    - https://find-sec-bugs.github.io/bugs.htm
+    confidence: LOW
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  message: >-
+    Flags cases of possible path traversal. If an unfiltered parameter is passed into 'fromFile', file
+    from an arbitrary filesystem
+    location could be read. This could lead to sensitive data exposure and other provles. Instead, sanitize
+    the user input
+    instead of performing direct string concatenation.
+  severity: WARNING
+  languages:
+  - scala
+  patterns:
+  - pattern-either:
+    - patterns:
       - pattern-either:
-          - patterns:
-              - pattern-either:
-                  - pattern-inside: |
-                      $FILENAME = "..." + $VAR
-                      ...
-                  - pattern-inside: |
-                      $FILENAME = $VAR + "..."
-                      ...
-                  - pattern-inside: |
-                      $FILENAME = $STR.concat($VAR)
-                      ...
-                  - pattern-inside: |
-                      $FILENAME = "...".format(..., $VAR, ...)
-                      ...
-              - pattern: Source.fromFile($FILENAME, ...)
-          - patterns:
-              - pattern-either:
-                  - pattern: Source.fromFile("..." + $VAR, ...)
-                  - pattern: Source.fromFile($VAR + "...", ...)
-                  - pattern: Source.fromFile($STR.concat($VAR), ...)
-                  - pattern: Source.fromFile("...".format(..., $VAR, ...), ...)
-      - pattern-inside: |
-          def $FUNC(..., $VAR: $TYPE, ...) = Action {
+        - pattern-inside: |
+            $FILENAME = "..." + $VAR
             ...
-          }
+        - pattern-inside: |
+            $FILENAME = $VAR + "..."
+            ...
+        - pattern-inside: |
+            $FILENAME = $STR.concat($VAR)
+            ...
+        - pattern-inside: |
+            $FILENAME = "...".format(..., $VAR, ...)
+            ...
+      - pattern: Source.fromFile($FILENAME, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: Source.fromFile("..." + $VAR, ...)
+        - pattern: Source.fromFile($VAR + "...", ...)
+        - pattern: Source.fromFile($STR.concat($VAR), ...)
+        - pattern: Source.fromFile("...".format(..., $VAR, ...), ...)
+  - pattern-inside: |
+      def $FUNC(..., $VAR: $TYPE, ...) = Action {
+        ...
+      }

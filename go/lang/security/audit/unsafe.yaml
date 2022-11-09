@@ -1,17 +1,24 @@
 rules:
-  - id: use-of-unsafe-block
-    message: >-
-      Using the unsafe package in Go gives you low-level memory management 
-      and many of the strengths of the C language, but also steps around the type safety of Go 
-      and can lead to buffer overflows and possible arbitrary code execution by an attacker.
-      Only use this package if you absolutely know what you're doing.
-    languages: [go]
-    severity: WARNING
-    metadata:
-      cwe: "CWE-242: Use of Inherently Dangerous Function"
-      source_rule_url: https://github.com/securego/gosec/blob/master/rules/unsafe.go
-      category: security
-      technology:
-        - go
-      confidence: MEDIUM
-    pattern: unsafe.$FUNC(...)
+- id: use-of-unsafe-block
+  message: >-
+    Using the unsafe package in Go gives you low-level memory management  and many of the strengths of
+    the C language, but also steps around the type safety of Go  and can lead to buffer overflows and
+    possible arbitrary code execution by an attacker.
+    Only use this package if you absolutely know what you're doing.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    cwe:
+    - 'CWE-242: Use of Inherently Dangerous Function'
+    source_rule_url: https://github.com/securego/gosec/blob/master/rules/unsafe.go
+    category: security
+    technology:
+    - go
+    confidence: LOW
+    references:
+    - https://cwe.mitre.org/data/definitions/242.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+  pattern: unsafe.$FUNC(...)

@@ -1,0 +1,35 @@
+rules:
+- id: laravel-active-debug-code
+  patterns:
+  - pattern-either:
+    - pattern: |
+        putenv("APP_DEBUG=true")
+    - pattern: |
+        config(['app.debug' => 'true'])
+    - pattern: |
+        $_ENV["APP_DEBUG"] = 'true'
+  message: >-
+    Found an instance setting the APP_DEBUG environment variable  to true. In your production environment,
+    this should
+    always be false. Otherwise, you risk exposing sensitive
+    configuration values to potential attackers. Instead, set this to false.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-489: Active Debug Code'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    technology:
+    - php
+    - laravel
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    - https://laravel.com/docs/9.x/configuration
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

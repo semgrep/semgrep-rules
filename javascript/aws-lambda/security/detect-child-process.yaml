@@ -1,17 +1,34 @@
 rules:
 - id: detect-child-process
-  mode: taint
+  message: >-
+    Allowing spawning arbitrary programs or running shell processes with arbitrary arguments may end up
+    in a command injection vulnerability.
+    Try to avoid non-literal values for the command string.
+    If it is not possible, then do not let running arbitrary commands, use a white list for inputs.
   metadata:
-    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     category: security
     technology:
     - javascript
     - aws-lambda
-  message: >-
-    Allowing spawning arbitrary programs or running shell processes with arbitrary arguments may end up in a command injection vulnerability.
-    Try to avoid non-literal values for the command string.
-    If it is not possible, then do not let running arbitrary commands, use a white list for inputs.
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  mode: taint
   pattern-sources:
   - patterns:
     - pattern: $EVENT
@@ -47,7 +64,3 @@ rules:
       - pattern-inside: |
           import 'child_process'
           ...
-  severity: ERROR
-  languages:
-    - javascript
-    - typescript

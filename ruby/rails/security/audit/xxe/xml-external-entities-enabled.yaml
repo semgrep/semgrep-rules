@@ -1,0 +1,41 @@
+rules:
+- id: xml-external-entities-enabled
+  languages: [ruby]
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        LibXML::XML.class_eval do
+          ...
+        end
+    - pattern-inside: |
+        XML.class_eval do
+          ...
+        end
+  - pattern: XML.default_substitute_entities = true
+  severity: ERROR
+  message: >-
+    This application is explicitly enabling external entities enabling an attacker to inject
+    malicious XML to exploit an XML External Entities (XXE) vulnerability. This could let the
+    attacker cause a denial-of-service by forcing the parser to parse large files, or at worst,
+    let the attacker download sensitive files or user data. Use the built-in Rails XML parser,
+    REXML, instead.
+  metadata:
+    references:
+    - https://www.stackhawk.com/blog/rails-xml-external-entities-xxe-guide-examples-and-prevention/
+    - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    technology:
+    - rails
+    - libxml
+    category: security
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH

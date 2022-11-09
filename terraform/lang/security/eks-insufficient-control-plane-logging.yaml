@@ -10,28 +10,37 @@ rules:
       - pattern-not-inside: |
           resource "aws_eks_cluster" "..." {
             ...
-            enabled_cluster_log_types = [..., "api", ..., "audit"]
+            enabled_cluster_log_types = [..., "api", ..., "audit", ...]
             ...
           }
       - pattern-not-inside: |
           resource "aws_eks_cluster" "..." {
             ...
-            enabled_cluster_log_types = [..., "audit", ..., "api"]
+            enabled_cluster_log_types = [..., "audit", ..., "api", ...]
             ...
           }
     languages:
       - hcl
-    message: >-
-      Missing EKS control plane logging.
-      It is recommended to enable at least Kubernetes API server component logs ("api") and audit logs ("audit") of the EKS control plane
-      through the enabled_cluster_log_types attribute.
+    message: Missing EKS control plane logging. It is recommended to enable at least
+      Kubernetes API server component logs ("api") and audit logs ("audit") of
+      the EKS control plane through the enabled_cluster_log_types attribute.
     severity: WARNING
     metadata:
       references:
         - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#enabling-control-plane-logging
         - https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html
       category: security
-      cwe: "CWE-778: Insufficient Logging"
+      cwe:
+        - "CWE-778: Insufficient Logging"
       technology:
         - terraform
         - aws
+      owasp:
+        - A10:2017 - Insufficient Logging & Monitoring
+        - A09:2021 - Security Logging and Monitoring Failures
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]

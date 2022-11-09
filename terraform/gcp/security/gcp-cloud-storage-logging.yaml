@@ -1,0 +1,35 @@
+rules:
+- id: gcp-cloud-storage-logging
+  patterns:
+  - pattern: |
+      resource "google_storage_bucket" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_storage_bucket" $ANYTHING {
+        ...
+        logging {
+            log_bucket = ...
+        }          
+        ...
+      }
+  message: Ensure bucket logs access.
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A10:2017 - Insufficient Logging & Monitoring
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    technology:
+    - terraform
+    - gcp
+    category: security
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM

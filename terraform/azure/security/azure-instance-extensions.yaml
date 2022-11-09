@@ -1,0 +1,46 @@
+rules:
+- id: azure-instance-extensions
+  message: >-
+    Ensure Virtual Machine Extensions are not Installed
+  patterns:
+  - pattern: resource
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_linux_virtual_machine" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_windows_virtual_machine" "..." {
+        ...
+        }
+  - pattern-not-inside: |
+      resource "azurerm_linux_virtual_machine" "..." {
+      ...
+      allow_extension_operations = false
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_windows_virtual_machine" "..." {
+      ...
+      allow_extension_operations = false
+      ...
+      }
+  metadata:
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

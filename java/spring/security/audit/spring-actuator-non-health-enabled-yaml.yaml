@@ -1,0 +1,42 @@
+rules:
+- id: spring-actuator-dangerous-endpoints-enabled-yaml
+  patterns:
+  - pattern-inside: |
+      management:
+        ...
+        endpoints:
+          ...
+          web:
+            ...
+            exposure:
+              ...
+              include:
+                ...
+  - pattern: |
+      include: [..., $ACTUATOR, ...]
+  - metavariable-comparison:
+      metavariable: $ACTUATOR
+      comparison: not str($ACTUATOR) in ["health","*"]
+  message: Spring Boot Actuator "$ACTUATOR" is enabled. Depending on the actuator, this can pose a significant
+    security risk. Please double-check if the actuator is needed and properly secured.
+  severity: WARNING
+  languages:
+  - yaml
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints-exposing-endpoints
+    - https://medium.com/walmartglobaltech/perils-of-spring-boot-actuators-misconfiguration-185c43a0f785
+    - https://blog.maass.xyz/spring-actuator-security-part-1-stealing-secrets-using-spring-actuators
+    category: security
+    technology:
+    - spring
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM

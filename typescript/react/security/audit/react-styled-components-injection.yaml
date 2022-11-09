@@ -1,51 +1,30 @@
 rules:
-  - id: react-styled-components-injection
-    patterns:
-      - pattern-inside: |
-          import styled from 'styled-components';
-          ...
-      - pattern-not-inside: |
-          import { keyframes } from 'styled-components';
-          ...
-          $STYLE = keyframes(...);
-          ...
-      - pattern-either:
-          - pattern-inside: |
-              $STYLE = $METHOD(...);
-              ...
-          - pattern-inside: |
-              function $FUNC(...,{$STYLE},...) {
-                ...
-              }
-          - pattern-inside: |
-              function $FUNC(...,$STYLE,...) {
-                ...
-              }
-          - pattern-inside: |
-              function $FUNC(...,{$INPUT},...) {
-                ...
-                $STYLE = <... $INPUT ...>;
-                ...
-              }
-          - pattern-inside: |
-              function $FUNC(...,$INPUT,...) {
-                ...
-                $STYLE = <... $INPUT ...>;
-                ...
-              }
-      - pattern: |
-          styled.$EL`...${$STYLE}...`
-    message: >-
-      User controlled data in a styled component's css is an anti-pattern that can lead to XSS vulnerabilities
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://styled-components.com/docs/advanced#security
-      category: security
-      technology:
-        - react
-    languages:
-      - typescript
-      - javascript
-    severity: WARNING
+- id: react-styled-components-injection
+  message: >-
+    this rule has been deprecated.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://styled-components.com/docs/advanced#security
+    category: security
+    deprecated: true
+    technology:
+    - react
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()

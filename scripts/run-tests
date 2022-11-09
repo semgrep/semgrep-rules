@@ -1,0 +1,96 @@
+#! /usr/bin/env bash
+#
+# Validate rules and run semgrep to check that it's producing the expected
+# results.
+#
+# This was originally part of the makefile but it's gotten too complicated
+# due the need for extra escaping and error codes being ignored.
+#
+set -eu
+
+usage() {
+  cat <<EOF
+Usage: $0 [validate|test]
+
+validate: check only rule validity
+test: run semgrep rules against the target files
+
+Return non-zero if some validation or test doesn't meet the expectations.
+EOF
+}
+
+error() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
+# Use the SEMGREP environment variable to specify a non-standard semgrep
+# command. This is useful for calling a development version of semgrep
+# e.g.
+#   PIPENV_PIPFILE=~/semgrep/cli/Pipfile SEMGREP='pipenv run semgrep' make test
+#
+if [[ -z "${SEMGREP-}" ]]; then
+  SEMGREP="semgrep"
+fi
+
+# Obtain the list of folders containing Semgrep rule files
+# (with a .yml suffix).
+#
+# This is meant to exclude folders that don't contain rule files and
+# may contain .yml files that are not Semgrep rules and would result
+# in errors.
+#
+set_rule_folders() {
+  rule_folders=$(find . -mindepth 1 -maxdepth 1 -type d \
+    | grep -v '^./\(\..*\|stats\|trusted_python\|fingerprints\|scripts\)/\?$' \
+    | sort)
+  if [[ -z "$rule_folders" ]]; then
+    error "Cannot find any rule folders to scan in $(pwd)"
+  fi
+}
+
+# stdout is redirected to stderr so as to see the whole output in the correct
+# order when running this from pytest.
+# (pytest captures stdout and stderr separately and prints them later,
+# if at all).
+#
+validate() {
+  set_rule_folders
+  for root in $rule_folders; do
+    echo "======== validate rule files in $root ========"
+    time -p $SEMGREP --validate \
+	 --strict --disable-version-check \
+	 --metrics=off --verbose \
+	 --config="./$root"
+  done >&2
+}
+
+test_only() {
+  set_rule_folders
+  for root in $rule_folders; do
+    echo "========= test rules in $root ========="
+    time -p $SEMGREP --test --test-ignore-todo \
+	 --strict --disable-version-check \
+	 --metrics=off --verbose \
+	 "./$root"
+  done >&2
+}
+
+if [[ $# != 1 ]]; then
+  usage >&2
+  exit 1
+else
+  case "$1" in
+    validate)
+      validate
+      exit 0
+      ;;
+    test)
+      test_only
+      exit 0
+      ;;
+    *)
+      usage >&2
+      exit 1
+  esac
+fi

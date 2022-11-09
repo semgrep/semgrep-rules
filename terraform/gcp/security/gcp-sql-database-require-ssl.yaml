@@ -1,0 +1,39 @@
+rules:
+- id: gcp-sql-database-require-ssl
+  patterns:
+  - pattern: resource
+  - pattern-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+      }
+  - pattern-not-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          ip_configuration {
+              ...
+              require_ssl = true
+              ...
+          }
+          ...
+      }
+  message: >-
+    Ensure all Cloud SQL database instance requires all incoming connections to use SSL
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    category: security
+    technology:
+    - terraform
+    - gcp
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: WARNING

@@ -1,0 +1,24 @@
+rules:
+  - id: use_weak_rsa_encryption_padding
+    pattern-either:
+      - pattern:
+          (RSAPKCS1KeyExchangeFormatter $FORMATER).CreateKeyExchange(...);
+      - pattern:
+          (RSAPKCS1KeyExchangeDeformatter $DEFORMATER).DecryptKeyExchange(...);
+    message: You are using the outdated PKCS#1 v1.5 encryption padding for your RSA key. Use the OAEP padding instead.
+    languages:
+      - csharp
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-780: Use of RSA Algorithm without OAEP"
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      references:
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rsapkcs1keyexchangeformatter
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rsaoaepkeyexchangeformatter
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rsapkcs1keyexchangedeformatter
+        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.rsaoaepkeyexchangedeformatter
+      category: security
+      technology:
+        - .net

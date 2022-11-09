@@ -1,48 +1,122 @@
 rules:
-  - id: documentbuilderfactory-disallow-doctype-decl-missing
-    severity: ERROR
-    metadata:
-      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
-      owasp: "A4: XML External Entities (XXE)"
-      asvs:
-        section: V5 Validation, Sanitization and Encoding
-        control_id: 5.5.2 Insecue XML Deserialization
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
-        version: "4"
-      references:
-        - https://blog.sonarsource.com/secure-xml-processor
-        - https://xerces.apache.org/xerces2-j/features.html
-      category: security
-      technology:
-        - java
-        - xml
-    message: >-
-      DOCTYPE declaratons are enabled for this DocumentBuilderFactory.
-      This is vulnerable to XML external entity attacks. Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl" to true.
-      Alternatively, allow DOCTYPE declarations and only prohibit external entities declarations.
-      This can be done by setting the features "http://xml.org/sax/features/external-general-entities" and "http://xml.org/sax/features/external-parameter-entities" to false.
-    patterns:
-      - pattern: DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance();
-      - pattern-not-inside: |
-          $RETURNTYPE $METHOD(...){
-            ...
-            $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", ...);
-            ...
-          }
-      - pattern-not-inside: |
-          $RETURNTYPE $METHOD(...){
-            ...
-            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", ...);
-            ...
-          }
-      - pattern-not-inside: |
-          $RETURNTYPE $METHOD(...){
-            ...
-            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", ...);
-            ...
-          }
-    fix: |
-        DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance();
-        $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-    languages:
-      - java
+- id: documentbuilderfactory-disallow-doctype-decl-missing
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    references:
+    - https://blog.sonarsource.com/secure-xml-processor
+    - https://xerces.apache.org/xerces2-j/features.html
+    category: security
+    technology:
+    - java
+    - xml
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: HIGH
+  message: >-
+    DOCTYPE declarations are enabled for this DocumentBuilderFactory.
+    This is vulnerable to XML external entity attacks. Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl"
+    to true.
+    Alternatively, allow DOCTYPE declarations and only prohibit external entities declarations.
+    This can be done by setting the features "http://xml.org/sax/features/external-general-entities" and
+    "http://xml.org/sax/features/external-parameter-entities" to false.
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern-either:
+            - pattern: |
+                $FACTORY = DocumentBuilderFactory.newInstance();
+            - patterns: 
+                - pattern: $FACTORY
+                - pattern-inside: |
+                    class $C {
+                      ...
+                      $V $FACTORY = DocumentBuilderFactory.newInstance();
+                      ...
+                    }
+                - pattern-not-inside: |
+                    class $C {
+                      ...
+                      $V $FACTORY = DocumentBuilderFactory.newInstance();
+                      static {
+                        ...
+                        $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                        ...
+                      }
+                      ...
+                    }
+                - pattern-not-inside: |
+                    class $C {
+                      ...
+                      $V $FACTORY = DocumentBuilderFactory.newInstance();
+                      static {
+                        ...
+                        $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                        ...
+                        $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                        ...
+                      }
+                      ...
+                    }
+                - pattern-not-inside: |
+                    class $C {
+                      ...
+                      $V $FACTORY = DocumentBuilderFactory.newInstance();
+                      static {
+                        ...
+                        $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                        ...
+                        $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                        ...
+                      }
+                      ...
+                    }
+            - patterns: 
+                - pattern: $FACTORY
+                - pattern-either:
+                  - pattern-inside: |
+                      class $C {
+                        ...
+                        $V $FACTORY;
+                        ...
+                      }
+                  - pattern-inside: |
+                      class $C {
+                        ...
+                        $V $FACTORY = null;
+                        ...
+                      }
+  pattern-sinks:
+    - pattern: $FACTORY.newDocumentBuilder();
+  pattern-sanitizers:
+    - patterns:
+        - pattern-either:
+            - pattern: |
+                $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            - pattern: |
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            - pattern: |
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        - focus-metavariable: $FACTORY
+  fix: |
+    $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    $FACTORY.newDocumentBuilder();
+  languages:
+  - java

@@ -1,49 +1,80 @@
 rules:
-  - id: insecure-resteasy-deserialization
-    severity: WARNING
-    languages:
-      - java
-    metadata:
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      owasp: "A8: Insecure Deserialization"
-      references:
-        - https://access.redhat.com/blogs/766093/posts/3162112
-      category: security
-      technology:
-        - jax-rs
-      confidence: MEDIUM
-    message: >-
-      When a Restful webservice endpoint is configured to use wildcard mediaType {*/*} as a value for the @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution when calling the $Y.getObject method.
-    pattern-either:
-      - pattern: |
-          @Consumes({"application/x-java-serialized-object"})
-      - pattern: |
-          @Consumes({"*/*"})
-      - pattern: |
-          @Consumes("*/*")
-      - pattern: |
-          @Consumes({MediaType.WILDCARD_TYPE})
-
-  - id: default-resteasy-provider-abuse
-    severity: WARNING
-    languages:
-      - java
-    metadata:
-      cwe: "CWE-502: Deserialization of Untrusted Data"
-      owasp: "A8: Insecure Deserialization"
-      references:
-        - https://access.redhat.com/blogs/766093/posts/3162112
-      category: security
-      technology:
-        - jax-rs
-      confidence: MEDIUM
-    message: >-
-      When a Restful webservice endpoint isn't configured with a @Consumes annotation, an attacker could abuse the SerializableProvider by sending a HTTP Request with a Content-Type of application/x-java-serialized-object. The body of that request would be processed by the SerializationProvider and could contain a malicious payload, which may lead to arbitrary code execution.
-    patterns:
-      - pattern: |
-          @Path("...")
-          public $RETURNTYPE $METHOD(...) { ...}
-      - pattern-not-inside: |
-          @Path("...")
-          @Consumes(...)
-          public $RETURNTYPE $METHOD(...) { ...}
+- id: insecure-resteasy-deserialization
+  message: >-
+    When a Restful webservice endpoint is configured to use wildcard  mediaType {*/*} as a value for the
+    @Consumes annotation, an attacker  could abuse the SerializableProvider by sending a HTTP Request
+    with a  Content-Type of application/x-java-serialized-object. The body of that  request would be processed
+    by the SerializationProvider and could  contain a malicious payload, which may lead to arbitrary code
+    execution  when calling the $Y.getObject method.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://access.redhat.com/blogs/766093/posts/3162112
+    subcategory:
+    - audit
+    technology:
+    - jax-rs
+  languages:
+  - java
+  pattern-either:
+  - pattern: |
+      @Consumes({"application/x-java-serialized-object"})
+  - pattern: |
+      @Consumes({"*/*"})
+  - pattern: |
+      @Consumes("*/*")
+  - pattern: |
+      @Consumes({MediaType.WILDCARD_TYPE})
+- id: default-resteasy-provider-abuse
+  message: >-
+    When a Restful webservice endpoint isn't configured with a @Consumes  annotation, an attacker could
+    abuse the SerializableProvider by sending a  HTTP Request with a Content-Type of application/x-java-serialized-object.  The
+    body of that request would be processed by the SerializationProvider  and could contain a malicious
+    payload, which may lead to arbitrary code  execution. Instead, add a @Consumes annotation to the function
+    or class.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://access.redhat.com/blogs/766093/posts/3162112
+    subcategory:
+    - audit
+    technology:
+    - jax-rs
+  languages:
+  - java
+  patterns:
+  - pattern: |
+      @Path("...")
+      public $RETURNTYPE $METHOD(...) { ...}
+  - pattern-not-inside: |
+      @GET
+      public $RETURNTYPE $METHOD(...) { ...}
+  - pattern-not-inside: |
+      @Path("...")
+      @Consumes(...)
+      public $RETURNTYPE $METHOD(...) { ...}
+  - pattern-not-inside: |
+      @Consumes(...)
+      public class $CLASSNAME { ... }

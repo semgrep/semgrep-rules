@@ -1,0 +1,29 @@
+rules:
+- id: libxml-backend
+  languages: [ruby]
+  pattern: ActiveSupport::XmlMini.backend = "LibXML"
+  severity: WARNING
+  message: >-
+    This application is using LibXML as the XML backend. LibXML can be vulnerable to
+    XML External Entities (XXE) vulnerabilities. Use the built-in Rails XML parser, REXML,
+    instead.
+  metadata:
+    references:
+    - https://www.stackhawk.com/blog/rails-xml-external-entities-xxe-guide-examples-and-prevention/
+    - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    technology:
+    - rails
+    - libxml
+    category: security
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM

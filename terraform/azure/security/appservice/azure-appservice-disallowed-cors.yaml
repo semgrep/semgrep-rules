@@ -1,0 +1,30 @@
+rules:
+- id: azure-appservice-disallowed-cors
+  patterns:
+  - pattern: |
+      ["*"]
+  - pattern-inside: allowed_origins = ...
+  - pattern-inside: |
+      $RESOURCE "azurerm_app_service" "..." {
+      ...
+      }
+  message: Ensure that CORS disallows every resource to access app services
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    category: security
+    technology:
+    - terraform
+    - azure
+
+    references:
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

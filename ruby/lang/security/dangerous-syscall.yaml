@@ -1,15 +1,25 @@
 rules:
-  - id: dangerous-syscall
-    pattern: |
-      syscall
-    message: >-
-      'syscall' is essentially unsafe and unportable. The DL (https://apidock.com/ruby/Fiddle)
-      library is preferred for safer and a bit more portable programming.
-    metadata:
-      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-      owasp: "A1: Injection"
-      category: security
-      technology:
-        - ruby
-    severity: WARNING
-    languages: [ruby]
+- id: dangerous-syscall
+  pattern: |
+    syscall
+  message: >-
+    'syscall' is essentially unsafe and unportable. The DL (https://apidock.com/ruby/Fiddle)
+    library is preferred for safer and a bit more portable programming.
+  metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - ruby
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  severity: WARNING
+  languages: [ruby]

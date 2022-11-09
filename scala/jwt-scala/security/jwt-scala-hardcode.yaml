@@ -60,15 +60,24 @@ rules:
   message: >-
     Hardcoded JWT secret or private key is used.
     This is a Insufficiently Protected Credentials weakness: https://cwe.mitre.org/data/definitions/522.html
-    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets in environment variables)
+    Consider using an appropriate security mechanism to protect the credentials (e.g. keeping secrets
+    in environment variables)
   languages: [scala]
   severity: WARNING
-  metadata: 
+  metadata:
     references:
     - https://jwt-scala.github.io/jwt-scala/
     category: security
-    cwe: "CWE-522: Insufficiently Protected Credentials"
-    owasp: "A2: Broken Authentication"
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
     technology:
-      - scala
-    confidence: MEDIUM
+    - scala
+    confidence: HIGH
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM

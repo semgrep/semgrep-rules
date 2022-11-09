@@ -1,22 +1,33 @@
 rules:
-  - id: unverified-ssl-context
-    pattern: ssl._create_unverified_context(...)
-    fix-regex:
-      regex: _create_unverified_context
-      replacement: create_default_context
-    message: >-
-      Unverified SSL context detected. This will permit insecure connections without
-      verifying
-      SSL certificates. Use 'ssl.create_default_context()' instead.
-    metadata:
-      owasp: "A6: Security Misconfiguration"
-      cwe: "CWE-295: Improper Certificate Validation"
-      references:
-        - https://docs.python.org/3/library/ssl.html#ssl-security
-        - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
-      category: security
-      technology:
-        - python
-    severity: ERROR
-    languages:
-      - python
+- id: unverified-ssl-context
+  patterns:
+  - pattern-either:
+    - pattern: ssl._create_unverified_context(...)
+    - pattern: ssl._create_default_https_context = ssl._create_unverified_context
+  fix-regex:
+    regex: _create_unverified_context
+    replacement: create_default_context
+  message: >-
+    Unverified SSL context detected. This will permit insecure connections without
+    verifying
+    SSL certificates. Use 'ssl.create_default_context' instead.
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-295: Improper Certificate Validation'
+    references:
+    - https://docs.python.org/3/library/ssl.html#ssl-security
+    - https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
+    category: security
+    technology:
+    - python
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  severity: ERROR
+  languages:
+  - python

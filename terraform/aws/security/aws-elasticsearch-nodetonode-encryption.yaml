@@ -1,43 +1,43 @@
 rules:
 - id: aws-elasticsearch-nodetonode-encryption-not-enabled
   patterns:
-    - pattern-either:
-      - pattern: |
-          resource "aws_elasticsearch_domain" $ANYTHING {
+  - pattern-either:
+    - pattern: |
+        resource "aws_elasticsearch_domain" $ANYTHING {
+          ...
+          node_to_node_encryption {
             ...
-            node_to_node_encryption {
-              ...
-              enabled = false
-              ...
-            }
+            enabled = false
             ...
           }
-      - pattern: |
-          resource "aws_elasticsearch_domain" $ANYTHING {
+          ...
+        }
+    - pattern: |
+        resource "aws_elasticsearch_domain" $ANYTHING {
+          ...
+          cluster_config {
             ...
-            cluster_config {
-              ...
-              instance_count = $COUNT
-              ...
-            }
-          }
-    - pattern-not-inside: |
-          resource "aws_elasticsearch_domain" $ANYTHING {
+            instance_count = $COUNT
             ...
-            cluster_config {
-              ...
-              instance_count = $COUNT
-              ...
-            }
-            node_to_node_encryption {
-              ...
-              enabled = true
-              ...
-            }
           }
-    - metavariable-comparison:
-        metavariable: $COUNT
-        comparison: $COUNT > 1
+        }
+  - pattern-not-inside: |
+      resource "aws_elasticsearch_domain" $ANYTHING {
+        ...
+        cluster_config {
+          ...
+          instance_count = $COUNT
+          ...
+        }
+        node_to_node_encryption {
+          ...
+          enabled = true
+          ...
+        }
+      }
+  - metavariable-comparison:
+      metavariable: $COUNT
+      comparison: $COUNT > 1
   message: >-
     Ensure all Elasticsearch has node-to-node encryption enabled.	
   metadata:
@@ -46,8 +46,16 @@ rules:
     - terraform
     - aws
     owasp:
-    - A02:2021 - Cryptographic Failures
     - A03:2017 - Sensitive Data Exposure
-    cwe: 'CWE-326: Inadequate Encryption Strength'
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
   languages: [hcl]
   severity: WARNING

@@ -1,22 +1,32 @@
 rules:
 - id: vm-runincontext-injection
-  mode: taint
   message: >-
     The `vm` module enables compiling and running code within V8 Virtual Machine contexts.
     The `vm` module is not a security mechanism. Do not use it to run untrusted code.
     If code passed to `vm` functions is controlled by user input it could result in command injection.
     Do not let user input in `vm` functions.
-  severity: ERROR
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    category: security
+    technology:
+    - javascript
+    - aws-lambda
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
   languages:
   - javascript
   - typescript
-  metadata:
-    owasp: "A1: Injection"
-    cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-    category: security
-    technology:
-      - javascript
-      - aws-lambda
+  severity: ERROR
+  mode: taint
   pattern-sources:
   - patterns:
     - pattern: $EVENT

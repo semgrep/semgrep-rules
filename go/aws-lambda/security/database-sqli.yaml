@@ -3,21 +3,32 @@ rules:
   languages:
   - go
   message: >-
-    Detected SQL statement that is tainted by `$EVENT` object. This could lead to SQL injection if the variable is user-controlled
+    Detected SQL statement that is tainted by `$EVENT` object. This could lead to SQL injection if the
+    variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
     used parameterized queries or prepared statements instead.
     You can use prepared statements with the 'Prepare' and 'PrepareContext' calls.
   mode: taint
   metadata:
     references:
-      - 'https://pkg.go.dev/database/sql#DB.Query'
+    - https://pkg.go.dev/database/sql#DB.Query
     category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     technology:
-      - aws-lambda
-      - database
-      - sql
+    - aws-lambda
+    - database
+    - sql
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
   pattern-sinks:
   - patterns:
     - pattern: $QUERY
@@ -39,13 +50,13 @@ rules:
           ...
           lambda.Start($HANDLER, ...)
       - patterns:
-          - pattern-inside: |
-              func $HANDLER($EVENT $TYPE) {...}
-              ...
-              lambda.Start($HANDLER, ...)
-          - pattern-not-inside: |
-              func $HANDLER($EVENT context.Context) {...}
-              ...
-              lambda.Start($HANDLER, ...)
+        - pattern-inside: |
+            func $HANDLER($EVENT $TYPE) {...}
+            ...
+            lambda.Start($HANDLER, ...)
+        - pattern-not-inside: |
+            func $HANDLER($EVENT context.Context) {...}
+            ...
+            lambda.Start($HANDLER, ...)
     - pattern: $EVENT
   severity: WARNING

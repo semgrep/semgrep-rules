@@ -50,20 +50,25 @@ rules:
       $DECRYPTED_STRING = openssl_decrypt(...);
       ...
       assert($DECRYPTED_STRING !== false,...);
-  message: The function `openssl_decrypt` returns either a string of the decrypted
-    data on success or `false` on failure. If the failure case is not handled, this
-    could lead to undefined behavior in your application. Please handle the case where
-    `openssl_decrypt` returns `false`.
+  message: The function `openssl_decrypt` returns either a string of the decrypted data on success or
+    `false` on failure. If the failure case is not handled, this could lead to undefined behavior in your
+    application. Please handle the case where `openssl_decrypt` returns `false`.
   languages:
   - php
   severity: WARNING
   metadata:
     references:
     - https://www.php.net/manual/en/function.openssl-decrypt.php
-    cwe: 'CWE-252: Unchecked Return Value'
+    cwe:
+    - 'CWE-252: Unchecked Return Value'
     owasp:
     - A02:2021 - Cryptographic Failures
     technology:
     - php
     - openssl
     category: security
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

@@ -1,6 +1,6 @@
 const vm = require('vm')
+const { runInContext } = require('vm')
 
-// ruleid: vm-runincontext-context-injection
 function test1(userInput) {
     var input = userInput.something || ''
     var sandbox = {
@@ -10,16 +10,14 @@ function test1(userInput) {
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
-// ruleid: vm-runincontext-context-injection
 foo(function (userInput) {
     var sandbox = {
         foo: userInput
     }
     vm.createContext(sandbox)
-    vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
+    runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 })
 
-// ok: vm-runincontext-context-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -28,7 +26,6 @@ function testOk1(userInput) {
     vm.runInContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
-// ruleid: vm-runinnewcontext-context-injection
 function test2(userInput) {
     var input = userInput.something || ''
     var sandbox = {
@@ -37,7 +34,6 @@ function test2(userInput) {
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 }
 
-// ruleid: vm-runinnewcontext-context-injection
 foo(function (userInput) {
     var sandbox = {
         foo: userInput
@@ -45,7 +41,6 @@ foo(function (userInput) {
     vm.runInNewContext('safeEval(orderLinesData)', sandbox, { timeout: 2000 })
 })
 
-// ok: vm-runinnewcontext-context-injection
 function testOk1(userInput) {
     var sandbox = {
         foo: 1
@@ -57,7 +52,6 @@ function test3(userInput) {
     const code = `
         var x = ${userInput};
     `
-    // ruleid: vm-runinthiscontext-code-injection
     vm.runInThisContext(code)
 }
 
@@ -65,25 +59,21 @@ function okTest3(userInput) {
     const code = `
         var x = 1;
     `
-    // ok: vm-runinthiscontext-code-injection
     vm.runInThisContext(code)
 }
 
 function test4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + ${userInput}`
-    // ruleid: vm-compilefunction-code-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
 function okTest4(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-    // ok: vm-compilefunction-code-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
-// ruleid: vm-compilefunction-context-injection
 function test5(userInput) {
     const context = vm.createContext({name: userInput})
     const code = `return 'hello ' name`
@@ -93,12 +83,10 @@ function test5(userInput) {
 function okTest5(userInput) {
     const parsingContext = vm.createContext({name: 'world'})
     const code = `return 'hello ' + name`
-    // ok: vm-compilefunction-context-injection
     const fn = vm.compileFunction(code, [], { parsingContext })
 }
 
 function test6(userInput) {
-    // ruleid: vm-script-code-injection
     const script = new vm.Script(`
         function add(a, b) {
           return a + ${userInput};
@@ -111,7 +99,6 @@ function test6(userInput) {
 }
 
 function okTest6(userInput) {
-    // ok: vm-script-code-injection
     const script = new vm.Script(`
         function add(a, b) {
           return a + b;
@@ -126,7 +113,6 @@ function okTest6(userInput) {
 async function test6(userInput) {
     const contextifiedObject = vm.createContext({ secret: 42 });
 
-    // ruleid: vm-sourcetextmodule-code-injection
       const module = new vm.SourceTextModule(
         `Object.getPrototypeOf(import.meta.prop).secret = ${userInput};`,
         {

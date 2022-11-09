@@ -1,0 +1,43 @@
+rules:
+- id: azure-service-fabric-cluster-protection-level
+  message: >-
+    Ensure that Service Fabric use three levels of protection available
+  patterns:
+  - pattern: resource
+  - pattern-inside: |
+      resource "azurerm_service_fabric_cluster" "..." {
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_service_fabric_cluster" "..." {
+      ...
+      fabric_settings {
+        name = "Security"
+        parameters = {
+          ...
+          name = "ClusterProtectionLevel"
+          value = "EncryptAndSign"
+          ...
+        }
+        ...
+      }
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

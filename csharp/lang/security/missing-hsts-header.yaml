@@ -1,0 +1,52 @@
+rules:
+- id: missing-hsts-header
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        public void Configure(...) {
+            ...
+            (IApplicationBuilder $APP). ...;
+            ...
+        }
+    - focus-metavariable: $APP
+    - pattern-not-inside: |
+        public void Configure(...) {
+            ...
+            (IApplicationBuilder $APP).UseHsts(...);
+            ...
+        }
+  - patterns:
+    - pattern-inside: |
+        public void ConfigureServices(...) {
+            ...
+            (IServiceCollection $SERVICES). ...;
+            ...
+        }
+    - focus-metavariable: $SERVICES
+    - pattern-not-inside: |
+        public void ConfigureServices(...) {
+            ...
+            (IServiceCollection $SERVICES).AddHsts(...);
+            ...
+        }
+  message: The HSTS HTTP response security header is missing, allowing interaction and communication to
+    be sent over the insecure HTTP protocol.
+  metadata:
+    category: security
+    technology:
+    - dotnet
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-346: Origin Validation Error'
+    references:
+    - https://cwe.mitre.org/data/definitions/346.html
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - csharp
+  severity: WARNING

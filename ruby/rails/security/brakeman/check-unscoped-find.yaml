@@ -24,21 +24,27 @@ rules:
     - metavariable-regex:
         metavariable: $MODEL
         regex: '[A-Z]\S+'
-  message: Found an unscoped `find(...)` with user-controllable input.  If the ActiveRecord
-    model being searched against is sensitive, this may lead to Insecure Direct Object
-    Reference (IDOR) behavior and allow users to read arbitrary records.
+  message: Found an unscoped `find(...)` with user-controllable input.  If the ActiveRecord model being
+    searched against is sensitive, this may lead to Insecure Direct Object Reference (IDOR) behavior and
+    allow users to read arbitrary records.
   languages:
   - ruby
   severity: WARNING
   metadata:
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_unscoped_find.rb
     category: security
-    cwe: 'CWE-639: Authorization Bypass Through User-Controlled Key'
+    cwe:
+    - 'CWE-639: Authorization Bypass Through User-Controlled Key'
     owasp:
+    - A05:2017 - Broken Access Control
     - A01:2021 - Broken Access Control
-    - A05:2021 - Broken Access Control
     technology:
     - ruby
     - rails
     references:
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails3.1/app/controllers/users_controller.rb
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM

@@ -1,35 +1,42 @@
 rules:
-  - id: no-interpolation-js-template-string
-    message: >-
-      Detected template variable interpolation in a JavaScript
-      template string. This is potentially vulnerable to
-      cross-site scripting (XSS) attacks because a malicious
-      actor has control over JavaScript but without the need
-      to use escaped characters. Instead, obtain this variable
-      outside of the template string and ensure your template
-      is properly escaped.
-    metadata:
-      cwe:
-        "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site\
-        \ Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      references:
-        - https://github.com/golang/go/issues/9200#issuecomment-66100328
-        - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
-      category: security
-      technology:
-        - generic
-      confidence: MEDIUM
-    languages:
-      - generic
-    severity: WARNING
-    paths:
-      include:
-        - "*.html"
-        - "*.thtml"
-        - "*.gohtml"
-        - "*.tmpl"
-        - "*.tpl"
-    patterns:
-      - pattern-inside: <script ...> ... ... ... ... ... </script>
-      - pattern: "` ... {{ ... }} ...`"
+- id: no-interpolation-js-template-string
+  message: >-
+    Detected template variable interpolation in a JavaScript
+    template string. This is potentially vulnerable to
+    cross-site scripting (XSS) attacks because a malicious
+    actor has control over JavaScript but without the need
+    to use escaped characters. Instead, obtain this variable
+    outside of the template string and ensure your template
+    is properly escaped.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://github.com/golang/go/issues/9200#issuecomment-66100328
+    - https://blogtitle.github.io/robn-go-security-pearls-cross-site-scripting-xss/
+    category: security
+    technology:
+    - generic
+    confidence: LOW
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+  languages:
+  - generic
+  severity: WARNING
+  paths:
+    include:
+    - '*.html'
+    - '*.thtml'
+    - '*.gohtml'
+    - '*.tmpl'
+    - '*.tpl'
+  patterns:
+  - pattern-inside: <script ...> ... ... ... ... ... </script>
+  - pattern: '` ... {{ ... }} ...`'

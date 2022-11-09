@@ -1,21 +1,30 @@
 rules:
-  - id: react-html-element-spreading
-    patterns:
-      - pattern: |
-          <$EL {...$PROPS} />
-      - metavariable-regex:
-          metavariable: $EL
-          regex: "[a-z]([a-zA-Z])*"
-    message: >-
-      It is a good practice to avoid spreading for JSX attributes. This prevents accidentally
-      passing `dangerouslySetInnerHTML` to an element.
-    metadata:
-      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      category: security
-      technology:
-        - react
-    languages:
-      - typescript
-      - javascript
-    severity: WARNING
+- id: react-html-element-spreading
+  message: >-
+    this rule has been deprecated.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://pragmaticwebsecurity.com/articles/spasecurity/react-xss-part2.html
+    category: security
+    deprecated: true
+    technology:
+    - react
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()

@@ -1,28 +1,38 @@
 rules:
-  - id: blowfish-insufficient-key-size
-    metadata:
-      cwe: "CWE-326: Inadequate Encryption Strength"
-      owasp: "A3: Sensitive Data Exposure"
-      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE
-      asvs:
-        section: V6 Stored Cryptography Verification Requirements
-        control_id: 6.2.5 Insecure Algorithm
-        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
-        version: "4"
-      category: security
-      technology:
-        - java
-    message: >-
-      Using less than 128 bits for Blowfish is considered insecure. Use 128 bits
-      or more, or switch to use AES instead.
-    severity: WARNING
-    languages:
-      - java
-    patterns:
-      - pattern: |
-          $KEYGEN = KeyGenerator.getInstance("Blowfish");
-          ...
-          $KEYGEN.init($SIZE);
-      - metavariable-comparison:
-          metavariable: $SIZE
-          comparison: $SIZE < 128
+- id: blowfish-insufficient-key-size
+  metadata:
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.5 Insecure Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+  message: >-
+    Using less than 128 bits for Blowfish is considered insecure. Use 128 bits
+    or more, or switch to use AES instead.
+  severity: WARNING
+  languages:
+  - java
+  patterns:
+  - pattern: |
+      $KEYGEN = KeyGenerator.getInstance("Blowfish");
+      ...
+      $KEYGEN.init($SIZE);
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 128

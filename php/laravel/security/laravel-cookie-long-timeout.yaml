@@ -1,0 +1,44 @@
+rules:
+- id: laravel-cookie-long-timeout
+  patterns:
+  - pattern: |
+      'lifetime'
+  - pattern-inside: |
+      return [
+        ...,
+        'lifetime' => $TIME,
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'lifetime' => env("$VAR", $DEFAULT),
+        ...
+      ];
+  - metavariable-comparison:
+      metavariable: $TIME
+      comparison: $TIME > 30
+  paths:
+    include:
+    - '*session.php'
+  message: >-
+    Found a configuration file where the lifetime attribute  is over 30 minutes.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    technology:
+    - php
+    - laravel
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

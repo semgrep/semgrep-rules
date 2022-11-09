@@ -18,31 +18,25 @@ rules:
             - pattern: '"s3EncryptionEnabled": false'
             - pattern: '"cloudWatchEncryptionEnabled": false'
             - pattern: '{..., "cloudWatchLogGroupName": "", ..., "s3BucketName": "", ...}'
-    # TODO once https://github.com/returntocorp/semgrep/issues/4582 is resolved
-    #- patterns:
-    #  - pattern-inside: |
-    #      resource "aws_ssm_document" $ANYTHING {
-    #        ...
-    #        document_format = "YAML"
-    #        ...
-    #      }
-    #  - pattern: content = "$YAMLSTATEMENT"
-    #  - metavariable-pattern:
-    #      metavariable: $YAMLSTATEMENT
-    #      language: yaml
-    #      pattern: |
-    #        ...
-    #        schemaVersion: '1.0'
-    #        ...
-  message: The AWS SSM logs are unencrypted or disabled. Please enable logs and use AWS KMS encryption key to protect SSM logs. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
+  message: The AWS SSM logs are unencrypted or disabled. Please enable logs and use AWS KMS encryption
+    key to protect SSM logs. To create your own, create a aws_kms_key resource or use the ARN string of
+    a key in your account.
   languages: [hcl]
   severity: WARNING
   metadata:
     owasp:
+    - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
-    cwe: |
-      CWE-311: Missing Encryption of Sensitive Data
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
     technology:
-      - aws
-      - terraform
+    - aws
+    - terraform
     category: security
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

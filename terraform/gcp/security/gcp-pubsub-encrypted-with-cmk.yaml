@@ -1,0 +1,33 @@
+rules:
+- id: gcp-pubsub-encrypted-with-cmk
+  patterns:
+  - pattern: |
+      resource "google_pubsub_topic" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_pubsub_topic" $ANYTHING {
+        ...
+        kms_key_name = ...
+        ...
+      }
+  message: >-
+    Ensure PubSub Topics are encrypted with Customer Supplied Encryption Keys (CSEK)
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - gcp
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

@@ -1,19 +1,34 @@
 rules:
-  - id: preg-replace-eval
-    patterns:
-      - pattern: preg_replace(...);
-      - pattern-not: preg_replace("...", ...);
-    message: >-
-      Calling preg_replace with user input in the pattern can lead to arbitrary
-      code execution. The eval modifier (`/e`) evaluates the replacement argument
-      as code.
-    metadata:
-      references:
-        - https://www.php.net/manual/en/function.preg-replace.php
-        - https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
-        - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PregReplaceSniff.php
-      category: security
-      technology:
-        - php
-    languages: [php]
-    severity: ERROR
+- id: preg-replace-eval
+  patterns:
+  - pattern: preg_replace(...);
+  - pattern-not: preg_replace("...", ...);
+  - pattern-not: preg_replace(array("..."), ...);
+  - pattern-not-inside: |
+      $VAR = array("...");
+      ...
+      preg_replace($VAR, ...);
+  message: >-
+    Calling preg_replace with user input in the pattern can lead to arbitrary
+    code execution. The eval modifier (`/e`) evaluates the replacement argument
+    as code.
+  metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    references:
+    - https://www.php.net/manual/en/function.preg-replace.php
+    - https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PregReplaceSniff.php
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  languages: [php]
+  severity: ERROR

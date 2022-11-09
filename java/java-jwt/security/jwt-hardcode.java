@@ -40,10 +40,9 @@ public class App
     }
 }
 
-// ruleid: java-jwt-hardcoded-secret
 abstract class App2
 {
-
+// ruleid: java-jwt-hardcoded-secret
     static String secret = "secret";
 
     public void bad2() {

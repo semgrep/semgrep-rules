@@ -1,4 +1,4 @@
-const {readFile} = require('fs')
+const {readFile} = require('fs/promises')
 const fs = require('fs')
 
 function test1(fileName) {

@@ -1,23 +1,33 @@
 rules:
-  - id: detect-no-csrf-before-method-override
-    metadata:
-      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
-      source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-no-csrf-before-method-override.js
-      references:
-        - https://github.com/nodesecurity/eslint-plugin-security/blob/master/docs/bypass-connect-csrf-protection-by-abusing.md
-      category: security
-      technology:
-        - javascript
-    message: >-
-      Detected use of express.csrf() middleware before express.methodOverride(). This
-      can
-      allow GET requests (which are not checked by csrf) to turn into POST requests
-      later.
-    pattern: |
-      express.csrf();
-      ...
-      express.methodOverride();
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
+- id: detect-no-csrf-before-method-override
+  message: >-
+    Detected use of express.csrf() middleware before express.methodOverride(). This
+    can
+    allow GET requests (which are not checked by csrf) to turn into POST requests
+    later.
+  metadata:
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-no-csrf-before-method-override.js
+    references:
+    - https://github.com/nodesecurity/eslint-plugin-security/blob/master/docs/bypass-connect-csrf-protection-by-abusing.md
+    category: security
+    technology:
+    - javascript
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  pattern: |
+    express.csrf();
+    ...
+    express.methodOverride();

@@ -1,54 +1,11 @@
-class Person
-end
-
 # ruleid:ruby-eval
-Person.class_eval do
-  def say_hello
-   "Hello!"
-  end
-end
-
-jimmy = Person.new
-jimmy.say_hello # "Hello!"
-
-# ruleid:ruby-eval
-Person.instance_eval do
-  def human?
-    true
-  end
-end
-
-Person.human? # true
-
-# ruleid:ruby-eval
-Array.class_eval(array_second)
-
-
-
-class Account < ActiveRecord::Base
-  validates_format_of :name, :with => /^[a-zA-Z]+$/
-  validates_format_of :blah, :with => /\A[a-zA-Z]+$/
-  validates_format_of :something, :with => /[a-zA-Z]\z/
-  validates_format_of :good_valid, :with => /\A[a-zA-Z]\z/ #No warning
-  validates_format_of :not_bad, :with => /\A[a-zA-Z]\Z/ #No warning
-
-  def mass_assign_it
-    Account.new(params[:account_info]).some_other_method
-  end
-
-  def test_class_eval
-    # ruleid:ruby-eval
-    User.class_eval do
-      attr_reader :some_private_thing
-    end
-  end
-end
+Array.class_eval(cookies['tainted_cookie'])
 
 def zen
   41
 end
 
-# ruleid:ruby-eval
+# ok:ruby-eval
 eval("def zen; 42; end")
 
 puts zen
@@ -56,21 +13,50 @@ puts zen
 class Thing
 end
 a = %q{def hello() "Hello there!" end}
-# ruleid:ruby-eval
+# not user-controllable, this is ok
+# ok:ruby-eval
 Thing.module_eval(a)
 puts Thing.new.hello()
+b = params['something']
+# ruleid:ruby-eval
+Thing.module_eval(b)
 
+# ruleid:ruby-eval
+eval(b)
+# ruleid:ruby-eval
+eval(b,some_binding)
 
 def get_binding(param)
   binding
 end
 b = get_binding("hello")
-# ruleid:ruby-eval
-b.eval("param")
+# ok:ruby-eval
+b.eval("some_func")
+
+# ok:ruby-eval
+eval("some_func",b)
 
 # ruleid:ruby-eval
+eval(params['cmd'],b)
+
+# ruleid:ruby-eval
+eval(params.dig('cmd'))
+
+# ruleid:ruby-eval
+eval(cookies.delete('foo'))
+
+# ruleid:ruby-eval
+RubyVM::InstructionSequence.compile(foo).eval
+
+# ok:ruby-eval
 RubyVM::InstructionSequence.compile("1 + 2").eval
 
-iseq = RubyVM::InstructionSequence.compile('num = 1 + 2')
+iseq = RubyVM::InstructionSequence.compile(foo)
 # ruleid:ruby-eval
 iseq.eval
+
+
+iseq = RubyVM::InstructionSequence.compile('num = 1 + 2')
+# ok:ruby-eval
+iseq.eval
+

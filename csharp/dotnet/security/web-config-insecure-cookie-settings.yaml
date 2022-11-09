@@ -1,39 +1,43 @@
 rules:
 - id: web-config-insecure-cookie-settings
   patterns:
-    - pattern-either:
-        - pattern: |
-            requireSSL="false"
-        - pattern: |
-            cookieRequireSSL="false"
-    - pattern-either:
-        - pattern-inside: |
-            <httpCookies ...>
-        - pattern-inside: |
-            <forms ...>
-        - pattern-inside: |
-            <roleManager ...>
-  message: Cookie Secure flag is explicitly disabled. You
-    should enforce this value to avoid accidentally presenting sensitive cookie values over
-    plaintext HTTP connections.
+  - pattern-either:
+    - pattern: |
+        requireSSL="false"
+    - pattern: |
+        cookieRequireSSL="false"
+  - pattern-either:
+    - pattern-inside: |
+        <httpCookies ...>
+    - pattern-inside: |
+        <forms ...>
+    - pattern-inside: |
+        <roleManager ...>
+  message: Cookie Secure flag is explicitly disabled. You should enforce this value to avoid accidentally
+    presenting sensitive cookie values over plaintext HTTP connections.
   languages:
-    - generic
+  - generic
   severity: WARNING
   paths:
     include:
-      - "*web.config"
+    - '*web.config'
   metadata:
     category: security
     license: MIT
     references:
-      - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
-      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
-      - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
+    - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
     technology:
-      - .net
-      - asp
-      - webforms
-    cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    - .net
+    - asp
+    - webforms
+    cwe:
+    - "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
     owasp:
-      - A06:2017 - Security Misconfiguration
-      - A05:2021 - Security Misconfiguration
+    - A05:2021 - Security Misconfiguration
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

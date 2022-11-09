@@ -1,10 +1,9 @@
 rules:
 - id: nan-injection
-  message: Found user input going directly into typecast for bool(), float(), or complex().
-    This allows  an attacker to inject Python's not-a-number (NaN) into the typecast.
-    This results in undefind behavior, particularly when doing comparisons. Either
-    cast to a different type, or add a guard checking for all capitalizations of the
-    string 'nan'.
+  message: Found user input going directly into typecast for bool(), float(), or complex(). This allows  an
+    attacker to inject Python's not-a-number (NaN) into the typecast. This results in undefind behavior,
+    particularly when doing comparisons. Either cast to a different type, or add a guard checking for
+    all capitalizations of the string 'nan'.
   languages:
   - python
   severity: ERROR
@@ -32,6 +31,12 @@ rules:
     - https://discuss.python.org/t/nan-breaks-min-max-and-sorting-functions-a-solution/2868
     - https://blog.bitdiscovery.com/2021/12/python-nan-injection/
     category: security
-    cwe: 'CWE-704: Incorrect Type Conversion or Cast'
+    cwe:
+    - 'CWE-704: Incorrect Type Conversion or Cast'
     technology:
     - flask
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: MEDIUM
+    confidence: MEDIUM

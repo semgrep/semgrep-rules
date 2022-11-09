@@ -1,24 +1,36 @@
 rules:
 - id: harden-dompurify-usage
+  message: DOMPurify.sanitize() was called without using RETURN_DOM or RETURN_DOM_FRAGMENT. This is prone
+    to mutation XSS, which could possibly bypass existing XSS filters. Adding one of these options will
+    harden against potential future DOMPurify exploits.
+  metadata:
+    category: security
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    technology:
+    - javascript
+    - typescript
+    references:
+    - https://research.securitum.com/mutation-xss-via-mathml-mutation-dompurify-2-0-17-bypass/
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - js
+  - ts
+  severity: ERROR
   patterns:
   - pattern: DOMPurify.sanitize($X, ...)
   - pattern-not: |
       DOMPurify.sanitize($X, {RETURN_DOM_FRAGMENT: true})
   - pattern-not: |
       DOMPurify.sanitize($X, {RETURN_DOM: true})
-  message: DOMPurify.sanitize() was called without using RETURN_DOM or RETURN_DOM_FRAGMENT. This is prone to mutation XSS,
-    which could possibly bypass existing XSS filters. Adding one of these options will harden against potential future DOMPurify
-    exploits.
-  languages:
-  - js
-  - ts
-  severity: ERROR
   fix: |
-    DOMPurify.sanitize($X, {RETURN_DOM: true});
-  metadata:
-    category: security
-    technology:
-    - javascript
-    - typescript
-    references:
-    - https://research.securitum.com/mutation-xss-via-mathml-mutation-dompurify-2-0-17-bypass/
+    DOMPurify.sanitize($X, {RETURN_DOM: true})

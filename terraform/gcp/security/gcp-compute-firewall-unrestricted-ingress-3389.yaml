@@ -1,0 +1,46 @@
+rules:
+- id: gcp-compute-firewall-unrestricted-ingress-3389
+  patterns:
+  - pattern: resource
+  - pattern-either:
+    - pattern-inside: |
+        resource "google_compute_firewall" "..." {
+        ...
+        allow {
+          protocol = "tcp"
+          ports    = [3389]
+        }
+        source_ranges = ["0.0.0.0/0"]
+        ...
+        }
+    - pattern-inside: |
+        resource "google_compute_firewall" "..." {
+        ...
+        allow {
+          protocol = "tcp"
+          ports    = [..., "3389", ...]
+        }
+        source_ranges = ["0.0.0.0/0"]
+        ...
+        }
+  message: >-
+    Ensure Google compute firewall ingress does not allow unrestricted RDP access
+  metadata:
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    category: security
+    technology:
+    - terraform
+    - gcp
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

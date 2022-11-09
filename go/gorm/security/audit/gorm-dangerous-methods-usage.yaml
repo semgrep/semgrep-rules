@@ -1,0 +1,61 @@
+rules:
+- id: gorm-dangerous-method-usage
+  message: >-
+    Detected usage of dangerous method $METHOD which does not escape  inputs (see link in references).
+    If the argument is user-controlled,  this can lead to SQL injection.  When using $METHOD function,
+    do not trust user-submitted data and only allow  approved list of input (possibly, use an allowlist
+    approach).
+  severity: WARNING
+  languages:
+  - go
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          ($REQUEST : http.Request).$ANYTHING
+      - pattern: |
+          ($REQUEST : *http.Request).$ANYTHING
+    - metavariable-regex:
+        metavariable: $ANYTHING
+        regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: |
+        import ("gorm.io/gorm")
+        ...
+    - patterns:
+      - pattern-inside: |
+          func $VAL(..., $GORM *gorm.DB,... ) {
+            ...
+          }
+      - pattern-either:
+        - pattern: |
+            $GORM. ... .$METHOD($VALUE)
+        - pattern: |
+            $DB := $GORM. ... .$ANYTHING(...)
+            ...
+            $DB. ... .$METHOD($VALUE)
+    - focus-metavariable: $VALUE
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(Order|Exec|Raw|Group|Having|Distinct|Select|Pluck)$
+  metadata:
+    category: security
+    technology:
+    - gorm
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://gorm.io/docs/security.html#SQL-injection-Methods
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    confidence: MEDIUM
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM

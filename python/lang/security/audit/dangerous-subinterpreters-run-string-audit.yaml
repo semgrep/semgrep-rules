@@ -1,0 +1,31 @@
+rules:
+- id: dangerous-subinterpreters-run-string-audit
+  patterns:
+  - pattern: |
+      _xxsubinterpreters.run_string($ID, $PAYLOAD, ...)
+  - pattern-not: |
+      _xxsubinterpreters.run_string($ID, "...", ...)
+  message: >-
+    Found dynamic content in `run_string`.
+    This is dangerous if external data can reach this function call because it allows
+    a malicious actor to run arbitrary Python code.
+    Ensure no external data reaches here.
+  metadata:
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://bugs.python.org/issue43472
+    - https://semgrep.dev/docs/cheat-sheets/python-command-injection/
+    category: security
+    technology:
+    - python
+    confidence: LOW
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+  severity: WARNING
+  languages:
+  - python

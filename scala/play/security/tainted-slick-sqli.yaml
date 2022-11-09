@@ -6,13 +6,22 @@ rules:
     - https://scala-slick.org/doc/3.3.3/sql.html#splicing-literal-values
     - https://scala-slick.org/doc/3.2.0/sql-to-slick.html#non-optimal-sql-code
     category: security
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp: "A1: Injection"
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
     technology:
     - scala
     - slick
     - play
     confidence: HIGH
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
   message: >-
     Detected a tainted SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
@@ -72,4 +81,4 @@ rules:
         ...
   severity: ERROR
   languages:
-    - scala
+  - scala

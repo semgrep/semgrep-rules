@@ -1,45 +1,63 @@
 rules:
-  - id: detect-angular-element-methods
-    mode: taint
-    message: >-
-      Use of angular.element can lead to XSS if user-input is treated as part of the HTML element within `$SINK`. 
-      It is recommended to contextually output encode user-input, before inserting into `$SINK`. 
-      If the HTML needs to be preseved it is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
-    languages:
-      - javascript
-      - typescript
-    metadata:
-      confidence: LOW
-      references:
-        - https://docs.angularjs.org/api/ng/function/angular.element
-        - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
-      category: security
-      technology:
-        - angularjs
-    severity: INFO
-    pattern-sources:
+- id: detect-angular-element-methods
+  message: >-
+    Use of angular.element can lead to XSS if user-input is treated as part of the HTML element within
+    `$SINK`.  It is recommended to contextually output encode user-input, before inserting into `$SINK`.  If
+    the HTML needs to be preseved it is recommended to sanitize the input using $sce.getTrustedHTML or
+    $sanitize.
+  metadata:
+    confidence: LOW
+    references:
+    - https://docs.angularjs.org/api/ng/function/angular.element
+    - https://owasp.org/www-chapter-london/assets/slides/OWASPLondon20170727_AngularJS.pdf
+    category: security
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    technology:
+    - angularjs
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: INFO
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
       - patterns:
-          - pattern-either:
-              - pattern: $scope
-              - pattern: $rootScope
-              - pattern: $injector.get('$rootScope')
-              - pattern: $injector.get('$scope')
-    pattern-sinks:
-      - patterns:
-          - pattern-either:
-              - pattern-inside: |
-                  angular.element(...). ... .$SINK($QUERY)
-              - pattern-inside: |
-                  $ANGULAR = angular.element(...)
-                  ...
-                  $ANGULAR. ... .$SINK($QUERY)
-          - metavariable-regex:
-              metavariable: $SINK
-              regex: ^(after|append|html|prepend|replaceWith|wrap)$
-          - pattern: $QUERY
-    pattern-sanitizers:
-      - patterns:
-          - pattern-either:
-              - pattern: $sce.getTrustedHtml(...)
-              - pattern: $sanitize(...)
-              - pattern: DOMPurify.sanitize(...)
+        - pattern-inside: |
+            function(..., $SCOPE, ...) { ... }
+        - focus-metavariable: $SCOPE
+        - metavariable-regex:
+            metavariable: $SCOPE
+            regex: ^\$scope$
+      - pattern: $rootScope
+      - pattern: $injector.get('$rootScope')
+      - pattern: $injector.get('$scope')
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          angular.element(...). ... .$SINK($QUERY)
+      - pattern-inside: |
+          $ANGULAR = angular.element(...)
+          ...
+          $ANGULAR. ... .$SINK($QUERY)
+    - metavariable-regex:
+        metavariable: $SINK
+        regex: ^(after|append|html|prepend|replaceWith|wrap)$
+    - pattern: $QUERY
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: $sce.getTrustedHtml(...)
+      - pattern: $sanitize(...)
+      - pattern: DOMPurify.sanitize(...)

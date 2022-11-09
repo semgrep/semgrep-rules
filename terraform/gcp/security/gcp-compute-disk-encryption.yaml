@@ -1,0 +1,43 @@
+rules:
+- id: gcp-compute-disk-encryption
+  patterns:
+  - pattern: |
+      resource "google_compute_disk" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_compute_disk" $ANYTHING {
+        ...
+        disk_encryption_key {
+          raw_key = ...
+        }
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_compute_disk" $ANYTHING {
+        ...
+        disk_encryption_key {
+          kms_key_self_link = ...
+        }
+        ...
+      }
+  message: Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK)
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    technology:
+    - terraform
+    - gcp
+    category: security
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

@@ -14,15 +14,15 @@ rules:
   - patterns:
     - pattern: |
         DB::raw(...)
-  message: HTTP method [$METHOD] to Laravel route $ROUTE_NAME is vulnerable to SQL
-    injection via string concatentation or unsafe interpolation.
+  message: HTTP method [$METHOD] to Laravel route $ROUTE_NAME is vulnerable to SQL injection via string
+    concatentation or unsafe interpolation.
   languages:
   - php
   severity: WARNING
   metadata:
     category: security
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      (''SQL Injection'')'
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     owasp:
     - A01:2017 - Injection
     - A03:2021 - Injection
@@ -31,3 +31,10 @@ rules:
     technology:
     - php
     - laravel
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM

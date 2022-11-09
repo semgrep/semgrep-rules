@@ -152,5 +152,8 @@ function BytesFilter($translate) {
 
 function urldecode(str) {
     // ok: raw-html-join
+    console.log(['I <3 Semgrep', 'Hello world'].join("\n"));
+
+    // ok: raw-html-join
     return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }

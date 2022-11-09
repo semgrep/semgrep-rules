@@ -1,20 +1,29 @@
 rules:
-  - id: non-literal-import
-    patterns:
-      - pattern: |
-          importlib.import_module($NAME, ...)
-      - pattern-not: |
-          importlib.import_module("...", ...)
-    message: >-
-      Untrusted user input in `importlib.import_module()` function allows an attacker
-      to load arbitrary code.
-      Avoid dynamic values in `importlib.import_module()` or use a whitelist to prevent
-      running untrusted code.
-    metadata:
-      owasp: "A1: Injection"
-      cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
-      category: security
-      technology:
-        - python
-    languages: [python]
-    severity: WARNING
+- id: non-literal-import
+  patterns:
+  - pattern: |
+      importlib.import_module($NAME, ...)
+  - pattern-not: |
+      importlib.import_module("...", ...)
+  message: >-
+    Untrusted user input in `importlib.import_module()` function allows an attacker
+    to load arbitrary code.
+    Avoid dynamic values in `importlib.import_module()` or use a whitelist to prevent
+    running untrusted code.
+  metadata:
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-706: Use of Incorrectly-Resolved Name or Reference'
+    category: security
+    technology:
+    - python
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages: [python]
+  severity: WARNING

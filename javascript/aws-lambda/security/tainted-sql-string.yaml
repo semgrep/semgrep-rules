@@ -1,6 +1,5 @@
 rules:
 - id: tainted-sql-string
-  severity: ERROR
   message: >-
     Detected user input used to manually construct a SQL string. This is usually
     bad practice because manual construction could accidentally result in a SQL
@@ -12,13 +11,24 @@ rules:
     references:
     - https://owasp.org/www-community/attacks/SQL_Injection
     category: security
-    owasp: "A1: Injection"
-    cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     technology:
     - aws-lambda
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
   languages:
   - javascript
   - typescript
+  severity: ERROR
   mode: taint
   pattern-sources:
   - patterns:

@@ -1,9 +1,12 @@
 rules:
   - id: iteration-over-ls-output
-    pattern: |
-      for $VAR in $(ls ...); do
-        ...
-      done
+    patterns:
+      - pattern: |
+          for $VAR in $LIST; do
+            ...
+          done
+      - pattern: |
+          $(ls ...)
     message: >-
       Iterating over ls output is fragile. Use globs, e.g. 'dir/*' instead
       of '$(ls dir)'.

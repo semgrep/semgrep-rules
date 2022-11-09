@@ -1,0 +1,25 @@
+rules:
+- id: gcp-gke-has-labels
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_container_cluster" "..." {
+          ...
+          }
+    - pattern-not-inside: |
+          resource "google_container_cluster" "..." {
+          ...
+          resource_labels = {
+              "..." = "..."
+          }
+          ...
+          }
+  message: >-
+    Ensure Kubernetes Clusters are configured with Labels
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

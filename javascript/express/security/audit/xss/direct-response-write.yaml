@@ -1,39 +1,214 @@
 rules:
-  - id: direct-response-write
-    message: >-
-      Detected directly writing to a Response object. This bypasses
-      any HTML escaping and may expose your app to a cross-site scripting
-      (XSS) vulnerability. Instead, use 'resp.render()' to render
-      safely escaped HTML.
-    languages:
-      - javascript
-      - typescript
-    severity: ERROR
-    metadata:
-      owasp: "A7: Cross-Site Scripting (XSS)"
-      cwe: >-
-        CWE-79: Improper Neutralization of Input During Web Page Generation
-        ('Cross-site Scripting')
-      category: security
-      technology:
-        - express
-    patterns:
-      - pattern-either:
-          - pattern-inside: function ($REQ, $RES) {...}
-          - pattern-inside: function $FUNC($REQ, $RES) {...}
-          - pattern-inside: function ($REQ, $RES, $NEXT) {...}
-          - pattern-inside: function $FUNC($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $X = function $FUNC($REQ, $RES) {...}
-          - pattern-inside: $X = function $FUNC($REQ, $RES, $NEXT) {...}
-          - pattern-inside: $APP.get(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.post(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.put(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.head(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.delete(..., function $FUNC($REQ, $RES) {...})
-          - pattern-inside: $APP.options(..., function $FUNC($REQ, $RES) {...})
-      - pattern-not: $RES.write("...")
-      - pattern-not: $RES.send("...")
-      - pattern-either:
-          - pattern: $RES.write($ARG)
-          - pattern: $RES.send($ARG)
-    fix: $RES.render($ARG)
+- id: direct-response-write
+  message: >-
+    Detected directly writing to a Response object from user-defined input. This bypasses
+    any HTML escaping and may expose your application to a Cross-Site-scripting
+    (XSS) vulnerability. Instead, use 'resp.render()' to render
+    safely escaped HTML.
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    category: security
+    technology:
+    - express
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... ($REQ, $RES) {...}
+      - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
+      - patterns:
+        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES) {...})
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|head|delete|options)
+    - pattern-not-inside: |
+        function ... ($REQ, $RES) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        $APP.$METHOD(..., function $FUNC($REQ, $RES) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        })
+    - pattern-not-inside: |
+        function ... ($REQ, $RES, $NEXT) {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        function ... ($REQ, $RES) {
+            ...
+            $RES.set('$TYPE')
+        }
+    - pattern-not-inside: |
+        $APP.$METHOD(..., function $FUNC($REQ, $RES) {
+            ...
+            $RES.set('$TYPE')
+        })
+    - pattern-not-inside: |
+        function ... ($REQ, $RES, $NEXT) {
+            ...
+            $RES.set('$TYPE')
+        }
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+          {...}
+      - pattern-inside: |
+          ({ $REQ }: Request,$RES: Response) => {...}
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+        {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response) => {
+            ...
+            $RES.$SET('Content-Type', '$TYPE')
+        }
+    - pattern-not-inside: |
+        ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
+        {
+            ...
+            $RES.set('$TYPE')
+        }
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $RES.write($ARG)
+      - pattern: $RES.send($ARG)
+    - focus-metavariable: $ARG
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          import * as $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          import $S from "underscore.string"
+          ...
+      - pattern-inside: |
+          $S = require("underscore.string")
+          ...
+    - pattern-either:
+      - pattern: $S.escapeHTML(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from "dompurify"
+          ...
+      - pattern-inside: |
+          import { ..., $S,... } from "dompurify"
+          ...
+      - pattern-inside: |
+          import * as $S from "dompurify"
+          ...
+      - pattern-inside: |
+          $S = require("dompurify")
+          ...
+      - pattern-inside: |
+          import $S from "isomorphic-dompurify"
+          ...
+      - pattern-inside: |
+          import * as $S from "isomorphic-dompurify"
+          ...
+      - pattern-inside: |
+          $S = require("isomorphic-dompurify")
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $VALUE = $S(...)
+            ...
+        - pattern: $VALUE.sanitize(...)
+      - patterns:
+        - pattern-inside: |
+            $VALUE = $S.sanitize
+            ...
+        - pattern: $S(...)
+      - pattern: $S.sanitize(...)
+      - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'xss';
+          ...
+      - pattern-inside: |
+          import * as $S from 'xss';
+          ...
+      - pattern-inside: |
+          $S = require("xss")
+          ...
+    - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'sanitize-html';
+          ...
+      - pattern-inside: |
+          import * as $S from "sanitize-html";
+          ...
+      - pattern-inside: |
+          $S = require("sanitize-html")
+          ...
+    - pattern: $S(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $S = new Remarkable()
+          ...
+    - pattern: $S.render(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import $S from 'express-xss-sanitizer';
+          ...
+      - pattern-inside: |
+          import * as $S from "express-xss-sanitizer";
+          ...
+      - pattern-inside: |
+          const { ..., $S, ... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          var { ..., $S, ... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          let { ...,$S,... } = require('express-xss-sanitizer');
+          ...
+      - pattern-inside: |
+          $S = require("express-xss-sanitizer")
+          ...
+    - pattern: $S(...)
+    

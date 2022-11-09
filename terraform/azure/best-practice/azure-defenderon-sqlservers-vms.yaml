@@ -1,0 +1,27 @@
+rules:
+  - id: azure-defenderon-sqlservers-vms
+    message: >-
+      Ensure that Azure Defender is set to On for SQL servers on machines
+    patterns:
+      - pattern: resource
+      - pattern-not-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Standard"
+          resource_type = "SqlServerVirtualMachines"
+          ...
+          }
+      - pattern-inside: |
+          resource "azurerm_security_center_subscription_pricing" "..." {
+          ...
+          tier = "Free"
+          resource_type = "SqlServerVirtualMachines"
+          ...
+          }
+    metadata:
+      category: best-practice
+      technology:
+        - terraform
+        - azure
+    languages: [hcl]
+    severity: WARNING

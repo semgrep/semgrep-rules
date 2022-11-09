@@ -1,22 +1,35 @@
 rules:
-  - id: hardcoded-http-auth-in-controller
-    pattern: |
+- id: hardcoded-http-auth-in-controller
+  patterns:
+  - pattern-inside: |
       class $CONTROLLER < ApplicationController
         ...
-        http_basic_authenticate_with ..., :password => "...", ...
+        http_basic_authenticate_with ..., :password => "$SECRET", ...
       end
-    message: >-
-      Detected hardcoded password used in basic authentication in a controller
-      class. Including this password in version control could expose this
-      credential. Consider refactoring to use environment variables or
-      configuration files.
-    severity: ERROR
-    metadata:
-      cwe: "CWE-798: Use of Hard-coded Credentials"
-      owasp: "A3: Sensitive Data Exposure"
-      source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
+  - focus-metavariable: $SECRET
+  message: >-
+    Detected hardcoded password used in basic authentication in a controller
+    class. Including this password in version control could expose this
+    credential. Consider refactoring to use environment variables or
+    configuration files.
+  severity: WARNING
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
+    category: security
+    technology:
+    - ruby
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  languages:
+  - ruby

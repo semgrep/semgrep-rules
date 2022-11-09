@@ -1,0 +1,55 @@
+rules:
+- id: laravel-cookie-same-site
+  patterns:
+  - pattern: |
+      'cookie'
+  - pattern-inside: |
+      return [
+        ...,
+        'cookie' => env(...),
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'same_site' => 'lax',
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'same_site' => 'strict',
+        ...
+      ];
+  - pattern-not-inside: |
+      return [
+        ...,
+        'same_site' => env('$NAME', $DEFAULT),
+        ...
+      ];
+  paths:
+    include:
+    - '*session.php'
+  message: >-
+    Found a configuration file where the same_site attribute is not set to 'lax' or 'strict'.
+    Setting 'same_site' to 'lax' or 'strict' restricts cookies  to a first-party or same-site context,
+    which will protect your cookies and prevent CSRF.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-1275: Sensitive Cookie with Improper SameSite Attribute'
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - php
+    - laravel
+    references:
+    - https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Laravel_Cheat_Sheet.md
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

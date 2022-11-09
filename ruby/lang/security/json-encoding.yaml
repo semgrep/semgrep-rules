@@ -1,23 +1,45 @@
 rules:
-  - id: json-encoding
-    message: >-
-      When a 'Hash' with user-supplied input is encoded in JSON, Rails doesn't provide
-      adequate escaping.
-      If the JSON string is supplied into HTML, the page will be vulnerable to XXS attacks.
-      The affected Rails versions are 3.0.x, 3.1.x, 3.2.x, 4.1.x, 4.2.x.
-      To fix, either upgrade or add an initializer.
-    metadata:
-      references:
-        - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_encoding.rb
-        - https://groups.google.com/g/rubyonrails-security/c/7VlB_pck3hU/m/3QZrGIaQW6cJ
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: WARNING
-    pattern-either:
+- id: json-encoding
+  message: >-
+    When a 'Hash' with user-supplied input is encoded in JSON, Rails doesn't provide
+    adequate escaping.
+    If the JSON string is supplied into HTML, the page will be vulnerable to XXS attacks.
+    The affected Rails versions are 3.0.x, 3.1.x, 3.2.x, 4.1.x, 4.2.x.
+    To fix, either upgrade or add an initializer.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_json_encoding.rb
+    - https://groups.google.com/g/rubyonrails-security/c/7VlB_pck3hU/m/3QZrGIaQW6cJ
+    category: security
+    technology:
+    - ruby
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - ruby
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: |
+        params
+    - pattern-not: |
+        cookies
+  pattern-sinks:
+  - pattern-either:
+    - patterns:
+      - focus-metavariable: $X
       - pattern: |
-          params[$VAR].to_json
-      - pattern: |
-          JSON.encode(params[$VAR])
+          $X.to_json
+    - pattern: |
+        JSON.encode(...)

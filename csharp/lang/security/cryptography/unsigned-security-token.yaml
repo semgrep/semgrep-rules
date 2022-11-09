@@ -1,0 +1,31 @@
+rules:
+- id: unsigned-security-token
+  patterns:
+  - pattern: RequireSignedTokens = false
+  - pattern-inside: |
+      new TokenValidationParameters {
+        ...
+      }
+  fix: RequireSignedTokens = true
+  message: Accepting unsigned security tokens as valid security tokens allows an attacker to remove its
+    signature and potentially forge an identity. As a fix, set RequireSignedTokens to be true.
+  metadata:
+    category: security
+    technology:
+    - csharp
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-347: Improper Verification of Cryptographic Signature'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+    - https://cwe.mitre.org/data/definitions/347
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages:
+  - csharp
+  severity: ERROR

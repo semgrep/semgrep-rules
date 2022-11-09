@@ -1,23 +1,41 @@
 rules:
-  - id: detect-non-literal-regexp
-    patterns:
-      - pattern-either:
-          - pattern: new RegExp($ARG, ...)
-          - pattern: RegExp($ARG, ...)
-      - pattern-not: RegExp("...", ...)
-      - pattern-not: new RegExp("...", ...)
-      - pattern-not: RegExp(/.../, ...)
-      - pattern-not: new RegExp(/.../, ...)
-    message: >-
-      RegExp() called with a variable, this might allow an attacker to DOS your application
-      with a long-running regular expression.
-    languages:
-      - javascript
-      - typescript
-    severity: WARNING
-    metadata:
-      cwe: "CWE-185: Incorrect Regular Expression"
-      source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-regexp.js
-      category: security
-      technology:
-        - javascript
+- id: detect-non-literal-regexp
+  message: >-
+    RegExp() called with a `$ARG` function argument, this might  allow an attacker to cause a Denial of
+    Service (DoS)  within your application as RegExP which blocks the main thread.
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    cwe:
+    - "CWE-1333: Inefficient Regular Expression Complexity"
+    references:
+    - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+    source-rule-url: https://github.com/nodesecurity/eslint-plugin-security/blob/master/rules/detect-non-literal-regexp.js
+    category: security
+    technology:
+    - javascript
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        function ... (...,$ARG,...) {...}
+    - focus-metavariable: $ARG
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: new RegExp($ARG, ...)
+      - pattern: RegExp($ARG, ...)
+    - pattern-not: RegExp("...", ...)
+    - pattern-not: new RegExp("...", ...)
+    - pattern-not: RegExp(/.../, ...)
+    - pattern-not: new RegExp(/.../, ...)

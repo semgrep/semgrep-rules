@@ -1,9 +1,21 @@
 rules:
   - id: use-workdir
-    pattern: RUN ... cd $DIR
+    options:
+      implicit_deep_exprstmt: false
+    patterns:
+      - pattern-either:
+        - pattern-inside: |
+            RUN $ CMD ...
+        - pattern-inside: |
+            RUN $CMD ... && ...
+      - metavariable-pattern:
+          metavariable: $CMD
+          pattern: cd
+      - focus-metavariable: $CMD
     message: >-
-      Use 'WORKDIR' instead of 'RUN cd ...'. Using 'RUN cd ...' may not
-      work as expected in a conatiner.
+      As recommended by Docker's documentation, it is best to use 'WORKDIR'
+      instead of 'RUN cd ...' for improved clarity and reliability. Also, 'RUN cd
+      ...' may not work as expected in a container.
     severity: WARNING
     languages: [dockerfile]
     metadata:

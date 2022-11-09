@@ -1,16 +1,41 @@
 rules:
   - id: missing-language-field
     message: >-
-      Please include a 'languages' field for your rule!
+      Please include a 'languages' field for your rule $RULEID!
     languages: [yaml]
-    patterns:
-      - pattern-inside: "rules: [..., $RULE, ...]"
-      - pattern: "id: $RULEID"
-      - pattern-not-inside: |
-          - ...
-            languages: ...
+    pattern-either:
+      # non join mode
+      - patterns:
+          - pattern-inside: "rules: [..., $RULE, ...]"
+          - pattern: "id: $RULEID"
+          - pattern-not-inside: |
+              - ...
+                languages: ...
+          - pattern-not-inside: |
+              - ...
+                mode: join
+      # join mode
+      - patterns:
+          - pattern-inside: |
+              rules: [ ..., $OUTER_RULE, ...]
+          - pattern-inside: $OUTER_RULE
+          - pattern-inside: |
+              id: $OUTER_RULEID
+              mode: join
+              join:
+                rules: [ ..., $INNER_RULE, ...]
+                ...
+              ...
+          - pattern-inside: $INNER_RULE
+          - pattern-not-inside: |
+              - languages: ...
+                ...
+          - pattern: |
+              id: $RULEID
     severity: WARNING
     metadata:
+      references:
+        - https://semgrep.dev/docs/writing-rules/rule-syntax/#required
       category: correctness
       technology:
         - semgrep

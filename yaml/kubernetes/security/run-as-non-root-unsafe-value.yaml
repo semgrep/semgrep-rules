@@ -1,0 +1,40 @@
+rules:
+- id: run-as-non-root-unsafe-value
+  patterns:
+  - pattern-inside: |
+      containers:
+        ...
+  - pattern: |
+      image: ...
+      ...
+      securityContext:
+        ...
+        runAsNonRoot: $VALUE
+  - pattern: |
+      $VALUE
+  - pattern: |
+      false
+  message: >-
+    Container allows for running applications as root. This can result in
+    privilege escalation attacks. Change 'runAsNonRoot:' to 'true' in 'securityContext'
+    to prevent this.
+  metadata:
+    references:
+    - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-2-set-a-user
+    cwe:
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A05:2017 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    category: security
+    technology:
+    - kubernetes
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+  languages: [yaml]
+  severity: WARNING

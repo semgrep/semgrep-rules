@@ -1,0 +1,51 @@
+rules:
+- id: handler-assignment-from-multiple-sources
+  options:
+    taint_unified_mvars: true
+  metadata:
+    cwe:
+    - 'CWE-289: Authentication Bypass by Alternate Name'
+    category: security
+    technology:
+    - gorilla
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    references:
+    - https://cwe.mitre.org/data/definitions/289.html
+    subcategory:
+    - audit
+    impact: MEDIUM
+    likelihood: LOW
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        func $HANDLER(..., $R *http.Request, ...) {
+          ...
+        }
+    - focus-metavariable: $R
+    - pattern-either:
+      - pattern: $R.query
+  pattern-sinks:
+  - patterns:
+    - pattern: |
+        $Y, err := store.Get(...)
+        ...
+        $VAR := $Y.Values[...]
+        ...
+        $VAR = $R
+    - focus-metavariable: $R
+  - patterns:
+    - pattern: |
+        $Y, err := store.Get(...)
+        ...
+        var $VAR $INT = $Y.Values["..."].($INT)
+        ...
+        $VAR = $R
+    - focus-metavariable: $R
+  message: >-
+    Variable $VAR is assigned from two different sources: '$Y' and '$R'. Make sure this is intended,
+    as this could cause logic bugs if they are treated as they are the same object.
+  languages:
+  - go
+  severity: WARNING

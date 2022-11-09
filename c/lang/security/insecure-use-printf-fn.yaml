@@ -1,34 +1,40 @@
 rules:
-  - id: insecure-use-printf-fn
-    message: >-
-      Avoid using user-controlled format strings passed into 'sprintf', 'printf' and
-      'vsprintf'.
-      These functions put you at risk of buffer overflow vulnerabilities through the
-      use of format string exploits.
-      Instead, use 'snprintf' and 'vsnprintf'.
-    metadata:
-      references:
-        - https://doc.castsoftware.com/display/SBX/Never+use+sprintf%28%29+or+vsprintf%28%29+functions
-        - https://www.cvedetails.com/cwe-details/134/Uncontrolled-Format-String.html
-      category: security
-      technology:
-        - c
-      confidence: HIGH
-    languages: [c]
-    severity: WARNING
-    pattern-either:
-      - pattern: |
-          $FUNC($BUFFER, argv[$NUM], ...);
-          ...
-          vsprintf(..., $BUFFER, ...);
-      - pattern: vsprintf(..., argv[$NUM], ...)
-      - pattern: |
-          $FUNC($BUFFER, argv[$NUM], ...);
-          ...
-          sprintf(..., $BUFFER, ...);
-      - pattern: sprintf(...,argv[$NUM],...)
-      - pattern: |
-          $FUNC($BUFFER, argv[$NUM], ...);
-          ...
-          printf(..., $BUFFER, ...);
-      - pattern: printf(...,argv[$NUM],...)
+- id: insecure-use-printf-fn
+  message: >-
+    Avoid using user-controlled format strings passed into 'sprintf', 'printf' and
+    'vsprintf'.
+    These functions put you at risk of buffer overflow vulnerabilities through the
+    use of format string exploits.
+    Instead, use 'snprintf' and 'vsnprintf'.
+  metadata:
+    cwe:
+    - 'CWE-134: Use of Externally-Controlled Format String'
+    references:
+    - https://doc.castsoftware.com/display/SBX/Never+use+sprintf%28%29+or+vsprintf%28%29+functions
+    - https://www.cvedetails.com/cwe-details/134/Uncontrolled-Format-String.html
+    category: security
+    technology:
+    - c
+    confidence: MEDIUM
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+  languages: [c]
+  severity: WARNING
+  pattern-either:
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      vsprintf(..., $BUFFER, ...);
+  - pattern: vsprintf(..., argv[$NUM], ...)
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      sprintf(..., $BUFFER, ...);
+  - pattern: sprintf(...,argv[$NUM],...)
+  - pattern: |
+      $FUNC($BUFFER, argv[$NUM], ...);
+      ...
+      printf(..., $BUFFER, ...);
+  - pattern: printf(...,argv[$NUM],...)

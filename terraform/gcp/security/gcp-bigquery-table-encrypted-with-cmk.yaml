@@ -1,0 +1,37 @@
+rules:
+- id: gcp-bigquery-table-encrypted-with-cmk
+  patterns:
+  - pattern: |
+      resource "google_bigquery_table" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_bigquery_table" $ANYTHING {
+        ...
+        encryption_configuration {
+          ...
+          kms_key_name = ...
+          ...
+        }
+        ...
+      }
+  message: >-
+    Ensure Big Query Tables are encrypted with Customer Supplied Encryption Keys (CSEK)	
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - gcp
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    references:
+    - https://docs.bridgecrew.io/docs/google-cloud-policy-index
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

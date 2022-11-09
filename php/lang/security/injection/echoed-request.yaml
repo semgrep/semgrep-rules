@@ -1,0 +1,41 @@
+rules:
+- id: echoed-request
+  mode: taint
+  message: >-
+    `Echo`ing user input risks cross-site scripting vulnerability.
+    You should use `htmlentities()` when showing data to users.
+  languages: [php]
+  severity: ERROR
+  pattern-sources:
+  - pattern: $_REQUEST
+  - pattern: $_GET
+  - pattern: $_POST
+  pattern-sinks:
+  - pattern: echo ...;
+  pattern-sanitizers:
+  - pattern: $X = $ANYFUNC(...);
+  - patterns:
+    - pattern-inside: echo <... $ANYFUNC(...) ...>;
+    - pattern: $ANYFUNC(...)
+  metadata:
+    technology:
+    - php
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    category: security
+    references:
+    - https://www.php.net/manual/en/function.htmlentities.php
+    - https://www.php.net/manual/ru/reserved.variables.request.php
+    - https://www.php.net/manual/ru/reserved.variables.post.php
+    - https://www.php.net/manual/ru/reserved.variables.get.php
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

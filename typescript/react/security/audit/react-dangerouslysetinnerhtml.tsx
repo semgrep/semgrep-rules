@@ -1,29 +1,53 @@
-function createMarkup() {
-  return {__html: 'Первый &middot; Второй'};
-}
+import DOMPurify from "dompurify"
+import sanitize from "xss"
 
 function TestComponent1() {
-    // ruleid:react-dangerouslysetinnerhtml
+    // ok:react-dangerouslysetinnerhtml
   return <div dangerouslySetInnerHTML={createMarkup()} />;
 }
 
-function TestComponent2() {
+function TestComponent2(foo) {
     // ruleid:react-dangerouslysetinnerhtml
-  return <li className={"foobar"} dangerouslySetInnerHTML={createMarkup()} />;
-}
-
-function TestComponent3() {
-    // ruleid:react-dangerouslysetinnerhtml
-    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: 'foobar'}};
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo},a:b};
     return React.createElement('div', params);
 }
 
+function TestComponent3() {
+    // ok:react-dangerouslysetinnerhtml
+  return <li className={"foobar"} dangerouslySetInnerHTML={{__html: params}} />;
+}
+
+
 function OkComponent1() {
+    // ok:react-dangerouslysetinnerhtml
+  return <li className={"foobar"} dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(foo)}} />;
+}
+
+
+
+function OkComponent2() {
+    // ok:react-dangerouslysetinnerhtml
+  return <li className={"foobar"} dangerouslySetInnerHTML={DOMPurify.sanitize(createMarkup())} />;
+}
+
+function OkComponent3() {
+    // ok:react-dangerouslysetinnerhtml
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: sanitize(foo)},a:b};
+    return React.createElement('div', params);
+}
+
+function OkComponent4() {
+    // ok:react-dangerouslysetinnerhtml
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: "hi"},a:b};
+    return React.createElement('div', params);
+}
+
+function OkComponent5() {
     // ok:react-dangerouslysetinnerhtml
   return <li class="foobar" selected={true} />;
 }
 
-function OkComponent2() {
+function OkComponent6() {
     // ok:react-dangerouslysetinnerhtml
     let params = {smth: "test123", style: {color: 'red'}};
     return React.createElement('div', params);

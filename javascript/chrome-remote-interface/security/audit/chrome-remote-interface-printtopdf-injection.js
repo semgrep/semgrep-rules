@@ -10,9 +10,9 @@ function example(userInput) {
             await Page.loadEventFired();
             // ok
             const result = await Page.printToPDF({landscape: true, printBackground: true, headerTemplate: '<h1>Title</h1>'});
-            // ruleid:chrome-remote-interface-printtopdf-injection
+            // chrome-remote-interface-printtopdf-injection
             const result2 = await Page.printToPDF({landscape: true, printBackground: true, footerTemplate: userInput});
-            // ruleid:chrome-remote-interface-printtopdf-injection
+            // chrome-remote-interface-printtopdf-injection
             const result3 = await Page.printToPDF({landscape: true, printBackground: true, headerTemplate: '<h1>' + userInput + '</h1>'});
             fs.writeFileSync('page.pdf', Buffer.from(data, 'base64'));
         } catch (err) {

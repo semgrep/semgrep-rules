@@ -1,0 +1,35 @@
+rules:
+- id: gcp-sub-network-logging-enabled
+  patterns:
+  - pattern: |
+      resource "google_compute_subnetwork" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "google_compute_subnetwork" $ANYTHING {
+        ...
+        log_config {
+          ...
+        }        
+        ...
+      }
+  message: Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    technology:
+    - terraform
+    - gcp
+    category: security
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW

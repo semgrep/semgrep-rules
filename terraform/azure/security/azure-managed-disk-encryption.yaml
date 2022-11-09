@@ -1,0 +1,34 @@
+rules:
+- id: azure-managed-disk-encryption
+  message: >-
+    Ensure Azure managed disk has encryption enabled
+  patterns:
+  - pattern: resource
+  - pattern-inside: |
+      resource "azurerm_managed_disk" "..." {
+      ...
+      encryption_settings {
+        ...
+        enabled = false
+        ...
+      }
+      ...
+      }
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages: [hcl]
+  severity: WARNING

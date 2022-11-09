@@ -1,17 +1,26 @@
 rules:
-  - id: gcm-nonce-reuse
-    metadata:
-      category: security
-      source-rule-url: https://www.youtube.com/watch?v=r1awgAl90wM
-      technology:
-        - java
-    languages:
-      - java
-    message: "GCM IV/nonce is reused: encryption can be totally useless"
-    #   NB: constants are automatically propagated so easy to define hard coded strings with "..."
-    #   but what about static byte arrays ? there seems to be no native support in semgrep
-    patterns:
-      - pattern-either:
-          - pattern: new GCMParameterSpec(..., "...".getBytes(...), ...);
-          - pattern: byte[] $NONCE = "...".getBytes(...); ... new GCMParameterSpec(..., $NONCE, ...);
-    severity: ERROR
+- id: gcm-nonce-reuse
+  metadata:
+    cwe:
+    - 'CWE-323: Reusing a Nonce, Key Pair in Encryption'
+    category: security
+    source-rule-url: https://www.youtube.com/watch?v=r1awgAl90wM
+    technology:
+    - java
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  languages:
+  - java
+  message: 'GCM IV/nonce is reused: encryption can be totally useless'
+  patterns:
+  - pattern-either:
+    - pattern: new GCMParameterSpec(..., "...".getBytes(...), ...);
+    - pattern: byte[] $NONCE = "...".getBytes(...); ... new GCMParameterSpec(..., $NONCE, ...);
+  severity: ERROR

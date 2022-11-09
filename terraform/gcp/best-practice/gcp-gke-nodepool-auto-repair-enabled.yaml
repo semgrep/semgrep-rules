@@ -1,0 +1,23 @@
+rules:
+- id: gcp-gke-nodepool-auto-repair-enabled
+  patterns:
+    - pattern: resource
+    - pattern-inside: |
+          resource "google_container_node_pool" "..." {
+          ...
+          management {
+            ...
+            auto_repair  = false
+            ...
+          }
+          ...
+          }
+  message: >-
+    Ensure 'Automatic node repair' is enabled for Kubernetes Clusters
+  metadata:
+    category: best-practice
+    technology:
+      - terraform
+      - gcp
+  languages: [hcl]
+  severity: WARNING

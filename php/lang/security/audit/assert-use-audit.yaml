@@ -1,0 +1,25 @@
+rules:
+- id: assert-use-audit
+  patterns:
+  - pattern: assert($ASSERT, ...);
+  - pattern-not: assert("...", ...);
+  message: >-
+    Calling assert with user input is equivalent to eval'ing.
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    references:
+    - https://www.php.net/manual/en/function.assert
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/AssertsSniff.php
+    category: security
+    technology:
+    - php
+    confidence: LOW
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+  languages: [php]
+  severity: ERROR

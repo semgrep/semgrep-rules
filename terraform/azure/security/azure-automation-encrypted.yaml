@@ -1,0 +1,42 @@
+rules:
+- id: azure-automation-encrypted
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_automation_variable_string" "..." {
+      ...
+      encrypted = true
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_automation_variable_datetime" "..." {
+      ...
+      encrypted = true
+      ...
+      }
+  - pattern-not-inside: |
+      resource "azurerm_automation_variable_int" "..." {
+      ...
+      encrypted = true
+      ...
+      }
+  message: Ensure that Automation account variables are encrypted
+  languages: [hcl]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    cwe:
+    - 'CWE-320: CWE CATEGORY: Key Management Errors'
+    category: security
+    technology:
+    - terraform
+    - azure
+
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
