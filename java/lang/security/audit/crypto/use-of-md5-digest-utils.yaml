@@ -19,10 +19,14 @@ rules:
         - java
     patterns:
       - pattern: |
-         java.security.MessageDigest.getInstance($ALGO, ...);
-      - metavariable-regex:
-          metavariable: "$ALGO"
-          regex: (.MD5.)
-      - focus-metavariable: $ALGO
+          $DU.$GET_ALGO().digest(...)
+      - metavariable-pattern:
+          metavariable: $GET_ALGO
+          pattern: getMd5Digest
+      - metavariable-pattern:
+          metavariable: $DU
+          pattern: DigestUtils
+      - focus-metavariable: $GET_ALGO
     fix: |
-      "SHA-512"
+      getSha512Digest
+
