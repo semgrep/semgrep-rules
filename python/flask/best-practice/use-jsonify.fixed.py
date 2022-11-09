@@ -7,7 +7,7 @@ app = flask.Flask(__name__)
 def user():
     user_dict = get_user(request.args.get("id"))
     # ruleid:use-jsonify
-    return json.dumps(user_dict)
+    return flask.jsonify(user_dict)
 
 from json import dumps
 
@@ -15,7 +15,7 @@ from json import dumps
 def user():
     user_dict = get_user(request.args.get("id"))
     # ruleid:use-jsonify
-    return dumps(user_dict)
+    return flask.jsonify(user_dict)
 
 # ok: use-jsonify
 def dumps():
