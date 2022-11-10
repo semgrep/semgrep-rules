@@ -2,7 +2,7 @@ rules:
 - id: subprocess-getstatusoutput
   patterns:
   - pattern: subprocess.getstatusoutput(...)
-  - pattern-not: subprocess.$FUNC("...")
+  - pattern-not: subprocess.getstatusoutput("...")
   message: Found 'subprocess.getstatusoutput' function with 'shell=True'. This is
     dangerous because this call will spawn the command using a shell process. Doing
     so propagates current shell settings and variables, which makes it much easier
@@ -24,10 +24,10 @@ rules:
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
-    - vuln
-    likelihood: HIGH
+    - audit
+    likelihood: LOW
     impact: LOW
-    confidence: MEDIUM
+    confidence: LOW
   languages:
   - python
-  severity: ERROR
+  severity: WARNING
