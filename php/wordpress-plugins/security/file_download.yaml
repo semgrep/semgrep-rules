@@ -1,0 +1,20 @@
+rules:
+  - id: file_download
+    patterns:
+      - pattern-either:
+          - pattern: file(...)
+          - pattern: readfile(...)
+          - pattern: file_get_contents(...)
+    message: Probable File Download
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-download
+      cwe: "CWE 73: The software allows user input to control or influence paths or
+        file names that are used in filesystem operations."
+      owasp: A1:2021 access

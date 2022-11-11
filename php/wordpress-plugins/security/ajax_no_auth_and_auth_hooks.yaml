@@ -1,0 +1,21 @@
+rules:
+  - id: ajax_no_auth_and_auth_hooks
+    patterns:
+      - pattern: add_action($HOOK,...)
+      - metavariable-regex:
+          metavariable: $HOOK
+          regex: "'wp_ajax_.*'"
+    message: Look for no_priv(wp_ajax_nopriv) and auth hooks
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#authorisation
+      owasp: A1:2021 access
+      cwe: "CWE 285: The software does not perform or incorrectly performs an
+        authorization check when an actor attempts to access a resource or
+        perform an action."

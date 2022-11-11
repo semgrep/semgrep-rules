@@ -1,0 +1,27 @@
+rules:
+  - id: sql_injection
+    patterns:
+      - pattern-either:
+          - pattern: $wpdb->query(...)
+          - pattern: $wpdb->get_var(...)
+          - pattern: $wpdb->get_row(...)
+          - pattern: $wpdb->get_col(...)
+          - pattern: $wpdb->get_results(...)
+          - pattern: $wpdb->replace(...)
+      - pattern-not: $wpdb->prepare(...)
+      - pattern-not: $wpdb->delete(...)
+      - pattern-not: $wpdb->update(...)
+      - pattern-not: $wpdb->insert(...)
+    message: Probable SQLi
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE 89: Improper Neutralization of Special Elements used in an SQL Command
+        ('SQL Injection')"
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#sql-injection
+      owasp: A3:2021 injection

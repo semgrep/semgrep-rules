@@ -1,0 +1,19 @@
+rules:
+  - id: code_execution
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: assert(...)
+          - pattern: call_user_func(...)
+    message: Probable Code Execution
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-code-execution
+      owasp: A3:2021 injection
+      cwe: "CWE 94: Improper Control of Generation of Code ('Code Injection')"

@@ -1,0 +1,18 @@
+rules:
+  - id: php_object_injection
+    patterns:
+      - pattern-either:
+          - pattern: unserialize(...)
+          - pattern: maybe_unserialize(...)
+    message: Probable Object Injection
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-object-injection
+      cwe: "CWE 502: Deserialization of Untrusted Data"
+      owasp: A3:2021 injection
