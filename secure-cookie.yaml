@@ -1,0 +1,17 @@
+rules:
+- id: secure-cookie
+  patterns:
+  - pattern-not: $RESPONSE.set_cookie(..., secure=True, httponly=True, samesite="Lax",
+      ...)
+  - pattern: $RESPONSE.set_cookie(...)
+  message: Unsecure Flask cookie configuration met! Use only r.set_cookie(..., secure=True,
+    httponly=True, samesite="Lax", ...)
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE 614: The Secure attribute for sensitive cookies in HTTPS sessions is
+      not set, which could cause the user agent to send those cookies in plaintext
+      over an HTTP session.'
+    owasp: A4:2021 insecure-design
