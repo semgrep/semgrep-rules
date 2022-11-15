@@ -1,0 +1,11 @@
+rules:
+- id: implicit_jwt_algorithms
+  patterns:
+  - pattern: jwt.decode(...)
+  - pattern-not: jwt.decode(..., algorithms=$X, ...)
+  message: JWT algorithms should be specified explicitly
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: best-practice
