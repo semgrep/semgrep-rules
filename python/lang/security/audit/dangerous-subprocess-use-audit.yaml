@@ -12,14 +12,20 @@ rules:
     - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...)
     - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
   - patterns:
-    - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
+    - pattern-either:
+      - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...],...)
+      - pattern: subprocess.$FUNC(("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...),...)
     - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
+    - pattern-not: subprocess.$FUNC(("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...),...)
   - patterns:
     - pattern: subprocess.$FUNC("=~/(python)/",...)
     - pattern-not: subprocess.$FUNC("=~/(python)/","...",...)
   - patterns:
-    - pattern: subprocess.$FUNC(["=~/(python)/",...],...)
+    - pattern-either:
+      - pattern: subprocess.$FUNC(["=~/(python)/",...],...)
+      - pattern: subprocess.$FUNC(("=~/(python)/",...),...)
     - pattern-not: subprocess.$FUNC(["=~/(python)/","...",...],...)
+    - pattern-not: subprocess.$FUNC(("=~/(python)/","...",...),...)
   message: >-
     Detected subprocess function '$FUNC' without a static string. If this data can
     be
