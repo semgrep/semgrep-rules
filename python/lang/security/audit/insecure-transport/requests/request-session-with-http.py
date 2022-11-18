@@ -12,7 +12,6 @@ def test1_ok():
 
 def test2():
     session = requests.Session()
-    # ruleid: request-session-with-http
     url = "http://example.com"
     # ruleid: request-session-with-http
     session.post(url)
@@ -23,22 +22,32 @@ def test2_ok():
     url = "https://example.com"
     session.post(url)
 
-# ruleid: request-session-with-http
 def test3(url = "http://example.com"):
     session = requests.Session()
+    # ruleid: request-session-with-http
     session.delete(url)
 
-# ok: request-session-with-http
 def test3_ok(url = "https://example.com"):
     session = requests.Session()
+    # ok: request-session-with-http
     session.delete(url)
 
-# ruleid: request-session-with-http
 def test4(url = "http://example.com"):
     session = requests.Session()
+    # ruleid: request-session-with-http
     session.request("HEAD", url, timeout=30)
 
-# ok: request-session-with-http
 def test4_ok(url = "https://example.com"):
     session = requests.Session()
+    # ok: request-session-with-http
+    session.request("HEAD", url, timeout=30)
+
+def test_localhost_ok(url = "http://localhost/blah"):
+    session = requests.Session()
+    # ok: request-session-with-http
+    session.request("HEAD", url, timeout=30)
+
+def test_localhost_ok2(url = "http://127.0.0.1/blah"):
+    session = requests.Session()
+    # ok: request-session-with-http
     session.request("HEAD", url, timeout=30)

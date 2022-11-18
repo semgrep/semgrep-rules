@@ -11,7 +11,7 @@ public class Bad{
   }
 
   public byte[] bad2(String password) {
-    // ruleid: use-of-md5
+    // ok: use-of-md5
     byte[] hashValue = DigestUtils.getMd5Digest().digest(password.getBytes());
     return hashValue;
   }
@@ -36,5 +36,13 @@ public class Bad{
       md.update(input);
 
       byte[] result = md.digest();
+  }
+
+  public byte[] good(String password) {
+    // ok: use-of-md5
+    MessageDigest md5Digest = MessageDigest.getInstance("SHA-512");
+    md5Digest.update(password.getBytes());
+    byte[] hashValue = md5Digest.digest();
+    return hashValue;
   }
 }

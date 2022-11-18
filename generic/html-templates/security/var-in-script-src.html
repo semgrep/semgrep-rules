@@ -43,4 +43,8 @@
 <!-- ruleid: var-in-script-src -->
 <script src="./{{ reactDemoIndexBundleJs }}" crossOrigin="anonymous" integrity="{{ sri.reactDemoIndexBundleJs }}"></script>
 
+<script nonce="{{ request.csp_nonce }}">
+  console.log('inline script running');
+</script>
+
 </html>

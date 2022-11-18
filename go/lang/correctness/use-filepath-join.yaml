@@ -1,16 +1,50 @@
 rules:
-- id: use-filepath-join
-  languages: [go]
-  severity: WARNING
-  message: >-
-    `path.Join(...)` always joins using a forward slash. This may cause
-    issues on Windows or other systems using a different delimiter. Use
-    `filepath.Join(...)` instead which uses OS-specific path separators.
-  pattern: path.Join(...)
-  metadata:
-    category: correctness
-    references:
-    - https://parsiya.net/blog/2019-03-09-path.join-considered-harmful/
-    - https://go.dev/src/path/path.go?s=4034:4066#L145
-    technology:
-    - go
+  - id: use-filepath-join
+    languages:
+      - go
+    severity: WARNING
+    message: "`path.Join(...)` always joins using a forward slash. This may cause
+      issues on Windows or other systems using a different delimiter. Use
+      `filepath.Join(...)` instead which uses OS-specific path separators."
+    metadata:
+      category: correctness
+      references:
+      - https://parsiya.net/blog/2019-03-09-path.join-considered-harmful/
+      - https://go.dev/src/path/path.go?s=4034:4066#L145
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      technology:
+      - go
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: |
+              ($STR : string)
+          - pattern-not: |
+              "..."
+      - patterns:
+          - pattern-inside: |
+              import "path"
+              ...
+          - pattern: path.$FUNC(...)
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(Base|Clean|Dir|Split)$
+      - patterns:
+          - pattern-inside: |
+              import "path/filepath"
+              ...
+          - pattern: filepath.$FUNC(...)
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(Base|Clean|Dir|FromSlash|Glob|Rel|Split|SplitList|ToSlash|VolumeName)$
+    pattern-sinks:
+      - pattern: path.Join(...)
+    pattern-sanitizers:
+      - pattern: |
+          url.Parse(...)
+          ...
+
