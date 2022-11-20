@@ -1,15 +1,15 @@
 <?php
 
-// ruleid: file_download
+// ruleid: wp-file-download-audit
 $json = file_get_contents( 'php://input' );
 
-// ruleid: file_download
+// ruleid: wp-file-download-audit
 readfile($zip_name);
 
-// ruleid: file_download
+// ruleid: wp-file-download-audit
 $localeFunctions = file($functionNamesFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-// ok: file_download
+// ok: wp-file-download-audit
 some_other_function($args);
 
 

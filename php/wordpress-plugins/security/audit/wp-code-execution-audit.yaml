@@ -1,16 +1,27 @@
 rules:
-  - id: code_execution
+  - id: wp-code-execution-audit
     patterns:
       - pattern-either:
           - pattern: eval(...)
           - pattern: assert(...)
           - pattern: call_user_func(...)
-    message: Probable Code Execution
+    message: >-
+      These functions can lead to code injection if the data inside them is
+      user-controlled. Don't use the input directly or validate the data
+      properly before passing it to these functions.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
     languages:
       - php
     severity: WARNING
     metadata:
       category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
       technology:
         - Wordpress Plugins
       references:

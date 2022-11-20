@@ -1,12 +1,12 @@
 <?php
 
-// ruleid: code_execution
+// ruleid: wp-code-execution-audit
 $snippetValue = eval('return ' .$sanitizedSnippet . ';');
 
-// ruleid: code_execution
+// ruleid: wp-code-execution-audit
 $val = call_user_func($filter, $val);
 
-// ok: code_execution
+// ok: wp-code-execution-audit
 some_other_safe_function($args);
 
 

@@ -1,13 +1,13 @@
 <?php
 
-// ruleid: command_execution
+// ruleid: wp-command-execution-audit
 exec('rm -rf ' . $dir, $o, $r);
 
-// ruleid: command_execution
+// ruleid: wp-command-execution-audit
 $stderr = shell_exec($command);
 
 
-// ok: command_execution
+// ok: wp-command-execution-audit
 some_other_safe_function($args);
 
 

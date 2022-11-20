@@ -1,13 +1,13 @@
 <?php
 
-// ruleid: csrf
+// ruleid: wp-csrf-audit
 check_ajax_referer( 'wpforms-admin', 'nonce', false );
 
-// ok: csrf
+// ok: wp-csrf-audit
 check_ajax_referer( 'wpforms-admin', 'nonce', true );
 
 
-// ok: csrf
+// ok: wp-csrf-audit
 check_ajax_referer( 'wpforms-admin', 'nonce' );
 
 ?>

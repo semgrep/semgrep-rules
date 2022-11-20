@@ -1,16 +1,27 @@
 rules:
-  - id: file_download
+  - id: wp-file-download-audit
     patterns:
       - pattern-either:
           - pattern: file(...)
           - pattern: readfile(...)
           - pattern: file_get_contents(...)
-    message: Probable File Download
+    message: >-
+      These functions can be used to read to content of the files if the data
+      inside is user-controlled.  Don't use the input directly or validate the
+      data properly before passing it to these functions.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
     languages:
       - php
     severity: WARNING
     metadata:
       category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
       technology:
         - Wordpress Plugins
       references:
