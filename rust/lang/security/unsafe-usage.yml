@@ -1,0 +1,9 @@
+rules:
+  - id: unsafe-usage
+    message: Detected 'unsafe' usage, please audit for secure usage
+    pattern: "unsafe { ... }"
+    metadata:
+      references:
+        - https://doc.rust-lang.org/std/keyword.unsafe.html
+    languages: [rust]
+    severity: INFO
