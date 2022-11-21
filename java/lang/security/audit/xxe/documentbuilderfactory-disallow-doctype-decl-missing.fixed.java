@@ -117,3 +117,47 @@ dbf.newDocumentBuilder();
 
 
 }
+
+
+class GoodDocumentBuilderFactoryCtr {
+
+    private final DocumentBuilderFactory dbf;
+
+    public GoodDocumentBuilderFactoryCtr() throws Exception {
+        dbf = DocumentBuilderFactory.newInstance();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
+
+
+class GoodDocumentBuilderFactoryCtr2 {
+    public void somemethod() throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        setFeatures(dbf);
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+
+    private void setFeatures(DocumentBuilderFactory dbf) throws Exception {
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    }
+
+}
+
+class GoodDocumentBuilderFactoryCtr3 {
+    public void somemethod() throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        setFeatures(dbf);
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+
+    private void setFeatures(DocumentBuilderFactory dbf) throws Exception {
+        dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+    }
+
+}
+
