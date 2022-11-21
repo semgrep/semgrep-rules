@@ -28,6 +28,13 @@ class GoodDocumentBuilderFactory {
         //ok:documentbuilderfactory-disallow-doctype-decl-missing
         dbf.newDocumentBuilder();
     }
+
+    public void GoodDocumentBuilderFactory4() throws  ParserConfigurationException {
+        DocumentBuilderFactory factory = XmlUtils.getSecureDocumentBuilderFactory();
+        //Deep semgrep could find issues like this
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        documentBuilder = factory.newDocumentBuilder();
+    }
 }
 
 class BadDocumentBuilderFactory{
@@ -156,4 +163,3 @@ class GoodDocumentBuilderFactoryCtr3 {
     }
 
 }
-
