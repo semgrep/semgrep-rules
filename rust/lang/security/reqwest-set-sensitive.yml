@@ -8,7 +8,7 @@ rules:
               ...
               let $HEADER_VALUE = <... header::HeaderValue::$FROM_FUNC(...) ...>;
               ...
-              $HEADERS.insert(header::AUTHORIZATION, $HEADER_VALUE);
+              $HEADERS.insert($HEADER, $HEADER_VALUE);
           - pattern-not: |
               let mut $HEADERS = header::HeaderMap::new();
               ...
@@ -16,7 +16,7 @@ rules:
               ...
               $HEADER_VALUE.set_sensitive(true);
               ...
-              $HEADERS.insert(header::AUTHORIZATION, $HEADER_VALUE);
+              $HEADERS.insert($HEADER, $HEADER_VALUE);
           - metavariable-pattern:
               metavariable: $FROM_FUNC
               pattern-either:
@@ -25,29 +25,11 @@ rules:
                 - pattern: from_name
                 - pattern: from_bytes
                 - pattern: from_maybe_shared
-      - patterns:
-          - pattern: |
-              let mut $HEADERS = header::HeaderMap::new();
-              ...
-              let $HEADER_VALUE = <... header::HeaderValue::$FROM_FUNC(...) ...>;
-              ...
-              $HEADERS.insert("Authorization", $HEADER_VALUE);
-          - pattern-not: |
-              let mut $HEADERS = header::HeaderMap::new();
-              ...
-              let $HEADER_VALUE = <... header::HeaderValue::$FROM_FUNC(...) ...>;
-              ...
-              $HEADER_VALUE.set_sensitive(true);
-              ...
-              $HEADERS.insert("Authorization", $HEADER_VALUE);
           - metavariable-pattern:
-              metavariable: $FROM_FUNC
+              metavariable: $HEADER
               pattern-either:
-                - pattern: from_static
-                - pattern: from_str
-                - pattern: from_name
-                - pattern: from_bytes
-                - pattern: from_maybe_shared
+                - pattern: header::AUTHORIZATION
+                - pattern: '"Authorization"'
     metadata:
       references:
         - https://docs.rs/reqwest/latest/reqwest/header/struct.HeaderValue.html#method.set_sensitive
