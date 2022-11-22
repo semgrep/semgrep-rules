@@ -1,0 +1,47 @@
+name: Check PR
+
+on:
+  pull_request:
+
+jobs:
+  check-pr:
+    name: Check PR
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Run Checks
+      run: |
+        echo "Running this step as a mock check"
+        echo ::set-output name=check-output::"Please correct the following on this PR"
+        exit 1
+    # This step checks out another branch and pushes the changes to that, so that the code can easily be reviewed/cherry-pick
+    # without modifying the branch the PR is on.
+    - name: Commit Changes
+      id: checks-commit
+      # Only run if it's a pull request, not made by dependabot, not on a fork and the checks exited with nonzero exit code
+      if: failure() && github.event_name == 'pull_request' && (github.actor != 'dependabot[bot]' && !(github.event.pull_request.head.repo.full_name != github.repository))
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: ./
+        default_author: github_actions
+        message: "Update PR with checks"
+        new_branch: pr-updates-${{ github.run_id }}-${{ github.run_attempt }}
+    - name: Comment about any PR updates
+      # Only run if it's a pull request, not made by dependabot, not on a fork and the checks exited with nonzero exit code
+      if: failure() && github.event_name == 'pull_request' && steps.checks-commit.outputs.pushed == 'true'
+      env:
+        GITHUB_TOKEN: ${{ steps.authentication.outputs.token }}
+      run: |
+        echo "We've found some improvments for your PR." >> /tmp/message.txt
+        echo "Please carefully review these changes and make sure they are intended:" >> /tmp/message.txt
+        echo >> /tmp/message.txt
+        echo "1. Review the changes at https://github.com/returntocorp/semgrep-rules/commit/${{ steps.checks-commit.outputs.commit_long_sha }}" >> /tmp/message.txt
+        echo "2. Accept the new snapshots with" >> /tmp/message.txt
+        echo >> /tmp/message.txt
+        echo "       git fetch origin && git cherry-pick ${{ steps.checks-commit.outputs.commit_sha }} && git push" >> /tmp/message.txt
+        gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/message.txt
