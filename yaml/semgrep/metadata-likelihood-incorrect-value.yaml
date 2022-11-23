@@ -1,0 +1,32 @@
+rules:
+  - id: metadata-likelihood-incorrect-value
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern: |
+          likelihood: $VALUE
+      - pattern-not: |
+          likelihood: LOW
+      - pattern-not: |
+          likelihood: MEDIUM
+      - pattern-not: |
+          likelihood: HIGH
+    message: >-
+      Semgrep rule likelihood: $VALUE detected, but the value must be LOW,
+      MEDIUM, or HIGH. For more information visit: 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+      category: correctness
+      technology:
+        - semgrep

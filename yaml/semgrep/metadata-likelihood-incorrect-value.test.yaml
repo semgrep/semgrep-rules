@@ -1,0 +1,36 @@
+rules:
+  - id: id-request
+    message: >-
+      If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the server.
+    severity: LOW
+    languages: [javascript, typescript]
+    metadata:
+      owasp: "A03:2021 - Injection"
+      cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
+      source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html
+      category: security
+      # ruleid: metadata-likelihood-incorrect-value
+      likelihood: lOW
+      impact: LOW
+      technology:
+        - express
+      references:
+        - https://github.com/google/node-sec-roadmap/blob/master/chapter-2/dynamism.md#dynamism-when-you-need-it
+    patterns: 
+  - id: ok-request
+    message: >-
+      If an attacker controls the x in require(x) then they can cause code to load that was not intended to run on the server.
+    severity: LOW
+    languages: [javascript, typescript]
+    metadata:
+      owasp: "A03:2021 - Injection"
+      cwe: "CWE-706: Use of Incorrectly-Resolved Name or Reference"
+      source-rule-url: https://nodesecroadmap.fyi/chapter-1/threat-UIR.html
+      category: security
+      # ok: metadata-likelihood-incorrect-value
+      likelihood: LOW
+      technology:
+        - express
+      references:
+        - https://github.com/google/node-sec-roadmap/blob/master/chapter-2/dynamism.md#dynamism-when-you-need-it
+    patterns: 

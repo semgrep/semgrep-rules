@@ -1,0 +1,28 @@
+rules:
+  - id: metadata-subcategory
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            subcategory: $VALUE
+    message: >-
+      This Semgrep rule is missing a valid 'subcategory' field in the 'metadata'.
+      which should be either audit, vuln, or guardrail. For more information visit 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+      category: correctness
+      technology:
+        - semgrep
