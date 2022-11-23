@@ -1,5 +1,30 @@
 rules:
 - id: open-directory-listing
+  message: >-
+    An open directory listing is potentially exposed, potentially revealing
+    sensitive information to attackers.
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-548: Exposure of Information Through Directory Listing'
+    owasp:
+    - A06:2017 - Security Misconfiguration
+    - A01:2021 - Broken Access Control
+    references:
+    - https://cwe.mitre.org/data/definitions/548.html
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration/
+    - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-7.0#directory-browsing
+    subcategory:
+    - vuln
+    technology:
+    - .net
+    - mvc
+  languages:
+  - csharp
   patterns:
   - pattern-either:
     - pattern: (IApplicationBuilder $APP).UseDirectoryBrowser(...);
@@ -8,28 +33,3 @@ rules:
       public void Configure(...) {
         ...
       }
-  message: >-
-    An open directory listing is potentially exposed, potentially revealing
-    sensitive information to attackers.
-  metadata:
-    category: security
-    technology:
-    - .net
-    - mvc
-    owasp:
-    - A06:2017 - Security Misconfiguration
-    - A01:2021 - Broken Access Control
-    cwe:
-    - 'CWE-548: Exposure of Information Through Directory Listing'
-    references:
-    - https://cwe.mitre.org/data/definitions/548.html
-    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration/
-    - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-7.0#directory-browsing
-    subcategory:
-    - vuln
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: MEDIUM
-  languages:
-  - csharp
-  severity: INFO
