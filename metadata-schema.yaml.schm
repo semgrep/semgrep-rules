@@ -46,10 +46,12 @@ schema:
       subcategory:
         type: 
         - array
-        enum:
-        - audit
-        - vuln
-        - guardrail
+        items:
+          type: object
+          enum:
+          - audit
+          - vuln
+          - guardrail
       cwe:
         type:
         - array
