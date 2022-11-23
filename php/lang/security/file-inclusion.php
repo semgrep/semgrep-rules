@@ -1,5 +1,7 @@
 <?php
 
+$user_input = $_GET["tainted"];
+
 // ruleid: file-inclusion
 include($user_input);
 
@@ -38,3 +40,7 @@ require_once(CONFIG_DIR . '/constant.php');
 
 // ok: file-inclusion
 require_once( dirname( __FILE__ ) . '/admin.php' );
+
+// ok: file-inclusion
+$pth = 'foo/bar.php';
+require_once $pth;
