@@ -1,19 +1,29 @@
 rules:
 - id: use-frozen-lockfile-yarn
   patterns:
-  - pattern-regex: yarn install\b
-  - pattern-not-regex: yarn install --frozen-lockfile
-  - pattern-not-regex: yarn install --immutable
-  - pattern-not-regex: yarn install -g
-  - pattern-not-regex: yarn install --global
-  - pattern-not-regex: yarn install [\w]+
-  fix: yarn install --frozen-lockfile
+    - pattern: |
+        RUN ... yarn $INSTALL ...
+    - pattern-not-inside: |
+        RUN ... yarn $INSTALL ... --frozen-lockfile ... 
+    - pattern-not-inside: |
+        RUN ... yarn $INSTALL ... --immutable ...
+    - pattern-not-inside: |
+        RUN ... yarn $INSTALL ... -g ...
+    - pattern-not-inside: |
+        RUN ... yarn $INSTALL ... --global ...
+    - metavariable-regex: 
+        metavariable: $INSTALL
+        regex: (install)
+    - focus-metavariable: $INSTALL
+  fix: |
+    install --immutable
   message: >-
     To ensure reproducable and deterministic builds, when performing yarn install, make sure to use the
-    lockfile. Without `--frozen-lockfile`, yarn will update the lockfile rather than using the pinned
-    versions.
+    lockfile. Yarn will update the lockfile rather than using the pinned
+    versions. By using `--immutable` yarn will throw an exit code if the lockfile was
+    to be modified.
   languages:
-  - generic
+  - dockerfile
   severity: INFO
   metadata:
     category: security
