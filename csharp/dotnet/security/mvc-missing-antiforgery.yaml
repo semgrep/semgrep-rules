@@ -1,5 +1,32 @@
 rules:
 - id: mvc-missing-antiforgery
+  message: $METHOD is a state-changing MVC method that does not validate the antiforgery token or do strict
+    content-type checking. State-changing controller methods should either enforce antiforgery tokens
+    or do strict content-type checking to prevent simple HTTP request types from bypassing CORS preflight
+    controls.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    license: MIT
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#cross-site-request-forgery
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
+    subcategory:
+    - audit
+    technology:
+    - .net
+    - mvc
+  languages:
+  - csharp
   patterns:
   - pattern: |
       [$HTTPMETHOD]
@@ -22,30 +49,3 @@ rules:
   - metavariable-regex:
       metavariable: $HTTPMETHOD
       regex: Http(Post|Put|Delete|Patch)
-  message: $METHOD is a state-changing MVC method that does not validate the antiforgery token or do strict
-    content-type checking. State-changing controller methods should either enforce antiforgery tokens
-    or do strict content-type checking to prevent simple HTTP request types from bypassing CORS preflight
-    controls.
-  languages:
-  - csharp
-  severity: WARNING
-  metadata:
-    category: security
-    confidence: LOW
-    cwe:
-    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#cross-site-request-forgery
-    - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
-    technology:
-    - .net
-    - mvc
-    license: MIT
-    owasp:
-    - A01:2021 - Broken Access Control
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM

@@ -1,0 +1,30 @@
+rules:
+  - id: wp-code-execution-audit
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: assert(...)
+          - pattern: call_user_func(...)
+    message: >-
+      These functions can lead to code injection if the data inside them is
+      user-controlled. Don't use the input directly or validate the data
+      properly before passing it to these functions.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-code-execution
+      owasp: A3:2021 injection
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"

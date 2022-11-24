@@ -1,0 +1,31 @@
+rules:
+  - id: wp-authorisation-checks-audit
+    patterns:
+      - pattern: $FUNCTION(...)
+      - metavariable-regex:
+          metavariable: $FUNCTION
+          regex: current_user_can|is_admin|is_user_logged_in|is_user_admin
+    message: >-
+      These are some of the patterns used for authorisation. Look properly if
+      the authorisation is proper or not.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#authorisation
+      owasp: A1:2021 access
+      cwe: "CWE-285: The software does not perform or incorrectly performs an
+        authorization check when an actor attempts to access a resource or
+        perform an action."
