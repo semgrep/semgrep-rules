@@ -6,8 +6,15 @@ RUN yarn install
 # trailing space
 # ruleid: use-frozen-lockfile-yarn
 RUN yarn install
+
+# ok: use-frozen-lockfile-yarn
+RUN yarn install --prod --frozen-lockfile --prefer-offline --ignore-optional --no-progress
+# ok: use-frozen-lockfile-yarn
+RUN yarn install --production --frozen-lockfile
+
 RUN yarn install --frozen-lockfile
 RUN yarn install --immutable
+# ruleid: use-frozen-lockfile-yarn
 RUN yarn install some_package
 RUN yarn install -g some_package
 RUN yarn install --global some_package
@@ -20,6 +27,7 @@ COPY . /app
 RUN yarn build
 
 WORKDIR /app
+# ruleid: use-frozen-lockfile-yarn
 RUN yarn install foo
 
 RUN npm install foo

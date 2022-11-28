@@ -1,0 +1,38 @@
+rules:
+  - id: use-of-md5-digest-utils
+    message: >-
+      Detected MD5 hash algorithm which is considered insecure. MD5 is not
+      collision resistant and is therefore not suitable as a cryptographic
+      signature. Use HMAC instead.
+    languages: [java]
+    severity: WARNING
+    metadata:
+      owasp:
+      - A03:2017 - Sensitive Data Exposure
+      - A02:2021 - Cryptographic Failures
+      cwe:
+      - 'CWE-328: Use of Weak Hash'
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_MD5
+      category: security
+      technology:
+      - java
+      references:
+      - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+      subcategory:
+      - vuln
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+    patterns:
+      - pattern: |
+          $DU.$GET_ALGO().digest(...)
+      - metavariable-pattern:
+          metavariable: $GET_ALGO
+          pattern: getMd5Digest
+      - metavariable-pattern:
+          metavariable: $DU
+          pattern: DigestUtils
+      - focus-metavariable: $GET_ALGO
+    fix: |
+      getSha512Digest
+

@@ -1,0 +1,28 @@
+rules:
+  - id: metadata-impact
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            impact: $VALUE
+    message: >-
+      This Semgrep rule is missing a valid 'impact' field in the 'metadata'.
+      which should be either LOW, MEDIUM, or HIGH. For more information visit 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/writing-rules/rule-syntax/#TODO
+      category: correctness
+      technology:
+        - semgrep

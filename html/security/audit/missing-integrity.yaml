@@ -18,7 +18,7 @@ rules:
   patterns:
   - pattern-either:
     - pattern: <script $...A >...</script>
-    - pattern: <link $...A>
+    - pattern: <link $...A >
   - metavariable-pattern:
       metavariable: $...A
       patterns:
@@ -31,7 +31,7 @@ rules:
           - pattern: src="//..."
           - pattern: href='//...'
           - pattern: href="//..."
-        - pattern-not-regex: (.*integrity=)
+        - pattern-not-regex: (?is).*integrity=
         - pattern-not-regex: (google-analytics.com|fonts.googleapis.com|googletagmanager.com)
   paths:
     include:

@@ -12,6 +12,9 @@ def ok():
     subprocess.call(["echo", "a", ";", "rm", "-rf", "/"])
 
     # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.call(("echo", "a", ";", "rm", "-rf", "/"))
+
+    # ok:dangerous-subprocess-use-tainted-env-args
     raise subprocess.CalledProcessError("{}".format("foo"))
 
     # ok:dangerous-subprocess-use-tainted-env-args

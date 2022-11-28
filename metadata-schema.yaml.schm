@@ -31,7 +31,27 @@ schema:
         - LOW
         - MEDIUM
         - HIGH
-        - VERY HIGH
+      likelihood:
+        type: string
+        enum:
+        - LOW
+        - MEDIUM
+        - HIGH
+      impact:
+        type: string
+        enum:
+        - LOW
+        - MEDIUM
+        - HIGH
+      subcategory:
+        type: 
+        - array
+        items:
+          type: string
+          enum:
+          - audit
+          - vuln
+          - guardrail
       cwe:
         type:
         - array
@@ -67,3 +87,7 @@ schema:
     then:
       required:
       - cwe
+      - likelihood
+      - impact
+      - subcategory
+      

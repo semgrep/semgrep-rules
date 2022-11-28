@@ -1,19 +1,30 @@
 rules:
 - id: request-session-http-in-with-context
-  patterns:
-  - pattern-inside: |
-      with requests.Session(...) as $SESSION:
-        ...
-  - pattern-either:
-    - pattern: $SESSION.$W("=~/[Hh][Tt][Tt][Pp]://.*/", ...)
-    - pattern: $SESSION.request($METHOD, "=~/[Hh][Tt][Tt][Pp]://.*/", ...)
+  options:
+      symbolic_propagation: true
+  mode: taint
+  pattern-sources:
     - patterns:
-      - pattern-inside: |
-          $URL =  "=~/[Hh][Tt][Tt][Pp]://.*/"
+        - pattern: |
+            "$URL"
+        - metavariable-pattern:
+            metavariable: $URL
+            language: regex
+            patterns:
+              - pattern-regex: http://
+              - pattern-not-regex: >-
+                  .*://localhost
+              - pattern-not-regex: >-
+                  .*://127\.0\.0\.1
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: |
+        with requests.Session(...) as $SESSION:
           ...
-      - pattern-either:
-        - pattern: $SESSION.$W($URL, ...)
-        - pattern: $SESSION.request($METHOD, $URL, ...)
+    - pattern-either:
+        - pattern: $SESSION.$W($SINK, ...)
+        - pattern: $SESSION.request($METHOD, $SINK, ...)
+    - focus-metavariable: $SINK
   fix-regex:
     regex: '[Hh][Tt][Tt][Pp]://'
     replacement: https://
@@ -41,6 +52,6 @@ rules:
     - audit
     likelihood: LOW
     impact: LOW
-    confidence: LOW
+    confidence: MEDIUM
   languages: [python]
-  severity: ERROR
+  severity: INFO

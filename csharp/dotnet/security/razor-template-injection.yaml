@@ -1,5 +1,29 @@
 rules:
 - id: razor-template-injection
+  message: User-controllable string passed to Razor.Parse.  This leads directly to code execution in the
+    context of the process.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    cwe2022-top25: true
+    license: MIT
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://clement.notin.org/blog/2020/04/15/Server-Side-Template-Injection-(SSTI)-in-ASP.NET-Razor/
+    subcategory:
+    - vuln
+    technology:
+    - .net
+    - razor
+    - asp
+  languages:
+  - csharp
   mode: taint
   pattern-sources:
   - patterns:
@@ -12,27 +36,3 @@ rules:
   pattern-sanitizers:
   - not_conflicting: true
     pattern: $F(...)
-  message: User-controllable string passed to Razor.Parse.  This leads directly to code execution in the
-    context of the process.
-  languages:
-  - csharp
-  severity: WARNING
-  metadata:
-    category: security
-    license: MIT
-    references:
-    - https://clement.notin.org/blog/2020/04/15/Server-Side-Template-Injection-(SSTI)-in-ASP.NET-Razor/
-    technology:
-    - .net
-    - razor
-    - asp
-    cwe:
-    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
-    owasp:
-    - A03:2021 - Injection
-    cwe2022-top25: true
-    subcategory:
-    - vuln
-    likelihood: MEDIUM
-    impact: MEDIUM
-    confidence: MEDIUM
