@@ -43,7 +43,7 @@ jobs:
         env:
           GH_REF: ${{ github.ref }}
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo-testing -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{ \"repo\": \"semgrep-rules\", \"branch\" : \"$GH_REF\"}"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-on-push -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{ \"repo\": \"semgrep-rules\", \"branch\" : \"$GH_REF\"}"
       - name: Trigger semgrep-scanner argo workflow on PR to develop or release
         env:
           CHANGED_FILES: ${{ env.changed_files }}
