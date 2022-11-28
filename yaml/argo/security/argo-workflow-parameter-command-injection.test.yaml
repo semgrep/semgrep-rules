@@ -68,8 +68,8 @@ spec:
       container:
         image: alpine:latest
         env:
-          name: MESSAGE
-          value: "{{inputs.parameters.message}}"
+          - name: MESSAGE
+            value: "{{inputs.parameters.message}}"
         command: [sh, -c]
         # ok: argo-workflow-parameter-command-injection
         args: ["echo result was: $MESSAGE"]
