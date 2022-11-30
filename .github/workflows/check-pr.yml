@@ -8,15 +8,17 @@ jobs:
     name: Check PR
     runs-on: ubuntu-22.04
     permissions:
-      id-token: write
       contents: write
+      pull-requests: write
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
     - name: Run Checks
+      #TODO: remove before flight. Add in real checks.
       run: |
         echo "Running this step as a mock check"
+        echo "changes!" > changes.txt
         echo ::set-output name=check-output::"Please correct the following on this PR"
         exit 1
     # This step checks out another branch and pushes the changes to that, so that the code can easily be reviewed/cherry-pick
@@ -35,7 +37,7 @@ jobs:
       # Only run if it's a pull request, not made by dependabot, not on a fork and the checks exited with nonzero exit code
       if: failure() && github.event_name == 'pull_request' && steps.checks-commit.outputs.pushed == 'true'
       env:
-        GITHUB_TOKEN: ${{ steps.authentication.outputs.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "We've found some improvments for your PR." >> /tmp/message.txt
         echo "Please carefully review these changes and make sure they are intended:" >> /tmp/message.txt
