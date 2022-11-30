@@ -17,7 +17,7 @@ Run existing and custom Semgrep rules locally with the Semgrep command line inte
 
 We welcome Semgrep rule contributions directly to this repository! When you submit your contribution to the `semgrep-rules` repository we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). See full [license details](https://github.com/returntocorp/semgrep-rules/blob/develop/LICENSE).
 
-Note: To contribute, find details about contributing in the **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** documentation.
+Note: To contribute, review the **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** documentation.
 
 You can also contact us at support@r2c.dev to make Semgrep rule contributions. We will import your rules for everyone to use!
 
