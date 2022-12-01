@@ -7,7 +7,7 @@
 | ------------ | ------------------------ | -------------------- |
 | `develop` | `returntocorp/semgrep:develop`  | [![semgrep-rules-test-develop](https://github.com/returntocorp/semgrep-rules/workflows/semgrep-develop/badge.svg)](https://github.com/returntocorp/semgrep-rules/actions?query=workflow%3Asemgrep-develop+branch%3Adevelop) |
 
-Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules, but there are many more written by [r2c](https://r2c.dev/) and other contributors available in the [Semgrep Registry](https://semgrep.dev/explore). If there is a specific rule you are looking for, you can also search the [Semgrep registry](https://semgrep.dev/r). To contribute, find details about contributing in the [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/) documentation.
+Welcome! This repository is the standard library for [Semgrep](https://semgrep.dev/) rules. There are many more rules available in the [Semgrep Registry](https://semgrep.dev/explore) written by [r2c](https://r2c.dev/) and other contributors. The [Semgrep Registry](https://semgrep.dev/explore) includes rules from this repository and additional rules that are accessible with the Team or Enterprise tiers of [Semgrep App](https://semgrep.dev/pricing). If there is a specific rule you are looking for, see the [Semgrep registry search](https://semgrep.dev/r). To contribute, find details about contributing in the [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/) documentation.
 
 ## Using Semgrep rules repository
 
@@ -15,11 +15,9 @@ Run existing and custom Semgrep rules locally with the Semgrep command line inte
 
 ## Contributing
 
-We welcome Semgrep rule contributions directly to this repository! If you are submitting to the `semgrep-rules` repository we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). Full [license details](https://github.com/returntocorp/semgrep-rules/blob/develop/LICENSE) here.
+We welcome Semgrep rule contributions directly to this repository! When you submit your contribution to the `semgrep-rules` repository we’ll ask you to make r2c a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows r2c to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). See full [license details](https://github.com/returntocorp/semgrep-rules/blob/develop/LICENSE).
 
-:::info
-To contribute, find details about contributing in the **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** documentation.
-:::
+Note: To contribute, review the **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** documentation.
 
 You can also contact us at support@r2c.dev to make Semgrep rule contributions. We will import your rules for everyone to use!
 
