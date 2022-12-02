@@ -7,6 +7,7 @@ rules:
       cwe: 
         - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
         - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: A03:2021 – Injection
       condidence: MEDIUM
       likelihood: MEDIUM
       impact: HIGH
@@ -74,7 +75,7 @@ rules:
               args: [..., $PARAM, ...]
         - metavariable-regex:
             metavariable: $LANG
-            regex: (bash|sh)
+            regex: (sh|bash|ksh|csh|tcsh|zsh)
         - metavariable-pattern:
             metavariable: $PARAM
             pattern-either: 
