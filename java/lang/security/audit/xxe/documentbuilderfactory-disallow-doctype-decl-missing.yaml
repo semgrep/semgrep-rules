@@ -35,7 +35,8 @@ rules:
       "http://xml.org/sax/features/external-parameter-entities" to false.
     mode: taint
     pattern-sources:
-      - patterns:
+      - by-side-effect: true
+        patterns:
           - pattern-either:
               - pattern: |
                   $FACTORY = DocumentBuilderFactory.newInstance();
@@ -88,7 +89,8 @@ rules:
       - patterns:
           - pattern: $FACTORY.newDocumentBuilder();
     pattern-sanitizers:
-      - pattern-either:
+      - by-side-effect: true
+        pattern-either:
           - patterns:
             - pattern-either:
               - pattern: >
