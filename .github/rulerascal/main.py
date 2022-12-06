@@ -32,6 +32,10 @@ async def main():
             for file in pr_files.json()
             if file["filename"].endswith(".yaml")
         ]
+        if rule_paths != 1:
+            print("back in my day, we only changed one rule per PR, bye!")
+            sys.exit(0)
+
         rule_path = rule_paths[0]
         resolved_rule_path = Path(os.environ["GITHUB_WORKSPACE"]) / rule_path
 
@@ -56,16 +60,6 @@ async def main():
         Respond with a single code block containing only the new message key from the YAML file.
         Do not include any other text in your response."""
         )
-        response = [
-            """
-            message: >-
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet.
-        """
-        ]
         new_message = "\n".join(
             line.strip()
             for line in dedent(response[0]).strip().splitlines()
