@@ -7,24 +7,33 @@ from textwrap import dedent
 from aiogpt import Chat
 import httpx
 
-pr_base_url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues/{os.environ['GITHUB_ISSUE_NUMBER']}"
+pr_base_url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/pulls/{os.environ['GITHUB_PR_NUMBER']}"
+
+
+COMMENT_HEADER = "Heya, I'm rule rascal. I'm an AI so I'm not that good at writing rule messages. But I try. Here's what I think the message could be:"
 
 
 async def main():
-    async with httpx.Client(
+    async with httpx.AsyncClient(
         headers={
             "Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
         }
     ) as gh:
+        pr_comments = await gh.get(f"{pr_base_url}/comments")
+        for comment in pr_comments.json():
+            if COMMENT_HEADER in comment["body"]:
+                print("Oh I already left a comment here, never mind bye!")
+                sys.exit(0)
         pr_files = await gh.get(f"{pr_base_url}/files")
         rule_paths = [
             Path(file["filename"])
-            for file in await pr_files.json()
+            for file in pr_files.json()
             if file["filename"].endswith(".yaml")
         ]
         rule_path = rule_paths[0]
+        resolved_rule_path = Path(os.environ["GITHUB_WORKSPACE"]) / rule_path
 
         chat = Chat(os.environ["CHATGPT_TOKEN"])
         response = await chat.say(
@@ -37,7 +46,7 @@ async def main():
         so it needs to be simple to understand.
         We have the following Semgrep rule:
 
-        {rule_path.read_text()}
+        {resolved_rule_path.read_text()}
 
         Please improve the message of this rule.
         The message should explain what the vulnerability is and how it is exploitable.
@@ -47,19 +56,31 @@ async def main():
         Respond with a single code block containing only the new message key from the YAML file.
         Do not include any other text in your response."""
         )
+        response = [
+            """
+            message: >-
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+                Lorem ipsum dolor sit amet.
+                Lorem ipsum dolor sit amet.
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+                Lorem ipsum dolor sit amet.
+        """
+        ]
         new_message = "\n".join(
-            line for line in response[0].splitlines() if "message:" not in line
+            line.strip()
+            for line in dedent(response[0]).strip().splitlines()
+            if "message:" not in line
         )
 
         start_line = -1
         end_line = -1
         indent_level_at_end_of_message = -1
 
-        for lineno, line in enumerate(rule_path.open(), start=1):
+        for lineno, line in enumerate(resolved_rule_path.open(), start=1):
             indent = re.search(r"^\s+", line)
             indent_level = len(indent.group()) if indent else 0
 
-            if start_line >= lineno:
+            if lineno >= start_line:
                 if indent_level == indent_level_at_end_of_message:
                     break
                 end_line = lineno
@@ -68,22 +89,25 @@ async def main():
                 start_line = lineno + 1
                 indent_level_at_end_of_message = indent_level
 
-        await gh.post(
-            f"{pr_base_url}/comments",
-            json={
-                "body": dedent(
-                    f"""
-                    ```suggestion
-                    {new_message}
-                    ```"""
-                ).strip(),
-                "commit_id": os.environ["GITHUB_SHA"],
-                "path": str(rule_path),
-                "start_side": "RIGHT",
-                "line": end_line,
-                "start_line": start_line,
-            },
-        )
+        NEWLINE = "\n"  # f-string expression part cannot include a backslash
+
+        pr_comment_json = {
+            "body": COMMENT_HEADER
+            + "\n\n```suggestion\n"
+            + NEWLINE.join(
+                (indent_level_at_end_of_message + 2) * " " + line
+                for line in new_message.splitlines()
+            )
+            + "\n```",
+            "commit_id": os.environ["GITHUB_SHA"],
+            "path": str(rule_path),
+            "start_side": "RIGHT",
+            "side": "RIGHT",
+            "line": end_line,
+            "start_line": start_line,
+        }
+
+        await gh.post(f"{pr_base_url}/comments", json=pr_comment_json)
 
 
 asyncio.run(main())
