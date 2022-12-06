@@ -2,14 +2,16 @@ rules:
 - id: use-after-free
   mode: taint
   pattern-sources:
-    - patterns:
+    - by-side-effect: true
+      patterns:
         - pattern: free($VAR);
         - focus-metavariable: $VAR
   pattern-sinks:
     - pattern: |
         $VAR->$ACCESSOR
   pattern-sanitizers:
-      - patterns:
+      - by-side-effect: true
+        patterns:
         - pattern: |
             $VAR = NULL;
         - focus-metavariable: $VAR  
