@@ -1,7 +1,19 @@
 rules:
 - id: azure-automation-encrypted
   patterns:
-  - pattern: resource
+  - pattern-either:
+    - pattern-inside: |
+        resource "azurerm_automation_variable_string" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_automation_variable_datetime" "..." {
+        ...
+        }
+    - pattern-inside: |
+        resource "azurerm_automation_variable_int" "..." {
+        ...
+        }
   - pattern-not-inside: |
       resource "azurerm_automation_variable_string" "..." {
       ...
