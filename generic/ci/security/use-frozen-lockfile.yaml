@@ -1,128 +1,128 @@
 rules:
-- id: use-frozen-lockfile-yarn
-  patterns:
-    - pattern: |
-        RUN ... yarn $INSTALL ...
-    - pattern-not-inside: |
-        RUN ... yarn $INSTALL ... --frozen-lockfile ... 
-    - pattern-not-inside: |
-        RUN ... yarn $INSTALL ... --immutable ...
-    - pattern-not-inside: |
-        RUN ... yarn $INSTALL ... -g ...
-    - pattern-not-inside: |
-        RUN ... yarn $INSTALL ... --global ...
-    - metavariable-regex: 
-        metavariable: $INSTALL
-        regex: ^(install)$
-    - focus-metavariable: $INSTALL
-  fix: |
-    install --immutable
-  message: >-
-    To ensure reproducable and deterministic builds, when performing yarn install, make sure to use the
-    lockfile. Yarn will update the lockfile rather than using the pinned
-    versions. By using `--immutable` yarn will throw an exit code if the lockfile was
-    to be modified.
-  languages:
-  - dockerfile
-  severity: INFO
-  metadata:
-    category: security
-    cwe:
-    - 'CWE-494: Download of Code Without Integrity Check'
-    owasp:
-    - A08:2021 - Software and Data Integrity Failures
-    technology:
-    - dockerfile
-    - javascript
-    - typescript
-    - yarn
-    references:
-    - https://classic.yarnpkg.com/lang/en/docs/cli/install/
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-- id: use-frozen-lockfile-npm
-  patterns:
-  - pattern-regex: npm install\b
-  - pattern-not-regex: npm install -g
-  - pattern-not-regex: npm install --global
-  - pattern-not-regex: npm install [\w]+
-  fix: npm ci
-  message: >-
-    To ensure reproducable and deterministic builds, use `npm ci` rather than `npm install` in scripts.
-    This will use the lockfile rather than updating it.
-  languages:
-  - generic
-  severity: INFO
-  metadata:
-    category: security
-    cwe:
-    - 'CWE-494: Download of Code Without Integrity Check'
-    owasp:
-    - A08:2021 - Software and Data Integrity Failures
-    technology:
-    - dockerfile
-    - javascript
-    - typescript
-    - npm
-    references:
-    - https://docs.npmjs.com/cli/v6/commands/npm-ci
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-- id: use-frozen-lockfile-pipenv
-  patterns:
-  - pattern: a()
-  - pattern: b()
-  message: >-
-    This rule has been deprecated.
-  languages:
-  - generic
-  severity: INFO
-  metadata:
-    category: security
-    cwe:
-    - 'CWE-494: Download of Code Without Integrity Check'
-    owasp:
-    - A08:2021 - Software and Data Integrity Failures
-    technology:
-    - dockerfile
-    - javascript
-    - typescript
-    references:
-    - https://r2c.dev
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-- id: use-frozen-lockfile-pip
-  patterns:
-  - pattern: a()
-  - pattern: b()
-  message: >-
-    This rule has been deprecated.
-  languages:
-  - generic
-  severity: INFO
-  metadata:
-    category: security
-    cwe:
-    - 'CWE-494: Download of Code Without Integrity Check'
-    owasp:
-    - A08:2021 - Software and Data Integrity Failures
-    technology:
-    - dockerfile
-    - javascript
-    - typescript
-    references:
-    - https://r2c.dev
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
+  - id: use-frozen-lockfile-yarn
+    patterns:
+      - pattern: |
+          RUN ... yarn $INSTALL ...
+      - pattern-not-inside: |
+          RUN ... yarn $INSTALL ... --frozen-lockfile ... 
+      - pattern-not-inside: |
+          RUN ... yarn $INSTALL ... --immutable ...
+      - pattern-not-inside: |
+          RUN ... yarn $INSTALL ... -g ...
+      - pattern-not-inside: |
+          RUN ... yarn $INSTALL ... --global ...
+      - metavariable-regex:
+          metavariable: $INSTALL
+          regex: ^(install)$
+      - focus-metavariable: $INSTALL
+    fix: |
+      install --immutable
+    message: >-
+      To ensure reproducible and deterministic builds, when performing yarn install, make sure to use the
+      lockfile. Yarn will update the lockfile rather than using the pinned
+      versions. By using `--immutable` yarn will throw an exit code if the lockfile was
+      to be modified.
+    languages:
+      - dockerfile
+    severity: INFO
+    metadata:
+      category: security
+      cwe:
+        - 'CWE-494: Download of Code Without Integrity Check'
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+        - yarn
+      references:
+        - https://classic.yarnpkg.com/lang/en/docs/cli/install/
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+  - id: use-frozen-lockfile-npm
+    patterns:
+      - pattern-regex: npm install\b
+      - pattern-not-regex: npm install -g
+      - pattern-not-regex: npm install --global
+      - pattern-not-regex: npm install [\w]+
+    fix: npm ci
+    message: >-
+      To ensure reproducible and deterministic builds, use `npm ci` rather than `npm install` in scripts.
+      This will use the lockfile rather than updating it.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe:
+        - 'CWE-494: Download of Code Without Integrity Check'
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+        - npm
+      references:
+        - https://docs.npmjs.com/cli/v6/commands/npm-ci
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+  - id: use-frozen-lockfile-pipenv
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    message: >-
+      This rule has been deprecated.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe:
+        - 'CWE-494: Download of Code Without Integrity Check'
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+      references:
+        - https://r2c.dev
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+  - id: use-frozen-lockfile-pip
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    message: >-
+      This rule has been deprecated.
+    languages:
+      - generic
+    severity: INFO
+    metadata:
+      category: security
+      cwe:
+        - 'CWE-494: Download of Code Without Integrity Check'
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      technology:
+        - dockerfile
+        - javascript
+        - typescript
+      references:
+        - https://r2c.dev
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
