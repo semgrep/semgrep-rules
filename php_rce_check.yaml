@@ -1,0 +1,27 @@
+rules:
+- id: php_rce_check
+  patterns:
+  - pattern-either:
+    - pattern: system(...)
+    - pattern: eval(...)
+    - pattern: exec(...)
+    - pattern: passthru(...)
+    - pattern: popen(...)
+    - pattern: proc_open(...)
+    - pattern: shell_exec(...)
+    - pattern: pcntl_exec(...)
+    - pattern: preg_replace('/.*/e',...)
+  message: Semgrep found a match
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - 'CWE 95: The software receives input from an upstream component, but it does
+      not neutralize or incorrectly neutralizes code syntax before using the input
+      in a dynamic evaluation call (e.g. "eval").'
+    - 'CWE 20: Improper Input Validation'
+    - 'CWE 78: Improper Neutralization of Special Elements used in an OS Command (''OS
+      Command Injection'')'
+    owasp: A3:2021 injection
