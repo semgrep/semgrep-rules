@@ -6,7 +6,7 @@ let verifier = MyServerCertVerifie;
 let mut c1 = rustls::client::ClientConfig::new();
 
 // Remove todo when Rust supports direct module references
-// todoruleid: rustls-dangerous
+// ruleid: rustls-dangerous
 let mut c2 = rustls::client::DangerousClientConfig {cfg: &mut cfg};
 c2.set_certificate_verifier(verifier);
 
