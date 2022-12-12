@@ -1,0 +1,44 @@
+rules:
+  - id: reqwest-set-sensitive
+    message: Set sensitive flag on security headers with 'set_sensitive' to treat data with special care
+    patterns:
+      - pattern: |
+          let mut $HEADERS = header::HeaderMap::new();
+          ...
+          let $HEADER_VALUE = <... header::HeaderValue::$FROM_FUNC(...) ...>;
+          ...
+          $HEADERS.insert($HEADER, $HEADER_VALUE);
+      - pattern-not: |
+          let mut $HEADERS = header::HeaderMap::new();
+          ...
+          let $HEADER_VALUE = <... header::HeaderValue::$FROM_FUNC(...) ...>;
+          ...
+          $HEADER_VALUE.set_sensitive(true);
+          ...
+          $HEADERS.insert($HEADER, $HEADER_VALUE);
+      - metavariable-pattern:
+          metavariable: $FROM_FUNC
+          pattern-either:
+            - pattern: from_static
+            - pattern: from_str
+            - pattern: from_name
+            - pattern: from_bytes
+            - pattern: from_maybe_shared
+      - metavariable-pattern:
+          metavariable: $HEADER
+          pattern-either:
+            - pattern: header::AUTHORIZATION
+            - pattern: '"Authorization"'
+    metadata:
+      references:
+        - https://docs.rs/reqwest/latest/reqwest/header/struct.HeaderValue.html#method.set_sensitive
+      technology:
+        - reqwest
+      category: security
+      cwe: "CWE-921: Storage of Sensitive Data in a Mechanism without Access Control"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [rust]
+    severity: INFO

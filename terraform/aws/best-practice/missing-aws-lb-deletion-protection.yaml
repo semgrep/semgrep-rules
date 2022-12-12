@@ -1,10 +1,15 @@
 rules:
 - id: missing-aws-lb-deletion-protection
   patterns:
-    - pattern: |
-        resource $ANYLB $ANYTHING {
+    - pattern-either:
+      - pattern-inside: |
+          resource "aws_alb" "..." {
           ...
-        }
+          }
+      - pattern-inside: |
+          resource "aws_lb" "..." {
+          ...
+          }
     - pattern-not-inside: |
         resource $ANYLB $ANYTHING {
           ...
