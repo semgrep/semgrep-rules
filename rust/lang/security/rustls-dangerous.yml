@@ -1,0 +1,24 @@
+rules:
+  - id: rustls-dangerous
+    message: Dangerous client config used, ensure SSL verification
+    pattern-either:
+      - pattern: "rustls::client::DangerousClientConfig"
+      - pattern: "$CLIENT.dangerous().set_certificate_verifier(...)"
+      - pattern: |
+          let $CLIENT = rustls::client::ClientConfig::dangerous(...);
+          ...
+          $CLIENT.set_certificate_verifier(...);
+    metadata:
+      references:
+        - https://docs.rs/rustls/latest/rustls/client/struct.DangerousClientConfig.html
+        - https://docs.rs/rustls/latest/rustls/client/struct.ClientConfig.html#method.dangerous
+      technology:
+        - rustls
+      category: security
+      cwe: "CWE-295: Improper Certificate Validation"
+      confidence: HIGH
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory: vuln
+    languages: [rust]
+    severity: WARNING

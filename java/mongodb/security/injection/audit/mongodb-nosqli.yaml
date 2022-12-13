@@ -1,0 +1,69 @@
+rules:
+- id: mongodb-nosqli
+  message: >-
+    Detected non-constant data passed into a NoSQL query using the 'where'
+    evaluation operator. If this data can be controlled by an external user, this
+    is a NoSQL injection. Ensure data passed to the NoSQL query is not user controllable,
+    or properly sanitize the data. Ideally, avoid using the 'where' operator at all
+    and instead use the helper methods provided by com.mongodb.client.model.Filters
+    with comparative operators such as eq, ne, lt, gt, etc.
+  languages:
+  - java
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: (com.mongodb.BasicDBObject $QUERY).put("$where", $INPUT);
+    - pattern: |
+        (HashMap<String, String> $MAP).put("$where", $INPUT);
+        ...
+        (com.mongodb.BasicDBObject $QUERY).putAll($MAP);
+    - pattern: (com.mongodb.BasicDBObject $QUERY).append("$where", $INPUT);
+    - pattern: new com.mongodb.BasicDBObject("$where", $INPUT);
+    - pattern: |
+        (HashMap<String, String> $MAP).put("$where", $INPUT);
+        ...
+        new com.mongodb.BasicDBObject($MAP);
+    - pattern: |
+        (HashMap<String, String> $MAP).put("$where", $INPUT);
+        ...
+        String json = new JSONObject($MAP).toString();
+        ...
+        (com.mongodb.BasicDBObject $QUERY).parse((String $JSON));
+    - pattern: com.mongodb.BasicDBObjectBuilder.start().add("$where", $INPUT);
+    - pattern: com.mongodb.BasicDBObjectBuilder.start().append("$where", $INPUT);
+    - pattern: com.mongodb.BasicDBObjectBuilder.start("$where", $INPUT);
+    - pattern: |
+        (HashMap<String, String> $MAP).put("$where", $INPUT);
+        ...
+        com.mongodb.BasicDBObjectBuilder.start($MAP);
+  - metavariable-pattern:
+      metavariable: $INPUT
+      patterns:
+        - pattern: |
+            ...
+        - pattern-not: |
+            "..."
+  metadata:
+    category: security
+    technology:
+    - nosql
+    - mongodb
+    cwe:
+    - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    asvs:
+      section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
+      control_id: 5.3.4 Injection Prevention
+      control_url: https://github.com/OWASP/ASVS/blob/master/5.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention
+      version: '5'
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    - https://www.mongodb.com/docs/manual/tutorial/query-documents/
+    - https://www.mongodb.com/docs/manual/reference/operator/query/where/
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW

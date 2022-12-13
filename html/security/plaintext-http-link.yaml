@@ -1,0 +1,27 @@
+rules:
+- id: plaintext-http-link
+  metadata:
+    category: security
+    technology:
+    - html
+    cwe:
+    - 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    confidence: HIGH
+    subcategory:
+      - vuln
+    references:
+    - https://cwe.mitre.org/data/definitions/319.html
+    likelihood: LOW
+    impact: LOW
+  patterns:
+  - pattern: <a href="$URL">...</a>
+  - metavariable-regex:
+      metavariable: $URL
+      regex: '^(?i)http://'
+  message: >-
+    This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.
+  severity: WARNING
+  languages: [html]

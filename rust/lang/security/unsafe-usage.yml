@@ -1,0 +1,17 @@
+rules:
+  - id: unsafe-usage
+    message: Detected 'unsafe' usage, please audit for secure usage
+    pattern: "unsafe { ... }"
+    metadata:
+      references:
+        - https://doc.rust-lang.org/std/keyword.unsafe.html
+      technology:
+        - rust
+      category: security
+      cwe: "CWE-242: Use of Inherently Dangerous Function"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [rust]
+    severity: INFO

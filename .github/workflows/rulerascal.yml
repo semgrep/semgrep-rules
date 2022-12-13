@@ -1,0 +1,24 @@
+on:
+  pull_request:
+
+jobs:
+  rulerascal:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: .github/rulerascal
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: poetry
+          cache-dependency-path: .github/rulerascal/poetry.lock
+      - run: poetry install
+      - run: poetry run python main.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHATGPT_TOKEN: ${{ secrets.CHATGPT_TOKEN }}
+          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
