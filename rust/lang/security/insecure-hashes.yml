@@ -1,0 +1,25 @@
+rules:
+  - id: insecure-hashes
+    message: Detected cryptographically insecure hashing function
+    pattern-either:
+      - pattern: "md2::Md2::new(...)"
+      - pattern: "md4::Md4::new(...)"
+      - pattern: "md5::Md5::new(...)"
+      - pattern: "sha1::Sha1::new(...)"
+    metadata:
+      references:
+        - https://github.com/RustCrypto/hashes
+        - https://docs.rs/md2/latest/md2/
+        - https://docs.rs/md4/latest/md4/
+        - https://docs.rs/md5/latest/md5/
+        - https://docs.rs/sha-1/latest/sha1/
+      technology:
+        - rust
+      category: security
+      cwe: "CWE-328: Use of Weak Hash"
+      confidence: HIGH
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory: audit
+    languages: [rust]
+    severity: WARNING
