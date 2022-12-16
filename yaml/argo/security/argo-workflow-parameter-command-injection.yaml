@@ -78,28 +78,15 @@ rules:
             - pattern-inside: |
                 container:
                   ...
-                  command: [$LANG, ...]
+                  command: $LANG
                   ...
-                  args: [..., $PARAM, ...]
+                  args: $PARAM
             - metavariable-regex:
                 metavariable: $LANG
-                regex: (sh|bash|ksh|csh|tcsh|zsh)
+                regex: .*(sh|bash|ksh|csh|tcsh|zsh).*
             - metavariable-pattern:
                 metavariable: $PARAM
                 pattern-either: 
                   - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
                   - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
-          - patterns:
-            - pattern-inside: |
-                container:
-                  ...
-                  command: [$LANG, ...]
-                  ...
-                  args: [..., $PARAM, ...]
-            - metavariable-regex:
-                metavariable: $LANG
-                regex: (bash|sh)
-            - metavariable-regex:
-                metavariable: $PARAM
-                regex: (.*{{(inputs|workflow).parameters.*)
             - focus-metavariable: $PARAM
