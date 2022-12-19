@@ -15,6 +15,12 @@ def route_param_ok(route_param):
     # ok: ssrf-requests
     return requests.get("this is safe")
 
+@app.get("/route_param/<route_param>")
+def route_param_without_decorator(route_param):
+    print("blah")
+    # ruleid: ssrf-requests
+    return requests.get(route_param)
+
 @app.route("/get_param", methods=["GET"])
 def get_param():
     param = flask.request.args.get("param")
