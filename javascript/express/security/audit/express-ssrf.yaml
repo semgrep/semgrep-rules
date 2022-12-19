@@ -55,6 +55,7 @@ rules:
               - pattern: cookies
               - pattern: headers
               - pattern: body
+    # we have a deepsemgrep rule which will make this 10x smaller.          
     pattern-sinks:
       - patterns:
           - pattern-either:
@@ -67,6 +68,7 @@ rules:
               - pattern-inside: |
                   import $REQUEST from 'request'
                   ...
+          # Direct usage with http:// https:// and //
           - pattern-either:
               - pattern: $REQUEST.$METHOD("$HTTP"+$REQ. ... .$VALUE)
               - pattern: $REQUEST.$METHOD("$HTTP"+$REQ. ... .$VALUE + $...A)
@@ -93,6 +95,7 @@ rules:
               - pattern-inside: |
                   import $REQUEST from 'request'
                   ...
+          # Direct usage with req.body at start
           - pattern-either:
               - pattern: $REQUEST.$METHOD($REQ. ... .$VALUE,...)
               - pattern: $REQUEST.$METHOD($REQ. ... .$VALUE + $...A,...)
@@ -112,6 +115,7 @@ rules:
               - pattern-inside: |
                   import $REQUEST from 'request'
                   ...
+          # Direct usage with req.body['value'] at start
           - pattern-either:
               - pattern: $REQUEST.$METHOD($REQ.$VALUE['...'],...)
               - pattern: $REQUEST.$METHOD($REQ.$VALUE['...'] + $...A,...)
@@ -131,37 +135,59 @@ rules:
               - pattern-inside: |
                   import $REQUEST from 'request'
                   ...
+          # Direct usage with req.body from assign
           - pattern-either:
               - pattern-inside: |
                   $ASSIGN = $REQ. ... .$VALUE
                   ...
               - pattern-inside: |
-                  $ASSIGN = $REQ.$VALUE['...']
+                  $ASSIGN = $REQ. ... .$VALUE['...']
                   ...
               - pattern-inside: |
                   $ASSIGN = $REQ. ... .$VALUE + $...A
                   ...
               - pattern-inside: |
-                  $ASSIGN = $REQ.$VALUE['...'] + $...A
+                  $ASSIGN = $REQ. ... .$VALUE['...'] + $...A
                   ...     
               - pattern-inside: |
                   $ASSIGN = `${$REQ. ... .$VALUE}...`
                   ...
               - pattern-inside: |
-                  $ASSIGN = `${$REQ.$VALUE['...']}...`
-                  ...                    
+                  $ASSIGN = `${$REQ. ... .$VALUE['...']}...`
+                  ... 
+              # Direct usage with req.body with http|https|// from assign
+              - patterns:
+                - pattern-either:
+                    - pattern-inside: |
+                            $ASSIGN = "$HTTP"+ $REQ. ... .$VALUE
+                            ...
+                    - pattern-inside: |
+                            $ASSIGN = "$HTTP"+$REQ. ... .$VALUE + $...A
+                            ...
+                    - pattern-inside: |
+                            $ASSIGN = "$HTTP"+$REQ.$VALUE[...]
+                            ...
+                    - pattern-inside: |
+                            $ASSIGN = "$HTTP"+$REQ.$VALUE[...] + $...A
+                            ...
+                    - pattern-inside: |
+                            $ASSIGN = `$HTTP${$REQ.$VALUE[...]}...`
+                            ...
+                - metavariable-regex:
+                    metavariable: $HTTP
+                    regex: ^(https?:\/\/|//)$                   
           - pattern-either:
               - pattern: $REQUEST.$METHOD($ASSIGN,...)
               - pattern: $REQUEST.$METHOD($ASSIGN + $...FOO,...)
               - pattern: $REQUEST.$METHOD(`${$ASSIGN}...`,...)
               - patterns:
-                - pattern-either:
-                  - pattern: $REQUEST.$METHOD("$HTTP"+$ASSIGN,...)
-                  - pattern: $REQUEST.$METHOD("$HTTP"+$ASSIGN + $...A,...)
-                  - pattern: $REQUEST.$METHOD(`$HTTP${$ASSIGN}...`,...)
-                - metavariable-regex:
-                    metavariable: $HTTP
-                    regex: ^(https?:\/\/|//)$
+                  - pattern-either:
+                      - pattern: $REQUEST.$METHOD("$HTTP"+$ASSIGN,...)
+                      - pattern: $REQUEST.$METHOD("$HTTP"+$ASSIGN + $...A,...)
+                      - pattern: $REQUEST.$METHOD(`$HTTP${$ASSIGN}...`,...)
+                  - metavariable-regex:
+                      metavariable: $HTTP
+                      regex: ^(https?:\/\/|//)$
           - pattern: $ASSIGN
           - metavariable-regex:
               metavariable: $METHOD

@@ -4,10 +4,12 @@ const request = require('request')
 
 module.exports = function badNormal () {
   return (req: Request, res: Response, next: NextFunction) => {
-    const url = req.body.imageUrl
+    const url = "//"+req.body.imageUrl
+    const url1 = req.body['imageUrl'] + 123
     // ruleid: express-ssrf
     request.get(url)
-    
+    // ruleid: express-ssrf
+    request.get(url1+123)
     // ok: express-ssrf
     request.get(`https://reddit.com/${req.query.url}/fooo`)
     // ok: express-ssrf
@@ -24,13 +26,13 @@ module.exports = function badNormal () {
     // ruleid: express-ssrf
     request.get(`${req.query.url}/fooo`)
     // ruleid: express-ssrf
-    request.get(req.query.url+config_value.url)
+    request.get("//"+req.query.url+config_value.url)
 
     const a = req.body.url
     // ruleid: express-ssrf
     request.get(a)
     // ruleid: express-ssrf
-    request.get(`${a}/fooo`)
+    request.get(`${url1}/fooo`)
     // ruleid: express-ssrf
     request.get(a+config_value.url)
 
@@ -56,7 +58,7 @@ module.exports = function badNormal () {
     request.get(req.body['url']+config_value.url)
 
     // ruleid: express-ssrf
-    request.get("https://"+url)
+    request.get("https://"+url1)
     // ruleid: express-ssrf
     request.get(`https://${req.body['url']}/fooo`)
     // ruleid: express-ssrf
