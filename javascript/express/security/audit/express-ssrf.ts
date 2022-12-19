@@ -7,16 +7,68 @@ module.exports = function badNormal () {
     const url = req.body.imageUrl
     // ruleid: express-ssrf
     request.get(url)
-
-}
-}
-module.exports = function goodNormal () {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const url = 'https://google.com'
+    
     // ok: express-ssrf
-     request.get(url)
-  }
+    request.get(`https://reddit.com/${req.query.url}/fooo`)
+    // ok: express-ssrf
+    request.get("https://google.com/"+req.query.url)
+    // ok: express-ssrf
+    request.get(config_value.foo+req.query.url)
+    // ok: express-ssrf
+    request.get(config_value.foo+req.body.shouldalsonotcatch)
+    // ok: express-ssrf
+    request.get(config_value.foo+req)
 
+    // ruleid: express-ssrf
+    request.get(req.body.url)
+    // ruleid: express-ssrf
+    request.get(`${req.query.url}/fooo`)
+    // ruleid: express-ssrf
+    request.get(req.query.url+config_value.url)
+
+    const a = req.body.url
+    // ruleid: express-ssrf
+    request.get(a)
+    // ruleid: express-ssrf
+    request.get(`${a}/fooo`)
+    // ruleid: express-ssrf
+    request.get(a+config_value.url)
+
+    // ok: express-ssrf
+    request.get(c+a)
+    // ok: express-ssrf
+    request.get(`${c}${a}/fooo`)
+    // ok: express-ssrf
+    request.get(c+a+config_value.url)
+
+    // ok: express-ssrf
+    request.get(c)
+    // ok: express-ssrf
+    request.get(`${c}`)
+    // ok: express-ssrf
+    request.get(c+config_value.url)
+
+    // ruleid: express-ssrf
+    request.get(req.body['url'])
+    // ruleid: express-ssrf
+    request.get(`${req.body['url']}/fooo`)
+    // ruleid: express-ssrf
+    request.get(req.body['url']+config_value.url)
+
+    // ruleid: express-ssrf
+    request.get("https://"+url)
+    // ruleid: express-ssrf
+    request.get(`https://${req.body['url']}/fooo`)
+    // ruleid: express-ssrf
+    request.get("https://"+req.body['url']+config_value.url)
+    // ruleid: express-ssrf
+    request.get("//"+req.body['url']+config_value.url)
+    // ok: express-ssrf
+    request.get("//"+c+req.body['url']+config_value.url)
+    // todo: express-ssrf
+    request.get("https://google.com"+req.query.url)
+
+}
 }
 
 
