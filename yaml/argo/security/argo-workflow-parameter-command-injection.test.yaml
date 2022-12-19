@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  generateName: scripts-bash-
+spec:
+  entrypoint: print-message
+  arguments:
+    parameters:
+      - name: message
+  templates:
+    - name: print-message
+      inputs:
+        parameters:
+          - name: message
+      script:
+        image: debian:9.4
+        command: [bash]
+        # ruleid: argo-workflow-parameter-command-injection
+        source: |
+          echo {{inputs.parameters.message}}
+    - name: print-message-sh
+      inputs:
+        parameters:
+          - name: message
+      script:
+        image: debian:9.4
+        command:
+          - sh
+        # ruleid: argo-workflow-parameter-command-injection
+        source: |
+          echo {{inputs.parameters.message}}
+    - name: print-message-python
+      inputs:
+        parameters:
+          - name: message
+      script:
+        image: debian:9.4
+        command: [python]
+        # ruleid: argo-workflow-parameter-command-injection
+        source: |
+          print("{{inputs.parameters.message}}")
+    - name: print-message-args
+      inputs:
+        parameters:
+        - name: message
+      container:
+        image: alpine:latest
+        command: [sh, -c]
+        # ruleid: argo-workflow-parameter-command-injection
+        args: ["echo result was: {{inputs.parameters.message}}"]
+    - name: print-message-secure
+      inputs:
+        parameters:
+          - name: message
+      script:
+        image: debian:9.4
+        env:
+          name: MESSAGE
+          value: "{{inputs.parameters.message}}"
+        command: [bash]
+        # ok: argo-workflow-parameter-command-injection
+        source: |
+          echo $MESSAGE
+    - name: print-message-args-secure
+      inputs:
+        parameters:
+        - name: message
+      container:
+        image: alpine:latest
+        env:
+          - name: MESSAGE
+            value: "{{inputs.parameters.message}}"
+        command: [sh, -c]
+        # ok: argo-workflow-parameter-command-injection
+        args: ["echo result was: $MESSAGE"]

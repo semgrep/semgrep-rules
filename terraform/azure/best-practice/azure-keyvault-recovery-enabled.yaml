@@ -3,7 +3,10 @@ rules:
     message: >-
       Ensure the key vault is recoverable
     patterns:
-      - pattern: resource
+      - pattern: |
+          resource "azurerm_key_vault" "..." {
+          ...
+          }
       - pattern-not-inside: |
           resource "azurerm_key_vault" "..." {
           ...

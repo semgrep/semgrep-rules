@@ -1,0 +1,92 @@
+rules:
+  - id: argo-workflow-parameter-command-injection
+    message: Using input or workflow parameters in here-scripts can lead to command injection or code injection. Convert the parameters to env variables instead.
+    languages: [yaml]
+    metadata:
+      category: security
+      cwe: 
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: 
+        - A03:2021 – Injection
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://github.com/argoproj/argo-workflows/issues/5061
+        - https://github.com/argoproj/argo-workflows/issues/5114#issue-808865370
+      technology:
+        - ci
+        - argo
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          apiVersion: $VERSION
+          ...
+      - metavariable-regex:
+          metavariable: $VERSION
+          regex: (argoproj.io.*)
+      - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                command:
+                  ...
+                  - python
+                  ...
+                ...
+                source: 
+                  $SCRIPT
+            - focus-metavariable: $SCRIPT
+            - metavariable-pattern:
+                metavariable: $SCRIPT
+                language: python
+                patterns: 
+                  - pattern: |
+                      $FUNC(..., $PARAM, ...)
+                  - metavariable-pattern:
+                      metavariable: $PARAM
+                      pattern-either: 
+                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+          - patterns:
+            - pattern-inside: |
+                command:
+                  ...
+                  - $LANG
+                  ...
+                ...
+                source: 
+                  $SCRIPT
+            - metavariable-regex:
+                metavariable: $LANG
+                regex: (bash|sh)
+            - focus-metavariable: $SCRIPT
+            - metavariable-pattern:
+                metavariable: $SCRIPT
+                language: bash
+                patterns: 
+                  - pattern: |
+                      $CMD ... $PARAM  ...
+                  - metavariable-pattern:
+                      metavariable: $PARAM
+                      pattern-either: 
+                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+          - patterns:
+            - pattern-inside: |
+                container:
+                  ...
+                  command: $LANG
+                  ...
+                  args: $PARAM
+            - metavariable-regex:
+                metavariable: $LANG
+                regex: .*(sh|bash|ksh|csh|tcsh|zsh).*
+            - metavariable-pattern:
+                metavariable: $PARAM
+                pattern-either: 
+                  - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+            - focus-metavariable: $PARAM
