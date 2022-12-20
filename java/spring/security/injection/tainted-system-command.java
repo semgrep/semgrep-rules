@@ -73,14 +73,14 @@ public class CommandInjection {
         if (isValid) {
             Process process;
             if (!isWindows) {
+                // ruleid: tainted-system-command
                 process =
-                        // ruleid: tainted-system-command
                         new ProcessBuilder(new String[] {"sh", "-c", "ping -c 2 " + ipAddress})
                                 .redirectErrorStream(true)
                                 .start();
             } else {
+                // ruleid: tainted-system-command
                 process =
-                        // ruleid: tainted-system-command
                         new ProcessBuilder(new String[] {"cmd", "/c", "ping -n 2 " + ipAddress})
                                 .redirectErrorStream(true)
                                 .start();
@@ -217,5 +217,47 @@ public class CommandInjection {
                         this.getResponseFromPingCommand(ipAddress, validator.get()).toString(),
                         true),
                 HttpStatus.OK);
+    }
+
+    public static void test1(@RequestParam(IP_ADDRESS) String ipAddress) {
+        String args = "ping -c 2 " + ipAddress + "test";
+        Process process;
+        // ruleid: tainted-system-command
+        process = new ProcessBuilder(new String[] {"sh", "-c", args});
+        process.start();
+    }
+
+    public static void test2(@RequestParam String input) {
+        String latlonCoords = input;
+        Runtime rt = Runtime.getRuntime();
+        // ok: tainted-system-command
+        Process exec = rt.exec(new String[] {
+                "c:\\path\to\latlon2utm.exe",
+                latlonCoords }); // safe bc args are seperated
+    }
+
+    public static void test3(@RequestParam String input) {
+        StringBuilder stringBuilder = new StringBuilder(100);
+        stringBuilder.append(input);
+        stringBuilder.append("test2");
+        Runtime rt = Runtime.getRuntime();
+        // ruleid: tainted-system-command
+        Process exec = rt.exec(stringBuilder);
+    }
+
+    public static void test4(@RequestParam String input) {
+        String test1 = "test";
+        String comb = test1.concat(input);
+        Runtime rt = Runtime.getRuntime();
+        // ruleid: tainted-system-command
+        Process exec = rt.exec(comb);
+    }
+
+    public static void test5(@RequestParam String input) {
+        String test1 = "test";
+        String comb = String.format("%s%s", test1, input);
+        Runtime rt = Runtime.getRuntime();
+        // ruleid: tainted-system-command
+        Process exec = rt.exec(comb);
     }
 }
