@@ -63,10 +63,11 @@ rules:
             regex: (add|addAll)
       - patterns:
         - pattern-either:
-          - pattern: |
-              $BUILDER = new ProcessBuilder(...);
-              ...
-              $BUILDER.start(...);
+          - patterns:
+            - pattern-inside: |
+                $BUILDER = new ProcessBuilder(...);
+                ...
+            - pattern: $BUILDER.start(...)
           - pattern: |
               new ProcessBuilder(...). ... .start(...);
     requires: CONCAT
@@ -98,5 +99,5 @@ rules:
     subcategory:
     - vuln
     likelihood: HIGH
-    impact: MEDIUM
+    impact: HIGH
     deepsemgrep: true
