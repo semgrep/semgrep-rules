@@ -1,7 +1,7 @@
 rules:
   - id: azure-keyvault-recovery-enabled
     message: >-
-      Ensure the key vault is recoverable
+      Ensure the key vault is recoverable https://docs.bridgecrew.io/docs/ensure-the-key-vault-is-recoverable
     patterns:
       - pattern: |
           resource "azurerm_key_vault" "..." {
@@ -18,5 +18,7 @@ rules:
       technology:
         - terraform
         - azure
+      references:
+        - https://docs.bridgecrew.io/docs/ensure-the-key-vault-is-recoverable
     languages: [hcl]
     severity: WARNING
