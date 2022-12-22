@@ -6,7 +6,7 @@ rules:
           - pattern: wp_delete_file(...)
     message: >-
       These functions can be used to delete the files if the data inside the
-      functions are user controlled.Use these functions carefully.
+      functions are user controlled. Use these functions carefully.
     paths:
       include:
         - wp-content/plugins/**/*.php
@@ -24,6 +24,10 @@ rules:
         - Wordpress Plugins
       references:
         - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-manipulation
-      owasp: A8:2021 integrity
-      cwe: "CWE-73: The software allows user input to control or influence paths or
-        file names that are used in filesystem operations."
+      owasp:
+        - A1:2021 - Broken Access Control
+        - A8:2021 - Software and Data Integrity Failures
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+        - "CWE-73: The software allows user input to control or influence paths of file names that are used in filesystem operations."
+        - "CWE-98: Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')"
