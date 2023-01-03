@@ -1,6 +1,17 @@
 rules:
 - id: run-as-non-root
   patterns:
+  # Pod Security Context
+  - pattern-not-inside: |
+      spec:
+        ...
+        securityContext:
+          ...
+          runAsNonRoot: $VALUE
+        ...
+        containers:
+          ...
+  # Container Security Context
   - pattern-inside: |
       containers:
         ...
