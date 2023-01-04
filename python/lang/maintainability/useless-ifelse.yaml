@@ -9,6 +9,8 @@ rules:
       elif $X:
           ...
     metadata:
+      references:
+        - https://docs.python.org/3/tutorial/controlflow.html
       category: maintainability
       technology:
         - python
@@ -18,10 +20,12 @@ rules:
           $S
       else:
           $S
-    message: useless if statment; both blocks have the same body
+    message: Useless if statement; both blocks have the same body
     languages: [python]
     severity: WARNING
     metadata:
+      references:
+        - https://docs.python.org/3/tutorial/controlflow.html
       category: maintainability
       technology:
         - python

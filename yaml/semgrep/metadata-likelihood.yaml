@@ -1,0 +1,28 @@
+rules:
+  - id: metadata-likelihood
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            category: security
+            ...
+      - pattern-not-inside: |
+          metadata: 
+            ...
+            likelihood: $VALUE
+    message: >-
+      This Semgrep rule is missing a valid 'likelihood' field in the 'metadata'.
+      which should be either LOW, MEDIUM, or HIGH. For more information visit 
+      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+      category: correctness
+      technology:
+        - semgrep

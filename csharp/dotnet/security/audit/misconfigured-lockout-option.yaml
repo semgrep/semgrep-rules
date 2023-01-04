@@ -1,5 +1,28 @@
 rules:
 - id: misconfigured-lockout-option
+  message: >-
+    A misconfigured lockout mechanism allows an attacker to execute brute-force
+    attacks. Account lockout must be correctly configured and enabled to prevent these
+    attacks.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-307: Improper Restriction of Excessive Authentication Attempts'
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    - https://cwe.mitre.org/data/definitions/307.html
+    subcategory:
+    - audit
+    technology:
+    - dotnet
+  languages:
+  - csharp
   patterns:
   - pattern-either:
     - pattern: |
@@ -10,26 +33,3 @@ rules:
       public async $TYPE<IActionResult> $METHOD(...) {
         ...
       }
-  message: >-
-    A misconfigured lockout mechanism allows an attacker to execute brute-force
-    attacks. Account lockout must be correctly configured and enabled to prevent these
-    attacks.
-  metadata:
-    category: security
-    technology:
-    - dotnet
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    cwe:
-    - 'CWE-307: Improper Restriction of Excessive Authentication Attempts'
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    - https://cwe.mitre.org/data/definitions/307.html
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-    confidence: LOW
-  languages:
-  - csharp
-  severity: WARNING

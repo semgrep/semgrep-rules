@@ -19,10 +19,11 @@ module.exports.redirect = function (req, res) {
 	res.redirect(req.query.url+config_value.url)
 
 	const a = req.body.url
+	const b = req.body['url']
 	// ruleid: express-open-redirect
 	res.redirect(a)
 	// ruleid: express-open-redirect
-	res.redirect(`${a}/fooo`)
+	res.redirect(`${b}/fooo`)
 	// ruleid: express-open-redirect
 	res.redirect(a+config_value.url)
 

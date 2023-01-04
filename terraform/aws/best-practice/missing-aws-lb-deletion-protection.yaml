@@ -1,10 +1,15 @@
 rules:
 - id: missing-aws-lb-deletion-protection
   patterns:
-    - pattern: |
-        resource $ANYLB $ANYTHING {
+    - pattern-either:
+      - pattern-inside: |
+          resource "aws_alb" "..." {
           ...
-        }
+          }
+      - pattern-inside: |
+          resource "aws_lb" "..." {
+          ...
+          }
     - pattern-not-inside: |
         resource $ANYLB $ANYTHING {
           ...
@@ -17,6 +22,9 @@ rules:
   severity: WARNING
   metadata:
     category: best-practice
+    references:
+      - https://aws.amazon.com/what-is/load-balancing/#seo-faq-pairs#benefits-lb
+      - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb
     technology:
     - terraform
     - aws

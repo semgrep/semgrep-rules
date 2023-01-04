@@ -36,7 +36,8 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
+  - by-side-effect: true
+    patterns:
     - pattern-either:
       - pattern: |
           {..., clientSecret: "...", ...}
