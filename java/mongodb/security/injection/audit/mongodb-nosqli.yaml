@@ -1,10 +1,10 @@
 rules:
 - id: mongodb-nosqli
   message: >-
-    Detected non-constant data passed into a NoSQL query using the 'where'
+    Detected non-constant data passed into a NoSQL query using the `where`
     evaluation operator. If this data can be controlled by an external user, this
     is a NoSQL injection. Ensure data passed to the NoSQL query is not user controllable,
-    or properly sanitize the data. Ideally, avoid using the 'where' operator at all
+    or properly sanitize the data. Ideally, avoid using the `where` operator at all
     and instead use the helper methods provided by com.mongodb.client.model.Filters
     with comparative operators such as eq, ne, lt, gt, etc.
   languages:
