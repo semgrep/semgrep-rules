@@ -27,7 +27,7 @@ rules:
   message: >-
     Possible JDBC injection detected. Use the parameterized query
     feature available in queryForObject instead of concatenating or formatting strings:
-    'jdbc.queryForObject("select * from table where name = ?", Integer.class, parameterName);'
+    `jdbc.queryForObject("select * from table where name = ?", Integer.class, parameterName);`
   patterns:
   - pattern-inside: |
       $JDBC = new JdbcTemplate(...);

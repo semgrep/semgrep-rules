@@ -27,7 +27,7 @@ rules:
     confidence: HIGH
   message: >-
     External entities are allowed for this DocumentBuilderFactory.
-    This is vulnerable to XML external entity attacks. Disable this by setting the feature "http://xml.org/sax/features/external-general-entities"
+    This is vulnerable to XML external entity attacks. Disable this by setting the feature `http://xml.org/sax/features/external-general-entities`
     to false.
   pattern: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities", true);
   fix: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
