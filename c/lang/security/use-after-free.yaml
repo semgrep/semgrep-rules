@@ -7,8 +7,11 @@ rules:
         - pattern: free($VAR);
         - focus-metavariable: $VAR
   pattern-sinks:
-    - pattern: |
-        $VAR->$ACCESSOR
+    - patterns:
+      - pattern: |
+          $VAR->$ACCESSOR
+      - pattern-not-inside: |
+          free(...);
   pattern-sanitizers:
       - by-side-effect: true
         patterns:

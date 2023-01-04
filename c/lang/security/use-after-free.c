@@ -80,3 +80,19 @@ int ok_code3(){
     return 0;
 
 }
+
+
+struct lv {
+    int length;
+    char *value;
+} lv;
+
+int ok_code4(){
+    int initial = 1000;
+    struct lv lv = {
+        .length = initial,
+        .value = malloc(initial),
+    };
+    free(lv.value);
+    return 0;
+}
