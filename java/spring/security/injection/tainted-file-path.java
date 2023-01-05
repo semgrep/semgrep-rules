@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.Resource;
 
 /**
  * Preflight is the request which is executed to download the uploaded file. This controller is made
@@ -44,5 +47,28 @@ public class PreflightController {
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment");
         return new ResponseEntity<byte[]>(
                 IOUtils.toByteArray(inputStream), httpHeaders, HttpStatus.OK);
+    }
+
+    public static void test2(@RequestParam String filename)
+    {
+    	ApplicationContext appContext = 
+    	   new ClassPathXmlApplicationContext(new String[] {"If-you-have-any.xml"});
+
+    	Resource resource = 
+           appContext.getResource("classpath:com/" + filename);
+                
+        try {
+           InputStream is = resource.getInputStream();
+           BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                
+           String line;
+           while ((line = br.readLine()) != null) {
+              System.out.println(line);
+           } 
+           br.close();
+                
+        } catch(IOException e){
+           e.printStackTrace();
+        }
     }
 }
