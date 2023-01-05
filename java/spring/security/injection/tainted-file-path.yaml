@@ -53,12 +53,14 @@ rules:
       - pattern: (Paths $PATHS).get(...)
       - patterns:
         - pattern: |
-            $CXT.$FUNC(...)
+            $CLASS.$FUNC(...)
         - metavariable-regex:
             metavariable: $FUNC
             regex: ^(getResourceAsStream|getResource)$
       - patterns:
         - pattern-either:
+          - pattern: new ClassPathResource($FILE, ...)
+          - pattern: ResourceUtils.getFile($FILE, ...)
           - pattern: new FileOutputStream($FILE, ...)
           - pattern: new java.io.FileOutputStream($FILE, ...)
           - pattern: new StreamSource($FILE, ...)

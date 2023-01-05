@@ -49,13 +49,28 @@ public class PreflightController {
                 IOUtils.toByteArray(inputStream), httpHeaders, HttpStatus.OK);
     }
 
-    public static void test2(@RequestParam String filename)
+    public static void bad(@RequestParam String user)
+    {
+        Socket sock;
+        BufferedReader filenameReader = new BufferedReader(
+                new InputStreamReader(sock.getInputStream(), "UTF-8"));
+        String filename = filenameReader.readLine();
+        // ruleid: tainted-file-path
+        BufferedReader fileReader = new BufferedReader(new FileReader("/home/" + user + "/" + filename));
+        String fileLine = fileReader.readLine();
+        while(fileLine != null) {
+                sock.getOutputStream().write(fileLine.getBytes());
+                fileLine = fileReader.readLine();
+        }
+    }
+
+    public static void bad2(@RequestParam String filename)
     {
     	ApplicationContext appContext = 
     	   new ClassPathXmlApplicationContext(new String[] {"If-you-have-any.xml"});
 
-    	Resource resource = 
-           appContext.getResource("classpath:com/" + filename);
+        // ruleid: tainted-file-path
+    	Resource resource = appContext.getResource("classpath:com/" + filename);
                 
         try {
            InputStream is = resource.getInputStream();
@@ -70,5 +85,37 @@ public class PreflightController {
         } catch(IOException e){
            e.printStackTrace();
         }
+    }
+
+    public static void ok(@RequestParam String filename)
+    {
+    	ApplicationContext appContext = 
+    	   new ClassPathXmlApplicationContext(new String[] {"If-you-have-any.xml"});
+
+        // ok: tainted-file-path
+    	Resource resource = 
+           appContext.getResource("classpath:com/" + org.apache.commons.io.FilenameUtils.getName(filename));
+                
+        try {
+           InputStream is = resource.getInputStream();
+           BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                
+           String line;
+           while ((line = br.readLine()) != null) {
+              System.out.println(line);
+           } 
+           br.close();
+                
+        } catch(IOException e){
+           e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void whenResourceAsFile_thenReadSuccessful(@RequestParam String filename) throws IOException {
+        // ruleid: tainted-file-path
+        File resource = new ClassPathResource("data/employees.dat" + filename).getFile();
+        String employees = new String(Files.readAllBytes(resource.toPath()));
+        assertEquals("Joe Employee,Jan Employee,James T. Employee", employees);
     }
 }
