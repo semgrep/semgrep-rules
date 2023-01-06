@@ -131,7 +131,7 @@ int bad_code5(){
     // ruleid: use-after-free
     free(lv2->lv->value);
     // ok: use-after-free
-    free(lv);
+    free(lv2);
     return 0;
 }
 
@@ -150,7 +150,7 @@ int ok_code5(){
     // ok: use-after-free
     free(lv2->lv);
     // ok: use-after-free
-    free(lv);
+    free(lv2);
     return 0;
 }
 
