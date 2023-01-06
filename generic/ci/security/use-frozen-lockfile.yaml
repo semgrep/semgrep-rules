@@ -46,6 +46,7 @@ rules:
   - id: use-frozen-lockfile-npm
     patterns:
       - pattern-regex: npm install\b
+      - pattern-not-regex: pnpm install
       - pattern-not-regex: npm install -g
       - pattern-not-regex: npm install --global
       - pattern-not-regex: npm install [\w]+
