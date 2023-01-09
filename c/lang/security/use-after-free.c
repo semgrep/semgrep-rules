@@ -6,6 +6,8 @@ typedef struct name {
     void (*func)(char *str);
 } NAME;
 
+void other_func(char *ignored) {}
+
 int bad_code1() {
     NAME *var;
     var = (NAME *)malloc(sizeof(struct name));
@@ -123,7 +125,7 @@ int bad_code5(){
     lv->length = initial;
     lv->value = malloc(initial);
 
-    struct lv2 *lv = malloc(sizeof(*lv2));
+    struct lv2 *lv2 = malloc(sizeof(*lv2));
     lv2->length = initial;
     lv2->lv = lv;
     // ok: use-after-free
@@ -142,7 +144,7 @@ int ok_code5(){
     lv->length = initial;
     lv->value = malloc(initial);
 
-    struct lv2 *lv = malloc(sizeof(*lv2));
+    struct lv2 *lv2 = malloc(sizeof(*lv2));
     lv2->length = initial;
     lv2->lv = lv;
     // ok: use-after-free
