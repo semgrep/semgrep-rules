@@ -93,7 +93,7 @@ struct lv {
 struct lv2 {
     int length;
     struct lv *lv;
-} lv;
+} lv2;
 
 
 int bad_code4(){
