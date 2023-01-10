@@ -1,0 +1,30 @@
+rules:
+- id: lseg-aws-s3-bucket-versioning-enabled
+  patterns:
+  - pattern: |
+      resource "aws_s3_bucket" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_s3_bucket" $ANYTHING {
+        ...
+        versioning = {
+          ...
+          status = true
+          ...
+        }
+        ...
+      }
+  message: S3 bucket versioning must be enabled
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    confidence: HIGH
+    category: security
+    technology:
+    - terraform
+    - aws
+    references:
+    - https://confluence.refinitiv.com/display/PSAR/LSEG+AWS+S3+Security+Requirements#LSEGAWSS3SecurityRequirements-S3-CTL-CP1
+    source_rule_url: https://confluence.refinitiv.com/display/PSAR/LSEG+AWS+S3+Security+Requirements#LSEGAWSS3SecurityRequirements-S3-CTL-CP1
