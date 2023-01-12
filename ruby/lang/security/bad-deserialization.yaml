@@ -3,10 +3,9 @@ rules:
   mode: taint
   pattern-sources:
   - pattern-either:
-    - pattern: |
-        params
-    - pattern: |
-        cookies
+    - pattern: params
+    - pattern: cookies
+    - pattern: request.env
   pattern-sinks:
   - pattern-either:
     - pattern: |
