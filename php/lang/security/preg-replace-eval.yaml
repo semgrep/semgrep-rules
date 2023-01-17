@@ -1,17 +1,10 @@
 rules:
 - id: preg-replace-eval
   patterns:
-  - pattern: preg_replace(...);
-  - pattern-not: preg_replace("...", ...);
-  - pattern-not: preg_replace(array("..."), ...);
-  - pattern-not-inside: |
-      $VAR = array("...");
-      ...
-      preg_replace($VAR, ...);
+  - pattern: a()
+  - pattern: b()
   message: >-
-    Calling preg_replace with user input in the pattern can lead to arbitrary
-    code execution. The eval modifier (`/e`) evaluates the replacement argument
-    as code.
+    This rule has been deprecated, see https://github.com/returntocorp/semgrep-rules/issues/2506.
   metadata:
     cwe:
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
@@ -20,6 +13,7 @@ rules:
     - https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
     - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/PregReplaceSniff.php
     category: security
+    deprecated: true
     technology:
     - php
     owasp:
