@@ -2,10 +2,31 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.5.0
     hooks:
-      - id: check-yaml
-        exclude: semgrep-github-action-push-without-branches.test.yml
       - id: check-case-conflict
       - id: check-added-large-files
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: check-symlinks
+  # Normal case - single document YAML only
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+      - id: check-yaml
+        exclude: |
+          (?x)^(
+            # These are multi-document
+            semgrep-github-action-push-without-branches\.test\.yml|
+            yaml/kubernetes/security/.*\.test\.yaml
+          )$
+  # Exception case - multi-document YAML OK - still check YAML
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+        files: |
+          (?x)^(
+            # These are multi-document
+            semgrep-github-action-push-without-branches\.test\.yml|
+            yaml/kubernetes/security/.*\.test\.yaml
+          )$
