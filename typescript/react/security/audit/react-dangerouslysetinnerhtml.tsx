@@ -8,7 +8,7 @@ function TestComponent1() {
 
 function TestComponent2(foo) {
     // ruleid:react-dangerouslysetinnerhtml
-    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo},a:b};
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo.bar},a:b};
     return React.createElement('div', params);
 }
 
