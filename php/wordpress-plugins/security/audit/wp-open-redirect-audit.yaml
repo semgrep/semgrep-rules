@@ -1,0 +1,29 @@
+rules:
+  - id: wp-open-redirect-audit
+    pattern: wp_redirect(...)
+    message: >-
+      This function can be used to redirect to user supplied URLs. If user
+      input is not sanitised or validated, this could lead to Open Redirect
+      vulnerabilities. Use "wp_safe_redirect()" to prevent this kind of attack.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#open-redirect
+        - https://developer.wordpress.org/reference/functions/wp_safe_redirect/
+      cwe:
+        - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp:
+        - A05:2021 - Security Misconfiguration

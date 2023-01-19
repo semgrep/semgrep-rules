@@ -31,12 +31,12 @@ rules:
     - pattern: requests.$FUNC(...)
     - pattern-either:
       - pattern-inside: |
-          @$APP.route($ROUTE, ...)
+          @$APP.$ROUTE_METHOD($ROUTE, ...)
           def $ROUTE_FUNC(..., $ROUTEVAR, ...):
             ...
             requests.$FUNC(..., <... $ROUTEVAR ...>, ...)
       - pattern-inside: |
-          @$APP.route($ROUTE, ...)
+          @$APP.$ROUTE_METHOD($ROUTE, ...)
           def $ROUTE_FUNC(..., $ROUTEVAR, ...):
             ...
             $INTERM = <... $ROUTEVAR ...>

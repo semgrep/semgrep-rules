@@ -1,0 +1,20 @@
+rules:
+  - id: reqwest-accept-invalid
+    message: Dangerously accepting invalid TLS information
+    pattern-either:
+      - pattern: reqwest::Client::builder(). ... .danger_accept_invalid_hostnames(true)
+      - pattern: reqwest::Client::builder(). ... .danger_accept_invalid_certs(true)
+    metadata:
+      references:
+        - https://docs.rs/reqwest/latest/reqwest/struct.ClientBuilder.html#method.danger_accept_invalid_hostnames
+        - https://docs.rs/reqwest/latest/reqwest/struct.ClientBuilder.html#method.danger_accept_invalid_certs
+      technology:
+        - reqwest
+      category: security
+      cwe: "CWE-295: Improper Certificate Validation"
+      confidence: HIGH
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory: vuln
+    languages: [rust]
+    severity: WARNING

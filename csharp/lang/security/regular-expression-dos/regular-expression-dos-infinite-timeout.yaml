@@ -6,7 +6,7 @@ rules:
   metadata:
     cwe:
     - 'CWE-1333: Inefficient Regular Expression Complexity'
-    owasp: 'A1: Injection'
+    owasp: 'A01:2017 - Injection'
     references:
     - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
     - https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.infinitematchtimeout
@@ -20,7 +20,7 @@ rules:
     likelihood: LOW
     impact: MEDIUM
   message: >-
-    Specifying the regex timeout leaves the system vulnerbale to a regex-based Denial of Service (DoS)
+    Specifying the regex timeout leaves the system vulnerable to a regex-based Denial of Service (DoS)
     attack.  Consider setting the timeout to a short amount of time like 2 or 3 seconds.
     If you are sure you need an infinite timeout, double check that your context meets the conditions
     outlined in the "Notes to Callers" section at the bottom of this page:  https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0

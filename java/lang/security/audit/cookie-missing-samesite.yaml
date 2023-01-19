@@ -36,3 +36,4 @@ rules:
   - pattern-either:
     - pattern: $RESP.addCookie(...);
     - pattern: $RESP.setHeader("Set-Cookie", ...);
+  - pattern-not: $RESP.setHeader("Set-Cookie", null);

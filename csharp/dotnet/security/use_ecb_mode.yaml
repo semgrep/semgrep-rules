@@ -1,34 +1,39 @@
 rules:
-  - id: use_ecb_mode
-    patterns:
-      - pattern-either:
-          - pattern: ($KEYTYPE $KEY).EncryptEcb(...);
-          - pattern: ($KEYTYPE $KEY).DecryptEcb(...);
-          - pattern: ($KEYTYPE $KEY).Mode = CipherMode.ECB;
-      - metavariable-pattern:
-          metavariable: $KEYTYPE
-          pattern-either:
-            - pattern: SymmetricAlgorithm
-            - pattern: Aes
-            - pattern: Rijndael
-            - pattern: DES
-            - pattern: TripleDES
-            - pattern: RC2
-    message: Usage of the insecure ECB mode detected.
-      You should use an authenticated encryption mode instead, which is implemented by the classes AesGcm or ChaCha20Poly1305.
-    languages:
-      - csharp
-    severity: WARNING
-    metadata:
-      cwe:
-        - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-      owasp:
-        - A02:2021 - Cryptographic Failures
-      technology:
-        - .net
-      category: security
-      references:
-        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.chacha20poly1305?view=net-6.0
-        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.aesgcm?view=net-6.0
-        - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.ciphermode?view=net-6.0
-        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+- id: use_ecb_mode
+  message: Usage of the insecure ECB mode detected. You should use an authenticated encryption mode instead,
+    which is implemented by the classes AesGcm or ChaCha20Poly1305.
+  severity: WARNING
+  metadata:
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    category: security
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.chacha20poly1305?view=net-6.0
+    - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.aesgcm?view=net-6.0
+    - https://learn.microsoft.com/en-gb/dotnet/api/system.security.cryptography.ciphermode?view=net-6.0
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+    subcategory:
+    - vuln
+    technology:
+    - .net
+  languages:
+  - csharp
+  patterns:
+  - pattern-either:
+    - pattern: ($KEYTYPE $KEY).EncryptEcb(...);
+    - pattern: ($KEYTYPE $KEY).DecryptEcb(...);
+    - pattern: ($KEYTYPE $KEY).Mode = CipherMode.ECB;
+  - metavariable-pattern:
+      metavariable: $KEYTYPE
+      pattern-either:
+      - pattern: SymmetricAlgorithm
+      - pattern: Aes
+      - pattern: Rijndael
+      - pattern: DES
+      - pattern: TripleDES
+      - pattern: RC2

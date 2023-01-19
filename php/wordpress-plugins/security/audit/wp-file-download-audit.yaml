@@ -1,0 +1,32 @@
+rules:
+  - id: wp-file-download-audit
+    patterns:
+      - pattern-either:
+          - pattern: file(...)
+          - pattern: readfile(...)
+          - pattern: file_get_contents(...)
+    message: >-
+      These functions can be used to read to content of the files if the data
+      inside is user-controlled. Don't use the input directly or validate the
+      data properly before passing it to these functions.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-download
+      cwe:
+        - "CWE-73: External Control of File Name or Path"
+      owasp:
+        - A01:2021 - Broken Access Control

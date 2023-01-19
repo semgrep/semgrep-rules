@@ -1,0 +1,32 @@
+rules:
+  - id: wp-php-object-injection-audit
+    patterns:
+      - pattern-either:
+          - pattern: unserialize(...)
+          - pattern: maybe_unserialize(...)
+    message: >-
+      If the data used inside the patterns are directly used without proper
+      sanitization, then this could lead to PHP Object Injection. Do not use
+      these function with user-supplied input, use JSON functions instead.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-object-injection
+        - https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
+      owasp:
+        - A03:2021 - Injection

@@ -1,0 +1,14 @@
+<table><tbody>
+  <tr>
+    <!-- ruleid: template-unquoted-attribute-var-->
+    <td class="input"><input type="text" value="{{ a + request.args.get('a')}}"/></td>
+  </tr>
+  <tr>
+    <td><input type="number" id="issue" name="issue" value={{ value }} min="1"/></td>
+  </tr>
+  <tr>
+    <td><label for="head">Head:</label></td>
+    <!-- ok: template-unquoted-attribute-var-->
+    <td><input type="text" id="head" name="head" value="{{ request.args.get('head', '') }}" placeholder="ex. [user:]bugfix"/></td>
+  </tr>
+</tbody></table>    

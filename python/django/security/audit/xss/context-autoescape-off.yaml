@@ -27,9 +27,16 @@ rules:
   languages:
   - python
   severity: WARNING
-  fix-regex:
-    regex: (autoescape.*?)False
-    replacement: \1True
-  pattern-either:
-  - pattern: '{..., "autoescape": False, ...}'
-  - pattern: $D["autoescape"] = False
+  patterns:
+    - pattern-either:
+      - pattern: |
+          {..., "autoescape": $FALSE, ...}
+      - pattern: |
+          $D["autoescape"] = $FALSE
+    - metavariable-pattern:
+        metavariable: $FALSE
+        pattern: |
+          False
+    - focus-metavariable: $FALSE
+  fix: |
+    True

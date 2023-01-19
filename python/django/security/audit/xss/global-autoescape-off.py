@@ -71,12 +71,12 @@ TEMPLATES = [
             ],
         },
     },
-    # ruleid: global-autoescape-off
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [str(BASE_DIR.joinpath('templates'))], # new
         'APP_DIRS': True,
         'OPTIONS': {
+            # ruleid: global-autoescape-off
             'autoescape': False
         },
     },

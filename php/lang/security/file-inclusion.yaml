@@ -1,14 +1,5 @@
 rules:
 - id: file-inclusion
-  patterns:
-  - pattern-inside: $FUNC(...);
-  - pattern: $VAR
-  - metavariable-regex:
-      metavariable: $FUNC
-      regex: \b(include|include_once|require|require_once)\b
-  - metavariable-regex:
-      metavariable: $VAR
-      regex: \W?\$.+
   message: >-
     Detected non-constant file inclusion. This can lead to local file inclusion (LFI) or remote file inclusion
     (RFI) if user input reaches this statement. LFI and RFI could lead to sensitive files being obtained
@@ -34,3 +25,27 @@ rules:
     confidence: LOW
   languages: [php]
   severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+      - pattern: $_SERVER
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: basename($PATH, ...)
+      - pattern-inside: linkinfo($PATH, ...)
+      - pattern-inside: readlink($PATH, ...)
+      - pattern-inside: realpath($PATH, ...)
+      - pattern-inside: include_safe(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: $FUNC(...);
+    - pattern: $VAR
+    - metavariable-regex:
+        metavariable: $FUNC
+        regex: \b(include|include_once|require|require_once)\b

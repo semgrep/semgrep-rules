@@ -1,0 +1,45 @@
+rules:
+- id: bad-deserialization-env
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: request.env
+  pattern-sinks:
+  - pattern-either:
+    - pattern: |
+        CSV.load(...)
+    - pattern: |
+        Marshal.load(...)
+    - pattern: |
+        Marshal.restore(...)
+    - pattern: |
+        Oj.object_load(...)
+    - pattern: |
+        Oj.load($X)
+  message: >-
+    Checks for unsafe deserialization. Objects in Ruby can be serialized into strings,
+    then later loaded from strings. However, uses of load and object_load can cause remote code execution.
+    Loading user input with MARSHAL or CSV can potentially be dangerous. Use JSON in a secure fashion
+    instead.
+  metadata:
+    references:
+    - https://groups.google.com/g/rubyonrails-security/c/61bkgvnSGTQ/m/nehwjA8tQ8EJ
+    - https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_deserialize.rb
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    technology:
+    - ruby
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  languages:
+  - ruby
+  severity: ERROR

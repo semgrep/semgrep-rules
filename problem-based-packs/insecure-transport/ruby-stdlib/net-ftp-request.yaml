@@ -1,27 +1,32 @@
 rules:
-  - id: net-ftp-request
-    message: >-
-      Checks for outgoing connections to ftp servers with the 'net/ftp' package. FTP does not encrypt traffic,   possibly
-      leading to PII being sent plaintext over the network. Instead, connect via the SFTP protocol.
-    metadata:
-      vulnerability: Insecure Transport
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
-      references:
-        - https://docs.ruby-lang.org/en/2.0.0/Net/FTP.html
-      category: security
-      technology:
-        - ruby
-    languages:
-      - ruby
-    severity: WARNING
-    pattern-either:
-      - pattern: |
-          $FTP = Net::FTP.new('...')
-          ...
-          $FTP.login
-      - pattern: |
-          Net::FTP.open('...') do |ftp|
-            ...
-            ftp.login
-          end
+- id: net-ftp-request
+  message: >-
+    Checks for outgoing connections to ftp servers with the 'net/ftp' package. FTP does not encrypt traffic,   possibly
+    leading to PII being sent plaintext over the network. Instead, connect via the SFTP protocol.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A03:2017 - Sensitive Data Exposure'
+    references:
+    - https://docs.ruby-lang.org/en/2.0.0/Net/FTP.html
+    subcategory:
+    - vuln
+    technology:
+    - ruby
+    vulnerability: Insecure Transport
+  languages:
+  - ruby
+  pattern-either:
+  - pattern: |
+      $FTP = Net::FTP.new('...')
+      ...
+      $FTP.login
+  - pattern: |
+      Net::FTP.open('...') do |ftp|
+        ...
+        ftp.login
+      end

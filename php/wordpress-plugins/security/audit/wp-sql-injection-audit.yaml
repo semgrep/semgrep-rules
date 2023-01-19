@@ -1,0 +1,42 @@
+rules:
+  - id: wp-sql-injection-audit
+    patterns:
+      - pattern-either:
+          - pattern: $wpdb->query(...)
+          - pattern: $wpdb->get_var(...)
+          - pattern: $wpdb->get_row(...)
+          - pattern: $wpdb->get_col(...)
+          - pattern: $wpdb->get_results(...)
+          - pattern: $wpdb->replace(...)
+      - pattern-not: $wpdb->prepare(...)
+      - pattern-not: $wpdb->delete(...)
+      - pattern-not: $wpdb->update(...)
+      - pattern-not: $wpdb->insert(...)
+    message: >-
+      Detected unsafe API methods. This could lead to SQL Injection if the
+      used variable in the functions are user controlled and not properly
+      escaped or sanitized. In order to prevent SQL Injection, use safe api
+      methods like "$wpdb->prepare" properly or escape/sanitize the data
+      properly.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      confidence: LOW
+      likelihood: LOW
+      impact: HIGH
+      category: security
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#sql-injection
+        - https://owasp.org/www-community/attacks/SQL_Injection
+      owasp:
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"

@@ -4,6 +4,10 @@ rules:
   - java
   severity: ERROR
   mode: taint
+  pattern-propagators:
+  - pattern: (StringBuilder $STRB).append($INPUT)
+    from: $INPUT
+    to: $STRB
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -17,18 +21,54 @@ rules:
           }
     - metavariable-regex:
         metavariable: $REQ
-        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
+        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
     - pattern: $SOURCE
+    label: INPUT
+  - patterns:
+    - pattern-either:
+      - pattern: $X + $SOURCE
+      - pattern: $SOURCE + $Y
+      - pattern: (StringBuilder $STRB).append($SOURCE)
+      - pattern: String.format("...", ..., $SOURCE, ...)
+      - pattern: String.join("...", ..., $SOURCE, ...)
+      - pattern: (String $STR).concat($SOURCE)
+      - pattern: $SOURCE.concat(...)
+      - pattern: $X += SOURCE
+      - pattern: $SOURCE += $X
+    label: CONCAT
+    requires: INPUT
   pattern-sinks:
-  - pattern-either:
-    - pattern: (Runtime $RUNTIME).exec(...)
-    - pattern: (Runtime $RUNTIME).loadLibrary(...)
-    - pattern: Runtime.getRuntime(...).exec(...)
-    - pattern: Runtime.getRuntime(...).loadLibrary(...)
-    - pattern: new ProcessBuilder($ONEARG)
-    - patterns:
-      - pattern: new ProcessBuilder(...)
-      - pattern-not: new ProcessBuilder("...", ...)
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          (Process $P) = new Process(...);
+      - pattern: |
+          (ProcessBuilder $PB).command(...);
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              (Runtime $R).$EXEC(...);
+          - pattern: |
+               Runtime.getRuntime(...).$EXEC(...);
+        - metavariable-regex:
+            metavariable: $EXEC
+            regex: (exec|loadLibrary|load)
+      - patterns:
+        - pattern: |
+            (ProcessBuilder $PB).command(...).$ADD(...);
+        - metavariable-regex:
+            metavariable: $ADD
+            regex: (add|addAll)
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                $BUILDER = new ProcessBuilder(...);
+                ...
+            - pattern: $BUILDER.start(...)
+          - pattern: |
+              new ProcessBuilder(...). ... .start(...);
+    requires: CONCAT
   message: >-
     Detected user input entering a method which executes a system command.
     This could result in a command injection vulnerability, which allows an
@@ -51,10 +91,11 @@ rules:
     references:
     - https://www.stackhawk.com/blog/command-injection-java/
     - https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html
-
+    - https://github.com/github/codeql/blob/main/java/ql/src/Security/CWE/CWE-078/ExecUnescaped.java
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: HIGH
-    impact: MEDIUM
+    impact: HIGH
+    deepsemgrep: true

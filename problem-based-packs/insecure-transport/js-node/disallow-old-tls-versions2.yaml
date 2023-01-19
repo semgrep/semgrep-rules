@@ -1,59 +1,65 @@
 rules:
-  - id: disallow-old-tls-versions2
-    patterns:
-      - pattern-either:
-          - pattern-inside: |
-              $CONST = require('crypto');
-              ...
-          - pattern-inside: |
-              $CONST = require('constants');
-              ...
-      - pattern-inside: |
-          $HTTPS = require('https');
-          ...
-      - pattern: |
-          $OPTIONS = {};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_SSLv3};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv2  | $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_TLSv1};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-      - pattern-not: |
-          $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2};
-          ...
-          $HTTPS.createServer($OPTIONS, ...);
-    message: >-
-      Detects creations of $HTTPS servers from option objects that don't disallow SSL v2, SSL v3, and TLS v1.
-      These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
-    metadata:
-      vulnerability: Insecure Transport
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
-      references:
-        - https://us-cert.cisa.gov/ncas/alerts/TA14-290A
-        - https://stackoverflow.com/questions/40434934/how-to-disable-the-ssl-3-0-and-tls-1-0-in-nodejs
-        - https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
-      category: security
-      technology:
-        - node.js
-    severity: WARNING
-    languages:
-      - javascript
-      - typescript
+- id: disallow-old-tls-versions2
+  message: >-
+    Detects creations of $HTTPS servers from option objects that don't disallow SSL v2, SSL v3, and TLS
+    v1.
+    These protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A03:2017 - Sensitive Data Exposure'
+    references:
+    - https://us-cert.cisa.gov/ncas/alerts/TA14-290A
+    - https://stackoverflow.com/questions/40434934/how-to-disable-the-ssl-3-0-and-tls-1-0-in-nodejs
+    - https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
+    subcategory:
+    - vuln
+    technology:
+    - node.js
+    vulnerability: Insecure Transport
+  languages:
+  - javascript
+  - typescript
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $CONST = require('crypto');
+        ...
+    - pattern-inside: |
+        $CONST = require('constants');
+        ...
+  - pattern-inside: |
+      $HTTPS = require('https');
+      ...
+  - pattern: |
+      $OPTIONS = {};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_SSLv3};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv2  | $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv3};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_SSLv2 | $CONST.SSL_OP_NO_TLSv1};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);
+  - pattern-not: |
+      $OPTIONS = {secureOptions: $CONST.SSL_OP_NO_SSLv3 | $CONST.SSL_OP_NO_TLSv1 | $CONST.SSL_OP_NO_SSLv2};
+      ...
+      $HTTPS.createServer($OPTIONS, ...);

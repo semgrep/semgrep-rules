@@ -2,13 +2,20 @@
 COPY package.json yarn.lock /app/
 WORKDIR /app
 # ruleid: use-frozen-lockfile-yarn
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 # trailing space
 # ruleid: use-frozen-lockfile-yarn
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
+
+# ok: use-frozen-lockfile-yarn
+RUN yarn install --prod --frozen-lockfile --prefer-offline --ignore-optional --no-progress
+# ok: use-frozen-lockfile-yarn
+RUN yarn install --production --frozen-lockfile
+
 RUN yarn install --frozen-lockfile
 RUN yarn install --immutable
-RUN yarn install some_package
+# ruleid: use-frozen-lockfile-yarn
+RUN yarn install --immutable some_package
 RUN yarn install -g some_package
 RUN yarn install --global some_package
 
@@ -20,7 +27,8 @@ COPY . /app
 RUN yarn build
 
 WORKDIR /app
-RUN yarn install foo
+# ruleid: use-frozen-lockfile-yarn
+RUN yarn install --immutable foo
 
 RUN npm install foo
 # ruleid: use-frozen-lockfile-npm
@@ -33,3 +41,5 @@ RUN yarn build
 
 RUN echo 'npm installing foo'
 
+# ok: use-frozen-lockfile-npm
+RUN pnpm install

@@ -3,7 +3,8 @@ rules:
   languages:
   - java
   severity: ERROR
-  message: Detected user input controlling a file path. An attacker could control the location of this
+  message: >-
+    Detected user input controlling a file path. An attacker could control the location of this
     file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled
     variables in file paths are sanitized. You may also consider using a utility method such as org.apache.commons.io.FilenameUtils.getName(...)
     to only retrieve the file name from the path.
@@ -20,9 +21,10 @@ rules:
     - spring
     subcategory:
     - vuln
-    impact: MEDIUM
+    impact: HIGH
     likelihood: MEDIUM
-    confidence: MEDIUM
+    confidence: HIGH
+    deepsemgrep: true
   mode: taint
   pattern-sources:
   - patterns:
@@ -37,15 +39,33 @@ rules:
           }
     - metavariable-regex:
         metavariable: $REQ
-        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
+        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
     - pattern: $SOURCE
   pattern-sinks:
-  - pattern-either:
+  - patterns:
     - pattern-either:
-      - pattern: new FileInputStream(...)
-      - pattern: new java.io.FileInputStream(...)
-      - pattern: new FileReader(...)
-      - pattern: new java.io.FileReader(...)
       - pattern: new File(...)
       - pattern: new java.io.File(...)
-      - pattern: $SOMETHING.getResourceAsStream(...)
+      - pattern: new FileReader(...)
+      - pattern: new java.io.FileReader(...)
+      - pattern: new FileInputStream(...)
+      - pattern: new java.io.FileInputStream(...)
+      - pattern: (Paths $PATHS).get(...)
+      - patterns:
+        - pattern: |
+            $CLASS.$FUNC(...)
+        - metavariable-regex:
+            metavariable: $FUNC
+            regex: ^(getResourceAsStream|getResource)$
+      - patterns:
+        - pattern-either:
+          - pattern: new ClassPathResource($FILE, ...)
+          - pattern: ResourceUtils.getFile($FILE, ...)
+          - pattern: new FileOutputStream($FILE, ...)
+          - pattern: new java.io.FileOutputStream($FILE, ...)
+          - pattern: new StreamSource($FILE, ...)
+          - pattern: new javax.xml.transform.StreamSource($FILE, ...)
+          - pattern: FileUtils.openOutputStream($FILE, ...)
+        - focus-metavariable: $FILE
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)

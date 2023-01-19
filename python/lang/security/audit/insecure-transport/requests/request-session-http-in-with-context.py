@@ -33,3 +33,9 @@ def test3_ok():
     with requests.Session() as session:
         # ok: request-session-http-in-with-context
         session.post(url)
+
+def test_localhost_ok():
+    url = "http://localhost/blah"
+    with requests.Session() as session:
+        # ok: request-session-http-in-with-context
+        session.post(url)

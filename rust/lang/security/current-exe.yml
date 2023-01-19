@@ -1,0 +1,21 @@
+rules:
+  - id: current-exe
+    message: >-
+      current_exe should not be used for security operations. From the docs:
+      "The output of this function should not be trusted for anything that
+      might have security implications. Basically, if users can run the
+      executable, they can change the output arbitrarily."
+    pattern: "std::env::current_exe()"
+    metadata:
+      references:
+        - https://doc.rust-lang.org/stable/std/env/fn.current_exe.html#security
+      technology:
+        - rust
+      category: security
+      cwe: "CWE-807: Reliance on Untrusted Inputs in a Security Decision"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory: audit
+    languages: [rust]
+    severity: INFO

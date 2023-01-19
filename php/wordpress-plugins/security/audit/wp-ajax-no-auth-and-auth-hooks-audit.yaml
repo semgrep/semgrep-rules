@@ -1,0 +1,33 @@
+rules:
+  - id: wp-ajax-no-auth-and-auth-hooks-audit
+    patterns:
+      - pattern: add_action($HOOK,...)
+      - metavariable-regex:
+          metavariable: $HOOK
+          regex: "'wp_ajax_.*'"
+    message: >-
+      These hooks allow the developer to handle the custom AJAX
+      endpoints."wp_ajax_$action" hook get fires for any authenticated user and
+      "wp_ajax_nopriv_$action" hook get fires for non-authenticated users.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#authorisation
+        - https://developer.wordpress.org/reference/hooks/wp_ajax_action/
+      owasp: 
+        - A01:2021 - Broken Access Control
+      cwe: 
+        - "CWE-285: Improper Authorization"

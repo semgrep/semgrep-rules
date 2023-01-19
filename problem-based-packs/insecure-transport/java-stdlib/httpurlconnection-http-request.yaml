@@ -1,36 +1,42 @@
 rules:
-  - id: httpurlconnection-http-request
-    message: >-
-      Checks for requests sent via HttpURLConnection and URLObj to http:// URLS. This is dangerous because
-      the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead, send requests only to
-      https:// URLS.
-    fix-regex:
-      regex: "[Hh][Tt][Tt][Pp]://"
-      replacement: https://
-      count: 1
-    metadata:
-      vulnerability: Insecure Transport
-      owasp: "A3: Sensitive Data Exposure"
-      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
-      references:
-        - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLConnection.html
-        - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URL.html#openConnection()
-      category: security
-      technology:
-        - java
-    languages:
-      - java
-    severity: WARNING
-    pattern-either:
-      - pattern: |
-          URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-          ...
-          $CON = (HttpURLConnection) $URL.openConnection(...);
-          ...
-          $CON.$FUNC(...);
-      - pattern: |
-          URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-          ...
-          $CON = $URL.openConnection(...);
-          ...
-          $CON.$FUNC(...);
+- id: httpurlconnection-http-request
+  message: >-
+    Checks for requests sent via HttpURLConnection and URLObj to http:// URLS. This is dangerous because
+    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,
+    send requests only to
+    https:// URLS.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    owasp: 'A03:2017 - Sensitive Data Exposure'
+    references:
+    - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLConnection.html
+    - https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URL.html#openConnection()
+    subcategory:
+    - vuln
+    technology:
+    - java
+    vulnerability: Insecure Transport
+  languages:
+  - java
+  fix-regex:
+    regex: '[Hh][Tt][Tt][Pp]://'
+    replacement: https://
+    count: 1
+  pattern-either:
+  - pattern: |
+      URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
+      ...
+      $CON = (HttpURLConnection) $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);
+  - pattern: |
+      URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
+      ...
+      $CON = $URL.openConnection(...);
+      ...
+      $CON.$FUNC(...);

@@ -1,0 +1,37 @@
+rules:
+  - id: wp-file-inclusion-audit
+    patterns:
+      - pattern-either:
+          - pattern: include(...)
+          - pattern: require(...)
+          - pattern: include_once(...)
+          - pattern: require_once(...)
+          - pattern: fread(...)
+    message: >-
+      These functions can lead to Local File Inclusion (LFI) or Remote File
+      Inclusion (RFI) if the data inside is user-controlled. Validate the data
+      properly before passing it to these functions.
+    paths:
+      include:
+        - wp-content/plugins/**/*.php
+    languages:
+      - php
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      technology:
+        - Wordpress Plugins
+      references:
+        - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-inclusion
+      owasp:
+        - A01:2021 - Broken Access Control
+        - A08:2021 - Software and Data Integrity Failures
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+        - "CWE-73: The software allows user input to control or influence paths of file names that are used in filesystem operations."
+        - "CWE-98: Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')"

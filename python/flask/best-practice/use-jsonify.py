@@ -17,8 +17,9 @@ def user():
     # ruleid:use-jsonify
     return dumps(user_dict)
 
-# should not catch the following
+# ok: use-jsonify
 def dumps():
   pass
 def test_empty_dumps():
+# ok: use-jsonify
     dumps()
