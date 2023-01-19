@@ -15,6 +15,7 @@ rules:
     - A03:2021 - Injection
     references:
     - https://github.com/janl/mustache.js/#variables
+    - https://ractive.js.org/v0.x/0.7/mustaches#variables
     category: security
     technology:
     - express
@@ -35,4 +36,4 @@ rules:
     - '*.html'
   pattern-either:
   - pattern-regex: '{{{((?!include).)*?}}}'
-  - pattern-regex: '{{[^}&]*&[^}&]*}}'
+  - pattern-regex: '{{[\\s]*&.*}}'
