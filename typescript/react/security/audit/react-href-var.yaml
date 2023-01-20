@@ -33,56 +33,56 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-          - pattern-not-inside: |
-              import $X from "..."
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              import * as $X from "..."
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              import { ..., $X,...} from "..."
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              $X = require("...")
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              $X = require("...").$F
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              const {...,$X,...} = require("...")
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              var {...,$X,...} = require("...")
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              let {...,$X,...} = require("...")
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              const {...,$X,...} = require("...").$F
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              var {...,$X,...} = require("...").$F
-              ...
-              $X. ... .$FUNC(...)
-          - pattern-not-inside: |
-              let {...,$X,...} = require("...").$F
-              ...
-              $X. ... .$FUNC(...)    
-          - pattern-either:
-              - pattern-inside: |
-                  function ...({..., $X, ...}) { ... }
-              - pattern-inside: |
-                  function ...(..., $X, ...) { ... }
-          - focus-metavariable: $X
+        - pattern-not-inside: |
+            import $C from "..."
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            import * as $X from "..."
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            import { ..., $C,...} from "..."
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            $X = require("...")
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            $C = require("...").$F
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            const {...,$C,...} = require("...")
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            var {...,$C,...} = require("...")
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            let {...,$C,...} = require("...")
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            const {...,$X,...} = require("...").$F
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            var {...,$C,...} = require("...").$F
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-not-inside: |
+            let {...,$C,...} = require("...").$F
+            ...
+            $C. ... .$FUNC(...)
+        - pattern-either:
+            - pattern-inside: |
+                function ...({..., $X, ...}) { ... }
+            - pattern-inside: |
+                function ...(..., $X, ...) { ... }
+        - focus-metavariable: $X
     pattern-sinks:
       - patterns:
           - pattern-either:

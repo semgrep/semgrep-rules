@@ -33,15 +33,56 @@ rules:
   mode: taint
   pattern-sources:
     - patterns:
-        - pattern-either:
-            - pattern-inside: |
-                function ...({..., $X, ...}) { ... }
-            - pattern-inside: |
-                function ...(..., $X, ...) { ... }
-        - focus-metavariable: $X
-        - pattern-either:
-            - pattern: $X.$Y
-            - pattern: $X[...]
+      - pattern-not-inside: |
+          import $C from "..."
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          import * as $X from "..."
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          import { ..., $C,...} from "..."
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          $X = require("...")
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          $C = require("...").$F
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          const {...,$C,...} = require("...")
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          var {...,$C,...} = require("...")
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          let {...,$C,...} = require("...")
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          const {...,$X,...} = require("...").$F
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          var {...,$C,...} = require("...").$F
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-not-inside: |
+          let {...,$C,...} = require("...").$F
+          ...
+          $C. ... .$FUNC(...)
+      - pattern-either:
+          - pattern-inside: |
+              function ...({..., $X, ...}) { ... }
+          - pattern-inside: |
+              function ...(..., $X, ...) { ... }
+      - focus-metavariable: $X
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -146,3 +187,11 @@ rules:
           $S = new Remarkable()
           ...
     - pattern: $S.render(...)
+  - patterns:
+      - pattern-either:
+          - pattern: $F(...)
+          - pattern: $X. ... .$F(...)
+          - pattern: $F. ... .$X(...)
+      - metavariable-regex:
+          metavariable: $F
+          regex: (?i)(.*sanitize|.*escape|.*encode)
