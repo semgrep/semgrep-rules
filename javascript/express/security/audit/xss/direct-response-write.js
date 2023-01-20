@@ -64,6 +64,16 @@ app.get('/4', function (req, res) {
     res.send(output);
 });
 
+app.get('/4', function (req, res) {
+    var user = req.query.name;
+    var header = "<html>";
+    var msg = 'Hi ' + user;
+    var footer = "</html>";
+    var output = header + msg + footer;
+    // ok: direct-response-write
+    res.type('xml').set('Content-Length', Buffer.byteLength(xml)).send(xml);
+});
+
 var express = require('express');
 var app = express();
 app.get('/', function (req, res) {
