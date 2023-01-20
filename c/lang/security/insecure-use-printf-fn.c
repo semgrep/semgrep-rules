@@ -35,11 +35,9 @@ void bad_sprintf(int argc, char **argv) {
 
     //ok: insecure-use-printf-fn
     sprintf("%s\n",argv[0])
-    
+
     //ok: insecure-use-printf-fn
     snprintf(buffer, format, a,b,c);
-
-
 }
 
 void bad_printf() {
