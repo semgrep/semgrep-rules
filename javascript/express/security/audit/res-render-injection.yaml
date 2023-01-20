@@ -1,8 +1,11 @@
 rules:
 - id: res-render-injection
   message: >-
-    If an attacker controls the x in res.render(x) then they can cause code to load that was not intended
-    to run on the server.
+    User controllable data `$REQ` enters `$RES.render(...)` this can lead to the loading
+    of other HTML/templating pages that they may not be authorized to render. An attacker
+    may attempt to use directory traversal techniques e.g. `../folder/index` to access other
+    HTML pages on the file system. Where possible, do not allow users to define what should be 
+    loaded in $RES.render or use an allow list for the existing application.
   metadata:
     deepsemgrep: true
     owasp:

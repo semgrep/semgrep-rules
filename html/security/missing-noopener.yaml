@@ -1,0 +1,28 @@
+rules:
+- id: missing-noopener
+  metadata:
+    category: security
+    technology:
+    - html
+    cwe:
+    - 'CWE-1022: Use of Web Link to Untrusted Target with window.opener Access'
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    confidence: LOW
+    references:
+    - https://cwe.mitre.org/data/definitions/1022.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  paths:
+    include:
+    - '*.html'
+  message: >-
+    This rule has been deprecated.
+  severity: WARNING
+  languages: [generic]

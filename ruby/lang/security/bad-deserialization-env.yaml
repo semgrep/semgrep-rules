@@ -1,10 +1,9 @@
 rules:
-- id: bad-deserialization
+- id: bad-deserialization-env
   mode: taint
   pattern-sources:
   - pattern-either:
-    - pattern: params
-    - pattern: cookies
+    - pattern: request.env
   pattern-sinks:
   - pattern-either:
     - pattern: |
@@ -38,9 +37,9 @@ rules:
     cwe2021-top25: true
     subcategory:
     - vuln
-    likelihood: MEDIUM
+    likelihood: LOW
     impact: HIGH
-    confidence: MEDIUM
+    confidence: LOW
   languages:
   - ruby
   severity: ERROR
