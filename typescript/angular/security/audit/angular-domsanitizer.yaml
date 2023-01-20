@@ -32,12 +32,13 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern-inside: |
-        function ...(..., $X, ...) { ... }
-    - focus-metavariable: $X
-  - pattern: $X.$Y
-  - pattern: $X[...]
+    - patterns:
+        - pattern-either:
+            - pattern-inside: |
+                function ...({..., $X: string, ...}) { ... }
+            - pattern-inside: |
+                function ...(..., $X: string, ...) { ... }
+        - focus-metavariable: $X
   pattern-sinks:
   - patterns:
     - pattern-either:
