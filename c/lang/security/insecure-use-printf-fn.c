@@ -12,6 +12,9 @@ void bad_vsprintf(int argc, char **argv) {
     vsprintf(buffer, argv[1], args);
 
     //ok: insecure-use-printf-fn
+    vsprintf("%s\n",argv[0])
+
+    //ok: insecure-use-printf-fn
     vsnprintf(buffer, format, args);
 }
 
@@ -31,7 +34,12 @@ void bad_sprintf(int argc, char **argv) {
     sprintf(buffer, argv[2], a, b, c);
 
     //ok: insecure-use-printf-fn
+    sprintf("%s\n",argv[0])
+    
+    //ok: insecure-use-printf-fn
     snprintf(buffer, format, a,b,c);
+
+
 }
 
 void bad_printf() {
@@ -45,6 +53,9 @@ void bad_printf() {
 
     //ok: insecure-use-printf-fn
     printf("hello");
+
+    //ok: insecure-use-printf-fn
+    printf("%s\n",argv[0])
 }
 
 int main() {
