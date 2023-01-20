@@ -1,162 +1,211 @@
 rules:
-- id: react-unsanitized-property
-  message: >-
-    Detection of $HTML from non-constant definition. This
-    can inadvertently expose users to cross-site scripting (XSS) attacks if this
-    comes from user-provided input. If you have to use $HTML, consider using
-    a sanitization library such as DOMPurify to sanitize your HTML.
-  metadata:
-    cwe:
-    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    references:
-    - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
-    category: security
-    confidence: MEDIUM
-    technology:
-    - react
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: MEDIUM
-    impact: MEDIUM
-  languages:
-  - typescript
-  - javascript
-  severity: WARNING
-  mode: taint
-  pattern-sources:
-    - patterns:
-        - pattern-either:
-            - pattern-inside: |
-                function ...({..., $X, ...}) { ... }
-            - pattern-inside: |
-                function ...(..., $X, ...) { ... }
-        - focus-metavariable: $X
-        - pattern-either:
-            - pattern: $X.$Y
-            - pattern: $X[...]
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $BODY = $REACT.useRef(...)
-          ...
-      - pattern-inside: |
-          $BODY = useRef(...)
-          ...
-      - pattern-inside: |
-          $BODY = findDOMNode(...)
-          ...
-      - pattern-inside: |
-          $BODY = createRef(...)
-          ...
-      - pattern-inside: |
-          $BODY = $REACT.findDOMNode(...)
-          ...
-      - pattern-inside: |
-          $BODY = $REACT.createRef(...)
-          ...
-    - pattern-either:
-      - pattern: |
-          $BODY. ... .$HTML = $SINK 
-      - pattern: |
-          $BODY.$HTML = $SINK  
-    - metavariable-regex:
-        metavariable: $HTML
-        regex: (innerHTML|outerHTML)
-    - focus-metavariable: $SINK
-  - patterns:
-    - pattern-either:
-      - pattern: ReactDOM.findDOMNode(...).$HTML = $SINK
-    - metavariable-regex:
-        metavariable: $HTML
-        regex: (innerHTML|outerHTML)
-    - focus-metavariable: $SINK
-  pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $S from "underscore.string"
-          ...
-      - pattern-inside: |
-          import * as $S from "underscore.string"
-          ...
-      - pattern-inside: |
-          import $S from "underscore.string"
-          ...
-      - pattern-inside: |
-          $S = require("underscore.string")
-          ...
-    - pattern-either:
-      - pattern: $S.escapeHTML(...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $S from "dompurify"
-          ...
-      - pattern-inside: |
-          import { ..., $S,... } from "dompurify"
-          ...
-      - pattern-inside: |
-          import * as $S from "dompurify"
-          ...
-      - pattern-inside: |
-          $S = require("dompurify")
-          ...
-      - pattern-inside: |
-          import $S from "isomorphic-dompurify"
-          ...
-      - pattern-inside: |
-          import * as $S from "isomorphic-dompurify"
-          ...
-      - pattern-inside: |
-          $S = require("isomorphic-dompurify")
-          ...
-    - pattern-either:
+  - id: react-unsanitized-property
+    message: Detection of $HTML from non-constant definition. This can inadvertently
+      expose users to cross-site scripting (XSS) attacks if this comes from
+      user-provided input. If you have to use $HTML, consider using a
+      sanitization library such as DOMPurify to sanitize your HTML.
+    metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation
+          ('Cross-site Scripting')"
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
+      references:
+        - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+      category: security
+      confidence: LOW
+      technology:
+        - react
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: MEDIUM
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING
+    mode: taint
+    pattern-sources:
       - patterns:
-        - pattern-inside: |
-            $VALUE = $S(...)
-            ...
-        - pattern: $VALUE.sanitize(...)
+          - pattern-not-inside: |
+              import $X from "..."
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              import * as $X from "..."
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              import { ..., $X,...} from "..."
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              $X = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              $X = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              const {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              var {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              let {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              const {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              var {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              let {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-either:
+              - pattern-inside: |
+                  function ...({..., $X, ...}) { ... }
+              - pattern-inside: |
+                  function ...(..., $X, ...) { ... }
+          - focus-metavariable: $X
+    pattern-sinks:
       - patterns:
-        - pattern-inside: |
-            $VALUE = $S.sanitize
-            ...
-        - pattern: $S(...)
-      - pattern: $S.sanitize(...)
-      - pattern: $S(...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $S from 'xss';
-          ...
-      - pattern-inside: |
-          import * as $S from 'xss';
-          ...
-      - pattern-inside: |
-          $S = require("xss")
-          ...
-    - pattern: $S(...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $S from 'sanitize-html';
-          ...
-      - pattern-inside: |
-          import * as $S from "sanitize-html";
-          ...
-      - pattern-inside: |
-          $S = require("sanitize-html")
-          ...
-    - pattern: $S(...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $S = new Remarkable()
-          ...
-    - pattern: $S.render(...)
+          - pattern-either:
+              - pattern-inside: |
+                  $BODY = $REACT.useRef(...)
+                  ...
+              - pattern-inside: |
+                  $BODY = useRef(...)
+                  ...
+              - pattern-inside: |
+                  $BODY = findDOMNode(...)
+                  ...
+              - pattern-inside: |
+                  $BODY = createRef(...)
+                  ...
+              - pattern-inside: |
+                  $BODY = $REACT.findDOMNode(...)
+                  ...
+              - pattern-inside: |
+                  $BODY = $REACT.createRef(...)
+                  ...
+          - pattern-either:
+              - pattern: |
+                  $BODY. ... .$HTML = $SINK 
+              - pattern: |
+                  $BODY.$HTML = $SINK  
+          - metavariable-regex:
+              metavariable: $HTML
+              regex: (innerHTML|outerHTML)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-either:
+              - pattern: ReactDOM.findDOMNode(...).$HTML = $SINK
+          - metavariable-regex:
+              metavariable: $HTML
+              regex: (innerHTML|outerHTML)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  import $S from "underscore.string"
+                  ...
+              - pattern-inside: |
+                  $S = require("underscore.string")
+                  ...
+          - pattern-either:
+              - pattern: $S.escapeHTML(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import { ..., $S,... } from "dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("dompurify")
+                  ...
+              - pattern-inside: |
+                  import $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  import * as $S from "isomorphic-dompurify"
+                  ...
+              - pattern-inside: |
+                  $S = require("isomorphic-dompurify")
+                  ...
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S(...)
+                      ...
+                  - pattern: $VALUE.sanitize(...)
+              - patterns:
+                  - pattern-inside: |
+                      $VALUE = $S.sanitize
+                      ...
+                  - pattern: $S(...)
+              - pattern: $S.sanitize(...)
+              - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  import * as $S from 'xss';
+                  ...
+              - pattern-inside: |
+                  $S = require("xss")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $S from 'sanitize-html';
+                  ...
+              - pattern-inside: |
+                  import * as $S from "sanitize-html";
+                  ...
+              - pattern-inside: |
+                  $S = require("sanitize-html")
+                  ...
+          - pattern: $S(...)
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $S = new Remarkable()
+                  ...
+          - pattern: $S.render(...)
+      - patterns:
+          - pattern-either:
+              - pattern: $F(...)
+              - pattern: $X. ... .$F(...)
+              - pattern: $F. ... .$X(...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: (?i)(.*sanitize|.*escape|.*encode)

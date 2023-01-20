@@ -1,141 +1,188 @@
 rules:
-- id: react-href-var
-  message: Detected a variable used in an anchor tag with the 'href' attribute. A malicious actor may
-    be able to input the 'javascript:' URI, which could cause cross-site scripting (XSS). It is recommended
-    to disallow 'javascript:' URIs within your application.
-  metadata:
-    cwe:
-    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    references:
-    - https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#deprecating-javascript-urls
-    - https://pragmaticwebsecurity.com/articles/spasecurity/react-xss-part1.html
-    category: security
-    confidence: LOW
-    technology:
-    - react
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-  languages:
-  - typescript
-  - javascript
-  severity: WARNING
-  mode: taint
-  pattern-sources:
-    - patterns:
-        - pattern-either:
-            - pattern-inside: |
-                function ...({..., $X, ...}) { ... }
-            - pattern-inside: |
-                function ...(..., $X, ...) { ... }
-        - focus-metavariable: $X
-        - pattern-either:
-            - pattern: $X.$Y
-            - pattern: $X[...]
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
+  - id: react-href-var
+    message: Detected a variable used in an anchor tag with the 'href' attribute. A
+      malicious actor may be able to input the 'javascript:' URI, which could
+      cause cross-site scripting (XSS). It is recommended to disallow
+      'javascript:' URIs within your application.
+    metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation
+          ('Cross-site Scripting')"
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
+      references:
+        - https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#deprecating-javascript-urls
+        - https://pragmaticwebsecurity.com/articles/spasecurity/react-xss-part1.html
+      category: security
+      confidence: LOW
+      technology:
+        - react
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: MEDIUM
+    languages:
+      - typescript
+      - javascript
+    severity: WARNING
+    mode: taint
+    pattern-sources:
       - patterns:
-        - focus-metavariable: $X
-        - pattern-not-inside: |
-            import {
-              ...,$X,...
-            } from "..."
-            ...
-        - pattern-not-inside: |
-            <Buttons .../>
-        - pattern-not-inside: |
-            <Button .../>
-        - pattern-not-inside: |
-            <AnchorButton .../>
-        - pattern-not-inside: |
-            <$EL ... href={$FUNC($X)}></$EL>
-        - pattern-not-inside: |
-            import $X from "..."
-            ...
-        - pattern-not-inside: |
-            import $X from "..."
-            ...
-        - pattern-not-inside: |
-            import * as $X from "..."
-            ...
-        - pattern-not-inside: |
-            $X = require(...)
-            ...
-        - pattern-either:
-          - pattern: |
-              <$EL href={$X} />
-          - pattern: |
-              <$EL href={`${$X}...`} />
-          - pattern: |
-              React.createElement($EL, {href: $X})
-          - pattern-inside: |
-              $PARAMS = {href: $X};
+          - pattern-not-inside: |
+              import $X from "..."
               ...
-              React.createElement($EL, $PARAMS);
-        - pattern-not: |
-            <$EL href="..." />
-        - pattern-not: |
-            <$EL href={"..."+$X} />
-        - pattern-not: |
-            React.createElement($EL, {href: "..."})        
-        - pattern-not: |
-            $PARAMS = {href: "..."};
-        - metavariable-pattern:
-            patterns:
-            - pattern-not: |
-                $FOO + $VALUE
-            - pattern-not: |
-                "..." + $F
-            - pattern-not: |
-                `...${$F}...`
-            metavariable: $X
-  pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          $A ? $VAL1 : $VAL2
-      - pattern: |
-          $A ? $VAL2 : $VAL1
-    - metavariable-pattern:
-        patterns:
-        - pattern: |
-            `${...}...`
-        - pattern-not: |
-            "..."
-        - pattern-not: |
-            "..." + $V
-        - pattern-not: |
-            `...${...}...`
-        metavariable: $VAL1
-    - focus-metavariable: $VAL1
-  - patterns:
-    - pattern-either:
-      - pattern: validateUrl(...)
-      - pattern: getSanitizedUrl(...)
-  - patterns:
-    - pattern: |
-        `...${$X}...`
-    - pattern-not: |
-        `${$X}...`
-    - focus-metavariable: $X
-  - patterns:
-    - pattern: |
-        "..." + $VALUE
-  - patterns:
-    - pattern-inside: |
-        if (<... $SOURCE.startsWith("$REGEX") ...>) { 
-            ... 
-        }
-  - patterns:
-    - pattern-inside: |
-        $X = [{...}];
-        ...
-    - pattern: $X.map(...)
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              import * as $X from "..."
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              import { ..., $X,...} from "..."
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              $X = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              $X = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              const {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              var {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              let {...,$X,...} = require("...")
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              const {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              var {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)
+          - pattern-not-inside: |
+              let {...,$X,...} = require("...").$F
+              ...
+              $X. ... .$FUNC(...)    
+          - pattern-either:
+              - pattern-inside: |
+                  function ...({..., $X, ...}) { ... }
+              - pattern-inside: |
+                  function ...(..., $X, ...) { ... }
+          - focus-metavariable: $X
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - focus-metavariable: $X
+                  - pattern-not-inside: |
+                      import {
+                        ...,$X,...
+                      } from "..."
+                      ...
+                  - pattern-not-inside: |
+                      <Buttons .../>
+                  - pattern-not-inside: |
+                      <Button .../>
+                  - pattern-not-inside: |
+                      <AnchorButton .../>
+                  - pattern-not-inside: |
+                      <$EL ... href={$FUNC($X)}></$EL>
+                  - pattern-not-inside: |
+                      import $X from "..."
+                      ...
+                  - pattern-not-inside: |
+                      import $X from "..."
+                      ...
+                  - pattern-not-inside: |
+                      import * as $X from "..."
+                      ...
+                  - pattern-not-inside: |
+                      $X = require(...)
+                      ...
+                  - pattern-either:
+                      - pattern: |
+                          <$EL href={$X} />
+                      - pattern: |
+                          <$EL href={`${$X}...`} />
+                      - pattern: |
+                          React.createElement($EL, {href: $X})
+                      - pattern-inside: |
+                          $PARAMS = {href: $X};
+                          ...
+                          React.createElement($EL, $PARAMS);
+                  - pattern-not: |
+                      <$EL href="..." />
+                  - pattern-not: |
+                      <$EL href={"..."+$X} />
+                  - pattern-not: |
+                      React.createElement($EL, {href: "..."})        
+                  - pattern-not: |
+                      $PARAMS = {href: "..."};
+                  - metavariable-pattern:
+                      patterns:
+                        - pattern-not: |
+                            $FOO + $VALUE
+                        - pattern-not: |
+                            "..." + $F
+                        - pattern-not: |
+                            `...${$F}...`
+                      metavariable: $X
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  $A ? $VAL1 : $VAL2
+              - pattern: |
+                  $A ? $VAL2 : $VAL1
+          - metavariable-pattern:
+              patterns:
+                - pattern: |
+                    `${...}...`
+                - pattern-not: |
+                    "..."
+                - pattern-not: |
+                    "..." + $V
+                - pattern-not: |
+                    `...${...}...`
+              metavariable: $VAL1
+          - focus-metavariable: $VAL1
+      - patterns:
+          - pattern-either:
+            - pattern: $F(...)
+            - pattern: $F. ... .$X(...)
+            - pattern: $X. ... .$F(...)
+          - metavariable-regex:
+                metavariable: $F
+                regex: (?i)(.*validate|sanitize)
+      - patterns:
+          - pattern: |
+              `...${$X}...`
+          - pattern-not: |
+              `${$X}...`
+          - focus-metavariable: $X
+      - patterns:
+          - pattern: |
+              "..." + $VALUE
+      - patterns:
+          - pattern-inside: |
+              if (<... $SOURCE.startsWith("$REGEX") ...>) { 
+                  ... 
+              }
+      - patterns:
+          - pattern-inside: |
+              $X = [{...}];
+              ...
+          - pattern: $X.map(...)
