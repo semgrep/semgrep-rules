@@ -3,6 +3,9 @@ rules:
   patterns:
   - pattern: assert($ASSERT, ...);
   - pattern-not: assert("...", ...);
+  - metavariable-regex:
+      metavariable: $ASSERTION
+      regex: \A\$\S+\Z
   message: >-
     Calling assert with user input is equivalent to eval'ing.
   metadata:
