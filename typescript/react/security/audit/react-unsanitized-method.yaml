@@ -34,49 +34,49 @@ rules:
   pattern-sources:
     - patterns:
       - pattern-not-inside: |
-          import $C from "..."
+          import $X from "..."
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          import * as $C from "..."
+          import * as $X from "..."
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          import { ..., $C,...} from "..."
+          import { ..., $X,...} from "..."
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          $C = require("...")
+          $X = require("...")
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          $C = require("...").$F
+          $X = require("...").$F
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          const {...,$C,...} = require("...")
+          const {...,$X,...} = require("...")
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          var {...,$C,...} = require("...")
+          var {...,$X,...} = require("...")
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          let {...,$C,...} = require("...")
+          let {...,$X,...} = require("...")
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          const {...,$C,...} = require("...").$F
+          const {...,$X,...} = require("...").$F
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          var {...,$C,...} = require("...").$F
+          var {...,$X,...} = require("...").$F
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-not-inside: |
-          let {...,$C,...} = require("...").$F
+          let {...,$X,...} = require("...").$F
           ...
-          $C. ... .$FUNC(...)
+          $X. ... .$FUNC(...)
       - pattern-either:
           - pattern-inside: |
               function ...({..., $X, ...}) { ... }
