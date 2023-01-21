@@ -8,8 +8,12 @@ function TestComponent1() {
 
 function TestComponent2(foo) {
     // ruleid:react-dangerouslysetinnerhtml
-    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo.bar},a:b};
+    let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo.bar}};
     return React.createElement('div', params);
+}
+export default function AdDisplay(props) {
+  const { ad, className, shape = 'auto' } = props;
+    let f = {smth: 'test123', dangerouslySetInnerHTML: {__html: props.bar}}
 }
 
 function TestComponent3() {
@@ -24,11 +28,16 @@ function OkComponent1() {
 }
 
 
+export default function AdDisplay(props) {
+  const { ad, className, shape = 'auto' } = props;
 
-function OkComponent2() {
-    // ok:react-dangerouslysetinnerhtml
-  return <li className={"foobar"} dangerouslySetInnerHTML={DOMPurify.sanitize(createMarkup())} />;
+  return (
+    // ok: react-dangerouslysetinnerhtml
+    <Root dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(props.description) }}>
+    </Root>
+  );
 }
+
 
 function OkComponent3() {
     // ok:react-dangerouslysetinnerhtml
@@ -52,3 +61,15 @@ function OkComponent6() {
     let params = {smth: "test123", style: {color: 'red'}};
     return React.createElement('div', params);
 }
+
+export default function AdDisplay(props) {
+  const { ad, className, shape = 'auto' } = props;
+
+  return (
+    // ruleid: react-dangerouslysetinnerhtml
+    <Root dangerouslySetInnerHTML={{ __html: props.description }}>
+    </Root>
+  );
+}
+
+
