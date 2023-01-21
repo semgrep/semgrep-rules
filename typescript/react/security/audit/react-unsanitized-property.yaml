@@ -31,13 +31,13 @@ rules:
     severity: WARNING
     mode: taint
     pattern-sources:
-      - patterns:
+     - patterns:
         - pattern-not-inside: |
             import $C from "..."
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
-            import * as $X from "..."
+            import * as $C from "..."
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
@@ -45,7 +45,7 @@ rules:
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
-            $X = require("...")
+            $C = require("...")
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
@@ -65,7 +65,7 @@ rules:
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
-            const {...,$X,...} = require("...").$F
+            const {...,$C,...} = require("...").$F
             ...
             $C. ... .$FUNC(...)
         - pattern-not-inside: |
@@ -209,4 +209,4 @@ rules:
               - pattern: $F. ... .$X(...)
           - metavariable-regex:
               metavariable: $F
-              regex: (?i)(.*sanitize|.*escape|.*encode)
+              regex: (?i)(.*sanitiz|.*escape|.*encode)
