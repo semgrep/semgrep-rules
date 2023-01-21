@@ -22,19 +22,23 @@ rules:
     impact: HIGH
   languages: [c]
   severity: WARNING
-  pattern-either:
-  - pattern: |
-      $FUNC($BUFFER, argv[$NUM], ...);
-      ...
-      vsprintf(..., $BUFFER, ...);
-  - pattern: vsprintf(..., argv[$NUM], ...)
-  - pattern: |
-      $FUNC($BUFFER, argv[$NUM], ...);
-      ...
-      sprintf(..., $BUFFER, ...);
-  - pattern: sprintf(...,argv[$NUM],...)
-  - pattern: |
-      $FUNC($BUFFER, argv[$NUM], ...);
-      ...
-      printf(..., $BUFFER, ...);
-  - pattern: printf(...,argv[$NUM],...)
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        vsprintf(..., $BUFFER, ...);
+    - pattern: vsprintf(..., argv[$NUM], ...)
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        sprintf(..., $BUFFER, ...);
+    - pattern: sprintf(...,argv[$NUM],...)
+    - pattern: |
+        $FUNC($BUFFER, argv[$NUM], ...);
+        ...
+        printf(..., $BUFFER, ...);
+    - pattern: printf(...,argv[$NUM],...)
+  - metavariable-comparison:
+      metavariable: $NUM
+      comparison: int($NUM) > 0
