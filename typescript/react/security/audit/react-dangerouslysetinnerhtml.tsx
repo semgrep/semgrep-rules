@@ -7,12 +7,13 @@ function TestComponent1() {
 }
 
 function TestComponent2(foo) {
-    // ok:react-dangerouslysetinnerhtml
+    // ruleid:react-dangerouslysetinnerhtml
     let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo.bar}};
     return React.createElement('div', params);
 }
 export default function AdDisplay(props) {
   const { ad, className, shape = 'auto' } = props;
+    // ruleid:react-dangerouslysetinnerhtml
     let f = {smth: 'test123', dangerouslySetInnerHTML: {__html: props.bar}}
 }
 
