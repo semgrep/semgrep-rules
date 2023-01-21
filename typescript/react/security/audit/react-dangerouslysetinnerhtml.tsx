@@ -7,7 +7,7 @@ function TestComponent1() {
 }
 
 function TestComponent2(foo) {
-    // ruleid:react-dangerouslysetinnerhtml
+    // ok:react-dangerouslysetinnerhtml
     let params = {smth: 'test123', dangerouslySetInnerHTML: {__html: foo.bar}};
     return React.createElement('div', params);
 }
