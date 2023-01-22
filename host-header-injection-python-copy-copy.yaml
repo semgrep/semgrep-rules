@@ -1,0 +1,36 @@
+rules:
+- id: host-header-injection-python-copy-copy
+  message: The code uses the request host in the construction of a password reset
+    link without proper validation, this could lead to host header injection attack.
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X = <... "=~/.*http[s]*:///" + flask.request.host ...>;
+    - pattern: |
+        $X = <... "=~/.*http[s]*:///" + flask.request["host"] ...>;
+    - pattern: |
+        $Z = flask.request.host;
+        ...
+        $X = <... "=~/.*http[s]*:///" + $Z ...>;
+    - pattern: |
+        $Z = flask.request["host"];
+        ...
+        $X = <... "=~/.*http[s]*:///" + $Z ...>;
+  - pattern-inside: |
+      @$APP.route($ROUTE, ...)
+      def $FUNC():
+        ...
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    owasp: A01:2017 - Injection
+    cwe: 'CWE-20: Improper Input Validation'
+    category: security
+    technology:
+    - django
+    subcategory: vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
