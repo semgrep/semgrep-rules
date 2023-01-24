@@ -23,8 +23,46 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: MEDIUM
-  patterns:
-  - pattern: http_tokens = "optional"
-  - pattern-inside: |
-      metadata_options { ... }
+  pattern-either:
+    # Legacy rule for backwards compatibility
+    - patterns:
+      - pattern: http_tokens = "optional"
+      - pattern-inside: |
+          metadata_options { ... }
+    - patterns:
+      - pattern: |
+          resource "aws_instance" "$NAME" {
+            ...
+          }
+      - pattern-not: |
+          resource "aws_instance" "$NAME" {
+            ...
+            metadata_options {
+              ...
+              http_tokens = "required"
+              ...
+            }
+            ...
+          }
+      # Don't match previous legacy rule
+      - pattern-not: |
+          resource "aws_instance" "$NAME" {
+            ...
+            metadata_options {
+              ...
+              http_tokens = "optional"
+              ...
+            }
+            ...
+          }
+      - pattern-not: |
+          resource "aws_instance" "$NAME" {
+            ...
+            metadata_options {
+              ...
+              http_endpoint = "disabled"
+              ...
+            }
+            ...
+          }
   severity: ERROR
