@@ -1,10 +1,114 @@
 rules:
 - id: avoid-jsonpickle
-  patterns:
-  - pattern: |
-      jsonpickle.decode($PAYLOAD,...)
-  - pattern-not: |
-      jsonpickle.decode("...",...)
+  mode: taint
+  pattern-sources:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  def $HANDLER($EVENT, context):
+                    ...
+              - focus-metavariable: $EVENT
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      @rest_framework.decorators.api_view(...)
+                      def $FUNC(..., $REQ, ...):
+                        ...
+                  - patterns:
+                      - pattern-either:
+                          - pattern-inside: >
+                              class $VIEW(..., rest_framework.views.APIView,
+                              ...):
+                                ...
+                          - pattern-inside: >
+                              class $VIEW(...,
+                              rest_framework.generics.GenericAPIView, ...):
+                                ...                              
+                      - pattern-inside: |
+                          def $METHOD(self, $REQ, ...):
+                            ...
+                      - metavariable-regex:
+                          metavariable: $METHOD
+                          regex: (get|post|put|patch|delete|head)
+              - pattern-either:
+                  - patterns:
+                    - pattern: $REQ.$FUNCTION(...)
+                    - metavariable-regex:
+                        metavariable: $FUNCTION
+                        regex: ^(get_signed_cookie|read|readline|readlines|__iter__)$
+                  - patterns:
+                    - pattern-either:
+                      - pattern: $REQ.$PROPERTY
+                      - pattern: $REQ.$PROPERTY[...]
+                      - pattern: $REQ.$PROPERTY.get(...)
+                    - metavariable-regex:
+                        metavariable: $PROPERTY
+                        regex: ^(body|content_type|data|DATA|query_params|QUERY_PARAMS|GET|POST|COOKIES|FILES|headers|stream)$
+          - patterns:
+              - pattern-either:
+                  - patterns:
+                      - pattern-either:
+                          - patterns:
+                            - pattern: flask.request.$FUNCTION(...)
+                            - metavariable-regex:
+                                metavariable: $FUNCTION
+                                regex: ^(from_values|get_data|get_json)$
+                          - patterns:
+                            - pattern-either:
+                              - pattern: flask.request.$PROPERTY
+                              - pattern: flask.request.$PROPERTY[...]
+                              - pattern: flask.request.$PROPERTY.get(...)
+                            - metavariable-regex:
+                                metavariable: $PROPERTY
+                                regex: ^(args|cookies|data|files|form|full_path|headers|input_stream|json|path|stream|values|view_args)$
+                  - patterns:
+                      - pattern: |
+                          @$APP.route(...)
+                          def $FUNC(..., $PARAM, ...):
+                            ...
+                      - focus-metavariable: $PARAM
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: >
+                      class $SERVER(..., http.server.BaseHTTPRequestHandler,
+                      ...):
+                        ...
+                  - pattern-inside: |
+                      class $SERVER(..., http.server.StreamRequestHandler, ...):
+                        ...
+                  - pattern-inside: >
+                      class $SERVER(..., http.server.DatagramRequestHandler,
+                      ...):
+                        ...
+              - pattern-either:
+                  - pattern: self.$PROPERTY
+                  - pattern: self.$PROPERTY.get(...)
+                  - pattern: self.$PROPERTY[...]
+              - metavariable-regex:
+                  metavariable: $PROPERTY
+                  regex: ^(command|headers|rfile|wfile|responses|requestline|path)$
+          - patterns:
+              - pattern-inside: |
+                  @pyramid.view.view_config( ... )
+                  def $VIEW($REQ):
+                    ...
+              - pattern-either:
+                  - patterns:
+                    - pattern: $REQ.$FUNCTION(...)
+                    - metavariable-regex:
+                        metavariable: $FUNCTION
+                        regex: ^(as_bytes|make_tempfile)$
+                  - patterns:
+                    - pattern-either:
+                      - pattern: $REQ.$PROPERTY
+                      - pattern: $REQ.$PROPERTY[...]
+                      - pattern: $REQ.$PROPERTY.get(...)
+                    - metavariable-regex:
+                        metavariable: $PROPERTY
+                        regex: ^(GET|POST|accept|body|body_file|body_file_raw|body_file_seekable|cache_control|cookies|headers|json|json_body|params|pragma|query_string|referer|referrer|text|urlargs|urlvars)$
+  pattern-sinks:
+    - pattern: |
+        jsonpickle.decode(...)
   metadata:
     owasp:
     - A08:2017 - Insecure Deserialization
@@ -12,21 +116,31 @@ rules:
     cwe:
     - 'CWE-502: Deserialization of Untrusted Data'
     references:
+    - https://portswigger.net/web-security/deserialization
+    - https://knowledge-base.secureflag.com/vulnerabilities/unsafe_deserialization/unsafe_deserialization_python.html
     - https://github.com/jsonpickle/jsonpickle#jsonpickle
+    - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
     - https://www.exploit-db.com/exploits/49585
     category: security
     technology:
     - jsonpickle
+    - python
+    - aws-lambda
+    - django
+    - flask
+    - pyramid
+    - json
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
   message: >-
-    Avoid using `jsonpickle`, which is known to lead to code execution vulnerabilities.
-    When unpickling, the serialized data could be manipulated to run arbitrary code.
-    Instead, consider serializing the relevant data using `json` module.
+      Insecure deserialization (called pickling in python) is when user-controllable data is deserialized by an application. 
+      This potentially enables an attacker to manipulate serialized objects in order to pass harmful data into the application code.
+      Many deserialization-based attacks are completed before deserialization is finished. 
+      This means that the deserialization process itself can initiate an attack, even if the app's own functionality does not directly interact with the malicious object.
+      `jsonpickle` can execute arbitrary Python code. Do not load `jsonpickles` from untrusted sources.
   languages: [python]
-  severity: WARNING
+  severity: ERROR
