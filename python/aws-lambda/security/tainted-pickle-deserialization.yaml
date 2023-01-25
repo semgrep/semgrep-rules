@@ -2,11 +2,11 @@ rules:
 - id: tainted-pickle-deserialization
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern: event
-    - pattern-inside: |
-        def $HANDLER(event, context):
-          ...
+     - patterns:
+         - pattern: |
+             def $HANDLER($EVENT, context):
+               ...
+         - focus-metavariable: $EVENT
   pattern-sinks:
   - patterns:
     - pattern: $SINK
@@ -21,10 +21,11 @@ rules:
       - pattern-inside: dill.loads($SINK,...)
       - pattern-inside: shelve.open($SINK,...)
   message: >-
-    Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
-    When unpickling, the serialized data could be manipulated to run arbitrary code.
-    Instead, consider serializing the relevant data as JSON or a similar text-based
-    serialization format.
+    Insecure deserialization (called pickling in python) is when user-controllable data is deserialized by an application. 
+    This potentially enables an attacker to manipulate serialized objects in order to pass harmful data into the application code.
+    Many deserialization-based attacks are completed before deserialization is finished. 
+    This means that the deserialization process itself can initiate an attack, even if the app's own functionality does not directly interact with the malicious object.
+    For deserializing data from untrusted sources we recommend using YAML or JSON libraries with built-in protections.
   metadata:
     owasp:
     - A08:2017 - Insecure Deserialization
@@ -32,6 +33,7 @@ rules:
     cwe:
     - 'CWE-502: Deserialization of Untrusted Data'
     references:
+    - https://portswigger.net/web-security/deserialization
     - https://docs.python.org/3/library/pickle.html
     - https://davidhamann.de/2020/04/05/exploiting-python-pickle/
     category: security

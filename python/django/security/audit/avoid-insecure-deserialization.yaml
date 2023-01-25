@@ -48,12 +48,12 @@ rules:
             shelve.$PICKLEFUNC(...)
       - metavariable-regex:
           metavariable: $PICKLEFUNC
-          regex: dumps|dump|load|loads
+          regex: ^(dumps|dump|load|loads)$
     - patterns:
       - pattern: dill.$DILLFUNC(...)
       - metavariable-regex:
           metavariable: $DILLFUNC
-          regex: dump|dump_session|dumps|load|load_session|loads
+          regex: ^(dump|dump_session|dumps|load|load_session|loads|temp.load.*)$
     - patterns:
       - pattern: yaml.$YAMLFUNC(...)
       - pattern-not: yaml.$YAMLFUNC(..., Dumper=SafeDumper, ...)
@@ -62,4 +62,4 @@ rules:
       - pattern-not: yaml.$YAMLFUNC(..., Loader=yaml.SafeLoader, ...)
       - metavariable-regex:
           metavariable: $YAMLFUNC
-          regex: dump|dump_all|load|load_all
+          regex: ^(dump|dump_all|load|load_all)$
