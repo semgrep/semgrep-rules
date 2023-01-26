@@ -12,7 +12,7 @@ rules:
   - patterns:
     - pattern-either:
       - pattern-inside: |
-          $METHODNAME(..., @$REQ($LOOKUP) $TYPE $SOURCE,...) {
+          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
             ...
           }
       - pattern-inside: |
@@ -23,52 +23,10 @@ rules:
         metavariable: $REQ
         regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
     - pattern: $SOURCE
-    label: INPUT
-  - patterns:
-    - pattern-either:
-      - pattern: $X + $SOURCE
-      - pattern: $SOURCE + $Y
-      - pattern: (StringBuilder $STRB).append($SOURCE)
-      - pattern: String.format("...", ..., $SOURCE, ...)
-      - pattern: String.join("...", ..., $SOURCE, ...)
-      - pattern: (String $STR).concat($SOURCE)
-      - pattern: $SOURCE.concat(...)
-      - pattern: $X += SOURCE
-      - pattern: $SOURCE += $X
-    label: CONCAT
-    requires: INPUT
   pattern-sinks:
   - patterns:
-    - pattern-either:
-      - pattern: |
-          (Process $P) = new Process(...);
-      - pattern: |
-          (ProcessBuilder $PB).command(...);
-      - patterns:
-        - pattern-either:
-          - pattern: |
-              (Runtime $R).$EXEC(...);
-          - pattern: |
-               Runtime.getRuntime(...).$EXEC(...);
-        - metavariable-regex:
-            metavariable: $EXEC
-            regex: (exec|loadLibrary|load)
-      - patterns:
-        - pattern: |
-            (ProcessBuilder $PB).command(...).$ADD(...);
-        - metavariable-regex:
-            metavariable: $ADD
-            regex: (add|addAll)
-      - patterns:
-        - pattern-either:
-          - patterns:
-            - pattern-inside: |
-                $BUILDER = new ProcessBuilder(...);
-                ...
-            - pattern: $BUILDER.start(...)
-          - pattern: |
-              new ProcessBuilder(...). ... .start(...);
-    requires: CONCAT
+    - pattern: |
+        (ProcessBuilder $PB).command(...);
   message: >-
     Detected user input entering a method which executes a system command.
     This could result in a command injection vulnerability, which allows an
