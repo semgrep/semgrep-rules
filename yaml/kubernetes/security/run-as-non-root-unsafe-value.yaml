@@ -1,15 +1,25 @@
 rules:
 - id: run-as-non-root-unsafe-value
   patterns:
-  - pattern-inside: |
-      containers:
-        ...
-  - pattern: |
-      image: ...
-      ...
-      securityContext:
-        ...
-        runAsNonRoot: $VALUE
+  - pattern-either:
+      # Pod Security Context
+      - pattern: |
+          spec:
+            ...
+            securityContext:
+              ...
+              runAsNonRoot: $VALUE
+      # Container Security Context
+      - patterns:
+          - pattern-inside: |
+              containers:
+                ...
+          - pattern: |
+              image: ...
+              ...
+              securityContext:
+                ...
+                runAsNonRoot: $VALUE
   - pattern: |
       $VALUE
   - pattern: |

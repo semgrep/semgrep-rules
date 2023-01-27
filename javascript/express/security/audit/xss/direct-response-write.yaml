@@ -107,6 +107,8 @@ rules:
     - pattern-either:
       - pattern: $RES.write($ARG)
       - pattern: $RES.send($ARG)
+    - pattern-not: $RES. ... .set('...'). ... .send($ARG)
+    - pattern-not: $RES. ... .type('...'). ... .send($ARG)
     - focus-metavariable: $ARG
   pattern-sanitizers:
   - patterns:
@@ -212,4 +214,9 @@ rules:
           $S = require("express-xss-sanitizer")
           ...
     - pattern: $S(...)
-    
+  - patterns:
+    - pattern: $RES. ... .type('$F'). ... .send(...)
+    - metavariable-regex:
+        metavariable: $F
+        regex: (?!.*text/html)
+        

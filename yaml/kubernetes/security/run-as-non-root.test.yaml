@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Pod
 spec:
@@ -17,3 +18,21 @@ spec:
       image: haproxy
       securityContext:
         runAsNonRoot: true
+---
+apiVersion: v1
+kind: Pod
+spec:
+  # ok: run-as-non-root
+  securityContext:
+    runAsNonRoot: true
+  containers:
+    - name: nginx
+      image: nginx
+    - name: postgres
+      image: postgres
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+    - name: haproxy
+      image: haproxy
