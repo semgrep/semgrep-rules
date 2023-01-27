@@ -2,7 +2,7 @@ rules:
 - id: tainted-sql-string
   languages:
   - ruby
-  severity: ERROR
+  severity: WARNING
   message: Detected user input used to manually construct a SQL string. This is usually bad practice because
     manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection
     to steal or modify contents of the database. Instead, use a parameterized query which is available
@@ -25,7 +25,7 @@ rules:
     subcategory:
     - vuln
     likelihood: MEDIUM
-    impact: HIGH
+    impact: MEDIUM
     confidence: MEDIUM
   mode: taint
   pattern-sources:

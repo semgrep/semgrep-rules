@@ -1,7 +1,7 @@
 rules:
 - id: template-blocktranslate-no-escape
   languages: [generic]
-  severity: INFO
+  severity: WARNING
   message: >-
     Translated strings will not be escaped when rendered in a template.
     This leads to a vulnerability where translators could include malicious script tags in their translations.
@@ -41,6 +41,6 @@ rules:
     cwe2021-top25: true
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: MEDIUM
     confidence: LOW
