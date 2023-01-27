@@ -3,6 +3,10 @@ rules:
   patterns:
   - pattern: assert($ASSERT, ...);
   - pattern-not: assert("...", ...);
+  - metavariable-regex:
+      metavariable: $ASSERT
+      # explanation - alphanumerics, array references (literal or variable), object properties
+      regex: \A\$[A-Za-z\[\]\-_'"\$]+(\-\>\w+)?\Z
   message: >-
     Calling assert with user input is equivalent to eval'ing.
   metadata:
