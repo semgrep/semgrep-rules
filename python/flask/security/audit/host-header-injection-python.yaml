@@ -1,0 +1,46 @@
+rules:
+- id: host-header-injection-python
+  message: >-
+    The `flask.request.host` is used to construct an HTTP request. 
+    This can lead to host header injection issues. Vulnerabilities 
+    that generally occur due to this issue are authentication bypasses, 
+    password reset issues, Server-Side-Request-Forgery (SSRF), and many more. 
+    It is recommended to validate the URL before passing it to a 
+    request library, or using application logic such as authentication 
+    or password resets.
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X = <... "=~/.*http[s]*:///" + flask.request.host ...>;
+    - pattern: |
+        $X = <... "=~/.*http[s]*:///" + flask.request["host"] ...>;
+    - pattern: |
+        $Z = flask.request.host;
+        ...
+        $X = <... "=~/.*http[s]*:///" + $Z ...>;
+    - pattern: |
+        $Z = flask.request["host"];
+        ...
+        $X = <... "=~/.*http[s]*:///" + $Z ...>;
+  - pattern-inside: |
+      @$APP.route($ROUTE, ...)
+      def $FUNC():
+        ...
+  languages:
+  - python
+  severity: INFO
+  metadata:
+    cwe: 
+      - 'CWE-20: Improper Input Validation'
+    category: security
+    references: 
+    -  https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection
+    - https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+    technology:
+    - flask
+    subcategory: 
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
