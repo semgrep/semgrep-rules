@@ -2,6 +2,7 @@ rules:
   - id: unspecified-open-encoding
     patterns:
       - pattern-inside: open(...)
+      - pattern-not: shelve.open(...)
       - pattern-not: open(..., encoding="...", ...)
       - pattern-not: open($F, "...", $B, "...", ...)
       - pattern-either:
