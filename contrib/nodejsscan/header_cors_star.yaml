@@ -1,4 +1,3 @@
-# Need QA + sgrep bug fix + false positive in generic_2 and {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/": '*' } not working
 rules:
   - id: generic_cors
     patterns:
@@ -11,59 +10,33 @@ rules:
       - javascript
     severity: WARNING
     metadata:
-      owasp: "A06:2017 - Security Misconfiguration"
-      cwe: "CWE-346: Origin Validation Error"
-      category: security
-      technology:
-        - node.js
-        - express
+      owasp-web: a6
+      cwe: cwe-346
   - id: express_cors
     patterns:
       - pattern-either:
-          - pattern-inside: function ($REQ, $RES, ...) {...}
-          - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-          - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-          - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+        - pattern-inside: function ($REQ, $RES, ...) {...}
+        - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+        - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+        - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
       - pattern-either:
           - pattern: |
               $APP.options('*', cors(...))
           - pattern: >
-              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $RES.set("=~/access-control-allow-origin/i",
               '*', ...)
           - pattern: >
               $RES.set(..., {
-              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
+              "=~/access-control-allow-origin/i" :
               '*' }, ...)
           - pattern: >
-              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
+              $RES.header("=~/access-control-allow-origin/i",
               '*', ...)
           - pattern: >
               $RES.writeHead(...,
-              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
-              '*' }, ...);
-          - pattern: >
-              $VAL = '*';
-              ...
-              $RES.set("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
-              $VAL, ...);
-          - pattern: >
-              $VAL = '*';
-              ...
-              $RES.set(..., {
-              "=~/[Access-Control-Allow-Origin|access-control-allow-origin]/" :
-              $VAL }, ...);
-          - pattern: >
-              $VAL = '*';
-              ...
-              $RES.header("=~/[Access-Control-Allow-Origin|access-control-allow-origin]/",
-              $VAL, ...);
-          - pattern: >
-              $VAL = '*';
-              ...
-              $RES.writeHead(...,
-              {"=~/[Access-Control-Allow-Origin|access-control-allow-origin]/":
-              $VAL }, ...);
+              {"=~/access-control-allow-origin/i":
+              '*' }, ...)
     message: >-
       Access-Control-Allow-Origin response header is set to "*". This will
       disable CORS Same Origin Policy restrictions.
@@ -71,9 +44,5 @@ rules:
       - javascript
     severity: WARNING
     metadata:
-      owasp: "A06:2017 - Security Misconfiguration"
-      cwe: "CWE-346: Origin Validation Error"
-      category: security
-      technology:
-        - node.js
-        - express
+      owasp-web: a6
+      cwe: cwe-346

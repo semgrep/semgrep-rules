@@ -2,7 +2,7 @@ rules:
   - id: header_xss_lusca
     patterns:
       - pattern-inside: |
-          $X = require('lusca');
+          $X = require('lusca')
           ...
       - pattern-not: |
           $X.use(helmet())
@@ -18,49 +18,27 @@ rules:
       - javascript
     severity: ERROR
     metadata:
-      owasp: "A06:2017 - Security Misconfiguration"
-      cwe: "CWE-693: Protection Mechanism Failure"
-      category: security
-      technology:
-        - node.js
-        - express
+      owasp-web: a6
+      cwe: cwe-693
   - id: header_xss_generic
     patterns:
       - pattern-either:
-          - pattern-inside: function ($REQ, $RES, ...) {...}
-          - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-          - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-          - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-          - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+        - pattern-inside: function ($REQ, $RES, ...) {...}
+        - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+        - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+        - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
       - pattern-either:
           - pattern: |
-              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+              $RES.header("=~/x-xss-protection/i", 0, ...)
           - pattern: |
-              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", 0, ...)
+              $RES.set("=~/x-xss-protection/i", 0, ...)
           - pattern: >
-              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : 0 },
+              $RES.set(..., { "=~/x-xss-protection/i" : 0 },
               ...)
           - pattern: >
-              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/": 0
-              }, ...);
-          - pattern: |
-              $VAL = 0;
-              ...
-              $RES.header("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
-          - pattern: |
-              $VAL = 0;
-              ...
-              $RES.set("=~/[X-XSS-Protection|x-xss-protection]/", $VAL, ...);
-          - pattern: >
-              $VAL = 0;
-              ...
-              $RES.set(..., { "=~/[X-XSS-Protection|x-xss-protection]/" : $VAL
-              }, ...);
-          - pattern: >
-              $VAL = 0;
-              ...
-              $RES.writeHead(..., {"=~/[X-XSS-Protection|x-xss-protection]/":
-              $VAL }, ...);
+              $RES.writeHead(..., {"=~/x-xss-protection/i": 0
+              }, ...)
     message: >-
       X-XSS-Protection header is set to 0. This will disable the browser's XSS
       Filter.
@@ -68,9 +46,5 @@ rules:
       - javascript
     severity: ERROR
     metadata:
-      owasp: "A06:2017 - Security Misconfiguration"
-      cwe: "CWE-693: Protection Mechanism Failure"
-      category: security
-      technology:
-        - node.js
-        - express
+      owasp-web: a6
+      cwe: cwe-693
