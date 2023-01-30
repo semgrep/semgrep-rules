@@ -1,0 +1,2 @@
+// ruleid: twitter-bearer-token
+twitter_api_token = "AAAAAAAAAAAAAAAAAAAAAA7PZ6bMqiP2Qx%OMhXlEi2cDlSING48cho5myWTUeulC1NvDn0FiCkRBnQlvK7ELVVlpfCq6AqLEgsWbx"
