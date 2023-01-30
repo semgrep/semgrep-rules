@@ -1,0 +1,24 @@
+rules:
+  - id: missing-noreferrer
+    metadata:
+      category: correctness
+      technology:
+        - html
+      cwe: "CWE-1022: Use of Web Link to Untrusted Target with window.opener Access"
+      owasp:
+        - A05:2017 - Broken Access Control
+        - A01:2021 - Broken Access Control
+      confidence: MEDIUM
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      references: 
+        - https://chromestatus.com/feature/6140064063029248
+    patterns:
+      - pattern: a()
+      - pattern: b()
+    paths:
+      include:
+        - "*.html"
+    message: This rule has been deprecated.
+    severity: WARNING
+    languages:
+      - generic
