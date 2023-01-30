@@ -1,48 +1,68 @@
 rules:
-  - id: generic_cors
-    patterns:
-      - pattern: |
-          $APP.options('*', cors(...))
-    message: >-
-      Access-Control-Allow-Origin response header is set to "*". This will
-      disable CORS Same Origin Policy restrictions.
-    languages:
-      - javascript
-    severity: WARNING
-    metadata:
-      owasp-web: a6
-      cwe: cwe-346
-  - id: express_cors
-    patterns:
-      - pattern-either:
-        - pattern-inside: function ($REQ, $RES, ...) {...}
-        - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
-        - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
-        - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
-        - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
-      - pattern-either:
-          - pattern: |
-              $APP.options('*', cors(...))
-          - pattern: >
-              $RES.set("=~/access-control-allow-origin/i",
-              '*', ...)
-          - pattern: >
-              $RES.set(..., {
-              "=~/access-control-allow-origin/i" :
-              '*' }, ...)
-          - pattern: >
-              $RES.header("=~/access-control-allow-origin/i",
-              '*', ...)
-          - pattern: >
-              $RES.writeHead(...,
-              {"=~/access-control-allow-origin/i":
-              '*' }, ...)
-    message: >-
-      Access-Control-Allow-Origin response header is set to "*". This will
-      disable CORS Same Origin Policy restrictions.
-    languages:
-      - javascript
-    severity: WARNING
-    metadata:
-      owasp-web: a6
-      cwe: cwe-346
+- id: generic_cors
+  message: >-
+    Access-Control-Allow-Origin response header is set to "*". This will
+    disable CORS Same Origin Policy restrictions.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-346: Origin Validation Error'
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    subcategory:
+    - vuln
+  languages:
+  - javascript
+  patterns:
+  - pattern: |
+      $APP.options('*', cors(...))
+- id: express_cors
+  message: >-
+    Access-Control-Allow-Origin response header is set to "*". This will
+    disable CORS Same Origin Policy restrictions.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-346: Origin Validation Error'
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    subcategory:
+    - audit
+  languages:
+  - javascript
+  patterns:
+  - pattern-either:
+    - pattern-inside: function ($REQ, $RES, ...) {...}
+    - pattern-inside: function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: $X = function $FUNC($REQ, $RES, ...) {...}
+    - pattern-inside: var $X = function $FUNC($REQ, $RES, ...) {...};
+    - pattern-inside: $APP.$METHOD(..., function $FUNC($REQ, $RES, ...) {...})
+  - pattern-either:
+    - pattern: |
+        $APP.options('*', cors(...))
+    - pattern: >
+        $RES.set("=~/access-control-allow-origin/i",
+        '*', ...)
+    - pattern: >
+        $RES.set(..., {
+        "=~/access-control-allow-origin/i" :
+        '*' }, ...)
+    - pattern: >
+        $RES.header("=~/access-control-allow-origin/i",
+        '*', ...)
+    - pattern: >
+        $RES.writeHead(...,
+        {"=~/access-control-allow-origin/i":
+        '*' }, ...)
