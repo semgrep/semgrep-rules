@@ -31,19 +31,19 @@ rules:
   - pattern: |
       HttpServletResponse $RES = ...;
       ...
-      $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      $RES.addHeader("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
   - pattern: |
       HttpServletResponse $RES = ...;
       ...
-      $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      $RES.setHeader("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
   - pattern: |
       ServerHttpResponse $RES = ...;
       ...
-      $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
   - pattern: |
       HttpHeaders $HEADERS = ...;
       ...
-      $HEADERS.set("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+      $HEADERS.set("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
   - pattern: |
       ServerWebExchange $SWE = ...;
       ...
@@ -51,26 +51,26 @@ rules:
   - pattern: |
       $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.addHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+        $RES.addHeader("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,HttpServletResponse $RES,...) {
         ...
-        $RES.setHeader("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+        $RES.setHeader("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,ServerHttpResponse $RES,...) {
         ...
-        $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+        $RES.getHeaders().add("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
         ...
       }
   - pattern: |
       $X $METHOD(...,ServerWebExchange $SWE,...) {
         ...
-        $SWE.getResponse().getHeaders().add("=~/access-control-allow-origin/i", "=~/^*|null$/i");
+        $SWE.getResponse().getHeaders().add("=~/access-control-allow-origin/i", "=~/^\*|null$/i");
         ...
       }
-  - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
-  - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^*|null$/i")
+  - pattern: ResponseEntity.$RES().header("=~/access-control-allow-origin/i", "=~/^\*|null$/i")
+  - pattern: ServerResponse.$RES().header("=~/access-control-allow-origin/i", "=~/^\*|null$/i")
