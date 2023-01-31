@@ -4,12 +4,7 @@ rules:
   - java
   severity: ERROR
   message: >-
-    Detected user input flowing into a manually constructed HTML string.
-    You may be accidentally bypassing secure methods of rendering HTML by
-    manually constructing HTML and this could create a cross-site scripting
-    vulnerability, which could let attackers steal sensitive user data. To be
-    sure this is safe, check that the HTML is rendered safely. You can use
-    the OWASP ESAPI encoder if you must render user data.
+    This rule has been deprecated. Please remove it from your policies and rulepacks.
   metadata:
     cwe:
     - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
@@ -29,49 +24,6 @@ rules:
     likelihood: HIGH
     impact: MEDIUM
     confidence: MEDIUM
-    interfile: true
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $METHODNAME(..., @$REQ(...) $TYPE 
-          $SOURCE,...) {
-            ...
-          }
-      - pattern-inside: |
-          $METHODNAME(..., @$REQ $TYPE 
-          $SOURCE,...) {
-            ...
-          }
-    - metavariable-regex:
-        metavariable: $REQ
-        regex: (RequestBody|PathVariable|RequestParam)
-    - pattern: $SOURCE
-  pattern-sinks:
-  - patterns:
-    - patterns:
-      - pattern-either:
-        - pattern: |
-            "$HTMLSTR" + ...
-        - pattern: |
-            "$HTMLSTR".concat(...)
-        - patterns:
-          - pattern-inside: |
-              StringBuilder $SB = new StringBuilder("$HTMLSTR");
-              ...
-          - pattern: $SB.append(...)
-        - patterns:
-          - pattern-inside: |
-              $VAR = "$HTMLSTR";
-              ...
-          - pattern: $VAR += ...
-        - pattern: String.format("$HTMLSTR", ...)
-        - patterns:
-          - pattern-inside: |
-              String $VAR = "$HTMLSTR";
-              ...
-          - pattern: String.format($VAR, ...)
-      - metavariable-regex:
-          metavariable: $HTMLSTR
-          regex: ^<\w+
+  patterns:
+  - pattern: a()
+  - pattern: b()

@@ -1,0 +1,105 @@
+rules:
+- id: tainted-html-to-responseentity
+  languages:
+  - java
+  severity: ERROR
+  message: >-
+    Detected user input flowing into a manually constructed HTML string.
+    You may be accidentally bypassing secure methods of rendering HTML by
+    manually constructing HTML and this could create a cross-site scripting
+    vulnerability, which could let attackers steal sensitive user data. To be
+    sure this is safe, check that the HTML is rendered safely. You can use
+    the OWASP ESAPI encoder if you must render user data.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    category: security
+    technology:
+    - java
+    - spring
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+    interfile: true
+  mode: taint
+  pattern-sources:
+  - label: INPUT
+    patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
+            ...
+          }
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
+            ...
+          }
+    - metavariable-regex:
+        metavariable: $REQ
+        regex: (RequestBody|PathVariable|RequestParam)
+    - focus-metavariable: $SOURCE
+  - label: CONCAT
+    by-side-effect: true
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: |
+          "$HTMLSTR" + ...
+      - pattern: |
+          "$HTMLSTR".concat(...)
+      - patterns:
+        - pattern-inside: |
+            StringBuilder $SB = new StringBuilder("$HTMLSTR");
+            ...
+        - pattern: $SB.append(...)
+      - patterns:
+        - pattern-inside: |
+            $VAR = "$HTMLSTR";
+            ...
+        - pattern: $VAR += ...
+      - pattern: String.format("$HTMLSTR", ...)
+      - patterns:
+        - pattern-inside: |
+            String $VAR = "$HTMLSTR";
+            ...
+        - pattern: String.format($VAR, ...)
+    - metavariable-regex:
+        metavariable: $HTMLSTR
+        regex: ^<\w+
+  pattern-propagators:
+  - pattern: (StringBuilder $SB).append($...TAINTED)
+    from: $...TAINTED
+    to: $SB
+  - pattern: $VAR += $...TAINTED
+    from: $...TAINTED
+    to: $VAR
+  pattern-sinks:
+  - requires: CONCAT
+    patterns:
+    - pattern-either:
+      - pattern: new ResponseEntity<>($PAYLOAD, ...)
+      - pattern: new ResponseEntity<$ERROR>($PAYLOAD, ...)
+      - pattern: ResponseEntity. ... .body($PAYLOAD)
+      - patterns:
+        - pattern-either:
+          - pattern: ResponseEntity.$RESPFUNC($PAYLOAD). ... .$FUNC(...)
+          - pattern: ResponseEntity.$RESPFUNC($PAYLOAD)
+        - metavariable-regex:
+            metavariable: $RESPFUNC
+            regex: ^(ok|of)$
+    - focus-metavariable: $PAYLOAD
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: Encode.forHtml(...)
+    - pattern: (PolicyFactory $POLICY).sanitize(...)
+    - pattern: (AntiSamy $AS).scan(...)
+    - pattern: JSoup.clean(...)
