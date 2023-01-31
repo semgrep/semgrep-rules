@@ -1,0 +1,29 @@
+rules:
+  - id: metadata-deepsemgrep
+    patterns:
+      - pattern-inside: |
+          rules: 
+            ...
+      - pattern-inside: |
+          metadata: 
+            ...
+            $DEEPSEMGREP: true
+            ...
+      - focus-metavariable: $DEEPSEMGREP
+      - metavariable-regex: 
+          metavariable: $DEEPSEMGREP
+          regex: ^(deepsemgrep)$
+    message: >-
+      We no longer support `deepsemgrep: true`, please use `interfile:true`
+    fix-regex:
+      regex: deepsemgrep
+      replacement: interfile
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - semgrep
+      references:
+        - https://semgrep.dev/
