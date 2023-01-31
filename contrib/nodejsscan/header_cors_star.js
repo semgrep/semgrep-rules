@@ -11,7 +11,6 @@ app.get('/', function (req, res) {
 
 app.get('/', function (req, res) {
     var y = 1;
-    // ruleid:express_cors
     var x = '*';
     //sgrep bug - https://github.com/returntocorp/sgrep/issues/512
     // ruleid:express_cors
