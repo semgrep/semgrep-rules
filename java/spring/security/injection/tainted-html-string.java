@@ -1,4 +1,3 @@
-// THIS RULE IS DEPRECATED
 package org.sasanlabs.service.vulnerability.xss.reflected;
 
 import java.util.HashSet;
@@ -52,7 +51,7 @@ public class XSSInImgTagAttribute {
         String vulnerablePayloadWithPlaceHolder = "<img src=%s width=\"400\" height=\"300\"/>";
 
         return new ResponseEntity<>(
-                // ok: tainted-html-to-responseentity
+                // ruleid: tainted-html-to-responseentity
                 String.format(vulnerablePayloadWithPlaceHolder, imageLocation), HttpStatus.OK);
     }
 
@@ -69,7 +68,7 @@ public class XSSInImgTagAttribute {
 
         String payload = String.format(vulnerablePayloadWithPlaceHolder, imageLocation);
 
-        // ok: tainted-html-to-responseentity
+        // ruleid: tainted-html-to-responseentity
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
 
@@ -89,7 +88,7 @@ public class XSSInImgTagAttribute {
                         vulnerablePayloadWithPlaceHolder,
                         StringEscapeUtils.escapeHtml4(imageLocation));
 
-        // ok: tainted-html-to-responseentity
+        // ruleid: tainted-html-to-responseentity
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
 
@@ -114,7 +113,7 @@ public class XSSInImgTagAttribute {
                             StringEscapeUtils.escapeHtml4(imageLocation)));
         }
 
-        // ok: tainted-html-to-responseentity
+        // ruleid: tainted-html-to-responseentity
         return new ResponseEntity<>(payload.toString(), HttpStatus.OK);
     }
 
@@ -147,7 +146,7 @@ public class XSSInImgTagAttribute {
                             StringEscapeUtils.escapeHtml4(imageLocation)));
         }
 
-        // ok: tainted-html-to-responseentity
+        // ruleid: tainted-html-to-responseentity
         return new ResponseEntity<>(payload.toString(), HttpStatus.OK);
     }
 
@@ -171,7 +170,7 @@ public class XSSInImgTagAttribute {
                             vulnerablePayloadWithPlaceHolder,
                             StringEscapeUtils.escapeHtml4(imageLocation));
 
-            // ok: tainted-html-to-responseentity
+            // ruleid: tainted-html-to-responseentity
             return ResponseEntity.ok(payload).headers(responseHeaders).build();
         }
 
@@ -202,7 +201,7 @@ public class XSSInImgTagAttribute {
                             vulnerablePayloadWithPlaceHolder,
                             HtmlUtils.htmlEscapeHex(imageLocation));
 
-            // ok: tainted-html-to-responseentity
+            // ruleid: tainted-html-to-responseentity
             return ResponseEntity.ok(payload);
 
         } else {
@@ -236,7 +235,7 @@ public class XSSInImgTagAttribute {
 
             return ResponseEntity.ok()
             .contentType(MediaType.TEXT_PLAIN)
-            // ok: tainted-html-to-responseentity
+            // ruleid: tainted-html-to-responseentity
             .body(payload);;
 
         } else {
@@ -265,7 +264,7 @@ public class XSSInImgTagAttribute {
 
             vulnerablePayloadWithPlaceHolder += imageLocation;
 
-            // ok: tainted-html-to-responseentity
+            // ruleid: tainted-html-to-responseentity
             return new ResponseEntity<Success>(vulnerablePayloadWithPlaceHolder, HttpStatus.OK);
 
         } else {
@@ -297,7 +296,7 @@ public class XSSInImgTagAttribute {
                             vulnerablePayloadWithPlaceHolder,
                             HtmlUtils.htmlEscapeHex(imageLocation));
 
-                 
+
             String cleaned = Encode.forHtml(payload);
             // ok: tainted-html-to-responseentity
             return new ResponseEntity<>(cleaned, HttpStatus.OK);
