@@ -90,9 +90,8 @@ rules:
       - pattern: new ResponseEntity<$ERROR>($PAYLOAD, ...)
       - pattern: ResponseEntity. ... .body($PAYLOAD)
       - patterns:
-        - pattern-either:
-          - pattern: ResponseEntity.$RESPFUNC($PAYLOAD). ... .$FUNC(...)
-          - pattern: ResponseEntity.$RESPFUNC($PAYLOAD)
+        - pattern: |
+            ResponseEntity.$RESPFUNC($PAYLOAD). ...
         - metavariable-regex:
             metavariable: $RESPFUNC
             regex: ^(ok|of)$

@@ -272,6 +272,36 @@ public class XSSInImgTagAttribute {
         }
     }
 
+
+    // Escape all special characters to their corresponding HTML hex format
+    // and validate input.
+    // Would be even better if Content Security Policy (CSP) is set.
+    @AttackVector(
+            vulnerabilityExposed = VulnerabilityType.REFLECTED_XSS,
+            description =
+                    "XSS_QUOTES_AND_WITH_HTML_ESCAPE_PLUS_FILTERING_ON_INPUT_SRC_ATTRIBUTE_IMG_TAG")
+    @VulnerableAppRequestMapping(
+            value = LevelConstants.LEVEL_7,
+            variant = Variant.SECURE,
+            htmlTemplate = "LEVEL_1/XSS")
+    public ResponseEntity<String> getVulnerablePayloadLevelSecure3(
+            @RequestParam(PARAMETER_NAME) String imageLocation) {
+        String vulnerablePayloadWithPlaceHolder = "not html";
+
+        if ((imageLocation.startsWith(IMAGE_RESOURCE_PATH)
+                        && imageLocation.endsWith(FILE_EXTENSION))
+                || allowedValues.contains(imageLocation)) {
+
+            vulnerablePayloadWithPlaceHolder += imageLocation;
+
+            // ok: tainted-html-to-responseentity
+            return new ResponseEntity<Success>(vulnerablePayloadWithPlaceHolder, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     // Escape all special characters to their corresponding HTML hex format
     // and validate input.
     // Would be even better if Content Security Policy (CSP) is set.
