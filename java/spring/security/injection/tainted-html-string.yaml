@@ -1,5 +1,5 @@
 rules:
-- id: tainted-html-string
+- id: tainted-html-to-responseentity
   languages:
   - java
   severity: ERROR
@@ -32,46 +32,73 @@ rules:
     interfile: true
   mode: taint
   pattern-sources:
-  - patterns:
+  - label: INPUT
+    patterns:
     - pattern-either:
       - pattern-inside: |
-          $METHODNAME(..., @$REQ(...) $TYPE 
-          $SOURCE,...) {
+          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
             ...
           }
       - pattern-inside: |
-          $METHODNAME(..., @$REQ $TYPE 
-          $SOURCE,...) {
+          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
             ...
           }
     - metavariable-regex:
         metavariable: $REQ
         regex: (RequestBody|PathVariable|RequestParam)
-    - pattern: $SOURCE
+    - focus-metavariable: $SOURCE
+  - label: CONCAT
+    by-side-effect: true
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: |
+          "$HTMLSTR" + ...
+      - pattern: |
+          "$HTMLSTR".concat(...)
+      - patterns:
+        - pattern-inside: |
+            StringBuilder $SB = new StringBuilder("$HTMLSTR");
+            ...
+        - pattern: $SB.append(...)
+      - patterns:
+        - pattern-inside: |
+            $VAR = "$HTMLSTR";
+            ...
+        - pattern: $VAR += ...
+      - pattern: String.format("$HTMLSTR", ...)
+      - patterns:
+        - pattern-inside: |
+            String $VAR = "$HTMLSTR";
+            ...
+        - pattern: String.format($VAR, ...)
+    - metavariable-regex:
+        metavariable: $HTMLSTR
+        regex: ^<\w+
+  pattern-propagators:
+  - pattern: (StringBuilder $SB).append($...TAINTED)
+    from: $...TAINTED
+    to: $SB
+  - pattern: $VAR += $...TAINTED
+    from: $...TAINTED
+    to: $VAR
   pattern-sinks:
-  - patterns:
-    - patterns:
-      - pattern-either:
+  - requires: CONCAT
+    patterns:
+    - pattern-either:
+      - pattern: new ResponseEntity<>($PAYLOAD, ...)
+      - pattern: new ResponseEntity<$ERROR>($PAYLOAD, ...)
+      - pattern: ResponseEntity. ... .body($PAYLOAD)
+      - patterns:
         - pattern: |
-            "$HTMLSTR" + ...
-        - pattern: |
-            "$HTMLSTR".concat(...)
-        - patterns:
-          - pattern-inside: |
-              StringBuilder $SB = new StringBuilder("$HTMLSTR");
-              ...
-          - pattern: $SB.append(...)
-        - patterns:
-          - pattern-inside: |
-              $VAR = "$HTMLSTR";
-              ...
-          - pattern: $VAR += ...
-        - pattern: String.format("$HTMLSTR", ...)
-        - patterns:
-          - pattern-inside: |
-              String $VAR = "$HTMLSTR";
-              ...
-          - pattern: String.format($VAR, ...)
-      - metavariable-regex:
-          metavariable: $HTMLSTR
-          regex: ^<\w+
+            ResponseEntity.$RESPFUNC($PAYLOAD). ...
+        - metavariable-regex:
+            metavariable: $RESPFUNC
+            regex: ^(ok|of)$
+    - focus-metavariable: $PAYLOAD
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: Encode.forHtml(...)
+    - pattern: (PolicyFactory $POLICY).sanitize(...)
+    - pattern: (AntiSamy $AS).scan(...)
+    - pattern: JSoup.clean(...)
