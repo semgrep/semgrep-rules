@@ -40,5 +40,23 @@ class Cls {
         // ok: command-injection-formatted-runtime-call
         Runtime.getRuntime().loadLibrary("lib.dll");
     }
-}
 
+    public void test6(String input) {
+        String[] envp = new String[]{"-c"};
+        // ruleid: command-injection-formatted-runtime-call
+        Runtime.getRuntime().exec("bash", envp, input);
+    }
+
+    public void test6(String input) {
+        String[] command = new String[]{"bash"};
+        String[] envp = new String[]{"-c"};
+        // ruleid: command-injection-formatted-runtime-call
+        Runtime.getRuntime().exec(command, envp, input);
+    }
+
+        public void test6(String input) {
+        String[] command = new String[]{"bash"};
+        // ruleid: command-injection-formatted-runtime-call
+        Runtime.getRuntime().exec(command, "-c", input);
+    }
+}
