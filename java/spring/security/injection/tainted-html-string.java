@@ -51,7 +51,7 @@ public class XSSInImgTagAttribute {
         String vulnerablePayloadWithPlaceHolder = "<img src=%s width=\"400\" height=\"300\"/>";
 
         return new ResponseEntity<>(
-                // ruleid: tainted-html-to-responseentity
+                // ruleid: tainted-html-string
                 String.format(vulnerablePayloadWithPlaceHolder, imageLocation), HttpStatus.OK);
     }
 
@@ -68,7 +68,7 @@ public class XSSInImgTagAttribute {
 
         String payload = String.format(vulnerablePayloadWithPlaceHolder, imageLocation);
 
-        // ruleid: tainted-html-to-responseentity
+        // ruleid: tainted-html-string
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
 
@@ -88,7 +88,7 @@ public class XSSInImgTagAttribute {
                         vulnerablePayloadWithPlaceHolder,
                         StringEscapeUtils.escapeHtml4(imageLocation));
 
-        // ruleid: tainted-html-to-responseentity
+        // ruleid: tainted-html-string
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
 
@@ -113,7 +113,7 @@ public class XSSInImgTagAttribute {
                             StringEscapeUtils.escapeHtml4(imageLocation)));
         }
 
-        // ruleid: tainted-html-to-responseentity
+        // ruleid: tainted-html-string
         return new ResponseEntity<>(payload.toString(), HttpStatus.OK);
     }
 
@@ -146,7 +146,7 @@ public class XSSInImgTagAttribute {
                             StringEscapeUtils.escapeHtml4(imageLocation)));
         }
 
-        // ruleid: tainted-html-to-responseentity
+        // ruleid: tainted-html-string
         return new ResponseEntity<>(payload.toString(), HttpStatus.OK);
     }
 
@@ -170,7 +170,7 @@ public class XSSInImgTagAttribute {
                             vulnerablePayloadWithPlaceHolder,
                             StringEscapeUtils.escapeHtml4(imageLocation));
 
-            // ruleid: tainted-html-to-responseentity
+            // ruleid: tainted-html-string
             return ResponseEntity.ok(payload).headers(responseHeaders).build();
         }
 
@@ -201,7 +201,7 @@ public class XSSInImgTagAttribute {
                             vulnerablePayloadWithPlaceHolder,
                             HtmlUtils.htmlEscapeHex(imageLocation));
 
-            // ruleid: tainted-html-to-responseentity
+            // ruleid: tainted-html-string
             return ResponseEntity.ok(payload);
 
         } else {
@@ -235,7 +235,7 @@ public class XSSInImgTagAttribute {
 
             return ResponseEntity.ok()
             .contentType(MediaType.TEXT_PLAIN)
-            // ruleid: tainted-html-to-responseentity
+            // ruleid: tainted-html-string
             .body(payload);;
 
         } else {
@@ -264,7 +264,7 @@ public class XSSInImgTagAttribute {
 
             vulnerablePayloadWithPlaceHolder += imageLocation;
 
-            // ruleid: tainted-html-to-responseentity
+            // ruleid: tainted-html-string
             return new ResponseEntity<Success>(vulnerablePayloadWithPlaceHolder, HttpStatus.OK);
 
         } else {
@@ -294,7 +294,7 @@ public class XSSInImgTagAttribute {
 
             vulnerablePayloadWithPlaceHolder += imageLocation;
 
-            // ok: tainted-html-to-responseentity
+            // ok: tainted-html-string
             return new ResponseEntity<Success>(vulnerablePayloadWithPlaceHolder, HttpStatus.OK);
 
         } else {
@@ -328,7 +328,7 @@ public class XSSInImgTagAttribute {
 
 
             String cleaned = Encode.forHtml(payload);
-            // ok: tainted-html-to-responseentity
+            // ok: tainted-html-string
             return new ResponseEntity<>(cleaned, HttpStatus.OK);
 
         } else {
@@ -421,7 +421,7 @@ public class SecurityQuestionAssignment extends AssignmentEndpoint {
     if (answer.isPresent()) {
       triedQuestions.incr(question);
       if (triedQuestions.isComplete()) {
-        //todook: tainted-html-to-responseentity
+        //todook: tainted-html-string
         return success(this).output("<b>" + answer + "</b>").build();
       }
     }
@@ -448,9 +448,9 @@ public class SecurityQuestionAssignment extends AssignmentEndpoint {
             + "</br>");
 
     if (strength.getScore() >= 4)
-        // ok: tainted-html-to-responseentity
+        // ok: tainted-html-string
         return success(this).feedback("securepassword-success").output(output.toString()).build();
-    // ok: tainted-html-to-responseentity
+    // ok: tainted-html-string
     else return failed(this).feedback("securepassword-failed").output(output.toString()).build();
   }
 }
@@ -508,9 +508,9 @@ public class SecurePasswordsAssignment extends AssignmentEndpoint {
     output.append("<b>Score: </b>" + strength.getScore() + "/4 </br>");
 
     if (strength.getScore() >= 4)
-      // ok: tainted-html-to-responseentity
+      // ok: tainted-html-string
       return success(this).feedback("securepassword-success").output(output.toString()).build();
-    // ok: tainted-html-to-responseentity
+    // ok: tainted-html-string
     else return failed(this).feedback("securepassword-failed").output(output.toString()).build();
   }
 
