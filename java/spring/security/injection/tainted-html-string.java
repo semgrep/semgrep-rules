@@ -421,7 +421,7 @@ public class SecurityQuestionAssignment extends AssignmentEndpoint {
     if (answer.isPresent()) {
       triedQuestions.incr(question);
       if (triedQuestions.isComplete()) {
-        //todook: tainted-html-string
+        //ok: tainted-html-string
         return success(this).output("<b>" + answer + "</b>").build();
       }
     }
