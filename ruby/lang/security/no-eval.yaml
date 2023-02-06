@@ -1,16 +1,18 @@
 rules:
 - id: ruby-eval
   message: >-
-    Use of eval with user-controllable input detected. This can lead to attackers running arbitrary code.
-    Ensure external data
-    does not reach here, otherwise this is a security vulnerability.
-    Consider other ways to do this without eval.
+    Use of eval with user-controllable input detected. This can lead 
+    to attackers running arbitrary code. Ensure external data does not 
+    reach here, otherwise this is a security vulnerability. Consider 
+    other ways to do this without eval.
   severity: WARNING
   metadata:
     likelihood: HIGH
     impact: MEDIUM
     confidence: MEDIUM
     category: security
+    cwe2022-top25: true
+    cwe2021-top25: true
     cwe:
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     owasp:
@@ -23,7 +25,8 @@ rules:
     technology:
     - ruby
     - rails
-  languages: [ruby]
+  languages: 
+    - ruby
   mode: taint
   pattern-sources:
   - pattern-either:
