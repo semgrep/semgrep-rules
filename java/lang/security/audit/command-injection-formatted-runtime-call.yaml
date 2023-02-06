@@ -14,8 +14,8 @@ rules:
     - pattern: $RUNTIME.loadLibrary(String.format(...));
     - patterns:
       - pattern-either:
-        - pattern: |
-            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
+        - pattern: | 
+            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $ARG,...)
         - pattern: |
             $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
         - pattern: |
@@ -31,6 +31,24 @@ rules:
           - pattern-inside: |
               $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
               ...
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                $RUNTIME.exec($CMD, $EXECUTE, $ARG, ...)
+          - pattern-inside: |
+              $CMD = new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/", ...};
+              ...
+        - patterns:
+            - pattern-either:
+                - pattern: | 
+                    $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", $BASH, $ARG,...)
+                - pattern: |
+                    $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...),...)
+                - pattern: |
+                    $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...},...)
+            - pattern-inside: |
+                $BASH = new String[]{"=~/(-c)/", ...};
+                ...
       - pattern-not-inside: |
           $ARG = "...";
           ...
@@ -69,4 +87,3 @@ rules:
   severity: ERROR
   languages:
   - java
-
