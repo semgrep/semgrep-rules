@@ -1,0 +1,25 @@
+rules:
+- id: absence_of_annotation
+  languages:
+  - java
+  severity: WARNING
+  message: 'Authorization annotation not applied: $METHOD() in $CLASS'
+  patterns:
+  - pattern-inside: |
+      public class $CLASS extends ExposedService {
+          ...
+      }
+  - pattern-not-inside: |
+      @Authorization(...)
+      public $RETTYPE $METHOD(...){
+          ...
+      }
+  - pattern-inside: |
+      public $RETTYPE $METHOD(...){
+          ...
+      }
+  - pattern: return ...;
+  metadata:
+    category: security
+    owasp: A1:2021 access
+    cwe: 'CWE 862: Missing Authorization'
