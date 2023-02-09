@@ -1,0 +1,13 @@
+rules:
+- id: superuser-port
+  patterns:
+  - pattern: set_port($ARG)
+  - metavariable-comparison:
+      metavariable: $ARG
+      comparison: $ARG < 1024
+  message: module setting superuser port
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: portability
