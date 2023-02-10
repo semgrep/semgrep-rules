@@ -1,12 +1,32 @@
 rules:
 - id: ruby-eval
   message: >-
-    Use of eval with user-controllable input detected. This can lead to attackers running arbitrary code.
-    Ensure external data
-    does not reach here, otherwise this is a security vulnerability.
-    Consider other ways to do this without eval.
-  languages: [ruby]
+    Use of eval with user-controllable input detected. This can lead 
+    to attackers running arbitrary code. Ensure external data does not 
+    reach here, otherwise this is a security vulnerability. Consider 
+    other ways to do this without eval.
   severity: WARNING
+  metadata:
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe2022-top25: true
+    cwe2021-top25: true
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_evaluation.rb
+    subcategory:
+    - vuln
+    technology:
+    - ruby
+    - rails
+  languages: 
+    - ruby
   mode: taint
   pattern-sources:
   - pattern-either:
@@ -33,22 +53,3 @@ rules:
       - pattern: module_eval(...)
       - pattern: instance_eval(...)
     - pattern-not: $M("...",...)
-  metadata:
-    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_evaluation.rb
-    category: security
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    references:
-    - https://owasp.org/www-community/attacks/Code_Injection
-    technology:
-    - ruby
-    - rails
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: MEDIUM
-    confidence: MEDIUM

@@ -39,6 +39,10 @@ rules:
   - typescript
   severity: WARNING
   mode: taint
+  pattern-propagators:
+  - pattern: $MODEL.$FIND($E).then((...,$S,...)=>{...})
+    from: $E
+    to: $S
   pattern-sources:
   - patterns:
     - pattern-either:
