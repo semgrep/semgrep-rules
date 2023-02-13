@@ -1,11 +1,12 @@
 rules:
 - id: node_md5
   message: >-
-    The MD5 hashing algorithm is considered to be weak. If this is used in any sensitive operation  such
-    as password hashing, or is used to ensure data integrity (collision sensitive) then you should use
-    a stronger hashing algorithm.
-    For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.  For data integrity, consider using
-    `SHA-256`
+    The MD5 hashing algorithm is considered to be weak.
+    If this is used in any sensitive operation such as
+    password hashing, or is used to ensure data integrity
+    (collision sensitive) then you should use a stronger hashing algorithm.
+    For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
+    For data integrity, consider using `SHA-256`
   severity: WARNING
   metadata:
     likelihood: LOW
@@ -38,10 +39,12 @@ rules:
         $CRYPTO.createHash(...)
 - id: node_sha1
   message: >-
-    The SHA1 hashing algorithm is considered to be weak. If this is used in any sensitive operation  such
-    as password hashing, or is used to ensure data integrity (collision sensitive) then you should use
-    a stronger hashing algorithm.
-    For passwords, consider `Argon2id`, `scrypt`, or `bcrypt`.  For data integrity, consider using `SHA-256`.
+    The SHA1 hashing algorithm is considered to be weak.
+    If this is used in any sensitive operation such as
+    password hashing, or is used to ensure data integrity
+    (collision sensitive) then you should use a stronger hashing algorithm.
+    For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
+    For data integrity, consider using `SHA-256`
   severity: WARNING
   metadata:
     likelihood: LOW
