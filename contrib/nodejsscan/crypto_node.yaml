@@ -1,81 +1,81 @@
 rules:
-- id: node_md5
-  message: >-
-    The MD5 hashing algorithm is considered to be weak.
-    If this is used in any sensitive operation such as
-    password hashing, or is used to ensure data integrity
-    (collision sensitive) then you should use a stronger hashing algorithm.
-    For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
-    For data integrity, consider using `SHA-256`
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    references:
-    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
-    subcategory:
-    - audit
-    technology:
-    - node.js
-  languages:
-  - javascript
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          "md5"
-      - pattern: |
-          "MD5"
-  pattern-sinks:
-  - patterns:
-    - pattern-inside: |
-        $CRYPTO.createHash(...)
-- id: node_sha1
-  message: >-
-    The SHA1 hashing algorithm is considered to be weak.
-    If this is used in any sensitive operation such as
-    password hashing, or is used to ensure data integrity
-    (collision sensitive) then you should use a stronger hashing algorithm.
-    For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
-    For data integrity, consider using `SHA-256`
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    references:
-    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
-    subcategory:
-    - audit
-    technology:
-    - node.js
-  languages:
-  - javascript
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          "SHA1"
-      - pattern: |
-          "sha1"
-  pattern-sinks:
-  - patterns:
-    - pattern-inside: |
-        $CRYPTO.createHash(...)
+  - id: node_md5
+    message: >-
+      The MD5 hashing algorithm is considered to be weak.
+      If this is used in any sensitive operation such as
+      password hashing, or is used to ensure data integrity
+      (collision sensitive) then you should use a stronger hashing algorithm.
+      For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
+      For data integrity, consider using `SHA-256`
+    severity: WARNING
+    metadata:
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: LOW
+      cwe:
+      - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp:
+      - A03:2017 - Sensitive Data Exposure
+      - A02:2021 - Cryptographic Failures
+      references:
+      - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+      subcategory:
+      - audit
+      technology:
+      - node.js
+    languages:
+    - javascript
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            "md5"
+        - pattern: |
+            "MD5"
+    pattern-sinks:
+    - patterns:
+      - pattern-inside: |
+          $CRYPTO.createHash(...)
+  - id: node_sha1
+    message: >-
+      The SHA1 hashing algorithm is considered to be weak.
+      If this is used in any sensitive operation such as
+      password hashing, or is used to ensure data integrity
+      (collision sensitive) then you should use a stronger hashing algorithm.
+      For passwords, consider using `Argon2id`, `scrypt`, or `bcrypt`.
+      For data integrity, consider using `SHA-256`
+    severity: WARNING
+    metadata:
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: LOW
+      category: security
+      cwe:
+      - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp:
+      - A03:2017 - Sensitive Data Exposure
+      - A02:2021 - Cryptographic Failures
+      references:
+      - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+      subcategory:
+      - audit
+      technology:
+      - node.js
+    languages:
+    - javascript
+    mode: taint
+    pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            "SHA1"
+        - pattern: |
+            "sha1"
+    pattern-sinks:
+    - patterns:
+      - pattern-inside: |
+          $CRYPTO.createHash(...)
   - id: node_aes_ecb
     patterns:
       - pattern-either:
