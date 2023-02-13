@@ -8,11 +8,13 @@ rules:
     `SHA-256`
   severity: WARNING
   metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
     - audit
     technology:
