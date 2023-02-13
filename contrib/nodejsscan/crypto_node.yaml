@@ -24,9 +24,9 @@ rules:
   - patterns:
     - pattern-either:
       - pattern: |
-          "sha1"
+          "md5"
       - pattern: |
-          "SHA1"
+          "MD5"
   pattern-sinks:
   - patterns:
     - pattern-inside: |
@@ -59,8 +59,11 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: |
-        "sha1"
+    - pattern-either:
+      - pattern: |
+          "SHA1"
+      - pattern: |
+          "sha1"
   pattern-sinks:
   - patterns:
     - pattern-inside: |
