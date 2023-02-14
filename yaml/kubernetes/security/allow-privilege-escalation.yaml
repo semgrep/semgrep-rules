@@ -10,16 +10,24 @@ rules:
   - pattern: |
       image: ...
       ...
-  - pattern-not: |
+  - pattern-inside: |
+      image: ...
+      ...
+      $SC:
+        ...
+  - metavariable-regex:
+      metavariable: $SC
+      regex: ^(securityContext)$
+  - pattern-not-inside: |
       image: ...
       ...
       securityContext:
         ...
-        allowPrivilegeEscalation: false
-  - focus-metavariable: $CONTAINER
+        allowPrivilegeEscalation: $VAL
+  - focus-metavariable: $SC
   message: >-
-    Container $CONTAINER allows for privilege escalation via setuid or setgid
-    binaries. Add 'allowPrivilegeEscalation: false' in 'securityContext' to
+    The `securityContext` of `$CONTAINER` allows for privilege escalation via
+    setuid or setgid binaries. Add 'allowPrivilegeEscalation: false' to
     prevent this.
   metadata:
     cwe:
