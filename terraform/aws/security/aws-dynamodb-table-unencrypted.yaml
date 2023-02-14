@@ -14,8 +14,10 @@ rules:
         }
         ...
       }
-  message: The AWS DynamoDB Table is unencrypted. The AWS KMS encryption key protects data in the DynamoDB
-    table. To create your own, create a aws_kms_key resource or use the ARN string of a key in your account.
+  message: >-
+    By default, AWS DynamoDB Table is encrypted using AWS-managed keys.
+    However, for added security, it's recommended to configure your own AWS KMS encryption key to protect your data in the DynamoDB table.
+    You can either create a new aws_kms_key resource or use the ARN of an existing key in your AWS account to do so.
   languages: [hcl]
   severity: WARNING
   metadata:
