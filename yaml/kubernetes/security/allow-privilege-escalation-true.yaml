@@ -1,5 +1,5 @@
 rules:
-- id: allow-privilege-escalation
+- id: allow-privilege-escalation-true
   patterns:
   - pattern-inside: |
       containers:
@@ -7,31 +7,25 @@ rules:
   - pattern-inside: |
       - name: $CONTAINER
         ...
-  - pattern: |
-      image: ...
-      ...
   - pattern-inside: |
       image: ...
       ...
-      $SC:
-        ...
-  - metavariable-regex:
-      metavariable: $SC
-      regex: ^(securityContext)$
-  - pattern-not-inside: |
-      image: ...
-      ...
+  - pattern-inside: |
       securityContext:
         ...
-        allowPrivilegeEscalation: $VAL
-  - focus-metavariable: $SC
+  - pattern: |
+      allowPrivilegeEscalation: $TRUE
+  - metavariable-pattern:
+      metavariable: $TRUE
+      pattern: |
+        true
+  - focus-metavariable: $TRUE
   fix: |
-    securityContext:
-            allowPrivilegeEscalation: false #
+    false
   message: >-
-    The `securityContext` of `$CONTAINER` allows for privilege escalation via
-    setuid or setgid binaries. Add 'allowPrivilegeEscalation: false' to
-    prevent this.
+    Do not set `allowPrivelegeEscalation: true` in `securityContext`.
+    This allows for privilege escalation via setuid or setgid in containter `$CONTAINER`. 
+    Set this value to `false` instead.
   metadata:
     cwe:
     - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
