@@ -1,20 +1,15 @@
 rules:
 - id: last-user-is-root
   patterns:
-    - pattern-either:
-        - patterns:
-            - pattern: USER root
-            - pattern-not-inside: |
-                USER root
-                ...
-                USER $A
-        - patterns:
-            - pattern-inside: |
-                USER $ANYTHING
-                ...
-                USER $ROOT
-            - focus-metavariable: $ROOT
-            - pattern: root
+    - pattern: USER $X
+    - pattern-not-inside: |
+        USER ...
+        ...
+        USER ...
+    - focus-metavariable: $X
+    - metavariable-regex:
+        metavariable: $X
+        regex: ^(root)$
   message: >-
     The last user in the container is 'root'. This is a security
     hazard because if an attacker gains control of the container
@@ -37,5 +32,5 @@ rules:
     - A04:2021 - Insecure Design
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: MEDIUM
