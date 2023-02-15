@@ -1,8 +1,9 @@
 rules:
 - id: insecure-use-memset
-  pattern: memset($VAR,...)
+  pattern: memset($...VARS)
+  fix: memset_s($...VARS)
   message: Using memset and then deleting that data can cause sensitive information to still be in the
-    buffer. Use **memset_s()** instead.
+    buffer. Use `memset_s()` instead.
   languages:
   - c
   severity: WARNING
