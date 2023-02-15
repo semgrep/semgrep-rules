@@ -1,22 +1,22 @@
 rules:
-- id: run-as-non-root
+- id: run-as-non-root-security-context-pod-level
   patterns:
-  # Capture spec
+  # Pod Security Context
   - pattern-inside: |
-      $SPEC:
+      spec:
         ...
-        containers:
+        $SC:
           ...
         ...
   - metavariable-regex:
-      metavariable: $SPEC
-      regex: ^(spec)$
-  # No Pod Security Context
+      metavariable: $SC
+      regex: ^(securityContext)$
+  # Pod Security Context does not contain runAsNonRoot
   - pattern-not-inside: |
       spec:
         ...
         securityContext:
-          ...
+          runAsNonRoot: $VAL
         ...
   # Containers defined
   - pattern-inside: |
@@ -37,14 +37,13 @@ rules:
             securityContext:
               ...
               runAsNonRoot: $VALUE
-  - focus-metavariable: $SPEC
+  - focus-metavariable: $SC
   fix: |
-    $SPEC:
-      securityContext:
+    $SC:
         runAsNonRoot: true #
   message: >-
     The containers in this pod allow for running applications as root. This can result in privilege escalation
-    attacks. Add a `securityContext` with `runAsNonRoot: true` in the pod to prevent this.
+    attacks. Add `runAsNonRoot: true` to the pod's `securityContext` to prevent this.
   metadata:
     references:
     - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/

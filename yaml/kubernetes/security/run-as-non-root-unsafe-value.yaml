@@ -20,10 +20,13 @@ rules:
               securityContext:
                 ...
                 runAsNonRoot: $VALUE
-  - pattern: |
-      $VALUE
-  - pattern: |
-      false
+  - metavariable-pattern:
+      metavariable: $VALUE
+      pattern: |
+        false
+  - focus-metavariable: $VALUE
+  fix: |
+    true
   message: >-
     Container allows for running applications as root. This can result in
     privilege escalation attacks. Change 'runAsNonRoot:' to 'true' in 'securityContext'
