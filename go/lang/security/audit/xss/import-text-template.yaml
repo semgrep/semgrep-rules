@@ -1,8 +1,8 @@
 rules:
 - id: import-text-template
   message: >-
-    'text/template' does not escape HTML content. If you need
-    to escape HTML content, use 'html/template' instead.
+    `'text/template'` does not escape HTML content. If you need
+    to escape HTML content, use `'html/template'` instead.
   metadata:
     owasp:
     - A07:2017 - Cross-Site Scripting (XSS)
@@ -22,7 +22,14 @@ rules:
     likelihood: LOW
     impact: LOW
   severity: WARNING
-  pattern: |
-    import "text/template"
+  patterns:
+    - pattern: |
+        import "$IMPORT"
+    - metavariable-regex:
+        metavariable: $IMPORT
+        regex: ^(text/template)$
+    - focus-metavariable: $IMPORT
+  fix: |
+    html/template
   languages:
   - go
