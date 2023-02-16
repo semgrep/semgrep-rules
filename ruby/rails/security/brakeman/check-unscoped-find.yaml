@@ -24,9 +24,9 @@ rules:
     - metavariable-regex:
         metavariable: $MODEL
         regex: '[A-Z]\S+'
-  message: Found an unscoped `find(...)` with user-controllable input.  If the ActiveRecord model being
+  message: Found an unscoped `find(...)` with user-controllable input. If the ActiveRecord model being
     searched against is sensitive, this may lead to Insecure Direct Object Reference (IDOR) behavior and
-    allow users to read arbitrary records.
+    allow users to read arbitrary records. Scope the find to the current user, e.g. `current_user.accounts.find(params[:id])`.
   languages:
   - ruby
   severity: WARNING
@@ -42,6 +42,7 @@ rules:
     - ruby
     - rails
     references:
+    - https://brakemanscanner.org/docs/warning_types/unscoped_find/
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails3.1/app/controllers/users_controller.rb
     subcategory:
     - vuln
