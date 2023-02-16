@@ -1,15 +1,11 @@
 rules:
 - id: last-user-is-root
   patterns:
-    - pattern: USER $X
+    - pattern: USER root
     - pattern-not-inside: |
-        USER ...
-        ...
-        USER ...
-    - focus-metavariable: $X
-    - metavariable-regex:
-        metavariable: $X
-        regex: ^(root)$
+          USER root
+          ...
+          USER $ANYTHING
   message: >-
     The last user in the container is 'root'. This is a security
     hazard because if an attacker gains control of the container
