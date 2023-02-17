@@ -1,32 +1,46 @@
 rules:
-- id: run-as-non-root-unsafe-value
+- id: run-as-non-root-security-context-pod-level
   patterns:
-  - pattern-either:
-      # Pod Security Context
-      - pattern: |
-          spec:
+  # Pod Security Context
+  - pattern-inside: |
+      spec:
+        ...
+        $SC:
+          ...
+        ...
+  - metavariable-regex:
+      metavariable: $SC
+      regex: ^(securityContext)$
+  # Pod Security Context does not contain runAsNonRoot
+  - pattern-not-inside: |
+      spec:
+        ...
+        securityContext:
+          runAsNonRoot: $VAL
+        ...
+  # Containers defined
+  - pattern-inside: |
+      $SPEC:
+        ...
+        containers:
+          ...
+  # Security Context of all containers in this pod are missing runAsNonRoot
+  # So no decision is made to secure at container level in other containers
+  - pattern-not-inside: |
+      $SPEC:
+        ...
+        containers:
+          ...
+          - name: $NAME
+            image: ...
             ...
             securityContext:
               ...
               runAsNonRoot: $VALUE
-      # Container Security Context
-      - patterns:
-          - pattern-inside: |
-              containers:
-                ...
-          - pattern: |
-              image: ...
-              ...
-              securityContext:
-                ...
-                runAsNonRoot: $VALUE
-  - metavariable-pattern:
-      metavariable: $VALUE
-      pattern: |
-        false
-  - focus-metavariable: $VALUE
+  - focus-metavariable: $SC
   fix: |
-    true
+    $SC:
+        runAsNonRoot: true #
   message: >-
     When running containers in Kubernetes, it's important to ensure that they 
     are properly secured to prevent privilege escalation attacks. 
@@ -44,18 +58,19 @@ rules:
     - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
     - https://kubernetes.io/docs/concepts/policy/pod-security-policy/
     - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-2-set-a-user
+    category: security
     cwe:
     - 'CWE-250: Execution with Unnecessary Privileges'
     owasp:
     - A05:2021 - Security Misconfiguration
     - A06:2017 - Security Misconfiguration
-    category: security
     technology:
     - kubernetes
     subcategory:
     - audit
-    likelihood: MEDIUM
-    impact: HIGH
-    confidence: MEDIUM
-  languages: [yaml]
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - yaml
   severity: INFO
