@@ -1,0 +1,37 @@
+rules:
+- id: aws-dynamodb-point-in-time-recovery-disabled
+  patterns:
+  - pattern: |
+      resource "aws_dynamodb_table" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_dynamodb_table" $ANYTHING {
+        ...
+        point_in_time_recovery {
+          enabled = true
+        }
+        ...
+      }
+  message: Point-in-time recovery is not enabled for the DynamoDB table. DynamoDB
+    tables should be protected against accidental or malicious write/delete actions.
+    By enabling point-in-time-recovery you can restore to a known point in the event
+    of loss of data.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    cwe:
+    - 'CWE-221: Information Loss or Omission'
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    rule-origin-note: published from /src/aws-dynamodb-point-in-time-recovery-disabled.yml
+      in None
+    owasp: A9:2021 bad-logging
