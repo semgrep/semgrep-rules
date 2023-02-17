@@ -1,0 +1,39 @@
+rules:
+- id: aws-athena-database-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_athena_database" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_athena_database" $ANYTHING {
+        ...
+        encryption_configuration {
+          ...
+        }
+        ...
+      }
+  message: The Athena database is unencrypted at rest. These databases are generally
+    derived from data in S3 buckets and should have the same level of at rest protection.
+    The AWS KMS encryption key protects database contents. To create your own, create
+    a aws_kms_key resource or use the ARN string of a key in your account.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

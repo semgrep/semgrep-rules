@@ -1,8 +1,19 @@
 rules:
 - id: insecure-use-memset
-  pattern: memset($VAR,...)
-  message: Using memset and then deleting that data can cause sensitive information to still be in the
-    buffer. Use **memset_s()** instead.
+  pattern: memset($...VARS)
+  fix: memset_s($...VARS)
+  message: >-
+    When handling sensitive information in a buffer, it's important to ensure 
+    that the data is securely erased before the buffer is deleted or reused. 
+    While `memset()` is commonly used for this purpose, it can leave sensitive 
+    information behind due to compiler optimizations or other factors. 
+    To avoid this potential vulnerability, it's recommended to use the 
+    `memset_s()` function instead. `memset_s()` is a standardized function 
+    that securely overwrites the memory with a specified value, making it more 
+    difficult for an attacker to recover any sensitive data that was stored in 
+    the buffer. By using `memset_s()` instead of `memset()`, you can help to 
+    ensure that your application is more secure and less vulnerable to exploits 
+    that rely on residual data in memory.
   languages:
   - c
   severity: WARNING

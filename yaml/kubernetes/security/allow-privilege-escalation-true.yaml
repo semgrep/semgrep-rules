@@ -1,5 +1,5 @@
 rules:
-- id: allow-privilege-escalation
+- id: allow-privilege-escalation-true
   patterns:
   - pattern-inside: |
       containers:
@@ -7,27 +7,21 @@ rules:
   - pattern-inside: |
       - name: $CONTAINER
         ...
-  - pattern: |
-      image: ...
-      ...
   - pattern-inside: |
       image: ...
       ...
-      $SC:
-        ...
-  - metavariable-regex:
-      metavariable: $SC
-      regex: ^(securityContext)$
-  - pattern-not-inside: |
-      image: ...
-      ...
+  - pattern-inside: |
       securityContext:
         ...
-        allowPrivilegeEscalation: $VAL
-  - focus-metavariable: $SC
+  - pattern: |
+      allowPrivilegeEscalation: $TRUE
+  - metavariable-pattern:
+      metavariable: $TRUE
+      pattern: |
+        true
+  - focus-metavariable: $TRUE
   fix: |
-    securityContext:
-            allowPrivilegeEscalation: false #
+    false
   message: >-
     In Kubernetes, each pod runs in its own isolated environment with its own 
     set of security policies. However, certain container images may contain 
@@ -37,10 +31,8 @@ rules:
     the pod, with the parameter `allowPrivilegeEscalation` set to `false`. 
     This will prevent the container from running any privileged processes and 
     limit the impact of any potential attacks. 
-    By adding the `allowPrivilegeEscalation` parameter to your the 
-    `securityContext`, you can help to 
-    ensure that your containerized applications are more secure and less 
-    vulnerable to privilege escalation attacks.
+    In the container `$CONTAINER` this parameter is set to `true` which makes
+    this container much more vulnerable to privelege escalation attacks.
   metadata:
     cwe:
     - 'CWE-732: Incorrect Permission Assignment for Critical Resource'

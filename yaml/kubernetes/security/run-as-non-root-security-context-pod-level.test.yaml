@@ -1,7 +1,8 @@
 ---
 apiVersion: v1
 kind: Pod
-# ruleid: run-as-non-root
+# this is ok becuase no securityContext at pod level: other fix required (other rule)
+# ok: run-as-non-root-security-context-pod-level
 spec:
   containers:
     - name: nginx
@@ -18,7 +19,7 @@ spec:
 apiVersion: v1
 kind: Pod
 # this is ok because runAsNonRoot defined at container level: fix other containers at that level
-# ok: run-as-non-root
+# ok: run-as-non-root-security-context-pod-level
 spec:
   containers:
     - name: nginx
@@ -37,8 +38,7 @@ spec:
 apiVersion: v1
 kind: Pod
 spec:
-  # this is ok because securityContext defined at pod level already: different fix needed
-  # ok: run-as-non-root
+  # ruleid: run-as-non-root-security-context-pod-level
   securityContext:
     runAsGroup: 3000
   containers:
@@ -57,7 +57,7 @@ apiVersion: v1
 kind: Pod
 spec:
   # this is ok because runAsNonRoot defined at pod level already
-  # ok: run-as-non-root
+  # ok: run-as-non-root-security-context-pod-level
   securityContext:
     runAsNonRoot: true
   containers:

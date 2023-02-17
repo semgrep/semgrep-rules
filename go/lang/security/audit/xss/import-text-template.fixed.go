@@ -5,7 +5,7 @@ package main
 import (
   "net/http"
   // ruleid: import-text-template
-  "text/template"
+  "html/template"
   "encoding/json"
   "io/ioutil"
   "os"

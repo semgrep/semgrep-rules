@@ -1,7 +1,8 @@
 ---
 apiVersion: v1
 kind: Pod
-# ruleid: run-as-non-root
+# this is ok because the fix should be at pod level, different rule
+# ok: run-as-non-root-container-level-missing-security-context
 spec:
   containers:
     - name: nginx
@@ -17,28 +18,32 @@ spec:
 ---
 apiVersion: v1
 kind: Pod
-# this is ok because runAsNonRoot defined at container level: fix other containers at that level
-# ok: run-as-non-root
 spec:
   containers:
     - name: nginx
+    # ruleid: run-as-non-root-container-level-missing-security-context
       image: nginx
+      securityContext:
+        runAsNonRoot: true
     - name: postgres
       image: postgres
+      # this is okay because there already is a security context, requires different fix, different rule
+      # ok: run-as-non-root-container-level-missing-security-context
       securityContext:
         runAsUser: 1000
         runAsGroup: 3000
         fsGroup: 2000
     - name: haproxy
       image: haproxy
+      # ok: run-as-non-root-container-level-missing-security-context
       securityContext:
         runAsNonRoot: true
 ---
 apiVersion: v1
 kind: Pod
 spec:
-  # this is ok because securityContext defined at pod level already: different fix needed
-  # ok: run-as-non-root
+  # this is ok because the fix should be at pod level-missing-security-context
+  # ok: run-as-non-root-container-level-missing-security-context
   securityContext:
     runAsGroup: 3000
   containers:
@@ -57,7 +62,7 @@ apiVersion: v1
 kind: Pod
 spec:
   # this is ok because runAsNonRoot defined at pod level already
-  # ok: run-as-non-root
+  # ok: run-as-non-root-container-level-missing-security-context
   securityContext:
     runAsNonRoot: true
   containers:

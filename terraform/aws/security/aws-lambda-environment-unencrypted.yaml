@@ -25,9 +25,10 @@ rules:
             ...
           }
     - pattern: kms_key_arn = ""
-  message: The AWS Lambda Environment is unencrypted. The AWS KMS encryption key protects environment
-    in the Lambda. To create your own, create a aws_kms_key resource or use the ARN string of a key in
-    your account.
+  message: >-
+    By default, the AWS Lambda Environment is encrypted using AWS-managed keys.
+    However, for added security, it's recommended to configure your own AWS KMS encryption key to protect your environment variables in Lambda.
+    You can either create a new aws_kms_key resource or use the ARN of an existing key in your AWS account to do so.
   languages: [hcl]
   severity: WARNING
   metadata:

@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Pod
 # ruleid: run-as-non-root
 spec:
+  securityContext:
+    runAsNonRoot: true #:
   containers:
     - name: nginx
       image: nginx

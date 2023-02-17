@@ -7,7 +7,7 @@ spec:
       image: redis
       securityContext:
         # ruleid: run-as-non-root-unsafe-value
-        runAsNonRoot: false
+        runAsNonRoot: true
     - name: haproxy
       image: haproxy
       securityContext:
@@ -19,7 +19,7 @@ kind: Pod
 spec:
   securityContext:
     # ruleid: run-as-non-root-unsafe-value
-    runAsNonRoot: false
+    runAsNonRoot: true
   containers:
     - name: redis
       image: redis
@@ -42,4 +42,4 @@ spec:
       image: haproxy
       securityContext:
         # ruleid: run-as-non-root-unsafe-value
-        runAsNonRoot: false
+        runAsNonRoot: true
