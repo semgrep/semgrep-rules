@@ -1,0 +1,90 @@
+rules:
+- id: command-injection-formatted-runtime-call
+  patterns:
+  - metavariable-pattern:
+      metavariable: $RUNTIME
+      patterns:
+      - pattern-either:
+        - pattern: (java.lang.Runtime $R)
+        - pattern: (Runtime $R)
+        - pattern: java.lang.Runtime.getRuntime(...)
+        - pattern: Runtime.getRuntime(...)
+  - pattern-either:
+    - pattern: $RUNTIME.exec($X + $Y);
+    - pattern: $RUNTIME.exec(String.format(...));
+    - pattern: $RUNTIME.loadLibrary($X + $Y);
+    - pattern: $RUNTIME.loadLibrary(String.format(...));
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $ARG,...)
+        - pattern: |
+            $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
+        - pattern: |
+            $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                $RUNTIME.exec($CMD,"-c",$ARG,...)
+            - pattern: |
+                $RUNTIME.exec(Arrays.asList($CMD,"-c",$ARG,...),...)
+            - pattern: |
+                $RUNTIME.exec(new String[]{$CMD,"-c",$ARG,...},...)
+          - pattern-inside: |
+              $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+              ...
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                $RUNTIME.exec($CMD, $EXECUTE, $ARG, ...)
+          - pattern-inside: |
+              $CMD = new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/", ...};
+              ...
+        - patterns:
+          - pattern-either:
+            - pattern: |
+                $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", $BASH, $ARG,...)
+            - pattern: |
+                $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...),...)
+            - pattern: |
+                $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...},...)
+          - pattern-inside: |
+              $BASH = new String[]{"=~/(-c)/", ...};
+              ...
+      - pattern-not-inside: |
+          $ARG = "...";
+          ...
+      - pattern-not: |
+          $RUNTIME.exec("...","...","...",...)
+      - pattern-not: |
+          $RUNTIME.exec(new String[]{"...","...","...",...},...)
+      - pattern-not: |
+          $RUNTIME.exec(Arrays.asList("...","...","...",...),...)
+  message: A formatted or concatenated string was detected as input to a java.lang.Runtime
+    call. This is dangerous if a variable is controlled by user input and could result
+    in a command injection. Ensure your variables are not controlled by users or sufficiently
+    sanitized.
+  metadata:
+    cwe:
+    - 'CWE-78: Improper Neutralization of Special Elements used in an OS Command (''OS
+      Command Injection'')'
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#COMMAND_INJECTION.
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  severity: ERROR
+  languages:
+  - java
