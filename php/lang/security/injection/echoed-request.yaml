@@ -13,6 +13,8 @@ rules:
   pattern-sinks:
   - pattern: echo ...;
   pattern-sanitizers:
+  - pattern: isset(...)
+  - pattern: empty(...)
   - pattern: $X = $ANYFUNC(...);
   - patterns:
     - pattern-inside: echo <... $ANYFUNC(...) ...>;
