@@ -1,0 +1,38 @@
+rules:
+- id: aws-ecr-image-scanning-disabled
+  patterns:
+  - pattern: |
+      resource "aws_ecr_repository" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_ecr_repository" $ANYTHING {
+        ...
+        image_scanning_configuration {
+          scan_on_push = true
+        }
+        ...
+      }
+  message: The ECR repository has image scans disabled. Repository image scans should
+    be enabled to ensure vulnerable software can be discovered and remediated as soon
+    as possible.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-223: Omission of Security-relevant Information'
+    references:
+    - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+    rule-origin-note: published from /src/aws-ecr-image-scanning-disabled.yml in None
