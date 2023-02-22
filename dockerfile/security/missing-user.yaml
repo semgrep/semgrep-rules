@@ -1,7 +1,11 @@
 rules:
 - id: missing-user
-  pattern: |
-    CMD $...VARS
+  patterns:
+    - pattern: |
+        CMD $...VARS
+    - pattern-not-inside: |
+        USER $USER
+        ...
   fix: |
     USER non-root
     CMD $...VARS

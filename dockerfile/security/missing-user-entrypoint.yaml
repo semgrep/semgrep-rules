@@ -1,7 +1,11 @@
 rules:
 - id: missing-user-entrypoint
-  pattern: |
-    ENTRYPOINT $...VARS
+  patterns:
+    - pattern: |
+        ENTRYPOINT $...VARS
+    - pattern-not-inside: |
+        USER $USER
+        ...
   fix: |
     USER non-root
     ENTRYPOINT $...VARS
