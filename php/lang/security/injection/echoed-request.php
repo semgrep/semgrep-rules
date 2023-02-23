@@ -44,3 +44,14 @@ function doOK3() {
         echo "Hello :".$tpl;
     }
 }
+
+function doOK4() {
+    // ok: echoed-request
+    echo "Hello ".isset($_POST['name'])." !";
+}
+
+function doOK5() {
+    $safevar = empty($_GET['name']);
+    // ok: echoed-request
+    echo "Hello $safevar !";
+}
