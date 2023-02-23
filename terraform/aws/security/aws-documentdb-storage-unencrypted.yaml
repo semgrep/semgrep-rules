@@ -1,0 +1,37 @@
+rules:
+- id: aws-documentdb-storage-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_docdb_cluster" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_docdb_cluster" $ANYTHING {
+        ...
+        storage_encrypted = true
+        ...
+      }
+  message: >-
+    The AWS DocumentDB cluster is unencrypted. The data could be read if the
+    underlying disks are compromised. You should enable storage encryption.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/docdb_cluster#storage_encrypted
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
