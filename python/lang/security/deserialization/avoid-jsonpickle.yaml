@@ -16,11 +16,11 @@ rules:
                         ...
                   - patterns:
                       - pattern-either:
-                          - pattern-inside: >
+                          - pattern-inside: |
                               class $VIEW(..., rest_framework.views.APIView,
                               ...):
                                 ...
-                          - pattern-inside: >
+                          - pattern-inside: |
                               class $VIEW(...,
                               rest_framework.generics.GenericAPIView, ...):
                                 ...                              
@@ -69,14 +69,14 @@ rules:
                       - focus-metavariable: $PARAM
           - patterns:
               - pattern-either:
-                  - pattern-inside: >
+                  - pattern-inside: |
                       class $SERVER(..., http.server.BaseHTTPRequestHandler,
                       ...):
                         ...
                   - pattern-inside: |
                       class $SERVER(..., http.server.StreamRequestHandler, ...):
                         ...
-                  - pattern-inside: >
+                  - pattern-inside: |
                       class $SERVER(..., http.server.DatagramRequestHandler,
                       ...):
                         ...
