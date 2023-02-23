@@ -23,6 +23,18 @@ rules:
             }
             ...
           }
+  - pattern-inside: |
+      resource $RESOURCE $X {
+        ...
+      }
+  - metavariable-pattern:
+      metavariable: $RESOURCE
+      patterns:
+      - pattern-either:
+          - pattern: |
+              "aws_lb_listener"
+          - pattern: |
+              "aws_alb_listener"
   message: >-
     Detected an AWS load balancer with an insecure TLS version.
     TLS versions less than 1.2 are considered insecure because they

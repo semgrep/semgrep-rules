@@ -137,6 +137,20 @@ resource "aws_alb_listener" "https_fs_1_2" {
   }
 }
 
+resource "aws_lb_target_group" "foo" {
+    name = "foo"
+    port = 80
+    # ok: insecure-load-balancer-tls-version
+    protocol = "HTTP"
+    target_type = "instance"
+    vpc_id   = data.aws_vpc.bar
+    deregistration_delay = 60
+
+   health_check { 
+     #....
+   }
+}
+
 # failure
 
 resource "aws_lb_listener" "http" {
