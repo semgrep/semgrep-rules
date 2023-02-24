@@ -18,12 +18,16 @@ rules:
               - metavariable-regex:
                   metavariable: $INGRESS
                   regex: ^(ingress|egress)$
-            - pattern-inside: |
-                resource "aws_security_group_rule" $ANYTHING {
-                  ...
-                  description = $DESCR
-                  ...
-                }
+            - patterns:
+              - pattern-inside: |
+                  resource "$SECGROUP" $ANYTHING {
+                    ...
+                    description = $DESCR
+                    ...
+                  }
+              - metavariable-regex:
+                  metavariable: $SECGROUP
+                  regex: ^(aws_security_group_rule|aws_security_group)$
           - metavariable-regex:
               metavariable: $DESCR
               regex: ^(['\"]['\"]|['\"]Managed by Terraform['\"])$
@@ -45,23 +49,25 @@ rules:
                     ...
                     $INGRESS {
                       ...
-                      description = "..."
+                      description = ...
                       ...
                     }
                     ...
                   }
       - patterns:
+              - metavariable-regex:
+                  metavariable: $SECGROUP
+                  regex: ^(aws_security_group_rule|aws_security_group)$
               - pattern: |
-                  resource "aws_security_group_rule" $ANYTHING {
+                  resource "$SECGROUP" $ANYTHING {
                     ...
                   }
               - pattern-not: |
-                  resource "aws_security_group_rule" $ANYTHING {
+                  resource "$SECGROUP" $ANYTHING {
                     ...
-                    description = "..."
+                    description = ...
                     ...
                   }
-
     message: >- 
       The AWS security group rule is missing a description, or its
       description is empty or the default value. 
