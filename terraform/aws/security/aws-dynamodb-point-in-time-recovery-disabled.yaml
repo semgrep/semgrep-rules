@@ -15,7 +15,8 @@ rules:
         }
         ...
       }
-  message: >- Point-in-time recovery is not enabled for the DynamoDB table. DynamoDB
+  message: >- 
+    Point-in-time recovery is not enabled for the DynamoDB table. DynamoDB
     tables should be protected against accidental or malicious write/delete actions.
     By enabling point-in-time-recovery you can restore to a known point in the event
     of loss of data.
@@ -35,6 +36,6 @@ rules:
     impact: LOW
     confidence: LOW
     references:
-      - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table#point_in_time_recovery
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table#point_in_time_recovery
     owasp: 
     - A09:2021 – Security Logging and Monitoring Failures
