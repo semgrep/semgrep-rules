@@ -1,0 +1,66 @@
+rules:
+- id: aws-ecr-repository-wildcard-principal
+  patterns:
+  - pattern-inside: |
+      resource "aws_ecr_repository_policy" $ANYTHING {
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern: policy = "$JSONPOLICY"
+      - metavariable-pattern:
+          metavariable: $JSONPOLICY
+          language: json
+          patterns:
+          - pattern-not-inside: |
+              {..., "Effect": "Deny", ...}
+          - pattern-either:
+            - pattern: |
+                {..., "Principal": "*", ...}
+            - pattern: |
+                {..., "Principal": [..., "*", ...], ...}
+            - pattern: |
+                {..., "Principal": { "AWS": "*" }, ...}
+            - pattern: |
+                {..., "Principal": { "AWS": [..., "*", ...] }, ...}
+    - patterns:
+      - pattern-inside: policy = jsonencode(...)
+      - pattern-not-inside: |
+          {..., Effect = "Deny", ...}
+      - pattern-either:
+        - pattern: |
+            {..., Principal = "*", ...}
+        - pattern: |
+            {..., Principal = [..., "*", ...], ...}
+        - pattern: |
+            {..., Principal = { AWS = "*" }, ...}
+        - pattern: |
+            {..., Principal = { AWS = [..., "*", ...] }, ...}
+  message: >-
+    Detected wildcard access granted in your ECR repository policy principal.
+    This grants access to all users, including anonymous users (public access). Instead,
+    limit principals, actions and resources to what you need according to least privilege.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy
+    - https://docs.aws.amazon.com/lambda/latest/operatorguide/wildcard-permissions-iam.html
+    - https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/monitor-amazon-ecr-repositories-for-wildcard-permissions-using-aws-cloudformation-and-aws-config.html
+    - https://cwe.mitre.org/data/definitions/732.html
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  languages:
+  - hcl
+  severity: WARNING
