@@ -11,12 +11,13 @@ rules:
         enabled_cloudwatch_logs_exports = [..., "audit", ...]
         ...
       }
-  message: Auditing is not enabled for DocumentDB. To ensure that you are able to
+  message: >-
+    Auditing is not enabled for DocumentDB. To ensure that you are able to
     accurately audit the usage of your DocumentDB cluster, you should enable auditing
     and export logs to CloudWatch.
   languages:
   - hcl
-  severity: WARNING
+  severity: INFO
   metadata:
     category: security
     technology:
@@ -33,5 +34,3 @@ rules:
     likelihood: LOW
     impact: LOW
     confidence: MEDIUM
-    rule-origin-note: published from /src/aws-documentdb-auditing-disabled.yml in
-      None
