@@ -36,7 +36,8 @@ rules:
             {..., Principal = { AWS = "*" }, ...}
         - pattern: |
             {..., Principal = { AWS = [..., "*", ...] }, ...}
-  message: Detected wildcard access granted in your ECR repository policy principal.
+  message: >-
+    Detected wildcard access granted in your ECR repository policy principal.
     This grants access to all users, including anonymous users (public access). Instead,
     limit principals, actions and resources to what you need according to least privilege.
   metadata:
@@ -49,6 +50,9 @@ rules:
     cwe:
     - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
     references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository_policy
+    - https://docs.aws.amazon.com/lambda/latest/operatorguide/wildcard-permissions-iam.html
+    - https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/monitor-amazon-ecr-repositories-for-wildcard-permissions-using-aws-cloudformation-and-aws-config.html
     - https://cwe.mitre.org/data/definitions/732.html
     cwe2021-top25: true
     subcategory:
@@ -57,8 +61,6 @@ rules:
     impact: MEDIUM
     confidence: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    rule-origin-note: published from /src/aws-ecr-repository-wildcard-principal.yml
-      in None
   languages:
   - hcl
-  severity: ERROR
+  severity: WARNING
