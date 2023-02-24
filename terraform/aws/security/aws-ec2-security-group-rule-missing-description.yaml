@@ -1,0 +1,97 @@
+rules:
+  - id: aws-ec2-security-group-rule-missing-description
+    patterns:
+    - pattern-either:
+      - patterns:
+          - pattern-either:
+            - patterns:
+              - pattern-inside: |
+                  resource "aws_security_group" $ANYTHING {
+                    ...
+                    $INGRESS {
+                      ...
+                      description = $DESCR
+                      ...
+                    }
+                    ...
+                  }
+              - metavariable-regex:
+                  metavariable: $INGRESS
+                  regex: ^(ingress|egress)$
+            - patterns:
+              - pattern-inside: |
+                  resource "$SECGROUP" $ANYTHING {
+                    ...
+                    description = $DESCR
+                    ...
+                  }
+              - metavariable-regex:
+                  metavariable: $SECGROUP
+                  regex: ^(aws_security_group_rule|aws_security_group)$
+          - metavariable-regex:
+              metavariable: $DESCR
+              regex: ^(['\"]['\"]|['\"]Managed by Terraform['\"])$
+          - focus-metavariable: $DESCR
+      - patterns:
+              - metavariable-regex:
+                  metavariable: $INGRESS
+                  regex: ^(ingress|egress)$
+              - pattern: |
+                  resource "aws_security_group" $ANYTHING {
+                    ...
+                    $INGRESS {
+                      ...
+                    }
+                    ...
+                  }
+              - pattern-not: |
+                  resource "aws_security_group" $ANYTHING {
+                    ...
+                    $INGRESS {
+                      ...
+                      description = ...
+                      ...
+                    }
+                    ...
+                  }
+      - patterns:
+              - metavariable-regex:
+                  metavariable: $SECGROUP
+                  regex: ^(aws_security_group_rule|aws_security_group)$
+              - pattern: |
+                  resource "$SECGROUP" $ANYTHING {
+                    ...
+                  }
+              - pattern-not: |
+                  resource "$SECGROUP" $ANYTHING {
+                    ...
+                    description = ...
+                    ...
+                  }
+    message: >- 
+      The AWS security group rule is missing a description, or its
+      description is empty or the default value. 
+      Security groups rules should include a meaningful
+      description in order to simplify auditing, debugging, and managing
+      security groups.
+    languages:
+      - hcl
+    severity: INFO
+    metadata:
+      category: security
+      technology:
+        - terraform
+        - aws
+      owasp:
+        - A09:2021 - Security Logging and Monitoring Failures
+      cwe:
+        - "CWE-223: Omission of Security-relevant Information"
+      references:
+        - https://shisho.dev/dojo/providers/aws/Amazon_EC2/aws-security-group/#:~:text=Ensure%20to%20keep%20the%20description%20of%20your%20security%20group%20up%2Dto%2Ddate
+        - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group#description
+        - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
