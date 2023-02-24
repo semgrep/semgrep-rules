@@ -1,0 +1,37 @@
+rules:
+- id: aws-documentdb-auditing-disabled
+  patterns:
+  - pattern: |
+      resource "aws_docdb_cluster" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_docdb_cluster" $ANYTHING {
+        ...
+        enabled_cloudwatch_logs_exports = [..., "audit", ...]
+        ...
+      }
+  message: >-
+    Auditing is not enabled for DocumentDB. To ensure that you are able to
+    accurately audit the usage of your DocumentDB cluster, you should enable auditing
+    and export logs to CloudWatch.
+  languages:
+  - hcl
+  severity: INFO
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/docdb_cluster#enabled_cloudwatch_logs_exports
+    - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM
