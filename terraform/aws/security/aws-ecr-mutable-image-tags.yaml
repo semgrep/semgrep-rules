@@ -11,7 +11,8 @@ rules:
         image_tag_mutability = "IMMUTABLE"
         ...
       }
-  message: The ECR repository has image scans disabled. Image tags could be overwritten
+  message: >- 
+    The ECR repository has image scans disabled. Image tags could be overwritten
     with compromised images. ECR images should be set to IMMUTABLE to prevent code
     injection through image mutation. This can be done by setting image_tab_mutability
     to IMMUTABLE.
@@ -28,10 +29,10 @@ rules:
     cwe:
     - 'CWE-345: Insufficient Verification of Data Authenticity'
     references:
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository#image_tag_mutability
     - https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/
     subcategory:
     - audit
     likelihood: LOW
     impact: HIGH
     confidence: MEDIUM
-    rule-origin-note: published from /src/aws-ecr-mutable-image-tags.yml in None
