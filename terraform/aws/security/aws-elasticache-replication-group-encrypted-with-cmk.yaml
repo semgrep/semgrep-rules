@@ -1,22 +1,10 @@
 rules:
 - id: aws-elasticache-replication-group-encrypted-with-cmk
   patterns:
-  - pattern: |
-      resource "aws_elasticache_replication_group" $ANYTHING {
-        ...
-        at_rest_encryption_enabled  = true
-        ...
-      }
-  - pattern-not-inside: |
-      resource "aws_elasticache_replication_group" $ANYTHING {
-        ...
-        at_rest_encryption_enabled  = true
-        kms_key_id = ...
-        ...
-      }
+  - pattern: a()
+  - pattern: b()
   message: >-
-    Ensure Elasticache Replication Group is encrypted at rest using KMS CMKs. CMKs gives you control over
-    the encryption key in terms of access and rotation.
+    This rule has been deprecated.
   metadata:
     category: security
     technology:
