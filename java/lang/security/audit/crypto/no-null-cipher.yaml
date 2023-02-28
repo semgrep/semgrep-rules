@@ -1,12 +1,9 @@
 rules:
 - id: no-null-cipher
   patterns:
-  - pattern-inside: |
-      $CI = new NullCipher(...);
-      ...
-  - pattern-either:
-    - pattern: $CI.doFinal(...)
-    - pattern: $CI.update(...)
+   - pattern-either:
+      - pattern: new NullCipher(...);
+      - pattern: new javax.crypto.NullCipher(...);
   metadata:
     cwe:
     - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
