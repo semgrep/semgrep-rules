@@ -1,0 +1,29 @@
+rules:
+- id: use-of-rc4 
+  pattern: $CIPHER.getInstance("RC4") 
+  metadata:
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    category: security
+    technology:
+    - java
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    - https://googleprojectzero.blogspot.com/2022/10/rc4-is-still-considered-harmful.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  message: >-
+    Use of RC4 was detected. RC4 is vulnerable to several attacks, including
+    stream cipher attacks and bit flipping attacks. Instead, use a strong,
+    secure cipher: Cipher.getInstance("AES/CBC/PKCS7PADDING").
+    See https://owasp.org/www-community/Using_the_Java_Cryptographic_Extensions
+    for more information.
+  severity: WARNING
+  languages:
+  - java

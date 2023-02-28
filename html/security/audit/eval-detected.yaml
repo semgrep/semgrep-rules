@@ -1,0 +1,45 @@
+rules:
+  - id: eval-detected
+    message: >-
+      Detected the use of eval(...). This can introduce 
+      a Cross-Site-Scripting (XSS) vulnerability if this 
+      comes from user-provided input. Follow OWASP best 
+      practices to ensure you handle XSS within a JavaScript
+      context correct, and consider using safer APIs to evaluate 
+      user-input such as JSON.parse(...). 
+    metadata:
+      cwe:
+      - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+      - A07:2017 - Cross-Site Scripting (XSS)
+      - A03:2021 - Injection
+      category: security
+      technology:
+      - browser
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+      - audit
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: LOW
+      references:
+      - https://owasp.org/Top10/A03_2021-Injection
+      - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    languages: 
+        - html
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          <script ...>$...A</script>
+      - metavariable-pattern:
+          metavariable: $...A
+          language: javascript
+          patterns:
+            - pattern-either:
+                - pattern: $X(...)
+            - pattern-not: $X("...")
+            - metavariable-regex:
+                metavariable: $X
+                regex: ^(eval)$
+            - focus-metavariable: $X
