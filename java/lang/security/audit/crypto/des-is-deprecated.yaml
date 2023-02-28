@@ -30,9 +30,14 @@ rules:
     confidence: HIGH
   severity: WARNING
   patterns:
-  - pattern-inside: $CIPHER.getInstance("=~/DES/.*/")
-  - pattern: |
-      "=~/DES/.*/"
+  - pattern-either:
+    - pattern-inside: $CIPHER.getInstance("=~/DES/.*/")
+    - pattern-inside: $CIPHER.getInstance("DES")
+  - pattern-either:
+    - pattern: |
+        "=~/DES/.*/"
+    - pattern: |
+        "DES"
   fix: |
     "AES/GCM/NoPadding"
   languages:
