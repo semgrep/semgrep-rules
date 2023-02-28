@@ -20,13 +20,14 @@ rules:
     vulnerability: Insecure Transport
   languages: [java]
   patterns:
-  - pattern: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "...");
-  - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2,TLSv1.3");
-  - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3,TLSv1.2");
-  - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
-  - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
+  - pattern: $VALUE. ... .setProperty("jdk.tls.client.protocols", "$PATTERNS");
+  - metavariable-pattern: 
+      metavariable: $PATTERNS
+      language: generic
+      patterns:
+        - pattern-either:
+            - pattern: TLS1
+            # Looks for anything with SSLv or ends with TLSv1
+            - pattern-regex: ^(.*TLSv1|.*SSLv.*)$
+            # Looks for TLSv1,
+            - pattern-regex: ^(.*TLSv1,.*)
