@@ -1,0 +1,21 @@
+<!-- ruleid: eval-detected -->
+<script>
+    const rootDiv = document.getElementById('root');
+    import { sanitize } from "dompurify"
+    const hash = location.hash.slice(1)
+    
+    
+    eval(hash1)
+    
+    const obj2 = { foo: 'baz', y: hash1 };
+    
+    const clonedObj = { ...obj2 };
+    
+    eval(clonedObj.y);
+    
+    // ok: eval-detected
+    eval("safe");
+    
+    
+    
+    </script>

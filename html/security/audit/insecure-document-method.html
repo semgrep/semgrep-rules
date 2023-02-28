@@ -1,0 +1,22 @@
+<!-- ruleid: insecure-document-method-->
+<script>
+    const rootDiv = document.getElementById('root');
+    import { sanitize } from "dompurify"
+    const hash = location.hash.slice(1)
+    
+
+    rootDiv.innerHTML = hash1;
+    
+    const obj2 = { foo: 'baz', y: hash1 };
+    
+    const clonedObj = { ...obj2 };
+    
+    
+    rootDiv.outerHTML = clonedObj.y;
+    
+    // ok: insecure-document-method
+    rootDiv.innerHTML = "safe";
+    
+    
+    
+    </script>
