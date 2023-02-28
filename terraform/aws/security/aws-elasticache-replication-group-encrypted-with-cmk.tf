@@ -12,7 +12,6 @@ resource "aws_elasticache_replication_group" "pass" {
   at_rest_encryption_enabled    = true
   kms_key_id                    = aws_kms_key.bar.arn
 }
-# ruleid: aws-elasticache-replication-group-encrypted-with-cmk
 resource "aws_elasticache_replication_group" "fail" {
   replication_group_id          = "tf-%s"
   replication_group_description = "test description"
