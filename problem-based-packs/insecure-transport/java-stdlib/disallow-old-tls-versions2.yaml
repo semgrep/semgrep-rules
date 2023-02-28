@@ -21,12 +21,12 @@ rules:
   languages: [java]
   patterns:
   - pattern: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "...");
+      $SYSTEM. ... .setProperty("jdk.tls.client.protocols", "...");
   - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2,TLSv1.3");
+      $SYSTEM. ... .setProperty("jdk.tls.client.protocols", "TLSv1.2,TLSv1.3");
   - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3,TLSv1.2");
+      $SYSTEM. ... .setProperty("jdk.tls.client.protocols", "TLSv1.3,TLSv1.2");
   - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
+      $SYSTEM. ... .setProperty("jdk.tls.client.protocols", "TLSv1.3");
   - pattern-not: |
-      java.lang.System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
+      $SYSTEM. ... .setProperty("jdk.tls.client.protocols", "TLSv1.2");
