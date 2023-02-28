@@ -5,17 +5,17 @@
     
     
     // ruleid: eval-detected
-    rootDiv.innerHTML = hash1;
+    eval(hash1)
     
     const obj2 = { foo: 'baz', y: hash1 };
     
     const clonedObj = { ...obj2 };
     
     // ruleid: eval-detected
-    rootDiv.outerHTML = clonedObj.y;
+    eval(clonedObj.y);
     
     // ok: eval-detected
-    rootDiv.innerHTML = "safe";
+    eval("safe");
     
     
     
