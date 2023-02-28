@@ -1,6 +1,9 @@
 rules:
 - id: no-null-cipher
-  pattern: new NullCipher(...);
+  patterns:
+   - pattern-either:
+      - pattern: new NullCipher(...);
+      - pattern: new javax.crypto.NullCipher(...);
   metadata:
     cwe:
     - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
