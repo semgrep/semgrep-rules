@@ -20,9 +20,7 @@ rules:
     vulnerability: Insecure Transport
   languages: [java]
   patterns:
-  - pattern-either:
-      - pattern: $VALUE. ... .put("jdk.tls.client.protocols", "$PATTERNS");
-      - pattern: $VALUE. ... .setProperty("jdk.tls.client.protocols", "$PATTERNS");
+  - pattern: $VALUE. ... .setProperty("jdk.tls.client.protocols", "$PATTERNS");
   - metavariable-pattern: 
       metavariable: $PATTERNS
       language: generic
