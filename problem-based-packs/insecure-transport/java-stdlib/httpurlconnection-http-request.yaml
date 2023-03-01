@@ -1,10 +1,10 @@
 rules:
 - id: httpurlconnection-http-request
   message: >-
-    Checks for requests sent via HttpURLConnection and URLObj to http:// URLS. This is dangerous because
-    the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,
-    send requests only to
-    https:// URLS.
+    Detected an HTTP request sent via HttpURLConnection.
+    This could lead to sensitive information
+    being sent over an insecure channel.
+    Instead, it is recommended to send requests over HTTPS.
   severity: WARNING
   metadata:
     likelihood: MEDIUM
