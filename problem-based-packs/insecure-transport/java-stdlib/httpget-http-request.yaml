@@ -1,7 +1,7 @@
 rules:
-- id: httpurlconnection-http-request
+- id: httpget-http-request
   message: >-
-    Checks for requests sent via HttpURLConnection and URLObj to http:// URLS. This is dangerous because
+    Checks for requests sent via HttpGet to http:// URLS. This is dangerous because
     the server is attempting to connect to a website that does not encrypt traffic with TLS. Instead,
     send requests only to
     https:// URLS.
@@ -30,16 +30,7 @@ rules:
   patterns:
   - pattern: |
       "=~/[Hh][Tt][Tt][Pp]://.*/"
-  - pattern-either:
-    - pattern-inside: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = (HttpURLConnection) $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
-    - pattern-inside: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
+  - pattern-inside: |
+      $R = new HttpGet("=~/[Hh][Tt][Tt][Pp]://.*/");
+      ...
+      $CLIENT. ... .execute($R, ...);
