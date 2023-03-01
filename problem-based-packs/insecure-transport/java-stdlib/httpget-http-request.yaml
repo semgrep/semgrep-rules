@@ -1,10 +1,10 @@
 rules:
-- id: httpurlconnection-http-request
+- id: httpget-http-request
   message: >-
-    Detected an HTTP request sent via HttpURLConnection.
-    This could lead to sensitive information
-    being sent over an insecure channel.
-    Instead, it is recommended to send requests over HTTPS.
+    Detected an HTTP request sent via HttpGet.
+    This could lead to sensitive information being sent 
+    over an insecure channel. Instead, it is recommended
+    to send requests over HTTPS.
   severity: WARNING
   metadata:
     likelihood: MEDIUM
@@ -30,16 +30,7 @@ rules:
   patterns:
   - pattern: |
       "=~/[Hh][Tt][Tt][Pp]://.*/"
-  - pattern-either:
-    - pattern-inside: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = (HttpURLConnection) $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
-    - pattern-inside: |
-        URL $URL = new URL ("=~/[Hh][Tt][Tt][Pp]://.*/", ...);
-        ...
-        $CON = $URL.openConnection(...);
-        ...
-        $CON.$FUNC(...);
+  - pattern-inside: |
+      $R = new HttpGet("=~/[Hh][Tt][Tt][Pp]://.*/");
+      ...
+      $CLIENT. ... .execute($R, ...);
