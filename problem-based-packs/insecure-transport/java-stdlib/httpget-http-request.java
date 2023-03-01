@@ -9,8 +9,8 @@ import org.apache.http.client.methods.HttpGet;
 class Bad {
     private static void sendbad1() throws IOException {
         // ruleid: httpget-http-request
-		HttpGet httpGet = new HttpGet("http://example.com"); 
-		HttpClients.createDefault().execute(httpGet);
+        HttpGet httpGet = new HttpGet("http://example.com");
+        HttpClients.createDefault().execute(httpGet);
     }
 
     private static void sendbad2() throws IOException {
@@ -24,8 +24,8 @@ class Bad {
 public class Ok {
     private static void sendok1() throws IOException {
         // ok: httpget-http-request
-		HttpGet httpGet = new HttpGet("https://example.com"); 
-		HttpClients.createDefault().execute(httpGet);
+        HttpGet httpGet = new HttpGet("https://example.com");
+        HttpClients.createDefault().execute(httpGet);
     }
 
     private static void sendok2() throws IOException {
