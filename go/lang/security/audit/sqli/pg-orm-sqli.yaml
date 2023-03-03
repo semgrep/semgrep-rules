@@ -3,9 +3,13 @@ rules:
     patterns:
       - pattern-inside: |
           import (
-              "$IMPORT"
+            ...
+            "$IMPORT"
           )
           ...
+      - metavariable-regex:
+          metavariable: $IMPORT
+          regex: .*go-pg
       - pattern-either:
           - patterns:
               - pattern: $DB.$METHOD(...,$QUERY,...)
@@ -36,15 +40,19 @@ rules:
               func $FUNCNAME(..., $DB *pg.DB, ...) {
                 ...
               }
+      - pattern-not-inside: |
+          $QUERY = fmt.Sprintf("...", ...,"...", ...)
+          ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not: $DB.$METHOD(...,"...",...)
       - pattern-not: |
-          $DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
+          $DB.$INTFUNC1(...).$METHOD(..., "...", ...).$INTFUNC2(...)
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
       - pattern-not: path.Join(...)
       - pattern-not: filepath.Join(...)
-      - pattern-not: |
-          "$X"
-      - metavariable-regex:
-          metavariable: $X
-          regex: (.*=\s*?)
       - metavariable-regex:
           metavariable: $METHOD
           regex: ^(Where|WhereOr|Join|GroupExpr|OrderExpr|ColumnExpr)$
