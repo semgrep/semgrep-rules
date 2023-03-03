@@ -1,67 +1,78 @@
 rules:
-- id: pg-orm-sqli
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: $DB.$METHOD(...,$QUERY,...)
+  - id: pg-orm-sqli
+    patterns:
+      - pattern-inside: |
+          import (
+              "$IMPORT"
+          )
+          ...
       - pattern-either:
-        - pattern-inside: |
-            $QUERY = $X + $Y
-            ...
-        - pattern-inside: |
-            $QUERY += $X
-            ...
-        - pattern-inside: |
-            $QUERY = fmt.Sprintf("...", $PARAM1, ...)
-            ...
-      - pattern-not-inside: |
-          $QUERY += "..."
-          ...
-      - pattern-not-inside: |
-          $QUERY = "..." + "..."
-          ...
-    - pattern: |
-        $DB.$INTFUNC1(...).$METHOD(..., $X + $Y, ...).$INTFUNC2(...)
-    - pattern: |
-        $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
-    - pattern-inside: |
-        $DB = pg.Connect(...)
-        ...
-    - pattern-inside: |
-        func $FUNCNAME(..., $DB *pg.DB, ...) {
-          ...
-        }
-  - pattern-not: |
-      $DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
-  - pattern-not: path.Join(...)
-  - pattern-not: filepath.Join(...)
-  - metavariable-regex:
-      metavariable: $METHOD
-      regex: ^(Where|WhereOr|Join|GroupExpr|OrderExpr|ColumnExpr)$
-  languages:
-  - go
-  message: >-
-    Detected string concatenation with a non-literal variable in a go-pg ORM
-    SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection,
-    do not use strings concatenated with user-controlled input.
-    Instead, use parameterized statements.
-  metadata:
-    cwe:
-    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    references:
-    - https://pg.uptrace.dev/queries/
-    category: security
-    technology:
-    - go-pg
-    confidence: LOW
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: LOW
-    impact: HIGH
-  severity: ERROR
+          - patterns:
+              - pattern: $DB.$METHOD(...,$QUERY,...)
+              - pattern-either:
+                  - pattern-inside: |
+                      $QUERY = $X + $Y
+                      ...
+                  - pattern-inside: |
+                      $QUERY += $X
+                      ...
+                  - pattern-inside: |
+                      $QUERY = fmt.Sprintf("...", $PARAM1, ...)
+                      ...
+              - pattern-not-inside: |
+                  $QUERY += "..."
+                  ...
+              - pattern-not-inside: |
+                  $QUERY = "..." + "..."
+                  ...
+          - pattern: |
+              $DB.$INTFUNC1(...).$METHOD(..., $X + $Y, ...).$INTFUNC2(...)
+          - pattern: |
+              $DB.$METHOD(..., fmt.Sprintf("...", $PARAM1, ...), ...)
+          - pattern-inside: |
+              $DB = pg.Connect(...)
+              ...
+          - pattern-inside: |
+              func $FUNCNAME(..., $DB *pg.DB, ...) {
+                ...
+              }
+      - pattern-not: |
+          $DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
+      - pattern-not: path.Join(...)
+      - pattern-not: filepath.Join(...)
+      - pattern-not: |
+          "$X"
+      - metavariable-regex:
+          metavariable: $X
+          regex: (.*=\s*?)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: ^(Where|WhereOr|Join|GroupExpr|OrderExpr|ColumnExpr)$
+    languages:
+      - go
+    message: Detected string concatenation with a non-literal variable in a go-pg
+      ORM SQL statement. This could lead to SQL injection if the variable is
+      user-controlled and not properly sanitized. In order to prevent SQL
+      injection, do not use strings concatenated with user-controlled input.
+      Instead, use parameterized statements.
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL
+          Command ('SQL Injection')"
+      references:
+        - https://pg.uptrace.dev/queries/
+      category: security
+      technology:
+        - go-pg
+      confidence: LOW
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - vuln
+      likelihood: LOW
+      impact: HIGH
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    severity: ERROR
