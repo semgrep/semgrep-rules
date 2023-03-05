@@ -53,7 +53,7 @@ rules:
             "$SQLSTR" + ...
         - metavariable-regex:
             metavariable: $SQLSTR
-            regex: (?i)(select|delete|insert|create|update|alter|drop).*
+            regex: (?i)(\s*select|\s*delete|\s*insert|\s*create|\s*update|\s*alter|\s*drop).*
       - patterns:
         - pattern-either:
           - pattern: fmt.Fprintf($F, "$SQLSTR", ...)
