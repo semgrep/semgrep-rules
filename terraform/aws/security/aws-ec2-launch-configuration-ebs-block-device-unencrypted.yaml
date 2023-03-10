@@ -1,22 +1,6 @@
 rules:
-- id: aws-ec2-launch-configuration-block-device-unencrypted
-  pattern-either:
-  - patterns:
-    - pattern: |
-        resource "aws_launch_configuration" $ANYTHING {
-          ...
-        }
-    - pattern-not-inside: |
-        resource "aws_launch_configuration" $ANYTHING {
-          ...
-          root_block_device {
-            ...
-            encrypted = true
-            ...
-          }
-          ...
-        }
-  - patterns:
+- id: aws-ec2-launch-configuration-ebs-block-device-unencrypted
+  patterns:
     - pattern-inside: |
         resource "aws_launch_configuration" $ANYTHING {
           ...
@@ -32,7 +16,7 @@ rules:
           ...
         }
   message: >-
-    The AWS launch configuration block device is unencrypted. The block device
+    The AWS launch configuration EBS block device is unencrypted. The block device
     could be read if compromised. Block devices should be encrypted to ensure sensitive
     data is held securely at rest.
   languages:
