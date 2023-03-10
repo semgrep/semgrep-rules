@@ -1,0 +1,22 @@
+rules:
+- id: global_variable-copy
+  patterns:
+  - pattern-either:
+    - pattern: $X $Y= $Z;
+    - pattern: $X $Y;
+  - pattern-inside: |
+      class $CLASS{
+      ...
+      }
+  - pattern-not-inside: |
+      $TYPE $H(...){
+        ...
+      }
+  - pattern-not-inside: |
+      $CLASS(){
+       ...
+       }
+  message: Using global variables leads to data leak vulnerabilities
+  languages:
+  - java
+  severity: WARNING
