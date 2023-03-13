@@ -1,0 +1,39 @@
+rules:
+- id: aws-ebs-volume-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_ebs_volume" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_ebs_volume" $ANYTHING {
+        ...
+        encrypted = true
+        ...
+      }
+  message: >-
+    The AWS EBS volume is unencrypted. The volume, the disk I/O and any derived
+    snapshots could be read if compromised. Volumes should be encrypted to ensure
+    sensitive data is stored securely.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_volume#encrypted
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
