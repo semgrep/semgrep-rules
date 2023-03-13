@@ -8,7 +8,7 @@ class CreateProducts < ActiveRecord::Migration[7.0]
     add_column :users2, :email2_id, :integer, foo: :bar
     add_index :users2, :email2_id, name: "asdf"
 
-    # todoruleid: ruby-rails-performance-indexes-are-beneficial
+    # ruleid: ruby-rails-performance-indexes-are-beneficial
     add_column :users3, :email3_id, :integer, foo: bar
     add_index :users3, [:email2_id, :other_id], name: "asdf"
 
