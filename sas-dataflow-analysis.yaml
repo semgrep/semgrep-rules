@@ -1,0 +1,25 @@
+rules:
+- id: sas-dataflow-analysis
+  languages:
+  - java
+  message: Found dangerous HTML output
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $Z = $X.getParameter("...")
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: StringEscapeUtils.$FUNC($Z)
+    - metavariable-regex:
+        metavariable: $FUNC
+        regex: (?i)(escapehtml4|escape|escapexml|escapjson)\b
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $C.println("..." + $Z)
+      - pattern: $C.println(String.$E("..." , $Z))
+      - pattern: $C.println($Z)
+  severity: WARNING
+  metadata: {}
