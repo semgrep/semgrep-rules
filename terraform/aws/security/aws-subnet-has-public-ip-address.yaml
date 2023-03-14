@@ -18,7 +18,8 @@ rules:
         map_public_ip_on_launch = false
         ...
       }
-  message: Resources in the AWS subnet are assigned a public IP address. Resources
+  message: >-
+    Resources in the AWS subnet are assigned a public IP address. Resources
     should not be exposed on the public internet, but should have access limited to
     consumers required for the function of your application. Set `map_public_ip_on_launch`
     to false so that resources are not publicly-accessible.
@@ -43,5 +44,3 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: MEDIUM
-    rule-origin-note: published from /src/aws-subnet-has-public-ip-address.yml in
-      None
