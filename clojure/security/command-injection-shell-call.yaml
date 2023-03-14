@@ -13,41 +13,29 @@ rules:
       impact: HIGH
     pattern-either:
     - patterns:
-      - pattern-inside: |
-          (ns ...
-          ...
-          (:require 
-          ... 
-          [clojure.java.shell ... [sh]]
-          ...
-          ))
-          ...
+      - pattern-either:
+        - pattern-inside: |
+            (ns ...
+            ...
+            (:require 
+            ... 
+            [clojure.java.shell ... [sh]]
+            ...
+            ))
+            ...
+        - pattern-inside: |
+            (ns ...
+            ...
+            (:use 
+            ... 
+            [clojure.java.shell ... [sh]]
+            ...
+            ))
+            ...
       - pattern: |
-          (sh ...)
-    - patterns:
-      - pattern-inside: |
-          (:require ... [clojure.java.shell ... ] ... )
-          ...
-      - pattern: |
-          (sh ...)
-    - patterns:
-      - pattern-inside: |
-          (require '[clojure.java.shell ... [sh]])
-          ...
-      - pattern: |
-          (sh ...)
-    - patterns:
-      - pattern-inside: |
-          (:use ... [clojure.java.shell ... [sh]] ... )
-          ...
-      - pattern: |
-          (sh ...)
-    - patterns:
-      - pattern-inside: |
-          (use ... '[clojure.java.shell ... [sh]] ... )
-          ...
-      - pattern: |
-          (sh ...)
+          (sh ... $VAR ...)
+      - pattern-not:
+          (sh "..." ...)
     languages: 
       - clojure
     severity: ERROR
