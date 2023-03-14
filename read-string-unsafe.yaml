@@ -1,0 +1,32 @@
+rules:
+- id: read-string-unsafe
+  metadata:
+    author: Gabriel Marquet <gab.marquet@gmail.com>
+    category: security
+    confidence: MEDIUM
+    references:
+    - http://www.learningclojure.com/2013/02/clojures-reader-is-unsafe.html#post-body-2898830171141471587
+    - https://ericnormand.me/article/clojure-web-security
+    - https://github.com/jafingerhut/jafingerhut.github.com/blob/master/clojure-info/using-edn-safely.md#vulnerabilities-in-clojurecores-read-and-read-string
+    source-rule-url: https://github.com/clj-holmes/clj-holmes-rules/tree/main/security/clojure-read-string
+    owasp:
+    - A8:2017 deserialization
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    likelihood: MEDIUM
+    impact: HIGH
+  patterns:
+  - pattern-not-inside: |
+      (ns ...
+      (... :exclude [read read-string]))
+      ...
+      (defn $VAR [$X]...)
+  - pattern-inside: |
+      (defn $VAR [$X]...)
+  - pattern: |
+      (read-string $X)
+  message: The default core Clojure read-string method is dangerous and can lead to
+    deserialization vulnerabilities. Use the edn/read-string instead.
+  languages:
+  - clojure
+  severity: ERROR
