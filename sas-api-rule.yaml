@@ -1,0 +1,13 @@
+rules:
+- id: SAS-API-rule
+  patterns:
+  - pattern: System.out.println("This is my package!");
+  - pattern-inside: package $F; ...
+  - metavariable-regex:
+      metavariable: $F
+      regex: (?i)(secure|security)\b
+  message: Semgrep found a match
+  languages:
+  - java
+  severity: WARNING
+  metadata: {}
