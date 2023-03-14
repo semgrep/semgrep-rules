@@ -9,13 +9,13 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $EVENT
+    - focus-metavariable: $EVENT
     - pattern-either:
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER($TYPE $EVENT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER(InputStream $EVENT, OutputStream $OUT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
