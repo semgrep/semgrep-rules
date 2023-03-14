@@ -12,11 +12,18 @@
         [clojure.java.shell :only [sh]]
         [clojure.tools.cli :only (cli)])
 
-
+(def command "bash")
 // ruleid: command-injection-shell-call
-(println (:out (sh command "-t" "rsa" "-b" arg "-P" "" "-C" "" "-f" filename)))
+(println (:out (sh command "-c" "rsa" "-b" arg "-P" "" "-C" "" "-f" filename)))
 
+(defn greetings [msg]
+// ruleid: command-injection-shell-call
+(println (:out (sh "/bin/bash" "-c" msg ))))
+// ruleid: command-injection-shell-call
+(println (:out (sh "bash" "-c" msg )))
+// ruleid: command-injection-shell-call
+(println (:out (sh "sh" "-c" msg )))
+// ruleid: command-injection-shell-call
+(println (:out (sh "echo" "-c" msg )))
 
-
-// ok: command-injection-shell-call
-(println (:out (sh "echo" "Printing a command-line output")))
+(greetings "whoami && pwd")
