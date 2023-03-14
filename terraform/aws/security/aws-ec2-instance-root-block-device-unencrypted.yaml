@@ -1,7 +1,6 @@
 rules:
-- id: aws-ec2-instance-block-device-unencrypted
-  pattern-either:
-  - patterns:
+- id: aws-ec2-instance-root-block-device-unencrypted
+  patterns:
     - pattern: |
         resource "aws_instance" $ANYTHING {
           ...
@@ -16,23 +15,8 @@ rules:
           }
           ...
         }
-  - patterns:
-    - pattern-inside: |
-        resource "aws_instance" $ANYTHING {
-          ...
-        }
-    - pattern: |
-        ebs_block_device {
-          ...
-        }
-    - pattern-not: |
-        ebs_block_device {
-          ...
-          encrypted = true
-          ...
-        }
   message: >-
-    The AWS EC2 block device is unencrypted. The block device could be read
+    The AWS EC2 root block device is unencrypted. The block device could be read
     if compromised. Block devices should be encrypted to ensure sensitive data is
     held securely at rest.
   languages:
