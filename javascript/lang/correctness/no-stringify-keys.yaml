@@ -11,7 +11,7 @@ rules:
     - pattern: $STRINGIFY(...)
   pattern-sinks:
   - pattern: $OBJECT[...]
-  message: |
+  message: >-
     JSON stringify does not produce a stable key ordering, and should not
     be relied on for producing object keys. Consider using json-stable-stringify
     instead.
@@ -21,3 +21,9 @@ rules:
   severity: WARNING
   metadata:
     category: correctness
+    references:
+      - https://www.npmjs.com/package/json-stable-stringify
+      - https://stackoverflow.com/a/16168003
+    technology:
+      - javascript
+      - typescript
