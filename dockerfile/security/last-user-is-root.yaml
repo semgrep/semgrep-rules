@@ -6,13 +6,14 @@ rules:
         ...
         USER $X
     - pattern-not-inside: |
+        ...
         USER $X
         ...
         USER $F
     - focus-metavariable: $X
     - metavariable-regex:
         metavariable: $X
-        regex: ^(root)$
+        regex: root
     - metavariable-regex:
         metavariable: $F
         regex: (.*(?!root))
