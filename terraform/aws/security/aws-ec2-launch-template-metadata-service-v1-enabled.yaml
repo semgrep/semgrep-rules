@@ -1,0 +1,53 @@
+rules:
+- id: aws-ec2-launch-template-metadata-service-v1-enabled
+  patterns:
+  - pattern: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+        metadata_options {
+          ...
+          http_endpoint = "disabled"
+          ...
+        }
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+        metadata_options {
+          ...
+          http_tokens = "required"
+          ...
+        }
+        ...
+      }
+  message: >-
+    The EC2 launch template has Instance Metadata Service Version 1 (IMDSv1)
+    enabled. IMDSv2 introduced session authentication tokens which improve security
+    when talking to IMDS. You should either disable IMDS or require the use of IMDSv2.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-1390: Weak Authentication'
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_configuration#metadata_options
+    - https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+

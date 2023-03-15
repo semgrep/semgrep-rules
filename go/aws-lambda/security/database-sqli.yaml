@@ -31,7 +31,7 @@ rules:
     confidence: MEDIUM
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
       - pattern: $DB.Exec($QUERY,...)
       - pattern: $DB.ExecContent($QUERY,...)
@@ -58,5 +58,5 @@ rules:
             func $HANDLER($EVENT context.Context) {...}
             ...
             lambda.Start($HANDLER, ...)
-    - pattern: $EVENT
+    - focus-metavariable: $EVENT
   severity: WARNING

@@ -1,0 +1,45 @@
+rules:
+- id: aws-ec2-launch-configuration-root-block-device-unencrypted
+  patterns:
+    - pattern: |
+        resource "aws_launch_configuration" $ANYTHING {
+          ...
+        }
+    - pattern-not-inside: |
+        resource "aws_launch_configuration" $ANYTHING {
+          ...
+          root_block_device {
+            ...
+            encrypted = true
+            ...
+          }
+          ...
+        }
+  message: >-
+    The AWS launch configuration root block device is unencrypted. The block device
+    could be read if compromised. Block devices should be encrypted to ensure sensitive
+    data is held securely at rest.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_configuration#block-devices
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/RootDeviceStorage.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    rule-origin-note: published from /src/aws-ec2-launch-configuration-block-device-unencrypted.yml
+      in None
