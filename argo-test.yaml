@@ -23,10 +23,5 @@ rules:
   - javascript
   - typescript
   severity: WARNING
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: JSON.parse(...)
-    - pattern-not: JSON.parse("...",...)
-  pattern-sinks:
-  - pattern: Object.assign(...)
+  pattern: |
+    app.use('/solve/challenges/server-side', verify.serverSideChallenges())
