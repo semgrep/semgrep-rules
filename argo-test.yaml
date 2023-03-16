@@ -1,0 +1,32 @@
+rules:
+- id: insecure-object-assign
+  message: >-
+    Depending on the context, user control data in `Object.assign` can cause web response
+    to include data that it should not have or can lead to a mass assignment vulnerability.
+  metadata:
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
+    - https://en.wikipedia.org/wiki/Mass_assignment_vulnerability
+    category: security
+    technology:
+    - javascript
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: JSON.parse(...)
+    - pattern-not: JSON.parse("...",...)
+  pattern-sinks:
+  - pattern: Object.assign(...)
