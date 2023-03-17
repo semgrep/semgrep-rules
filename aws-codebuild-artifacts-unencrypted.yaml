@@ -14,10 +14,10 @@ rules:
       }
   - metavariable-regex:
       metavariable: $ARTIFACTS
-      regex: (^artifacts|secondary_artifacts$)
+      regex: ^(artifacts|secondary_artifacts)$
   - metavariable-regex:
       metavariable: $TYPE
-      regex: (^CODEPIPELINE|S3$)
+      regex: ^(CODEPIPELINE|S3)$
   message: The CodeBuild project artifacts are unencrypted. All artifacts produced
     by your CodeBuild project pipeline should be encrypted to prevent them from being
     read if compromised.
@@ -44,5 +44,3 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
-    rule-origin-note: published from /src/aws-codebuild-artifacts-unencrypted.yml
-      in None
