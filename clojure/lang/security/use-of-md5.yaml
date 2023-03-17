@@ -1,0 +1,36 @@
+rules:
+  - id: use-of-md5
+    languages:
+      - clojure
+    severity: WARNING
+    message: >-
+      MD5 hash algorithm detected. This is not collision resistant and leads to
+      easily-cracked password hashes. Replace with current recommended hashing
+      algorithms.
+    metadata:
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+        - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+      technology:
+        - clojure
+      source-rule-url: https://github.com/clj-holmes/clj-holmes-rules/blob/main/security/weak-hash-function-md5.yml
+      owasp:
+        - A03:2017 - Sensitive Data Exposure
+        - A02:2021 - Cryptographic Failures
+      cwe:
+        - "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+        - "CWE-328: Use of Weak Hash"
+      author: Gabriel Marquet <gab.marquet@gmail.com>
+      category: security
+      subcategory:
+        - vuln
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+    pattern-either:
+      - pattern: (MessageDigest/getInstance "MD5")
+      - pattern: (MessageDigest/getInstance MessageDigestAlgorithms/MD5)
+      - pattern: (MessageDigest/getInstance org.apache.commons.codec.digest.MessageDigestAlgorithms/MD5)
+      - pattern: (java.security.MessageDigest/getInstance "MD5")
+      - pattern: (java.security.MessageDigest/getInstance MessageDigestAlgorithms/MD5)
+      - pattern: (java.security.MessageDigest/getInstance org.apache.commons.codec.digest.MessageDigestAlgorithms/MD5)
