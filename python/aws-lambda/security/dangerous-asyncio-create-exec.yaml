@@ -9,19 +9,19 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: $CMD
+    - focus-metavariable: $CMD
     - pattern-either:
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, $CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, [$CMD, ...], ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, $CMD, ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, [$CMD, ...], ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c",
+      - pattern: asyncio.create_subprocess_exec($PROG, $CMD, ...)
+      - pattern: asyncio.create_subprocess_exec($PROG, [$CMD, ...], ...)
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, $CMD, ...)
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, [$CMD, ...], ...)
+      - pattern: asyncio.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c",
           $CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c",
+      - pattern: asyncio.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c",
           $CMD, ...], ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...], ...)
   message: >-
     Detected 'create_subprocess_exec' function with argument tainted by `event` object. If

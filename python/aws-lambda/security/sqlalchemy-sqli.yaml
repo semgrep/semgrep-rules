@@ -31,8 +31,8 @@ rules:
     confidence: MEDIUM
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
-    - pattern-inside: $CURSOR.execute($QUERY,...)
+    - focus-metavariable: $QUERY
+    - pattern: $CURSOR.execute($QUERY,...)
     - pattern-inside: |
         import sqlalchemy
         ...

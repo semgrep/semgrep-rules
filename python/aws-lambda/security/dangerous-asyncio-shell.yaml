@@ -9,11 +9,11 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: $CMD
+    - focus-metavariable: $CMD
     - pattern-either:
-      - pattern-inside: $LOOP.subprocess_shell($PROTOCOL, $CMD)
-      - pattern-inside: asyncio.subprocess.create_subprocess_shell($CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_shell($CMD, ...)
+      - pattern: $LOOP.subprocess_shell($PROTOCOL, $CMD)
+      - pattern: asyncio.subprocess.create_subprocess_shell($CMD, ...)
+      - pattern: asyncio.create_subprocess_shell($CMD, ...)
   message: >-
     Detected asyncio subprocess function with argument tainted by `event` object. If this
     data can be controlled by a malicious actor, it may be an instance of

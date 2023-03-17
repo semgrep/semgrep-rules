@@ -34,11 +34,11 @@ rules:
     confidence: MEDIUM
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $CURSOR.execute($QUERY,...)
-      - pattern-inside: $CURSOR.executemany($QUERY,...)
-      - pattern-inside: $CURSOR.mogrify($QUERY,...)
+      - pattern: $CURSOR.execute($QUERY,...)
+      - pattern: $CURSOR.executemany($QUERY,...)
+      - pattern: $CURSOR.mogrify($QUERY,...)
     - pattern-inside: |
         import psycopg2
         ...

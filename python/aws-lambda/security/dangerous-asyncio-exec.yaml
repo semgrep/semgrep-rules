@@ -9,13 +9,13 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: $CMD
+    - focus-metavariable: $CMD
     - pattern-either:
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, $CMD, ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, [$CMD, ...], ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, $CMD, ...)
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, [$CMD, ...], ...)
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
           ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
           ...], ...)
   message: >-
     Detected subprocess function '$LOOP.subprocess_exec' with argument tainted by `event` object.

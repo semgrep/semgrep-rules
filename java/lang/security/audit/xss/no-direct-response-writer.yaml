@@ -18,7 +18,7 @@ rules:
           (javax.servlet.ServletOutputStream $WRITER).$WRITE(..., $SINK, ...)
       - pattern: |
           (java.io.OutputStream $WRITER).$WRITE(..., $SINK, ...)
-    - pattern: $SINK
+    - focus-metavariable: $SINK
   message: Detected a request with potential user-input going into a OutputStream or Writer object.  This
     bypasses any view or template environments, including HTML escaping, which may expose this application
     to cross-site scripting (XSS) vulnerabilities. Consider using a view technology such as JavaServer
