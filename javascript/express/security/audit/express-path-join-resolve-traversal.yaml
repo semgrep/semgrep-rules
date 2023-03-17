@@ -61,7 +61,7 @@ rules:
       - pattern: body
   pattern-sinks:
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-either:
       - pattern-inside: |
           $PATH = require('path');
@@ -70,16 +70,16 @@ rules:
           import $PATH from 'path';
           ...
     - pattern-either:
-      - pattern-inside: $PATH.join(...,$SINK,...)
-      - pattern-inside: $PATH.resolve(...,$SINK,...)
+      - pattern: $PATH.join(...,$SINK,...)
+      - pattern: $PATH.resolve(...,$SINK,...)
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-inside: |
         import 'path';
         ...
     - pattern-either:
-      - pattern-inside: path.join(...,$SINK,...)
-      - pattern-inside: path.resolve(...,$SINK,...)
+      - pattern: path.join(...,$SINK,...)
+      - pattern: path.resolve(...,$SINK,...)
   pattern-sanitizers:
   - pattern: $Y.replace(...)
   - pattern: $Y.indexOf(...)

@@ -46,6 +46,6 @@ rules:
     - pattern: $EVENT
   pattern-sinks:
   - patterns:
-    - pattern: $BODY
+    - focus-metavariable: $BODY
     - pattern-inside: |
         {..., headers: {..., 'Content-Type': 'text/html', ...}, body: $BODY, ... }

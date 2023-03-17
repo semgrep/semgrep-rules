@@ -50,9 +50,9 @@ rules:
     - pattern: $EVENT
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $DB.query($QUERY, ...)
+      - pattern: $DB.query($QUERY, ...)
     - pattern-either:
       - pattern-inside: |
           require('pg')

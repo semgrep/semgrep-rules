@@ -32,10 +32,10 @@ rules:
     confidence: MEDIUM
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $CURSOR.execute($QUERY,...)
-      - pattern-inside: $CURSOR.executemany($QUERY,...)
+      - pattern: $CURSOR.execute($QUERY,...)
+      - pattern: $CURSOR.executemany($QUERY,...)
     - pattern-either:
       - pattern-inside: |
           import mysql
