@@ -1,7 +1,7 @@
 rules:
 - id: google_maps_apikey_leak
   patterns:
-  - pattern-regex: (AIza[0-9A-Za-z_-]{35}(?!\S))
+  - pattern-regex: ^(AIza[0-9A-Za-z_-]{35}(?!\S))$
   message: Detects potential Google Maps API keys in code
   languages:
   - generic
