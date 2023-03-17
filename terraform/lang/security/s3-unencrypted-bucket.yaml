@@ -1,29 +1,31 @@
 rules:
-- id: s3-unencrypted-bucket
-  patterns:
-  - pattern: a
-  - pattern: b
-  languages:
-  - hcl
-  severity: INFO
-  message: >-
-    This rule has been deprecated, as all s3 buckets are encrypted by default with no way to disable it
-  metadata:
-    references:
-    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#server_side_encryption_configuration
-    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html
-    cwe:
-    - 'CWE-311: Missing Encryption of Sensitive Data'
-    category: security
-    technology:
-    - terraform
-    - aws
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A04:2021 - Insecure Design
-    subcategory:
-    - vuln
-    likelihood: MEDIUM
-    impact: MEDIUM
-    confidence: MEDIUM
-    deprecated: true
+  - id: s3-unencrypted-bucket
+    patterns:
+      - pattern: a
+      - pattern: b
+    languages:
+      - hcl
+    severity: INFO
+    message: >-
+      This rule has been deprecated, as all s3 buckets are encrypted by default with
+      no way to disable it. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration
+      for more info.
+    metadata:
+      references:
+        - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#server_side_encryption_configuration
+        - https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html
+      cwe:
+        - "CWE-311: Missing Encryption of Sensitive Data"
+      category: security
+      technology:
+        - terraform
+        - aws
+      owasp:
+        - A03:2017 - Sensitive Data Exposure
+        - A04:2021 - Insecure Design
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      deprecated: true
