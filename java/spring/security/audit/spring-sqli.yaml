@@ -7,7 +7,7 @@ rules:
     - pattern-inside: |
         public $T $M (..., String $ARG,...){...}
   pattern-sanitizers:
-  - not_conflicting: true
+  - not_conflicting: true # DEPRECATED FEATURE !!!!!
     patterns:
     - pattern: $A
     - pattern-inside: |
@@ -16,24 +16,24 @@ rules:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             new PreparedStatementCreatorFactory($A,...);
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             (JdbcTemplate $T).$M($A,...)
       - patterns:
         - pattern: (String $A)
         - pattern-inside: |
             (JdbcTemplate $T).batchUpdate(...)
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             NamedParameterBatchUpdateUtils.$M($A,...)
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             BatchUpdateUtils.$M($A,...)
   message: >-
     Detected a string argument from a public method contract in a raw SQL statement. This could lead to

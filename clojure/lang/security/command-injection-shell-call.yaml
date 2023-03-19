@@ -1,0 +1,40 @@
+rules:
+  - id: command-injection-shell-call
+    metadata:
+      author: Gabriel Marquet <gab.marquet@gmail.com>
+      category: security
+      confidence: LOW
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command
+          ('OS Command Injection')"
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - audit
+      technology:
+        - clojure
+      references:
+        - https://clojuredocs.org/clojure.java.shell/sh
+    patterns:
+      - pattern-either:
+          - pattern-inside: "(ns ...\n...\n(:require \n... \n[clojure.java.shell ...
+              [sh]]\n...\n))\n...\n"
+          - pattern-inside: "(ns ...\n...\n(:use \n... \n[clojure.java.shell ... [sh]]\n...\n))\n...\n"
+      - pattern-either:
+          - patterns:
+              - pattern: (sh $BASH ...)
+              - metavariable-regex:
+                  metavariable: $BASH
+                  regex: (.*)(sh|bash|ksh|csh|tcsh|zsh)
+          - patterns:
+              - pattern: (sh $ARG ...)
+              - pattern-not: (sh "..." ...)
+    languages:
+      - clojure
+    severity: ERROR
+    message: >-
+      A call to clojure.java.shell has been found, this could lead to an RCE if the
+      inputs are user-controllable. Please ensure their origin is validated and sanitized.
