@@ -1,0 +1,46 @@
+rules:
+- id: aws-codebuild-artifacts-unencrypted
+  patterns:
+  - pattern-inside: |
+      resource "aws_codebuild_project" "$ANYTHING" {
+        ...
+      }
+  - pattern: |
+      $ARTIFACTS {
+        ...
+        type = "$TYPE"
+        encryption_disabled = true
+        ...
+      }
+  - metavariable-regex:
+      metavariable: $ARTIFACTS
+      regex: ^(artifacts|secondary_artifacts)$
+  - metavariable-regex:
+      metavariable: $TYPE
+      regex: ^(CODEPIPELINE|S3)$
+  message: The CodeBuild project artifacts are unencrypted. All artifacts produced
+    by your CodeBuild project pipeline should be encrypted to prevent them from being
+    read if compromised.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codebuild_project#encryption_disabled
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-artifacts.html
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

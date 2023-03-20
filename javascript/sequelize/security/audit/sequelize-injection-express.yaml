@@ -71,9 +71,9 @@ rules:
       - pattern-either:
           - patterns:
               - pattern-either:
-                  - pattern-inside: sequelize.query($QUERY,...)
-                  - pattern-inside: $DB.sequelize.query($QUERY,...)
-              - pattern: $QUERY
+                  - pattern: sequelize.query($QUERY,...)
+                  - pattern: $DB.sequelize.query($QUERY,...)
+              - focus-metavariable: $QUERY
     pattern-sanitizers:
       - pattern-either:
           - pattern: parseInt(...)

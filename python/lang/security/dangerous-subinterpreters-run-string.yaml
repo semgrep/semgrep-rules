@@ -31,7 +31,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: $ROUTEVAR
+            - focus-metavariable: $ROUTEVAR
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -102,11 +102,11 @@ rules:
         - pattern-not: $REQ.dbsession
   pattern-sinks:
   - patterns:
-    - pattern-inside: |
+    - pattern: |
         _xxsubinterpreters.run_string($ID, $PAYLOAD, ...)
     - pattern-not: |
         _xxsubinterpreters.run_string($ID, "...", ...)
-    - pattern: $PAYLOAD
+    - focus-metavariable: $PAYLOAD
   message: >-
     Found user controlled content in `run_string`.
     This is dangerous because it allows a malicious actor to run arbitrary Python code.

@@ -6,7 +6,7 @@ rules:
     Detected SQL statement that is tainted by `event` object. This could lead to SQL injection if the
     variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
+    use parameterized queries or prepared statements instead.
     You can use parameterized statements like so:
     `cursor.execute('SELECT * FROM projects WHERE status = %s', 'active')`
   mode: taint
@@ -34,11 +34,11 @@ rules:
     confidence: MEDIUM
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $CURSOR.execute($QUERY,...)
-      - pattern-inside: $CURSOR.executemany($QUERY,...)
-      - pattern-inside: $CURSOR.mogrify($QUERY,...)
+      - pattern: $CURSOR.execute($QUERY,...)
+      - pattern: $CURSOR.executemany($QUERY,...)
+      - pattern: $CURSOR.mogrify($QUERY,...)
     - pattern-inside: |
         import psycopg2
         ...

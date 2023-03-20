@@ -12,8 +12,8 @@ rules:
         <... Path.GetFileName($A) != $A ...>
   pattern-sinks:
   - patterns:
-    - pattern: $X
-    - pattern-inside: |
+    - focus-metavariable: $X
+    - pattern: |
         File.$METHOD($X,...)
     - metavariable-regex:
         metavariable: $METHOD

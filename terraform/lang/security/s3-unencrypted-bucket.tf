@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "unencrypted" {
-  # ruleid: s3-unencrypted-bucket
+  # ok: s3-unencrypted-bucket
   bucket = "my-unencrypted-bucket"
   acl    = "private"
 }

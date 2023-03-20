@@ -42,10 +42,10 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: $CMD
+    - focus-metavariable: $CMD
     - pattern-either:
       - patterns:
-        - pattern-inside: os.$METHOD($MODE, $CMD, ...)
+        - pattern: os.$METHOD($MODE, $CMD, ...)
         - metavariable-regex:
             metavariable: $METHOD
             regex: (spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp|startfile)

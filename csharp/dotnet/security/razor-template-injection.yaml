@@ -27,7 +27,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $ARG
+    - focus-metavariable: $ARG
     - pattern-inside: |
         public ActionResult $METHOD(..., string $ARG,...){...}
   pattern-sinks:
