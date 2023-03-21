@@ -7,7 +7,7 @@ rules:
   fix-regex:
     regex: ActionController.*:yaml
     replacement: ' '
-  severity: WARNING
+  severity: ERROR
   languages:
   - ruby
   pattern: ActionController::Base.param_parsers[Mime::YAML] = :yaml
@@ -24,6 +24,6 @@ rules:
     cwe2022-top25: true
     subcategory:
     - audit
-    likelihood: LOW
-    impact: LOW
+    likelihood: MEDIUM
+    impact: HIGH
     confidence: LOW
