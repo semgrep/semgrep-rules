@@ -2,7 +2,7 @@ rules:
 - id: ssrf-requests
   languages:
   - python
-  severity: ERROR
+  severity: INFO
   message: Data from request object is passed to a new server-side request. This could lead to a server-side
     request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against an allowlist,
     do not forward the response to the user, and ensure proper authentication and transport-layer security
@@ -21,8 +21,8 @@ rules:
     cwe2021-top25: true
     subcategory:
     - vuln
-    likelihood: MEDIUM
-    impact: HIGH
+    likelihood: LOW
+    impact: MEDIUM
     confidence: MEDIUM
   pattern-either:
   - patterns:

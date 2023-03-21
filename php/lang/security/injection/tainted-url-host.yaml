@@ -2,7 +2,7 @@ rules:
 - id: tainted-url-host
   languages:
   - php
-  severity: WARNING
+  severity: INFO
   message: >-
     User data flows into the host portion of this manually-constructed URL. This could allow an attacker
     to send data
@@ -29,7 +29,7 @@ rules:
     subcategory:
     - vuln
     impact: MEDIUM
-    likelihood: MEDIUM
+    likelihood: LOW
     confidence: MEDIUM
   mode: taint
   pattern-sources:
