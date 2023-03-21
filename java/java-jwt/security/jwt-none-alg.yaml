@@ -21,10 +21,10 @@ rules:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
     - vuln
-    likelihood: HIGH
-    impact: MEDIUM
+    likelihood: LOW
+    impact: HIGH
   languages: [java]
-  severity: ERROR
+  severity: WARNING
   pattern-either:
   - pattern: |
       $JWT.sign(com.auth0.jwt.algorithms.Algorithm.none());

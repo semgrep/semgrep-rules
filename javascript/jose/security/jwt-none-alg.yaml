@@ -24,15 +24,15 @@ rules:
     - jwt
     subcategory:
     - vuln
-    likelihood: HIGH
-    impact: MEDIUM
+    likelihood: LOW
+    impact: HIGH
     confidence: HIGH
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
   languages:
   - javascript
   - typescript
-  severity: ERROR
+  severity: WARNING
   pattern-either:
   - pattern: |
       var $JOSE = require("jose");
