@@ -34,7 +34,7 @@ rules:
   message: The AWS KMS has no rotation. Missing rotation can cause leaked key to be used by attackers.
     To fix this, set a `enable_key_rotation`.
   languages: [hcl]
-  severity: WARNING
+  severity: INFO
   metadata:
     owasp:
     - A03:2017 - Sensitive Data Exposure
@@ -49,6 +49,6 @@ rules:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     subcategory:
     - vuln
-    likelihood: MEDIUM
-    impact: MEDIUM
+    likelihood: LOW
+    impact: LOW
     confidence: MEDIUM

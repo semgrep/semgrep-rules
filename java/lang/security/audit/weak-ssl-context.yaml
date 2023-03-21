@@ -16,13 +16,13 @@ rules:
     subcategory:
     - audit
     likelihood: LOW
-    impact: MEDIUM
+    impact: LOW
     confidence: HIGH
   message: >-
     An insecure SSL context was detected. TLS versions 1.0, 1.1, and all SSL versions
     are considered weak encryption and are deprecated.
     Use SSLContext.getInstance("TLSv1.2") for the best security.
-  severity: WARNING
+  severity: INFO
   languages: [java]
   patterns:
   - pattern-not: SSLContext.getInstance("TLSv1.3")

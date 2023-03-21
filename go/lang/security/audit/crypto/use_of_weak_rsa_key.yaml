@@ -2,7 +2,7 @@ rules:
 - id: use-of-weak-rsa-key
   message: RSA keys should be at least 2048 bits
   languages: [go]
-  severity: WARNING
+  severity: INFO
   metadata:
     cwe:
     - 'CWE-326: Inadequate Encryption Strength'
@@ -18,8 +18,8 @@ rules:
     confidence: HIGH
     subcategory:
     - audit
-    likelihood: HIGH
-    impact: MEDIUM
+    likelihood: LOW
+    impact: LOW
   patterns:
   - pattern-either:
     - pattern: |

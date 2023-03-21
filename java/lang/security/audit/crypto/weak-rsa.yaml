@@ -2,7 +2,7 @@ rules:
 - id: use-of-weak-rsa-key
   message: RSA keys should be at least 2048 bits based on NIST recommendation.
   languages: [java]
-  severity: WARNING
+  severity: INFO
   metadata:
     cwe:
     - 'CWE-326: Inadequate Encryption Strength'
@@ -22,8 +22,8 @@ rules:
     - java
     subcategory:
     - vuln
-    likelihood: MEDIUM
-    impact: MEDIUM
+    likelihood: LOW
+    impact: LOW
     confidence: HIGH
   patterns:
   - pattern: |
