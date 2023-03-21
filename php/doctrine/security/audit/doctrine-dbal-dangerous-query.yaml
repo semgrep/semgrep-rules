@@ -22,7 +22,7 @@ rules:
     cwe2021-top25: true
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: HIGH
     confidence: LOW
   patterns:
@@ -40,4 +40,4 @@ rules:
   - pattern-not: $CONNECTION->prepare("...",...)
   - pattern-not: $CONNECTION->createQuery("...",...)
   - pattern-not: $CONNECTION->executeQuery("...",...)
-  severity: WARNING
+  severity: ERROR

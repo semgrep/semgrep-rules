@@ -5,7 +5,7 @@ rules:
     String-formatted SQL query detected. This could lead to SQL injection if
     the string is not sanitized properly. Audit this call to ensure the
     SQL is not manipulable by external data.
-  severity: WARNING
+  severity: ERROR
   metadata:
     owasp:
     - A01:2017 - Injection
@@ -23,7 +23,7 @@ rules:
     cwe2021-top25: true
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: HIGH
   patterns:
   - pattern-not-inside: |

@@ -5,7 +5,7 @@ rules:
     If the argument is user-controlled, this can lead to SQL injection. When using $METHOD function,
     do not trust user-submitted data and only allow approved list of input (possibly, use an allowlist
     approach).
-  severity: WARNING
+  severity: ERROR
   languages:
   - go
   mode: taint
@@ -57,5 +57,5 @@ rules:
     cwe2021-top25: true
     subcategory:
     - vuln
-    likelihood: HIGH
-    impact: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH

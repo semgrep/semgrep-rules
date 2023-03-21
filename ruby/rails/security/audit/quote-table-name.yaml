@@ -16,8 +16,8 @@ rules:
     cwe2021-top25: true
     subcategory:
     - vuln
-    likelihood: HIGH
-    impact: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
     confidence: LOW
   message: >-
     Detected usage of `quote_table_name`, which has a vulnerability
@@ -26,7 +26,7 @@ rules:
     is not possible, sanitize input thoroughly before passing it to
     a `quote_table_name` call.
   languages: [ruby]
-  severity: WARNING
+  severity: ERROR
   mode: taint
   pattern-sources:
   - pattern: params[$X]

@@ -22,12 +22,12 @@ rules:
     cwe2021-top25: true
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: HIGH
     confidence: LOW
   languages:
   - python
-  severity: WARNING
+  severity: ERROR
   patterns:
   - pattern: $MODEL.extra(...)
   - pattern-not-inside: '$MODEL.extra(select = {$KEY: "..."})'
