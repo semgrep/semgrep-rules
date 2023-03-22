@@ -1,0 +1,90 @@
+rules:
+- id: net-http-command-injection-taint
+  message: |
+    An `http.Request` object `$REQ` is being passed into an `exec.Command()` or `syscall.Exec()` call, which can lead to command injection. This is a serious security issue, as it allows an attacker to execute arbitrary commands on the system by injecting malicious input into an HTTP request.
+
+    To remediate this issue, avoid using unsanitized user input from HTTP requests when constructing command-line arguments for` exec.Command()` or `syscall.Exec()`. See the [Go Command Injection Cheat Sheet](https://semgrep.dev/docs/cheat-sheets/go-command-injection/) for more details.
+  severity: ERROR
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-78: Improper Neutralization of Special Elements used in an OS Command (''OS
+      Command Injection'')'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://semgrep.dev/docs/cheat-sheets/go-command-injection/
+    - https://pkg.go.dev/os/exec
+    - https://pkg.go.dev/syscall#Exec
+    subcategory:
+    - vuln
+    technology:
+    - go
+    - go-net/http
+    license: "proprietary license - copyright \xA9 r2c"
+  languages:
+  - go
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          ($REQ : http.Request).$FIELD
+      - pattern: |
+          ($REQ : *http.Request).$FIELD
+    - metavariable-regex:
+        metavariable: $FIELD
+        regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|URL|UserAgent)$
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $CMD_STRUCT := exec.Command("$SHELL")
+            ...
+        - pattern-inside: |
+            $WRITER, ... := $CMD_STRUCT.StdinPipe()
+            ...
+        - pattern-either:
+          - pattern: $WRITER.Write(...)
+          - patterns:
+            - pattern: io.WriteString($WRITER, $SHELLCMD, ...)
+            - focus-metavariable: $SHELLCMD
+      - patterns:
+        - pattern-inside: |
+            &exec.Cmd { Path: "$SHELL", ... }
+        - pattern-either:
+          - pattern: |
+              Args: { "$SHELL", "-c", $SHELLCMD, ...}
+          - pattern: |
+              Args: $TYPE{ "$SHELL", "-c", $SHELLCMD, ...}
+        - focus-metavariable: $SHELLCMD
+    - metavariable-regex:
+        metavariable: $SHELL
+        regex: (bash|csh|dash|fish|ksh|tcsh|sh|zsh)$
+  - patterns:
+    - pattern-either:
+      - pattern-inside: syscall.Exec($PATH, $ARGS, ...)
+      - pattern-inside: syscall.ForkExec($PATH, $ARGS, ...)
+      - pattern-inside: |
+          &exec.Cmd {$PATH, $ARGS, ...}
+      - patterns:
+        - pattern-inside: |
+            &exec.Cmd { ... }
+        - pattern-either:
+          - pattern-inside: |
+              Path: $INPUT
+          - pattern-inside: |
+              Args: $INPUT
+        - focus-metavariable: $INPUT
+  - patterns:
+    - pattern-either:
+      - pattern: exec.Command($PATH, ...)
+      - pattern: exec.CommandContext($CTX, $PATH, ...)
+    - focus-metavariable: $PATH
