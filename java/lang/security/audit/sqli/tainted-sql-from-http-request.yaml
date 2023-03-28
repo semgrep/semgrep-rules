@@ -51,6 +51,14 @@ rules:
         - metavariable-regex:
             metavariable: $SQLCMD
             regex: (execute|query|executeUpdate)
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: $...X
+    - pattern-either:
+      - pattern: <... $...X != $...Y ...>
+      - pattern: <... $...Y != $...X ...>
+      - pattern: <... $...X == $...Y ...>
+      - pattern: <... $...Y == $...X ...>
   metadata:
     category: security
     technology:

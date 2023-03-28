@@ -56,6 +56,14 @@ rules:
     - metavariable-regex:
         metavariable: $SQLFUNC
         regex: execute|executeQuery|createQuery|query
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: $...X
+    - pattern-either:
+      - pattern: <... $...X != $...Y ...>
+      - pattern: <... $...Y != $...X ...>
+      - pattern: <... $...X == $...Y ...>
+      - pattern: <... $...Y == $...X ...>
   severity: ERROR
   languages:
   - java
