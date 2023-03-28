@@ -67,9 +67,9 @@ rules:
   pattern-sinks:
   - patterns:
     - pattern-either:
-      - pattern-inside: $RES.$METH($QUERY,...)
+      - pattern: $RES.$METH($QUERY,...)
     - pattern-not-inside: $RES.$METH($QUERY,$OPTIONS)
     - metavariable-regex:
         metavariable: $METH
         regex: ^(sendfile|sendFile)$
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY

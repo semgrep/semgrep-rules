@@ -45,8 +45,8 @@ rules:
           exports.handler = $FUNC
   pattern-sinks:
   - patterns:
-    - pattern: $SINK
-    - pattern-inside: |
+    - focus-metavariable: $SINK
+    - pattern: |
         $DC.$METHOD($SINK, ...)
     - metavariable-regex:
         metavariable: $METHOD

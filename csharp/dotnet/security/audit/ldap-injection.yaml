@@ -27,8 +27,8 @@ rules:
   options:
     taint_unify_mvars: true
   pattern-sources:
-  - pattern-either:
-    - pattern: $INPUT
+  - patterns:
+    - focus-metavariable: $INPUT
     - pattern-inside: $T $M($INPUT,...) {...}
   pattern-sinks:
   - patterns:

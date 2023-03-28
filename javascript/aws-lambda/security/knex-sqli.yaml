@@ -50,11 +50,11 @@ rules:
     - pattern: $EVENT
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $KNEX.fromRaw($QUERY, ...)
-      - pattern-inside: $KNEX.whereRaw($QUERY, ...)
-      - pattern-inside: $KNEX.raw($QUERY, ...)
+      - pattern: $KNEX.fromRaw($QUERY, ...)
+      - pattern: $KNEX.whereRaw($QUERY, ...)
+      - pattern: $KNEX.raw($QUERY, ...)
     - pattern-either:
       - pattern-inside: |
           require('knex')

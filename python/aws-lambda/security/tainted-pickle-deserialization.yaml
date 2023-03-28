@@ -9,17 +9,17 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-either:
-      - pattern-inside: pickle.load($SINK,...)
-      - pattern-inside: pickle.loads($SINK,...)
-      - pattern-inside: _pickle.load($SINK,...)
-      - pattern-inside: _pickle.loads($SINK,...)
-      - pattern-inside: cPickle.load($SINK,...)
-      - pattern-inside: cPickle.loads($SINK,...)
-      - pattern-inside: dill.load($SINK,...)
-      - pattern-inside: dill.loads($SINK,...)
-      - pattern-inside: shelve.open($SINK,...)
+      - pattern: pickle.load($SINK,...)
+      - pattern: pickle.loads($SINK,...)
+      - pattern: _pickle.load($SINK,...)
+      - pattern: _pickle.loads($SINK,...)
+      - pattern: cPickle.load($SINK,...)
+      - pattern: cPickle.loads($SINK,...)
+      - pattern: dill.load($SINK,...)
+      - pattern: dill.loads($SINK,...)
+      - pattern: shelve.open($SINK,...)
   message: >-
     Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.

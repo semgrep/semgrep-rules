@@ -32,8 +32,8 @@ rules:
   pattern-sinks:
   - pattern-either:
     - patterns:
-      - pattern-inside: ($KEYTYPE $CIPHER).Key = $SINK;
-      - pattern: $SINK
+      - pattern: ($KEYTYPE $CIPHER).Key = $SINK;
+      - focus-metavariable: $SINK
       - metavariable-pattern:
           metavariable: $KEYTYPE
           pattern-either:

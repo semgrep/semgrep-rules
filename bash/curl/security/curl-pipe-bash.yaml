@@ -26,8 +26,8 @@ rules:
     likelihood: LOW
     impact: LOW
   patterns:
-  - pattern-either:
-    - pattern: curl ... | bash ...
-    - pattern: curl ... | /bin/bash ...
-    - pattern: bash <(curl ...)
-    - pattern: /bin/bash <(curl ...)
+    - pattern-either:
+        - pattern: curl ... | ... bash ... 
+        - pattern: curl ... | ... /bin/bash ...
+        - pattern: ... bash <(curl ...)
+        - pattern: ... /bin/bash <(curl ...)

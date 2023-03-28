@@ -50,10 +50,10 @@ rules:
     - pattern: $EVENT
   pattern-sinks:
   - patterns:
-    - pattern: $QUERY
+    - focus-metavariable: $QUERY
     - pattern-either:
-      - pattern-inside: $POOL.query($QUERY, ...)
-      - pattern-inside: $POOL.execute($QUERY, ...)
+      - pattern: $POOL.query($QUERY, ...)
+      - pattern: $POOL.execute($QUERY, ...)
     - pattern-either:
       - pattern-inside: |
           require('mysql')
