@@ -7,11 +7,12 @@ rules:
     - pattern-inside: |
         public $T $M (..., String $ARG,...){...}
   pattern-sanitizers:
-  - pattern-either:
+  - not_conflicting: true
+    pattern-either:
     - patterns:
-      - focus-metavariable: $X
+      - focus-metavariable: $A
       - pattern-inside: |
-          new $TYPE(...,$X,...);
+          new $TYPE(...,$A,...);
     - patterns:
       - focus-metavariable: $...X
       - pattern-either:
