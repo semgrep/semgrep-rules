@@ -7,11 +7,19 @@ rules:
     - pattern-inside: |
         public $T $M (..., String $ARG,...){...}
   pattern-sanitizers:
-  - not_conflicting: true # DEPRECATED FEATURE !!!!!
-    patterns:
-    - pattern: $A
-    - pattern-inside: |
-        new $TYPE(...,$A,...);
+  - not_conflicting: true
+    pattern-either:
+    - patterns:
+      - focus-metavariable: $A
+      - pattern-inside: |
+          new $TYPE(...,$A,...);
+    - patterns:
+      - focus-metavariable: $...X
+      - pattern-either:
+        - pattern: <... $...X != $...Y ...>
+        - pattern: <... $...Y != $...X ...>
+        - pattern: <... $...X == $...Y ...>
+        - pattern: <... $...Y == $...X ...>
   pattern-sinks:
   - patterns:
     - pattern-either:
