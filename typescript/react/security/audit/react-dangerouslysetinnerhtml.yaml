@@ -38,9 +38,9 @@ rules:
             - pattern-inside: |
                 function ...(..., $X, ...) { ... }
         - focus-metavariable: $X
-        - pattern-either:
-            - pattern: $X.$Y
-            - pattern: $X[...]
+        # Added to remove value.map which causes a fair amount of false positives
+        - pattern-not-inside: |
+              $X. ... .$SANITIZEUNC(...)
   pattern-sinks:
   - patterns:
     - focus-metavariable: $X
