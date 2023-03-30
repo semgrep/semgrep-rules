@@ -45,7 +45,7 @@ rules:
               - pattern: $X[...]
           # This removes function maps, which generally are from imported hardcoded values
           - pattern-not-inside: |
-              $X. ... .$SANITIZEUNC(...)
+              $F. ... .$SANITIZEUNC(...)
       - label: CONCAT
         requires: TAINTED
         patterns:
