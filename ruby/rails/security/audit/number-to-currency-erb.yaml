@@ -21,8 +21,8 @@ rules:
     confidence: LOW
   message: >-
     Detected user input flowing into number_to_currency helper.
-    One of the parameters to the helper (unit) is  not escaped correctly and could  lead to XSS, which
-    in turn could lead to  sensitive data being exfiltrated. Instead, sanitize
+    One of the parameters to the helper (unit) is not escaped correctly and could lead to XSS, which
+    in turn could lead to sensitive data being exfiltrated. Instead, sanitize
     data with the 'html_escape' or 'h' function
     before passing it into `number_to_currency`
     or upgrade to Rails 4.0.2 or 3.2.16.
