@@ -23,11 +23,15 @@ rules:
     - vuln
     likelihood: MEDIUM
     impact: MEDIUM
-  pattern-either:
-  - pattern: |
-      md5.New()
-  - pattern: |
-      md5.Sum(...)
+  patterns:
+  - pattern-inside: |
+      import "crypto/md5"
+      ...
+  - pattern-either:
+    - pattern: |
+        md5.New()
+    - pattern: |
+        md5.Sum(...)
 - id: use-of-sha1
   message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
@@ -52,11 +56,15 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
-  pattern-either:
-  - pattern: |
-      sha1.New()
-  - pattern: |
-      sha1.Sum(...)
+  patterns: 
+    - pattern-inside: |
+        import "crypto/sha1"
+        ...
+    - pattern-either:
+      - pattern: |
+          sha1.New()
+      - pattern: |
+          sha1.Sum(...)
 - id: use-of-DES
   message: >-
     Detected DES cipher algorithm which is insecure. The algorithm is
@@ -80,11 +88,15 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
-  pattern-either:
-  - pattern: |
-      des.NewTripleDESCipher(...)
-  - pattern: |
-      des.NewCipher(...)
+  patterns:
+  - pattern-inside: |
+      import "crypto/des"
+      ...
+  - pattern-either:
+    - pattern: |
+        des.NewTripleDESCipher(...)
+    - pattern: |
+        des.NewCipher(...)
 - id: use-of-rc4
   message: >-
     Detected RC4 cipher algorithm which is insecure. The algorithm has many
@@ -108,5 +120,9 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
-  pattern: |-
-    rc4.NewCipher(...)
+  patterns:
+    - pattern-inside: |
+        import "crypto/rc4"
+        ...
+    - pattern: |-
+        rc4.NewCipher(...)

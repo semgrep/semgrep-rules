@@ -1,8 +1,8 @@
 rules:
 - id: insecure-module-used
   message: >-
-    Detected use of an insecure cryptographic hashing method. This method is known
-    to be broken and easily compromised. Use SHA256 or SHA3 instead.
+    The package `net/http/cgi` is on the import blocklist. 
+    The package is vulnerable to httpoxy attacks (CVE-2015-5386).
   metadata:
     owasp:
     - A03:2017 - Sensitive Data Exposure
@@ -23,30 +23,6 @@ rules:
   languages: [go]
   severity: WARNING
   pattern-either:
-  - patterns:
-    - pattern-inside: |
-        import "crypto/md5"
-        ...
-    - pattern: |
-        md5.$FUNC(...)
-  - patterns:
-    - pattern-inside: |
-        import "crypto/des"
-        ...
-    - pattern: |
-        des.$FUNC(...)
-  - patterns:
-    - pattern-inside: |
-        import "crypto/sha1"
-        ...
-    - pattern: |
-        sha1.$FUNC(...)
-  - patterns:
-    - pattern-inside: |
-        import "crypto/rc4"
-        ...
-    - pattern: |
-        rc4.$FUNC(...)
   - patterns:
     - pattern-inside: |
         import "net/http/cgi"
