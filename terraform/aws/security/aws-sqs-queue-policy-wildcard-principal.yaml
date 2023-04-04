@@ -6,7 +6,10 @@ rules:
         resource "aws_sqs_queue_policy" $ANYTHING {
           ...
         }
-    - pattern-inside: "resource \"aws_sqs_queue\" $ANYTHING {\n  ...\n}          \n"
+    - pattern-inside: |
+        resource "aws_sqs_queue" $ANYTHING {
+          ...
+        }
   - pattern-either:
     - patterns:
       - pattern: policy = "$JSONPOLICY"
@@ -38,7 +41,8 @@ rules:
             {..., Principal = { AWS = "*" }, ...}
         - pattern: |
             {..., Principal = { AWS = [..., "*", ...] }, ...}
-  message: Wildcard used in your SQS queue policy principal. This grants access to
+  message: >-
+    Wildcard used in your SQS queue policy principal. This grants access to
     all users, including anonymous users (public access). Unless you explicitly require
     anyone on the internet to be able to read or write to your queue, limit principals,
     actions and resources to what you need according to least privilege.
