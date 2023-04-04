@@ -26,7 +26,7 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "::set-output name=CHANGED_FILES::$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )"
+          echo "CHANGED_FILES=$(git diff --name-only origin/${BASE_REF} origin/${HEAD_REF} | xargs )" >> $GITHUB_OUTPUT
       - id: print-changed-files
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}
