@@ -17,7 +17,8 @@ rules:
         kms_master_key_id = ...
         ...
       }
-  message: The AWS SQS queue contents are unencrypted. The data could be read if compromised.
+  message: >-
+    The AWS SQS queue contents are unencrypted. The data could be read if compromised.
     Enable server-side encryption for your queue using SQS-managed encryption keys
     (SSE-SQS), or using your own AWS KMS key (SSE-KMS).
   languages:
@@ -42,4 +43,3 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
-    rule-origin-note: published from /src/aws-sqs-queue-unencrypted.yml in None
