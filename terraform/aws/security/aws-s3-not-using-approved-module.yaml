@@ -1,0 +1,22 @@
+rules:
+- id: aws-s3-not-using-approved-module
+  patterns:
+  - pattern: |
+      resource "aws_s3_bucket" $ANYTHING {
+        ...
+      }
+  paths:
+    exclude:
+      - "*/tf-mod-s3*"
+  message: >-
+    Please use an approved internal module for creating an S3 bucket which automatically provision Cyral, encryption, and best practice public access blocks
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+  languages: [hcl]
+  severity: WARNING
