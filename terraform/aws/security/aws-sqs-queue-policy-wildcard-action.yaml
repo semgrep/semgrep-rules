@@ -6,7 +6,10 @@ rules:
         resource "aws_sqs_queue_policy" $ANYTHING {
           ...
         }
-    - pattern-inside: "resource \"aws_sqs_queue\" $ANYTHING {\n  ...\n}          \n"
+    - pattern-inside: |
+        resource "aws_sqs_queue" $ANYTHING {
+          ...
+        }
   - pattern-either:
     - patterns:
       - pattern: policy = "$JSONPOLICY"
@@ -38,7 +41,8 @@ rules:
             {..., Action = [..., "*", ...], ...}
         - pattern: |
             {..., Action = [..., "sqs:*", ...], ...}
-  message: Wildcard used in your SQS queue policy action. SQS queue policies should
+  message: >-
+    Wildcard used in your SQS queue policy action. SQS queue policies should
     always grant least privilege - that is, only grant the permissions required to
     perform a specific task. Implementing least privilege is important to reducing
     security risks and reducing the effect of errors or malicious intent.
@@ -62,8 +66,6 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
-    rule-origin-note: published from /src/aws-sqs-queue-policy-wildcard-action.yml
-      in None
   languages:
   - hcl
   severity: INFO
