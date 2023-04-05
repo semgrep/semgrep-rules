@@ -40,10 +40,6 @@ rules:
               - pattern-inside: |
                   function ...(..., $X, ...) { ... }
           - focus-metavariable: $X
-          - pattern-either:
-              - pattern: $X.$Y
-              - pattern: $X[...]
-          # This removes function maps, which generally are from imported hardcoded values
           - pattern-not-inside: |
               $F. ... .$SANITIZEUNC(...)
       - label: CONCAT
@@ -59,8 +55,19 @@ rules:
           - pattern-not: |
               $X + ...
           - focus-metavariable: $X
+      - label: CLEAN
+        by-side-effect: true
+        patterns:
+          - pattern-either:
+              - pattern: $A($SOURCE)
+              - pattern: $SANITIZE. ... .$A($SOURCE)
+              - pattern: $A. ... .$SANITIZE($SOURCE)
+          - focus-metavariable: $SOURCE
+          - metavariable-regex:
+              metavariable: $A
+              regex: (?i)(.*valid|.*sanitiz)
     pattern-sinks:
-      - requires: TAINTED and not CONCAT
+      - requires: TAINTED and not CONCAT and not CLEAN
         patterns:
           - focus-metavariable: $X
           - pattern-either:
@@ -72,81 +79,7 @@ rules:
                   $PARAMS = {href: $X};
                   ...
                   React.createElement($EL, $PARAMS);
-          # Removing any element which has buttons since it tends to be a fp
           - metavariable-pattern:
               patterns:
                 - pattern-not-regex: (?i)(button)
               metavariable: $EL
-    pattern-sanitizers:
-      # Operators have been known to cause FPs, so removing any value which does not equal 
-      - patterns:
-          - pattern-either:
-              - pattern: |
-                  <... $A ...> ? $VAL1 : $VAL2
-              - pattern: |
-                  <... $A ...> ? $VAL2 : $VAL1
-          - metavariable-pattern:
-              patterns:
-                - pattern: |
-                    `${...}...`
-                - pattern-not: |
-                    "..."
-                - pattern-not: |
-                    "..." + $V
-                - pattern-not: |
-                    "..." + $V + ...
-                - pattern-not: |
-                    `...${...}...`
-              metavariable: $VAL1
-          - focus-metavariable: $VAL1
-      - patterns:
-          - pattern-either:
-              - patterns:
-                  - pattern-either:
-                      - pattern: |
-                          <... $A ...> ? $VAL1 : $VAL2
-                      - pattern: |
-                          <... $A ...> ? $VAL2 : $VAL1
-                  - pattern: $VAL1
-              - patterns:
-                  - pattern-either:
-                      - pattern-inside: |
-                          if (<... !$A($SOURCE) ...>) { 
-                              ... 
-                          }
-                          ...
-                      - pattern-inside: |
-                          if (<... !$SANITIZE. ... .$A($SOURCE) ...>) { 
-                              ... 
-                          } 
-                          ...
-                      - pattern-inside: |
-                          if (<... !$A. ... .$SANITIZE($SOURCE) ...>) { 
-                              ... 
-                          } 
-                          ...
-                      - pattern-inside: |
-                          if (<... $A. ... .$SANITIZE($SOURCE) ...>) { 
-                              ... 
-                          } 
-                      - pattern-inside: |
-                          if (<... $S. ... .$A($SOURCE) ...>) { 
-                              ... 
-                          } 
-                      - pattern-inside: |
-                          if (<... $A($SOURCE) ...>) { 
-                              ... 
-                          }
-                      - pattern: $A($SOURCE)
-                      - pattern: $SANITIZE. ... .$A($SOURCE)
-                      - pattern: $A. ... .$SANITIZE($SOURCE)
-                  - pattern: $SOURCE
-          - metavariable-regex:
-              metavariable: $A
-              regex: (?i)(.*valid|.*sanitiz)
-      - patterns:
-          - pattern-inside: |
-              if (<... $SOURCE.startsWith(...) ...>) { 
-                  ... 
-              }
-          - pattern: $SOURCE
