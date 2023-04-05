@@ -1,0 +1,71 @@
+rules:
+- id: aws-sqs-queue-policy-wildcard-action
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        resource "aws_sqs_queue_policy" $ANYTHING {
+          ...
+        }
+    - pattern-inside: |
+        resource "aws_sqs_queue" $ANYTHING {
+          ...
+        }
+  - pattern-either:
+    - patterns:
+      - pattern: policy = "$JSONPOLICY"
+      - metavariable-pattern:
+          metavariable: $JSONPOLICY
+          language: json
+          patterns:
+          - pattern-not-inside: |
+              {..., "Effect": "Deny", ...}
+          - pattern-either:
+            - pattern: |
+                {..., "Action": "*", ...}
+            - pattern: |
+                {..., "Action": "sqs:*", ...}
+            - pattern: |
+                {..., "Action": [..., "*", ...], ...}
+            - pattern: |
+                {..., "Action": [..., "sqs:*", ...], ...}
+    - patterns:
+      - pattern-inside: policy = jsonencode(...)
+      - pattern-not-inside: |
+          {..., Effect = "Deny", ...}
+      - pattern-either:
+        - pattern: |
+            {..., Action = "*", ...}
+        - pattern: |
+            {..., Action = "sqs:*", ...}
+        - pattern: |
+            {..., Action = [..., "*", ...], ...}
+        - pattern: |
+            {..., Action = [..., "sqs:*", ...], ...}
+  message: >-
+    Wildcard used in your SQS queue policy action. SQS queue policies should
+    always grant least privilege - that is, only grant the permissions required to
+    perform a specific task. Implementing least privilege is important to reducing
+    security risks and reducing the effect of errors or malicious intent.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy
+    - https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-security-best-practices.html
+    - https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - hcl
+  severity: INFO

@@ -1,0 +1,72 @@
+rules:
+- id: aws-sqs-queue-policy-wildcard-principal
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        resource "aws_sqs_queue_policy" $ANYTHING {
+          ...
+        }
+    - pattern-inside: |
+        resource "aws_sqs_queue" $ANYTHING {
+          ...
+        }
+  - pattern-either:
+    - patterns:
+      - pattern: policy = "$JSONPOLICY"
+      - metavariable-pattern:
+          metavariable: $JSONPOLICY
+          language: json
+          patterns:
+          - pattern-not-inside: |
+              {..., "Effect": "Deny", ...}
+          - pattern-either:
+            - pattern: |
+                {..., "Principal": "*", ...}
+            - pattern: |
+                {..., "Principal": [..., "*", ...], ...}
+            - pattern: |
+                {..., "Principal": { "AWS": "*" }, ...}
+            - pattern: |
+                {..., "Principal": { "AWS": [..., "*", ...] }, ...}
+    - patterns:
+      - pattern-inside: policy = jsonencode(...)
+      - pattern-not-inside: |
+          {..., Effect = "Deny", ...}
+      - pattern-either:
+        - pattern: |
+            {..., Principal = "*", ...}
+        - pattern: |
+            {..., Principal = [..., "*", ...], ...}
+        - pattern: |
+            {..., Principal = { AWS = "*" }, ...}
+        - pattern: |
+            {..., Principal = { AWS = [..., "*", ...] }, ...}
+  message: >-
+    Wildcard used in your SQS queue policy principal. This grants access to
+    all users, including anonymous users (public access). Unless you explicitly require
+    anyone on the internet to be able to read or write to your queue, limit principals,
+    actions and resources to what you need according to least privilege.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy
+    - https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-security-best-practices.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    rule-origin-note: published from /src/aws-sqs-queue-policy-wildcard-principal.yml
+      in None
+  languages:
+  - hcl
+  severity: ERROR

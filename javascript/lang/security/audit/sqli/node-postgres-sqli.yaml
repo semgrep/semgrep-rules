@@ -34,18 +34,26 @@ rules:
           ...
         }
     - focus-metavariable: $FUNC
+    - pattern-not-inside: |
+        $F. ... .$SOURCE(...)
   pattern-sinks:
   - patterns:
+    - pattern-either: 
+      - pattern-inside: |
+         const { $CLIENT } = require('pg')
+          ...
+      - pattern-inside: |
+         var { $CLIENT } = require('pg')
+          ...
+      - pattern-inside: |
+         let { $CLIENT } = require('pg')
+          ...
     - pattern-either:
       - pattern-inside: |
-          const { $CLIENT } = require('pg')
-          ...
           $DB = new $CLIENT(...)
           ...
       - pattern-inside: |
-          const { $POOL } = require('pg')
-          ...
-          const $NEWPOOL = new $POOL(...)
+          $NEWPOOL = new $CLIENT(...)
           ...
           $NEWPOOL.connect((..., $DB, ...) => {
               ...

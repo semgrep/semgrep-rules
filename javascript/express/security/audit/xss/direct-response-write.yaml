@@ -219,4 +219,14 @@ rules:
     - metavariable-regex:
         metavariable: $F
         regex: (?!.*text/html)
-        
+  - patterns: 
+    - pattern-inside: |
+        $X = [...];
+        ...
+    - pattern: |
+        if(<... !$X.includes($SOURCE)...>) {
+            ...
+            return ...
+        }
+        ...
+    - pattern: $SOURCE
