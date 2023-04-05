@@ -40,6 +40,11 @@ rules:
               - pattern-inside: |
                   function ...(..., $X, ...) { ... }
           - focus-metavariable: $X
+          # This rule causes too many false positives without this addition
+          - pattern-either:
+            - pattern: $X.$Y
+            - pattern: $X[...]
+          # this removes .map(...) etc which likely comes from hard coded values.
           - pattern-not-inside: |
               $F. ... .$SANITIZEUNC(...)
       - label: CONCAT
