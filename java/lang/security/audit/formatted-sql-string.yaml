@@ -58,6 +58,8 @@ rules:
         regex: execute|executeQuery|createQuery|query
   pattern-sanitizers:
   - patterns:
+    - pattern: (CriteriaBuilder $CB).$ANY(...)
+  - patterns:
     - focus-metavariable: $...X
     - pattern-either:
       - pattern: <... $...X != $...Y ...>
