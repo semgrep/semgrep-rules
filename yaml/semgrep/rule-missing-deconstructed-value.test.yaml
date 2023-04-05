@@ -1,0 +1,35 @@
+rules:
+  - id: half-written-crypto-example
+    message: >-
+      A lav crypto hun
+    languages:
+      - js
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          # ruleid: missing-deconstructed-value
+          const {...,createCipheriv,...} = require('node:crypto');
+          ...
+      - pattern: |
+          createCipheriv($ALGO, $KEY, $IV);
+      - pattern-either: 
+       # ok: missing-deconstructed-value
+        - pattern-inside: |
+            const {...,createCipheriv,...} = require('node:crypto');
+            ...
+        - pattern-inside: |
+            let {...,createCipheriv,...} = require('node:crypto');
+            ...
+        - pattern-inside: |
+            var {...,createCipheriv,...} = require('node:crypto');
+            ...
+      - pattern-either: 
+        # ruleid: missing-deconstructed-value
+        - pattern-inside: |
+            const {...,createCipheriv,...} = require('node:crypto');
+            ...
+        # ruleid: missing-deconstructed-value
+        - pattern-inside: |
+            let {...,createCipheriv,...} = require('node:crypto');
+            ...
+ 

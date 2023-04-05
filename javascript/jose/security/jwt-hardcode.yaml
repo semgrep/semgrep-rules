@@ -37,7 +37,7 @@ rules:
   severity: WARNING
   patterns:
   - pattern-inside: |
-      var $JOSE = require("jose");
+      $JOSE = require("jose");
       ...
   - pattern-either:
     - pattern-inside: |
@@ -45,6 +45,18 @@ rules:
         ...
     - pattern-inside: |
         var {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWK, JWT} = $JOSE;
         ...
   - pattern-either:
     - pattern: |

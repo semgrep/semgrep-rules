@@ -1,0 +1,68 @@
+rules:
+  - id: missing-deconstructed-value
+    message: >-
+      Looks like this value is deconstructing a const/var/let you need to use
+      all three `const {...} =` `var {...} =` and `let {...} =` to provide
+      accurate coverage consider adding the missing patterns in a
+      `pattern-inside` for better coverage.
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository
+      category: correctness
+      technology:
+        - semgrep
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: |
+                  rules: ...
+              - pattern-not-inside: |
+                  - pattern-either:
+                      ...
+              - pattern: |
+                  - pattern-inside:
+                      $VALUE
+              - pattern-either:
+                  - pattern-regex: const {.*}.*=
+                  - pattern-regex: let {.*}.*=
+                  - pattern-regex: var {.*}.*=
+          - patterns:
+              - patterns:
+                  - pattern-inside: |
+                      rules: ...
+                  - pattern-inside: |
+                      - pattern-either:
+                          $VALUE
+                  - focus-metavariable:
+                      - $VALUE
+                  - pattern-inside: |
+                      - pattern-inside: 
+                          $A
+                  - metavariable-regex:
+                      metavariable: $A
+                      regex: .*\s.*(var|const|let)\s{.*}\s=
+              - pattern-not:
+                  patterns:
+                    - pattern-inside: |
+                        ...
+                        - pattern-inside: 
+                            $Z
+                        ...
+                        - pattern-inside: 
+                            $B
+                        ...            
+                        - pattern-inside: 
+                            $C
+                        ...
+                    - metavariable-regex:
+                        metavariable: $Z
+                        regex: .*\s.*(var|const|let).*{.*}
+                    - metavariable-regex:
+                        metavariable: $B
+                        regex: .*\s.*(var|const|let).*{.*}
+                    - metavariable-regex:
+                        metavariable: $C
+                        regex: .*\s.*(var|const|let).*{.*}
