@@ -14,6 +14,11 @@ function test1(input) {
 }
 
 // ok: react-href-var
+{collaborationSectionData.paragraphs.map((item, i) => (
+  <div>  <a href={item.value}>click</a></div>
+))}
+
+// ok: react-href-var
 let zzz = <Foo className={"foobar"} href={`${input}`} />;
 
 // ok: react-href-var
