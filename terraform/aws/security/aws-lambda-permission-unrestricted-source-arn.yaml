@@ -1,0 +1,45 @@
+rules:
+- id: aws-lambda-permission-unrestricted-source-arn
+  patterns:
+  - pattern: |
+      resource "aws_lambda_permission" $ANYTHING {
+        ...
+        principal = "$PRINCIPAL"
+        ...
+      }
+  - pattern-not: |
+      resource "aws_lambda_permission" $ANYTHING {
+        ...
+        source_arn = ...
+        ...
+      }
+  - metavariable-regex:
+      metavariable: $PRINCIPAL
+      regex: .*[.]amazonaws[.]com$
+  message: The AWS Lambda permission has an AWS service principal but does not specify
+    a source ARN. If you grant permission to a service principal without specifying
+    the source, other accounts could potentially configure resources in their account
+    to invoke your Lambda function. Set the source_arn value to the ARN of the AWS
+    resource that invokes the function, eg. an S3 bucket, CloudWatch Events Rule,
+    API Gateway, or SNS topic.
+  languages:
+  - hcl
+  severity: ERROR
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
