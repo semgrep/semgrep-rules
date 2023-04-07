@@ -17,5 +17,5 @@ jobs:
           fetch-depth: 0
       - name: Trigger semgrep-rules-pro benchmarking argo workflow on PR to develop or release
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"test\", \"repo\" : \"test\", \"commit\" : \"test\", \"changed_files\" : \"test\" , \"langs\" : \"test\"}"
+          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/delightful-octopus -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"message\" : \"hello\"}"
 
