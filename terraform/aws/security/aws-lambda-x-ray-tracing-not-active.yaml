@@ -1,0 +1,42 @@
+rules:
+- id: aws-lambda-x-ray-tracing-not-active
+  patterns:
+  - pattern: |
+      resource "aws_lambda_function" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_lambda_function" $ANYTHING {
+        ...
+        tracing_config {
+          ...
+          mode = "Active"
+          ...
+        }
+        ...
+      }
+  message: The AWS Lambda function does not have active X-Ray tracing enabled. X-Ray
+    tracing enables end-to-end debugging and analysis of all function activity. This
+    makes it easier to trace the flow of logs and identify bottlenecks, slow downs
+    and timeouts.
+  languages:
+  - hcl
+  severity: INFO
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - "A09:2021 Security Logging and Monitoring Failures"
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    references:
+    - https://cwe.mitre.org/data/definitions/778.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#mode
+    - https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM

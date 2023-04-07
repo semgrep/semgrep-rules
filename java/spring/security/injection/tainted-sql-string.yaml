@@ -43,6 +43,9 @@ rules:
     - metavariable-regex:
         metavariable: $REQ
         regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
+    - metavariable-regex:
+        metavariable: $TYPE
+        regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
     - focus-metavariable: $SOURCE
   pattern-sinks:
   - patterns:
@@ -77,3 +80,11 @@ rules:
     - metavariable-regex:
         metavariable: $SQLSTR
         regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: $...X
+    - pattern-either:
+      - pattern: <... $...X != $...Y ...>
+      - pattern: <... $...Y != $...X ...>
+      - pattern: <... $...X == $...Y ...>
+      - pattern: <... $...Y == $...X ...>

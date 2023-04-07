@@ -12,6 +12,13 @@ function TestComponent2(foo) {
     return React.createElement('div', params);
 }
 
+// ok:react-dangerouslysetinnerhtml
+{collaborationSectionData.paragraphs.map((item, i) => (
+  <li key={`collaboration-p-${i}`} dangerouslySetInnerHTML={{
+    __html: item,}}>
+  </li>
+))}
+
 function TestComponent3() {
     // ok:react-dangerouslysetinnerhtml
   return <li className={"foobar"} dangerouslySetInnerHTML={{__html: params}} />;

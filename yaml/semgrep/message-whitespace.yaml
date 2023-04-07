@@ -1,0 +1,28 @@
+rules:
+  - id: message-whitespace-check
+    message: >-
+      It looks like you have an additional space in your rule message, this
+      can look awkward in the finding output, please remove the additional
+      whitespace!
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository
+      category: correctness
+      technology:
+        - semgrep
+    patterns:
+      - pattern-inside: |
+          rules: ...
+      - pattern: |
+          message: >-
+            $VALUE
+      - focus-metavariable:
+          - $VALUE
+      - pattern-regex: \w.*
+      - pattern-regex: \s{2,}
+    fix-regex:
+      regex: (?<=\S)\s(\s{1,})
+      replacement: " "

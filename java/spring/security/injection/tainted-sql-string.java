@@ -26,7 +26,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/test2", method = RequestMethod.POST, produces = "plain/text")
@@ -36,7 +36,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/test3", method = RequestMethod.POST, produces = "plain/text")
@@ -47,7 +47,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/test4", method = RequestMethod.POST, produces = "plain/text")
@@ -58,7 +58,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql.toString());
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/test5", method = RequestMethod.POST, produces = "plain/text")
@@ -69,7 +69,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/ok1", method = RequestMethod.POST, produces = "plain/text")
@@ -79,7 +79,7 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
     }
 
     @RequestMapping(value = "/ok2", method = RequestMethod.POST, produces = "plain/text")
@@ -94,6 +94,50 @@ public class TestController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
-        return rs
+        return rs;
+    }
+
+    @RequestMapping(value = "/testok3", method = RequestMethod.POST, produces = "plain/text")
+    ResultSet ok3(@RequestBody Integer name) {
+        String sql = "SELECT * FROM table WHERE name = ";
+        // ok: tainted-sql-string
+        sql += name + ";";
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.execute(sql);
+        return rs;
+    }
+
+    @RequestMapping(value = "/testok4", method = RequestMethod.POST, produces = "plain/text")
+    ResultSet ok4(@RequestBody Boolean name) {
+        String sql = "SELECT * FROM table WHERE name = ";
+        // ok: tainted-sql-string
+        sql += name + ";";
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.execute(sql);
+        return rs;
+    }
+
+    @RequestMapping(value = "/testok5", method = RequestMethod.POST, produces = "plain/text")
+    ResultSet ok5(@RequestBody String name) {
+        String sql = "SELECT * FROM table WHERE name = ";
+        // ok: tainted-sql-string
+        sql += (name.substring(2,3) != "hello".substring(2,3)) + ";";
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.execute(sql);
+        return rs;
+    }
+
+    @RequestMapping(value = "/testok6", method = RequestMethod.POST, produces = "plain/text")
+    ResultSet ok6(@RequestBody String name) {
+        String sql = "SELECT * FROM table WHERE name = ";
+        // ok: tainted-sql-string
+        sql += ("hello".substring(2,3) == name.substring(2,3)) + ";";
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.execute(sql);
+        return rs;
     }
 }
