@@ -3,7 +3,7 @@ name: semgrep-rules-pro benchmark
 on:
   workflow_dispatch:
   push:
-    branches: [release]
+    branches: [develop, release]
   pull_request:
     branches: [develop, release]
 jobs:
@@ -16,12 +16,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Trigger semgrep-rules-pro benchmarking argo workflow on PR to develop or release
-        env:
-          RULES_REPO: "semgrep-rules"
-          BASE_BRANCH: "ddf5f4ca6252bb4d995e5bb861ecda908fcc5b94" 
-          COMP_BRANCH: "develop"
-        if: |
-          github.event_name == 'pull_request'
         run: |
-          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"rules-repository\": \"RULES_REPO\", \"base-branch\" : \"$BASE_BRANCH\", \"comparison-branch\" : \"$COMP_BRANCH\"}"
+          curl -X POST https://argo.corp.r2c.dev/api/v1/events/security-research/delightful-octopus -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"message\": \"hello\"}"
 
