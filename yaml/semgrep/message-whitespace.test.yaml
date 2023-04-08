@@ -1,0 +1,13 @@
+rules:
+  - id: half-written-crypto-example
+    message: >-
+      # ruleid: message-whitespace-check
+      Semgrep found  a match
+      # ruleid: message-whitespace-check
+      I like    big space
+    languages:
+      - js
+    severity: WARNING
+    patterns:
+      - pattern: |
+          createCipheriv($ALGO, $KEY, $IV);

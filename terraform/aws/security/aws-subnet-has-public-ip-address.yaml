@@ -1,0 +1,46 @@
+rules:
+- id: aws-subnet-has-public-ip-address
+  patterns:
+  - pattern-either:
+    - pattern: |
+        resource "aws_subnet" $ANYTHING {
+          ...
+          map_public_ip_on_launch = true
+          ...
+        }
+    - pattern: |
+        resource "aws_default_subnet" $ANYTHING {
+          ...
+        }
+  - pattern-not: |
+      resource "aws_default_subnet" $ANYTHING {
+        ...
+        map_public_ip_on_launch = false
+        ...
+      }
+  message: >-
+    Resources in the AWS subnet are assigned a public IP address. Resources
+    should not be exposed on the public internet, but should have access limited to
+    consumers required for the function of your application. Set `map_public_ip_on_launch`
+    to false so that resources are not publicly-accessible.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet#map_public_ip_on_launch
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html#concepts-public-addresses
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM

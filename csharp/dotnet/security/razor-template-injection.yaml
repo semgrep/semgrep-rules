@@ -1,6 +1,6 @@
 rules:
 - id: razor-template-injection
-  message: User-controllable string passed to Razor.Parse.  This leads directly to code execution in the
+  message: User-controllable string passed to Razor.Parse. This leads directly to code execution in the
     context of the process.
   severity: WARNING
   metadata:
@@ -27,7 +27,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $ARG
+    - focus-metavariable: $ARG
     - pattern-inside: |
         public ActionResult $METHOD(..., string $ARG,...){...}
   pattern-sinks:

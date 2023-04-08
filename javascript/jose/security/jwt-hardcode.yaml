@@ -1,10 +1,10 @@
 rules:
 - id: hardcoded-jwt-secret
   message: >-
-    A hard-coded credential was detected. It is not recommended  to store credentials in source-code,
+    A hard-coded credential was detected. It is not recommended to store credentials in source-code,
     as this risks secrets
-    being leaked and used by either an internal or external malicious adversary.  It is recommended to
-    use environment variables to  securely provide credentials or retrieve credentials from  a secure
+    being leaked and used by either an internal or external malicious adversary. It is recommended to
+    use environment variables to securely provide credentials or retrieve credentials from a secure
     vault or HSM (Hardware Security Module).
   metadata:
     interfile: true
@@ -37,7 +37,7 @@ rules:
   severity: WARNING
   patterns:
   - pattern-inside: |
-      var $JOSE = require("jose");
+      $JOSE = require("jose");
       ...
   - pattern-either:
     - pattern-inside: |
@@ -45,6 +45,18 @@ rules:
         ...
     - pattern-inside: |
         var {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWK, JWT} = $JOSE;
         ...
   - pattern-either:
     - pattern: |

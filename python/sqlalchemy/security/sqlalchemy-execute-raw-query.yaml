@@ -40,19 +40,27 @@ rules:
       $CONNECTION.execute( $SQL.format(...), ... )
   - pattern: |
       $CONNECTION.execute(f"...{...}...", ...)
-  - pattern: |
-      $QUERY = $SQL + ...
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = $SQL % (...)
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = $SQL.format(...)
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = f"...{...}..."
-      ...
-      $CONNECTION.execute($QUERY, ...)
+  - patterns:
+    - pattern-inside: |
+        $QUERY = $SQL + ...
+        ...
+    - pattern: |
+        $CONNECTION.execute($QUERY, ...)
+  - patterns: 
+    - pattern-inside: |
+        $QUERY = $SQL % (...)
+        ...
+    - pattern: |
+        $CONNECTION.execute($QUERY, ...)
+  - patterns:
+    - pattern-inside: |
+        $QUERY = $SQL.format(...)
+        ...
+    - pattern: |
+        $CONNECTION.execute($QUERY, ...)
+  - patterns:
+    - pattern-inside: |
+        $QUERY = f"...{...}..."
+        ...
+    - pattern: |
+        $CONNECTION.execute($QUERY, ...)
