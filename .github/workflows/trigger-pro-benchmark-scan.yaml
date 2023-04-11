@@ -8,12 +8,21 @@ on:
     branches: [develop, release]
 jobs:
   trigger:
+    # do not run automatically if rule is posted from the playground (can still be started manually)
     # PRs posted by first time contributors already need approval as well
     if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
+      #- id: base-branch
+      #  name: get base branch
+      #  env:
+      #    BASE_BRANCH: ${{ env.base_branch }}
+      #  run: |
+      #    echo 
       - id: trigger-run
-        name: Trigger semgrep-rules-pro benchmarking argo workflow on PR to develop or release
+        name: Trigger semgrep-rules-pro benchmarking argo workflow on PR/push to develop or release
+        env:
+          RULES_REPO: ${{ github.event.repository.name }}
         run: |
-          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"base_branch": "release", "comparison_branch": "develop", "rules_repository": "semgrep-rules"}'
+          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"base_branch": "release", "comparison_branch": "develop", "rules_repository": "$RULES_REPO"}'
 
