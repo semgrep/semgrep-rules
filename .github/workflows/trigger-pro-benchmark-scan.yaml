@@ -15,5 +15,5 @@ jobs:
       - id: trigger-run
         name: Trigger semgrep-rules-pro benchmarking argo workflow on PR to develop or release
         run: |
-          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"base_branch": "release", "comparison_branch": "develop"}'
+          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"base_branch": "release", "comparison_branch": "develop", "rules_repository": "semgrep-rules"}'
 
