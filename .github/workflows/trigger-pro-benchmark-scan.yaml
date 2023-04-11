@@ -23,7 +23,7 @@ jobs:
         name: Trigger semgrep-rules-pro benchmarking argo workflow on PR/push to develop or release
         env:
           RULES_REPO: ${{ github.event.repository.name }}
-          BASE_BRANCH: ${{ env.base_branch }}
+          BASE_BRANCH: ${{ github.head_ref }}
         run: |
           curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"$BASE_BRANCH\", \"comparison_branch\": \"develop\", \"rules_repository\": \"$RULES_REPO\"}"
 
