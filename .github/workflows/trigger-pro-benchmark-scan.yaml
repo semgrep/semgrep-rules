@@ -24,5 +24,5 @@ jobs:
         env:
           RULES_REPO: ${{ github.event.repository.name }}
         run: |
-          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d '{"base_branch": "release", "comparison_branch": "develop", "rules_repository": "$RULES_REPO"}'
+          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"release\", \"comparison_branch\": \"develop\", \"rules_repository\": \"$RULES_REPO\"}"
 
