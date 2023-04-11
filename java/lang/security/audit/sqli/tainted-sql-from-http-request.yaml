@@ -1,26 +1,45 @@
 rules:
 - id: tainted-sql-from-http-request
   message: >-
-    Detected input from a HTTPServletRequest going into a SQL sink or statement. This could lead to SQL
+    Detected input from a HTTPServletRequest going into a SQL sink or statement. This
+    could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
     Use parameterized SQL queries or properly sanitize user input instead.
-  languages: [java]
   severity: WARNING
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    subcategory:
+    - vuln
+    technology:
+    - sql
+    - java
+    - servlets
+    - spring
+  languages: [java]
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern-either:   # using this more specific pattern instead of (HttpServletRequest $REQ) reduces FP that are designed to trick taint
+    - pattern-either:
       - pattern: |
-          (HttpServletRequest $REQ).$REQFUNC(...) 
-      - patterns:   # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
-        - pattern-inside: |
-            (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
-            ...
-            for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
-              ...
-            }
-        - pattern: |
-            $COOKIE.getValue(...)
+          (HttpServletRequest $REQ).$REQFUNC(...)
+      - pattern: |
+          (ServletRequest $REQ).$REQFUNC(...) 
+    - metavariable-regex:
+        metavariable: $REQFUNC
+        regex: (getInputStream|getParameter|getParameterMap|getParameterValues|getReader|getCookies|getHeader|getHeaderNames|getHeaders|getPart|getParts|getQueryString)
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -59,22 +78,3 @@ rules:
       - pattern: <... $...Y != $...X ...>
       - pattern: <... $...X == $...Y ...>
       - pattern: <... $...Y == $...X ...>
-  metadata:
-    category: security
-    technology:
-    - sql
-    - java
-    cwe:
-    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
-    references:
-    - https://owasp.org/Top10/A03_2021-Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: HIGH
-    confidence: MEDIUM
