@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 
 public class SqlExample {
     public void staticQuery() throws SQLException {
@@ -132,5 +133,13 @@ public class FalsePositiveCase {
         apiClient.execute(call);
         apiClient.run(call); // proof that 'execute' name is causing the false-positive
     }
-}
 
+    public List<Student> addWhere(String name, CriteriaQuery Query)
+    {
+        EntityManager em = emfactory.createEntityManager();
+    	CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+		// ok: formatted-sql-string
+        List<Student> students = em.createQuery(Query.where(criteriaBuilder.equal(studentRoot.get("name"), name ))).getResultList();
+        return students;
+    }
+}
