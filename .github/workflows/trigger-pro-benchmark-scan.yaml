@@ -13,12 +13,6 @@ jobs:
     if: github.actor != 'semgrep-dev-pr-bot'
     runs-on: ubuntu-20.04
     steps:
-      - id: comp-branch
-        name: get current branch
-        env:
-          COMP_BRANCH: ${{ env.base_branch }}
-        run: |
-          echo "base_branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - id: trigger-run
         name: Trigger semgrep-rules-pro benchmarking argo workflow on PR/push to develop or release
         env:
