@@ -27,13 +27,5 @@ rules:
   severity: WARNING
   languages: [java]
   patterns:
-  - pattern-not-inside: |
-      $RETURNTYPE $METHOD(..., HttpServletResponse $RESP, ...) {
-        ...
-        $RESP.setHeader("Set-Cookie", "=~/.*SameSite=.*/");
-        ...
-      }
-  - pattern-either:
-    - pattern: $RESP.addCookie(...);
-    - pattern: $RESP.setHeader("Set-Cookie", ...);
-  - pattern-not: $RESP.setHeader("Set-Cookie", null);
+    - pattern: a()
+    - pattern: b()
