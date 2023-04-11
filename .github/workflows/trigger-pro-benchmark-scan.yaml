@@ -16,14 +16,15 @@ jobs:
       - id: comp-branch
         name: get current branch
         env:
-          BASE_BRANCH: ${{ env.base_branch }}
+          COMP_BRANCH: ${{ env.base_branch }}
         run: |
           echo "base_branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - id: trigger-run
         name: Trigger semgrep-rules-pro benchmarking argo workflow on PR/push to develop or release
         env:
           RULES_REPO: ${{ github.event.repository.name }}
-          BASE_BRANCH: ${{ github.head_ref }}
+          COMP_BRANCH: ${{ github.head_ref }}
+          BASE_BRANCH: ${{  github.event.pull_request.base.ref }}
         run: |
-          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"$BASE_BRANCH\", \"comparison_branch\": \"develop\", \"rules_repository\": \"$RULES_REPO\"}"
+          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"$BASE_BRANCH\", \"comparison_branch\": \"$COMP_BRANCH\", \"rules_repository\": \"$RULES_REPO\"}"
 
