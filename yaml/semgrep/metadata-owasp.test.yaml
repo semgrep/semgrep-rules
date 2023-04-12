@@ -15,6 +15,22 @@ rules:
     metadata:
       # ok: metadata-owasp
       owasp: A05:2021 - Security Misconfiguration
+  - id: example-bad-zero
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ruleid: metadata-owasp
+      owasp: "A0: Zero"
+  - id: example-bad-double-zero-year
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ruleid: metadata-owasp
+      owasp: "A00:2021 Zero"
   - id: example-bad-missing-leading-zero
     message: Example
     severity: ERROR
@@ -67,6 +83,10 @@ rules:
     metadata:
       # ok: metadata-owasp
       owasp:
+        # ruleid: metadata-owasp
+        - A0:2021 - Zero
+        # ruleid: metadata-owasp
+        - A00:2021 - Double Zero
         # Missing leading zero
         # ruleid: metadata-owasp
         - A5:2021 - Security Misconfiguration
