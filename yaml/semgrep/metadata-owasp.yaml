@@ -9,9 +9,11 @@ rules:
       - pattern-inside: "rules: ..."
       - pattern-inside: "metadata: ..."
       - pattern-either:
+          # A single line year is optional, e.g. `owasp: A1 blah` or `owasp: A1:2021 blah`
           - patterns:
               - pattern: 'owasp: "..."'
-              - pattern-not: 'owasp: "=~/^A(0?[1-9]|10): .+$/"'
+              - pattern-not: 'owasp: "=~/^A(0?[1-9]|10):([0-9]{4})?\s+.+$/"'
+          # A list, must have the year, e.g. `- A1:2021 blah`
           - patterns:
               - pattern-inside: "owasp: [...]"
               - pattern: '"$ANYTHING"'
