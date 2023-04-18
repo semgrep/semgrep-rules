@@ -1,11 +1,13 @@
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_open_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "0.0.0.0/0"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
 }
 
 resource "aws_network_acl" "fail_open_1" {
@@ -22,14 +24,30 @@ resource "aws_network_acl" "fail_open_1" {
   }
 }
 
+resource "aws_default_network_acl" "fail_open_1" {
+  default_network_acl_id = aws_vpc.example.default_network_acl_id
+
+  # ruleid: aws-network-acl-allows-public-ingress
+  ingress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+  }
+}
+
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_open_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.0.0.0/0"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.0.0.0/0"
 }
 
 resource "aws_network_acl" "fail_open_2" {
@@ -48,12 +66,14 @@ resource "aws_network_acl" "fail_open_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_loopback_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.0.0.0/2" # 64.0.0.0 - 127.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.0.0.0/2" # 64.0.0.0 - 127.255.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_loopback_1" {
@@ -72,12 +92,14 @@ resource "aws_network_acl" "fail_start_outside_loopback_1" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_loopback_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.99.99.99/2" # 64.0.0.0 - 127.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.99.99.99/2" # 64.0.0.0 - 127.255.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_loopback_2" {
@@ -96,12 +118,14 @@ resource "aws_network_acl" "fail_start_outside_loopback_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_loopback_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.255.255.255/2" # 64.0.0.0 - 127.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.255.255.255/2" # 64.0.0.0 - 127.255.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_loopback_3" {
@@ -120,12 +144,14 @@ resource "aws_network_acl" "fail_start_outside_loopback_3" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_loopback_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "126.0.0.0/7" # 126.0.0.0 - 127.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "126.0.0.0/7" # 126.0.0.0 - 127.255.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_loopback_4" {
@@ -144,12 +170,14 @@ resource "aws_network_acl" "fail_start_outside_loopback_4" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.0.0.0/7" # 10.0.0.0 - 11.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.0.0.0/7" # 10.0.0.0 - 11.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_1" {
@@ -168,12 +196,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_1" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.99.99.99/7" # 10.0.0.0 - 11.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.99.99.99/7" # 10.0.0.0 - 11.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_2" {
@@ -192,12 +222,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.255.255.255/7" # 10.0.0.0 - 11.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.255.255.255/7" # 10.0.0.0 - 11.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_3" {
@@ -216,12 +248,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_3" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "11.0.0.0/7" # 10.0.0.0 - 11.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "11.0.0.0/7" # 10.0.0.0 - 11.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_4" {
@@ -240,12 +274,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_4" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_private_network_5" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.0.0/11" # 172.0.0.0 - 172.31.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.0.0/11" # 172.0.0.0 - 172.31.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_private_network_5" {
@@ -264,12 +300,14 @@ resource "aws_network_acl" "fail_start_outside_private_network_5" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_private_network_6" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.99.99/11" # 172.0.0.0 - 172.31.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.99.99/11" # 172.0.0.0 - 172.31.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_private_network_6" {
@@ -288,12 +326,14 @@ resource "aws_network_acl" "fail_start_outside_private_network_6" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_private_network_7" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.255.255/11" # 172.0.0.0 - 172.31.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.255.255/11" # 172.0.0.0 - 172.31.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_private_network_7" {
@@ -312,12 +352,14 @@ resource "aws_network_acl" "fail_start_outside_private_network_7" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_private_network_8" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.15.0.0/12" # 172.0.0.0 - 172.15.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.15.0.0/12" # 172.0.0.0 - 172.15.255.255
 }
 
 resource "aws_network_acl" "fail_start_outside_private_network_8" {
@@ -336,12 +378,14 @@ resource "aws_network_acl" "fail_start_outside_private_network_8" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_9" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.0.0/15" # 192.168.0.0 - 192.169.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.0.0/15" # 192.168.0.0 - 192.169.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_9" {
@@ -360,12 +404,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_9" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_10" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.99.99/15" # 192.168.0.0 - 192.169.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.99.99/15" # 192.168.0.0 - 192.169.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_10" {
@@ -384,12 +430,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_10" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_11" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.255.255/15" # 192.168.0.0 - 192.169.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.255.255/15" # 192.168.0.0 - 192.169.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_11" {
@@ -408,12 +456,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_11" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_private_network_12" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.169.0.0/15" # 192.168.0.0 - 192.169.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.169.0.0/15" # 192.168.0.0 - 192.169.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_private_network_12" {
@@ -432,12 +482,14 @@ resource "aws_network_acl" "fail_end_outside_private_network_12" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_link_local_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.0.0/15" # 169.254.0.0 - 169.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.0.0/15" # 169.254.0.0 - 169.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_link_local_1" {
@@ -456,12 +508,14 @@ resource "aws_network_acl" "fail_end_outside_link_local_1" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_link_local_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.99.99/15" # 169.254.0.0 - 169.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.99.99/15" # 169.254.0.0 - 169.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_link_local_2" {
@@ -480,12 +534,14 @@ resource "aws_network_acl" "fail_end_outside_link_local_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_end_outside_link_local_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.255.255/15" # 169.254.0.0 - 169.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.255.255/15" # 169.254.0.0 - 169.255.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_link_local_3" {
@@ -503,16 +559,18 @@ resource "aws_network_acl" "fail_end_outside_link_local_3" {
 }
 
 # ruleid: aws-network-acl-allows-public-ingress
-resource "aws_network_acl_rule" "fail_end_outside_link_local_5" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.255.0.0/15" # 169.254.0.0 - 169.255.255.255
+resource "aws_network_acl_rule" "fail_end_outside_link_local_4" {
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.255.0.0/15" # 169.254.0.0 - 169.255.255.255
 }
 
-resource "aws_network_acl" "fail_end_outside_link_local_5" {
+resource "aws_network_acl" "fail_end_outside_link_local_4" {
   vpc_id = aws_vpc.example.id
 
   # ruleid: aws-network-acl-allows-public-ingress
@@ -528,15 +586,17 @@ resource "aws_network_acl" "fail_end_outside_link_local_5" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_shared_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.0.0/9" # 100.0.0.0 - 100.127.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.0.0/9" # 100.0.0.0 - 100.127.255.255
 }
 
-resource "aws_network_acl" "fail_end_outside_shared_1" {
+resource "aws_network_acl" "fail_start_outside_shared_1" {
   vpc_id = aws_vpc.example.id
 
   # ruleid: aws-network-acl-allows-public-ingress
@@ -552,15 +612,17 @@ resource "aws_network_acl" "fail_end_outside_shared_1" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_shared_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.99.99/9" # 100.0.0.0 - 100.127.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.99.99/9" # 100.0.0.0 - 100.127.255.255
 }
 
-resource "aws_network_acl" "fail_end_outside_shared_2" {
+resource "aws_network_acl" "fail_start_outside_shared_2" {
   vpc_id = aws_vpc.example.id
 
   # ruleid: aws-network-acl-allows-public-ingress
@@ -576,12 +638,14 @@ resource "aws_network_acl" "fail_end_outside_shared_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_shared_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.255.255/9" # 100.0.0.0 - 100.127.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.255.255/9" # 100.0.0.0 - 100.127.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_shared_3" {
@@ -600,12 +664,14 @@ resource "aws_network_acl" "fail_end_outside_shared_3" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_start_outside_shared_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.65.0.0/9" # 100.0.0.0 - 100.127.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.65.0.0/9" # 100.0.0.0 - 100.127.255.255
 }
 
 resource "aws_network_acl" "fail_end_outside_shared_4" {
@@ -624,12 +690,14 @@ resource "aws_network_acl" "fail_end_outside_shared_4" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.0.0.0/6" # 8.0.0.0 - 11.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.0.0.0/6" # 8.0.0.0 - 11.255.255.255
 }
 
 resource "aws_network_acl" "fail_1" {
@@ -648,12 +716,14 @@ resource "aws_network_acl" "fail_1" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.0.0/2" # 128.0.0.0 - 192.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.0.0/2" # 128.0.0.0 - 192.255.255.255
 }
 
 resource "aws_network_acl" "fail_2" {
@@ -672,12 +742,14 @@ resource "aws_network_acl" "fail_2" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.0.1/8" # 192.0.0.0 - 192.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.0.1/8" # 192.0.0.0 - 192.255.255.255
 }
 
 resource "aws_network_acl" "fail_3" {
@@ -696,12 +768,14 @@ resource "aws_network_acl" "fail_3" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.0.0/14" # 169.252.0.0 - 169.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.0.0/14" # 169.252.0.0 - 169.255.255.255
 }
 
 resource "aws_network_acl" "fail_4" {
@@ -720,12 +794,14 @@ resource "aws_network_acl" "fail_4" {
 
 # ruleid: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "fail_5" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.0.0/8" # 100.0.0.0 - 100.255.255.255
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.0.0/8" # 100.0.0.0 - 100.255.255.255
 }
 
 resource "aws_network_acl" "fail_5" {
@@ -744,12 +820,14 @@ resource "aws_network_acl" "fail_5" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_loopback_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.0.0.0/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.0.0.0/8"
 }
 
 resource "aws_network_acl" "pass_inside_loopback_1" {
@@ -766,14 +844,30 @@ resource "aws_network_acl" "pass_inside_loopback_1" {
   }
 }
 
+resource "aws_default_network_acl" "pass_inside_loopback_1" {
+  default_network_acl_id = aws_vpc.example.default_network_acl_id
+
+  # ok: aws-network-acl-allows-public-ingress
+  ingress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "allow"
+    cidr_block = "127.0.0.0/8"
+  }
+}
+
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_loopback_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.99.99.99/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.99.99.99/8"
 }
 
 resource "aws_network_acl" "pass_inside_loopback_2" {
@@ -792,12 +886,14 @@ resource "aws_network_acl" "pass_inside_loopback_2" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_loopback_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.255.255.255/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.255.255.255/8"
 }
 
 resource "aws_network_acl" "pass_inside_loopback_3" {
@@ -816,12 +912,14 @@ resource "aws_network_acl" "pass_inside_loopback_3" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_loopback_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.0.0.0/10"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.0.0.0/10"
 }
 
 resource "aws_network_acl" "pass_inside_loopback_4" {
@@ -840,12 +938,14 @@ resource "aws_network_acl" "pass_inside_loopback_4" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_loopback_5" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "127.0.0.0/31"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "127.0.0.0/31"
 }
 
 resource "aws_network_acl" "pass_inside_loopback_5" {
@@ -864,12 +964,14 @@ resource "aws_network_acl" "pass_inside_loopback_5" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.0.0.0/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.0.0.0/8"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_1" {
@@ -888,12 +990,14 @@ resource "aws_network_acl" "pass_inside_private_network_1" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.99.99.99/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.99.99.99/8"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_2" {
@@ -912,12 +1016,14 @@ resource "aws_network_acl" "pass_inside_private_network_2" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.255.255.255/8"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.255.255.255/8"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_3" {
@@ -936,12 +1042,14 @@ resource "aws_network_acl" "pass_inside_private_network_3" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.0.0.0/10"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.0.0.0/10"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_4" {
@@ -960,12 +1068,14 @@ resource "aws_network_acl" "pass_inside_private_network_4" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_5" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "10.0.0.0/31"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "10.0.0.0/31"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_5" {
@@ -984,12 +1094,14 @@ resource "aws_network_acl" "pass_inside_private_network_5" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_6" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.0.0/12"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.0.0/12"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_6" {
@@ -1008,12 +1120,14 @@ resource "aws_network_acl" "pass_inside_private_network_6" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_7" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.99.99/12"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.99.99/12"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_7" {
@@ -1032,12 +1146,14 @@ resource "aws_network_acl" "pass_inside_private_network_7" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_8" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.255.255/12"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.255.255/12"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_8" {
@@ -1056,12 +1172,14 @@ resource "aws_network_acl" "pass_inside_private_network_8" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_9" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "172.16.0.0/22"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "172.16.0.0/22"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_9" {
@@ -1080,12 +1198,14 @@ resource "aws_network_acl" "pass_inside_private_network_9" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_10" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.0.0/16"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.0.0/16"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_10" {
@@ -1104,12 +1224,14 @@ resource "aws_network_acl" "pass_inside_private_network_10" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_11" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.99.99/24"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.99.99/24"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_11" {
@@ -1128,12 +1250,14 @@ resource "aws_network_acl" "pass_inside_private_network_11" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_12" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.255.255/16"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.255.255/16"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_12" {
@@ -1152,12 +1276,14 @@ resource "aws_network_acl" "pass_inside_private_network_12" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_private_network_13" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "192.168.0.0/24"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "192.168.0.0/24"
 }
 
 resource "aws_network_acl" "pass_inside_private_network_13" {
@@ -1176,12 +1302,14 @@ resource "aws_network_acl" "pass_inside_private_network_13" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_link_local_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.0.0/16"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.0.0/16"
 }
 
 resource "aws_network_acl" "pass_inside_link_local_1" {
@@ -1200,12 +1328,14 @@ resource "aws_network_acl" "pass_inside_link_local_1" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_link_local_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.99.99/16"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.99.99/16"
 }
 
 resource "aws_network_acl" "pass_inside_link_local_2" {
@@ -1224,12 +1354,14 @@ resource "aws_network_acl" "pass_inside_link_local_2" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_link_local_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.255.255/16"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.255.255/16"
 }
 
 resource "aws_network_acl" "pass_inside_link_local_3" {
@@ -1248,12 +1380,14 @@ resource "aws_network_acl" "pass_inside_link_local_3" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_link_local_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "169.254.0.0/26"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "169.254.0.0/26"
 }
 
 resource "aws_network_acl" "pass_inside_link_local_4" {
@@ -1272,12 +1406,14 @@ resource "aws_network_acl" "pass_inside_link_local_4" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_shared_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.0.0/10"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.0.0/10"
 }
 
 resource "aws_network_acl" "pass_inside_shared_1" {
@@ -1296,12 +1432,14 @@ resource "aws_network_acl" "pass_inside_shared_1" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_shared_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.99.99/10"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.99.99/10"
 }
 
 resource "aws_network_acl" "pass_inside_shared_2" {
@@ -1320,12 +1458,14 @@ resource "aws_network_acl" "pass_inside_shared_2" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_shared_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.255.255/10"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.255.255/10"
 }
 
 resource "aws_network_acl" "pass_inside_shared_3" {
@@ -1344,12 +1484,14 @@ resource "aws_network_acl" "pass_inside_shared_3" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_inside_shared_4" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "100.64.0.0/20"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "100.64.0.0/20"
 }
 
 resource "aws_network_acl" "pass_inside_shared_4" {
@@ -1368,12 +1510,14 @@ resource "aws_network_acl" "pass_inside_shared_4" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_single_ip_1" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "1.2.3.4/32"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "1.2.3.4/32"
 }
 
 resource "aws_network_acl" "pass_single_ip_1" {
@@ -1392,12 +1536,14 @@ resource "aws_network_acl" "pass_single_ip_1" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_single_ip_2" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "11.22.33.44/32"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "11.22.33.44/32"
 }
 
 resource "aws_network_acl" "pass_single_ip_2" {
@@ -1416,12 +1562,14 @@ resource "aws_network_acl" "pass_single_ip_2" {
 
 # ok: aws-network-acl-allows-public-ingress
 resource "aws_network_acl_rule" "pass_single_ip_3" {
-  egress      = false
-  protocol    = "tcp"
-  from_port   = 22
-  to_port     = 22
-  rule_action = "allow"
-  cidr_block  = "211.222.233.244/32"
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "211.222.233.244/32"
 }
 
 resource "aws_network_acl" "pass_single_ip_3" {
@@ -1435,5 +1583,85 @@ resource "aws_network_acl" "pass_single_ip_3" {
     to_port    = 22
     action     = "allow"
     cidr_block = "211.222.233.244/32"
+  }
+}
+
+# ok: aws-network-acl-allows-public-ingress
+resource "aws_network_acl_rule" "pass_deny_ingress" {
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = false
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "deny"
+  cidr_block     = "0.0.0.0/0"
+}
+
+resource "aws_network_acl" "pass_deny_ingress" {
+  vpc_id = aws_vpc.example.id
+
+  # ok: aws-network-acl-allows-public-ingress
+  ingress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "deny"
+    cidr_block = "0.0.0.0/0"
+  }
+}
+
+resource "aws_default_network_acl" "pass_deny_ingress" {
+  default_network_acl_id = aws_vpc.example.default_network_acl_id
+
+  # ok: aws-network-acl-allows-public-ingress
+  ingress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "deny"
+    cidr_block = "0.0.0.0/0"
+  }
+}
+
+# ok: aws-network-acl-allows-public-ingress
+resource "aws_network_acl_rule" "pass_egress" {
+  network_acl_id = aws_network_acl.example.id
+  rule_number    = 1
+  egress         = true
+  protocol       = "tcp"
+  from_port      = 22
+  to_port        = 22
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+}
+
+resource "aws_network_acl" "pass_egress" {
+  vpc_id = aws_vpc.example.id
+
+  # ok: aws-network-acl-allows-public-ingress
+  egress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+  }
+}
+
+resource "aws_default_network_acl" "pass_egress" {
+  default_network_acl_id = aws_vpc.example.default_network_acl_id
+
+  # ok: aws-network-acl-allows-public-ingress
+  egress {
+    rule_no    = 1
+    protocol   = "tcp"
+    from_port  = 22
+    to_port    = 22
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
   }
 }
