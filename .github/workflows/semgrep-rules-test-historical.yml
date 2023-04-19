@@ -49,7 +49,7 @@ jobs:
         echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:1.15.0 semgrep --validate --config /src
     - name: test with historical semgrep version
       run: |
         TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
