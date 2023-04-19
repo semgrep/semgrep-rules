@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        path: semgrep-rules-proprietary
+        path: semgrep-rules
         fetch-depth: 0
     - uses: actions/setup-python@v2
       with:
@@ -24,7 +24,7 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v23.1
       with:
-        path: semgrep-rules-proprietary
+        path: semgrep-rules
         separator: ","
     # need to delete these directories or else we get linter errors during 
     # the "validate" step.
@@ -74,4 +74,3 @@ jobs:
           done
           exit 1
         fi
-        
