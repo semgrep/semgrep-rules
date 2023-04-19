@@ -7,7 +7,7 @@ rules:
     authorization information sent with this request. They could also probe internal servers or other
     resources that the server runnig this code can access. (This is called server-side request forgery,
     or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the
-    correct host.
+    correct host. $URLSTR
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -19,7 +19,7 @@ rules:
     technology:
     - go
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    confidence: MEDIUM
+    confidence: HIGH
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
@@ -27,24 +27,11 @@ rules:
     impact: MEDIUM
     likelihood: MEDIUM
   mode: taint
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-either:
-          - pattern: fmt.Fprintf($F, "$URLSTR", ...)
-          - pattern: fmt.Sprintf("$URLSTR", ...)
-          - pattern: fmt.Printf("$URLSTR", ...)
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: http(s?)://%(v|s|q).*
-      - patterns:
-        - pattern: '"$URLSTR" + ...'
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: \w+://.*
+  options:
+    symbolic_propagation: true
   pattern-sources:
-  - patterns:
+  - label: INPUT
+    patterns:
     - pattern-either:
       - pattern: |
           ($REQUEST : *http.Request).$ANYTHING
@@ -53,4 +40,58 @@ rules:
     - metavariable-regex:
         metavariable: $ANYTHING
         regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
+  - label: FORMAT
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: fmt.Fprintf($F, "$URLSTR", $INPUT, ...)
+          - pattern: fmt.Sprintf("$URLSTR", $INPUT, ...)
+          - pattern: fmt.Printf("$URLSTR", $INPUT, ...)
+        - metavariable-regex:
+            metavariable: $URLSTR
+            regex: ^((http://)|(https://)|(//))%(v|s|q).*
+    - focus-metavariable: $INPUT
+  - label: ADD
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: |
+          $F + $X
+      - pattern: fmt.Fprintf(..., $X, ...)
+      - pattern: fmt.Sprintf(..., $X, ...)
+      - pattern: fmt.Printf(..., $X ...)
+    - pattern-not: |
+        "https://" + $X
+    - pattern-not: |
+        "http://" + $X
+    - pattern-not: |
+        "//" + $X
+    - pattern-not: |
+        $X + $F
+    - focus-metavariable: $X
+  pattern-sinks:
+  - requires: FORMAT or (not ADD)
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                $CLIENT := &http.Client{...}
+                ...
+            - pattern: $CLIENT.$METHOD($URL, ...)
+          - pattern: http.$METHOD($URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(Get|Head|Post|PostForm)$
+      - pattern: http.Redirect($W, $REQ, $URL, ...)
+      - patterns:
+        - pattern: |
+            http.NewRequest("$METHOD", $URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(GET|HEAD|POST|POSTFORM)$
+    - focus-metavariable: $URL
   severity: WARNING
