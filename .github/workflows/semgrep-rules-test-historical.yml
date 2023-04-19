@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        path: semgrep-rules
+        path: semgrep-rules-proprietary
         fetch-depth: 0
     - uses: actions/setup-python@v2
       with:
@@ -24,16 +24,12 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v23.1
       with:
-        path: semgrep-rules
+        path: semgrep-rules-proprietary
         separator: ","
     # need to delete these directories or else we get linter errors during 
     # the "validate" step.
     - name: install semgrep
       run: pip3 install semgrep
-    - name: delete stats directory
-      run: rm -rf semgrep-rules/stats
-    - name: delete fingerprints directory
-      run: rm -rf semgrep-rules/fingerprints
     - name: grab historical semgrep version
       run: |
         RE_SEMVER='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
@@ -49,10 +45,10 @@ jobs:
         echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
       run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
+        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules-proprietary:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
     - name: test with historical semgrep version
       run: |
-        TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
+        TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules-proprietary:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
         echo "=== Testsuite output ==="
         echo "${TESTSUITE_OUTPUT}"
         echo "========================"
@@ -78,3 +74,4 @@ jobs:
           done
           exit 1
         fi
+        
