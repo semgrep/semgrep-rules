@@ -35,6 +35,8 @@ jobs:
     - name: delete fingerprints directory
       run: rm -rf semgrep-rules/fingerprints
     - name: grab historical semgrep version
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         SEMGREP_OLD_VERSION=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq -r '.[].tag_name' | sed -n 5p | tr -d v)
         echo $SEMGREP_OLD_VERSION
