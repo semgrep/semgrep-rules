@@ -2,12 +2,13 @@ rules:
 - id: tainted-url-host
   languages:
   - go
-  message: User data flows into the host portion of this manually-constructed URL. This could allow an
-    attacker to send data to their own server, potentially exposing sensitive data such as cookies or
-    authorization information sent with this request. They could also probe internal servers or other
-    resources that the server runnig this code can access. (This is called server-side request forgery,
-    or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the
-    correct host. $URLSTR
+  message: >-
+    A request was found to be crafted from user-input `$REQUEST`.
+    This can lead to Server-Side Request Forgery (SSRF) vulnerabilities, 
+    potentially exposing sensitive data. It is recommend where possible
+    to not allow user-input to craft the base request, but to be treated as part of the path or query
+    parameter. When user-input is necessary to craft the request, it is recommended to follow OWASP best
+    practices to prevent abuse, including using an allowlist.
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -27,8 +28,6 @@ rules:
     impact: MEDIUM
     likelihood: MEDIUM
   mode: taint
-  options:
-    symbolic_propagation: true
   pattern-sources:
   - label: INPUT
     patterns:

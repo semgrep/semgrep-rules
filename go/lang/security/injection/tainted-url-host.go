@@ -100,10 +100,10 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
     client := &http.Client{Transport: tr}
 
     if r.Method == "POST" && r.URL.Path == "/api" {
-        url := fmt.Printf("https://example.com/%v", r.URL.Query().Get("proxy"))
+        url2 := fmt.Printf("https://example.com/%v", r.URL.Query().Get("proxy"))
 
          // todook: tainted-url-host
-        resp, err := client.Post(url, "application/json", r.Body)
+        resp, err := client.Post(url2, "application/json", r.Body)
 
         if err != nil {
             w.WriteHeader(http.StatusInternalServerError)
