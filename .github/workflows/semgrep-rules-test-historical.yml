@@ -41,7 +41,6 @@ jobs:
         SEMGREP_VERSION_TOP=`echo ${SEMGREP_VERSION} | sed -e "s#$RE_SEMVER#\1#"`
         SEMGREP_VERSION_SHORT=`echo ${SEMGREP_VERSION} | sed -e "s#$RE_SEMVER#\2#"`
         SEMGREP_OLD_VERSION="$SEMGREP_VERSION_TOP.$(($SEMGREP_VERSION_SHORT-3)).0"
-        fi
         echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
       run: |
