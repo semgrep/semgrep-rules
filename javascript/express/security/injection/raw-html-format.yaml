@@ -46,7 +46,7 @@ rules:
       - pattern: $REQ.params
       - pattern: $REQ.cookies
       - pattern: $REQ.headers
-  - label: NEXTJS
+  - label: EXPRESSTS
     patterns:
     - pattern-either:
       - pattern-inside: |
@@ -73,7 +73,7 @@ rules:
           metavariable: $A
           regex: (?i)(.*valid|.*sanitiz)
   pattern-sinks:
-  - requires: (EXPRESS and not CLEAN) or (NEXTJS and not CLEAN)
+  - requires: (EXPRESS and not CLEAN) or (EXPRESSTS and not CLEAN)
     patterns:
     - pattern-either:
       - patterns:
