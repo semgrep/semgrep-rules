@@ -40,6 +40,16 @@ rules:
     - metavariable-regex:
         metavariable: $METHOD
         regex: ^(Order|Exec|Raw|Group|Having|Distinct|Select|Pluck)$
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: strconv.Atoi(...)
+    - patterns:
+      - focus-metavariable: $...X
+      - pattern-either:
+        - pattern: <... $...X != $...Y ...>
+        - pattern: <... $...Y != $...X ...>
+        - pattern: <... $...X == $...Y ...>
+        - pattern: <... $...Y == $...X ...>
   metadata:
     category: security
     technology:
@@ -52,10 +62,11 @@ rules:
     references:
     - https://gorm.io/docs/security.html#SQL-injection-Methods
     - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-    confidence: MEDIUM
+    confidence: HIGH
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: HIGH
     impact: MEDIUM
+    interfile: true
