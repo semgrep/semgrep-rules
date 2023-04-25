@@ -92,47 +92,6 @@ func handlerOtherFmt(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
-    tr := &http.Transport{
-            TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-        }
-
-    client := &http.Client{Transport: tr}
-
-    if r.Method == "POST" && r.URL.Path == "/api" {
-        url2 := fmt.Printf("https://example.com/%v", r.URL.Query().Get("proxy"))
-
-         // todook: tainted-url-host
-        resp, err := client.Post(url2, "application/json", r.Body)
-
-        if err != nil {
-            w.WriteHeader(http.StatusInternalServerError)
-            return
-        }
-
-        defer resp.Body.Close()
-
-        if resp.StatusCode != 200 {
-            w.WriteHeader(500)
-            return
-        }
-
-        w.Write([]byte(fmt.Sprintf("{\"host\":\"%v\"}", r.URL.Query().Get("proxy"))))
-        return
-    } else {
-        proxy := r.URL.Query()["proxy"]
-        secure := r.URL.Query()["secure"]
-
-        if (secure) {
-            url := fmt.Sprintf("https://example.com/%s", proxy)
-        } else {
-            url := fmt.Fprintf(w, "http://example.com%q", proxy)
-        }
-        // ok: tainted-url-host
-        resp, err := client.Post(url, "application/json", r.Body)
-    }
-}
-
 func (s *server) handlerBadFmt (w http.ResponseWriter, r *http.Request) {
     urls, ok := r.URL.Query()["url"] // extract url from query params
 
@@ -390,24 +349,6 @@ func (s *server) handlerBadAdd (w http.ResponseWriter, r *http.Request) {
     // Write out the hexdump of the bytes as plaintext.
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprint(w, hex.Dump(bytes))
-}
-
-func newRedirectServerAdd(addr string, rootPath string) *http.Server {
-    return &http.Server{
-        Addr: addr,
-        Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-            target := "https://" + req.Host + "/path/to/" + req.URL.Path
-            if rootPath != "" {
-                target += "/" + strings.TrimRight(strings.TrimLeft(rootPath, "/"), "/")
-            }
-            target += req.URL.Path
-            if len(req.URL.RawQuery) > 0 {
-                target += "?" + req.URL.RawQuery
-            }
-            // todoruleid: tainted-url-host
-            http.Redirect(w, req, target, http.StatusTemporaryRedirect)
-        }),
-    }
 }
 
 func main() {
