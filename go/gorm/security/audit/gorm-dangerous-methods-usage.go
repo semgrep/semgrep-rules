@@ -55,6 +55,16 @@ func testNoInjection2(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 	table.Order(orderBy).Find(&u)
 }
 
+func testNoInjection3(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
+	param := r.URL.Query().Get("orderBy")
+	if param != "" {
+		table := db.Table("users")
+		var u User
+		//ok: gorm-dangerous-method-usage
+		table.Order((param != "param") + " " + "ASC").Find(&u)
+	}
+}
+
 func main() {
 	dsn := "dbuser:password@tcp(127.0.0.1:3306)/users?charset=utf8&parseTime=True"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
