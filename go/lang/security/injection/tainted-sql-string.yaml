@@ -44,8 +44,24 @@ rules:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: |
-            "$SQLSTR" + ...
+        - pattern-either:
+          - pattern: |
+              "$SQLSTR" + ...
+          - patterns:
+            - pattern-inside: |
+                $VAR = "$SQLSTR";
+                ...
+            - pattern: $VAR += ...
+          - patterns:
+            - pattern-inside: |
+                var $SB strings.Builder
+                ...
+            - pattern-inside: |
+                $SB.WriteString("$SQLSTR")
+                ...
+                $SB.String(...)
+            - pattern: |
+                $SB.WriteString(...)
         - metavariable-regex:
             metavariable: $SQLSTR
             regex: (?i)(select|delete|insert|create|update|alter|drop).*
@@ -58,4 +74,12 @@ rules:
             metavariable: $SQLSTR
             regex: \s*(?i)(select|delete|insert|create|update|alter|drop)\b.*%(v|s|q).*
   pattern-sanitizers:
-  - pattern: strconv.Atoi(...)
+  - pattern-either:
+    - pattern: strconv.Atoi(...)
+    - patterns:
+      - focus-metavariable: $...X
+      - pattern-either:
+        - pattern: <... $...X != $...Y ...>
+        - pattern: <... $...Y != $...X ...>
+        - pattern: <... $...X == $...Y ...>
+        - pattern: <... $...Y == $...X ...>
