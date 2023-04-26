@@ -55,7 +55,7 @@ rules:
       - pattern: (EntityManager $EM).$SQLFUNC(...)
     - metavariable-regex:
         metavariable: $SQLFUNC
-        regex: execute|executeQuery|createQuery|query
+        regex: execute|executeQuery|createQuery|query|addBatch|nativeSQL|create|prepare
   pattern-sanitizers:
   - patterns:
     - pattern: (CriteriaBuilder $CB).$ANY(...)
