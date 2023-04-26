@@ -51,7 +51,9 @@ rules:
     - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
     - pattern-either:
       - pattern: (Statement $S).$SQLFUNC(...)
+      - pattern: (PreparedStatement $P).$SQLFUNC(...)
       - pattern: (Connection $C).createStatement(...).$SQLFUNC(...)
+      - pattern: (Connection $C).prepareStatement(...).$SQLFUNC(...)
       - pattern: (EntityManager $EM).$SQLFUNC(...)
     - metavariable-regex:
         metavariable: $SQLFUNC
