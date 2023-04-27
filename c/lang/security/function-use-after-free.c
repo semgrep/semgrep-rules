@@ -15,14 +15,14 @@ int bad_code1() {
     char buf[10];
     var = (NAME *)malloc(sizeof(struct name));
     free(var);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     strcpy(buf, (char*)var);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     other_func((char*)(*var));
+    // ruleid: function-use-after-free
     other_func((char*)var[0]);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     var->func(var->myname);
-    other_func((char*)var);
     return 0;
 }
 
@@ -31,11 +31,11 @@ int bad_code2() {
     char buf[10];
     var = (NAME *)malloc(sizeof(struct name));
     free(var);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     strcpy(buf, (char*)*var);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     other_func((char*)var);
-    // ruleid: use-after-free
+    // ruleid: function-use-after-free
     other_func((char*)var->myname);
     return 0;
 }
@@ -46,7 +46,7 @@ int okay_code1() {
     free(var);
     var = NULL;
     // This will segmentation fault
-    // ok: use-after-free
+    // ok: function-use-after-free
     other_func((char*)var);
     other_func((char*)var->myname);
     other_func((char*)*var);
@@ -60,7 +60,7 @@ int okay_code2() {
     var = NULL;
     var = (NAME *)malloc(sizeof(struct name));
     // This will segmentation fault
-    // ok: use-after-free
+    // ok: function-use-after-free
     other_func((char*)var);
     other_func((char*)var->myname);
     other_func((char*)*var);

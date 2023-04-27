@@ -2,10 +2,10 @@ rules:
   - id: function-use-after-free
     patterns:
       - pattern-either:
-        - pattern: $FUNC(..., $VAR, ...)
-        - pattern: $FUNC(..., $VAR->$ACCESSOR, ...)
-        - pattern: $FUNC(..., (*$VAR).$ACCESSOR, ...)
-        - pattern: $FUNC(..., $VAR[$NUM], ...)
+        - pattern: $FUNC(..., <... $VAR ...>, ...)
+        - pattern: $FUNC(..., <... $VAR->$ACCESSOR ...>, ...)
+        - pattern: $FUNC(..., <... (*$VAR).$ACCESSOR ...>, ...)
+        - pattern: $FUNC(..., <... $VAR[$NUM] ...>, ...)
       - metavariable-regex:
           metavariable: $FUNC
           regex: (?!^free$)
