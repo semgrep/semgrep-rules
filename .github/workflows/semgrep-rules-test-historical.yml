@@ -35,17 +35,11 @@ jobs:
     - name: delete fingerprints directory
       run: rm -rf semgrep-rules/fingerprints
     - name: grab historical semgrep version
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
-        RE_SEMVER='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
-        SEMGREP_VERSION=`semgrep --version`
-        SEMGREP_VERSION_TOP=`echo ${SEMGREP_VERSION} | sed -e "s#$RE_SEMVER#\1#"`
-        SEMGREP_VERSION_SHORT=`echo ${SEMGREP_VERSION} | sed -e "s#$RE_SEMVER#\2#"`
-        if [[ $SEMGREP_VERSION_SHORT < 3 ]]
-        then
-          SEMGREP_OLD_VERSION="$SEMGREP_VERSION_TOP.0.0"
-        else
-          SEMGREP_OLD_VERSION="$SEMGREP_VERSION_TOP.$(($SEMGREP_VERSION_SHORT-3)).0"
-        fi
+        SEMGREP_OLD_VERSION=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq -r '.[].tag_name' | sed -n 5p | tr -d v)
+        echo $SEMGREP_OLD_VERSION
         echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
       run: |
