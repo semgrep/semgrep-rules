@@ -2,12 +2,13 @@ rules:
 - id: tainted-url-host
   languages:
   - go
-  message: User data flows into the host portion of this manually-constructed URL. This could allow an
-    attacker to send data to their own server, potentially exposing sensitive data such as cookies or
-    authorization information sent with this request. They could also probe internal servers or other
-    resources that the server runnig this code can access. (This is called server-side request forgery,
-    or SSRF.) Do not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the
-    correct host.
+  message: >-
+    A request was found to be crafted from user-input `$REQUEST`.
+    This can lead to Server-Side Request Forgery (SSRF) vulnerabilities, 
+    potentially exposing sensitive data. It is recommend where possible
+    to not allow user-input to craft the base request, but to be treated as part of the path or query
+    parameter. When user-input is necessary to craft the request, it is recommended to follow OWASP best
+    practices to prevent abuse, including using an allowlist. $URLSTR
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -19,32 +20,18 @@ rules:
     technology:
     - go
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    confidence: MEDIUM
+    confidence: HIGH
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - vuln
     impact: MEDIUM
     likelihood: MEDIUM
+    interfile: true
   mode: taint
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-either:
-          - pattern: fmt.Fprintf($F, "$URLSTR", ...)
-          - pattern: fmt.Sprintf("$URLSTR", ...)
-          - pattern: fmt.Printf("$URLSTR", ...)
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: http(s?)://%(v|s|q).*
-      - patterns:
-        - pattern: '"$URLSTR" + ...'
-        - metavariable-regex:
-            metavariable: $URLSTR
-            regex: \w+://.*
   pattern-sources:
-  - patterns:
+  - label: INPUT
+    patterns:
     - pattern-either:
       - pattern: |
           ($REQUEST : *http.Request).$ANYTHING
@@ -53,4 +40,62 @@ rules:
     - metavariable-regex:
         metavariable: $ANYTHING
         regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
+  - label: FORMAT
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: fmt.Fprintf($F, "$URLSTR", $INPUT, ...)
+          - pattern: fmt.Sprintf("$URLSTR", $INPUT, ...)
+          - pattern: fmt.Printf("$URLSTR", $INPUT, ...)
+        - metavariable-regex:
+            metavariable: $URLSTR
+            regex: ^((http://)|(https://)|(//))%(v|s|q).*
+    - focus-metavariable: $INPUT
+  - label: ADD_OR_DIRECT
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: $X + $F
+      - pattern: $X
+    - focus-metavariable: $X
+    - pattern-not-inside: |
+        fmt.Printf(...)
+        ...
+    - pattern-not-inside: |
+        fmt.Sprintf(...)
+        ...
+    - pattern-not-inside: |
+        fmt.Fprintf(...)
+        ...
+  pattern-sanitizers:
+  - patterns:
+    - pattern: $F + $X
+    - metavariable-regex: 
+        metavariable: $F
+        regex: ".*//[a-zA-Z0-10]+\\..*"
+  pattern-sinks:
+  - requires: FORMAT or ADD_OR_DIRECT
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                $CLIENT := &http.Client{...}
+                ...
+            - pattern: $CLIENT.$METHOD($URL, ...)
+          - pattern: http.$METHOD($URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(Get|Head|Post|PostForm)$
+      - pattern: http.Redirect($W, $REQ, $URL, ...)
+      - patterns:
+        - pattern: |
+            http.NewRequest("$METHOD", $URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(GET|HEAD|POST|POSTFORM)$
+    - focus-metavariable: $URL
   severity: WARNING
