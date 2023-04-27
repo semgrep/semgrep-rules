@@ -102,7 +102,7 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
     if r.Method == "POST" && r.URL.Path == "/api" {
         url := fmt.Printf("https://example.com/%v", r.URL.Query().Get("proxy"))
 
-         // todook: tainted-url-host
+         // ok: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
 
         if err != nil {
@@ -124,7 +124,7 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
         secure := r.URL.Query()["secure"]
 
         if (secure) {
-            url := fmt.Sprintf("https://example.com/%s", proxy)
+           
         } else {
             url := fmt.Fprintf(w, "http://example.com%q", proxy)
         }

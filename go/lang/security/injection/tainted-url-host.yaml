@@ -60,6 +60,15 @@ rules:
       - pattern: $X + $F
       - pattern: $X
     - focus-metavariable: $X
+    - pattern-not-inside: |
+        fmt.Printf(...)
+        ...
+    - pattern-not-inside: |
+        fmt.Sprintf(...)
+        ...
+    - pattern-not-inside: |
+        fmt.Fprintf(...)
+        ...
   pattern-sanitizers:
   - patterns:
     - pattern: $F + $X
