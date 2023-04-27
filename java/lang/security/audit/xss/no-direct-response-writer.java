@@ -125,7 +125,7 @@ public class BenchmarkTest02388 extends HttpServlet {
                 fw.write("hash_value=" + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true) + "\n");
             fw.close();
             response.getWriter().println(
-            // ruleid: no-direct-response-writer
+            // ok: no-direct-response-writer
             "Sensitive value '" + org.owasp.esapi.ESAPI.encoder().encodeForHTML(new String(input)) + "' hashed and stored<br/>"
 );
 

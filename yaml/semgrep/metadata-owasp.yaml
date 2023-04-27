@@ -9,13 +9,17 @@ rules:
       - pattern-inside: "rules: ..."
       - pattern-inside: "metadata: ..."
       - pattern-either:
+        # A single line year is optional, e.g. `owasp: "A1: blah"` or `owasp: A01:2021 blah`
+        # If there's a year, need leading zero, e.g. `A01:2021 blah` rather than `A1:2021 blah`.
           - patterns:
               - pattern: 'owasp: "..."'
-              - pattern-not: 'owasp: "=~/^A(0?[1-9]|10): .+$/"'
+              - pattern-not: 'owasp: "=~/^A(0?[1-9]|10):\s+.+$/"'
+              - pattern-not: 'owasp: "=~/^A(0[1-9]|10):([0-9]{4})?\s+.+$/"'
+          # A list, must have the year, e.g. `- A01:2021 blah`
           - patterns:
               - pattern-inside: "owasp: [...]"
               - pattern: '"$ANYTHING"'
-              - pattern-not-regex: .*A[01][0-9]:[0-9]{4}\s+.*
+              - pattern-not-regex: .*A(0[1-9]|10):[0-9]{4}\s+.*
               - pattern-not-regex: "owasp:"
     metadata:
       category: best-practice
