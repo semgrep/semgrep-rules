@@ -28,7 +28,8 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
+  - label: EXPRESS
+    patterns:
     - pattern-either:
       - pattern-inside: function ... ($REQ, $RES) {...}
       - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
@@ -45,7 +46,8 @@ rules:
       - pattern: $REQ.params
       - pattern: $REQ.cookies
       - pattern: $REQ.headers
-  - patterns:
+  - label: EXPRESSTS
+    patterns:
     - pattern-either:
       - pattern-inside: |
           ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
@@ -59,8 +61,20 @@ rules:
       - pattern: cookies
       - pattern: headers
       - pattern: body
+  - label: CLEAN
+    by-side-effect: true
+    patterns:
+      - pattern-either:
+          - pattern: $A($SOURCE)
+          - pattern: $SANITIZE. ... .$A($SOURCE)
+          - pattern: $A. ... .$SANITIZE($SOURCE)
+      - focus-metavariable: $SOURCE
+      - metavariable-regex:
+          metavariable: $A
+          regex: (?i)(.*valid|.*sanitiz)
   pattern-sinks:
-  - patterns:
+  - requires: (EXPRESS and not CLEAN) or (EXPRESSTS and not CLEAN)
+    patterns:
     - pattern-either:
       - patterns:
         - pattern-either:
