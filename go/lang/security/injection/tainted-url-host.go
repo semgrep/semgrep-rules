@@ -124,7 +124,7 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
         secure := r.URL.Query()["secure"]
 
         if (secure) {
-           
+            url := fmt.Sprintf("https://example.com/%s", proxy)
         } else {
             url := fmt.Fprintf(w, "http://example.com%q", proxy)
         }
