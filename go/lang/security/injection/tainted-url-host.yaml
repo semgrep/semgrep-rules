@@ -8,7 +8,7 @@ rules:
     potentially exposing sensitive data. It is recommend where possible
     to not allow user-input to craft the base request, but to be treated as part of the path or query
     parameter. When user-input is necessary to craft the request, it is recommended to follow OWASP best
-    practices to prevent abuse, including using an allowlist.
+    practices to prevent abuse, including using an allowlist. $URLSTR
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -53,26 +53,21 @@ rules:
             metavariable: $URLSTR
             regex: ^((http://)|(https://)|(//))%(v|s|q).*
     - focus-metavariable: $INPUT
-  - label: ADD
+  - label: ADD_OR_DIRECT
     requires: INPUT
     patterns:
     - pattern-either:
-      - pattern: |
-          $F + $X
-      - pattern: fmt.Fprintf(..., $X, ...)
-      - pattern: fmt.Sprintf(..., $X, ...)
-      - pattern: fmt.Printf(..., $X ...)
-    - pattern-not: |
-        "https://" + $X
-    - pattern-not: |
-        "http://" + $X
-    - pattern-not: |
-        "//" + $X
-    - pattern-not: |
-        $X + $F
+      - pattern: $X + $F
+      - pattern: $X
     - focus-metavariable: $X
+  pattern-sanitizers:
+  - patterns:
+    - pattern: $F + $X
+    - metavariable-regex: 
+        metavariable: $F
+        regex: ".*//[a-zA-Z0-10]+..*"
   pattern-sinks:
-  - requires: FORMAT or (not ADD)
+  - requires: FORMAT or ADD_OR_DIRECT
     patterns:
     - pattern-either:
       - patterns:
