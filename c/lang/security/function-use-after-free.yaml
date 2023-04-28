@@ -1,10 +1,14 @@
 rules:
-  - id: use-after-free
+  - id: function-use-after-free
     patterns:
       - pattern-either:
-        - pattern: $VAR->$ACCESSOR
-        - pattern: (*$VAR).$ACCESSOR
-        - pattern: $VAR[$NUM]
+        - pattern: $FUNC(..., <... $VAR ...>, ...)
+        - pattern: $FUNC(..., <... $VAR->$ACCESSOR ...>, ...)
+        - pattern: $FUNC(..., <... (*$VAR).$ACCESSOR ...>, ...)
+        - pattern: $FUNC(..., <... $VAR[$NUM] ...>, ...)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: (?!^free$)
       - pattern-inside:
           free($VAR);
           ...
@@ -16,8 +20,7 @@ rules:
           ...
           $VAR = malloc(...);
           ...
-    message: Variable '$VAR' was used after being freed. This can lead to undefined
-      behavior.
+    message: Variable '$VAR' was passed to a function after being freed. This can lead to undefined behavior.
     metadata:
       cwe:
         - "CWE-416: Use After Free"
