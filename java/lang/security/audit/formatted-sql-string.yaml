@@ -42,20 +42,42 @@ rules:
             $ANNOT $FUNC (..., $INPUT, ...) {
               ...
             }
-        - pattern-either:
-          - pattern: (String $INPUT)
-          - pattern: String.format(..., (String $INPUT), ...)
+        - pattern: (String $INPUT)
+    - focus-metavariable: $INPUT
+    label: INPUT
+  - patterns:
+    - pattern-either:
+      - pattern: $X + $INPUT
+      - pattern: $X += $INPUT
+      - pattern: $STRB.append($INPUT)
+      - pattern: String.format(..., $INPUT, ...)
+      - pattern: String.join(..., $INPUT, ...)
+      - pattern: (String $STR).concat($INPUT)
+      - pattern: $INPUT.concat(...)
+      - pattern: new $STRB(..., $INPUT, ...)
+    label: CONCAT
+    requires: INPUT
+  pattern-propagators:
+    - pattern: (StringBuffer $S).append($X)
+      from: $X
+      to: $S
+    - pattern: (StringBuilder $S).append($X)
+      from: $X
+      to: $S
   pattern-sinks:
   - patterns:
     - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE *$/" ...>)
     - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
     - pattern-either:
       - pattern: (Statement $S).$SQLFUNC(...)
+      - pattern: (PreparedStatement $P).$SQLFUNC(...)
       - pattern: (Connection $C).createStatement(...).$SQLFUNC(...)
+      - pattern: (Connection $C).prepareStatement(...).$SQLFUNC(...)
       - pattern: (EntityManager $EM).$SQLFUNC(...)
     - metavariable-regex:
         metavariable: $SQLFUNC
-        regex: execute|executeQuery|createQuery|query
+        regex: execute|executeQuery|createQuery|query|addBatch|nativeSQL|create|prepare
+    requires: CONCAT
   pattern-sanitizers:
   - patterns:
     - pattern: (CriteriaBuilder $CB).$ANY(...)
