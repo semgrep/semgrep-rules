@@ -156,3 +156,34 @@ int ok_code5(){
     return 0;
 }
 
+int bad_code6() {
+    NAME *var;
+    var = (NAME *)malloc(sizeof(struct name));
+    free(var);
+    // ruleid: use-after-free
+    (*var).func("use after free");
+    return 0;
+}
+
+int ok_code6() {
+    NAME *var;
+    var = (NAME *)malloc(sizeof(struct name));
+    free(var);
+    var = (NAME *)malloc(sizeof(struct name));
+    // ok: use-after-free
+    (*var).func("use after free");
+    return 0;
+}
+
+
+int bad_code7() {
+    char *var;
+    char buf[10];
+    var = (char *)malloc(100);
+    free(var);
+    // ruleid: use-after-free
+    char buf[0] = var[0];
+    // todo rule/id: use-after-free	// todo
+    strcpy(buf, var);
+    return 0;
+}
