@@ -104,6 +104,7 @@ rules:
       - pattern: body
   pattern-sinks:
   - patterns:
+    - pattern-inside: function ... (..., $REQ,...) {...}
     - pattern-either:
       - pattern: $RES.write($ARG)
       - pattern: $RES.send($ARG)
