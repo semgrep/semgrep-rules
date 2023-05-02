@@ -32,9 +32,9 @@ rules:
       - metavariable-regex:
           metavariable: $NETWORK_ACL
           regex: ^(aws_network_acl|aws_default_network_acl)$
-    - metavariable-regex:
-        metavariable: $PROTOCOL
-        regex: \A("all"|"-1"|-1)\Z
+  - metavariable-regex:
+      metavariable: $PROTOCOL
+      regex: \A("all"|"-1"|-1)\Z
   message: >-
     Ingress and/or egress is allowed for all ports in the network ACL rule.
     Ensure access to specific required ports is allowed, and nothing else.
