@@ -1,0 +1,86 @@
+rules:
+- id: aws-network-acl-allows-public-ingress
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: |
+          resource "aws_network_acl_rule" $ANYTHING {
+            ...
+            rule_action = "allow"
+            cidr_block = "$PUBLIC_IPV4_CIDR"
+            ...
+          }
+      - pattern-not: |
+          resource "aws_network_acl_rule" $ANYTHING {
+            ...
+            egress = true
+            ...
+          }
+    - patterns:
+      - pattern-inside: |
+          resource "$NETWORK_ACL" $ANYTHING {
+            ...
+          }
+      - pattern: |
+          ingress {
+            ...
+            action = "allow"
+            cidr_block = "$PUBLIC_IPV4_CIDR"
+            ...
+          }
+      - metavariable-regex:
+          metavariable: $NETWORK_ACL
+          regex: ^(aws_network_acl|aws_default_network_acl)$
+  - metavariable-pattern:
+      metavariable: $PUBLIC_IPV4_CIDR
+      language: generic
+      # Exclude any CIDR range that starts and ends in the designated private ranges:
+      # - 127.0.0.0/8 (IPv4 loopback) i.e. 127.0.0.0 - 127.255.255.255
+      # - 10.0.0.0/8 (IPv4 private network) i.e. 10.0.0.0 - 10.255.255.255
+      # - 172.16.0.0/12 (IPv4 private network) i.e. 172.16.0.0 - 172.31.255.255
+      # - 192.168.0.0/16 (IPv4 private network) i.e. 192.168.0.0 - 192.168.255.255
+      # - 169.254.0.0/16 (IPv4 link-local) i.e. 169.254.0.0 - 169.254.255.255
+      # - 100.64.0.0/10 (IPv4 shared address space) i.e. 100.64.0.0 - 100.127.255.255
+      patterns:
+      # 127.0.0.0 with netmask 8-32
+      - pattern-not-regex: ^127\.\d{1,3}\.\d{1,3}\.\d{1,3}/(8|9|[1-3][0-9])$
+      # 10.0.0.0 with netmask 8-32
+      - pattern-not-regex: ^10\.\d{1,3}\.\d{1,3}\.\d{1,3}/(8|9|[1-3][0-9])$
+      # 172.16.0.0-172.31.0.0 with netmask 12-32
+      - pattern-not-regex: ^172\.(1[6-9]|2[0-9]|3[01])\.\d{1,3}\.\d{1,3}/(1[2-9]|[23][0-9])$
+      # 192.168.0.0 with netmask 16-32
+      - pattern-not-regex: ^192\.168\.\d{1,3}\.\d{1,3}/(1[6-9]|[23][0-9])$
+      # 169.254.0.0 with netmask 16-32
+      - pattern-not-regex: ^169\.254\.\d{1,3}\.\d{1,3}/(1[6-9]|[23][0-9])$
+      # 100.64.0.0-100.127.0.0 with netmask 10-32
+      - pattern-not-regex: ^100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\.\d{1,3}\.\d{1,3}/[1-3][0-9]$
+      # *Also* exclude any CIDR range containing only 1 IP address, even if it is public
+      - pattern-not-regex: ^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/32$
+  message: >-
+    The network ACL rule allows ingress from public internet. Opening up ACLs
+    to the public internet is potentially dangerous. You should restrict access to
+    IP addresses or ranges that explicitly require it where possible. Set a more restrictive
+    CIDR range.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule#cidr_block
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl#cidr_block
+    - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
