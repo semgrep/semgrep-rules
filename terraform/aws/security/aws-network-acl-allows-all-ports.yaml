@@ -11,7 +11,7 @@ rules:
         }
     - patterns:
       - pattern-inside: |
-          resource "aws_network_acl" $ANYTHING {
+          resource "$NETWORK_ACL" $ANYTHING {
             ...
           }
       - pattern-either:
@@ -29,6 +29,9 @@ rules:
               action = "allow"
               ...
             }
+      - metavariable-regex:
+          metavariable: $NETWORK_ACL
+          regex: ^(aws_network_acl|aws_default_network_acl)$
   - metavariable-regex:
       metavariable: $PROTOCOL
       regex: \A("all"|"-1"|-1)\Z
@@ -51,11 +54,10 @@ rules:
     - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
     - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
     - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl
     - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
     subcategory:
     - audit
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: LOW
-    rule-origin-note: published from /src/aws-network-acl-allows-all-ports.yml in
-      None
