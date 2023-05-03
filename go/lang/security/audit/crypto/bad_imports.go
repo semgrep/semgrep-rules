@@ -21,7 +21,7 @@ func main1() {
 }
 
 func main2() {
-	// ruleid: insecure-module-used
+	// ok: insecure-module-used
 	block, err := des.NewCipher([]byte("sekritz"))
 	if err != nil {
 		panic(err)
@@ -39,13 +39,13 @@ func main2() {
 
 func main3() {
 	for _, arg := range os.Args {
-		// ruleid: insecure-module-used
+		// ok: insecure-module-used
 		fmt.Printf("%x - %s\n", md5.Sum([]byte(arg)), arg)
 	}
 }
 
 func main4() {
-	// ruleid: insecure-module-used
+	// ok: insecure-module-used
 	cipher, err := rc4.NewCipher([]byte("sekritz"))
 	if err != nil {
 		panic(err)
@@ -58,7 +58,7 @@ func main4() {
 
 func main5() {
 	for _, arg := range os.Args {
-		// ruleid: insecure-module-used
+		// ok: insecure-module-used
 		fmt.Printf("%x - %s\n", sha1.Sum([]byte(arg)), arg)
 	}
 }

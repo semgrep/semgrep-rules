@@ -1,9 +1,12 @@
 rules:
 - id: missing-ssl-minversion
   message: >-
-    `MinVersion` is missing from this TLS configuration. The default
-    value is TLS1.0 which is considered insecure. Explicitly set the
-    `MinVersion` to a secure version of TLS, such as `VersionTLS13`.
+    `MinVersion` is missing from this TLS configuration. 
+    By default, TLS 1.2 is currently used as the minimum when acting as a client, and TLS 1.0 when acting as a server.
+    General purpose web applications should default to TLS 1.3 with all other protocols disabled. 
+    Only where it is known that a web server must support legacy clients
+    with unsupported an insecure browsers (such as Internet Explorer 10), it may be necessary to enable TLS 1.0 to provide support.
+    Add `MinVersion: tls.VersionTLS13' to the TLS configuration to bump the minimum version to TLS 1.3.
   metadata:
     cwe:
     - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
@@ -20,16 +23,16 @@ rules:
     - go
     confidence: HIGH
     subcategory:
-    - audit
+    - guardrail
     likelihood: MEDIUM
     impact: LOW
   languages: [go]
   severity: WARNING
   patterns:
-  - pattern: |-
-      tls.Config{...}
-  - pattern-not-inside: |-
+  - pattern: |
+      tls.Config{ $...CONF }
+  - pattern-not: |
       tls.Config{..., MinVersion: ..., ...}
-  fix-regex:
-    regex: Config\s*\{
-    replacement: 'Config{MinVersion: tls.VersionTLS13,'
+  fix: |
+    tls.Config{ $...CONF, MinVersion: tls.VersionTLS13 }
+
