@@ -18,21 +18,23 @@ rules:
   message: Do not use `math/rand`. Use `crypto/rand` instead.
   languages: [go]
   severity: WARNING
-  pattern-either:
-  - patterns:
-    - pattern-inside: |
-        import mrand "math/rand"
-        ...
+  patterns:
     - pattern-either:
-      - pattern: mrand.Int()
-      - pattern: mrand.Read(...)
-  - patterns:
-    - pattern-inside: |
-        import "math/rand"
-        ...
-    - pattern-not-inside: |
-        import "crypto/rand"
-        ...
+      - pattern: |
+          import $RAND "$MATH"
+      - pattern: |
+          import "$MATH"
+    - metavariable-regex:
+        metavariable: $MATH
+        regex: ^(math/rand)$
     - pattern-either:
-      - pattern: rand.Int()
-      - pattern: rand.Read(...)
+        - pattern-inside: |
+            ...
+            rand.$FUNC(...)
+        - pattern-inside: |
+            ...
+            $RAND.$FUNC(...)
+    - focus-metavariable:
+        - $MATH
+  fix: |
+    crypto/rand
