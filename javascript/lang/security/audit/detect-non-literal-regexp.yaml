@@ -2,7 +2,10 @@ rules:
 - id: detect-non-literal-regexp
   message: >-
     RegExp() called with a `$ARG` function argument, this might allow an attacker to cause a Denial of
-    Service (DoS) within your application as RegExP which blocks the main thread.
+    Service (DoS) within your application as RegExP which blocks the main thread. For this reason, it is
+    recommended to use hardcoded regexes instead. If your regex is going to be run on user-controlled
+    input, consider using a regex checking/sanitization library such as https://www.npmjs.com/package/recheck
+    to verify that your regex isn't vulnerable before allowing it to be run.
   metadata:
     owasp:
     - A05:2021 - Security Misconfiguration
