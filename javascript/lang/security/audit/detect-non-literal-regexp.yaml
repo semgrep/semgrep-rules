@@ -1,8 +1,11 @@
 rules:
 - id: detect-non-literal-regexp
   message: >-
-    RegExp() called with a `$ARG` function argument, this might allow an attacker to cause a Denial of
-    Service (DoS) within your application as RegExP which blocks the main thread.
+    RegExp() called with a `$ARG` function argument, this might allow an attacker to cause a Regular Expression
+    Denial-of-Service (ReDoS) within your application as RegExP blocks the main thread. For this reason, it is
+    recommended to use hardcoded regexes instead. If your regex is run on user-controlled input, consider performing
+    input validation or use a regex checking/sanitization library such as https://www.npmjs.com/package/recheck to
+    verify that the regex does not appear vulnerable to ReDoS.
   metadata:
     owasp:
     - A05:2021 - Security Misconfiguration
