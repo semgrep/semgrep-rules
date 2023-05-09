@@ -1,0 +1,42 @@
+rules:
+- id: insecure-random
+  message: >-
+    A random number generator was detected which is **not** *guaranteed* to be
+    Cryptographically secure. If the source of entropy is used for security
+    purposes (e.g. with other Cryptographic operations), make sure to use the
+    `SecCopyRandomBytes` API explicitly.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    masvs:
+    - 'MSTG-CRYPTO-6: All random values are generated using a sufficiently secure random number generator.'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://mobile-security.gitbook.io/masvs/security-requirements/0x08-v3-cryptography_verification_requirements
+    - https://developer.apple.com/documentation/security/1399291-secrandomcopybytes
+    - https://developer.apple.com/documentation/security/randomization_services?language=swift
+    - https://github.com/apple/swift-evolution/blob/main/proposals/0202-random-unification.md
+    subcategory:
+    - audit
+    technology:
+    - ios
+    - macos
+  languages:
+  - swift
+  pattern-either:
+  - pattern: random()
+  - pattern: Int.random(...)
+  - pattern: Bool.random(...)
+  - pattern: Float.random(...)
+  - pattern: Double.random(...)
+  - pattern: arc4random()
+  - pattern: arc4random_buf(...)
+  - pattern: arc4random_uniform(...)
+  - pattern: SystemRandomNumberGenerator(...)
+  - pattern: rand()
