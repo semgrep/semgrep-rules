@@ -29,6 +29,8 @@ rules:
     confidence: MEDIUM
     interfile: true
   mode: taint
+  options:
+    taint_assume_safe_comparisons: true
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -80,11 +82,3 @@ rules:
     - metavariable-regex:
         metavariable: $SQLSTR
         regex: (?i)(select|delete|insert|create|update|alter|drop)\b
-  pattern-sanitizers:
-  - patterns:
-    - focus-metavariable: $...X
-    - pattern-either:
-      - pattern: <... $...X != $...Y ...>
-      - pattern: <... $...Y != $...X ...>
-      - pattern: <... $...X == $...Y ...>
-      - pattern: <... $...Y == $...X ...>

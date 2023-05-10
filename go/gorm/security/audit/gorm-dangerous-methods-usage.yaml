@@ -9,6 +9,8 @@ rules:
   languages:
   - go
   mode: taint
+  options:
+    taint_assume_safe_comparisons: true
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -43,13 +45,6 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - pattern: strconv.Atoi(...)
-    - patterns:
-      - focus-metavariable: $...X
-      - pattern-either:
-        - pattern: <... $...X != $...Y ...>
-        - pattern: <... $...Y != $...X ...>
-        - pattern: <... $...X == $...Y ...>
-        - pattern: <... $...Y == $...X ...>
   metadata:
     category: security
     technology:

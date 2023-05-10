@@ -32,6 +32,8 @@ rules:
     Use a prepared statements (java.sql.PreparedStatement) instead. You
     can obtain a PreparedStatement using 'connection.prepareStatement'.
   mode: taint
+  options:
+    taint_assume_safe_comparisons: true
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -81,13 +83,6 @@ rules:
   pattern-sanitizers:
   - patterns:
     - pattern: (CriteriaBuilder $CB).$ANY(...)
-  - patterns:
-    - focus-metavariable: $...X
-    - pattern-either:
-      - pattern: <... $...X != $...Y ...>
-      - pattern: <... $...Y != $...X ...>
-      - pattern: <... $...X == $...Y ...>
-      - pattern: <... $...Y == $...X ...>
   severity: ERROR
   languages:
   - java

@@ -1,6 +1,8 @@
 rules:
 - id: spring-sqli
   mode: taint
+  options:
+    taint_assume_safe_comparisons: true
   pattern-sources:
   - patterns:
     - pattern: $ARG
@@ -13,13 +15,6 @@ rules:
       - focus-metavariable: $A
       - pattern-inside: |
           new $TYPE(...,$A,...);
-    - patterns:
-      - focus-metavariable: $...X
-      - pattern-either:
-        - pattern: <... $...X != $...Y ...>
-        - pattern: <... $...Y != $...X ...>
-        - pattern: <... $...X == $...Y ...>
-        - pattern: <... $...Y == $...X ...>
   pattern-sinks:
   - patterns:
     - pattern-either:

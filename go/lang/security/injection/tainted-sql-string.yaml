@@ -30,6 +30,8 @@ rules:
     impact: MEDIUM
     interfile: true
   mode: taint
+  options:
+    taint_assume_safe_comparisons: true
   severity: ERROR
   pattern-sources:
   - patterns:
@@ -77,10 +79,3 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - pattern: strconv.Atoi(...)
-    - patterns:
-      - focus-metavariable: $...X
-      - pattern-either:
-        - pattern: <... $...X != $...Y ...>
-        - pattern: <... $...Y != $...X ...>
-        - pattern: <... $...X == $...Y ...>
-        - pattern: <... $...Y == $...X ...>
