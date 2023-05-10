@@ -2,8 +2,7 @@ rules:
   - id: tainted-url-host
     languages:
       - go
-    message: >-
-      A request was found to be crafted from user-input `$REQUEST`. This can
+    message: A request was found to be crafted from user-input `$REQUEST`. This can
       lead to Server-Side Request Forgery (SSRF) vulnerabilities,  potentially
       exposing sensitive data. It is recommend where possible to not allow
       user-input to craft the base request, but to be treated as part of the
@@ -28,6 +27,7 @@ rules:
         - vuln
       impact: MEDIUM
       likelihood: MEDIUM
+      interfile: true
     mode: taint
     pattern-sources:
       - label: INPUT
@@ -40,35 +40,22 @@ rules:
           - metavariable-regex:
               metavariable: $ANYTHING
               regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
-      - label: FORMAT
+      - label: CLEAN
         requires: INPUT
         patterns:
           - pattern-either:
+              - pattern: |
+                  "$URLSTR" + $INPUT
               - patterns:
                   - pattern-either:
                       - pattern: fmt.Fprintf($F, "$URLSTR", $INPUT, ...)
                       - pattern: fmt.Sprintf("$URLSTR", $INPUT, ...)
                       - pattern: fmt.Printf("$URLSTR", $INPUT, ...)
-                  - metavariable-regex:
-                      metavariable: $URLSTR
-                      regex: ^((http://)|(https://)|(//))%(v|s|q).*
-          - focus-metavariable: $INPUT
-      - label: ADD_OR_DIRECT
-        requires: INPUT
-        patterns:
-          - pattern-either:
-              - pattern: $X + $F
-          - focus-metavariable:
-              - $X
-              - $F
-    pattern-sanitizers:
-      - patterns:
-          - pattern: $F + $X
           - metavariable-regex:
-              metavariable: $F
+              metavariable: $URLSTR
               regex: .*//[a-zA-Z0-10]+\..*
     pattern-sinks:
-      - requires: FORMAT or ADD_OR_DIRECT
+      - requires: INPUT and not CLEAN
         patterns:
           - pattern-either:
               - patterns:
