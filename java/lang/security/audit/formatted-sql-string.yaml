@@ -82,12 +82,9 @@ rules:
   - patterns:
     - pattern: (CriteriaBuilder $CB).$ANY(...)
   - patterns:
-    - focus-metavariable: $...X
     - pattern-either:
-      - pattern: <... $...X != $...Y ...>
-      - pattern: <... $...Y != $...X ...>
-      - pattern: <... $...X == $...Y ...>
-      - pattern: <... $...Y == $...X ...>
+      - pattern: $X != $Y
+      - pattern: $X == $Y
   severity: ERROR
   languages:
   - java
