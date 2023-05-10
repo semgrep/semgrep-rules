@@ -82,9 +82,6 @@ rules:
         regex: (?i)(select|delete|insert|create|update|alter|drop)\b
   pattern-sanitizers:
   - patterns:
-    - focus-metavariable: $...X
     - pattern-either:
-      - pattern: <... $...X != $...Y ...>
-      - pattern: <... $...Y != $...X ...>
-      - pattern: <... $...X == $...Y ...>
-      - pattern: <... $...Y == $...X ...>
+      - pattern: $X != $Y
+      - pattern: $X == $Y
