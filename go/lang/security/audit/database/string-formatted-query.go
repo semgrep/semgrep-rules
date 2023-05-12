@@ -18,6 +18,9 @@ func dbExec(r *http.Request) {
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = " + customerId
 
 	row, _ := db.Exec(query)
+
+	// ok: string-formatted-query
+	out, err := sshClient.Exec(fmt.Sprintf("sudo bash %s", scriptPath))
 }
 
 func okDbExec(r *http.Request) {
