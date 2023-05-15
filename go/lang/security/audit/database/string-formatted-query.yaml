@@ -26,6 +26,9 @@ rules:
     likelihood: LOW
     impact: HIGH
   patterns:
+  - metavariable-regex:
+        metavariable: $OBJ
+        regex: (?i).*(db|database)
   - pattern-not-inside: |
       $VAR = "..." + "..."
       ...
