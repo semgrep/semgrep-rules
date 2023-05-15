@@ -44,12 +44,9 @@ rules:
   - pattern-either:
     - pattern: strconv.Atoi(...)
     - patterns:
-      - focus-metavariable: $...X
       - pattern-either:
-        - pattern: <... $...X != $...Y ...>
-        - pattern: <... $...Y != $...X ...>
-        - pattern: <... $...X == $...Y ...>
-        - pattern: <... $...Y == $...X ...>
+        - pattern: $X != $Y
+        - pattern: $X == $Y
   metadata:
     category: security
     technology:
