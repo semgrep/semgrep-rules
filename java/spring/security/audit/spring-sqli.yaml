@@ -14,12 +14,9 @@ rules:
       - pattern-inside: |
           new $TYPE(...,$A,...);
     - patterns:
-      - focus-metavariable: $...X
       - pattern-either:
-        - pattern: <... $...X != $...Y ...>
-        - pattern: <... $...Y != $...X ...>
-        - pattern: <... $...X == $...Y ...>
-        - pattern: <... $...Y == $...X ...>
+        - pattern: $X != $Y
+        - pattern: $X == $Y
   pattern-sinks:
   - patterns:
     - pattern-either:
