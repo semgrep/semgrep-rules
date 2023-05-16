@@ -46,7 +46,7 @@ private class Car {
     public static void anotherMain(String[] args) throws JsonGenerationException, JsonMappingException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         // Disable default typing globally
-        //objectMapper.enableDefaultTyping();
+        // objectMapper.enableDefaultTyping();
 
         try {
             // ruleid: jackson-unsafe-deserialization
@@ -69,5 +69,39 @@ private class Car {
             System.out.println("Exception raised:" + e.getMessage());
         }
 
+    }
+}
+
+// Additional class to test rule when ObjectMapper is created in a different
+// method
+@RestController
+public class MyController {
+    private Test variable;
+    private ObjectMapper objectMapper;
+    private Test2 variable2;
+
+    @PostConstruct
+    public void initialize() {
+        this.variable = 123;
+        objectMapper = new ObjectMapper();
+        objectMapper.enableDefaultTyping();
+        this.variable2 = 456;
+    }
+
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public void redirectToUserInfo(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/somewhere");
+    }
+
+    @RequestMapping(path = "/vulnerable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericUser vulnerable(@CookieValue(name = "token", required = false) String token)
+            throws JsonParseException, JsonMappingException, IOException {
+        byte[] decoded = Base64.getDecoder().decode(token);
+        String decodedString = new String(decoded);
+        // ruleid: jackson-unsafe-deserialization
+        Car obj = objectMapper.readValue(
+                decodedString,
+                Car.class);
+        return obj;
     }
 }
