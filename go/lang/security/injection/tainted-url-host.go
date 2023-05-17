@@ -128,7 +128,7 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
         } else {
             url := fmt.Fprintf(w, "http://example.com%q", proxy)
         }
-        // todook: tainted-url-host
+        // ok: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
     }
 }

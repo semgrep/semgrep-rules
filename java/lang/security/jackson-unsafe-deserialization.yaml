@@ -22,6 +22,26 @@ rules:
                   metavariable: $TYPE
                   regex: (Object|Serializable|Comparable)
               - pattern: $OM.readValue($JSON, $CLASS.class);
+          - patterns:
+              - pattern-inside: |
+                  class $CLASS {
+                    ...
+                    ObjectMapper $OM;
+                    ...
+                    $INITMETHODTYPE $INITMETHOD(...) {
+                      ...
+                      $OM = new ObjectMapper();
+                      ...
+                      $OM.enableDefaultTyping();
+                      ...
+                    }
+                    ...
+                  }
+              - pattern-inside: |
+                  $METHODTYPE $METHOD(...) {
+                    ...  
+                  }
+              - pattern: $OM.readValue($JSON, ...);
     message: >-
       When using Jackson to marshall/unmarshall JSON to Java objects,
       enabling default typing is dangerous and can lead to RCE. If an attacker
