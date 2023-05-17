@@ -20,3 +20,19 @@ class BadDocumentBuilderFactory{
         dbf.setFeature("http://xml.org/sax/features/external-general-entities" , true);
     }
 }
+
+class GoodSAXParserFactory {
+    public void GoodSAXParserFactory() throws  ParserConfigurationException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        //ok:documentbuilderfactory-external-general-entities-true
+        spf.setFeature("http://xml.org/sax/features/external-general-entities" , false);
+    }
+}
+
+class BadSAXParserFactory{
+    public void BadSAXParserFactory() throws  ParserConfigurationException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        //ruleid:documentbuilderfactory-external-general-entities-true
+        spf.setFeature("http://xml.org/sax/features/external-general-entities" , true);
+    }
+}
