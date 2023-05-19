@@ -22,7 +22,7 @@ rules:
       - pattern-not-inside: |
           $RETURNTYPE $METHOD(...) {
             ...
-            $DBF.setXIncludeAware(true);
+            $DBF.setXIncludeAware(false);
             $DBF.setNamespaceAware(true);
             ...
             $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -33,7 +33,7 @@ rules:
       - pattern-not-inside: |
           DocumentBuilderFactory $DBF =  ... ;
           ...
-          $DBF.setXIncludeAware(true);
+          $DBF.setXIncludeAware(false);
           $DBF.setNamespaceAware(true);
           ...
           $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);

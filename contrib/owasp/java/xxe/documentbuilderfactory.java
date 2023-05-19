@@ -323,7 +323,7 @@ public class XXE {
 
             // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setXIncludeAware(true);   // 支持XInclude
+            dbf.setXIncludeAware(false);   // 支持XInclude
             dbf.setNamespaceAware(true);  // 支持XInclude
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
@@ -349,7 +349,7 @@ public class XXE {
             logger.info(body);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-            dbf.setXIncludeAware(true);   // 支持XInclude
+            dbf.setXIncludeAware(false);   // 支持XInclude
             dbf.setNamespaceAware(true);  // 支持XInclude
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);

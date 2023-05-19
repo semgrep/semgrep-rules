@@ -30,7 +30,7 @@ class Foo {
     val docBuilderFactory = DocumentBuilderFactory.newInstance()
     val docBuilder = docBuilderFactory.newDocumentBuilder()
 
-    docBuilder.setXIncludeAware(true)
+    docBuilder.setXIncludeAware(false)
     docBuilder.setNamespaceAware(true)
 
     docBuilder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
@@ -47,7 +47,7 @@ class Foo {
     // ok: documentbuilder-dtd-enabled
     val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
-    docBuilder.setXIncludeAware(true)
+    docBuilder.setXIncludeAware(false)
     docBuilder.setNamespaceAware(true)
 
     docBuilder.setFeature("http://xml.org/sax/features/external-general-entities", false)
