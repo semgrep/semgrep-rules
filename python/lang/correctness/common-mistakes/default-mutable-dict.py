@@ -12,9 +12,9 @@ def assign_func2(default={}):
         default[x] = 1
 
 
-# todoruleid: default-mutable-dict
 def assign_func3(default={}):
     x = default
+    # ruleid: default-mutable-dict
     x[3] = 2
 
 
