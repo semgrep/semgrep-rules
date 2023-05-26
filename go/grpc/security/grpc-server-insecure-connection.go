@@ -62,10 +62,28 @@ func startServerWithOpts() {
 func startServerCredsVar() {
 	creds := credentials.NewClientTLSFromCert(xpool, xaddr)
 	options := []grpc.ServerOption{
-		creds,
+		grpc.Creds(creds),
 		grpc.UnaryInterceptor(auth.GRPCInterceptor),
 	}
 	// ok:grpc-server-insecure-connection
 	grpcServer := grpc.NewServer(options...)
 	_ = grpcServer
 }
+
+func startServerWithOtherCreds() {
+    creds := credentials.NewTLS(tlsConfig)
+	logger := penglog.GlobalLogger()
+	logInterceptor := penggrpc.NewAccessLogInterceptor(&logger, grpcLogFields)
+	opts := []grpc.ServerOption{
+		grpc.Creds(creds),
+		grpc.ChainUnaryInterceptor(
+			logInterceptor.UnaryServerInterceptor,
+			auth.GRPCInterceptor,
+		),
+		grpc.MaxRecvMsgSize(maxRecvMsgSize),
+	}
+	// ok:grpc-server-insecure-connection
+	grpcServer := grpc.NewServer(opts)
+	_ = grpcServer
+}
+
