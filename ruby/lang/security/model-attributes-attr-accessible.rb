@@ -43,3 +43,7 @@ end
 
 #ok: model-attributes-attr-accessible
 SomeErrorClass.new()
+
+#todook: model-attributes-attr-accessible
+class TestObject < Struct.new(:name); end
+TestObject.new("name")
