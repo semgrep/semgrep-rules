@@ -43,10 +43,8 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - pattern: strconv.Atoi(...)
-    - patterns:
-      - pattern-either:
-        - pattern: $X != $Y
-        - pattern: $X == $Y
+    - pattern: |
+        ($X: bool)
   metadata:
     category: security
     technology:
