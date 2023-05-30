@@ -191,8 +191,8 @@ public class SpringBatchUpdateUtils {
         BatchUpdateUtils.executeBatchUpdate(sql, new ArrayList<Object[]>(),new int[] {Types.INTEGER}, jdbcOperations);
     }
 
-    public void queryBatchUpdateSafe() {
-        String sql = "UPDATE Users SET name = 'safe' where id = 1";
+    public void queryBatchUpdateSafe(String input) {
+        String sql = "UPDATE Users SET set = '"+ (input != NULL) +"' where id = 1";
         // ok:spring-sqli
         BatchUpdateUtils.executeBatchUpdate(sql, new ArrayList<Object[]>(),new int[] {Types.INTEGER}, jdbcOperations);
     }
