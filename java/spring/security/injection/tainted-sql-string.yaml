@@ -81,7 +81,4 @@ rules:
         metavariable: $SQLSTR
         regex: (?i)(select|delete|insert|create|update|alter|drop)\b
   pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: $X != $Y
-      - pattern: $X == $Y
+  - pattern: (boolean $X)

@@ -71,7 +71,4 @@ rules:
             metavariable: $SQLCMD
             regex: (execute|query|executeUpdate)
   pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: $X != $Y
-      - pattern: $X == $Y
+  - pattern: (boolean $X)
