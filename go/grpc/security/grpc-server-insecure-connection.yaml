@@ -27,22 +27,17 @@ rules:
   languages:
   - go
   severity: ERROR
-  patterns:
-  - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
-  - pattern-not-inside: |
-      $OPTS := []grpc.ServerOption{
-        ...,
-        grpc.Creds(credentials.NewClientTLSFromCert(...)),
-        ...,
-      }
-      grpc.NewServer($OPTS...)
-  - pattern-not-inside: |
-      $CREDS := credentials.NewClientTLSFromCert(...)
-      ...
-      $OPTS := []grpc.ServerOption{
-        ...,
-        $CREDS,
-        ...,
-      }
-      grpc.NewServer($OPTS...)
-  - pattern: grpc.NewServer(...)
+  mode: taint
+  pattern-sinks:
+    - requires: OPTIONS and not CREDS
+      pattern: grpc.NewServer($OPT, ...)
+    - requires: EMPTY_CONSTRUCTOR
+      pattern: grpc.NewServer()
+  pattern-sources:
+    - label: OPTIONS
+      pattern: grpc.ServerOption{ ... }
+    - label: CREDS 
+      pattern: grpc.Creds(...)
+    - label: EMPTY_CONSTRUCTOR
+      pattern: grpc.NewServer()
+
