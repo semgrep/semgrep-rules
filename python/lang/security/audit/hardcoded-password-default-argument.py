@@ -18,3 +18,7 @@ def whoops(password="this-could-be-bad"):
 # ok:hardcoded-password-default-argument
 def ok(password=None):
     print(password)
+
+# ok:hardcoded-password-default-argument
+def ok(password=""):
+    print(password)
