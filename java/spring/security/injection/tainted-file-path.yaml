@@ -38,6 +38,9 @@ rules:
             ...
           }
     - metavariable-regex:
+        metavariable: $TYPE
+        regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
+    - metavariable-regex:
         metavariable: $REQ
         regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
     - focus-metavariable: $SOURCE
