@@ -1,0 +1,43 @@
+rules:
+- id: exported_activity
+  patterns:
+  - pattern-not-inside: <activity ... android:exported="false" ... />
+  - pattern-inside: "<activity  ... /> \n"
+  - pattern-either:
+    - pattern: |
+        <activity ... android:exported="true" ... />
+    - pattern: |
+        <activity ... <intent-filter> ... />
+  message: Use of Exported Activity
+  languages:
+  - generic
+  severity: WARNING
+  paths:
+    exclude:
+    - sources/
+    - classes3.dex
+    - '*.so'
+    include:
+    - '*AndroidManifest.xml'
+  metadata:
+    vulnerability: Use of exported components
+    Description: Application exported activities are exported so anyof third party
+      application. can launch the activity/ exploit the app if any misconfiguration
+      in exported components.
+    Severity: HIGH
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 926: The Android application exports a component for use by other applications,
+      but does not properly restrict which applications can launch the component or
+      access the data it contains.'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    owasp:
+    - A5:2021 Security Misconfiguration
+    technology:
+    - Android
+    references:
+    - https://cwe.mitre.org/data/definitions/926.html
