@@ -28,9 +28,11 @@ rules:
   - patterns:
     - pattern: public $T $M(...)   # audit rule until it can checked < 2.15.0
   pattern-sinks:
-  - patterns:
+  - pattern-either:
     - pattern: |
         (org.apache.log4j.Logger $L).$M(...)
+    - pattern: |
+        (org.apache.logging.log4j.Logger $L).$M(...)
   severity: WARNING
   languages:
   - java
