@@ -21,17 +21,15 @@ rules:
     - '*AndroidManifest.xml'
   metadata:
     vulnerability: Use of exported components
-    Description: Application exported activities are exported so anyof third party
-      application. can launch the activity/ exploit the app if any misconfiguration
-      in exported components.
+    Description: >-
+      The application exports an activity. Any application on the device can launch the exported activity which may compromise the integrity of your application or its data. 
+      Ensure that any exported activities do not have privileged access to your application's control plane.
     Severity: HIGH
     category: security
     subcategory:
     - vuln
     cwe:
-    - 'CWE 926: The Android application exports a component for use by other applications,
-      but does not properly restrict which applications can launch the component or
-      access the data it contains.'
+    - 'CWE-926: Improper Export of Android Application Components'
     confidence: MEDIUM
     likelihood: MEDIUM
     impact: MEDIUM
