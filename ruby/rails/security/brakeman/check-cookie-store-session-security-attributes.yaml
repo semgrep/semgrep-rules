@@ -10,7 +10,7 @@ rules:
     - pattern: |
         $MODULE::Application.config.session_store :cookie_store, ..., :$KEY => false, ...
     - pattern: |
-        $CLASS.application.config.session_store :cookie_store, ..., $KEY: false
+        $CLASS.application.config.session_store :cookie_store, ..., $KEY: false, ...
   - metavariable-regex:
       metavariable: $KEY
       regex: ^(session_)?(http_?only|secure)$
