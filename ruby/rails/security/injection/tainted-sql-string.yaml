@@ -38,8 +38,11 @@ rules:
     - pattern-either:
       - patterns:
         - pattern-either:
-          - pattern: |
-              $RECORD.where($X,...)
+          - patterns:
+            - pattern: |
+                $RECORD.where($X,...)
+            - pattern-not: |
+                $RECORD.where($PARAMS.slice(...), ...)
           - pattern: |
               $RECORD.find(..., :conditions => $X,...)
         - focus-metavariable: $X
