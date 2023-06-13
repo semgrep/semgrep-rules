@@ -23,3 +23,9 @@ Rails.application.config.session_store :cookie_store, httponly: false
 
 # ok: check-cookie-store-session-security-attributes
 Rails.application.config.session_store :cookie_store, some_harmless_key: false
+
+# ruleid: check-cookie-store-session-security-attributes
+MyRailsApp::Application.config.session_store :cookie_store, httponly: false
+
+# ruleid: check-cookie-store-session-security-attributes
+MyRailsApp.application.config.session_store :cookie_store, httponly: false
