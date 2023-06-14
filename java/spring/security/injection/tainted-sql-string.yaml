@@ -28,6 +28,9 @@ rules:
     impact: MEDIUM
     confidence: MEDIUM
     interfile: true
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   mode: taint
   pattern-sources:
   - patterns:
@@ -80,6 +83,3 @@ rules:
     - metavariable-regex:
         metavariable: $SQLSTR
         regex: (?i)(select|delete|insert|create|update|alter|drop)\b
-  pattern-sanitizers:
-  - pattern: (int $X)
-  - pattern: (boolean $X)
