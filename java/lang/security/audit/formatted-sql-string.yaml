@@ -26,6 +26,9 @@ rules:
     likelihood: HIGH
     impact: MEDIUM
     confidence: MEDIUM
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   message: >-
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
@@ -81,10 +84,6 @@ rules:
   pattern-sanitizers:
   - patterns:
     - pattern: (CriteriaBuilder $CB).$ANY(...)
-  - patterns:
-    - pattern-either:
-      - pattern: $X != $Y
-      - pattern: $X == $Y
   severity: ERROR
   languages:
   - java
