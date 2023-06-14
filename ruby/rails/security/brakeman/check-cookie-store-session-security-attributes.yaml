@@ -8,9 +8,9 @@ rules:
       - pattern-inside: |
           ActionController::Base.session = {...}
     - pattern: |
-        Rails3::Application.config.session_store :cookie_store, ..., :$KEY => false, ...
+        $MODULE::Application.config.session_store :cookie_store, ..., :$KEY => false, ...
     - pattern: |
-        Rails.application.config.session_store :cookie_store, ..., $KEY: false
+        $CLASS.application.config.session_store :cookie_store, ..., $KEY: false, ...
   - metavariable-regex:
       metavariable: $KEY
       regex: ^(session_)?(http_?only|secure)$
