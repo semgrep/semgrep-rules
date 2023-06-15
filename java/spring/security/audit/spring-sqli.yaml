@@ -13,8 +13,6 @@ rules:
       - focus-metavariable: $A
       - pattern-inside: |
           new $TYPE(...,$A,...);
-    - pattern: (boolean $X)
-    - pattern: (int $X)
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -46,6 +44,9 @@ rules:
     can obtain a PreparedStatement using 'connection.prepareStatement'.
   languages: [java]
   severity: WARNING
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   metadata:
     cwe:
     - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
