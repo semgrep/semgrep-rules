@@ -33,6 +33,9 @@ rules:
     - pattern-either:
       - pattern: params
       - pattern: request
+  pattern-sanitizers:
+  - pattern: |
+      $PARAMS.slice(...)
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -41,8 +44,7 @@ rules:
           - patterns:
             - pattern: |
                 $RECORD.where($X,...)
-            - pattern-not: |
-                $RECORD.where($PARAMS.slice(...), ...)
+
           - pattern: |
               $RECORD.find(..., :conditions => $X,...)
         - focus-metavariable: $X
