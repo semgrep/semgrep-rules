@@ -1,16 +1,9 @@
 rules:
 - id: rails-check-page-caching-cve
   patterns:
-  - pattern-inside: |
-      class $CONTROLLER < $BIGCONTROLLER
-      ...
-      end
-  - pattern: |
-      caches_page :$ACTION
-  message: >-
-    All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable to arbitrary file write
-    and remote code execution (CVE-2020-8159) when using caching methods. Update to version 1.2.1 or greater
-    or remove calls to 'caches_page'.
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
