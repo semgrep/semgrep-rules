@@ -18,19 +18,10 @@ rules:
     - audit
     likelihood: LOW
     impact: HIGH
-  message: Possible Lookup injection into Log4j messages. Lookups provide a way to add values to the Log4j
-    messages at arbitrary places. If the message parameter contains an attacker controlled string, the
-    attacker could inject arbitrary lookups, for instance '${java:runtime}'. This could lead to information
-    disclosure or even remote code execution if 'log4j2.formatMsgNoLookups' is disabled. This was disabled
-    by default until version 2.15.0.
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: public $T $M(...)   # audit rule until it can checked < 2.15.0
-  pattern-sinks:
-  - patterns:
-    - pattern: |
-        (org.apache.log4j.Logger $L).$M(...)
+  message: This rule is deprecated.
+  patterns:
+  - pattern: a()
+  - pattern: b()
   severity: WARNING
   languages:
   - java
