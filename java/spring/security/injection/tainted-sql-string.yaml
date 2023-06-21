@@ -1,85 +1,89 @@
 rules:
-- id: tainted-sql-string
-  languages:
-  - java
-  severity: ERROR
-  message: User data flows into this manually-constructed SQL string. User data can be safely inserted
-    into SQL strings using prepared statements or an object-relational mapper (ORM). Manually-constructed
-    SQL strings is a possible indicator of SQL injection, which could let an attacker steal or manipulate
-    data from the database. Instead, use prepared statements (`connection.PreparedStatement`) or a safe
-    library.
-  metadata:
-    cwe:
-    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
-    references:
-    - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
-    category: security
-    technology:
-    - spring
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: MEDIUM
-    confidence: MEDIUM
-    interfile: true
-  options:
-    taint_assume_safe_numbers: true
-    taint_assume_safe_booleans: true
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
-            ...
-          }
-      - pattern-inside: |
-          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
-            ...
-          }
-    - metavariable-regex:
-        metavariable: $REQ
-        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
-    - metavariable-regex:
-        metavariable: $TYPE
-        regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
-    - focus-metavariable: $SOURCE
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          "$SQLSTR" + ...
-      - pattern: |
-          "$SQLSTR".concat(...)
+  - id: tainted-sql-string
+    languages:
+      - java
+    severity: ERROR
+    message: User data flows into this manually-constructed SQL string. User data
+      can be safely inserted into SQL strings using prepared statements or an
+      object-relational mapper (ORM). Manually-constructed SQL strings is a
+      possible indicator of SQL injection, which could let an attacker steal or
+      manipulate data from the database. Instead, use prepared statements
+      (`connection.PreparedStatement`) or a safe library.
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL
+          Command ('SQL Injection')"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
+      category: security
+      technology:
+        - spring
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: MEDIUM
+      confidence: MEDIUM
+      interfile: true
+    options:
+      taint_assume_safe_numbers: true
+      taint_assume_safe_booleans: true
+    mode: taint
+    pattern-sources:
       - patterns:
-        - pattern-inside: |
-            StringBuilder $SB = new StringBuilder("$SQLSTR");
-            ...
-        - pattern: $SB.append(...)
+          - pattern-either:
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
+                    ...
+                  }
+              - pattern-inside: |
+                  $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
+                    ...
+                  }
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)
+          - metavariable-regex:
+              metavariable: $TYPE
+              regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
+          - focus-metavariable: $SOURCE
+    pattern-sinks:
       - patterns:
-        - pattern-inside: |
-            $VAR = "$SQLSTR";
-            ...
-        - pattern: $VAR += ...
-      - pattern: String.format("$SQLSTR", ...)
-      - patterns:
-        - pattern-inside: |
-            String $VAR = "$SQLSTR";
-            ...
-        - pattern: String.format($VAR, ...)
-    - pattern-not-inside: System.out.println(...)
-    - pattern-not-inside: $LOG.info(...)
-    - pattern-not-inside: $LOG.warn(...)
-    - pattern-not-inside: $LOG.warning(...)
-    - pattern-not-inside: $LOG.debug(...)
-    - pattern-not-inside: $LOG.debugging(...)
-    - pattern-not-inside: $LOG.error(...)
-    - metavariable-regex:
-        metavariable: $SQLSTR
-        regex: (?i)(select|delete|insert|create|update|alter|drop)\b
+          - pattern-either:
+              - pattern: |
+                  "$SQLSTR" + ...
+              - pattern: |
+                  "$SQLSTR".concat(...)
+              - patterns:
+                  - pattern-inside: |
+                      StringBuilder $SB = new StringBuilder("$SQLSTR");
+                      ...
+                  - pattern: $SB.append(...)
+              - patterns:
+                  - pattern-inside: |
+                      $VAR = "$SQLSTR";
+                      ...
+                  - pattern: $VAR += ...
+              - pattern: String.format("$SQLSTR", ...)
+              - patterns:
+                  - pattern-inside: |
+                      String $VAR = "$SQLSTR";
+                      ...
+                  - pattern: String.format($VAR, ...)
+          - pattern-not-inside: System.out.println(...)
+          - pattern-not-inside: $LOG.info(...)
+          - pattern-not-inside: $LOG.warn(...)
+          - pattern-not-inside: $LOG.warning(...)
+          - pattern-not-inside: $LOG.debug(...)
+          - pattern-not-inside: $LOG.debugging(...)
+          - pattern-not-inside: $LOG.error(...)
+          - pattern-not-inside: new Exception(...)
+          - pattern-not-inside: throw ...;
+          - metavariable-regex:
+              metavariable: $SQLSTR
+              regex: (?i)(select|delete|insert|create|update|alter|drop)\b
