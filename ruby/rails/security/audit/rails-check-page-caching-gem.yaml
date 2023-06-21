@@ -1,42 +1,12 @@
 rules:
 - id: rails-check-page-caching-gem
-  pattern-either:
-  - patterns:
-    - pattern: gem 'actionpack_page-caching', '1.$MIN'
-    - metavariable-comparison:
-        metavariable: $MIN
-        comparison: $MIN <= 2
-  - patterns:
-    - pattern: gem 'actionpack_page-caching', '1.$MIN.$PATCH'
-    - metavariable-comparison:
-        metavariable: $MIN
-        comparison: $MIN < 2
-  - patterns:
-    - patterns:
-      - pattern: gem 'actionpack_page-caching', '1.2.$PATCH'
-      - metavariable-comparison:
-          metavariable: $PATCH
-          comparison: $PATCH < 1
-  - pattern-either:
-    - pattern: gem 'actionpack_page-caching', '~> 0.$MIN'
-    - pattern: gem 'actionpack_page-caching', '~> 0.$MIN.$PATCH'
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'actionpack_page-caching', '~> 1.$MIN'
-        - pattern: gem 'actionpack_page-caching', '~> 1.$MIN.$PATCH'
-      - metavariable-comparison:
-          metavariable: $MIN
-          comparison: $MIN < 2
-  message: All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable to arbitrary file
-    write and remote code execution (CVE-2020-8159). Update to version 1.2.1 or greater or remove calls
-    to 'caches_page'.
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - '*Gemfile'
-    - gems.rb
   metadata:
     cwe:
     - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
