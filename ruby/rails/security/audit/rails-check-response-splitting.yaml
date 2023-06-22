@@ -1,24 +1,12 @@
 rules:
 - id: rails-check-response-splitting
-  pattern-either:
-  - pattern-either:
-    - pattern: gem 'rails', '2.3'
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '2.3.$PATCH'
-        - pattern: gem 'rails', '~> 2.3.$PATCH'
-      - metavariable-comparison:
-          metavariable: $PATCH
-          comparison: $PATCH < 14
-  message: Rails versions 2.3.14 are vulnerable to response splitting, allowing header injection (CVE-2011-3186).
-    Upgrade to 2.3.14 or greater.
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - '*Gemfile'
-    - gems.rb
   metadata:
     cwe:
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"

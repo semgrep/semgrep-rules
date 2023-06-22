@@ -1,11 +1,6 @@
 rules:
 - id: model-attributes-attr-protected
-  message: >-
-    Checks for models that use attr_protected, as use of allowlist instead of denylist
-    is better practice.
-    Attr_protected was also found to be vulnerable to bypass. The fixed versions of
-    Rails are: 3.2.12, 3.1.11, 2.3.17.
-    To prevent bypass, use attr_accessible instead.
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-284: Improper Access Control'
@@ -26,4 +21,6 @@ rules:
   languages:
   - ruby
   severity: WARNING
-  pattern: attr_protected
+  patterns:
+  - pattern: a()
+  - pattern: b()
