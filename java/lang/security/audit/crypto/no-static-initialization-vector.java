@@ -17,6 +17,7 @@ public class StaticIV {
 
 // ruleid: no-static-initialization-vector
 public class StaticIV2 {
+    // ruleid: no-static-initialization-vector
     byte[] iv = {
         (byte) 0, (byte) 0, (byte) 0, (byte) 0,
         (byte) 0, (byte) 0, (byte) 0, (byte) 0,
