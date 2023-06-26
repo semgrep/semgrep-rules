@@ -1,0 +1,25 @@
+rules:
+  - id: yaml-key-indentation-check
+    message: "It looks like you have an YAML indentation issue -- instead of writing
+      `$KEY`,  put a space between the hyphen and what comes after! Otherwise,
+      it reads  as a single string. "
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository
+      category: correctness
+      technology:
+        - semgrep
+    pattern-either:
+      - patterns:
+          - pattern-inside: |
+              rules: ...
+          - pattern: |
+              $KEY: >-
+                $VALUE
+          - focus-metavariable: $KEY
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^-(\w*)$

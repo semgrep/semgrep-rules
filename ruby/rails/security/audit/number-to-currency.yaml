@@ -19,22 +19,9 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
-  message: >-
-    Detected user input flowing into number_to_currency helper.
-    One of the parameters to the helper (unit) is not escaped correctly and could lead to XSS, which
-    in turn could lead to sensitive data being exfiltrated. Instead, sanitize
-    data before passing it into `number_to_currency` with the
-    html_escape (h) function
-    or upgrade to Rails 4.0.2 or 3.2.16.
+  message: This rule is deprecated.
   languages: [ruby]
   severity: WARNING
-  mode: taint
-  pattern-sources:
-  - pattern: params[$X]
-  pattern-sinks:
-  - patterns:
-    - pattern: $UNIT
-    - pattern-inside: |
-        number_to_currency(..., unit: $UNIT, ...)
-  pattern-sanitizers:
-  - pattern: h(...)
+  patterns:
+  - pattern: a()
+  - pattern: b()
