@@ -30,11 +30,14 @@ rules:
       confidence: HIGH
     message: DOCTYPE declarations are enabled for this SAXParserFactory. This
       is vulnerable to XML external entity attacks. Disable this by setting the
-      feature "http://apache.org/xml/features/disallow-doctype-decl" to true.
+      feature `http://apache.org/xml/features/disallow-doctype-decl` to true.
       Alternatively, allow DOCTYPE declarations and only prohibit external
       entities declarations. This can be done by setting the features
-      "http://xml.org/sax/features/external-general-entities" and
-      "http://xml.org/sax/features/external-parameter-entities" to false.
+      `http://xml.org/sax/features/external-general-entities` and
+      `http://xml.org/sax/features/external-parameter-entities` to false.
+      NOTE - The previous links are not meant to be clicked. They are the
+      literal config key values that are supposed to be used to disable these
+      features. For more information, see https://semgrep.dev/docs/cheat-sheets/java-xxe/#3a-documentbuilderfactory.
     mode: taint
     pattern-sources:
       - by-side-effect: true
