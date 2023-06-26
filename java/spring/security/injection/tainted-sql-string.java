@@ -177,8 +177,7 @@ class Test {
   public ResultSet ok7(@RequestBody String name, Foo foo) {
         var v = foo.getBars(name).get(0).getX();
         String sql = "SELECT * FROM table WHERE name = ";
-        // ok in pro engine
-        // ruleid: tainted-sql-string
+        // ruleid: deepok: tainted-sql-string
         sql += v + ";";
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
@@ -213,8 +212,7 @@ class Test2 {
   public ResultSet ok8(@RequestBody String name, SiteModel sitemodel) {
         var v = sitemodel.getPrefixes(name).sites.ids.get(0);
         String sql = "SELECT * FROM table WHERE name = ";
-        // ok in pro-engine
-        // ruleid: tainted-sql-string
+        // ruleid: deepok: tainted-sql-string
         sql += v + ";";
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8080", "guest", "password");
         Statement stmt = conn.createStatement();
