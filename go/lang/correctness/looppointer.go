@@ -12,7 +12,7 @@ func() {
 func() {
     // ruleid:exported_loop_pointer
     for _, val := range values {
-        print_pointer(val)
+        print_pointer(&val)
     }
 }
 
@@ -27,4 +27,13 @@ func() {
             fmt.Println(&val)
         })
     }
+}
+
+func (){
+	input := []string{"a", "b", "c"}
+	output := []string{}
+    // ok:exported_loop_pointer
+	for _, val := range input {
+		output = append(output, val)
+	}
 }
