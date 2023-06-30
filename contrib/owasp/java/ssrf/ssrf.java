@@ -185,6 +185,19 @@ public class HttpUtils {
     }
 
 
+    // ruleid:owasp.java.ssrf.java.net.url - 2nd pattern
+    public static void imageIO(String url) {
+        URL u = null ;
+        try {
+            u = new URL(url);
+            ImageIO.read(u); // send request
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
+    }
+
+
     /**
      * IOUtils which is wrapped by URLConnection can get remote pictures.
      * The default setting of redirection is true.
