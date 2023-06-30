@@ -15,7 +15,7 @@ namespace InsecureDeserialization
             var dict = new Hashtable();
             dict["typeFilterLevel"] = "Full";
             // ruleid: insecure-typefilterlevel-full
-            BinaryServerFormatterSinkProvider serverProvider2 = new BinaryServerFormatterSinkProvider(dict, null)
+            BinaryServerFormatterSinkProvider serverProvider2 = new BinaryServerFormatterSinkProvider(dict, null);
         }
     }
 }
