@@ -6,15 +6,10 @@ rules:
       - pattern: |
           ENTRYPOINT ...
           ...
-          $ENTRYPOINT ...
-      - metavariable-pattern:
-          metavariable: $ENTRYPOINT
-          patterns:
-            - pattern: |
-                ENTRYPOINT ...
-      - focus-metavariable: $ENTRYPOINT
+          ENTRYPOINT ...
     message: >-
-      Multiple ENTRYPOINT instructions were found. Only the last one will take effect.
+      Multiple ENTRYPOINT instructions were found. Only the last one
+      will take effect.
     metadata:
       source-rule-url: https://github.com/hadolint/hadolint/wiki/DL4004
       references:
