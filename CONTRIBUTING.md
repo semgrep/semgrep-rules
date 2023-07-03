@@ -6,5 +6,5 @@ See [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contri
 
 We're happy to help!
 
-- Email us: [support@r2c.dev](mailto:support@r2c.dev)
-- [Join our Slack](https://r2c.dev/slack)
+- Email us: [support@semgrep.com](mailto:support@semgrep.com)
+- [Join our Slack](https://go.semgrep.dev/slack)
