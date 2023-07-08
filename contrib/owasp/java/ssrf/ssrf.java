@@ -185,7 +185,7 @@ public class HttpUtils {
     }
 
 
-    // ruleid:owasp.java.ssrf.java.net.url - 2nd pattern
+    // ruleid:owasp.java.ssrf.java.net.url
     public static void imageIO(String url) {
         URL u = null ;
         try {
