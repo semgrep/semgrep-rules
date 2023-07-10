@@ -29,21 +29,16 @@ eval("somethin(){}")
 # ok:eval-detected
 eval(f"something()")
 
-# ruleid:eval-detected
-eval(f"x = 1; x = x + {}") #f-string: empty expression not allowed
-
 # ok:eval-detected
 eval("")
 
 # ok:eval-detected
 eval(f"")
 
-user_input = "command injection payload"
+user_input = get_userinput()
 # ruleid:eval-detected
 eval(f"some_func({user_input})")
 
 def eval_something(something):
     # ruleid:eval-detected
-    eval(f"some_func({{something}})")
-
-
+    eval(f"some_func({{{something}}})")
