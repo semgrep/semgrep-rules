@@ -1,0 +1,63 @@
+on:
+  pull_request_target:
+  pull_request:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: actions/setup-node@master
+      - run: |
+          npm install
+          npm build
+
+      # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: ./.github/actions/do-a-local-action
+        with:
+          arg1: ${{ secrets.supersecret1 }}
+
+      # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: completely/fakeaction@5fd3084fc36e372ff1fff382a39b10d03659f355
+        with:
+          arg2: ${{ secrets.supersecret2 }}
+
+      # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: docker://alpine@sha256:402d21757a03a114d273bbe372fa4b9eca567e8b6c332fa7ebf982b902207242
+
+      # ruleid: third-party-action-not-pinned-to-commit-sha
+      - uses: completely/fakeaction@5fd3084
+        with:
+          arg2: ${{ secrets.supersecret2 }}
+ 
+      # ruleid: third-party-action-not-pinned-to-commit-sha
+      - uses: fakerepo/comment-on-pr@v1
+        with:
+          message: |
+            Thank you!
+ 
+      # ruleid: third-party-action-not-pinned-to-commit-sha
+      - uses: fakerepo/comment-on-pr
+        with:
+          message: |
+            Thank you!
+
+      # ruleid: third-party-action-not-pinned-to-commit-sha
+      - uses: docker://gcr.io/cloud-builders/gradle
+
+      # ruleid: third-party-action-not-pinned-to-commit-sha
+      - uses: docker://alpine:3.8
+
+  build2:
+    name: Build and test using a local workflow
+    # ok: third-party-action-not-pinned-to-commit-sha
+    uses: ./.github/workflows/use_a_local_workflow.yml@master
+    secrets: inherit
+    with:
+      examplearg: true

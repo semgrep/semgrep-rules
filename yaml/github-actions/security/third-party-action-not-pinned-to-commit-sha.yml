@@ -1,0 +1,43 @@
+rules:
+  - id: third-party-action-not-pinned-to-commit-sha
+    patterns:
+      - pattern-inside: "{steps: ...}"
+      - pattern: |
+          uses: "$USES"
+      - metavariable-pattern:
+          metavariable: $USES
+          language: generic
+          patterns:
+            # Locally-defined action
+            - pattern-not-regex: "^[.]/"
+            # GitHub-owned action
+            - pattern-not-regex: "^actions/"
+            # Action with pinned commit SHA
+            - pattern-not-regex: "@[0-9a-f]{40}$"
+            # Docker action with pinned image digest
+            - pattern-not-regex: "^docker://.*@sha256:[0-9a-f]{64}$"
+    message: >-
+      An action sourced from a third-party repository on GitHub is not pinned
+      to a full length commit SHA. Pinning an action to a full length commit SHA
+      is currently the only way to use an action as an immutable release. Pinning
+      to a particular SHA helps mitigate the risk of a bad actor adding a backdoor
+      to the action's repository, as they would need to generate a SHA-1 collision
+      for a valid Git object payload.
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+      owasp: A06:2021 - Vulnerable and Outdated Components
+      references:
+        - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
+        - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+      category: security
+      technology:
+        - github-actions
+      subcategory:
+        - vuln
+      likelihood: LOW
+      impact: LOW
+      confidence: HIGH
