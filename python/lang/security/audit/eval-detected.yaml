@@ -1,12 +1,9 @@
 rules:
 - id: eval-detected
   patterns:
-    - pattern: eval($ARG)
-    - metavariable-pattern:
-        metavariable: $ARG
-        patterns:
-          - pattern-not-regex: (^f")([^{}]*)("$)
-          - pattern-not-regex: (^")(.*)("$)
+  - pattern-not: eval(f"")
+  - pattern-not: eval("...")
+  - pattern: eval(...)
   message: >-
     Detected the use of eval(). eval() can be dangerous if used to evaluate
     dynamic content. If this content can be input from outside the program, this
