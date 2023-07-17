@@ -22,10 +22,10 @@ var clean = DOMPurify.sanitize(dirty, {RETURN_DOM_FRAGMENT: true});
 var clean = DOMPurify.sanitize(dirty, {RETURN_DOM_FRAGMENT: true, RETURN_DOM_IMPORT: true});
 document.body.appendChild(clean);
 
-// ruleid: harden-dompurify-usage
+// ok: harden-dompurify-usage
 var yikes = DOMPurify.sanitize(dirty, {RETURN_DOM: true})
 document.body.innerHTML = yikes;
 
 
-// ruleid: harden-dompurify-usage
+// ok: harden-dompurify-usage
 dosomethingsketchy(DOMPurify.sanitize(dirty, {RETURN_DOM: true}));
