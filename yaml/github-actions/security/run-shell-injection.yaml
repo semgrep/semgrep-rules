@@ -55,4 +55,6 @@ rules:
         - pattern: ${{ github.event.pull_request.head.repo.default_branch }}
         - pattern: ${{ github.head_ref }}
         - pattern: ${{ github.event.inputs ... }}
+      - pattern-not: 
+          pattern: ${{ github.event.inputs.commit_hash }}
   severity: ERROR
