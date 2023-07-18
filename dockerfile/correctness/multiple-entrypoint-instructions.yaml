@@ -6,7 +6,14 @@ rules:
       - pattern: |
           ENTRYPOINT ...
           ...
-          ENTRYPOINT ...
+          $ENTRYPOINT_INSTR
+      # Restrict the match to just the second ENTRYPOINT instruction.
+      # This avoids producing unstable findings due to capturing
+      # many lines of unrelated code with the ellipsis.
+      - metavariable-regex:
+          metavariable: $ENTRYPOINT_INSTR
+          regex: (?i)(^ENTRYPOINT)
+      - focus-metavariable: $ENTRYPOINT_INSTR
     message: >-
       Multiple ENTRYPOINT instructions were found. Only the last one
       will take effect.
