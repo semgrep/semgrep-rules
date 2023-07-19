@@ -218,4 +218,5 @@ class Test2 {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.execute(sql);
         return rs;
+  }
 }

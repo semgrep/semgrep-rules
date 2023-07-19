@@ -2,7 +2,7 @@
 import ReactHtmlParser from 'react-html-parser';
 
 
-renderContent() {
+function renderContent() {
     let content = this.props.content;
     if (!content || (typeof content === 'string' && !content.length)) {
         if (this.props.children) {
