@@ -79,7 +79,7 @@ namespace Sqli
             using (SqlConnection connection = new SqlConnection("Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI;")) {
                connection.Open();
                // ruleid: csharp-sqli
-               SqlCommand command = new SqlCommand(sqli)
+               SqlCommand command = new SqlCommand(sqli);
             }
         }
 
