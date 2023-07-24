@@ -1,0 +1,39 @@
+rules:
+ -
+    id: compound-sweeptoken-not-restricted
+    message: Function sweepToken is allowed to be called by anyone
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: MEDIUM
+        likelihood: LOW
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/chainsecurity/trueusd-compound-vulnerability-bc5b696d29e2
+        - https://chainsecurity.com/security-audit/compound-ctoken/
+        - https://blog.openzeppelin.com/compound-comprehensive-protocol-audit/
+        - https://etherscan.io/address/0xa035b9e130f2b1aedc733eefb1c67ba4c503491f # Compound
+    patterns:
+    - pattern-inside: |
+        function sweepToken(...) {
+        ...
+        }
+    - pattern-not-inside: |
+        function sweepToken(...) $M {
+        ...
+        }
+    - pattern: token.transfer(...);
+    - pattern-not-inside: |
+        require(msg.sender == admin, "...");
+        ...
+    - pattern-not-inside: |
+        require(_msgSender() == admin, "...");
+        ...
+    languages: 
+    - solidity
+    severity: WARNING
+
