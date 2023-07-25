@@ -10,7 +10,7 @@ rules:
       Detected useless comparison operation `$X == $X` or `$X != $X`. This will always return 'True' or 'False' and therefore
       is not necessary. Instead, remove this comparison operation or use another comparison expression that is not deterministic.
     languages: [go]
-    severity: ERROR
+    severity: INFO
     metadata:
       category: correctness
       technology:
@@ -21,7 +21,7 @@ rules:
       not necessary in the code. Remove the 'if (False)' expression completely or just the 'if (True)' comparison depending
       on which expression is in the code.
     languages: [go]
-    severity: ERROR
+    severity: INFO
     pattern-either:
       - pattern: if (true) { ... }
       - pattern: if (false) { ... }
