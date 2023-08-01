@@ -38,7 +38,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        SEMGREP_OLD_VERSION=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq -r '.[].tag_name' | sed -n 5p | tr -d v)
+        SEMGREP_OLD_VERSION=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq -r '.[].tag_name' | sed -n 10p | tr -d v)
         echo $SEMGREP_OLD_VERSION
         echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
     - name: validate rules on historical semgrep version
