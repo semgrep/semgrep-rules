@@ -77,7 +77,7 @@ public class SpringJdbcTemplate {
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>());
 
         // ok:spring-sqli
-        jdbcTemplate.batchUpdate("SELECT foo FROM bar WHERE baz = 'biz'", new ArrayList<Object[]>(Arrays.asList(new Object[] {taintedString}));
+        jdbcTemplate.batchUpdate("SELECT foo FROM bar WHERE baz = 'biz'", new ArrayList<Object[]>(Arrays.asList(new Object[] {taintedString})));
         // ruleid:spring-sqli
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>(), new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR});
     }

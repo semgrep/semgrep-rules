@@ -82,7 +82,7 @@ public class SQLExample3 {
     public void getAllFields(String tableName) throws SQLException {
         Connection c = db.getConnection();
         // ruleid:formatted-sql-string
-        ResultSet rs = c.createStatement().execute(String.format("SELECT * FROM %s", tableName);
+        ResultSet rs = c.createStatement().execute(String.format("SELECT * FROM %s", tableName));
     }
 
     public void findAccountsById(String id) throws SQLException {
@@ -104,7 +104,7 @@ public class SQLExample3 {
     }
 
     public void findAccountsByIdOk() throws SQLException {
-        String id = "const"
+        String id = "const";
         String sql = String.format("SELECT * FROM accounts WHERE id = '%s'", id);
         Connection c = db.getConnection();
         // ok:formatted-sql-string
