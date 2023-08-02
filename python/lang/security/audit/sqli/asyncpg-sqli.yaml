@@ -82,6 +82,9 @@ rules:
     - pattern-inside: |
         def $FUNCNAME(..., $CONN: Connection, ...):
             ...
+    - pattern-inside: |
+        def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
+            ...
   - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
   - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
   - pattern-not: $CONN.$METHOD(..., '...'%(), ...)
