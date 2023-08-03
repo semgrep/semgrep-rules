@@ -64,6 +64,11 @@ def bad10(conn: asyncpg.Connection):
         # ruleid: asyncpg-sqli
         cur = await conn.cursor(sql_query)
 
+def bad11(conn: asyncpg.Connection):
+    import common
+    # ruleid: asyncpg-sqli
+    cur = conn.fetch(common.bad_query_1.format(user_input))
+
 def ok1(user_input):
     con = await asyncpg.connect(user='postgres')
     # ok: asyncpg-sqli
