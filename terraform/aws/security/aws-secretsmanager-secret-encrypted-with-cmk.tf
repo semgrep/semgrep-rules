@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret" "enabled2" {
 }
 
 # failure
-# ruleid: aws-secretsmanager-secret-with-cmk
+# ruleid: aws-secretsmanager-secret-encrypted-with-cmk
 resource "aws_secretsmanager_secret" "default" {
   name = "secret"
 }
