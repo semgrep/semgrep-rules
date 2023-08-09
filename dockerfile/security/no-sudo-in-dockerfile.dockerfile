@@ -3,8 +3,10 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# ok: no-sudo-in-dockerfile
 RUN apt-get update && apt-get upgrade -y
 
+# ok: no-sudo-in-dockerfile
 RUN apt-get install -y sudo
 
 RUN useradd -ms /bin/bash newuser
