@@ -1,0 +1,27 @@
+rules:
+- id: no-sudo-in-dockerfile
+  patterns:
+  - pattern: |
+      RUN sudo ...
+  message: >-
+    Avoid using sudo in Dockerfiles. Running processes as a non-root user can help 
+    reduce the potential impact of configuration errors and security vulnerabilities.
+  metadata:
+    category: security
+    technology:
+    - dockerfile
+    cwe: 
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://cwe.mitre.org/data/definitions/250.html
+    - https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+  languages:
+  - dockerfile
+  severity: WARNING
