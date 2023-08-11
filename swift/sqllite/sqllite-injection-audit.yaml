@@ -1,0 +1,43 @@
+rules:
+- id: swift-potential-sqlite-injection
+  message: >-
+    Potential Client-side SQL injection which has different impacts depending on the SQL use-case. The
+    impact may include the circumvention of local authentication mechanisms, obtaining of sensitive data
+    from the app, or manipulation of client-side behavior. It wasn't possible to make certain that the
+    source is untrusted, but the application should avoid concatenating dynamic data into SQL queries
+    and should instead leverage parameterized queries.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    masvs:
+    - 'MASVS-CODE-4: The app validates and sanitizes all untrusted inputs.'
+    references:
+    - https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/ValidatingInput.html
+    subcategory:
+    - vuln
+    technology:
+    - ios
+    - macos
+  languages:
+  - swift
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: |
+        "...\($X)..."
+    - pattern: |
+        $SQL = "..." + $X
+    - pattern: |
+        $SQL = $X + "..."
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: sqlite3_exec($DB, $SQL, ...)
+      - pattern: sqlite3_prepare_v2($DB, $SQL, ...)
+    - focus-metavariable:
+      - $SQL
