@@ -63,6 +63,7 @@ rules:
           $QUERY = '...' % ()
           ...
     - pattern: $CONN.$METHOD(..., $X + $Y, ...)
+    - pattern: $CONN.$METHOD(..., $Y.format(...), ...)
     - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
     - pattern: $CONN.$METHOD(..., '...' % (...), ...)
     - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
@@ -81,6 +82,9 @@ rules:
         ...
     - pattern-inside: |
         def $FUNCNAME(..., $CONN: Connection, ...):
+            ...
+    - pattern-inside: |
+        def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
             ...
   - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
   - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
