@@ -1,0 +1,17 @@
+#!/bin/bash
+HISTORICAL_VERSIONS=10
+RETRIES=3
+
+versions=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq 'reverse' | jq -r '.[].tag_name' | tail "-n${HISTORICAL_VERSIONS}" | head -n "${RETRIES}" | tr -d v)
+
+for version in $(echo "${versions}"); do
+  docker pull "returntocorp/semgrep:${version}"
+  if [[ "$?" == 0 ]]; then
+    echo "${version}"
+    echo "SEMGREP_OLD_VERSION=${version}" >> "${GITHUB_ENV}"
+    exit 0
+  fi
+done
+
+echo "Could not determine historical version, tried: $(echo ${versions})"
+exit 1
