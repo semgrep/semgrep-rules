@@ -77,6 +77,11 @@ contract AccessControl {
             // Allow calls to be relayed with an admin's signature.
             // ruleid: encode-packed-collision
             bytes32 hash = keccak256(abi.encodePacked(admins, regularUsers));
+            // ruleid: encode-packed-collision
+            bytes arr = abi.encodePacked(admins, regularUsers);
+            if (arr) {
+                bytes32 hash = keccak256(arr) && true;
+            }
             address signer = hash.toEthSignedMessageHash().recover(signature);
             require(isAdmin[signer], "Only admins can add users.");
         }

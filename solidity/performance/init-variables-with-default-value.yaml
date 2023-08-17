@@ -11,10 +11,10 @@ rules:
         - solidity
     patterns:
       - pattern-either:
-          - pattern: $TYPE $VAR = 0
-          - pattern: $TYPE $VAR = false
-          - pattern: $TYPE $VAR = ""
-          - pattern: $TYPE $VAR = ''
+          - pattern: $TYPE $VAR = 0;
+          - pattern: $TYPE $VAR = false;
+          - pattern: $TYPE $VAR = "";
+          - pattern: $TYPE $VAR = '';
       - pattern-not: $TYPE constant $VAR = ...;
       - pattern-not-inside: |
           contract $C {

@@ -29,19 +29,19 @@ rules:
       - pattern-not: function burn(...) $M(...) { ... }
       - pattern-not: |
           function burn(...) {
-            _burn(msg.sender, ...)
+            _burn(msg.sender, ...);
           }
       - pattern-not: |
           function burn(...) {
-            _burn(_msgSender(), ...)
+            _burn(_msgSender(), ...);
           }
       - pattern-not: |
           function burn(...) {
-            _burn(tokenId, ...)
+            _burn(tokenId, ...);
           }
       - pattern-not: |
           function burn(...) {
-            _burn(_tokenId, ...)
+            _burn(_tokenId, ...);
           }
     languages: 
     - solidity
