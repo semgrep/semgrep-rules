@@ -92,5 +92,12 @@ class UsersController < ApplicationController
     redirect_to "#{authenticator_domain}/application-name/landing?redirect_path=#{redirect_url}"
   end
 
+  def ok_test6
+    # ok:tainted-sql-string
+    user = User.where(user_id: params[:user_id])[0]
+    # ok:tainted-sql-string
+    user = User.where(params.slice(:user_id))[0]
+  end
 
 end
+

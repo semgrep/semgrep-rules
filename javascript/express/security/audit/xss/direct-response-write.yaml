@@ -104,6 +104,7 @@ rules:
       - pattern: body
   pattern-sinks:
   - patterns:
+    - pattern-inside: function ... (..., $RES,...) {...}
     - pattern-either:
       - pattern: $RES.write($ARG)
       - pattern: $RES.send($ARG)
@@ -219,4 +220,14 @@ rules:
     - metavariable-regex:
         metavariable: $F
         regex: (?!.*text/html)
-        
+  - patterns: 
+    - pattern-inside: |
+        $X = [...];
+        ...
+    - pattern: |
+        if(<... !$X.includes($SOURCE)...>) {
+            ...
+            return ...
+        }
+        ...
+    - pattern: $SOURCE

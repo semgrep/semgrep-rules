@@ -31,6 +31,21 @@
     $( "p" ).wrapAll(userInput);
   }
 
+
+  function bad6() {
+    $.get(
+      `/foo/${x}`,
+      (response) => {
+        let select = $('foo')
+        for (let d of response.data) {
+            let bar = $(new Data(d))
+            // ruleid: jquery-insecure-method
+            select.append(bar)
+        }
+      }
+    );
+  }
+
   function ok1() {
     const item = '<div></div>';
     // ok: jquery-insecure-method

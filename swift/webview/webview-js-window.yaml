@@ -1,0 +1,58 @@
+rules:
+- id: swift-webview-config-allows-js-open-windows
+  message: >-
+    Webviews were observed that explictly allow JavaScript in an WKWebview to open windows automatically.
+    Consider disabling this functionality if not required, following the principle of least privelege.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+    category: security
+    cwe:
+    - 'CWE-272: Least Privilege Violation'
+    masvs:
+    - 'MASVS-PLATFORM-2: The app uses WebViews securely'
+    references:
+    - https://mas.owasp.org/MASVS/controls/MASVS-PLATFORM-2/
+    - https://developer.apple.com/documentation/webkit/wkpreferences/1536573-javascriptcanopenwindowsautomati
+    subcategory:
+    - audit
+    technology:
+    - ios
+    - macos
+  languages:
+  - swift
+  patterns:
+  - pattern: |
+      $P = WKPreferences()
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $P.JavaScriptCanOpenWindowsAutomatically  = $FALSE
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = $TRUE
+      # nosemgrep
+      - pattern-not-inside: |
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = $TRUE
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically = $FALSE
+      - pattern: |
+          $P.JavaScriptCanOpenWindowsAutomatically  = true
+      - metavariable-regex:
+          metavariable: $TRUE
+          regex: ^(true)$
+      - metavariable-regex:
+          metavariable: $TRUE
+          regex: (.*(?!true))
+    - patterns:
+      - pattern: |
+          $P.JavaScriptCanOpenWindowsAutomatically  = true
+      # nosemgrep
+      - pattern-not-inside: |
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = ...
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = ...

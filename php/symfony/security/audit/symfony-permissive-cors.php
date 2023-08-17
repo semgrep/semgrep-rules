@@ -9,7 +9,7 @@ $response = new Response('content', Response::HTTP_OK, ['Access-Control-Allow-Or
 // ruleid: symfony-permissive-cors
 $response = new Response('content', Response::HTTP_OK, Array('Access-Control-Allow-Origin' => '*'));
 
-// todoruleid: symfony-permissive-cors
+// ruleid: symfony-permissive-cors
 $response = new response('content', Response::HTTP_OK, Array('Access-Control-Allow-Origin' => '*'));
 
 // ruleid: symfony-permissive-cors

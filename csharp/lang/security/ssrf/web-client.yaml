@@ -34,7 +34,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenRead(<... $X ...>)
+        ... $Y.OpenRead(<... $X ...>);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -44,7 +44,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenRead($B)
+        ... $Y.OpenRead($B);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -52,25 +52,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenReadAsync(<... $X ...>, ...)
-        }
-    - pattern: |
-        $T $F(..., $X, ...)
-        {
-        ...
-        $A $B = <... $X ...>;
-        ...
-        WebClient $Y = new WebClient();
-        ...
-        ... $Y.OpenReadAsync($B, ...)
-        }
-    - pattern: |
-        $T $F(..., $X, ...)
-        {
-        ...
-        WebClient $Y = new WebClient();
-        ...
-        ... $Y.DownloadString(<... $X ...>)
+        ... $Y.OpenReadAsync(<... $X ...>, ...);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -80,5 +62,23 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.DownloadString($B)
+        ... $Y.OpenReadAsync($B, ...);
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString(<... $X ...>);
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        $A $B = <... $X ...>;
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString($B);
         }

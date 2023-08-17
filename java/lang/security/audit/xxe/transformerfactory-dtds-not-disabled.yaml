@@ -1,0 +1,190 @@
+rules:
+  - id: transformerfactory-dtds-not-disabled
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp:
+        - A04:2017 - XML External Entities (XXE)
+        - A05:2021 - Security Misconfiguration
+      asvs:
+        section: V5 Validation, Sanitization and Encoding
+        control_id: 5.5.2 Insecue XML Deserialization
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+        version: "4"
+      references:
+        - https://semgrep.dev/blog/2022/xml-security-in-java
+        - https://semgrep.dev/docs/cheat-sheets/java-xxe/
+        - https://blog.sonarsource.com/secure-xml-processor
+        - https://xerces.apache.org/xerces2-j/features.html
+      category: security
+      technology:
+        - java
+        - xml
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - vuln
+      likelihood: LOW
+      impact: HIGH
+      confidence: HIGH
+    message: DOCTYPE declarations are enabled for this TransformerFactory. This
+      is vulnerable to XML external entity attacks. Disable this by setting the
+      attributes "accessExternalDTD" and "accessExternalStylesheet" to "". 
+    mode: taint
+    pattern-sources:
+      - by-side-effect: true
+        patterns:
+          - pattern-either:
+              - pattern: |
+                  $FACTORY = TransformerFactory.newInstance();
+              - patterns:
+                  - pattern: $FACTORY
+                  - pattern-inside: |
+                      class $C {
+                        ...
+                        $V $FACTORY = TransformerFactory.newInstance();
+                        ...
+                      }
+                  - pattern-not-inside: >
+                      class $C {
+                        ...
+                        $V $FACTORY = TransformerFactory.newInstance();
+                        static {
+                          ...
+                          $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                          ...
+                          $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                          ...
+                        }
+                        ...
+                      }
+                  - pattern-not-inside: >
+                      class $C {
+                        ...
+                        $V $FACTORY = TransformerFactory.newInstance();
+                        static {
+                          ...
+                          $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                          ...
+                          $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                          ...
+                        }
+                        ...
+                      }
+                  - pattern-not-inside: >
+                      class $C {
+                        ...
+                        $V $FACTORY = TransformerFactory.newInstance();
+                        static {
+                          ...
+                          $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                          ...
+                          $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                          ...
+                        }
+                        ...
+                      }
+                  - pattern-not-inside: >
+                      class $C {
+                        ...
+                        $V $FACTORY = TransformerFactory.newInstance();
+                        static {
+                          ...
+                          $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                          ...
+                          $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                          ...
+                        }
+                        ...
+                      }
+    pattern-sinks:
+      - patterns:
+          - pattern: $FACTORY.newTransformer(...);
+    pattern-sanitizers:
+      - by-side-effect: true
+        pattern-either:
+          - patterns:
+            - pattern-either:
+              - pattern: >
+                  $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                  ...
+
+                  $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+              - pattern: >
+                  $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+
+                  ...
+
+                  $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+              - pattern: >
+                  $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                  ...
+
+                  $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+              - pattern: >
+                  $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+
+                  ...
+
+                  $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+            - focus-metavariable: $FACTORY
+          - patterns:
+              - pattern-either:
+                - pattern-inside: >
+                    class $C {
+                      ...
+                      $T $M(...) {
+                        ...
+                        $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                        ...
+                        $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                        ...
+                      }
+                      ...
+                    }
+                - pattern-inside: >
+                    class $C {
+                      ...
+                      $T $M(...) {
+                        ...
+                        $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                        ...
+                        $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                        ...
+                      }
+                      ...
+                    }
+                - pattern-inside: >
+                    class $C {
+                      ...
+                      $T $M(...) {
+                        ...
+                        $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                        ...
+                        $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                        ...
+                      }
+                      ...
+                    }
+                - pattern-inside: >
+                    class $C {
+                      ...
+                      $T $M(...) {
+                        ...
+                        $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                        ...
+                        $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                        ...
+                      }
+                      ...
+                    }
+              - pattern: $M($X)
+              - focus-metavariable: $X
+    fix: >
+      $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
+      $FACTORY.newTransformer(...);
+    languages:
+      - java

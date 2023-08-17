@@ -3,6 +3,10 @@ const express = require('express')
 const router = express.Router()
 var xss = require("xss");
 
+import {
+    AdminUpdateUserAttributesCommand,
+    CognitoIdentityProviderClient,
+} from "@aws-sdk/client-cognito-identity-provider";
 
 
 router.get('/greeting', (req, res) => {
@@ -127,4 +131,33 @@ app.get('/xss', function (req, res) {
     // ruleid: direct-response-write
     res.write('Response</br>' + html);
 });
+
+// For https://github.com/returntocorp/semgrep-rules/issues/2872
+app.post(
+    "/:id",
+    async (req, res, next) => {
+        const userId = req.params?.id;
+
+        if (user.email !== req.body.email) {
+            const command = new AdminUpdateUserAttributesCommand({
+                Username: user.cognitoUserId,
+                UserPoolId: process.env.COGNITO_USER_POOL_ID,
+                UserAttributes: [
+                    {
+                        Name: "email",
+                        Value: req.body.email,
+                    }
+                ],
+            });
+
+            // ok: direct-response-write
+            await client.send(command);
+        }
+
+        res.status(200).send();
+    }
+);
+
+
 app.listen(8000);
+

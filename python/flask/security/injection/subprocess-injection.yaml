@@ -27,7 +27,7 @@ rules:
         - pattern: flask.request.view_args.get(...)
         - pattern: flask.request.view_args[...]
     - patterns:
-      - pattern: |
+      - pattern-inside: |
           @$APP.route($ROUTE, ...)
           def $FUNC(..., $ROUTEVAR, ...):
             ...

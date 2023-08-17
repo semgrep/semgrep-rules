@@ -38,13 +38,13 @@ rules:
         $X.concat("...")
   pattern-sinks:
   - patterns:
-    - pattern: $STR
+    - focus-metavariable: $STR
     - pattern-either:
-      - pattern-inside: |
+      - pattern: |
           console.$LOG($STR,$PARAM,...)
       - patterns:
         - pattern-inside: |
             $UTIL = require('util')
             ...
-        - pattern-inside: |
+        - pattern: |
             $UTIL.format($STR,$PARAM,...)

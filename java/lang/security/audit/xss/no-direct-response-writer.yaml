@@ -1,48 +1,69 @@
 rules:
 - id: no-direct-response-writer
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: (HttpServletRequest $REQ)
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          (HttpServletResponse $RESPONSE).getWriter(...).$WRITE(..., $SINK, ...)
-      - pattern: >
-          (HttpServletResponse
-          $RESPONSE).getOutputStream(...).$WRITE(..., $SINK, ...)
-      - pattern: |
-          (java.io.PrintWriter $WRITER).$WRITE(..., $SINK, ...)
-      - pattern: |
-          (javax.servlet.ServletOutputStream $WRITER).$WRITE(..., $SINK, ...)
-      - pattern: |
-          (java.io.OutputStream $WRITER).$WRITE(..., $SINK, ...)
-    - pattern: $SINK
-  message: Detected a request with potential user-input going into a OutputStream or Writer object.  This
-    bypasses any view or template environments, including HTML escaping, which may expose this application
-    to cross-site scripting (XSS) vulnerabilities. Consider using a view technology such as JavaServer
-    Faces (JSFs) which automatically escapes HTML views.
+  message: Detected a request with potential user-input going into a OutputStream
+      or Writer object. This bypasses any view or template environments,
+      including HTML escaping, which may expose this application to cross-site
+      scripting (XSS) vulnerabilities. Consider using a view technology such as
+      JavaServer Faces (JSFs) which automatically escapes HTML views.
+  severity: WARNING
   metadata:
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    cwe:
-    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    references:
-    - https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaServerFaces.html
-    category: security
-    technology:
-    - java
-    - servlets
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
     likelihood: HIGH
     impact: MEDIUM
     confidence: MEDIUM
-  severity: WARNING
+    category: security
+    cwe:
+      - "CWE-79: Improper Neutralization of Input During Web Page Generation
+        ('Cross-site Scripting')"
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+      - A07:2017 - Cross-Site Scripting (XSS)
+      - A03:2021 - Injection
+    references:
+      - https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaServerFaces.html
+    subcategory:
+      - vuln
+    technology:
+      - java
+      - servlets
+    interfile: true
+    license: proprietary license - copyright © Semgrep, Inc.
   languages:
-  - java
+    - java
+  mode: taint
+  pattern-sources:
+    - patterns:
+        - pattern-either:
+            - pattern: |
+                (HttpServletRequest $REQ).$REQFUNC(...)
+            - pattern: |
+                (ServletRequest $REQ).$REQFUNC(...) 
+        - metavariable-regex:
+            metavariable: $REQFUNC
+            regex: (getInputStream|getParameter|getParameterMap|getParameterValues|getReader|getCookies|getHeader|getHeaderNames|getHeaders|getPart|getParts|getQueryString)
+  pattern-sinks:
+    - patterns:
+        - pattern-either:
+            - pattern: |
+                (HttpServletResponse $RESPONSE).getWriter(...).$WRITE(...)
+            - pattern: >
+                (HttpServletResponse
+                $RESPONSE).getOutputStream(...).$WRITE(...)
+            - pattern: |
+                (java.io.PrintWriter $WRITER).$WRITE(...)
+            - pattern: |
+                (PrintWriter $WRITER).$WRITE(...)
+            - pattern: |
+                (javax.servlet.ServletOutputStream $WRITER).$WRITE(...)
+            - pattern: |
+                (ServletOutputStream $WRITER).$WRITE(...)
+            - pattern: |
+                (java.io.OutputStream $WRITER).$WRITE(...)
+            - pattern: |
+                (OutputStream $WRITER).$WRITE(...)
+  pattern-sanitizers:
+    - pattern-either:
+        - pattern: Encode.forHtml(...)
+        - pattern: (PolicyFactory $POLICY).sanitize(...)
+        - pattern: (AntiSamy $AS).scan(...)
+        - pattern: JSoup.clean(...)

@@ -3,7 +3,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $ARG
+    - focus-metavariable: $ARG
     - pattern-inside: |
         Route::$METHOD($ROUTE_NAME, function(...,$ARG,...){...})
   pattern-sanitizers:

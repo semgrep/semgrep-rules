@@ -47,16 +47,16 @@ rules:
           exports.handler = $FUNC
   pattern-sinks:
   - patterns:
-    - pattern: $CMD
+    - focus-metavariable: $CMD
     - pattern-either:
-      - pattern-inside: exec($CMD,...)
-      - pattern-inside: execSync($CMD,...)
-      - pattern-inside: spawn($CMD,...)
-      - pattern-inside: spawnSync($CMD,...)
-      - pattern-inside: $CP.exec($CMD,...)
-      - pattern-inside: $CP.execSync($CMD,...)
-      - pattern-inside: $CP.spawn($CMD,...)
-      - pattern-inside: $CP.spawnSync($CMD,...)
+      - pattern: exec($CMD,...)
+      - pattern: execSync($CMD,...)
+      - pattern: spawn($CMD,...)
+      - pattern: spawnSync($CMD,...)
+      - pattern: $CP.exec($CMD,...)
+      - pattern: $CP.execSync($CMD,...)
+      - pattern: $CP.spawn($CMD,...)
+      - pattern: $CP.spawnSync($CMD,...)
     - pattern-either:
       - pattern-inside: |
           require('child_process')

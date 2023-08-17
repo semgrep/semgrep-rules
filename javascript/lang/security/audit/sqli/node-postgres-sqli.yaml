@@ -4,7 +4,7 @@ rules:
     Detected string concatenation with a non-literal variable in a node-postgres
     JS SQL statement. This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
+    use parameterized queries or prepared statements instead.
     You can use parameterized statements like so:
     `client.query('SELECT $1 from table', [userinput])`
   metadata:
@@ -34,18 +34,26 @@ rules:
           ...
         }
     - focus-metavariable: $FUNC
+    - pattern-not-inside: |
+        $F. ... .$SOURCE(...)
   pattern-sinks:
   - patterns:
+    - pattern-either: 
+      - pattern-inside: |
+         const { $CLIENT } = require('pg')
+          ...
+      - pattern-inside: |
+         var { $CLIENT } = require('pg')
+          ...
+      - pattern-inside: |
+         let { $CLIENT } = require('pg')
+          ...
     - pattern-either:
       - pattern-inside: |
-          const { $CLIENT } = require('pg')
-          ...
           $DB = new $CLIENT(...)
           ...
       - pattern-inside: |
-          const { $POOL } = require('pg')
-          ...
-          const $NEWPOOL = new $POOL(...)
+          $NEWPOOL = new $CLIENT(...)
           ...
           $NEWPOOL.connect((..., $DB, ...) => {
               ...

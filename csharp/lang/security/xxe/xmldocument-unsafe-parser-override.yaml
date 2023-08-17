@@ -3,7 +3,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $ARG
+    - focus-metavariable: $ARG
     - pattern-inside: |
         public $T $M(...,string $ARG,...){...}
   pattern-sinks:
@@ -16,14 +16,13 @@ rules:
         $XMLDOCUMENT.XmlResolver = new XmlUrlResolver(...);
         ...  
   message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling a string argument
-    from a public method.  Enabling Document Type Definition (DTD) parsing may cause XML External Entity
+    from a public method. Enabling Document Type Definition (DTD) parsing may cause XML External Entity
     (XXE) injection if supplied with user-controllable data.
   languages:
   - csharp
   severity: WARNING
   metadata:
     category: security
-    license: MIT
     references:
     - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
     - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver?view=net-6.0#remarks

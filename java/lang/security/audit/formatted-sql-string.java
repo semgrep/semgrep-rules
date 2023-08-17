@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 
 public class SqlExample {
     public void staticQuery() throws SQLException {
@@ -81,7 +82,7 @@ public class SQLExample3 {
     public void getAllFields(String tableName) throws SQLException {
         Connection c = db.getConnection();
         // ruleid:formatted-sql-string
-        ResultSet rs = c.createStatement().execute(String.format("SELECT * FROM %s", tableName);
+        ResultSet rs = c.createStatement().execute(String.format("SELECT * FROM %s", tableName));
     }
 
     public void findAccountsById(String id) throws SQLException {
@@ -103,7 +104,7 @@ public class SQLExample3 {
     }
 
     public void findAccountsByIdOk() throws SQLException {
-        String id = "const"
+        String id = "const";
         String sql = String.format("SELECT * FROM accounts WHERE id = '%s'", id);
         Connection c = db.getConnection();
         // ok:formatted-sql-string
@@ -132,5 +133,13 @@ public class FalsePositiveCase {
         apiClient.execute(call);
         apiClient.run(call); // proof that 'execute' name is causing the false-positive
     }
-}
 
+    public List<Student> addWhere(String name, CriteriaQuery Query)
+    {
+        EntityManager em = emfactory.createEntityManager();
+    	CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+		// ok: formatted-sql-string
+        List<Student> students = em.createQuery(Query.where(criteriaBuilder.equal(studentRoot.get("name"), name ))).getResultList();
+        return students;
+    }
+}

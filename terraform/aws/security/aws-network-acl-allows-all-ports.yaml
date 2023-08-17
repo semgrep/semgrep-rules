@@ -1,0 +1,63 @@
+rules:
+- id: aws-network-acl-allows-all-ports
+  patterns:
+  - pattern-either:
+    - pattern: |
+        resource "aws_network_acl_rule" $ANYTHING {
+          ...
+          protocol = $PROTOCOL
+          rule_action = "allow"
+          ...
+        }
+    - patterns:
+      - pattern-inside: |
+          resource "$NETWORK_ACL" $ANYTHING {
+            ...
+          }
+      - pattern-either:
+        - pattern: |
+            ingress {
+              ...
+              protocol = $PROTOCOL
+              action = "allow"
+              ...
+            }
+        - pattern: |
+            egress {
+              ...
+              protocol = $PROTOCOL
+              action = "allow"
+              ...
+            }
+      - metavariable-regex:
+          metavariable: $NETWORK_ACL
+          regex: ^(aws_network_acl|aws_default_network_acl)$
+  - metavariable-regex:
+      metavariable: $PROTOCOL
+      regex: \A("all"|"-1"|-1)\Z
+  message: >-
+    Ingress and/or egress is allowed for all ports in the network ACL rule.
+    Ensure access to specific required ports is allowed, and nothing else.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl
+    - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW

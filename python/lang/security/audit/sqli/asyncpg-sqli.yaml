@@ -6,7 +6,7 @@ rules:
     Detected string concatenation with a non-literal variable in a asyncpg
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
     and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead.
+    use parameterized queries or prepared statements instead.
     You can create parameterized queries like so:
     'conn.fetch("SELECT $1 FROM table", value)'.
     You can also create prepared statements with 'Connection.prepare':
@@ -63,6 +63,7 @@ rules:
           $QUERY = '...' % ()
           ...
     - pattern: $CONN.$METHOD(..., $X + $Y, ...)
+    - pattern: $CONN.$METHOD(..., $Y.format(...), ...)
     - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
     - pattern: $CONN.$METHOD(..., '...' % (...), ...)
     - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
@@ -81,6 +82,9 @@ rules:
         ...
     - pattern-inside: |
         def $FUNCNAME(..., $CONN: Connection, ...):
+            ...
+    - pattern-inside: |
+        def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
             ...
   - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
   - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)

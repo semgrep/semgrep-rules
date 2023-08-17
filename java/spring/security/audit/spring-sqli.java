@@ -77,7 +77,7 @@ public class SpringJdbcTemplate {
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>());
 
         // ok:spring-sqli
-        jdbcTemplate.batchUpdate("SELECT foo FROM bar WHERE baz = 'biz'", new ArrayList<Object[]>(Arrays.asList(new Object[] {taintedString}));
+        jdbcTemplate.batchUpdate("SELECT foo FROM bar WHERE baz = 'biz'", new ArrayList<Object[]>(Arrays.asList(new Object[] {taintedString})));
         // ruleid:spring-sqli
         jdbcTemplate.batchUpdate(sql, new ArrayList<Object[]>(), new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR});
     }
@@ -191,8 +191,8 @@ public class SpringBatchUpdateUtils {
         BatchUpdateUtils.executeBatchUpdate(sql, new ArrayList<Object[]>(),new int[] {Types.INTEGER}, jdbcOperations);
     }
 
-    public void queryBatchUpdateSafe() {
-        String sql = "UPDATE Users SET name = 'safe' where id = 1";
+    public void queryBatchUpdateSafe(String input) {
+        String sql = "UPDATE Users SET set = '"+ (input != NULL) +"' where id = 1";
         // ok:spring-sqli
         BatchUpdateUtils.executeBatchUpdate(sql, new ArrayList<Object[]>(),new int[] {Types.INTEGER}, jdbcOperations);
     }

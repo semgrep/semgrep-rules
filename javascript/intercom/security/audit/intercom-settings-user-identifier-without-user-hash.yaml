@@ -1,0 +1,49 @@
+rules:
+  - id: intercom-settings-user-identifier-without-user-hash
+    patterns:
+      - pattern-either:
+          - pattern: |
+              window.intercomSettings = {..., email: $EMAIL, ...};
+          - pattern: |
+              window.intercomSettings = {..., user_id: $USER_ID, ...};
+          - pattern: |
+              Intercom('boot', {..., email: $EMAIL, ...});
+          - pattern: |
+              Intercom('boot', {..., user_id: $USER_ID, ...});
+          - pattern: |
+              $VAR = {..., email: $EMAIL, ...};
+              ...
+              Intercom('boot', $VAR);
+          - pattern: |
+              $VAR = {..., user_id: $EMAIL, ...};
+              ...
+              Intercom('boot', $VAR);
+      - pattern-not: |
+          window.intercomSettings = {..., user_hash: $USER_HASH, ...};
+      - pattern-not: |
+          Intercom('boot', {..., user_hash: $USER_HASH, ...});
+      - pattern-not: |
+          $VAR = {..., user_hash: $USER_HASH, ...};
+          ...
+          Intercom('boot', $VAR);
+    message: Found an initialization of the Intercom Messenger that identifies a
+      User, but does not specify a `user_hash`.This configuration allows users
+      to impersonate one another. See the Intercom Identity Verification docs
+      for more context
+      https://www.intercom.com/help/en/articles/183-set-up-identity-verification-for-web-and-mobile
+    languages:
+      - js
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - guardrail
+      cwe:
+        - "CWE-287: Improper Authentication"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - intercom
+      references:
+        - https://www.intercom.com/help/en/articles/183-set-up-identity-verification-for-web-and-mobile

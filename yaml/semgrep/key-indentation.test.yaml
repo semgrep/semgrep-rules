@@ -1,0 +1,16 @@
+rules:
+  - id: yaml-key-indentation-check-example 
+    message: >-
+      There should be a finding here, because the YAML
+      fuses the hyphen and the key together! 
+    languages:
+      - js
+    severity: WARNING
+    patterns:
+      # ruleid: yaml-key-indentation-check 
+      -pattern: |
+        bar
+    patterns-again:
+      # ok: yaml-key-indentation-check 
+      - pattern: |
+            bar

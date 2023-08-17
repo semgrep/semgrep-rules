@@ -44,6 +44,12 @@ class GoodDocumentBuilderFactory {
         dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
     }
 
+    public void GoodSAXParserFactory() throws  ParserConfigurationException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        //ok:documentbuilderfactory-disallow-doctype-decl-false
+        spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    }
+
 }
 
 class BadDocumentBuilderFactory{
@@ -53,5 +59,15 @@ class BadDocumentBuilderFactory{
         dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
         //fix:documentbuilderfactory-disallow-doctype-decl-false
         //dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    }
+}
+
+class BadSAXParserFactory{
+    public void BadSAXParserFactory() throws  ParserConfigurationException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        //ruleid:documentbuilderfactory-disallow-doctype-decl-false
+        spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+        //fix:documentbuilderfactory-disallow-doctype-decl-false
+        //spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
     }
 }

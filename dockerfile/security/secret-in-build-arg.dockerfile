@@ -27,6 +27,15 @@ ARG SECRET_KEY_BASE
 ARG SECRET_TOKEN
 
 # ruleid: secret-in-build-arg
+ARG AUTH_TOKEN="this-is-a-secret"
+
+# ruleid: secret-in-build-arg
+ARG SSH_PRIVATE_KEY
+
+# ruleid: secret-in-build-arg
+ARG CERT_PASSWORD
+
+# ruleid: secret-in-build-arg
 ARG DJANGO_SECRET_KEY
 
 # ruleid: secret-in-build-arg

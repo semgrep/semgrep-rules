@@ -12,8 +12,8 @@ rules:
         <... Path.GetFileName($A) != $A ...>
   pattern-sinks:
   - patterns:
-    - pattern: $X
-    - pattern-inside: |
+    - focus-metavariable: $X
+    - pattern: |
         File.$METHOD($X,...)
     - metavariable-regex:
         metavariable: $METHOD
@@ -42,7 +42,6 @@ rules:
   metadata:
     category: security
     confidence: MEDIUM
-    license: MIT
     references:
     - https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/
     - https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks

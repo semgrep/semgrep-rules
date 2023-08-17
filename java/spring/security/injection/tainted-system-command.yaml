@@ -20,9 +20,12 @@ rules:
             ...
           }
     - metavariable-regex:
+        metavariable: $TYPE
+        regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
+    - metavariable-regex:
         metavariable: $REQ
         regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
-    - pattern: $SOURCE
+    - focus-metavariable: $SOURCE
     label: INPUT
   - patterns:
     - pattern-either:
@@ -33,7 +36,7 @@ rules:
       - pattern: String.join("...", ..., $SOURCE, ...)
       - pattern: (String $STR).concat($SOURCE)
       - pattern: $SOURCE.concat(...)
-      - pattern: $X += SOURCE
+      - pattern: $X += $SOURCE
       - pattern: $SOURCE += $X
     label: CONCAT
     requires: INPUT
@@ -98,4 +101,3 @@ rules:
     - vuln
     likelihood: HIGH
     impact: HIGH
-    interfile: true

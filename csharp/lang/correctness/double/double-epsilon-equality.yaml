@@ -5,7 +5,7 @@ rules:
         $V1 - $V2
     - pattern-either:
       - pattern-inside: |
-          ... <= Double.Epsilon;
+          ... <= Double.Epsilon
       - pattern-inside: | 
           Double.Epsilon <= ...
     - pattern-not-inside: |
@@ -20,7 +20,7 @@ rules:
     - pattern-not-inside: |
         $V2 = 0;
         ...
-  message: Double.Epsilon is defined by .NET as the smallest value that can be added to or subtracted from a zero-value Double.  It is unsuitable for equality comparisons of non-zero Double values. Furthermore, the value of Double.Epsilon is framework and processor architecture dependent.  Wherever possible, developers should prefer the framework Equals() method over custom equality implementations.
+  message: Double.Epsilon is defined by .NET as the smallest value that can be added to or subtracted from a zero-value Double. It is unsuitable for equality comparisons of non-zero Double values. Furthermore, the value of Double.Epsilon is framework and processor architecture dependent. Wherever possible, developers should prefer the framework Equals() method over custom equality implementations.
   languages: [csharp]
   severity: WARNING
   metadata:

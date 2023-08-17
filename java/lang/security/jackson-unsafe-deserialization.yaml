@@ -1,0 +1,74 @@
+rules:
+  - id: jackson-unsafe-deserialization
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: |
+                  ObjectMapper $OM = new ObjectMapper(...);
+                  ...
+              - pattern-inside: |
+                  $OM.enableDefaultTyping();
+                  ...
+              - pattern: $OM.readValue($JSON, ...);
+          - patterns:
+              - pattern-inside: |
+                  class $CLASS {
+                    ...
+                    @JsonTypeInfo(use = Id.CLASS,...)
+                    $TYPE $VAR;
+                    ...
+                  }
+              - metavariable-regex:
+                  metavariable: $TYPE
+                  regex: (Object|Serializable|Comparable)
+              - pattern: $OM.readValue($JSON, $CLASS.class);
+          - patterns:
+              - pattern-inside: |
+                  class $CLASS {
+                    ...
+                    ObjectMapper $OM;
+                    ...
+                    $INITMETHODTYPE $INITMETHOD(...) {
+                      ...
+                      $OM = new ObjectMapper();
+                      ...
+                      $OM.enableDefaultTyping();
+                      ...
+                    }
+                    ...
+                  }
+              - pattern-inside: |
+                  $METHODTYPE $METHOD(...) {
+                    ...  
+                  }
+              - pattern: $OM.readValue($JSON, ...);
+    message: >-
+      When using Jackson to marshall/unmarshall JSON to Java objects,
+      enabling default typing is dangerous and can lead to RCE. If an attacker
+      can control `$JSON` it might be possible to provide a malicious JSON which
+      can be used to exploit unsecure deserialization. In order to prevent this
+      issue, avoid to enable default typing (globally or by using "Per-class"
+      annotations) and avoid using `Object` and other dangerous types for member
+      variable declaration which creating classes for Jackson based
+      deserialization.
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: HIGH
+      owasp:
+        - A8:2017 Insecure Deserialization
+        - A8:2021 Software and Data Integrity Failures
+      references:
+        - https://swapneildash.medium.com/understanding-insecure-implementation-of-jackson-deserialization-7b3d409d2038
+        - https://cowtowncoder.medium.com/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062
+        - https://adamcaudill.com/2017/10/04/exploiting-jackson-rce-cve-2017-7525/
+      technology:
+        - jackson

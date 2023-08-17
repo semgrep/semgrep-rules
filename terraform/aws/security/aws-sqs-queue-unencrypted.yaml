@@ -1,0 +1,45 @@
+rules:
+- id: aws-sqs-queue-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_sqs_queue" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_sqs_queue" $ANYTHING {
+        ...
+        sqs_managed_sse_enabled = true
+        ...
+      }
+  - pattern-not: |
+      resource "aws_sqs_queue" $ANYTHING {
+        ...
+        kms_master_key_id = ...
+        ...
+      }
+  message: >-
+    The AWS SQS queue contents are unencrypted. The data could be read if compromised.
+    Enable server-side encryption for your queue using SQS-managed encryption keys
+    (SSE-SQS), or using your own AWS KMS key (SSE-KMS).
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue#server-side-encryption-sse
+    - https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW

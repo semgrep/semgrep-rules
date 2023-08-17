@@ -8,32 +8,33 @@ rules:
         public $T $M (..., String $ARG,...){...}
   pattern-sanitizers:
   - not_conflicting: true
-    patterns:
-    - pattern: $A
-    - pattern-inside: |
-        new $TYPE(...,$A,...);
+    pattern-either:
+    - patterns:
+      - focus-metavariable: $A
+      - pattern-inside: |
+          new $TYPE(...,$A,...);
   pattern-sinks:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             new PreparedStatementCreatorFactory($A,...);
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             (JdbcTemplate $T).$M($A,...)
       - patterns:
         - pattern: (String $A)
         - pattern-inside: |
             (JdbcTemplate $T).batchUpdate(...)
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             NamedParameterBatchUpdateUtils.$M($A,...)
       - patterns:
-        - pattern: $A
-        - pattern-inside: |
+        - focus-metavariable: $A
+        - pattern: |
             BatchUpdateUtils.$M($A,...)
   message: >-
     Detected a string argument from a public method contract in a raw SQL statement. This could lead to
@@ -43,6 +44,9 @@ rules:
     can obtain a PreparedStatement using 'connection.prepareStatement'.
   languages: [java]
   severity: WARNING
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   metadata:
     cwe:
     - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"

@@ -1,0 +1,29 @@
+rules:
+- id: no-stringify-keys
+  mode: taint
+  pattern-sources:
+  - pattern: JSON.stringify(...)
+  - patterns:
+    - pattern-inside: |
+        $STRINGIFY = JSON.stringify
+        ...
+        $STRINGIFY(...)
+    - pattern: $STRINGIFY(...)
+  pattern-sinks:
+  - pattern: $OBJECT[...]
+  message: >-
+    JSON stringify does not produce a stable key ordering, and should not
+    be relied on for producing object keys. Consider using json-stable-stringify
+    instead.
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    category: correctness
+    references:
+      - https://www.npmjs.com/package/json-stable-stringify
+      - https://stackoverflow.com/a/16168003
+    technology:
+      - javascript
+      - typescript

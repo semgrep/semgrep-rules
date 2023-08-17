@@ -1,6 +1,6 @@
 rules:
 - id: razor-template-injection
-  message: User-controllable string passed to Razor.Parse.  This leads directly to code execution in the
+  message: User-controllable string passed to Razor.Parse. This leads directly to code execution in the
     context of the process.
   severity: WARNING
   metadata:
@@ -11,7 +11,6 @@ rules:
     cwe:
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     cwe2022-top25: true
-    license: MIT
     owasp:
     - A03:2021 - Injection
     references:
@@ -27,7 +26,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $ARG
+    - focus-metavariable: $ARG
     - pattern-inside: |
         public ActionResult $METHOD(..., string $ARG,...){...}
   pattern-sinks:

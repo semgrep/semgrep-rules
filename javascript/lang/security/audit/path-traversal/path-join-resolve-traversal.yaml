@@ -31,7 +31,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: $X
+    - focus-metavariable: $X
     - pattern-either:
       - pattern-inside: |
           function ... (...,$X,...) {...}
@@ -39,7 +39,7 @@ rules:
           function ... (...,{...,$X,...},...) {...}
   pattern-sinks:
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-either:
       - pattern-inside: |
           $PATH = require('path');
@@ -48,10 +48,10 @@ rules:
           import $PATH from 'path';
           ...
     - pattern-either:
-      - pattern-inside: $PATH.join(...,$SINK,...)
-      - pattern-inside: $PATH.resolve(...,$SINK,...)
+      - pattern: $PATH.join(...,$SINK,...)
+      - pattern: $PATH.resolve(...,$SINK,...)
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-inside: |
         import 'path';
         ...

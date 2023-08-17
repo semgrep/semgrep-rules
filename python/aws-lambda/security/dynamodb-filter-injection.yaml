@@ -36,10 +36,10 @@ rules:
         {...}
   pattern-sinks:
   - patterns:
-    - pattern: $SINK
+    - focus-metavariable: $SINK
     - pattern-either:
-      - pattern-inside: $TABLE.scan(..., ScanFilter = $SINK, ...)
-      - pattern-inside: $TABLE.query(..., QueryFilter = $SINK, ...)
+      - pattern: $TABLE.scan(..., ScanFilter = $SINK, ...)
+      - pattern: $TABLE.query(..., QueryFilter = $SINK, ...)
     - pattern-either:
       - patterns:
         - pattern-inside: |

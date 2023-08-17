@@ -1,12 +1,20 @@
 rules:
   - id: use-after-free
     patterns:
-      - pattern: $VAR->$ACCESSOR
+      - pattern-either:
+        - pattern: $VAR->$ACCESSOR
+        - pattern: (*$VAR).$ACCESSOR
+        - pattern: $VAR[$NUM]
       - pattern-inside:
           free($VAR);
           ...
       - pattern-not-inside:
           $VAR = NULL;
+          ...
+      - pattern-not-inside:
+          free($VAR);
+          ...
+          $VAR = malloc(...);
           ...
     message: Variable '$VAR' was used after being freed. This can lead to undefined
       behavior.

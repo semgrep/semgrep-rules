@@ -34,7 +34,7 @@ func test_mkdir() {
 	}
 
 	// ruleid: incorrect-default-permission
-	err := os.MkdirAll("/tmp/mydir", 0777)
+	err = os.MkdirAll("/tmp/mydir", 0777)
 	if err != nil {
 		fmt.Println("Error when creating a directory!")
 		return
