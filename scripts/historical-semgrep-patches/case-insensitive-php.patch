@@ -1,0 +1,39 @@
+diff --git php/lang/security/ldap-bind-without-password.php php/lang/security/ldap-bind-without-password.php
+index 3b43c73b..eb4d74a6 100644
+--- php/lang/security/ldap-bind-without-password.php
++++ php/lang/security/ldap-bind-without-password.php
+@@ -5,7 +5,7 @@ $ldapconn = ldap_connect("foo.com");
+ // ruleid: ldap-bind-without-password
+ $ldapbind = ldap_bind($ldapconn);
+ 
+-// ruleid: ldap-bind-without-password
++// todoruleid: ldap-bind-without-password
+ LDAP_BIND($ldapconn, "username");
+ 
+ // ruleid: ldap-bind-without-password
+diff --git php/lang/security/php-permissive-cors.php php/lang/security/php-permissive-cors.php
+index 194b2abe..84807a2f 100644
+--- php/lang/security/php-permissive-cors.php
++++ php/lang/security/php-permissive-cors.php
+@@ -7,7 +7,7 @@ header("Access-Control-Allow-Origin: *");
+ // ruleid: php-permissive-cors
+ header("Access-Control-Allow-Origin:* ");
+ 
+-// ruleid: php-permissive-cors
++// todoruleid: php-permissive-cors
+ Header("access-control-allow-origin: *");
+ 
+ // ok: php-permissive-cors
+diff --git php/symfony/security/audit/symfony-permissive-cors.php php/symfony/security/audit/symfony-permissive-cors.php
+index 0b2f8a69..71a0dc45 100644
+--- php/symfony/security/audit/symfony-permissive-cors.php
++++ php/symfony/security/audit/symfony-permissive-cors.php
+@@ -9,7 +9,7 @@ $response = new Response('content', Response::HTTP_OK, ['Access-Control-Allow-Or
+ // ruleid: symfony-permissive-cors
+ $response = new Response('content', Response::HTTP_OK, Array('Access-Control-Allow-Origin' => '*'));
+ 
+-// ruleid: symfony-permissive-cors
++// todoruleid: symfony-permissive-cors
+ $response = new response('content', Response::HTTP_OK, Array('Access-Control-Allow-Origin' => '*'));
+ 
+ // ruleid: symfony-permissive-cors
