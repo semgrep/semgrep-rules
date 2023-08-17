@@ -11,6 +11,13 @@ token = JWT.encode payload, secret, 'HS256'
 
 print token
 
-decoded_token = JWT.decode token, secret, false
+def bad(token, secret)
+    decoded_token = JWT.decode token, secret, false
+    print decoded_token    
+end
 
-print decoded_token
+
+def ok(token, secret)
+    decoded_token = JWT.decode token, secret, true
+    print decoded_token
+end
