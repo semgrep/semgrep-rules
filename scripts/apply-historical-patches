@@ -8,7 +8,7 @@ import sys
 def patch(needed_until, patch_filename):
     historical_version = tuple(map(int, os.environ["SEMGREP_OLD_VERSION"].split(".")))
 
-    if historical_version > needed_until:
+    if historical_version >= needed_until:
         print(
             f"{patch_filename} is not needed anymore. Please delete the logic from scripts/apply-historical-patches"
         )
