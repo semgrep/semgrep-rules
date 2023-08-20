@@ -1,0 +1,19 @@
+rules:
+  - id: atom_exhaustion
+    message: >-
+      Atom doesn't garbage by the Garbage Collector. Creating it dynamically with `String.to_atom/1` or `List.to_atom/1` can possible memory leaks if the input cannot control.
+    severity: ERROR
+    languages:
+      - elixir
+    patterns:
+      - pattern: $MODULE.to_atom($STRING)
+      - metavariable-regex:
+          metavariable: $MODULE
+          regex: ^(String|List)$
+    fix: $MODULE.to_existing_atom($STRING)
+    metadata:
+      references:
+        - https://erlef.github.io/security-wg/secure_coding_and_deployment_hardening/atom_exhaustion.html
+      category: correctness
+      technology:
+        - elixir
