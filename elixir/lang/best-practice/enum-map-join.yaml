@@ -1,0 +1,26 @@
+rules:
+  - id: enum_map_join
+    message: >-
+      Using `Enum.map_join/3` is more efficient than using `Enum.map/2 |> Enum.join/2`.
+    severity: WARNING
+    languages:
+      - elixir
+    pattern-either:
+      - pattern: |
+          Enum.join(Enum.map($E, $FUN), $JOINER)
+      - pattern: |
+          Enum.map($E, $FUN)
+          |> Enum.join($JOINER)
+      - pattern: |
+          $E
+          |> Enum.map($FUN)
+          |> Enum.join($JOINER)
+    fix: |
+      $E
+      |> Enum.map_join($JOINER, $FUN end)
+    metadata:
+      references:
+        - https://github.com/rrrene/credo/blob/master/lib/credo/check/refactor/map_join.ex
+      category: best-practice
+      technology:
+        - elixir
