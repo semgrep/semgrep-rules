@@ -1,0 +1,53 @@
+metadata:
+  name: vuln-research-container-env-var-hzggj
+  generateName: vuln-research-container-env-var-
+  namespace: security-research
+  uid: f007e040-3c41-4721-ad14-ecdcc5c3f22a
+  resourceVersion: '708455073'
+  generation: 2
+  creationTimestamp: '2023-08-23T12:35:22Z'
+  labels:
+    workflows.argoproj.io/creator: 00u3qyq8imi46a30l5d7
+  managedFields:
+    - manager: argo
+      operation: Update
+      apiVersion: argoproj.io/v1alpha1
+      time: '2023-08-23T12:35:22Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:generateName: {}
+          f:labels:
+            .: {}
+            f:workflows.argoproj.io/creator: {}
+        f:spec: {}
+spec:
+  templates:
+    - name: pearl-dev-null
+      inputs:
+        parameters:
+          - name: env_name
+          - name: env_value
+      outputs: {}
+      metadata: {}
+      container:
+        name: ''
+        image: perl:5.30.2
+        command:
+          - perl
+        args:
+          - /dev/null
+        env:
+          # ruleid: argo-workflow-env-var-injection
+          - name: '{{inputs.parameters.env_name}}'
+            value: '{{inputs.parameters.env_value}}'
+        resources: {}
+  entrypoint: pearl-dev-null
+  arguments:
+    parameters:
+      - name: env_name
+      - name: env_value
+  artifactRepositoryRef:
+    key: security-research
+  archiveLogs: true
+

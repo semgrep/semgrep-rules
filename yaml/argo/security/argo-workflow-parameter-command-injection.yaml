@@ -22,34 +22,16 @@ rules:
         - argo
     severity: ERROR
     patterns:
-      - pattern-inside: |
-          apiVersion: $VERSION
-          ...
-      - metavariable-regex:
-          metavariable: $VERSION
-          regex: (argoproj.io.*)
-      - pattern-either:
-          - patterns:
-            - pattern-inside: |
-                command:
-                  ...
-                  - python
+      - patterns:
+          - pattern-inside: |
+              metadata:
+                ...
+              spec:
+                ...
+                templates:
                   ...
                 ...
-                source: 
-                  $SCRIPT
-            - focus-metavariable: $SCRIPT
-            - metavariable-pattern:
-                metavariable: $SCRIPT
-                language: python
-                patterns: 
-                  - pattern: |
-                      $FUNC(..., $PARAM, ...)
-                  - metavariable-pattern:
-                      metavariable: $PARAM
-                      pattern-either: 
-                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
-                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+      - pattern-either:
           - patterns:
             - pattern-inside: |
                 command:
@@ -61,19 +43,13 @@ rules:
                   $SCRIPT
             - metavariable-regex:
                 metavariable: $LANG
-                regex: (bash|sh)
+                regex: (bash|sh|python|node|javascript|ruby|perl)
             - focus-metavariable: $SCRIPT
             - metavariable-pattern:
                 metavariable: $SCRIPT
-                language: bash
-                patterns: 
-                  - pattern: |
-                      $CMD ... $PARAM  ...
-                  - metavariable-pattern:
-                      metavariable: $PARAM
-                      pattern-either: 
-                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
-                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+                pattern-either: 
+                  - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
           - patterns:
             - pattern-inside: |
                 container:
@@ -83,7 +59,7 @@ rules:
                   args: $PARAM
             - metavariable-regex:
                 metavariable: $LANG
-                regex: .*(sh|bash|ksh|csh|tcsh|zsh).*
+                regex: .*(sh|bash|ksh|csh|tcsh|zsh|python|node|javascript|ruby|perl|lua|groovy|lisp).*
             - metavariable-pattern:
                 metavariable: $PARAM
                 pattern-either: 

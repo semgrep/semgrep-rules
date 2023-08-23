@@ -1,0 +1,59 @@
+rules:
+  - id: argo-workflow-env-var-injection
+    message: Using input or workflow parameters in environment variables can lead to remote code execution in certain environments.
+    languages: [yaml]
+    metadata:
+      category: security
+      cwe: 
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: 
+        - A03:2021 – Injection
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://github.com/argoproj/argo-workflows/issues/5061
+        - https://github.com/argoproj/argo-workflows/issues/5114#issue-808865370
+      technology:
+        - ci
+        - argo
+    severity: ERROR
+    patterns:
+      - patterns:
+          - pattern-inside: |
+              metadata:
+                ...
+              spec:
+                ...
+                templates:
+                  ...
+                ...
+      - pattern-either:
+        - pattern-inside: |
+            container:
+              ...
+              command: $LANG
+              ...
+              env:
+                ...
+                - name: $NAME
+                  value: $VALUE
+                ...
+              ...
+      - metavariable-regex:
+          metavariable: $LANG
+          regex: .*(perl|python|node|php|roby).*
+      - metavariable-pattern:
+          metavariable: $NAME
+          pattern-either: 
+            - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+            - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+      - metavariable-pattern:
+          metavariable: $VALUE
+          pattern-either: 
+            - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+            - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+      - focus-metavariable: $NAME
