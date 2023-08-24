@@ -22,22 +22,21 @@ rules:
         - argo
     severity: ERROR
     patterns:
-      - patterns:
-          - pattern-inside: |
-              metadata:
-                ...
-              spec:
-                ...
-      - pattern-either:
-          - patterns:
-            - pattern-inside: |
-                http:
-                  ...
-                  url: $URL
-                  ...
-            - metavariable-pattern:
-                metavariable: $URL
-                pattern-either: 
-                  - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
-                  - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
-            - focus-metavariable: $URL
+     - pattern-inside: |
+         ...
+         metadata:
+           ...
+         spec:
+           ...
+     - patterns:
+       - pattern-inside: |
+           http:
+             ...
+             url: $URL
+             ...
+       - metavariable-pattern:
+           metavariable: $URL
+           pattern-either: 
+             - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+             - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+       - focus-metavariable: $URL

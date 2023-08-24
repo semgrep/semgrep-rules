@@ -29,6 +29,13 @@ spec:
       inputs:
         parameters:
           - name: url
+        artifacts:
+          - name: robots
+            path: /robots.txt
+            mode: 755
+            http:
+              # ruleid: argo-workflow-parameter-command-injection
+              url: '{{workflow.parameters.url}}'
       outputs: {}
       metadata: {}
       http:
@@ -49,7 +56,14 @@ spec:
           - '{{inputs.parameters.msg}}'
         resources: {}
   entrypoint: main
-  arguments: {}
+  arguments:
+    parameters:
+      - name: url
+    artifacts:
+      - name: robots
+        http:
+          # ruleid: argo-workflow-parameter-command-injection
+          url: '{{workflow.parameters.url}}'
   artifactRepositoryRef:
     key: security-research
   archiveLogs: true
