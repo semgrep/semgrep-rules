@@ -1,0 +1,42 @@
+rules:
+- id: detect-redos
+  message: >-
+    Detected the use of a regular expression `$REDOS` which appears to be vulnerable to a Regular expression Denial-of-Service (ReDoS). For this reason, it is recommended to review the regex and ensure it is not vulnerable to catastrophic backtracking, and if possible use a library which offers default safety against ReDoS vulnerabilities.
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    cwe:
+    - "CWE-1333: Inefficient Regular Expression Complexity"
+    references:
+    - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+    - https://www.regular-expressions.info/redos.html
+    category: security
+    technology:
+    - javascript
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  patterns:
+    - pattern-either:
+        - pattern: |
+            new RegExp(/$REDOS/,...)
+        - pattern: |
+           new RegExp("$REDOS",...)
+        - pattern: |
+            /$REDOS/.test(...)
+        - pattern: |
+            "$REDOS".test(...)
+        - pattern: |
+            $X.match(/$REDOS/)
+        - pattern: |
+            $X.match("$REDOS")
+    - metavariable-analysis:
+        analyzer: redos
+        metavariable: $REDOS
