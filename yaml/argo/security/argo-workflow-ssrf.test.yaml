@@ -1,0 +1,55 @@
+metadata:
+  generateName: vuln-research-http-outputs-
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: url
+            value: ''
+      outputs: {}
+      metadata: {}
+      dag:
+        tasks:
+          - name: http
+            template: http
+            arguments:
+              parameters:
+                - name: url
+                  value: '{{workflow.parameters.url}}'
+          - name: echo
+            template: echo
+            arguments:
+              parameters:
+                - name: msg
+                  value: '{{tasks.http.outputs.result}}'
+            dependencies:
+              - http
+    - name: http
+      inputs:
+        parameters:
+          - name: url
+      outputs: {}
+      metadata: {}
+      http:
+        # ruleid: argo-workflow-parameter-command-injection
+        url: '{{inputs.parameters.url}}'
+    - name: echo
+      inputs:
+        parameters:
+          - name: msg
+      outputs: {}
+      metadata: {}
+      container:
+        name: ''
+        image: alpine:latest
+        command:
+          - echo
+        args:
+          - '{{inputs.parameters.msg}}'
+        resources: {}
+  entrypoint: main
+  arguments: {}
+  artifactRepositoryRef:
+    key: security-research
+  archiveLogs: true

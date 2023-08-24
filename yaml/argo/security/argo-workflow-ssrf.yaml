@@ -1,0 +1,43 @@
+
+rules:
+  - id: argo-workflow-parameter-command-injection
+    message: >-
+      The URL of the HTTP template in this argo workflow is user controlled. This can lead to SSRF attacks.
+    languages: [yaml]
+    metadata:
+      category: security
+      cwe: 
+        - "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: 
+        - A10:2021 - Server-Side Request Forgery (SSRF)
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://argoproj.github.io/argo-workflows/http-template/
+      technology:
+        - ci
+        - argo
+    severity: ERROR
+    patterns:
+      - patterns:
+          - pattern-inside: |
+              metadata:
+                ...
+              spec:
+                ...
+      - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                http:
+                  ...
+                  url: $URL
+                  ...
+            - metavariable-pattern:
+                metavariable: $URL
+                pattern-either: 
+                  - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+            - focus-metavariable: $URL
