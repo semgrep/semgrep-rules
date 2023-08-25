@@ -25,4 +25,7 @@ rules:
   languages:
   - regex
   severity: ERROR
-  pattern-regex: \bws:\/\/
+  patterns:
+  - pattern-regex: \bws:\/\/
+  - pattern-not-inside: \bws:\/\/localhost.*
+  - pattern-not-inside: \bws:\/\/127.0.0.1.*
