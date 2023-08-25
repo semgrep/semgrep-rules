@@ -1,0 +1,15 @@
+rules:
+  - id: deprecated_use_bitwise
+    message: >-
+      The syntax `use Bitwise` is already deprecated. Please use `import Bitwise` instead.
+    severity: WARNING
+    languages:
+      - elixir
+    pattern: use Bitwise
+    fix: import Bitwise
+    metadata:
+      references:
+        - https://github.com/elixir-lang/elixir/commit/f1b9d3e818e5bebd44540f87be85979f24b9abfc
+      category: best-practice
+      technology:
+        - elixir

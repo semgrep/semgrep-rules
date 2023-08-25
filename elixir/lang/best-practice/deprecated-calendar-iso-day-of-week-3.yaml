@@ -1,0 +1,16 @@
+rules:
+  - id: deprecated_calendar_iso_day_of_week_3
+    message: >-
+      `Calendar.ISO.day_of_week/3` is already deprecated. Please use `Calendar.ISO.day_of_week/4` instead.
+    severity: WARNING
+    languages:
+      - elixir
+    pattern: $VAR = Calendar.ISO.day_of_week($YEAR, $MONTH, $DAY)
+    fix: |
+      {$VAR, _, _} = Calendar.ISO.day_of_week($YEAR, $MONTH, $DAY, :default)
+    metadata:
+      references:
+        - https://github.com/elixir-lang/elixir/releases/tag/v1.15.0
+      category: best-practice
+      technology:
+        - elixir
