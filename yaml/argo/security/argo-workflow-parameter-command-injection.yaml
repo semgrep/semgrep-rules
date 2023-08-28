@@ -48,6 +48,7 @@ rules:
                 pattern-either: 
                   - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
                   - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.outputs.parameters.*}}.*)
           - patterns:
             - pattern-inside: |
                 container:
@@ -63,4 +64,5 @@ rules:
                 pattern-either: 
                   - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
                   - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.outputs.parameters.*}}.*)
             - focus-metavariable: $PARAM
