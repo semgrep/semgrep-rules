@@ -1,4 +1,4 @@
-class bad_attr_accessible
+class Bad_attr_accessible
    include  ActiveModel::MassAssignmentSecurity
 
    # ruleid: model-attr-accessible
