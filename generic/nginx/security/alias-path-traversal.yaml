@@ -1,13 +1,15 @@
 rules:
 - id: alias-path-traversal
   patterns:
-  - pattern: |
-      location ... {
-        ...
-        alias .../;
-        ...
-      }
-  - pattern-not-inside: location /.../ { ... ... }
+     - pattern: |
+          location $...LOCATION {
+            ...
+            alias .../;
+            ...
+          }
+     - metavariable-pattern:
+        metavariable: $...LOCATION
+        pattern-regex: ^.*[^/]$
   paths:
     include:
     - '*.conf'
