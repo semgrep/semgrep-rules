@@ -37,26 +37,27 @@ rules:
                   ...
               - pattern: |
                   (DocumentBuilder $DB).parse(...);
-          - pattern: DocumentBuilder $DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+          - pattern: DocumentBuilder $DB = DocumentBuilderFactory. ... .newInstance(). ... .newDocumentBuilder();
       - pattern-not:
           patterns:
             - pattern-inside: |
                 DocumentBuilderFactory $DBF =  ... ;
                 ...
             - pattern-inside: |
-                $DBF.setXIncludeAware(true);
+                $DBF. ... .setXIncludeAware(true);
                 ...
             - pattern-inside: |
-                $DBF.setNamespaceAware(true);
+                $DBF. ... .setNamespaceAware(true);
                 ...
             - pattern-inside: |
-                $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                $DBF. ... .setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
                 ...
             - pattern-inside: |
-                $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                $DBF. ... .setFeature("http://xml.org/sax/features/external-general-entities", false);
                 ...
             - pattern-inside: |
-                $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                $DBF. ... .setFeature("http://xml.org/sax/features/external-parameter-entities", false);
                 ...
     languages:
       - java
+
