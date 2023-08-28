@@ -1,0 +1,144 @@
+rules:
+- id: swift-user-defaults
+  message: >-
+    Potentially sensitive data was observed to be stored in UserDefaults, which is not adequate protection
+    of sensitive information. For data of a sensitive nature, applications should leverage the Keychain.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    masvs:
+    - 'MASVS-STORAGE-1: The app securely stores sensitive data'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    references:
+    - https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/ValidatingInput.html
+    - https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-1/
+    subcategory:
+    - vuln
+    technology:
+    - ios
+    - macos
+  languages:
+  - swift
+  options:
+    taint_propagation: true
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*(passcode|password|pass_word|passphrase|pass_code|pass_word|pass_phrase)$
+      - focus-metavariable: $VALUE
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(passcode|password|pass_word|passphrase|pass_code|pass_word|pass_phrase)$
+      - focus-metavariable: $KEY
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*(api_key|apikey)$
+      - focus-metavariable: $VALUE
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(api_key|apikey)$
+      - focus-metavariable: $KEY
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*(secretkey|secret_key|secrettoken|secret_token|clientsecret|client_secret)$
+      - focus-metavariable: $VALUE
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(secretkey|secret_key|secrettoken|secret_token|clientsecret|client_secret)$
+      - focus-metavariable: $KEY
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*(cryptkey|cryptokey|crypto_key|cryptionkey|symmetrickey|privatekey|symmetric_key|private_key)$
+      - focus-metavariable: $VALUE
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set("$VALUE", forKey: $KEY)
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: "$KEY")
+        - pattern: |
+            UserDefaults.standard.set($VALUE, forKey: $KEY)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(cryptkey|cryptokey|crypto_key|cryptionkey|symmetrickey|privatekey|symmetric_key|private_key)$
+      - focus-metavariable: $KEY

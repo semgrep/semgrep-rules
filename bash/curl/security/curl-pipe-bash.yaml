@@ -27,7 +27,9 @@ rules:
     impact: LOW
   patterns:
     - pattern-either:
-        - pattern: curl ... | ... bash ... 
+        - pattern: curl ... | ... bash ...
         - pattern: curl ... | ... /bin/bash ...
         - pattern: ... bash <(curl ...)
         - pattern: ... /bin/bash <(curl ...)
+        - pattern: ... bash -c "$(curl ...)"
+        - pattern: ... /bin/bash -c "$(curl ...)"

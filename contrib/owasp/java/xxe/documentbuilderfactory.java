@@ -47,7 +47,7 @@ public class XXE {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-            xmlReader.parse(new InputSource(new StringReader(body)));  // parse xml
+            xmlReader.parse(new InputSource(new StringReader(body)));  // parse xmldocumentbuilderfactory
             return "xmlReader xxe vuln code";
         } catch (Exception e) {
             logger.error(e.toString());
@@ -290,6 +290,41 @@ public class XXE {
             return EXCEPT;
         }
     }
+
+
+    @RequestMapping(value = "/DocumentBuilder/vuln03", method = RequestMethod.POST)
+    public String DocumentBuilderVuln03(HttpServletRequest request) {
+        try {
+            String body = WebUtils.getRequestBody(request);
+            logger.info(body);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
+            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            StringReader sr = new StringReader(body);
+            InputSource is = new InputSource(sr);
+            Document document = db.parse(is);  // parse xml
+
+            // 遍历xml节点name和value
+            StringBuilder result = new StringBuilder();
+            NodeList rootNodeList = document.getChildNodes();
+            for (int i = 0; i < rootNodeList.getLength(); i++) {
+                Node rootNode = rootNodeList.item(i);
+                NodeList child = rootNode.getChildNodes();
+                for (int j = 0; j < child.getLength(); j++) {
+                    Node node = child.item(j);
+                    // 正常解析XML，需要判断是否是ELEMENT_NODE类型。否则会出现多余的的节点。
+                    if (child.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                        result.append(String.format("%s: %s\n", node.getNodeName(), node.getFirstChild()));
+                    }
+                }
+            }
+            sr.close();
+            return result.toString();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return EXCEPT;
+        }
+    }
+
 
 
     @RequestMapping(value = "/DocumentBuilder/Sec", method = RequestMethod.POST)

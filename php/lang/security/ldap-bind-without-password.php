@@ -5,7 +5,7 @@ $ldapconn = ldap_connect("foo.com");
 // ruleid: ldap-bind-without-password
 $ldapbind = ldap_bind($ldapconn);
 
-// todoruleid: ldap-bind-without-password
+// ruleid: ldap-bind-without-password
 LDAP_BIND($ldapconn, "username");
 
 // ruleid: ldap-bind-without-password
