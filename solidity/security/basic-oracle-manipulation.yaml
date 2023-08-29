@@ -1,0 +1,49 @@
+rules:
+ -
+    id: basic-oracle-manipulation
+    message: Price oracle can be manipulated via flashloan
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-682: Incorrect Calculation"
+        confidence: LOW
+        likelihood: MEDIUM
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/oneringfinance/onering-finance-exploit-post-mortem-after-oshare-hack-602a529db99b
+        - https://twitter.com/peckshield/status/1506090607059431427
+        - https://pwned-no-more.notion.site/The-Deus-Hack-Explained-647bf97afa2b4e4e9e8b882e68a75c0b
+        - https://twitter.com/peckshield/status/1519530463337250817
+        - https://ftmscan.com/address/0xc06826f52f29b34c5d8b2c61abf844cebcf78abf # OneRing
+        - https://ftmscan.com/address/0x5CEB2b0308a7f21CcC0915DB29fa5095bEAdb48D # Deus
+        - https://ftmscan.com/address/0x8129026c585bcfa530445a6267f9389057761a00 # Deus (again)
+    patterns:
+    - pattern-inside: |
+        function $F(...) {
+            ...
+        }
+    - pattern-either:
+      - pattern: $X.div($Y)
+      - pattern: $X / $Y
+    - metavariable-regex:
+          metavariable: $F
+          regex: (?i)get([a-z0-9_])*price
+    - metavariable-pattern:
+        metavariable: $X
+        pattern-either:
+        - pattern: underlying
+        - pattern: underlyingUnit
+        - pattern: pair
+        - pattern: reserve
+        - pattern: reserve0
+        - pattern: reserve1
+    - metavariable-regex:
+        metavariable: $Y
+        regex: .*totalSupply.*
+    languages: 
+    - solidity
+    severity: INFO
+

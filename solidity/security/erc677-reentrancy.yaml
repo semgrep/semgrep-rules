@@ -1,0 +1,29 @@
+rules:
+ -
+    id: erc677-reentrancy
+    message: ERC677 callAfterTransfer() reentrancy
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-841: Improper Enforcement of Behavioral Workflow"
+        confidence: HIGH
+        likelihood: MEDIUM
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/peckshield/status/1509431646818234369
+        - https://twitter.com/blocksecteam/status/1509466576848064512
+        - https://explorer.fuse.io/address/0x139Eb08579eec664d461f0B754c1F8B569044611 # Ola
+        - https://explorer.fuse.io/address/0x5De15b5543c178C111915d6B8ae929Af01a8cC58 # WETH
+    patterns:
+    - pattern-inside: |
+        function transfer(...) {
+            ...
+        }
+    - pattern: callAfterTransfer(...);
+    languages: 
+    - solidity
+    severity: WARNING
+

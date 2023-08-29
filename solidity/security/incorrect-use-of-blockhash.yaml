@@ -1,0 +1,26 @@
+rules:
+  - id: incorrect-use-of-blockhash
+    message: blockhash(block.number) and blockhash(block.number + N) always returns 0.
+    metadata:
+      category: security
+      technology:
+        - solidity
+      cwe: "CWE-341: Predictable from Observable State"
+      confidence: HIGH
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+          - vuln
+      references:
+        - https://blog.positive.com/predicting-random-numbers-in-ethereum-smart-contracts-e5358c6b8620
+    patterns:
+      - pattern-either:
+          - pattern: blockhash(block.number)
+          - pattern: blockhash(block.number + $N)
+          - pattern: blockhash(block.number * $N)
+          - pattern: block.blockhash(block.number)
+          - pattern: block.blockhash(block.number + $N)
+          - pattern: block.blockhash(block.number * $N)
+    severity: ERROR
+    languages:
+      - solidity

@@ -1,0 +1,49 @@
+rules:
+ -
+    id: erc20-public-burn
+    message: Anyone can burn tokens of other accounts
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/danielvf/status/1511013322015051797
+        - https://etherscan.io/address/0xf15ead6acb8ab52a1e335671a48f3a99e991614c
+    patterns:
+      - pattern-either:
+         - pattern: |
+            function burn(...) public { 
+                _burn($ACCOUNT, $AMOUNT);
+             }
+         - pattern: |
+            function burn(...) external { 
+                _burn($ACCOUNT, $AMOUNT);
+             }
+      - pattern-not: function burn(...) $M { ... }
+      - pattern-not: function burn(...) $M(...) { ... }
+      - pattern-not: |
+          function burn(...) {
+            _burn(msg.sender, ...);
+          }
+      - pattern-not: |
+          function burn(...) {
+            _burn(_msgSender(), ...);
+          }
+      - pattern-not: |
+          function burn(...) {
+            _burn(tokenId, ...);
+          }
+      - pattern-not: |
+          function burn(...) {
+            _burn(_tokenId, ...);
+          }
+    languages: 
+    - solidity
+    severity: ERROR
+

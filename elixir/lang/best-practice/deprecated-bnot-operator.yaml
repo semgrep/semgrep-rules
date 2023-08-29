@@ -1,0 +1,15 @@
+rules:
+  - id: deprecated_bnot_operator
+    message: >-
+      The bitwise operator (`^^^`) is already deprecated. Please use `Bitwise.bnot($VAL)` instead.
+    severity: WARNING
+    languages:
+      - elixir
+    pattern: ~~~$VAL
+    fix: Bitwise.bnot($VAL)
+    metadata:
+      references:
+        - https://github.com/elixir-lang/elixir/commit/f1b9d3e818e5bebd44540f87be85979f24b9abfc
+      category: best-practice
+      technology:
+        - elixir

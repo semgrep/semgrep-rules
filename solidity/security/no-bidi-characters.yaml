@@ -1,0 +1,30 @@
+rules:
+  - id: no-bidi-characters
+    message: The code must not contain any of Unicode Direction Control Characters
+    metadata:
+      category: security
+      technology:
+        - solidity
+      cwe: "CWE-837: Improper Enforcement of a Single, Unique Action"
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+          - audit
+      references:
+        - https://entethalliance.org/specs/ethtrust-sl/v1/#req-1-unicode-bdo
+    patterns:
+    - pattern-either:
+      - pattern-regex: ‪             # left-to-right embedding (LRE)
+      - pattern-regex: ‫             # right-to-left embedding (RLE)
+      - pattern-regex: ‭             # left-to-right override (LRO)
+      - pattern-regex: ‮             # right-to-left override (RLO)
+      - pattern-regex: ⁦             # left-to-right isolate (LRI)
+      - pattern-regex: ⁧             # right-to-left isolate (RLI)
+      - pattern-regex: ⁨             # first strong isolate (FSI)
+      - pattern-regex: ‬             # pop directional formatting (PDF)
+      - pattern-regex: ⁩             # pop directional isolate (PDI)
+    languages: 
+      - solidity
+    severity: WARNING
+
