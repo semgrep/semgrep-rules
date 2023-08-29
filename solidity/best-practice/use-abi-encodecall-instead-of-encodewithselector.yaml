@@ -1,0 +1,15 @@
+rules:
+    - id: use-abi-encodecall-instead-of-encodewithselector
+      message: To guarantee arguments type safety it is recommended to use `abi.encodeCall` instead of `abi.encodeWithSelector`.
+      metadata:
+        category: best-practice
+        references:
+          - https://blog.soliditylang.org/2021/12/20/solidity-0.8.11-release-announcement/
+        technology:
+          - solidity
+      patterns:
+        - pattern: |
+            abi.encodeWithSelector(...);
+      languages:
+        - solidity
+      severity: INFO
