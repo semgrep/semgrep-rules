@@ -1,0 +1,25 @@
+rules:
+ -
+    id: rigoblock-missing-access-control
+    message: setMultipleAllowances() is missing onlyOwner modifier
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: HIGH
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/danielvf/status/1494317265835147272
+        - https://etherscan.io/address/0x876b9ebd725d1fa0b879fcee12560a6453b51dc8
+        - https://play.secdim.com/game/dapp/challenge/rigoownsol
+    patterns:
+    - pattern: function setMultipleAllowances(...) {...}
+    - pattern-not: function setMultipleAllowances(...) onlyOwner {...}
+    languages: 
+    - solidity
+    severity: ERROR
+

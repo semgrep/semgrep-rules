@@ -1,0 +1,27 @@
+rules:
+ -
+    id: superfluid-ctx-injection
+    message: A specially crafted calldata may be used to impersonate other accounts
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-20: Improper Input Validation"
+        confidence: HIGH
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://rekt.news/superfluid-rekt/
+        - https://medium.com/superfluid-blog/08-02-22-exploit-post-mortem-15ff9c97cdd
+        - https://polygonscan.com/address/0x07711bb6dfbc99a1df1f2d7f57545a67519941e7
+    patterns:
+    - pattern: $T.decodeCtx(ctx);
+    - pattern-not-inside: |
+        require($T.isCtxValid(...), "...");
+        ...
+    languages: 
+    - solidity
+    severity: ERROR
+

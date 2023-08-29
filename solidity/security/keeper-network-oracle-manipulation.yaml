@@ -1,0 +1,28 @@
+rules:
+ -
+    id: keeper-network-oracle-manipulation
+    message: >-
+      Keep3rV2.current() call has high data freshness, but it has low security, 
+      an exploiter simply needs to manipulate 2 data points to be able to impact the feed.
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-682: Incorrect Calculation"
+        confidence: HIGH
+        likelihood: LOW
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/peckshield/status/1510232640338608131
+        - https://twitter.com/FrankResearcher/status/1510239094777032713
+        - https://twitter.com/larry0x/status/1510263618180464644
+        - https://andrecronje.medium.com/keep3r-network-on-chain-oracle-price-feeds-3c67ed002a9
+        - https://etherscan.io/address/0x210ac53b27f16e20a9aa7d16260f84693390258f
+    patterns:
+    - pattern: $KEEPER.current($TOKENIN, $AMOUNTIN, $TOKENOUT);
+    languages: 
+    - solidity
+    severity: WARNING
+
