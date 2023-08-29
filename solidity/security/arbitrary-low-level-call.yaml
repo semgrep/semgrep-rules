@@ -1,0 +1,35 @@
+rules:
+ -
+    id: arbitrary-low-level-call
+    message: An attacker may perform call() to an arbitrary address with controlled calldata
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-20: Improper Input Validation"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+            - https://twitter.com/CertiKAlert/status/1512198846343954445
+            - https://twitter.com/SlowMist_Team/status/1508787862791069700
+            - https://twitter.com/Beosin_com/status/1509099103401127942
+            - https://blocksecteam.medium.com/li-fi-attack-a-cross-chain-bridge-vulnerability-no-its-due-to-unchecked-external-call-c31e7dadf60f
+            - https://etherscan.io/address/0xe7597f774fd0a15a617894dc39d45a28b97afa4f # Auctus Options
+            - https://etherscan.io/address/0x73a499e043b03fc047189ab1ba72eb595ff1fc8e # Li.Fi
+    patterns:
+        - pattern-either:
+            - pattern-inside: |
+                function $F(..., address $ADDR, ..., bytes calldata $DATA, ...) external { ... }
+            - pattern-inside: |
+                function $F(..., address $ADDR, ..., bytes calldata $DATA, ...) public { ... }
+        - pattern-either:
+            - pattern: $ADDR.call($DATA);
+            - pattern: $ADDR.call{$VALUE:...}($DATA);
+            - pattern: $ADDR.call{$VALUE:..., $GAS:...}($DATA);
+    languages: 
+        - solidity
+    severity: ERROR
+

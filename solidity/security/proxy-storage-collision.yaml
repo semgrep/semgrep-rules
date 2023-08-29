@@ -1,0 +1,75 @@
+rules:
+ -
+    id: proxy-storage-collision
+    message: Proxy declares a state var that may override a storage slot of the implementation
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-787: Out-of-bounds Write"
+        confidence: HIGH
+        likelihood: MEDIUM
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://blog.audius.co/article/audius-governance-takeover-post-mortem-7-23-22
+    patterns:
+        - pattern-either:
+          - pattern: |
+              contract $CONTRACT is ..., $PROXY, ... {
+                  ...
+                  $TYPE $VAR;
+                  ...
+                  constructor(...) {
+                      ...
+                  }
+                  ...
+              }
+          - pattern: |
+              contract $CONTRACT is ..., $PROXY, ... {
+                  ...
+                  $TYPE $VAR = ...;
+                  ...
+                  constructor(...) {
+                      ...
+                  }
+                  ...
+              }
+        - pattern-not: |
+            contract $CONTRACT is ..., $PROXY, ... {
+                $TYPE immutable $VAR;
+                ...
+                constructor(...) {
+                    ...
+                }
+                ...
+            }
+        - pattern-not: |
+            contract $CONTRACT is ..., $PROXY, ... {
+                $TYPE immutable $VAR = ...;
+                ...
+                constructor(...) {
+                    ...
+                }
+                ...
+            }
+        - pattern-not: |
+            contract $CONTRACT is ..., $PROXY, ... {
+                $TYPE constant $VAR = ...;
+                ...
+                constructor(...) {
+                    ...
+                }
+                ...
+            }
+        - metavariable-regex:
+            metavariable: $CONTRACT
+            regex: ^(?!AdminUpgradeabilityProxy|OwnedUpgrade*abilityProxy).*$
+        - metavariable-regex:
+            metavariable: $PROXY
+            regex: (UpgradeabilityProxy|AdminUpgradeabilityProxy|OwnedUpgrade*abilityProxy|TransparentUpgradeableProxy|ERC1967Proxy)
+        - focus-metavariable: $PROXY
+    languages: 
+    - solidity
+    severity: WARNING

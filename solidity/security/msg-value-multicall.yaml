@@ -1,0 +1,35 @@
+rules:
+-
+  id: msg-value-multicall
+  message: $F with constant msg.value can be called multiple times
+  metadata:
+    category: security
+    technology:
+      - solidity
+    cwe: "CWE-837: Improper Enforcement of a Single, Unique Action"
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    subcategory:
+        - vuln
+    references:
+      - https://github.com/Uniswap/v3-periphery/issues/52
+      - https://www.paradigm.xyz/2021/08/two-rights-might-make-a-wrong
+  patterns:
+    - pattern-either:
+      - pattern-inside: |
+          contract $C is ..., BoringBatchable, ... {
+            ...
+          }
+      - pattern-inside: |
+          contract $C is ..., Multicall, ... {
+            ...
+          }
+    - pattern-inside: |
+        function $F(...) {
+          ...
+        }
+    - pattern: msg.value
+  languages:
+    - solidity
+  severity: ERROR
