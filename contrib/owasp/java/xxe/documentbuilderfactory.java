@@ -229,11 +229,11 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
             InputSource is = new InputSource(sr);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             Document document = db.parse(is);  // parse xml
 
             // 遍历xml节点name和value
@@ -262,11 +262,11 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
             InputSource is = new InputSource(sr);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             Document document = db.parse(is);  // parse xml
 
             // 遍历xml节点name和value
@@ -332,7 +332,6 @@ public class XXE {
         try {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
-            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -340,6 +339,7 @@ public class XXE {
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
             InputSource is = new InputSource(sr);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             db.parse(is);  // parse xml
             sr.close();
         } catch (Exception e) {
@@ -356,13 +356,13 @@ public class XXE {
             String body = WebUtils.getRequestBody(request);
             logger.info(body);
 
-            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setXIncludeAware(true);   // 支持XInclude
             dbf.setNamespaceAware(true);  // 支持XInclude
             DocumentBuilder db = dbf.newDocumentBuilder();
             StringReader sr = new StringReader(body);
             InputSource is = new InputSource(sr);
+            // ruleid:owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
             Document document = db.parse(is);  // parse xml
 
             NodeList rootNodeList = document.getChildNodes();
@@ -480,5 +480,4 @@ public class XXE {
 
     public static void main(String[] args)  {
     }
-
 }

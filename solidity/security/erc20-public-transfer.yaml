@@ -1,0 +1,31 @@
+rules:
+ -
+    id: erc20-public-transfer
+    message: Custom ERC20 implementation exposes _transfer() as public
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/@Knownsec_Blockchain_Lab/creat-future-was-tragically-transferred-coins-at-will-who-is-the-mastermind-behind-the-scenes-8ad42a7af814
+        - https://bscscan.com/address/0x8B7218CF6Ac641382D7C723dE8aA173e98a80196
+    patterns:
+      - pattern-either:
+         - pattern: |
+            function _transfer(...) public { ... }
+         - pattern: |
+            function _transfer(...) external { ... }
+      - pattern-not: |
+         function _transfer(...) $M { ... }
+      - pattern-not: |
+         function _transfer(...) $M(...) { ... }
+    languages: 
+    - solidity
+    severity: WARNING
+

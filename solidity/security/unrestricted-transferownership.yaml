@@ -1,0 +1,94 @@
+rules:
+ -
+    id: unrestricted-transferownership
+    message: Unrestricted transferOwnership
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/quillhash/decoding-ragnarok-online-invasion-44k-exploit-quillaudits-261b7e23b55
+        - https://www.bscscan.com/address/0xe48b75dc1b131fd3a8364b0580f76efd04cf6e9c
+    patterns:
+        - pattern-either:
+          - pattern: function transferOwnership(address $X) public {...}
+          - pattern: function transferOwnership(address $X) external {...}
+        - pattern-not: |
+            function transferOwnership(address $X) $M {...}
+        - pattern-not: |
+            function transferOwnership(address $X) $M(...) {...}
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              require(<... msg.sender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              require(<... _msgSender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              if (<... msg.sender ...>) {
+                ...
+              }
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              if (<... _msgSender ...>) {
+                ...
+              }
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              onlyOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              requireOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              _requireOwnership(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              $C._enforceIsContractOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              $C._enforceOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {
+              ...
+              $C.enforceIsContractOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function transferOwnership(address $X) {}
+    languages: 
+    - solidity
+    severity: ERROR

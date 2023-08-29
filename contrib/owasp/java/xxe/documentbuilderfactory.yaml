@@ -1,43 +1,63 @@
 rules:
   - id: owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
     message: >-
-      DocumentBuilderFactory being instantiated without calling the setFeature functions that are generally used for disabling
-      entity processing
+      DocumentBuilderFactory being instantiated without calling the setFeature functions that are generally used for disabling entity processing, which can allow for XXE vulnerabilities
     metadata:
       cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
       owasp: "A04:2017 - XML External Entities (XXE)"
       source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
       category: security
+      technology:
+        - java
+        - xml
+      cwe2022-top25: true
+      cwe2021-top25: true
+      references:
+        - https://www.programcreek.com/java-api-examples/?api=javax.xml.parsers.DocumentBuilderFactory
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - vuln
+      confidence: HIGH
     severity: ERROR
     patterns:
-      # Reference: https://www.programcreek.com/java-api-examples/?api=javax.xml.parsers.DocumentBuilderFactory
       - pattern-either:
-          - pattern: |
-              DocumentBuilderFactory $DBF =  ... ;
-              ...
-              DocumentBuilder $DB = $DBF.newDocumentBuilder();
-              ...
-              $DB.parse(...);
-          - pattern: DocumentBuilder $DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      - pattern-not-inside: |
-          $RETURNTYPE $METHOD(...) {
-            ...
-            $DBF.setXIncludeAware(true);
-            $DBF.setNamespaceAware(true);
-            ...
-            $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            ...
-          }
-      - pattern-not-inside: |
-          DocumentBuilderFactory $DBF =  ... ;
-          ...
-          $DBF.setXIncludeAware(true);
-          $DBF.setNamespaceAware(true);
-          ...
-          $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-          $DBF.setFeature("http://xml.org/sax/features/external-general-entities", false);
-          $DBF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+          - patterns:
+              - pattern-inside: |
+                  DocumentBuilderFactory $DBF =  ... ;
+                  ...
+              - pattern-inside: |
+                  DocumentBuilder $DB = $DBF.newDocumentBuilder();
+                  ...
+              - pattern: |
+                  $DB.parse(...);
+          - patterns:
+              - pattern-inside: |
+                  (DocumentBuilder $DB) = (DocumentBuilderFactory $DBF).newDocumentBuilder();
+                  ...
+              - pattern: |
+                  (DocumentBuilder $DB).parse(...);
+          - pattern: DocumentBuilder $DB = DocumentBuilderFactory. ... .newInstance(). ... .newDocumentBuilder();
+      - pattern-not:
+          patterns:
+            - pattern-inside: |
+                DocumentBuilderFactory $DBF =  ... ;
+                ...
+            - pattern-inside: |
+                $DBF. ... .setXIncludeAware(true);
+                ...
+            - pattern-inside: |
+                $DBF. ... .setNamespaceAware(true);
+                ...
+            - pattern-inside: |
+                $DBF. ... .setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                ...
+            - pattern-inside: |
+                $DBF. ... .setFeature("http://xml.org/sax/features/external-general-entities", false);
+                ...
+            - pattern-inside: |
+                $DBF. ... .setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
     languages:
       - java
+

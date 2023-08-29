@@ -1,0 +1,18 @@
+rules:
+    - id: use-multiple-require
+      message: >-
+        Using multiple require statements is cheaper than using && multiple check combinations. 
+        There are more advantages, such as easier to read code and better coverage reports.
+      metadata:
+        references:
+          - https://code4rena.com/reports/2023-01-ondo#g-15-splitting-require-statements-that-use--saves-gas---saves-8-gas-per-
+        category: performance
+        technology:
+          - solidity
+      patterns:
+        - pattern: |
+            require (<... $X && $Y ...>, ...);
+      languages:
+        - solidity
+      severity: INFO
+  
