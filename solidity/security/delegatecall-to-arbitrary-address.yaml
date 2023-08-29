@@ -1,0 +1,49 @@
+rules:
+  - id: delegatecall-to-arbitrary-address
+    message: An attacker may perform delegatecall() to an arbitrary address.
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-20: Improper Input Validation"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://entethalliance.org/specs/ethtrust-sl/v1/#req-1-delegatecall
+    languages: 
+      - solidity
+    severity: ERROR
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-either:
+          - pattern: function $ANY(..., address $CONTRACT, ...) public {...}
+          - pattern: function $ANY(..., address $CONTRACT, ...) external {...}
+          - pattern: function $ANY(..., address payable $CONTRACT, ...) public {...}
+          - pattern: function $ANY(..., address payable $CONTRACT, ...) external {...}
+        - pattern-not: constructor(...) { ... }
+        - pattern-not: function $ANY(...) $M { ... }
+        - pattern-not: function $ANY(...) $M(...) { ... }
+        - focus-metavariable: $CONTRACT
+    pattern-sinks:
+      - patterns:
+        - pattern-not-inside: |
+            require(<... msg.sender ...>, ...);
+            ...
+        - pattern-not-inside: |
+            require(<... _msgSender() ...>, ...);
+            ...
+        - pattern-not-inside: |
+            if(<... msg.sender ...>) revert(...);
+            ...
+        - pattern-not-inside: |
+            if(<... _msgSender() ...>) revert(...);
+            ...
+        - pattern-not: address(this).delegatecall(...);
+        - pattern-either:
+              - pattern: $CONTRACT.delegatecall(...);
+              - pattern: $CONTRACT.delegatecall{gas:$GAS}(...);
+    

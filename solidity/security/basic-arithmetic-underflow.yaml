@@ -1,0 +1,31 @@
+rules:
+ -
+    id: basic-arithmetic-underflow
+    message: Possible arithmetic underflow
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-191: Integer Underflow (Wrap or Wraparound)"
+        confidence: LOW
+        likelihood: MEDIUM
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+         - https://medium.com/@Knownsec_Blockchain_Lab/knownsec-blockchain-lab-umbnetwork-attack-event-analysis-9bae1141e58
+         - https://twitter.com/danielvf/status/1497194778278174724
+         - https://etherscan.io/address/0xbbc3a290c7d2755b48681c87f25f9d7f480ad42f # Remittance
+    mode: taint
+    pattern-sinks:
+      - pattern: $Y - $X
+    pattern-sources:
+        - pattern-either:
+            - pattern-inside: |
+                function $F(..., $X, ...) external { ... }
+            - pattern-inside: |
+                function $F(..., $X, ...) public { ... }
+    languages: 
+    - solidity
+    severity: INFO
+
