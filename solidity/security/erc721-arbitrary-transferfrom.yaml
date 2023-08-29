@@ -1,0 +1,42 @@
+rules:
+ -
+    id: erc721-arbitrary-transferfrom
+    message: Custom ERC721 implementation lacks access control checks in _transfer()
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: MEDIUM
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/BlockSecAlert/status/1516289618605654024
+        - https://etherscan.io/address/0xf3821adaceb6500c0a202971aecf840a033f236b
+    patterns:
+      - pattern-inside: |
+         function _transfer(...) {
+         ...
+         }
+      - pattern-inside: |
+         require(prevOwnership.addr == $FROM, ...);
+         ...
+      - pattern-not-inside: |
+         (<... _msgSender() == $FROM ...>);
+         ...
+      - pattern-not-inside: |
+         (<... _msgSender() == $PREV.$ADDR ...>);
+         ...
+      - pattern-not-inside: |
+         (<... msg.sender == $FROM ...>);
+         ...
+      - pattern-not-inside: |
+         require(_isApprovedOrOwner(...), ...);
+         ...
+      - pattern: _approve(...);
+    languages: 
+    - solidity
+    severity: WARNING
+

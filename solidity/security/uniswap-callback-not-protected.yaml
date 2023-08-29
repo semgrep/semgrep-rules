@@ -1,0 +1,138 @@
+rules:
+ -
+    id: uniswap-callback-not-protected
+    message: Uniswap callback is not protected
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: LOW
+        likelihood: MEDIUM
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+            - https://docs.uniswap.org/contracts/v3/guides/flash-integrations/flash-callback
+    patterns:
+        - pattern: |
+            function $CALLBACK(...) { ... }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                $VALIDATION.verifyCallback(...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                $CHECK(msg.sender == $U.$PAIR(...), ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                $CHECK(_msgSender() == $U.$PAIR(...), ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require(msg.sender == $POOL, ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require(_msgSender() == $POOL, ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require($POOL == msg.sender, ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require($POOL == _msgSender(), ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if (msg.sender != $POOL) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if (_msgSender() != $POOL) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if (msg.sender == $POOL) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if (_msgSender() == $POOL) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if(!$POOLS[msg.sender]) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                if(!$POOLS[_msgSender()]) {
+                  ...
+                }
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                _verifyCallback(...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) isCallback {
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require($POOLS[msg.sender], ...);
+                ...
+            }
+        - pattern-not: |
+            function $CALLBACK(...) {
+                ...
+                require($POOLS[_msgSender()], ...);
+                ...
+            }
+        - metavariable-regex:
+            metavariable: $CALLBACK
+            regex: (uniswapV2Call|uniswapV3SwapCallback|uniswapV3FlashCallback|uniswapV3MintCallback)
+    languages: 
+    - solidity
+    severity: WARNING
+
