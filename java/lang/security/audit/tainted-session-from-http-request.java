@@ -64,8 +64,11 @@ public class BenchmarkTest00004 extends HttpServlet {
         }
 
         // javax.servlet.http.HttpSession.setAttribute(java.lang.String^,java.lang.Object)
-        // ruleid: tainted-session-from-http-request
+        // ok: tainted-session-from-http-request
         request.getSession().setAttribute(param, "10340");
+
+        // ruleid: tainted-session-from-http-request
+        request.getSession().setAttribute("param", param);
 
         response.getWriter()
                 .println(
@@ -104,8 +107,10 @@ public class BenchmarkTest00321 extends HttpServlet {
         String bar = org.owasp.esapi.ESAPI.encoder().encodeForHTML(param);
 
         // javax.servlet.http.HttpSession.putValue(java.lang.String^,java.lang.Object)
-        // ruleid: tainted-session-from-http-request
+        // ok: tainted-session-from-http-request
         request.getSession().putValue(bar, "10340");
+        // ruleid: tainted-session-from-http-request
+        request.getSession().putValue(bar, bar);
 
         response.getWriter()
                 .println(
