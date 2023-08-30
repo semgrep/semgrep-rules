@@ -42,6 +42,9 @@ rules:
             $INTERM = <... $ROUTEVAR ...>
             ...
             requests.$FUNC(..., <... $INTERM ...>, ...)
+    - metavariable-regex:
+        metavariable: $ROUTE_METHOD
+        regex: ^(route|get|post|put|delete|patch)$
   - pattern: requests.$FUNC(..., <... flask.request.$W.get(...) ...>, ...)
   - pattern: requests.$FUNC(..., <... flask.request.$W[...] ...>, ...)
   - pattern: requests.$FUNC(..., <... flask.request.$W(...) ...>, ...)
