@@ -52,7 +52,7 @@ exports.promotionVideo = () => {
       // ok:unknown-value-with-script-tag
       var w = "<script>";
 
-      // ok:unknown-value-with-script-tag
+      // ruleid:unknown-value-with-script-tag
       utils.solveIf(challenges.videoXssChallenge, () => { return utils.contains(subs, '</script><script>alert(`xss`)</script>') })
 
       const theme = themes[config.get('application.theme')]

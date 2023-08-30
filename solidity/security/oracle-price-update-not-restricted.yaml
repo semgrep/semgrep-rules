@@ -1,0 +1,35 @@
+rules:
+ -
+    id: oracle-price-update-not-restricted
+    message: Oracle price data can be submitted by anyone
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-284: Improper Access Control"
+        confidence: LOW
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/BlockSecTeam/status/1514815673800663045
+        - https://twitter.com/CertiKAlert/status/1514831117169405953
+        - https://medium.com/@hacxyk/aave-v3s-price-oracle-manipulation-vulnerability-168e44e9e374
+        - https://bscscan.com/address/0xd55f01b4b51b7f48912cd8ca3cdd8070a1a9dba5 # Rikkei
+        - https://polygonscan.com/address/0xaA5890362f36FeaAe91aF248e84e287cE6eCD1A9 # AAVE
+    patterns:
+    - pattern-either: 
+      - pattern: function $F(...) public  {...}
+      - pattern: function $F(...) external  {...}
+    - metavariable-pattern:
+        metavariable: $F
+        pattern-either: 
+        - pattern: setOracleData
+        - pattern: setAssetPrice
+    - pattern-not: function $F(...) onlyOwner { ... }
+    - pattern-not: function $F(...) onlySybil { ... }
+    languages: 
+    - solidity
+    severity: ERROR
+
