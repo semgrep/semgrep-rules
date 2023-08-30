@@ -1,13 +1,15 @@
 rules:
 - id: alias-path-traversal
   patterns:
-  - pattern: |
-      location ... {
-        ...
-        alias .../;
-        ...
-      }
-  - pattern-not-inside: location /.../ { ... ... }
+     - pattern: |
+          location $...LOCATION {
+            ...
+            alias .../;
+            ...
+          }
+     - metavariable-pattern:
+        metavariable: $...LOCATION
+        pattern-regex: ^.*[^/]$
   paths:
     include:
     - '*.conf'
@@ -37,6 +39,9 @@ rules:
     - A01:2021 - Broken Access Control
     references:
     - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    - https://www.acunetix.com/vulnerabilities/web/path-traversal-via-misconfigured-nginx-alias/
+    - https://www.youtube.com/watch?v=CIhHpkybYsY
+    - https://github.com/orangetw/My-Presentation-Slides/blob/main/data/2018-Breaking-Parser-Logic-Take-Your-Path-Normalization-Off-And-Pop-0days-Out.pdf
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
