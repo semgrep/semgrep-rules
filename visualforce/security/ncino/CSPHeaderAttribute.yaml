@@ -1,0 +1,20 @@
+rules:
+  - id: xml.metadata.csp-header-attribute
+    languages:
+      - generic
+    patterns:
+      - pattern: <apex:page...>...</apex:page>
+      - pattern-not: <apex:page...cspHeader="true"...>...</apex:page>
+      - pattern-not: <apex:page...>...<!--deprecated-->...</apex:page>
+      - pattern-not: <apex:page...>...<!-- deprecated -->...</apex:page>
+    paths:
+      include:
+        - "*.page"
+    severity: INFO
+    message: >-
+      Visualforce Pages must have the cspHeader attribute set to true.
+      This attribute is available in API version 55 or higher.
+    metadata:
+      category: security
+      technology: ncino
+      reference: https://help.salesforce.com/s/articleView?id=sf.csp_trusted_sites.htm&type=5
