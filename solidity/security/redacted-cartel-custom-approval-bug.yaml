@@ -1,0 +1,27 @@
+rules:
+ -
+    id: redacted-cartel-custom-approval-bug
+    message: transferFrom() can steal allowance of other accounts
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-688: Function Call With Incorrect Variable or Reference as Argument"
+        confidence: HIGH
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/immunefi/redacted-cartel-custom-approval-logic-bugfix-review-9b2d039ca2c5
+        - https://etherscan.io/address/0x186E55C0BebD2f69348d94C4A27556d93C5Bd36C
+    patterns:
+    - pattern-inside: |
+        function transferFrom(...) {
+        ...
+        }
+    - pattern: _approve(..., allowance(sender, recipient).sub(amount, ...), ...);
+    languages: 
+    - solidity
+    severity: ERROR
+

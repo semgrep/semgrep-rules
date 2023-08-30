@@ -1,0 +1,25 @@
+rules:
+    -
+      id: use-short-revert-string
+      message: >-
+        Shortening revert strings to fit in 32 bytes will decrease gas costs for deployment and 
+        gas costs when the revert condition has been met.
+      metadata:
+          references:
+          - https://github.com/byterocket/c4-common-issues/blob/main/0-Gas-Optimizations.md/#g007---long-revert-strings
+          category: performance
+          technology:
+          - solidity
+      patterns:
+        - pattern-either:
+          - pattern: |
+              require(..., "$MSG");
+          - pattern: |
+              revert("$MSG");
+        - metavariable-regex:
+            metavariable: $MSG
+            regex: .{33,}
+      languages: 
+      - solidity
+      severity: INFO
+    

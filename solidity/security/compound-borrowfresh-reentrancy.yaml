@@ -1,0 +1,32 @@
+rules:
+ -
+    id: compound-borrowfresh-reentrancy
+    message: Function borrowFresh() in Compound performs state update after doTransferOut()
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-841: Improper Enforcement of Behavioral Workflow"
+        confidence: HIGH
+        likelihood: LOW
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/peckshield/status/1509431646818234369
+        - https://twitter.com/blocksecteam/status/1509466576848064512
+        - https://slowmist.medium.com/another-day-another-reentrancy-attack-5cde10bbb2b4
+        - https://explorer.fuse.io/address/0x139Eb08579eec664d461f0B754c1F8B569044611 # Ola
+    patterns:
+     - pattern-inside: |
+         function borrowFresh(...) {
+           ...
+         }
+     - pattern-not-inside: |
+         accountBorrows[borrower].interestIndex = borrowIndex;
+         ...
+     - pattern: doTransferOut(...);
+    languages: 
+    - solidity
+    severity: WARNING
+

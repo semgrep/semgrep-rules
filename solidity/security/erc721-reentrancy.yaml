@@ -1,0 +1,23 @@
+rules:
+ -
+    id: erc721-reentrancy
+    message: ERC721 onERC721Received() reentrancy
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-841: Improper Enforcement of Behavioral Workflow"
+        confidence: HIGH
+        likelihood: LOW
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://blocksecteam.medium.com/when-safemint-becomes-unsafe-lessons-from-the-hypebears-security-incident-2965209bda2a
+        - https://etherscan.io/address/0x14e0a1f310e2b7e321c91f58847e98b8c802f6ef
+    patterns:
+    - pattern: _checkOnERC721Received(...)
+    languages: 
+    - solidity
+    severity: WARNING
+
