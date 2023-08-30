@@ -18,3 +18,9 @@ var amazon_url = "aws://my/url";
 // from https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/yahoo.py#L124
 // ok: detect-insecure-websocket
 // # ytwnews://cavideo/
+
+// ok: detect-insecure-websocket
+var localhost = "ws://localhost:27017/freecodecamp?directConnection=true";
+
+// ok: detect-insecure-websocket
+var local = "ws://127.0.0.1:3000"

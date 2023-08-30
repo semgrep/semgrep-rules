@@ -1,0 +1,76 @@
+rules:
+-
+  id: encode-packed-collision
+  message: abi.encodePacked hash collision with variable length arguments in $F()
+  metadata:
+    category: security
+    technology:
+      - solidity
+    cwe: "CWE-20: Improper Input Validation"
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory:
+        - vuln
+    references:
+      - https://swcregistry.io/docs/SWC-133
+  patterns:
+    - pattern-either:
+      - pattern-inside: |
+          function $F(..., bytes $A, ..., bytes $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., string $A, ..., string $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., bytes $A, ..., string $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., string $A, ..., bytes $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., address[] $A, ..., address[] $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., uint256[] $A, ..., uint256[] $B, ...) public {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., bytes $A, ..., bytes $B, ...) external {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., string $A, ..., string $B, ...) external {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., bytes $A, ..., string $B, ...) external {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., string $A, ..., bytes $B, ...) external {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., address[] $A, ..., address[] $B, ...) external {
+            ...
+          }
+      - pattern-inside: |
+          function $F(..., uint256[] $A, ..., uint256[] $B, ...) external {
+            ...
+          }
+    - pattern-either:
+      - pattern: |
+          keccak256(abi.encodePacked(..., $A, $B, ...))
+      - pattern: |
+          $X = abi.encodePacked(..., $A, $B, ...);
+          ...
+          keccak256($X);
+  languages:
+    - solidity
+  severity: ERROR

@@ -1,0 +1,22 @@
+rules:
+    -
+      id: use-custom-error-not-require
+      message: >-
+        Consider using custom errors as they are more gas efficient while allowing developers 
+        to describe the error in detail using NatSpec.
+      metadata:
+          references:
+          - https://blog.soliditylang.org/2021/04/21/custom-errors/
+          category: performance
+          technology:
+          - solidity
+      patterns:
+            # todo: check pragma when semgrep supports it
+            # - pattern-regex: pragma solidity .*0\.8\.([3-9]|\d\d+);
+            - pattern-either:
+                - pattern: require(..., "$MSG");
+                - pattern: revert("$MSG");
+      languages: 
+      - solidity
+      severity: INFO
+    

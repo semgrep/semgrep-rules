@@ -1,0 +1,29 @@
+rules:
+  - id: non-payable-constructor
+    message: Consider making costructor payable to save gas.
+    metadata:
+      references:
+        - https://twitter.com/0xAsm0d3us/status/1518960704271056897
+      category: performance
+      technology:
+        - solidity
+    languages:
+      - solidity
+    severity: INFO
+    patterns:
+      - pattern-inside:  |
+          contract $ANY{
+            ...
+          }
+      - pattern-not-inside: |
+          abstract contract $ANY{
+            ...
+          }
+      - pattern: |
+          constructor(...){
+            ...
+          }
+      - pattern-not: |
+          constructor(...) payable{
+            ...
+          }

@@ -38,6 +38,17 @@ subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True)
 # ruleid:dangerous-subprocess-use-audit
 subprocess.run(["bash", "-c", sys.argv[1]], shell=True)
 
+# ok:dangerous-subprocess-use-audit
+subprocess.call(["echo", "a", ";", "rm", "-rf", "/"])
+
+cmd_cmd = ["sh", "-c"]
+# ruleid:dangerous-subprocess-use-audit
+subprocess.call([*cmd_cmd, "rm", "-rf", "/"])
+
+echo_cmd = ["echo", "a", ";"]
+# ok:dangerous-subprocess-use-audit
+subprocess.call([*echo_cmd, "rm", "-rf", "/"])
+
 def vuln_payload(payload: str) -> None:
   with tempfile.TemporaryDirectory() as directory:
     python_file = Path(directory) / "hello_world.py"
@@ -49,3 +60,4 @@ def vuln_payload(payload: str) -> None:
     # ruleid:dangerous-subprocess-use-audit
     program = subprocess.Popen(['python2', str(python_file)], stdin=subprocess.PIPE, text=True)
     program.communicate(input=payload, timeout=1)
+

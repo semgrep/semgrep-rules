@@ -1,0 +1,26 @@
+rules:
+  - id: enum_map_into
+    message: >-
+      Using `Enum.into/3` is more efficient than using `Enum.map/2 |> Enum.into/2`.
+    severity: WARNING
+    languages:
+      - elixir
+    pattern-either:
+      - pattern: |
+          Enum.into(Enum.map($E, $FUN), $INTO)
+      - pattern: |
+          Enum.map($E, $FUN)
+          |> Enum.into($INTO)
+      - pattern: |
+          $E
+          |> Enum.map($FUN)
+          |> Enum.into($INTO)
+    fix: |
+      $E
+      |> Enum.into($INTO, $FUN end)
+    metadata:
+      references:
+        - https://github.com/rrrene/credo/blob/master/lib/credo/check/refactor/map_into.ex
+      category: best-practice
+      technology:
+        - elixir
