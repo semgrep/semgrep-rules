@@ -34,12 +34,12 @@ spec:
             path: /robots.txt
             mode: 755
             http:
-              # ruleid: argo-workflow-parameter-command-injection
+              # ruleid: argo-workflow-ssrf
               url: '{{workflow.parameters.url}}'
       outputs: {}
       metadata: {}
       http:
-        # ruleid: argo-workflow-parameter-command-injection
+        # ruleid: argo-workflow-ssrf
         url: '{{inputs.parameters.url}}'
     - name: echo
       inputs:
@@ -62,7 +62,7 @@ spec:
     artifacts:
       - name: robots
         http:
-          # ruleid: argo-workflow-parameter-command-injection
+          # ruleid: argo-workflow-ssrf
           url: '{{workflow.parameters.url}}'
   artifactRepositoryRef:
     key: security-research
