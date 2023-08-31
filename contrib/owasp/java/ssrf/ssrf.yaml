@@ -15,6 +15,14 @@ rules:
                 URL $URL = new URL($VAR);
                 ...
               }
+          - pattern: |
+              $RETURN $METHOD(...,String $VAR, ...) {
+                ...
+                URL $URL = ...;
+                ...
+                $URL = new URL($VAR);
+                ...
+              }
             # Negating false positives by adding "..." which indicates a hard-coded string.Since it's hard-coded it wont be user-supplied.
       - pattern-not: $URL = new URL("...");
     languages:
