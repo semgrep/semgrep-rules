@@ -58,6 +58,17 @@ async def bad9(conn: Connection, user_input):
     conn.execute(
     "insert into %s values (%%s, %%s)" % ext.quote_ident(table_name),[10, 20])
 
+def bad10(conn: asyncpg.Connection):
+    async with conn.transaction():
+        sql_query = 'SELECT * FROM {}'.format(user_input)
+        # ruleid: asyncpg-sqli
+        cur = await conn.cursor(sql_query)
+
+def bad11(conn: asyncpg.Connection):
+    import common
+    # ruleid: asyncpg-sqli
+    cur = conn.fetch(common.bad_query_1.format(user_input))
+
 def ok1(user_input):
     con = await asyncpg.connect(user='postgres')
     # ok: asyncpg-sqli

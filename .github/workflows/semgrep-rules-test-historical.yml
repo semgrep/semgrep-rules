@@ -37,10 +37,7 @@ jobs:
     - name: grab historical semgrep version
       env:
         GH_TOKEN: ${{ github.token }}
-      run: |
-        SEMGREP_OLD_VERSION=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq -r '.[].tag_name' | sed -n 10p | tr -d v)
-        echo $SEMGREP_OLD_VERSION
-        echo "SEMGREP_OLD_VERSION=$SEMGREP_OLD_VERSION" >> $GITHUB_ENV
+      run: semgrep-rules/scripts/historical-semgrep-version
     - name: validate rules on historical semgrep version
       run: |
         docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src

@@ -1,0 +1,31 @@
+rules:
+  - id: init-variables-with-default-value
+    message: >-
+      Uninitialized variables are assigned with the types default value.
+      Explicitly initializing a variable with its default value costs unnecessary gas.
+    metadata:
+      references:
+        - https://github.com/byterocket/c4-common-issues/blob/main/0-Gas-Optimizations.md/#g001---dont-initialize-variables-with-default-value
+      category: performance
+      technology:
+        - solidity
+    patterns:
+      - pattern-either:
+          - pattern: $TYPE $VAR = 0;
+          - pattern: $TYPE $VAR = false;
+          - pattern: $TYPE $VAR = "";
+          - pattern: $TYPE $VAR = '';
+      - pattern-not: $TYPE constant $VAR = ...;
+      - pattern-not-inside: |
+          contract $C {
+            ...
+            $TYPE immutable $VAR = ...;
+            ...
+          }
+      - pattern-not-inside: |
+          function $F(...) {
+            ...
+          }
+    languages:
+      - solidity
+    severity: INFO

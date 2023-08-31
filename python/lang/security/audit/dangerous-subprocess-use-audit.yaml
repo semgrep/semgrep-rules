@@ -5,6 +5,17 @@ rules:
     - pattern-not: subprocess.$FUNC("...", ...)
     - pattern-not: subprocess.$FUNC(["...",...], ...)
     - pattern-not: subprocess.$FUNC(("...",...), ...)
+    - pattern-not:
+        patterns:
+        - pattern-not-inside: | # Double negative, so this creates findings when a shell array is present
+            $ARR = ["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", ...]
+            ...
+        - pattern-inside: | # Filter out safe non-shell arrays
+            $ARR = [...]
+            ...
+        - pattern-either:
+          - pattern: subprocess.$FUNC(*$ARR, ...)
+          - pattern: subprocess.$FUNC([*$ARR, ...])
     - pattern-not: subprocess.CalledProcessError(...)
     - pattern-not: subprocess.SubprocessError(...)
     - pattern: subprocess.$FUNC(...)
@@ -60,3 +71,4 @@ rules:
     impact: HIGH
   languages: [python]
   severity: ERROR
+

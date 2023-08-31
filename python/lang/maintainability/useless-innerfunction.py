@@ -58,7 +58,7 @@ def dec(f):
 def decorator_factory( foo ):
     def decorator( function ):
         # https://github.com/returntocorp/semgrep-rules/issues/660
-        # todook:useless-inner-function
+        # ok:useless-inner-function
         def function_wrapper( *args, **kwargs ):
             # Do something with 'foo'.
             return function( *args, **kwargs )

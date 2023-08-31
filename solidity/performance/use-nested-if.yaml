@@ -1,0 +1,20 @@
+rules:
+    - id: use-nested-if
+      message: >-
+        Using nested is cheaper than using && multiple check combinations. 
+        There are more advantages, such as easier to read code and better coverage reports.
+      metadata:
+        references:
+          - https://code4rena.com/reports/2023-01-biconomy#g-18-use-nested-if-and-avoid-multiple-check-combinations
+        category: performance
+        technology:
+          - solidity
+      patterns:
+        - pattern: |
+            if (<... $X && $Y ...>) {
+              ...
+            }
+      languages:
+        - solidity
+      severity: INFO
+  

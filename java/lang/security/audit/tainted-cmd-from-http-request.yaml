@@ -23,30 +23,36 @@ rules:
         - pattern: |
             $COOKIE.getValue(...)
   pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: |
-          (ProcessBuilder $PB) = ...;
-      - pattern: |
-          (Process $P) = ...;
-      - patterns:     # used in the case that commands are added to an argument list along with a user-inputted parameter and then executed. also a hack similar to line 15.
-        - pattern-either:
-          - pattern-inside: |
-              (java.util.List<$TYPE> $ARGLIST) = ...;  
-              ...
-              (ProcessBuilder $PB) = ...;
-              ...
-              $PB.command($ARGLIST);
-          - pattern-inside: |
-              (java.util.List<$TYPE> $ARGLIST) = ...;  
-              ...
-              (ProcessBuilder $PB) = ...;
-          - pattern-inside: |
-              (java.util.List<$TYPE> $ARGLIST) = ...;  
-              ...
-              (Process $P) = ...;
-        - pattern: |
-            $ARGLIST.add(...);
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  (ProcessBuilder $PB) = ...;
+              - patterns:
+                - pattern: |
+                    (Process $P) = ...;
+                - pattern-not: |
+                    (Process $P) = (java.lang.Runtime $R).exec(...);
+              - patterns:
+                  - pattern: (java.lang.Runtime $R).exec($CMD, ...);
+                  - focus-metavariable: $CMD
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          (java.util.List<$TYPE> $ARGLIST) = ...;  
+                          ...
+                          (ProcessBuilder $PB) = ...;
+                          ...
+                          $PB.command($ARGLIST);
+                      - pattern-inside: |
+                          (java.util.List<$TYPE> $ARGLIST) = ...;  
+                          ...
+                          (ProcessBuilder $PB) = ...;
+                      - pattern-inside: |
+                          (java.util.List<$TYPE> $ARGLIST) = ...;  
+                          ...
+                          (Process $P) = ...;
+                  - pattern: |
+                      $ARGLIST.add(...);
   metadata:
     category: security
     technology:

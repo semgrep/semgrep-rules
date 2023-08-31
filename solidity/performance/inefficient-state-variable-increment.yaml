@@ -1,0 +1,37 @@
+rules:
+    -
+      id: inefficient-state-variable-increment
+      message: >-
+        <x> += <y> costs more gas than <x> = <x> + <y> for state variables.
+      metadata:
+          references:
+          - https://gist.github.com/IllIllI000/cbbfb267425b898e5be734d4008d4fe8
+          category: performance
+          technology:
+          - solidity
+      patterns:
+        - pattern-either:
+          - pattern: |
+                $X += $Y
+          - pattern: |
+                $X[...] += $Y
+        - pattern-either:
+          - pattern-inside: |
+                contract $C {
+                  ...
+                  $TYPE $X;
+                  ...
+                }
+          - pattern-inside: |
+                contract $C {
+                  ...
+                  $TYPE $X = ...;
+                  ...
+                }
+        -  metavariable-regex:
+              metavariable: $TYPE
+              regex: uint
+      languages: 
+      - solidity
+      severity: INFO
+    

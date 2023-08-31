@@ -13,6 +13,11 @@ abc = str.replace(hashlib.md5("1"), "###")
 # ruleid:insecure-hash-algorithm-md5
 print(hashlib.md5("1"))
 
-
 # ok:insecure-hash-algorithm-md5
 hashlib.sha256(1)
+
+# ruleid:insecure-hash-algorithm-md5
+foo = hashlib.md5(data, usedforsecurity=True)
+
+# ok
+bar = hashlib.md5(data, usedforsecurity=False)
