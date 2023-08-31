@@ -18,11 +18,12 @@ rules:
       references:
         - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#configuring-the-role-and-trust-policy
         - https://dagrz.com/writing/aws-security/hacking-github-aws-oidc/
-    message: "`$POLICY` is missing a `condition` block which scopes users of this
+    message: >-
+      `$POLICY` is missing a `condition` block which scopes users of this
       policy to specific GitHub repositories. Without this, `$POLICY` is open to
       all users on GitHub. Add a `condition` block on the variable
       `token.actions.githubusercontent.com:sub` which scopes  it to prevent
-      this."
+      this.
     languages:
       - hcl
     severity: WARNING
