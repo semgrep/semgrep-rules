@@ -1,0 +1,33 @@
+rules:
+  - id: intent-redirection
+    mode: taint
+    pattern-sources:
+      - by-side-effect: true
+        pattern-either:
+          - pattern: Intent $RITENT = (Intent) getIntent();
+          - pattern: Intent $RITENT = (Intent) getIntent().$EXTRACTOR(...);
+        focus-metavariable: $RITENT
+    pattern-sinks:
+      - pattern-either:
+          - pattern-inside: startActivity(...)
+          - pattern-inside: startService(...)
+    message: Intent Redirection - App contains an Intent Redirection issue which can allow malicious apps to access private app components or files.
+    metadata:
+      masvs:
+        - MSTG-PLATFORM-2
+      references:
+        - https://mas.owasp.org/MASTG/tests/android/MASVS-CODE/MASTG-TEST-0026/
+      category: security
+      technology:
+        - android
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - Code Injection
+    languages:
+      - java
+    severity: WARNING
