@@ -1,0 +1,23 @@
+rules:
+  - id: ocamllint-digest
+    pattern-either: 
+      - pattern: Digest.string
+      - pattern: Digest.bytes
+      - pattern: Digest.substring
+      - pattern: Digest.subbytes
+      - pattern: Digest.channel
+      - pattern: Digest.file
+    message: Digest uses MD5 and should not be used for security purposes.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - ocaml
+      cwe: "CWE-328: Use of Weak Hash (4.12)"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - audit
+

@@ -1,0 +1,16 @@
+rules:
+  - id: ocamllint-tempfile
+    pattern: Filename.temp_file
+    message: Filename.temp_file might lead to race conditions, since the file could be altered or replaced by a symlink before being opened.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - ocaml
+      cwe: "CWE-367: Time-of-check Time-of-use (TOCTOU) Race Condition"
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - vuln

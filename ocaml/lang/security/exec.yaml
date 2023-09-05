@@ -1,0 +1,21 @@
+rules:
+  - id: ocamllint-exec
+    pattern-either:
+      - pattern: Unix.execve
+      - pattern: Unix.execvp
+      - pattern: Unix.execvpe
+      - pattern: Unix.system
+      - pattern: Sys.command
+    message: Executing external programs might lead to comand or argument injection vulnerabilities.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - ocaml
+      cwe: "CWE 78: OS Command Injection"
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - audit
