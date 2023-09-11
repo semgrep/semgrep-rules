@@ -1,0 +1,46 @@
+rules:
+  - id: interfile-true-under-metadata-and-options-already-present
+    message: >-
+      `interfile: true` should be under the `options` field, not the `metadata` field.
+    languages: [yaml]
+    severity: WARNING
+    patterns:
+      - pattern: |
+          rules:
+            - id: $ID
+              ...
+              $METADATA:
+                ...
+                $INTERFILE: true
+                ...
+              ...
+      - pattern-inside: |
+          rules:
+            - id: $ID
+              ...
+              $OPTIONS:
+                $FIRST_OPT: $VAL
+                ...
+              ...
+      - pattern-not-inside: |
+          rules:
+            - id: $ID
+              ...
+              $OPTIONS:
+                ...
+                interfile: true
+                ...
+              ...
+      - metavariable-regex:
+          metavariable: $INTERFILE
+          regex: interfile
+      - metavariable-regex:
+          metavariable: $METADATA
+          regex: metadata
+      - metavariable-regex:
+          metavariable: $OPTIONS
+          regex: options
+      - focus-metavariable: $VAL
+    fix: |
+      $VAL
+          interfile: true
