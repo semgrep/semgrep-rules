@@ -1,0 +1,25 @@
+rules:
+  - id: metadata-incorrect-option
+    message: >-
+        It looks like $KEY is not in the default list of expected options, if this is a new key update this rule
+    languages:
+      - yaml
+    severity: INFO
+    metadata:
+      references:
+        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository
+      category: correctness
+      technology:
+        - semgrep
+    patterns:
+      - pattern-inside: |
+          rules: ...
+      - pattern-inside: |
+          options:
+            $A
+      - focus-metavariable: $A
+      - pattern: |
+          $KEY: $VALUE
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?!options|ac_matching|attr_expr|commutative_boolop|constant_propagation|generic_comment_style|generic_ellipsis_max_span|taint_assume_safe_functions|taint_assume_safe_indexes|vardef_assign|xml_attrs_implicit_ellipsis|generic_engine|taint_unify_mvars|taint_assume_safe_booleans|taint_assume_safe_numbers|symbolic_propagation|generic_multiline|generic_caseless|taint_unified_mvars|implicit_deep_exprstmt)
