@@ -1,7 +1,8 @@
 rules:
 - id: swift-user-defaults
   message: >-
-    DATA
+    Potentially sensitive data was observed to be stored in UserDefaults, which is not adequate protection
+    of sensitive information. For data of a sensitive nature, applications should leverage the Keychain.
   severity: WARNING
   metadata:
     likelihood: LOW
@@ -10,9 +11,14 @@ rules:
     category: security
     cwe:
     - 'CWE-311: Missing Encryption of Sensitive Data'
+    masvs:
+    - 'MASVS-STORAGE-1: The app securely stores sensitive data'
     owasp:
     - A03:2017 - Sensitive Data Exposure
     - A04:2021 - Insecure Design
+    references:
+    - https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/ValidatingInput.html
+    - https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-1/
     subcategory:
     - vuln
     technology:
