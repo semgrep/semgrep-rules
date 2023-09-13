@@ -1,0 +1,28 @@
+rules:
+- patterns:
+  - pattern: |-
+      resource "aws_instance" "..." {
+          ...
+          provisioner "remote-exec" {
+              ...
+          }
+          ...
+      }
+  id: terraform-remote-exec
+  message: This rules prevents the use of provisioners such as remote-exec and local-exec
+  languages:
+  - terraform
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - 'CWE 94: Improper Control of Generation of Code (''Code Injection'')'
+    subcategory:
+    - guardrail
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - terraform
+    references:
+    - https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
