@@ -1,0 +1,26 @@
+rules:
+- id: jwt-algorithm-bypass
+  languages:
+  - python
+  pattern: |
+    jwt.decode(..., "...", ...)
+  message: 'Potential JWT algorithm bypass: hardcoded secret key found in `decode`
+    method.'
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 522: Insufficiently Protected Credentials'
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    owasp:
+    - A2:2017 Broken Authentication
+    - A1:2021 Broken Access Control
+    technology:
+    - docker
+    - terraform
+    references:
+    - https://semgrep.dev/orgs/quiner/editor/r/python.jwt.security.jwt-exposed-credentials.jwt-python-exposed-credentials
