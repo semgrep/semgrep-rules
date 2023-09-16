@@ -1,0 +1,24 @@
+rules:
+- id: jwt-authentication-bypass
+  languages:
+  - python
+  pattern: |
+    jwt.decode(..., verify=False, ...)
+  message: 'Potential JWT authentication bypass: verify=False found in `decode` method.'
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - CWE-347 - Improper Verification of Cryptographic Signature
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    owasp:
+    - A2:2017 Broken Authentication
+    - A1:2021 Broken Access Control
+    technology:
+    - jwt
+    references:
+    - https://rules.sonarsource.com/python/RSPEC-5659/
