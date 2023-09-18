@@ -1,0 +1,23 @@
+rules:
+- id: jwt-vulenrabilities
+  patterns:
+  - pattern-either:
+    - pattern: tokenizer.decode(token, "password", verify=False)
+    - pattern: jwt.decode(token, "password")
+  message: Potential JWT vulnerability
+  severity: ERROR
+  languages:
+  - python
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 1259: Improper Restriction of Security Token Assignment'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - flask
+    references:
+    - https://example.com
