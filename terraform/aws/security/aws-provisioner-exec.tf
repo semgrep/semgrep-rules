@@ -1,11 +1,11 @@
-# ruleid: generated-rule-terraform
+
 resource "aws_instance" "example" {
   ami           = "ami-06ca3ca175f37dd66"
   instance_type = "t2.micro"
 
 
   associate_public_ip_address = true
-
+  # ruleid: aws-provisioner-exec
   provisioner "remote-exec" {
     inline = [
       "sudo yum install ec2-instance-connect -y",

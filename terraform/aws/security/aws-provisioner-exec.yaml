@@ -1,0 +1,37 @@
+rules:
+- patterns:
+  - pattern-either:
+    - pattern: |
+        provisioner "remote-exec" {
+            ...
+        }
+    - pattern: |
+        provisioner "local-exec" {
+            ...
+        }
+  - pattern-inside: |
+      resource "aws_instance" "..." {
+          ...
+      }
+  id: aws-provisioner-exec
+  message: Provisioners are a tool of last resort and should be avoided where possible. Provisioner behavior cannot be mapped by Terraform as part of a plan, and execute arbitrary shell commands by design.
+  languages:
+  - terraform
+  severity: WARNING
+  metadata:
+    category: security
+    owasp:
+    - 'A03:2021 - Injection'
+    - 'A01:2017 - Injection'
+    cwe:
+    - 'CWE 94: Improper Control of Generation of Code (''Code Injection'')'
+    subcategory:
+    - guardrail
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - terraform
+    references:
+    - https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec
+    - https://developer.hashicorp.com/terraform/language/resources/provisioners/local-exec
