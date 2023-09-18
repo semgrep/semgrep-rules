@@ -1,0 +1,23 @@
+rules:
+- id: jwt-algorithms
+  patterns:
+  - pattern-not: jwt.decode(..., algorithms=$A)
+  - pattern: jwt.decode(...)
+  message: Not restricting `algorithms` can also lead to token pollution since attackers
+    can easily set algorithm to `none`
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - jwt
+    cwe:
+    - 'CWE 345: Insufficient Verification of Data Authenticity'
+    references:
+    - https://www.akto.io/blog/jwt-none-algorithm-test
