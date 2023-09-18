@@ -62,6 +62,8 @@ rules:
           (java.util.Map<String, Object> $STMT) = $PATH.queryForMap(...);
       - pattern: |
           (org.springframework.jdbc.support.rowset.SqlRowSet $STMT) = ...;
+      - pattern: |
+          (org.springframework.jdbc.core.JdbcTemplate $TEMPL).batchUpdate(...)
       - patterns:
         - pattern-inside: |
             (String $SQL) = "$SQLSTR" + ...;

@@ -6,6 +6,8 @@ rules:
       scripting (XSS) vulnerabilities. Consider using a view technology such as
       JavaServer Faces (JSFs) which automatically escapes HTML views.
   severity: WARNING
+  options:
+    interfile: true
   metadata:
     likelihood: HIGH
     impact: MEDIUM
@@ -67,3 +69,6 @@ rules:
         - pattern: (PolicyFactory $POLICY).sanitize(...)
         - pattern: (AntiSamy $AS).scan(...)
         - pattern: JSoup.clean(...)
+        - pattern: org.apache.commons.lang.StringEscapeUtils.escapeHtml(...)
+        - pattern: org.springframework.web.util.HtmlUtils.htmlEscape(...)
+        - pattern: org.owasp.esapi.ESAPI.encoder().encodeForHTML(...)
