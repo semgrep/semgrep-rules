@@ -1,0 +1,22 @@
+rules:
+- id: jwt-verify-false
+  patterns:
+  - pattern: jwt.decode(..., verify=False)
+  message: Setting `verify=False` disables signature verification that allows attackers
+    to pollute token.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 345: Insufficient Verification of Data Authenticity'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - jwt
+    references:
+    - https://rules.sonarsource.com/python/RSPEC-5659/
