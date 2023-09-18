@@ -1,11 +1,11 @@
 rules:
 - patterns:
-  - pattern: |-
-      resource "aws_instance" "..." {
+  - pattern: |
+      provisioner "remote-exec" {
           ...
-          provisioner "remote-exec" {
-              ...
-          }
+      }
+  - pattern-inside: |
+      resource "aws_instance" "..." {
           ...
       }
   id: terraform-remote-exec
