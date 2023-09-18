@@ -15,10 +15,8 @@ rules:
   pattern-sanitizers:
   - pattern: isset(...)
   - pattern: empty(...)
-  - pattern: $X = $ANYFUNC(...);
-  - patterns:
-    - pattern-inside: echo <... $ANYFUNC(...) ...>;
-    - pattern: $ANYFUNC(...)
+  - pattern: htmlentities(...)
+  - pattern: htmlspecialchars(...)
   metadata:
     technology:
     - php
