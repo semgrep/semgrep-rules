@@ -1,0 +1,24 @@
+rules:
+- id: insecure-cookie
+  patterns:
+  - pattern-either:
+    - pattern: r.set_cookie(..., secure=False)
+    - pattern: r.set_cookie(..., secure=False, ...)
+  message: |
+    Potential vulnerability: insecure cookie. Set the 'secure' flag to 'True' to ensure cookies are only transmitted over HTTPS.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - flask
+    references:
+    - https://example.com
