@@ -24,6 +24,7 @@ rules:
               metavariable: $MAP
               patterns:
                 - pattern-not-regex: params
+      - pattern: File.basename(...)
     message: Found request parameters in a call to `render`. This can allow end
       users to request arbitrary local files which may result in leaking
       sensitive information persisted on disk. Where possible, avoid letting
@@ -56,3 +57,6 @@ rules:
       impact: HIGH
       confidence: MEDIUM
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - Path Traversal
+
