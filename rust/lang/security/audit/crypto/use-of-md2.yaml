@@ -1,0 +1,33 @@
+rules:
+  - id: use-of-md2
+    languages: [rust]
+    message: avoid cryptographically insecure hashing function(s)
+    pattern-either:
+      - patterns:
+          - pattern: md2::new(...)
+          - pattern-inside: |
+              use md2::Md2;
+              ...
+      - patterns:
+          - pattern: md2::Md2::new()
+      - patterns:
+          - pattern: md2::new_with_prefix(...)
+          - pattern-inside: |
+              use md2::Md2;
+              ...
+      - patterns:
+          - pattern: md2::Md2::new_with_prefix(...)
+      - patterns:
+          - pattern: md2::Md2::digest(...)
+      - patterns:
+          - pattern: Md2::digest(...)
+          - pattern-inside: |
+              use md2::Digest;
+              ...
+    metadata:
+      references:
+        - https://github.com/RustCrypto/hashes
+        - https://docs.rs/md2/latest/md2/
+      category: security
+      cwe: "CWE-328: Use of Weak Hash"
+    severity: WARNING
