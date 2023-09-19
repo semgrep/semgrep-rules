@@ -1,0 +1,18 @@
+rules:
+  - id: argument-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fn $FUNC(...) {
+               requests::$METHOD(...);
+               ...
+               Command::new(...);
+               ...
+                       }
+    message: |
+      The software constructs a string for a command to executed by a separate component in another control sphere, but it does not properly delimit the intended arguments, options, or switches within that command string.
+    metadata:
+      cwe: "CWE-88: Improper Neutralization of Argument Delimiters in a Command ('Argument Injection')"
+      owasp: 'A1: Injection'
+    languages: [rust]
+    severity: WARNING

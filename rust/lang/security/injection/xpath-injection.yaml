@@ -1,0 +1,23 @@
+rules:
+  - id: xpath-injection
+    languages:
+      - rust
+    message: |
+      The software does not properly neutralize special elements that are used in XML,
+      allowing attackers to modify the syntax, content, or commands of the XML before
+      it is processed by an end system.
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-91: XML Injection (aka Blind XPath Injection)'
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  fn $FUNC(...) {
+                    let $QUERY = format!(...);
+                    ...
+                    $CTX.evaluate(&$QUERY);
+                    ...
+                  }
+

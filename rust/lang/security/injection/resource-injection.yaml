@@ -1,0 +1,29 @@
+rules:
+  - id: resource-injection
+    languages:
+      - rust
+    message: |
+      The software receives input from an upstream component, but it does not restrict
+      or incorrectly restricts the input before it is used as an identifier for a
+      resource that may be outside the intended sphere of control.
+    metadata:
+      owasp: 'A1: Injection'
+      cwe: 'CWE-99: Improper Control of Resource Identifiers ("Resource Injection")'
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fn $FUNC($ARG: $ARGTYPE, ...) {
+                ...
+                let $PATH = PathBuf::from(...);
+                ...
+                $PATH.push(<... $ARG ...>);
+                ...
+              }
+          - pattern: |
+              fn $FUNC($ARG: $ARGTYPE, ...) {
+                 ...
+                 let $PATH = PathBuf::from($ARG);
+                 ...
+               }
+

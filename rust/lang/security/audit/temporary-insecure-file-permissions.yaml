@@ -1,0 +1,19 @@
+rules:
+  - id: temporary-insecure-file-permissions
+    patterns:
+      - pattern-either:
+          - pattern: |
+              let $TMPDIR = tempdir()?;
+               ...
+              let $FILENAME = dir.path().join(...);
+               ...
+               File::create($FILENAME);
+               ...
+    message: |
+      Opening temporary files without appropriate measures or controls can leave the file, its contents and any function that it impacts vulnerable to attack.
+    metadata:
+      cwe: "CWE-378: Creation of Temporary File With Insecure Permissions
+          CWE-379: Creation of Temporary File in Directory with Insecure Permissions
+          CWE-377: Insecure Temporary File"
+    languages: [rust]
+    severity: WARNING

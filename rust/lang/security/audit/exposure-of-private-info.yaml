@@ -1,0 +1,44 @@
+rules:
+  - id: exposure-of-private-info
+    languages:
+      - rust
+    message: |
+      The product does not properly prevent a person's private, personal information
+      from being accessed by actors who either (1) are not explicitly authorized to
+      access the information or (2) do not have the implicit consent of the person about
+      whom the information is collected.
+    metadata:
+      owasp: 'A3: Sensitive Data Exposure'
+
+      cwe: |
+        - CWE-359: Exposure of Private Personal Information to an Unauthorized Actor
+        - CWE-532: Insertion of Sensitive Information into Log File
+    
+
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  fn $FUNC (...) {
+                    ...
+                    let $NPI = $OBJ.$METHOD(...);
+                    ...
+                    $EMIT(<... $NPI ...>);
+                  }
+              - pattern: |
+                  fn $FUNC (...) {
+                    ...
+                    let $NPI = $F(...);
+                    ...
+                    $EMIT(<... $NPI ...>);
+                  }
+              - metavariable-regex:
+                  metavariable: $EMIT
+                  regex: ^(write|foramt|println|trace|debug|info|warn|error|critical)!$
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: (.*)(password|account_id|key|secret|social_security_number|national_id|government_id|location)(.*)
+              - metavariable-regex:
+                  metavariable: $F
+                  regex: (.*)(password|account_id|key|secret|social_security_number|national_id|government_id|location)(.*)

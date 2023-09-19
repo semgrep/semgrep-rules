@@ -1,0 +1,33 @@
+rules:
+  - id: improper-null-neutralization
+    message: |
+      The software receives input from an upstream component, but it does not neutralize or incorrectly
+      neutralizes NUL characters or null bytes when they are sent to a downstream component.
+    metadata:
+      cwe: |
+        - "CWE-138: Improper Neutralization of Special Elements"
+        - "CWE-158: Improper Neutralization of Null Byte or NUL Character"
+      cwe-url: "https://cwe.mitre.org/data/definitions/158.html"
+      references:
+        - https://doc.rust-lang.org/std/ffi/struct.CStr.html
+    languages: [rust]
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          let $CSTR = $OBJECT::from_ptr(...).to_bytes();
+          ...
+          let $STR = $OBJECT::from_bytes_with_nul_unchecked($CSTR);
+      - pattern: |
+          let $CSTR = $OBJECT::from_ptr(...).to_bytes();
+          ...
+          $OBJECT::from_bytes_with_nul_unchecked($CSTR);
+      - pattern: |
+          let $SLICE = $OBJECT::from_ptr(...);
+          ...
+          let $UNKNOWN = $SLICE.to_str().unwrap();
+      - pattern: |
+          let $SLICE = $OBJECT::from_ptr(...);
+          ...
+          $SLICE.to_str().unwrap();
+
+       

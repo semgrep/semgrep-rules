@@ -1,0 +1,22 @@
+rules:
+  - id: sensitive-data-exposure
+    message: |
+      Because the information is stored in cleartext, attackers could potentially read it. 
+      Even if the information is encoded in a way that is not human-readable, certain techniques could determine which encoding is being used, then decode the information.
+    metadata:
+      cwe: |
+        - "CWE-312: Cleartext Storage of Sensitive Information."
+        - "CWE-318: Cleartext Storage of Sensitive Information in Executable."
+      owasp: 'A3: Sensitive Data Exposure'
+    languages: [rust]
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          let $VAL = requests::$METHOD(...).unwrap();
+          ...
+          headers.set($HEADER($VAL));
+      - pattern: |
+          let $VAL = requests::$METHOD(...);
+          ...
+          headers.set($HEADER($VAL));          
+       

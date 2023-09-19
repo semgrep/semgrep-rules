@@ -1,0 +1,43 @@
+rules:
+  - id: sqlx-sqli
+    languages:
+      - rust
+    message: >
+      Detected string concatenation with a non-literal variable in a go-pg
+
+      SQL statement. This could lead to SQL injection if the variable is user-controlled
+
+      and not properly sanitized. In order to prevent SQL injection,
+
+      used parameterized queries instead of string concatenation. You can use parameterized queries like so:
+
+      '(SELECT ? FROM table, data1)'
+    metadata:
+      owasp: 'A1: Injection'
+      references:
+        - https://pg.uptrace.dev/
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  sqlx::query!($QUERY)
+              - pattern-either:
+                  - pattern-inside: |
+                      $QUERY = $X + $Y
+                      ...
+                  - pattern-inside: |
+                      $QUERY += $X
+                      ...
+                  - pattern-inside: |
+                      $QUERY = format!($PARAM1, ...)
+                      ...
+              - pattern-not-inside: |
+                  $QUERY += "..."
+                  ...
+              - pattern-not-inside: |
+                  $QUERY = "..." + "..."
+                  ...
+          - pattern: sqlx::query!($X + $Y)
+          - pattern: sqlx::query!(format!("...", $PARAM1, ...))
+
