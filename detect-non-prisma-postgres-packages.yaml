@@ -1,0 +1,14 @@
+rules:
+- id: detect-non-prisma-postgres-packages
+  languages:
+  - json
+  message: Non-Prisma PostgreSQL package detected. Consider using Prisma for PostgreSQL
+    interactions.
+  severity: ERROR
+  pattern-either:
+  - pattern: '"dependencies": { "pg": $VERSION, ... }'
+  - pattern: '"dependencies": { "knex": $VERSION, ... }'
+  - pattern: '"dependencies": { "sequelize": $VERSION, ... }'
+  - pattern: '"devDependencies": { "pg": $VERSION, ... }'
+  - pattern: '"devDependencies": { "knex": $VERSION, ... }'
+  - pattern: '"devDependencies": { "sequelize": $VERSION, ... }'
