@@ -24,6 +24,10 @@ function doSmth4() {
     echo "Hello ".htmlentities($_POST['name'])." !".$_POST['lastname'];
 }
 
+function doSmth5() {
+     // ruleid: echoed-request
+    echo "Hello ".trim($_POST['name']);
+}
 
 function doOK1() {
     // ok: echoed-request
@@ -37,12 +41,9 @@ function doOK2() {
 }
 
 function doOK3() {
-    $name = $_GET['name'];
-    if (str_contains($name, 'foobar')) {
-        $tpl = createSafeTemplate($name);
-        // ok: echoed-request
-        echo "Hello :".$tpl;
-    }
+    $safevar = "Hello ".htmlentities(trim($_GET['name']));
+    // ok: echoed-request
+    echo $safevar;
 }
 
 function doOK4() {
@@ -55,3 +56,17 @@ function doOK5() {
     // ok: echoed-request
     echo "Hello $safevar !";
 }
+
+function doOK6() {
+    $safevar = "Hello ".htmlentities($_GET['name']);
+    // ok: echoed-request
+    echo $safevar;
+}
+
+function doOK7() {
+    $safevar = "Hello ".htmlspecialchars($_GET['name']);
+    // ok: echoed-request
+    echo $safevar;
+}
+
+
