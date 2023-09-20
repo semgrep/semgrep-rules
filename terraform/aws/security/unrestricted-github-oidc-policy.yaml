@@ -1,0 +1,50 @@
+rules:
+  - id: unrestricted-github-oidc-policy
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      technology:
+        - terraform
+        - aws
+      owasp:
+        - A05:2017 - Sensitive Data Exposure
+        - A01:2021 - Broken Access Control
+      cwe:
+        - "CWE-284: Improper Access Control"
+      references:
+        - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#configuring-the-role-and-trust-policy
+        - https://dagrz.com/writing/aws-security/hacking-github-aws-oidc/
+    message: "`$POLICY` is missing a `condition` block which scopes users of this policy to specific GitHub repositories. Without this, `$POLICY` is open to all users on GitHub. Add a `condition` block on the variable `token.actions.githubusercontent.com:sub` which scopes it to prevent this."
+    languages:
+      - hcl
+    severity: WARNING
+    match:
+      where:
+        - metavariable: $IDENTIFIER
+          regex: .*oidc-provider/token\.actions\.githubusercontent\.com
+      all:
+        - inside: |
+            data "aws_iam_policy_document" $POLICY {
+              ...
+            }
+        - |
+          statement {
+            ...
+            principals {
+              ...
+              type = "Federated"
+              identifiers = [..., $IDENTIFIER, ...]
+            }
+          }
+        - not: |
+            statement {
+              ...
+              condition {
+                ...
+                variable = "token.actions.githubusercontent.com:sub"
+              }
+            }
