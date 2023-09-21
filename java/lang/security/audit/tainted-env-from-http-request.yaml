@@ -22,10 +22,9 @@ rules:
         - pattern: |
             $COOKIE.getValue(...)
   pattern-sinks:
-      - patterns:
-              - patterns:
-                  - pattern: (java.lang.Runtime $R).exec($CMD, $ENV_ARGS, ...);
-                  - focus-metavariable: $ENV_ARGS
+       - patterns:
+           - pattern: (java.lang.Runtime $R).exec($CMD, $ENV_ARGS, ...);
+           - focus-metavariable: $ENV_ARGS
   metadata:
     category: security
     technology:
