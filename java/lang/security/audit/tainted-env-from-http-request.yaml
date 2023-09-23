@@ -1,0 +1,45 @@
+rules:
+- id: tainted-env-from-http-request
+  message: >-
+    Detected input from a HTTPServletRequest going into the environment variables of an 'exec' command. 
+    Instead, call the command with user-supplied arguments by using the overloaded method with one String array as the argument.
+    `exec({"command", "arg1", "arg2"})`.
+  languages: [java]
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          (HttpServletRequest $REQ)
+      - patterns:   # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
+        - pattern-inside: |
+            (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+            ...
+            for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+              ...
+            }
+        - pattern: |
+            $COOKIE.getValue(...)
+  pattern-sinks:
+       - patterns:
+           - pattern: (java.lang.Runtime $R).exec($CMD, $ENV_ARGS, ...);
+           - focus-metavariable: $ENV_ARGS
+  metadata:
+    category: security
+    technology:
+    - java
+    cwe:
+    - "CWE-454: External Initialization of Trusted Variables or Data Stores"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    cwe2022-top25: false
+    cwe2021-top25: false
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
