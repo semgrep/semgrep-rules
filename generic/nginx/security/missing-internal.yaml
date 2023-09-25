@@ -1,18 +1,24 @@
 rules:
 - id: missing-internal
+  options:
+    generic_ellipsis_max_span: 0
+    generic_engine: aliengrep
   patterns:
-  - pattern-inside: |
-      location ... {
-        ...
-        ...
-      }
-  - pattern-not-inside: |
-      location ... {
-        ...
-        internal;
-        ...
-      }
-  - pattern: proxy_pass ...$...;
+    - pattern-inside: |
+        location ... {
+          ....
+          ....
+        }
+    - pattern-not-inside: |
+        location ... {
+          ....
+          internal;
+          ....
+        }
+    - pattern: proxy_pass $...URL;
+    - metavariable-regex:
+        metavariable: $...URL
+        regex: (.*\$.*)
   paths:
     include:
     - '*.conf'

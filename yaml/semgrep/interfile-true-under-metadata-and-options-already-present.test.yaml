@@ -1,0 +1,111 @@
+rules:
+- id: libxml2-xxe-taint
+  message: >-
+    The application is using an XML parser that has not been safely configured. This might lead to XML
+    External Entity (XXE) vulnerabilities when parsing user-controlled input. An attacker can include
+    document type definitions (DTDs) which can interact with internal or external hosts. XXE can lead
+    to other vulnerabilities, such as Local File Inclusion (LFI), Remote Code Execution (RCE), and Server-side
+    request forgery (SSRF), depending on the application configuration. An attacker can also use DTDs
+    to expand recursively, leading to a Denial-of-Service (DoS) attack, also known as a `Billion Laughs
+    Attack`. The best defense against XXE is to have an XML parser that supports disabling DTDs. Limiting
+    the use of external entities from the start can prevent the parser from being used to process untrusted
+    XML files. Reducing dependencies on external resources is also a good practice for performance reasons.
+    It is difficult to guarantee that even a trusted XML file on your server or during transmission has
+    not been tampered with by a malicious third-party. 
+  severity: ERROR
+  options:
+    # ruleid: interfile-true-under-metadata-and-options-already-present
+    symbolic_propagation: true
+  metadata:
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+    interfile: true
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe2020-top25: true
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+    technology:
+    - go
+    - libxml2
+    - go
+    - go-net/http
+    - gin
+    - gin-gonic/gin
+  languages:
+  - go
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          ($REQ : http.Request).$FIELD
+      - pattern: |
+          ($REQ : *http.Request).$FIELD
+    - metavariable-regex:
+        metavariable: $FIELD
+        regex: 
+          ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|Header|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|URL|UserAgent)$
+  - patterns:
+    - pattern-inside: |
+        import "github.com/gin-gonic/gin"
+        ...
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              ($CONTEXT : gin.Context).$FIELD
+          - pattern: |
+              ($CONTEXT : *gin.Context).$FIELD
+        - metavariable-regex:
+            metavariable: $FIELD
+            regex: 
+              ^(Cookie|DefaultPostForm|DefaultQuery|FormFile|GetHeader|GetPostForm|GetPostFormArray|GetPostFormMap|GetQuery|GetQueryArray|GetQueryMap|GetRawData|MultipartForm|Param|Params|PostForm|PostFormArray|PostFormMap|Query|QueryArray|QueryMap)$
+      - pattern-either:
+        - pattern: |
+            ($CONTEXT : gin.Context).Request.URL.Query().Get(...)
+        - pattern: |
+            ($CONTEXT : *gin.Context).Request.URL.Query().Get(...)
+  pattern-sinks:
+  - patterns:
+    - patterns:
+      - pattern-inside: |
+          import "$IMPORT"
+          ...
+      - metavariable-regex:
+          metavariable: $IMPORT
+          regex: (.*lestrrat-go/libxml2.*)
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              $P = parser.New($OPTS)
+              ...
+          - pattern: |
+              $P.$PARSE($INPUT)
+        - pattern: |
+            parser.New($OPTS).$PARSE($INPUT)
+        - pattern: |
+            NewCtxt($INPUT, $OPTS)
+      - focus-metavariable: $INPUT
+      - metavariable-regex:
+          metavariable: $PARSE
+          regex: ^(Parse|ParseHTML|ParseHTMLReader|ParseHTMLString|ParseReader|ParseString)$
+      - metavariable-pattern:
+          metavariable: $OPTS
+          patterns:
+          - pattern-either:
+            - pattern: |
+                XMLParseNoEnt
+            - pattern: |
+                parser.XMLParseNoEnt
+
