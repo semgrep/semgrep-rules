@@ -31,7 +31,7 @@ fn get_xml_string() -> String {
     )
 }
 
-//todoruleid: xpath-injection
+//ruleid: xpath-injection
 fn login(username: &str, password: &str) -> Result<(), Box<dyn Error>> {
     let query = format!(
         "//Employee[UserName/text()='{username}' and Password/text()='{password}']",

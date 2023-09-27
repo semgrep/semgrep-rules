@@ -1,6 +1,6 @@
 use std::process::Command;
 
-//todoruleid: command-injection
+//ruleid: command-injection
 fn main() {
     let get_args = requests::get("http://example.org/get").unwrap();
 
