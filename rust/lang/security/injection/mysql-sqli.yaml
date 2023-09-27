@@ -22,22 +22,22 @@ rules:
           - patterns:
               - pattern: |
                   $CONN.query_first($QUERY)
-              - pattern-either:
-                  - pattern-inside: |
-                      $QUERY = $X + $Y
-                      ...
-                  - pattern-inside: |
-                      $QUERY += $X
-                      ...
-                  - pattern-inside: |
-                      $QUERY = format!($PARAM1, ...)
-                      ...
-              - pattern-not-inside: |
-                  $QUERY += "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = "..." + "..."
-                  ...
+#              - pattern-either: //bug by semgrep https://github.com/returntocorp/semgrep-rules/issues/3128
+#                  - pattern-inside: |
+#                      $QUERY = $X + $Y
+#                      ...
+#                  - pattern-inside: |
+#                      $QUERY += $X
+#                      ...
+#                  - pattern-inside: |
+#                      $QUERY = format!($PARAM1, ...)
+#                      ...
+#              - pattern-not-inside: |
+#                  $QUERY += "..."
+#                  ...
+#              - pattern-not-inside: |
+#                  $QUERY = "..." + "..."
+#                  ...
           - pattern: $CONN.query_first($X + $Y)
           - pattern: $CONN.query_first(format!("...", $PARAM1, ...))
 

@@ -22,22 +22,22 @@ rules:
           - patterns:
               - pattern: |
                   sqlx::query!($QUERY)
-              - pattern-either:
-                  - pattern-inside: |
-                      $QUERY = $X + $Y
-                      ...
-                  - pattern-inside: |
-                      $QUERY += $X
-                      ...
-                  - pattern-inside: |
-                      $QUERY = format!($PARAM1, ...)
-                      ...
-              - pattern-not-inside: |
-                  $QUERY += "..."
-                  ...
-              - pattern-not-inside: |
-                  $QUERY = "..." + "..."
-                  ...
+#              - pattern-either: //bug by semgrep https://github.com/returntocorp/semgrep-rules/issues/3128
+#                  - pattern-inside: |
+#                      $QUERY = $X + $Y
+#                      ...
+#                  - pattern-inside: |
+#                      $QUERY += $X
+#                      ...
+#                  - pattern-inside: |
+#                      $QUERY = format!($PARAM1, ...)
+#                      ...
+#              - pattern-not-inside: |
+#                  $QUERY += "..."
+#                  ...
+#              - pattern-not-inside: |
+#                  $QUERY = "..." + "..."
+#                  ...
           - pattern: sqlx::query!($X + $Y)
           - pattern: sqlx::query!(format!("...", $PARAM1, ...))
 

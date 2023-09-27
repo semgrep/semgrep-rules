@@ -15,8 +15,8 @@ struct PathParam {
 }
 
 // Blind resource injection from HTTP request query param
-#[get("/")]
 //ruleid: resource-injection
+#[get("/")]
 async fn index(params: web::Query<PathParam>) -> String {
     let mut path = PathBuf::from(SERVER_ROOT);
     path.push(params.path.clone());
