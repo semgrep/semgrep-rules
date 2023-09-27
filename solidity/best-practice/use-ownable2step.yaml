@@ -1,0 +1,25 @@
+rules:
+    - id: use-ownable2step
+      metadata:
+        category: best-practice
+        references:
+          - https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable2Step
+          - https://www.rareskills.io/post/openzeppelin-ownable2step
+        technology:
+          - solidity
+      message: >-
+        By demanding that the receiver of the owner permissions actively accept via a contract call of its own, 
+        `Ownable2Step` and `Ownable2StepUpgradeable` prevent the contract ownership from accidentally being transferred 
+        to an address that cannot handle it.
+      languages:
+        - solidity
+      severity: INFO
+      patterns:
+        - pattern-inside: |
+            contract $C is ...,$OWNABLE,... {
+              ...
+            }
+        - metavariable-regex:
+            metavariable: $OWNABLE
+            regex: (Ownable$|OwnableUpgradeable)
+        - focus-metavariable: $OWNABLE

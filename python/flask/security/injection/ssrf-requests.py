@@ -73,3 +73,20 @@ def subexpression():
 @app.route("/ok")
 def ok():
     requests.get("https://www.google.com")
+
+# Non-flask false positive check from https://github.com/returntocorp/semgrep-rules/issues/3053
+class GitlabApi(ScmApiBase):
+    @cachedmethod("cache")
+    @handle_errors
+    @tracer_wrap
+    def get_file(self, repo_name: str, commit_sha: str, file_path: str) -> str:
+        api_url = (
+            f"{self.base_url}/projects/{quote(repo_name, safe='')}/repository/files"
+        )
+        params = {"ref": commit_sha, "file_path": file_path}
+
+        # ok: ssrf-requests
+        response = requests.get(api_url, headers=self.headers, params=params)
+        code = response.json()["content"]
+        code = code.encode("utf-8").decode("base64").decode("utf-8")
+        return code                                         

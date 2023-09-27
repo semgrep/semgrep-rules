@@ -2,6 +2,8 @@ rules:
 - id: express-insecure-template-usage
   message: User data from `$REQ` is being compiled into the template, which can lead to a Server Side
     Template Injection (SSTI) vulnerability.
+  options:
+    interfile: true
   metadata:
     interfile: true
     category: security

@@ -1,0 +1,44 @@
+rules:
+    - id: unnecessary-checked-arithmetic-in-loop
+      message: >-
+        A lot of times there is no risk that the loop counter can overflow. 
+        Using Solidity's unchecked block saves the overflow checks.
+      metadata:
+        references:
+          - https://github.com/byterocket/c4-common-issues/blob/main/0-Gas-Optimizations.md/#g011---unnecessary-checked-arithmetic-in-for-loop
+        category: performance
+        technology:
+          - solidity
+      patterns:
+      - pattern-either:
+          - pattern-inside: |
+              for ($TYPE $VAR = ... ; ...; ...) {
+                ...
+              }
+          - pattern-inside: |
+              for ($TYPE $VAR = ...; ...) {
+                ...
+              }
+          - pattern-inside: |
+              for ($TYPE $VAR; ...; ...) {
+                ...
+              }
+          - pattern-inside: |
+              for ($TYPE $VAR; ...) {
+                ...
+              }
+      - pattern-either:
+          - pattern: |
+              $VAR++
+          - pattern: |
+              ++$VAR
+      - pattern-not-inside: |
+          unchecked {
+            ...
+            <... $VAR ...>;
+            ...
+          }
+      languages:
+        - solidity
+      severity: INFO
+  

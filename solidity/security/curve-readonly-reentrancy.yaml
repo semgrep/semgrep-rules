@@ -1,0 +1,70 @@
+rules:
+  - id: curve-readonly-reentrancy
+    message: $POOL.get_virtual_price() call on a Curve pool is not protected from the read-only reentrancy.
+    metadata:
+      category: security
+      technology:
+          - solidity
+      cwe: "CWE-841: Improper Enforcement of Behavioral Workflow"
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+          - vuln
+      references:
+        - https://chainsecurity.com/heartbreaks-curve-lp-oracles/
+        - https://chainsecurity.com/curve-lp-oracle-manipulation-post-mortem/
+    patterns:
+      - pattern: |
+          $POOL.get_virtual_price()
+      - pattern-not-inside: |
+          function $F(...) {
+            ...
+            $VAR.withdraw_admin_fees(...);
+            ...
+          }
+      - pattern-not-inside: |
+          function $F(...) {
+            ...
+            $VAR.withdraw_admin_fees(...);
+            ...
+          }
+      - pattern-not-inside: |
+          contract $C {
+            ...
+            function $CHECKFUNC(...) {
+              ...
+              $VAR.withdraw_admin_fees(...);
+              ...
+            }
+            ...
+            function $F(...) {
+              ...
+              $CHECKFUNC(...);
+              ...
+              $POOL.get_virtual_price();
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          contract $C {
+            ...
+            function $CHECKFUNC(...) {
+              ...
+              $VAR.withdraw_admin_fees(...);
+              ...
+            }
+            ...
+            function $F(...) {
+              ...
+              $POOL.get_virtual_price();
+              ...
+              $CHECKFUNC(...);
+              ...
+            }
+            ...
+          }
+    languages:
+      - solidity
+    severity: ERROR

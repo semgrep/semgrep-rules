@@ -1,4 +1,4 @@
-class bad_attr_accessible
+class Bad_attr_accessible
    include  ActiveModel::MassAssignmentSecurity
 
    # ruleid: model-attr-accessible
@@ -38,7 +38,7 @@ class bad_attr_accessible
    params.permit!
 end
 
-class ok_attr_accessible
+class Ok_attr_accessible
    # ok: model-attr-accessible
    attr_accessible :name, :address, :age,
                    :telephone, as: :create_params
