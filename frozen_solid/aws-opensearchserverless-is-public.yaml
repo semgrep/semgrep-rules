@@ -1,0 +1,54 @@
+rules:
+- id: aws-opensearchserverless-is-public
+  patterns:
+  - pattern-inside: |
+      resource "aws_opensearchserverless_security_policy" $ANYTHING {
+        ...
+        type =  "network"
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern: policy = $JSONPOLICY
+      - metavariable-pattern:
+          metavariable: $JSONPOLICY
+          language: json
+          pattern: |
+            {..., "AllowFromPublic":true, ... }
+    - patterns:
+      - pattern-inside: policy = jsonencode(...)
+      - pattern: |
+          {..., AllowFromPublic = true, ...}
+    - patterns:
+      - pattern-inside: policy = jsonencode([...])
+      - pattern: |
+          {..., AllowFromPublic = true, ...}
+    - patterns:
+      - pattern-inside: policy = jsonencode([...])
+      - pattern: "{..., \"AllowFromPublic\" : true, ...}                 \n"
+  message: The opensearch serverless collection is accessible from the public internet
+    using a public VPC endpoint.  To fix this, set your `AllowFromPublic` to `"false"`
+    and specify an internal VPC endpoint in `SourceVPCEs` .
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy#network-security-policy
+    - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-network.html
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+    source_rule_url: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-network.html
+  languages:
+  - hcl
+  severity: WARNING
