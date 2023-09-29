@@ -1,35 +1,32 @@
 rules:
-  - id: cors-regex-wildcard
-    message: "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
-    metadata:
-      cwe:
-        - "CWE-183: Permissive List of Allowed Inputs"
-      category: security
-      technology:
-        - cors
-      owasp:
-        - A04:2021 - Insecure Design
-      references:
-        - https://owasp.org/Top10/A04_2021-Insecure_Design
-      subcategory:
-        - audit
-      likelihood: LOW
-      impact: LOW
-      confidence: LOW
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-      vulnerability_class:
-        - Improper Validation
-    languages:
-      - ts
-    severity: WARNING
-    patterns:
-      - pattern-either:
-          - pattern: $CORS = [...,/$PATTERN/,...]
-          - pattern: $CORS = /$PATTERN/
-      - focus-metavariable: $PATTERN
-      - metavariable-regex:
-          metavariable: $PATTERN
-          regex: .+?(?<!\\).\..+(?<!\\)\..+
-      - metavariable-regex:
-          metavariable: $CORS
-          regex: (?i)cors
+- id: cors-regex-wildcard
+  message: "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
+  metadata:
+    cwe:
+    - 'CWE-183: Permissive List of Allowed Inputs'
+    category: security
+    technology:
+    - cors
+    owasp:
+    - A04:2021 - Insecure Design
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+  languages:
+  - ts
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: $CORS = [...,/$PATTERN/,...]
+    - pattern: $CORS = /$PATTERN/
+  - focus-metavariable: $PATTERN
+  - metavariable-regex:
+      metavariable: $PATTERN
+      regex: .+?(?<!\\).\..+(?<!\\)\..+
+  - metavariable-regex:
+      metavariable: $CORS
+      regex: (?i)cors
