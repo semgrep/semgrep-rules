@@ -1,28 +1,28 @@
 public class DMLNativeStatements {
     public void dmlInsert() {
         Account act = new Account(
-            // ok: apex.dml.dml-native-statements
+            // ok: dml-native-statements
             Name = 'insert'
         );
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         insert act;
     }
 
     public void databaseInsert() {
         Account act = new Account(
-            // ok: apex.dml.dml-native-statements
+            // ok: dml-native-statements
             Name = 'insert'
         );
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         Database.insert(act);
     }
 
     public void utilityInsert() {
         Account act = new Account(
-            // ok: apex.dml.dml-native-statements
+            // ok: dml-native-statements
             Name = 'insert'
         );
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         nFORCE.DMLUtility.insertObj(act);
     }
 
@@ -42,11 +42,11 @@ public class DMLNativeStatements {
             a.BillingCity = 'Mumbai';
         }
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         Account newAcct = new Account(Name = 'upsert', BillingCity = 'San Francisco');
         acctsList.add(newAcct);
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         upsert acctsList;
     }
 
@@ -66,11 +66,11 @@ public class DMLNativeStatements {
             a.BillingCity = 'Mumbai';
         }
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         Account newAcct = new Account(Name = 'upsert', BillingCity = 'San Francisco');
         acctsList.add(newAcct);
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         Database.upsert(acctsList);
     }
 
@@ -90,11 +90,11 @@ public class DMLNativeStatements {
             a.BillingCity = 'Mumbai';
         }
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         Account newAcct = new Account(Name = 'upsert', BillingCity = 'San Francisco');
         acctsList.add(newAcct);
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         nFORCE.DMLUtility.upsertObjs(acctsList);
     }
 
@@ -105,15 +105,15 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='update'
             LIMIT 1
         ];
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         updtAct.BillingCity = 'update';
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         update updtAct;
     }
 
@@ -124,15 +124,15 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='update'
             LIMIT 1
         ];
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         updtAct.BillingCity = 'update';
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         Database.update(updtAct);
     }
 
@@ -143,15 +143,15 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='update'
             LIMIT 1
         ];
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         updtAct.BillingCity = 'update';
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         nFORCE.DMLUtility.updateObj(updtAct);
     }
 
@@ -162,12 +162,12 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='delete'
             LIMIT 1
         ];
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         delete dltAct;
     }
 
@@ -178,12 +178,12 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='delete'
             LIMIT 1
         ];
 
-        // ruleid: apex.dml.dml-native-statements
+        // ruleid: dml-native-statements
         Database.delete(dltAct);
     }
 
@@ -194,12 +194,12 @@ public class DMLNativeStatements {
             FROM
                 Account
             WHERE
-                // ok: apex.dml.dml-native-statements
+                // ok: dml-native-statements
                 Name='delete'
             LIMIT 1
         ];
 
-        // ok: apex.dml.dml-native-statements
+        // ok: dml-native-statements
         nFORCE.DMLUtility.deleteObj(dltAct);
     }
 }

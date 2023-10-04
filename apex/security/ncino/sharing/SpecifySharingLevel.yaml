@@ -1,18 +1,24 @@
 rules:
-  - id: apex.sharing.specify-sharing-level
+  - id: specify-sharing-level
+    min-version: 1.40.0
     severity: WARNING
     languages:
       - apex
     metadata:
       cwe:
-      - CWE-284 - Improper Access Controla https://cwe.mitre.org/data/definitions/284.html
+      - 'CWE-284: Improper Access Control'
       owasp:
-      - A04:2021 - Insecure Design https://owasp.org/Top10/A04_2021-Insecure_Design/
+      - A04:2021 - Insecure Design
       references:
       - https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_keywords_sharing.htm
+      - https://cwe.mitre.org/data/definitions/284.html
+      - https://owasp.org/Top10/A04_2021-Insecure_Design/
       category: security
-      subcategory: sharing
+      subcategory: vuln
       technology: salesforce
+      impact: MEDIUM
+      likelihood: MEDIUM
+      confidence: HIGH
     message: >-
         Every Apex class should have an explicit sharing mode declared. Use the `with sharing`
         or `without sharing` keywords on a class to specify whether sharing rules must be enforced.

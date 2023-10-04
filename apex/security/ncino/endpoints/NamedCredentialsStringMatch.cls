@@ -8,7 +8,7 @@ public with sharing class NamedCredentialsStringMatch {
 
 		Blob headerValue = Blob.valueOf(username + ':' + password);
 		String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
-		// ruleid: apex.endpoints.named-credentials.string-match
+		// ruleid: named-credentials-string-match
 		req.setHeader('Authorization', authorizationHeader);
 		req.setEndpoint('https://www.website.com');
 
@@ -18,7 +18,7 @@ public with sharing class NamedCredentialsStringMatch {
 	public void calloutWithNamedCredential() {
 		HttpRequest req = new HttpRequest();
 
-		// ok: apex.endpoints.named-credentials.string-match
+		// ok: named-credentials-string-match
 		req.setEndpoint('callout:My_Named_Credential/some_path');
 
 		HTTPResponse res = new Http().send(req);

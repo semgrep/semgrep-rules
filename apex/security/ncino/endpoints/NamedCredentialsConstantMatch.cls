@@ -8,7 +8,7 @@ public with sharing class NamedCredentialsConstantMatch {
 
 		Blob headerValue = Blob.valueOf('someUsername:somePasswod');
 		String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
-		// ruleid: apex.endpoints.named-credentials.constant-match
+		// ruleid: named-credentials-constant-match
 		req.setHeader(AUTHORIZATION_HEADER, authorizationHeader);
 		req.setEndpoint('https://www.website.com');
 
@@ -18,7 +18,7 @@ public with sharing class NamedCredentialsConstantMatch {
 	public void calloutWithNamedCredential() {
 		HttpRequest req = new HttpRequest();
 
-		// ok: apex.endpoints.named-credentials.constant-match
+		// ok: named-credentials-constant-match
 		req.setEndpoint('callout:My_Named_Credential/some_path');
 
 		HTTPResponse res = new Http().send(req);

@@ -1,14 +1,22 @@
 rules:
-  - id: apex.encryption.bad-crypto
+  - id: bad-crypto
+    min-version: 1.40.0
     severity: ERROR
     languages:
       - apex
     metadata:
       cwe:
-      - CWE-321 Use of Hard-coded Cryptographic Key https://cwe.mitre.org/data/definitions/321.html
+      - 'CWE-321: Use of Hard-coded Cryptographic Key'
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      impact: HIGH
+      likelihood: LOW
+      confidence: LOW
       category: security
-      subcategory: encryption
+      subcategory: audit
       technology: salesforce
+      references:
+      - https://cwe.mitre.org/data/definitions/321.html
     message: >-
       The rule makes sure you are using randomly generated IVs and keys
       for Crypto calls. Hard-coding these values greatly compromises the

@@ -1,18 +1,25 @@
 rules:
-  - id: apex.dml.dml-native-statements
+  - id: dml-native-statements
+    min-version: 1.40.0
     severity: WARNING
     languages:
       - apex
     metadata:
       cwe:
-      - CWE-863 Incorrect Authorization https://cwe.mitre.org/data/definitions/863.html
+      - 'CWE-863: Incorrect Authorization'
       owasp:
-      - A04:2021 - Insecure Design https://owasp.org/Top10/A04_2021-Insecure_Design/
+      - A01:2021 - Broken Access Control
+      - A04:2021 - Insecure Design
+      impact: HIGH
+      likelihood: LOW
+      confidence: LOW
+      category: security
+      subcategory: audit
+      technology: salesforce
       references:
       - https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_dml_section.htm
-      category: security
-      subcategory: authorization
-      technology: salesforce
+      - https://cwe.mitre.org/data/definitions/863.html
+      - https://owasp.org/Top10/A04_2021-Insecure_Design/
     message: >-
       Native Salesforce DML operations execute in system context, ignoring the current user's permissions,
       field-level security, organization-wide defaults, position in the role hierarchy, and sharing rules.

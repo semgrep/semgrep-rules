@@ -1,13 +1,23 @@
 rules:
-  - id: apex.injection.soql-injection.unescaped-url-param
+  - id: soql-injection-unescaped-url-param
+    min-version: 1.40.0
     mode: taint
     severity: ERROR
     languages:
       - apex
     metadata:
       category: security
-      subcategory: injection
+      subcategory: vuln
       technology: salesforce
+      cwe:
+      - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+      owasp:
+      - A03:2021 - Injection
+      references:
+      - https://cwe.mitre.org/data/definitions/943.html
+      impact: HIGH
+      likelihood: HIGH
+      confidence: HIGH
     message: >-
       If a dynamic query must be used,leverage nFORCE Query Builder.
       In other programming languages, the related flaw is known as SQL injection.

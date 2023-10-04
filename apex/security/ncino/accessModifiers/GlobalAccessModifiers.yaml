@@ -1,14 +1,16 @@
 rules:
-  - id: apex.accessModifiers.global-access-modifiers
+  - id: global-access-modifiers
+    min-version: 1.40.0
     severity: WARNING
     languages:
       - apex
     metadata:
       cwe:
-      - CWE-284 Improper Access Control https://cwe.mitre.org/data/definitions/284.html
+      - 'CWE-284: Improper Access Control'
       category: best-practice
-      subcategory: access control
       technology: salesforce
+      references:
+      - https://cwe.mitre.org/data/definitions/284.html
     message: >-
       Global classes, methods, and variables should be avoided (especially in managed packages) as they can
       never be deleted or changed in signature. Always check twice if something needs to be global.
