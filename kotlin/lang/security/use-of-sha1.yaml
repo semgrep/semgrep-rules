@@ -29,7 +29,11 @@ rules:
     impact: MEDIUM
     confidence: MEDIUM
   pattern-either:
-  - pattern: |
-      $VAR = $MD.getInstance("SHA1")
+  - patterns:
+    - pattern: |
+        $VAR = $MD.getInstance("$ALGO")
+    - metavariable-regex:
+        metavariable: $ALGO
+        regex: (SHA1|SHA-1)
   - pattern: |
       $DU.getSha1Digest().digest(...)
