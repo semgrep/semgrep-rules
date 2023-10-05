@@ -9,7 +9,10 @@ rules:
       - 'CWE-489: Active Debug Code'
       - 'CWE-779: Logging of Excessive Data'
       category: security
-      technology: vuln
+      subcategory:
+      - vuln
+      technology:
+      - vuln
       references:
       - https://cwe.mitre.org/data/definitions/489.html
       - https://cwe.mitre.org/data/definitions/779.html
@@ -20,8 +23,7 @@ rules:
       In addition to debug statements potentially logging data excessively, debug statements
       also contribute to longer transactions and consume Apex CPU time even when debug logs
       are not being captured.
-    patterns:
-      - pattern: System.debug(...)
+    pattern: System.debug(...)
     paths:
       exclude:
         - "*Test*"

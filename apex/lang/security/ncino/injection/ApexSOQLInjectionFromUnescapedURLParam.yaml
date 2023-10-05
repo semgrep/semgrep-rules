@@ -7,8 +7,10 @@ rules:
       - apex
     metadata:
       category: security
-      subcategory: vuln
-      technology: salesforce
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
       cwe:
       - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
       owasp:
@@ -30,8 +32,7 @@ rules:
       the application into performing unintended commands.
     pattern-sources:
       - by-side-effect: true
-        patterns:
-          - pattern: ApexPage.getCurrentPage().getParameters.get($URLPARAM);
+        pattern: ApexPage.getCurrentPage().getParameters.get($URLPARAM);
     pattern-sanitizers:
       - pattern: String.escapeSingleQuotes(...)
     pattern-sinks:
