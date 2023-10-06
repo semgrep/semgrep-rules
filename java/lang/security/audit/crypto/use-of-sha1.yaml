@@ -30,7 +30,11 @@ rules:
     impact: MEDIUM
     confidence: HIGH
   pattern-either:
-  - pattern: |
-      java.security.MessageDigest.getInstance("SHA1", ...);
+  - patterns:
+    - pattern: |
+        java.security.MessageDigest.getInstance("$ALGO", ...);
+    - metavariable-regex:
+        metavariable: $ALGO
+        regex: (SHA1|SHA-1)
   - pattern: |
       $DU.getSha1Digest().digest(...)

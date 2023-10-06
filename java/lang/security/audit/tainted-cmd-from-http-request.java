@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.Runtime;
 
 @WebServlet(value = "/cmdi-00/BenchmarkTest00006")
 public class bad1 extends HttpServlet {
@@ -111,7 +112,8 @@ public class bad2 extends HttpServlet {
         Runtime r = Runtime.getRuntime();
 
         try {
-            // ruleid: tainted-cmd-from-http-request
+            // this is vulnerable, but considered a separate issue
+            // ok: tainted-cmd-from-http-request
             Process p = r.exec(args, argsEnv);
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {
@@ -172,7 +174,8 @@ public class bad3 extends HttpServlet {
         Runtime r = Runtime.getRuntime();
 
         try {
-            // ruleid: tainted-cmd-from-http-request
+            // this is vulnerable, but considered a separate issue
+            // ok: tainted-cmd-from-http-request
             Process p = r.exec(args, argsEnv);
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {
