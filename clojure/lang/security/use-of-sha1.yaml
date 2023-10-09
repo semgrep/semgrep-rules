@@ -1,0 +1,35 @@
+rules:
+  - id: use-of-sha1
+    languages:
+      - clojure
+    severity: WARNING
+    message: >-
+      Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+      collision resistant and is therefore not suitable as a cryptographic
+      signature. Instead, use PBKDF2 for password hashing
+      or SHA256 or SHA512 for other hash function applications.
+    metadata:
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+        - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+      technology:
+        - clojure
+      owasp:
+        - A03:2017 - Sensitive Data Exposure
+        - A02:2021 - Cryptographic Failures
+      cwe:
+        - "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+        - "CWE-328: Use of Weak Hash"
+      category: security
+      subcategory:
+        - vuln
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+    patterns:
+      - pattern-either:
+        - pattern: (MessageDigest/getInstance $ALGO)
+        - pattern: (java.security.MessageDigest/getInstance $ALGO)
+      - metavariable-regex:
+          metavariable: $ALGO
+          regex: (((org\.apache\.commons\.codec\.digest\.)?MessageDigestAlgorithms/)?"?(SHA-1|SHA1)"?)
