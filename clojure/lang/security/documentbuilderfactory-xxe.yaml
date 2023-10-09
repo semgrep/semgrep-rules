@@ -1,0 +1,68 @@
+rules:
+  - id: documentbuilderfactory-xxe
+    languages:
+      - clojure
+    severity: ERROR
+    metadata:
+      cwe:
+      - 'CWE-611: Improper Restriction of XML External Entity Reference'
+      owasp:
+      - A04:2017 - XML External Entities (XXE)
+      - A05:2021 - Security Misconfiguration
+      asvs:
+        section: V5 Validation, Sanitization and Encoding
+        control_id: 5.5.2 Insecue XML Deserialization
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+        version: '4'
+      references:
+      - https://semgrep.dev/blog/2022/xml-security-in-java
+      - https://semgrep.dev/docs/cheat-sheets/java-xxe/
+      - https://xerces.apache.org/xerces2-j/features.html
+      source-rule-url: https://github.com/clj-holmes/clj-holmes-rules/blob/main/security/xxe-clojure-xml/xxe-clojure-xml.yml
+      category: security
+      technology:
+      - clojure
+      - xml
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+      - vuln
+      likelihood: LOW
+      impact: HIGH
+      confidence: HIGH
+    message: >-
+      DOCTYPE declarations are enabled for javax.xml.parsers.SAXParserFactory.
+      Without prohibiting external entity declarations, this is vulnerable to XML external entity attacks.
+      Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl" to true.
+      Alternatively, allow DOCTYPE declarations and only prohibit external entities declarations.
+      This can be done by setting the features "http://xml.org/sax/features/external-general-entities" and
+      "http://xml.org/sax/features/external-parameter-entities" to false.
+    patterns:
+      - pattern-inside: |
+          (ns ... (:require [clojure.xml :as ...]))
+          ...
+      - pattern-either:
+          - pattern-inside: |
+              (def ... ... ( ... ))
+          - pattern-inside: |
+              (defn ... ... ( ... ))
+      - pattern-either:
+        - pattern: (clojure.xml/parse $INPUT)
+        - patterns:
+          - pattern-inside: |
+              (doto (javax.xml.parsers.SAXParserFactory/newInstance) ...)
+          - pattern: (.setFeature "http://apache.org/xml/features/disallow-doctype-decl" false)
+          - pattern-not-inside: |
+              (doto (javax.xml.parsers.SAXParserFactory/newInstance)
+                ...
+                (.setFeature "http://xml.org/sax/features/external-general-entities" false)
+                ...
+                (.setFeature "http://xml.org/sax/features/external-parameter-entities" false)
+                ...)
+          - pattern-not-inside: |
+              (doto (javax.xml.parsers.SAXParserFactory/newInstance)
+                ...
+                (.setFeature "http://xml.org/sax/features/external-parameter-entities" false)
+                ...
+                (.setFeature "http://xml.org/sax/features/external-general-entities" false)
+                ...)
