@@ -8,6 +8,6 @@ public class UseAssertClass {
 	// ruleid: use-assert-class
 	System.assertNotEquals(1,1);
 
-	// ok: assert-class
+	// ok: use-assert-class
 	Assert.areEqual(1,1);
 }
