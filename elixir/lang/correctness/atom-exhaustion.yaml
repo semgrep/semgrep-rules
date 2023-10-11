@@ -1,0 +1,19 @@
+rules:
+  - id: atom_exhaustion
+    message: >-
+      Atom values are appended to a global table but never removed. If input is user-controlled, dynamic instantiations such as `String.to_atom` or `List.to_atom` can lead to possible memory leaks. Instead, use `String.to_existing_atom` or `List.to_existing_atom`.
+    severity: ERROR
+    languages:
+      - elixir
+    patterns:
+      - pattern: $MODULE.to_atom($STRING)
+      - metavariable-regex:
+          metavariable: $MODULE
+          regex: ^(String|List)$
+    fix: $MODULE.to_existing_atom($STRING)
+    metadata:
+      references:
+        - https://erlef.github.io/security-wg/secure_coding_and_deployment_hardening/atom_exhaustion.html
+      category: correctness
+      technology:
+        - elixir

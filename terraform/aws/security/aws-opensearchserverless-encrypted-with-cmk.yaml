@@ -1,0 +1,45 @@
+rules:
+  - id: aws-opensearchserverless-encrypted-with-cmk
+    patterns:
+      - pattern-inside: |
+          resource "aws_opensearchserverless_security_policy" $ANYTHING {
+            ...
+            type =  "encryption"
+            ...
+          }
+      - pattern-either:
+          - patterns:
+              - pattern: policy = "$JSONPOLICY"
+              - metavariable-pattern:
+                  metavariable: $JSONPOLICY
+                  language: json
+                  pattern: |
+                    {..., "AWSOwnedKey":true, ... }
+          - patterns:
+              - pattern-inside: policy = jsonencode(...)
+              - pattern: |
+                  {..., AWSOwnedKey = true, ...}
+    message: Ensure opensearch serverless is encrypted at rest using AWS KMS (Key
+      Management Service) CMK (Customer Managed Keys). CMKs give you control
+      over the encryption key in terms of access and rotation.
+    languages:
+      - terraform
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - vuln
+      cwe:
+        - "CWE-320: CWE CATEGORY: Key Management Errors"
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: LOW
+      source_rule_url: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-encryption.html#serverless-encryption-policies
+      references:
+        - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-encryption.html#serverless-encryption-policies
+      technology:
+        - terraform
+        - aws
+      owasp:
+        - A2:2021 Cryptographic Failures
+        - A5:2021 Security Misconfiguration

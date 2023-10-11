@@ -1,0 +1,108 @@
+rules:
+  - id: accessible-selfdestruct
+    severity: ERROR
+    languages:
+      - solidity
+    message: Contract can be destructed by anyone in $FUNC
+    metadata:
+      category: security
+      technology:
+        - solidity
+      cwe: "CWE-284: Improper Access Control"
+      confidence: LOW
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      references: 
+        - https://www.parity.io/blog/a-postmortem-on-the-parity-multi-sig-library-self-destruct/
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - focus-metavariable:
+            - $ADDR
+        - pattern-either:
+            - pattern: function $FUNC(..., address $ADDR, ...) external { ... }
+            - pattern: function $FUNC(..., address $ADDR, ...) public { ... }
+        - pattern-not: function $FUNC(...) $MODIFIER { ... }
+        - pattern-not: function $FUNC(...) $MODIFIER(...) { ... }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              require(<... msg.sender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              assert(<... msg.sender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              require(<... _msgSender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              assert(<... _msgSender ...>, ...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              if (<... msg.sender ...>) {
+                ...
+              }
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              if (<... _msgSender ...>) {
+                ...
+              }
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              onlyOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              requireOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              _requireOwnership(...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              $C._enforceIsContractOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              $C._enforceOwner(...);
+              ...
+            }
+        - pattern-not: |
+            function $FUNC(...) {
+              ...
+              $C.enforceIsContractOwner(...);
+              ...
+            }
+    pattern-sinks:
+      - pattern-either:
+        - pattern: selfdestruct(...);
+        - pattern: suicide(...);

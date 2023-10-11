@@ -1,0 +1,41 @@
+rules:
+  - id: array-length-outside-loop
+    message: Caching the array length outside a loop saves reading it on each
+      iteration, as long as the array's length is not changed during the loop.
+    metadata:
+      references:
+        - https://github.com/byterocket/c4-common-issues/blob/main/0-Gas-Optimizations.md/#g002---cache-array-length-outside-of-loop
+      category: performance
+      technology:
+        - solidity
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              for (...) {
+                ...
+              }
+          - pattern-inside: |
+              while (...) {
+                ...
+              }
+      - pattern-not-inside: |
+          function $F(..., $TYPE calldata $VAR, ...) {
+            ...
+          }
+      - pattern-not-inside: |
+          function $F(...) {
+            ...
+            $TYPE[...] storage $VAR;
+            ...
+          }
+      - pattern-not-inside: |
+          function $F(...) {
+            ...
+            $TYPE[...] storage $VAR = ...;
+            ...
+          }
+      - pattern: |
+          $VAR.length
+    languages:
+      - solidity
+    severity: INFO

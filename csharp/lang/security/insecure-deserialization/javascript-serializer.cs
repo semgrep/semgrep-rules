@@ -11,6 +11,11 @@ namespace InsecureDeserialization
                 // ruleid: insecure-javascriptserializer-deserialization
                 var serializer = new JavaScriptSerializer(new SimpleTypeResolver());
                 serializer.DeserializeObject(json);
+
+                var resolver = new SimpleTypeResolver()
+                // ruleid: insecure-javascriptserializer-deserialization
+                var serializer2 = new JavaScriptSerializer(resolver);
+                serializer2.DeserializeObject(json);
             }
             catch (Exception e)
             {

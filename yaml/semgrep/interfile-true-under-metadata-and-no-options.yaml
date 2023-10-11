@@ -1,0 +1,35 @@
+rules:
+  - id: interfile-true-under-metadata-and-no-options
+    message: "`interfile: true` should be under the `options` field, not the
+      `metadata` field."
+    languages:
+      - yaml
+    severity: WARNING
+    patterns:
+      - pattern: |
+          rules:
+            - id: $ID
+              ...
+              $METADATA:
+                ...
+                $INTERFILE: true
+                ...
+              ...
+      - pattern-not-inside: |
+          rules:
+            - id: $ID
+              ...
+              options:
+                ...
+              ...
+      - metavariable-regex:
+          metavariable: $INTERFILE
+          regex: interfile
+      - metavariable-regex:
+          metavariable: $METADATA
+          regex: metadata
+      - focus-metavariable: $METADATA
+    fix: |
+      options:
+          interfile: true
+        metadata

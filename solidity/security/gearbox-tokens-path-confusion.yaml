@@ -1,0 +1,23 @@
+rules:
+ -
+    id: gearbox-tokens-path-confusion
+    message: UniswapV3 adapter implemented incorrect extraction of path parameters
+    metadata:
+        category: security
+        technology:
+          - solidity
+        cwe: "CWE-1285: Improper Validation of Specified Index, Position, or Offset in Input"
+        confidence: LOW
+        likelihood: LOW
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://medium.com/@nnez/different-parsers-different-results-acecf84dfb0c
+        - https://etherscan.io/address/0xbA7B57D7E4d4A7516FC1CbfF1CA5182eBC0c1491
+    patterns:
+     - pattern: $PATH.toAddress($PATH.length - $ADDR_SIZE);
+    languages: 
+     - solidity
+    severity: WARNING
+

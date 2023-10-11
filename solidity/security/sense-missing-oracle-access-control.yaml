@@ -1,0 +1,52 @@
+rules:
+-
+  id: sense-missing-oracle-access-control
+  message: Oracle update is not restricted in $F()
+  metadata:
+    category: security
+    technology:
+        - solidity
+    cwe: "CWE-284: Improper Access Control"
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    subcategory:
+        - vuln
+    author: https://twitter.com/ArbazKiraak
+    references:
+      - https://medium.com/immunefi/sense-finance-access-control-issue-bugfix-review-32e0c806b1a0
+  patterns:
+    - pattern-either:
+        - pattern-inside: |
+            function $F(...,$D $REQUEST,...) external {
+                ...
+            }
+        - pattern-inside: |
+            function $F(...,$D $REQUEST,...) public {
+                ...
+            }
+    - pattern-not-inside: |
+        function $F(...,$D $REQUEST,...) external onlyVault(...) {
+            ...
+        }
+    - patterns:
+        - pattern: _updateOracle($LASTBLOCK,...,...)
+        - pattern-not-inside: | # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
+            ...
+            if (msg.sender == $BALANCER) { ... }
+            ...
+        - pattern-not-inside: | # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
+            ...
+            require(msg.sender == address($BALANCER),...);
+            ...
+        - pattern-not-inside: | # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
+            ...
+            if (_msgSender() == $BALANCER) { ... }
+            ...
+        - pattern-not-inside: | # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
+            ...
+            require(_msgSender() == address($BALANCER),...);
+            ...
+  languages:
+    - solidity
+  severity: ERROR

@@ -43,9 +43,14 @@ rules:
         - pattern: |
             java.net.URLDecoder.decode($PARAM, ...)
   pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: (HttpServletRequest $REQ).getSession().$FUNC(...);
+    - patterns:
+        - pattern: (HttpServletRequest $REQ).getSession().$FUNC($NAME, $VALUE);
+        - metavariable-regex:
+            metavariable: $FUNC
+            regex: ^(putValue|setAttribute)$
+        - focus-metavariable: $VALUE
+  options:
+    interfile: true
   metadata:
     category: security
     technology:
@@ -61,3 +66,4 @@ rules:
     impact: MEDIUM
     likelihood: MEDIUM
     confidence: MEDIUM
+    interfile: true

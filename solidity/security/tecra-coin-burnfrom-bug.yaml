@@ -1,0 +1,31 @@
+rules:
+ -
+    id: tecra-coin-burnfrom-bug
+    message: Parameter "from" is checked at incorrect position in "_allowances" mapping
+    metadata:
+        category: security
+        technology:
+            - solidity
+        cwe: "CWE-688: Function Call With Incorrect Variable or Reference as Argument"
+        confidence: MEDIUM
+        likelihood: HIGH
+        impact: HIGH
+        subcategory:
+            - vuln
+        references:
+        - https://twitter.com/Mauricio_0218/status/1490082073096462340
+        - https://etherscan.io/address/0xe38b72d6595fd3885d1d2f770aa23e94757f91a1
+    patterns:
+        - pattern-inside: |
+            function $BURN(..., address $FROM, ...) {
+                ...
+                _burn($FROM, ...);
+                ...
+            }
+        - pattern-either:
+            - pattern: require(_allowances[$S][$FROM] >= $X, ...)
+            - pattern: require(allowance($S, $FROM) >= $X, ...)
+    languages: 
+    - solidity
+    severity: ERROR
+
