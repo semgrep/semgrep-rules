@@ -2,6 +2,8 @@ rules:
 - id: use-of-rc2
   pattern: $CIPHER.getInstance("RC2") 
   metadata:
+    functional-categories:
+      - 'crypto::search::symmetric-algorithm'
     cwe:
     - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp:
