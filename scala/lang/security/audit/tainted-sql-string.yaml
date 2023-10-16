@@ -76,7 +76,9 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - patterns:
-      - pattern: $LOGGER.$METHOD(...)
+      - pattern-either:
+        - pattern: $LOGGER.$METHOD(...)
+        - pattern: $LOGGER(...)
       - metavariable-regex:
           metavariable: $LOGGER
           regex: (i?)log.*
