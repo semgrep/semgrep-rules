@@ -4,9 +4,9 @@ resource "aws_lambda_function" "forward_to_sns" {
   timeout       = 120
   package_type  = "Image"
   image_uri     = "image/goes/here"
-  # ruleid: aws-lambda-redundant-field-with-image
+  # ruleid: lambda-redundant-field-with-image
   handler       = "main.lambda_handler"
-  # ruleid: aws-lambda-redundant-field-with-image
+  # ruleid: lambda-redundant-field-with-image
   runtime       = "python3.9"
 
   environment {
@@ -24,7 +24,7 @@ resource "aws_lambda_function" "forward_to_sns" {
   timeout       = 120
   package_type  = "Image"
   image_uri     = "image/goes/here"
-  # ruleid: aws-lambda-redundant-field-with-image
+  # ruleid: lambda-redundant-field-with-image
   handler       = "main.lambda_handler"
 
   environment {
@@ -42,7 +42,7 @@ resource "aws_lambda_function" "forward_to_sns" {
   timeout       = 120
   package_type  = "Image"
   image_uri     = "image/goes/here"
-  # ruleid: aws-lambda-redundant-field-with-image
+  # ruleid: lambda-redundant-field-with-image
   runtime       = "python3.9"
 
   environment {
@@ -59,7 +59,7 @@ resource "aws_lambda_function" "forward_to_sns" {
   role          = aws_iam_role.lambda_to_sns.arn
   timeout       = 120
   package_type  = "Image"
-  # ok: aws-lambda-redundant-field-with-image
+  # ok: lambda-redundant-field-with-image
   image_uri     = "image/goes/here"
 
   environment {
@@ -77,9 +77,9 @@ resource "aws_lambda_function" "forward_to_sns" {
   timeout       = 120
   package_type  = "Zip"
   image_uri     = "image/goes/here"
-  # ok: aws-lambda-redundant-field-with-image
+  # ok: lambda-redundant-field-with-image
   handler       = "main.lambda_handler"
-  # ok: aws-lambda-redundant-field-with-image
+  # ok: lambda-redundant-field-with-image
   runtime       = "python3.9"
 
   environment {
@@ -97,9 +97,9 @@ resource "aws_lambda_function" "forward_to_sns" {
   role          = aws_iam_role.lambda_to_sns.arn
   timeout       = 120
   image_uri     = "image/goes/here"
-  # ok: aws-lambda-redundant-field-with-image
+  # ok: lambda-redundant-field-with-image
   handler       = "main.lambda_handler"
-  # ok: aws-lambda-redundant-field-with-image
+  # ok: lambda-redundant-field-with-image
   runtime       = "python3.9"
 
   environment {
