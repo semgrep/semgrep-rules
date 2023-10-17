@@ -2,6 +2,8 @@ rules:
 - id: gcm-detection
   metadata:
     category: security
+    functional-categories:
+      - 'crypto::search::randomness::javax.crypto'
     cwe:
     - 'CWE-323: Reusing a Nonce, Key Pair in Encryption'
     references:
@@ -11,10 +13,10 @@ rules:
     owasp:
     - A02:2021 - Cryptographic Failures
     subcategory:
-    - vuln
+    - audit
     likelihood: MEDIUM
     impact: MEDIUM
-    confidence: HIGH
+    confidence: LOW
   languages:
   - java
   message: >-
