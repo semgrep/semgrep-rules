@@ -7,13 +7,13 @@ def tests(token):
     # ruleid:unverified-jwt-decode
     jwt.decode(encoded, key, options={"verify_signature": False})
 
-    opts = {"verify_signature": False}
     # ruleid:unverified-jwt-decode
+    opts = {"verify_signature": False}
     jwt.decode(encoded, key, options=opts)
 
     a_false_boolean = False
-    opts2 = {"verify_signature": a_false_boolean}
     # ruleid:unverified-jwt-decode
+    opts2 = {"verify_signature": a_false_boolean}
     jwt.decode(encoded, key, options=opts2)
 
     # ok:unverified-jwt-decode
