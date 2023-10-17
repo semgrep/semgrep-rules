@@ -1,0 +1,26 @@
+rules:
+- id: subscription-filter-missing-depends
+  severity: WARNING
+  languages: [hcl]
+  message: 'The `aws_cloudwatch_log_subscription_filter` resource "$NAME" needs a `depends_on` clause on the `aws_lambda_permission`, otherwise Terraform may try to create these out-of-order and fail.'
+  metadata:
+    category: correctness
+    references:
+    - https://stackoverflow.com/questions/38407660/terraform-configuring-cloudwatch-log-subscription-delivery-to-lambda/38428834#38428834
+    technology:
+    - aws
+    - terraform
+    - aws-lambda
+    - cloudwatch
+    confidence: MEDIUM
+  patterns:
+  - pattern: |
+      resource "aws_cloudwatch_log_subscription_filter" $NAME {
+        ...
+        destination_arn = aws_lambda_function.$LAMBDA_NAME.arn
+      }
+  - pattern-not-inside: |
+      resource "aws_cloudwatch_log_subscription_filter" $NAME {
+        ...
+        depends_on = [..., aws_lambda_permission.$PERMISSION_NAME, ...]
+      }
