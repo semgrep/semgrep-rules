@@ -1,0 +1,25 @@
+rules:
+- id: lambda-permission-logs-missing-arn-asterisk
+  severity: WARNING
+  languages: [hcl]
+  message: "The `source_arn` field needs to end with an asterisk, like this: `<log-group-arn>:*` Without this, the `aws_lambda_permission` resource '$NAME' will not be created. Add the asterisk to the end of the arn. x $ARN"
+  metadata:
+    category: correctness
+    references:
+    - https://github.com/hashicorp/terraform-provider-aws/issues/14630
+    technology:
+    - aws
+    - terraform
+    - aws-lambda
+  patterns:
+    - pattern-inside: |
+        resource "aws_lambda_permission" "$NAME" { ...  }
+    - pattern: |
+        source_arn = $ARN
+    - metavariable-pattern:
+        metavariable: $ARN
+        patterns:
+        - pattern-regex:
+            arn:aws:logs.*
+        - pattern-not-regex: >-
+            arn:aws:logs:.*:\*
