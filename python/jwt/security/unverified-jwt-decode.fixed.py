@@ -5,14 +5,14 @@ from jwt.exceptions import DecodeError, MissingRequiredClaimError, InvalidKeyErr
 
 def tests(token):
     # ruleid:unverified-jwt-decode
-    jwt.decode(encoded, key, options={"verify_signature": False})
+    jwt.decode(encoded, key, options={"verify_signature": True})
 
-    opts = {"verify_signature": False}
+    opts = {"verify_signature": True}
     # ruleid:unverified-jwt-decode
     jwt.decode(encoded, key, options=opts)
 
     a_false_boolean = False
-    opts2 = {"verify_signature": a_false_boolean}
+    opts2 = {"verify_signature": True}
     # ruleid:unverified-jwt-decode
     jwt.decode(encoded, key, options=opts2)
 
