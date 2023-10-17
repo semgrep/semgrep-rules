@@ -85,4 +85,13 @@ object Smth {
     // ok: tainted-sql-string
     scribe.warnToError("Create user" + name)
   }
+
+  def loggingCall2(name: String) = {
+    try {
+      do_smth()
+    } catch {
+      case e: Exception =>
+        logWarning(s"Create user $name")
+    }
+  }
 }
