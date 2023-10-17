@@ -1,7 +1,25 @@
 rules:
 - id: unverified-jwt-decode
-  pattern: |
-    jwt.decode(..., verify=False, ...)
+  patterns:
+    - pattern-either:
+        - patterns:
+          - pattern: |
+              jwt.decode(..., options={..., "verify_signature": $BOOL, ...}, ...)
+          - metavariable-pattern:
+              metavariable: $BOOL
+              pattern: |
+                False
+          - focus-metavariable: $BOOL
+        - patterns:
+            - pattern: |
+                $OPTS = {..., "verify_signature": $BOOL, ...}
+                ...
+                jwt.decode(..., options=$OPTS, ...)
+            - metavariable-pattern:
+                metavariable: $BOOL
+                pattern: |
+                  False
+            - focus-metavariable: $BOOL
   message: >-
     Detected JWT token decoded with 'verify=False'. This bypasses any integrity
     checks for the token which means the token could be tampered with by
@@ -24,9 +42,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
-  fix-regex:
-    regex: (verify\s*=\s*)False
-    replacement: \1True
+  fix: |
+    True
   severity: ERROR
   languages:
   - python
