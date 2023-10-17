@@ -7,7 +7,7 @@ rules:
       - pattern: Digest.subbytes
       - pattern: Digest.channel
       - pattern: Digest.file
-    message: Digest uses MD5 and should not be used for security purposes.
+    message: Digest uses MD5 and should not be used for security purposes. Consider using SHA256 instead.
     languages: [ocaml]
     severity: WARNING
     metadata:
@@ -15,7 +15,7 @@ rules:
       technology:
         - ocaml
       cwe: "CWE-328: Use of Weak Hash (4.12)"
-      confidence: MEDIUM
+      confidence: LOW
       likelihood: MEDIUM
       impact: MEDIUM
       subcategory:
