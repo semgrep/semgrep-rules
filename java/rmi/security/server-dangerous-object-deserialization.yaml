@@ -8,8 +8,11 @@ rules:
     - A08:2017 - Insecure Deserialization
     - A08:2021 - Software and Data Integrity Failures
     references:
-    - https://mogwailabs.de/blog/2019/03/attacking-java-rmi-services-after-jep-290/
     - https://frohoff.github.io/appseccali-marshalling-pickles/
+    - https://book.hacktricks.xyz/network-services-pentesting/1099-pentesting-java-rmi
+    - https://youtu.be/t_aw1mDNhzI
+    - https://github.com/qtc-de/remote-method-guesser
+    - https://github.com/openjdk/jdk/blob/master/src/java.rmi/share/classes/sun/rmi/server/UnicastRef.java#L303C4-L331
     category: security
     technology:
     - rmi
@@ -21,13 +24,48 @@ rules:
     impact: HIGH
     confidence: LOW
   message: >-
-    Using an arbitrary object ('Object $PARAM') with Java RMI is an insecure deserialization
+    Using an arbitrary object ('$PARAMTYPE $PARAM') with Java RMI is an insecure deserialization
     vulnerability. This object can be manipulated by a malicious actor allowing them to execute
     code on your system. Instead, use an integer ID to look up your object, or consider alternative
     serialization schemes such as JSON.
   languages:
   - java
-  pattern: |
-    interface $INTERFACE extends Remote {
-      $RETURNTYPE $METHOD(Object $PARAM) throws RemoteException;
-    }
+  patterns:
+  - pattern: |
+      interface $INTERFACE extends Remote {
+        $RETURNTYPE $METHOD($PARAMTYPE $PARAM) throws RemoteException;
+      }
+  - metavariable-pattern:
+      metavariable: $PARAMTYPE
+      # Needed because we unfortunately cannot parse primitive types as
+      # standalone patterns in Java
+      language: generic
+      patterns:
+        # Not actually a primitive but handled specially in deserialization
+        # code, so not vulnerable.
+        - pattern-not: String
+        - pattern-not: java.lang.String
+        - pattern-not: boolean
+        - pattern-not: Boolean
+        - pattern-not: java.lang.Boolean
+        - pattern-not: byte
+        - pattern-not: Byte
+        - pattern-not: java.lang.Byte
+        - pattern-not: char
+        - pattern-not: Character
+        - pattern-not: java.lang.Character
+        - pattern-not: double
+        - pattern-not: Double
+        - pattern-not: java.lang.Double
+        - pattern-not: float
+        - pattern-not: Float
+        - pattern-not: java.lang.Float
+        - pattern-not: int
+        - pattern-not: Integer
+        - pattern-not: java.lang.Integer
+        - pattern-not: long
+        - pattern-not: Long
+        - pattern-not: java.lang.Long
+        - pattern-not: short
+        - pattern-not: Short
+        - pattern-not: java.lang.Short
