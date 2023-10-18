@@ -23,6 +23,8 @@ jobs:
       run: rm -rf stats
     - name: remove fingerprints from testing
       run: rm -rf fingerprints
+    - name: remove rules requiring Semgrep Pro
+      run: rm -rf apex
     - name: validate rules
       run: semgrep --validate --config .
     - name: run semgrep
