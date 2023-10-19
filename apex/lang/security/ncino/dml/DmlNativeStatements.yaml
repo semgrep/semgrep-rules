@@ -1,0 +1,35 @@
+rules:
+  - id: dml-native-statements
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-863: Incorrect Authorization'
+      owasp:
+      - A01:2021 - Broken Access Control
+      - A04:2021 - Insecure Design
+      impact: HIGH
+      likelihood: LOW
+      confidence: LOW
+      category: security
+      subcategory:
+      - audit
+      technology:
+      - salesforce
+      references:
+      - https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_dml_section.htm
+      - https://cwe.mitre.org/data/definitions/863.html
+      - https://owasp.org/Top10/A04_2021-Insecure_Design/
+    message: >-
+      Native Salesforce DML operations execute in system context, ignoring the current user's permissions,
+      field-level security, organization-wide defaults, position in the role hierarchy, and sharing rules.
+      Be mindful when using native Salesforce DML operations.
+    patterns:
+      - pattern-either:
+        - pattern-regex: '(insert|upsert|update|delete)[\s]'
+        - pattern-regex: '(insert|upsert|update|delete)[(]'
+      - pattern-not-regex: '[\/\/].*(insert|upsert|update|delete).*'
+      - pattern-not-regex: '[\/\/].*(insert|upsert|update|delete)[\n]'
+      - pattern-not-regex: '.*[=].*(insert|upsert|update|delete).*[,;]'
