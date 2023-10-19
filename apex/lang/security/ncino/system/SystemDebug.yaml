@@ -1,0 +1,30 @@
+rules:
+  - id: system-debug
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-489: Active Debug Code'
+      - 'CWE-779: Logging of Excessive Data'
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - vuln
+      references:
+      - https://cwe.mitre.org/data/definitions/489.html
+      - https://cwe.mitre.org/data/definitions/779.html
+      impact: MEDIUM
+      likelihood: LOW
+      confidence: HIGH
+    message: >-
+      In addition to debug statements potentially logging data excessively, debug statements
+      also contribute to longer transactions and consume Apex CPU time even when debug logs
+      are not being captured.
+    pattern: System.debug(...)
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"

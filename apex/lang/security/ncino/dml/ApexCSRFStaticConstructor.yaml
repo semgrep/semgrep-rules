@@ -1,0 +1,44 @@
+rules:
+  - id: apex-csrf-static-constructor
+    min-version: 1.44.0
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      cwe:
+      - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+      owasp:
+      - A01:2021 - Broken Access Control
+      cwe2020-top25': true
+      cwe2021-top25': true
+      cwe2022-top25': true
+      impact: HIGH
+      likelihood: MEDIUM
+      confidence: HIGH
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      references:
+      - https://cwe.mitre.org/data/definitions/352.html
+    message: >-
+      Having DML operations in Apex class constructor or initializers can
+      have unexpected side effects: By just accessing a page, the DML statements
+      would be executed and the database would be modified. Just querying the
+      database is permitted.
+    patterns:
+      - pattern-inside: static {...}
+      - pattern-either:
+        - pattern: |
+            insert $DATA;
+        - pattern: |
+            update $DATA;
+        - pattern: |
+            upsert $DATA;
+        - pattern: |
+            delete $DATA;
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"
