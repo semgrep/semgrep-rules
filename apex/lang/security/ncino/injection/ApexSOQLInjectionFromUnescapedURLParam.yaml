@@ -1,0 +1,41 @@
+rules:
+  - id: soql-injection-unescaped-url-param
+    min-version: 1.44.0
+    mode: taint
+    severity: ERROR
+    languages:
+      - apex
+    metadata:
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      cwe:
+      - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+      owasp:
+      - A03:2021 - Injection
+      references:
+      - https://cwe.mitre.org/data/definitions/943.html
+      impact: HIGH
+      likelihood: HIGH
+      confidence: HIGH
+    message: >-
+      If a dynamic query must be used,leverage nFORCE Query Builder.
+      In other programming languages, the related flaw is known as SQL injection.
+      Apex doesn't use SQL, but uses its own database query language, SOQL. SOQL is
+      much simpler and more limited in functionality than SQL. The risks are much
+      lower for SOQL injection than for SQL injection, but the attacks are nearly
+      identical to traditional SQL injection. SQL/SOQL injection takes user-supplied
+      input and uses those values in a dynamic SOQL query. If the input isn't validated,
+      it can include SOQL commands that effectively modify the SOQL statement and trick
+      the application into performing unintended commands.
+    pattern-sources:
+      - by-side-effect: true
+        pattern: ApexPage.getCurrentPage().getParameters.get($URLPARAM);
+    pattern-sanitizers:
+      - pattern: String.escapeSingleQuotes(...)
+    pattern-sinks:
+      - patterns:
+        - pattern: Database.query($SINK,...);
+        - focus-metavariable: $SINK
