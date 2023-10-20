@@ -1,5 +1,5 @@
 rules:
-- id: use-defused-xml
+- id: use-defused-xml-parse
   metadata:
     owasp:
     - A04:2017 - XML External Entities (XXE)
@@ -16,14 +16,18 @@ rules:
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
-    - audit
+    - vuln
     likelihood: LOW
     impact: MEDIUM
-    confidence: LOW
+    confidence: MEDIUM
   message: >-
-    The Python documentation recommends using `defusedxml` instead of `xml` because the native Python
-    `xml` library is vulnerable to XML External Entity (XXE) attacks. These attacks can leak confidential
-    data and "XML bombs" can cause denial of service.
+    The native Python `xml` library is vulnerable to XML External Entity (XXE) attacks. 
+    These attacks can leak confidential data and "XML bombs" can cause denial of service.
+    Do not use this library to parse untrusted input. Instead 
+    the Python documentation recommends using `defusedxml`.
   languages: [python]
   severity: ERROR
-  pattern: import xml
+  patterns:
+    - pattern: xml.etree.ElementTree.parse($...ARGS)
+    - pattern-not: xml.etree.ElementTree.parse("...")
+  fix: defusedxml.etree.ElementTree.parse($...ARGS)
