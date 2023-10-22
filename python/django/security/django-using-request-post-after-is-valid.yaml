@@ -1,0 +1,25 @@
+rules:
+  - id: django-using-request-post-after-is-valid
+    patterns:
+      - pattern-inside: |
+          def $FUNC(request, ...):
+            ...
+      - pattern-inside: |
+          if $FORM.is_valid():
+            ...
+      - pattern-either:
+        - pattern: request.POST[...]
+        - pattern: request.POST.get(...)
+    message: Use request.cleaned_data[] instead of request.POST[] after form.is_valid() has been executed to only access sanitized data
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-20: Improper Input Validation"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - guardrail
+      technology:
+        - django
