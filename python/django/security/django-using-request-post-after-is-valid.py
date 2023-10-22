@@ -14,6 +14,7 @@ def create_new_tournament_dangerous(request):
     if request.method == 'POST':
         form = CreateTournamentForm(request.POST)
         if form.is_valid():
+# ruleid: django-using-request-post-after-is-valid            
             t = Tournament(name=request.POST['name'])
             t.save()
             return redirect('index')
@@ -26,6 +27,7 @@ def create_new_tournament_safe(request):
     if request.method == 'POST':
         form = CreateTournamentForm(request.POST)
         if form.is_valid():
+# ok: django-using-request-post-after-is-valid
             t = Tournament(name=request.cleaned_data['name'])
             t.save()
             return redirect('index')
