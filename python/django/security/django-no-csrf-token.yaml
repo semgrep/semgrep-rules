@@ -1,0 +1,21 @@
+rules:
+  - id: django-no-csrf-token
+    patterns:
+      - pattern: "<form...>...</form>"
+      - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
+    message: Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks
+    languages: [generic]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - guardrail
+      technology:
+        - django
+    paths:
+      include:
+        - "*.html"
