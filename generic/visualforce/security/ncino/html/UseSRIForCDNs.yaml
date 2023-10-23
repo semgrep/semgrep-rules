@@ -1,0 +1,49 @@
+rules:
+  - id: use-SRI-for-CDNs
+    languages:
+      - generic
+    severity: WARNING
+    message: >-
+      Consuming CDNs without including a SubResource Integrity (SRI) can expose your
+      application and its users to compromised code. SRIs allow you to consume specific
+      versions of content where if even a single byte is compromised, the resource will
+      not be loaded. Add an integrity attribute to your <script> and <link> tags pointing
+      to CDN content to ensure the resources have not been compromised. A crossorigin
+      attribute should also be added. For a more thorough explanation along with explicit
+      instructions on remediating, follow the directions from Mozilla here:
+      https://developer.mozilla.org/en-US/blog/securing-cdn-using-sri-why-how/
+    metadata:
+      cwe:
+      - 'CWE-346: Origin Validation Error'
+      owasp:
+      - A07:2021 - Identification and Authentication Failures
+      cwe2020-top25': true
+      cwe2021-top25': true
+      cwe2022-top25': true
+      impact: MEDIUM
+      likelihood: MEDIUM
+      confidence: MEDIUM
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      - visualforce
+      references:
+      - https://cwe.mitre.org/data/definitions/352.html
+      - https://developer.mozilla.org/en-US/blog/securing-cdn-using-sri-why-how/
+    patterns:
+      - pattern-either:
+        - pattern: <link...href="$URL..."...>
+        - pattern: <script...src="$URL..."...>
+      - metavariable-regex:
+          metavariable: $URL
+          regex: http[A-Za-z0-9\/\.\-\:]
+      - pattern-not: <script...integrity="..."...src="..."...>
+      - pattern-not: <script...src="..."...integrity="..."...>
+      - pattern-not: <link...integrity="..."...href="..."...>
+      - pattern-not: <link...href="..."...integrity="..."...>
+    paths:
+      include:
+        - "*.component"
+        - "*.page"
