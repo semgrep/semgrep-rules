@@ -28,7 +28,7 @@ def create_new_tournament_safe(request):
         form = CreateTournamentForm(request.POST)
         if form.is_valid():
 # ok: django-using-request-post-after-is-valid
-            t = Tournament(name=request.cleaned_data['name'])
+            t = Tournament(name=form.cleaned_data['name'])
             t.save()
             return redirect('index')
     else:

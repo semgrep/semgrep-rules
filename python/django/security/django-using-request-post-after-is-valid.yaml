@@ -10,7 +10,7 @@ rules:
       - pattern-either:
         - pattern: request.POST[...]
         - pattern: request.POST.get(...)
-    message: Use request.cleaned_data[] instead of request.POST[] after form.is_valid() has been executed to only access sanitized data
+    message: Use $FORM.cleaned_data[] instead of request.POST[] after form.is_valid() has been executed to only access sanitized data
     languages: [python]
     severity: WARNING
     metadata:
