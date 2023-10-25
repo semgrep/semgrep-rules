@@ -1,65 +1,44 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: bad-role
 rules:
-- id: cluster-role-with-all-access
-  pattern-either:
-  - patterns:
-    - pattern: |
-        ...
-        resources:
-          - '*'
-        verbs:
-          - '*'
-        ...
-    - pattern-inside: |
-        - apiGroups:
-           - ""
-          ...
-    - pattern-inside: |
-        ...
-        apiVersion: rbac.authorization.k8s.io/v1
-        ...
-        kind: ClusterRole
-        ...
-  - patterns:
-    - pattern: |
-        ...
-        resources: ["*"]
-        verbs: ["*"]
-        ...
-    - pattern-inside: |
-        - apiGroups: [""]
-          ...
-    - pattern-inside: |
-        ...
-        apiVersion: rbac.authorization.k8s.io/v1
-        ...
-        kind: ClusterRole
-        ...
-  message: "In Kubernetes, a ClusterRole resource is scoped at k8s cluster level,
-    instead of a namespace. That means ,a ClusterRole operates on all namespaces in
-    a cluster. Having a ClusterRole with all permissions (verbs) on all resources
-    in core API group of k8s (denoted by \"\") is a bad idea. You should only give
-    the necessary permissions by explicitly specifying verbs and named resources.
-    This rule detects such pattern in a helm chart file as well as a kubernetes manifest
-    file. \n"
-  languages:
-  - yaml
-  severity: WARNING
-  metadata:
-    cwe:
-    - 'CWE-269: Improper Privilege Management'
-    owasp:
-    - A05:2021 - Security Misconfiguration
-    - A06:2017 - Security Misconfiguration
-    references:
-    - https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
-    - https://kubernetes.io/docs/concepts/security/rbac-good-practices/#general-good-practice
-    - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#api-groups
-    category: security
-    technology:
-    - kubernetes
-    cwe2021-top25: false
-    subcategory:
-    - vuln
-    likelihood: MEDIUM
-    impact: HIGH
-    confidence: HIGH
+  # ok: cluster-role-with-all-access
+  - apiGroups:
+      - apps
+    resources:
+      - "*"
+    verbs:
+      - "*"
+  # ruleid: cluster-role-with-all-access
+  - apiGroups:
+      - ""
+    resources:
+      - "*"
+    verbs:
+      - "*"
+  # ok: cluster-role-with-all-access
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  # ruleid: cluster-role-with-all-access
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+      - customresourcedefinitions/status
+    verbs:
+      - "*"
