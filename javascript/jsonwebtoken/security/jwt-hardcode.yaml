@@ -43,8 +43,13 @@ rules:
             $VALUE = '$Y' 
             ...
         - pattern: $VALUE
-      - pattern-inside: $JWT.sign($VALUE, '$Y',...)
-      - pattern-inside: $JWT.verify($VALUE, '$Y',...)
+      - patterns:
+        - pattern-either:
+          - pattern-inside: $JWT.sign($VALUE, $Y,...)
+          - pattern-inside: $JWT.verify($VALUE, $Y,...)
+        - focus-metavariable: $Y
+        - pattern: >
+            '...'
       - patterns:
         - pattern-inside: |
             $SECRET = "$Y"
