@@ -20,5 +20,5 @@ jobs:
           COMP_BRANCH: ${{ github.head_ref }}
           BASE_BRANCH: ${{  github.event.pull_request.base.ref }}
         run: |
-          curl -X POST https://argoworkflows-dev.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"$BASE_BRANCH\", \"comparison_branch\": \"$COMP_BRANCH\", \"rules_repository\": \"$RULES_REPO\"}"
+          curl -X POST https://argoworkflows-dev2.corp.r2c.dev/api/v1/events/security-research/pro-perf-scan-test -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"base_branch\": \"$BASE_BRANCH\", \"comparison_branch\": \"$COMP_BRANCH\", \"rules_repository\": \"$RULES_REPO\"}"
 
