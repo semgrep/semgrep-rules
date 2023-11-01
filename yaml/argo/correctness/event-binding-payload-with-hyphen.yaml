@@ -3,6 +3,11 @@ rules:
   languages: [yaml]
   severity: WARNING
   message: The parameter `$VALUE` to this WorkflowEventBinding includes hyphens, which will, very confusingly, throw an error when Argo Workflows tries to invoke the workflow. Set the payload value to use underscores instead.
+  metadata:
+    category: correctness
+    technology:
+    - argo
+    - argo-workflows
   match:
     all:
     - inside: |
