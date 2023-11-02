@@ -2,11 +2,12 @@ rules:
 - id: dangerous-subprocess-use
   mode: taint
   message: >-
-    Detected subprocess function with argument tainted by `event` object. If this
-    data can be controlled by a malicious actor, it may be an instance of
-    command injection. Audit the use of this call to ensure it is not
-    controllable by an external resource. You may consider using
-    'shlex.escape()'.
+    Detected subprocess function with argument tainted by an `event` object. 
+    If this data can be controlled by a malicious actor, it may be an instance of
+    command injection. The default option for `shell` is False, and this is secure by default.
+    Consider removing the `shell=True` or setting it to False explicitely.
+    Using `shell=False` means you have to split the command string into an array of
+    strings for the command and its arguments. You may consider using 'shlex.split()' for this purpose.
   metadata:
     owasp:
     - A01:2017 - Injection
@@ -44,13 +45,8 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - focus-metavariable: $CMD
-    - pattern-either:
-      - pattern: subprocess.$FUNC($CMD, ...)
-      - pattern: subprocess.$FUNC([$CMD,...], ...)
-      - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...)
-      - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...], ...)
-      - pattern: subprocess.$FUNC("=~/(python)/", $CMD, ...)
-      - pattern: subprocess.$FUNC(["=~/(python)/",$CMD,...],...)
+    - pattern: subprocess.$FUNC(..., shell=True, ...)
   pattern-sanitizers:
-  - pattern: shlex.escape(...)
+  - pattern: shlex.split(...)
+  - pattern: pipes.quote(...)
+  - pattern: shlex.quote(...)

@@ -12,6 +12,8 @@ rules:
             - pattern-not-regex: "^[.]/"
             # GitHub-owned action
             - pattern-not-regex: "^actions/"
+            # GitHub-owned action
+            - pattern-not-regex: "^github/"
             # Action with pinned commit SHA
             - pattern-not-regex: "@[0-9a-f]{40}$"
             # Docker action with pinned image digest
@@ -29,6 +31,7 @@ rules:
     metadata:
       cwe:
         - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+        - "CWE-353: Missing Support for Integrity Check"
       owasp: A06:2021 - Vulnerable and Outdated Components
       references:
         - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components

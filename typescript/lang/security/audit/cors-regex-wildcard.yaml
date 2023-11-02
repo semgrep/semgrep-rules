@@ -21,8 +21,9 @@ rules:
   severity: WARNING
   patterns:
   - pattern-either:
-    - pattern: const $CORS = [...,$PATTERN,...]
-    - pattern: const $CORS = $PATTERN
+    - pattern: $CORS = [...,/$PATTERN/,...]
+    - pattern: $CORS = /$PATTERN/
+  - focus-metavariable: $PATTERN
   - metavariable-regex:
       metavariable: $PATTERN
       regex: .+?(?<!\\).\..+(?<!\\)\..+
