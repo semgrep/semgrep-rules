@@ -1,0 +1,35 @@
+rules:
+  - id: csp-header-attribute
+    languages:
+      - generic
+    severity: INFO
+    message: >-
+      Visualforce Pages must have the cspHeader attribute set to true.
+      This attribute is available in API version 55 or higher.
+    metadata:
+      cwe:
+      - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+      - A07:2017 - Cross-Site Scripting (XSS)
+      - A03:2021 - Injection
+      references:
+      - https://help.salesforce.com/s/articleView?id=sf.csp_trusted_sites.htm&type=5
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      - visualforce
+      cwe2022-top25: true
+      cwe2021-top25: true
+      likelihood: HIGH
+      impact: MEDIUM
+      confidence: HIGH
+    patterns:
+      - pattern: <apex:page...>...</apex:page>
+      - pattern-not: <apex:page...cspHeader="true"...>...</apex:page>
+      - pattern-not: <apex:page...>...<!--deprecated-->...</apex:page>
+      - pattern-not: <apex:page...>...<!-- deprecated -->...</apex:page>
+    paths:
+      include:
+        - "*.page"

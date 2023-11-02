@@ -3,21 +3,31 @@
 import jwt
 from jwt.exceptions import DecodeError, MissingRequiredClaimError, InvalidKeyError
 
-def verify_jwt(token):
-    try:
-        # ok:unverified-jwt-decode
-        decoded = jwt.decode(token, app.config['SECRET_KEY_HMAC'], verify=True, issuer = 'we45', leeway=10, algorithms=['HS256'])
-        print("JWT Token from API: {0}".format(decoded))
-        return True
-    except DecodeError:
-        print("Error in decoding token")
-        return False
-    except MissingRequiredClaimError as e:
-        print('Claim required is missing: {0}'.format(e))
-        return False
-
-def insecure_verify(token):
+def tests(token):
     # ruleid:unverified-jwt-decode
-    decoded = jwt.decode(token, verify = False)
-    print(decoded)
-    return True
+    jwt.decode(encoded, key, options={"verify_signature": False})
+
+    # ruleid:unverified-jwt-decode
+    opts = {"verify_signature": False}
+    jwt.decode(encoded, key, options=opts)
+
+    a_false_boolean = False
+    # ruleid:unverified-jwt-decode
+    opts2 = {"verify_signature": a_false_boolean}
+    jwt.decode(encoded, key, options=opts2)
+
+    # ok:unverified-jwt-decode
+    jwt.decode(encoded, key, options={"verify_signature": True})
+
+    opts = {"verify_signature": True}
+    # ok:unverified-jwt-decode
+    jwt.decode(encoded, key, options=opts)
+
+    a_false_boolean = True
+    opts2 = {"verify_signature": a_false_boolean}
+    # ok:unverified-jwt-decode
+    jwt.decode(encoded, key, options=opts2)
+
+    # ok:unverified-jwt-decode
+    jwt.decode(encoded, key)
+
