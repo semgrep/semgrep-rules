@@ -1,11 +1,17 @@
 rules:
   - id: ocamllint-exec
-    pattern-either:
-      - pattern: Unix.execve
-      - pattern: Unix.execvp
-      - pattern: Unix.execvpe
-      - pattern: Unix.system
-      - pattern: Sys.command
+    patterns:
+      - pattern-either:
+        - pattern: Unix.execve $STR
+        - pattern: Unix.execvp $STR
+        - pattern: Unix.execvpe $STR
+        - pattern: Unix.system $STR
+        - pattern: Sys.command $STR
+      - pattern-not: Unix.execve "..."
+      - pattern-not: Unix.execvp "..."
+      - pattern-not: Unix.execvpe "..."
+      - pattern-not: Unix.system "..."
+      - pattern-not: Sys.command "..."
     message: Executing external programs might lead to comand or argument injection vulnerabilities.
     languages: [ocaml]
     severity: WARNING
