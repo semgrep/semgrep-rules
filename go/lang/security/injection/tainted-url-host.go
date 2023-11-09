@@ -41,10 +41,11 @@ func handlerIndexFmt(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := fmt.Sprintf("https://%s", proxy)
+            url = fmt.Sprintf("https://%s", proxy)
         } else {
-            url := fmt.Sprintf("http://%q", proxy)
+            url = fmt.Sprintf("http://%q", proxy)
         }
         // ruleid: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
@@ -82,10 +83,11 @@ func handlerOtherFmt(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := fmt.Fprintf(w, "https://%s", proxy)
+            url = fmt.Fprintf(w, "https://%s", proxy)
         } else {
-            url := fmt.Fprintf(w, "http://%q", proxy)
+            url = fmt.Fprintf(w, "http://%q", proxy)
         }
         // ruleid: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
@@ -123,10 +125,11 @@ func handlerOkFmt(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := fmt.Sprintf("https://example.com/%s", proxy)
+            url = fmt.Sprintf("https://example.com/%s", proxy)
         } else {
-            url := fmt.Fprintf(w, "http://example.com%q", proxy)
+            url = fmt.Fprintf(w, "http://example.com%q", proxy)
         }
         // ok: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
@@ -242,10 +245,11 @@ func handlerIndexAdd(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := "https://" + proxy
+            url = "https://" + proxy
         } else {
-            url := "http://" + proxy
+            url = "http://" + proxy
         }
         // ruleid: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
@@ -283,10 +287,11 @@ func handlerOtherAdd(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := "https://example.com/" + proxy
+            url = "https://example.com/" + proxy
         } else {
-            url := "http://example.com/api/test/" + proxy
+            url = "http://example.com/api/test/" + proxy
         }
         // ok: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
@@ -322,10 +327,11 @@ func handlerOkAdd(w http.ResponseWriter, r *http.Request) {
         proxy := r.URL.Query()["proxy"]
         secure := r.URL.Query()["secure"]
 
+        url := ""
         if (secure) {
-            url := "https://example.com/" + proxy
+            url = "https://example.com/" + proxy
         } else {
-            url := "http://example.com" + proxy
+            url = "http://example.com" + proxy
         }
         // ok: tainted-url-host
         resp, err := client.Post(url, "application/json", r.Body)
