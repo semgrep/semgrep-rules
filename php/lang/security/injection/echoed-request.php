@@ -11,7 +11,7 @@ function dangerousPrintUsage() {
 
 function safePrintUsage() {
     $name = $_REQUEST['name'];
-    // ruleid: echoed-request
+    // ok: echoed-request
     print("Hello : " . htmlentities($name));
 }
 
