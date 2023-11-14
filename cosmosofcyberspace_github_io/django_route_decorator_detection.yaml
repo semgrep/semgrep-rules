@@ -1,0 +1,37 @@
+rules:
+- id: web_cache_deception_nodejs_express
+  patterns:
+  - pattern-either:
+    - pattern: $Y.get($X, ...)
+    - pattern: $Y.post($X, ...)
+    - pattern: $Y.put($X, ...)
+    - pattern: $Y.delete($X, ...)
+    - pattern: $Y.patch($X, ...)
+  - pattern-inside: |
+      require('express')
+      ...
+  - metavariable-pattern:
+      metavariable: $X
+      patterns:
+      - pattern-regex: \/[^'"]*[*]
+  message: Detected express path decorator with * character may lead to web cache
+    deception
+  severity: INFO
+  languages:
+  - js
+  - javascript
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 525: Use of Web Browser Cache Containing Sensitive Information'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - express
+    - nodejs
+    source_rule_url: https://cosmosofcyberspace.github.io/semgrep/nodejs/express/express.html
+    references:
+    - https://cosmosofcyberspace.github.io/semgrep/nodejs/express/express.html
