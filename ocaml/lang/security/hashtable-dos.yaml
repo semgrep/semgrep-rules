@@ -1,0 +1,18 @@
+rules:
+  - id: ocamllint-hashtable-dos
+    patterns:
+    - pattern: Hashtbl.create $Y
+    - pattern-not: Hashtbl.create $Y ~random:true
+    message: Creating a Hashtbl without the optional random number parameter makes it prone to DoS attacks when attackers are able to fill the table with malicious content. Hashtbl.randomize or the R flag in the OCAMLRUNPARAM are other ways to randomize it.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - ocaml
+      cwe: "CWE-399: Resource Management Errors (4.12)"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - audit
