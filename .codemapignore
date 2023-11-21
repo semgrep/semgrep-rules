@@ -1,10 +1,16 @@
-# showing just the rules, for pad's codemap
+# -*- sh -*-
+# gitignore-like file for Codemap (see https://github.com/aryx/codemap)
+# The goal here is to just show and count the rules in codemap
 
 # skipping all files, targets and rules (but rules will be restored below)
 [a-z]*/**/*.*
 
+# restore directories which are not languages
+# coupling: see scripts/run-test rule_folders variable
+!libsonnet/
 !scripts/
 !stats/
+# restore also fingerprints/ ? trusted_python/ ? 
 
 # do not skip the rules
 ![a-z]*/**/*.yaml
