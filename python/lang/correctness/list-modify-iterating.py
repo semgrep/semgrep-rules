@@ -30,3 +30,8 @@ e = [1, 2, 3, 4]
 for i in e:
     print(i)
     d.append(i)
+
+# ruleid:list-modify-while-iterate
+for i in e:
+    if i == 1:
+        e.remove(i)
