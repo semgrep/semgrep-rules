@@ -115,3 +115,21 @@ rules:
       category: security
       technology:
         - electron
+  - id: electron_shell_openexternal
+    patterns:
+      - pattern: |
+          shell.openExternal($X)
+    message: >-
+      The openExternal method opens the provided URL's using the
+      Operating Systems native application for that URL scheme. This may lead to
+      Remote Code Execution if URL schemes such as `file:`, `smb:`, etc. are 
+      permitted. https://positive.security/blog/url-open-rce.
+    languages:
+      - javascript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-913: Improper Control of Dynamically-Managed Code Resources"
+      category: security
+      technology:
+        - electron
