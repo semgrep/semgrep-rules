@@ -9,7 +9,7 @@ public class Bad {
 
  public class Ok {
           public void ok1() {
-             // ok: cookie-issecure-false
+             // ok: cookie-setSecure
              Cookie cookie = new Cookie("name", "value");
              cookie.setSecure(true);
           }

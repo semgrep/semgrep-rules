@@ -1,9 +1,6 @@
 rules:
   - id: cookie-issecure-false
     patterns:
-      - pattern-inside: |
-          $COOKIE = new Cookie($...ARGS);
-          ...
       - pattern: $COOKIE = new Cookie($...ARGS);
       - pattern-not-inside: |
           $COOKIE = new Cookie(...);
@@ -14,7 +11,7 @@ rules:
       scripting attacks."
     fix: |
         $COOKIE = new Cookie($...ARGS);
-        $COOKIE.setSecure(true)
+        $COOKIE.setSecure(true);
     metadata:
       vulnerability: Insecure Transport
       owasp:
