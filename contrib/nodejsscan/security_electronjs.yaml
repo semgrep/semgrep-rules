@@ -117,8 +117,8 @@ rules:
         - electron
   - id: electron_shell_openexternal
     patterns:
-      - pattern: |
-          shell.openExternal($X)
+      - pattern: shell.openExternal($X)
+      - pattern-not: shell.openExternal("...")
     message: >-
       The openExternal method opens the provided URL's using the
       Operating Systems native application for that URL scheme. This may lead to

