@@ -1,20 +1,22 @@
 rules:
   - id: cookie-issecure-false
     patterns:
-      - pattern-inside: |
-          $COOKIE = new Cookie($...ARGS);
-          ...
-      - pattern: $COOKIE = new Cookie($...ARGS);
+      - patterns:
+          - pattern-inside: |
+              $COOKIE = new Cookie(...);
+              ...
+          - pattern: |
+              $COOKIE.setSecure(false);
       - pattern-not-inside: |
           $COOKIE = new Cookie(...);
           ...
-          $COOKIE.setSecure(...);
+          $COOKIE.setSecure(true);
     message: "Default session middleware settings: `setSecure` not set to true. This
       ensures that the cookie is sent only over HTTPS to prevent cross-site
       scripting attacks."
-    fix: |
-        $COOKIE = new Cookie($...ARGS);
-        $COOKIE.setSecure(true)
+    fix-regex:
+      regex: setSecure\(false\)
+      replacement: setSecure(true)
     metadata:
       vulnerability: Insecure Transport
       owasp:
