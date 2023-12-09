@@ -1,0 +1,49 @@
+rules:
+  - id: ocamllint-unsafe
+    pattern-either:
+      - pattern: $X.unsafe_get        # oob array access
+      - pattern: $X.unsafe_set        # oob array access
+      - pattern: $X.unsafe_to_string    # requires unique ownership
+      - pattern: $X.unsafe_of_string    # requires unique ownership
+      - pattern: $X.unsafe_blit
+      - pattern: $X.unsafe_blit_string
+      - pattern: $X.unsafe_fill
+      - pattern: $X.unsafe_to_string
+      - pattern: $X.unsafe_getenv
+      - pattern: $X.unsafe_environment
+      - pattern: $X.unsafe_chr        # possibly wrong output for int > 255
+      - pattern: $X.unsafe_of_int
+      - pattern: $X.unsafe_output
+      - pattern: $X.unsafe_output_string
+      - pattern: $X.unsafe_read
+      - pattern: $X.unsafe_recv
+      - pattern: $X.unsafe_recvfrom
+      - pattern: $X.unsafe_send
+      - pattern: $X.unsafe_sendto
+      - pattern: $X.unsafe_set
+      - pattern: $X.unsafe_set_int16
+      - pattern: $X.unsafe_set_int32
+      - pattern: $X.unsafe_set_int64
+      - pattern: $X.unsafe_set_int8
+      - pattern: $X.unsafe_set_uint16_ne
+      - pattern: $X.unsafe_set_uint8
+      - pattern: $X.unsafe_single_write
+      - pattern: $X.unsafe_string
+      - pattern: $X.unsafe_sub
+      - pattern: $X.unsafe_write 
+    message: Unsafe functions do not perform boundary checks or have other side effects, use with care.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      references:
+      - https://v2.ocaml.org/api/Bigarray.Array1.html#VALunsafe_get
+      - https://v2.ocaml.org/api/Bytes.html#VALunsafe_to_string
+      technology:
+        - ocaml
+      cwe: "CWE-242: Use of Inherently Dangerous Function (4.12)"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - audit
