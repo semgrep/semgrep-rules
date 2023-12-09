@@ -5,28 +5,39 @@ app = FastAPI()
 
 origins = ["*"]
 
-# rule-id:wildcard-cors
+
 app.add_middleware(
+    # rule-id: wildcard-cors
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow=["*"]
 )
 
-# rule-id:wildcard-cors
+
 app.add_middleware(
+    # rule-id: wildcard-cors
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
     allow=["*"]
 )
 
-# rule-id:wildcard-cors
+
 app.add_middleware(
+    # rule-id: wildcard-cors
     CORSMiddleware,
     allow_origins=["https://github.com"],
     allow_credentials=True,
     allow=["*"]
+)
+
+app.add_middleware(
+    # ok: wildcard-cors
+    CORSMiddleware,
+    allow_origins=["https://github.com"],
+    allow_credentials=True,
+    allow=["www.semgrep.dev"]
 )
 
 
