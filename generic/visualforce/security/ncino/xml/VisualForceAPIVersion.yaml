@@ -1,0 +1,35 @@
+rules:
+  - id: visualforce-page-api-version
+    languages:
+      - generic
+    severity: WARNING
+    message: Visualforce Pages must use API version 55 or higher for required use of the cspHeader attribute set to true.
+    metadata:
+      cwe:
+      - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+      - A07:2017 - Cross-Site Scripting (XSS)
+      - A03:2021 - Injection
+      references:
+      - https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_pages.htm
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      - visualforce
+      cwe2022-top25: true
+      cwe2021-top25: true
+      likelihood: HIGH
+      impact: MEDIUM
+      confidence: HIGH
+    patterns:
+      - pattern-inside: <apiVersion.../apiVersion>
+      - pattern-either:
+        - pattern-regex: '[>][0-9].[0-9][<]'
+        - pattern-regex: '[>][1-4][0-9].[0-9][<]'
+        - pattern-regex: '[>][5][0-4].[0-9][<]'
+    paths:
+      include:
+        - "*.page-meta.xml"
+

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowEventBinding
+metadata:
+  name: rando-binding
+spec:
+  event:
+    selector: discriminator == "do-the-thing"
+  submit:
+    workflowTemplateRef:
+      name: rando-binding
+    arguments:
+      parameters:
+      - name: base-branch
+        valueFrom:
+          # ok: event-binding-payload-with-hyphen
+          event: payload.base_branch
+      - name: nonbase-branch
+        valueFrom:
+          # ruleid: event-binding-payload-with-hyphen
+          event: payload.nonbase-branch
+      - name: some-other-thing-with-multiple-hyphens
+        valueFrom:
+          # ruleid: event-binding-payload-with-hyphen
+          event: payload.some-other-thing-with-multiple-hyphens
