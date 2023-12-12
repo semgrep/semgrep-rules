@@ -11,7 +11,7 @@ rules:
               <form ... method=$METHOD ...>...</form>
       - metavariable-regex:
           metavariable: $METHOD
-          regex: (?i)post
+          regex: (?i)(post|put|delete|patch)
       - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
     message: Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks
     languages: [generic]
