@@ -1,0 +1,30 @@
+rules:
+- id: pNBJ
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        import flask
+        ...
+    - pattern-inside: |
+        import flask_protobuf
+        ...
+  - pattern-inside: |
+      @$TARGET_DECORATOR(...)
+      def $F(...):
+        ...
+  - metavariable-pattern:
+      metavariable: $TARGET_DECORATOR
+      patterns:
+      - pattern-regex: ^(.*\.)?route$
+  - pattern-regex: \@((?!route\().)*\n@(.*\.)?route\(
+  message: In Flask, the route() decorator has to be the outermost. Everything outside
+    of route() will take no effect.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: correctness
+    technology:
+    - flask
+    references:
+    - https://flask.palletsprojects.com/en/2.3.x/patterns/viewdecorators/#login-required-decorator
