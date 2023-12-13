@@ -8,7 +8,7 @@ origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    # rule-id: wildcard-cors
+    # ruleid: wildcard-cors
     allow_origins=origins,
     allow_credentials=True,
     allow=["*"]
@@ -17,7 +17,7 @@ app.add_middleware(
 
 app.add_middleware(
     CORSMiddleware,
-    # rule-id: wildcard-cors
+    # ruleid: wildcard-cors
     allow_origins=["*"],
     allow_credentials=True,
     allow=["*"]
@@ -26,7 +26,7 @@ app.add_middleware(
 
 app.add_middleware(
     CORSMiddleware,
-    # ok-id: wildcard-cors
+    # ok: wildcard-cors
     allow_origins=["https://github.com"],
     allow_credentials=True,
     allow=["*"]
