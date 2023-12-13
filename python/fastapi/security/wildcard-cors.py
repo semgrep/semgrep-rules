@@ -7,8 +7,8 @@ origins = ["*"]
 
 
 app.add_middleware(
-    # rule-id: wildcard-cors
     CORSMiddleware,
+    # rule-id: wildcard-cors
     allow_origins=origins,
     allow_credentials=True,
     allow=["*"]
@@ -16,8 +16,8 @@ app.add_middleware(
 
 
 app.add_middleware(
-    # rule-id: wildcard-cors
     CORSMiddleware,
+    # rule-id: wildcard-cors
     allow_origins=["*"],
     allow_credentials=True,
     allow=["*"]
@@ -25,16 +25,16 @@ app.add_middleware(
 
 
 app.add_middleware(
-    # rule-id: wildcard-cors
     CORSMiddleware,
+    # ok-id: wildcard-cors
     allow_origins=["https://github.com"],
     allow_credentials=True,
     allow=["*"]
 )
 
 app.add_middleware(
-    # ok: wildcard-cors
     CORSMiddleware,
+    # ok: wildcard-cors
     allow_origins=["https://github.com"],
     allow_credentials=True,
     allow=["www.semgrep.dev"]
