@@ -14,5 +14,6 @@ rules:
           subprocess.call(...) == $X
     message: >-
       This is not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call() instead
+    languages: [python]
     severity: WARNING
     fix: subprocess.check_call(...)
