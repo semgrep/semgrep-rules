@@ -84,4 +84,10 @@ function doOK7() {
     echo $safevar;
 }
 
+?>
 
+<? // ruleid: echoed-request ?>
+<?= $_GET['payload'] ?>
+
+<? // ok: echoed-request ?>
+<?= htmlentities($_GET['payload']) ?>
