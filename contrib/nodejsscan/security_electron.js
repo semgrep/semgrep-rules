@@ -109,3 +109,10 @@ app.whenReady().then(() => {
   view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
   view.webContents.loadURL(someurl)
 });
+
+// ruleid:electron_disabled_sanbox
+const mainWindow = new BrowserWindow({
+    webPreferences: {
+        sandbox: false
+    }
+});

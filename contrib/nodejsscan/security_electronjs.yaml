@@ -177,3 +177,26 @@ rules:
       category: security
       technology:
         - electron
+  - id: electron_disabled_sandbox
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {sandbox: false}});
+          - pattern: |
+              var $X = {webPreferences: {sandbox: false}};
+    message: >-
+      Sandbox is a security feature that isolates and restricts the access of an Electron app's 
+      renderer processes to the underlying operating system. When sandboxing is disabled, renderer
+      processes have more direct access to system resources, including the user's file system 
+      and other sensitive operations. Enabling the sandbox adds an additional layer of security
+      to the application.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-272: Least Privilege Violation"
+      category: security
+      technology:
+        - electron
