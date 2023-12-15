@@ -159,3 +159,21 @@ rules:
       category: security
       technology:
         - electron
+  - id: electron_browserview_loadurl
+    patterns:
+      - pattern: $X.loadURL($Y)
+      - pattern-not: $X.loadURL("...")
+    message: >-
+      A BrowserView can be used to embed additional web content into a BrowserWindow.
+      It is meant to be an alternative to the webview tag. Allowing user controlled URLs 
+      may lead to an attacker exploiting XSS or v8 vulnerabilities to gain RCE.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-913: Improper Control of Dynamically-Managed Code Resources"
+      category: security
+      technology:
+        - electron
