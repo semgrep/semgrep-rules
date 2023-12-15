@@ -66,3 +66,34 @@ const mainWindow = new BrowserWindow({
 
 // ruleid:electron_shell_openexternal
 shell.openExternal("file://"+ip+"/share/pwn.jar")
+
+// ruleid:electron_webview_allowpopus
+return (
+    <div>
+      <ScreenSharePicker />
+      <webview
+        ref={webviewRef}
+        src={videoCallUrl}
+        preload='./preload.js'
+        webpreferences='nodeIntegration,nativeWindowOpen=true'
+        allowpopups={'true' as any}
+      />
+    </div>
+);
+
+// ruleid:electron_webview_allowpopus
+loadWebView(w.webContents, {
+    allowpopups: 'on',
+    nodeintegration: 'on',
+    webpreferences: 'contextIsolation=no',
+    src: `file://${path.join(fixtures, 'api', 'native-window-open-file.html')}`
+});
+
+// ruleid:electron_webview_allowpopus
+rendition = book.renderTo('epub-viewer', {
+    width: '100%',
+    height: '100%',
+    stylesheet: props.bookStyle,
+    allowScriptedContent: true,
+    allowPopups: true
+} as any);

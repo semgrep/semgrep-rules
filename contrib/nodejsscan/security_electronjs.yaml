@@ -140,3 +140,22 @@ rules:
       category: security
       technology:
         - electron
+  - id: electron_webview_allowpopups
+    patterns:
+      - pattern-regex: allow[pP]opups\s?[=:](.*)?(true|on)
+    message: >-
+      Webview or embedded browser control is a web browser that is embedded in a 
+      native app to display web content. If a webview is configured to allow popups, 
+      and the embedded webpage is either attacker controlled, or is vulnerable to
+      Cross-Site Scripting (XSS), then an attacker can leverage that to open a new 
+      window which may be used to gain Remote Code Execution.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+      category: security
+      technology:
+        - electron
