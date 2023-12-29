@@ -79,3 +79,12 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+pwd = ""
+# ruleid: use-none-for-password-default
+def foo1(password=pwd):
+	model.set_password(password)
+
+# ok: use-none-for-password-default
+def foo2(password="helloworld"):
+	model.set_password(password)
