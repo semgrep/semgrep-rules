@@ -33,3 +33,17 @@ rules:
       new SSLConnectionSocketFactory(..., new String[] {"TLSv1.3"}, ...);
   - pattern-not: |
       new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2"}, ...);
+  - pattern-not-inside: >
+      (SSLConnectionSocketFactory $SF) = new
+      SSLConnectionSocketFactory(...);
+      ...
+      (TlsConfig $TLSCONFIG) = TlsConfig.custom(). ... .setSupportedProtocols(TLS.V_1_2). ... .build();
+      ...
+      HttpClientConnectionManager cm = $CM.create(). ... .setSSLSocketFactory($SF). ... .setDefaultTlsConfig($TLSCONFIG). ... .build();
+  - pattern-not-inside: >
+      (SSLConnectionSocketFactory $SF) = new
+      SSLConnectionSocketFactory(...);
+      ...
+      (TlsConfig $TLSCONFIG) = TlsConfig.custom(). ... .setSupportedProtocols(TLS.V_1_3). ... .build();
+      ...
+      HttpClientConnectionManager cm = $CM.create(). ... .setSSLSocketFactory($SF). ... .setDefaultTlsConfig($TLSCONFIG). ... .build();
