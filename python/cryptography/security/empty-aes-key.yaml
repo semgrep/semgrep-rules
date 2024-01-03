@@ -1,6 +1,7 @@
 rules:
 - id: empty-aes-key
-  message: Potential empty AES encryption key. Using an empty key in AES encryption
+  message: >-
+    Potential empty AES encryption key. Using an empty key in AES encryption
     can result in weak encryption and may allow attackers to easily decrypt sensitive
     data. Ensure that a strong, non-empty key is used for AES encryption.
   patterns:
@@ -16,8 +17,6 @@ rules:
     - https://cwe.mitre.org/data/definitions/327.html
     - https://cwe.mitre.org/data/definitions/310.html
     category: security
-    technology:
-    - python
     subcategory:
     - vuln
     likelihood: MEDIUM
@@ -25,3 +24,10 @@ rules:
     confidence: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     owasp: A6:2017 misconfiguration
+    functional-categories:
+    - crypto::search::key-length::pycrypto
+    - crypto::search::key-length::pycryptodome
+    technology:
+    - python
+    - pycrypto
+    - pycryptodome
