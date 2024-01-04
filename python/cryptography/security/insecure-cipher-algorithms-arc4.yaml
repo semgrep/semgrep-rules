@@ -2,8 +2,9 @@ rules:
 - id: insecure-cipher-algorithm-arc4
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
   message: >-
-    Detected ARC4 cipher algorithm which is considered insecure. The algorithm is
-    considered weak and has been deprecated. Use AES instead.
+    ARC4 (Alleged RC4) is a stream cipher with serious weaknesses in its initial stream output. 
+    Its use is strongly discouraged. ARC4 does not use mode constructions.
+    Use a strong symmetric cipher such as EAS instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -13,7 +14,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B304
     references:
-    - https://tools.ietf.org/html/rfc5469
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#weak-ciphers
     category: security
     technology:
     - cryptography
@@ -22,6 +23,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
   severity: WARNING
   languages:
   - python

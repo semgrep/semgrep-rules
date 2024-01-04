@@ -2,8 +2,10 @@ rules:
 - id: insecure-cipher-mode-ecb
   pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
   message: >-
-    Detected ECB cipher mode which is considered insecure. The algorithm can
-    potentially leak information about the plaintext. Use CBC mode instead.
+    ECB (Electronic Code Book) is the simplest mode of operation for block ciphers. 
+    Each block of data is encrypted in the same way. 
+    This means identical plaintext blocks will always result in identical ciphertext blocks, which can leave significant patterns in the output.
+    Use a different, more secure mode instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
     cwe:
@@ -13,6 +15,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B305
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#insecure-modes
     - https://crypto.stackexchange.com/questions/20941/why-shouldnt-i-use-ecb-encryption
     category: security
     technology:
@@ -22,6 +25,8 @@ rules:
     likelihood: LOW
     impact: LOW
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::mode::cryptography
   severity: WARNING
   languages:
   - python

@@ -19,6 +19,8 @@ rules:
     - A02:2021 - Cryptographic Failures
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/weak_cryptographic_key.py
     references:
+    - https://www.cosic.esat.kuleuven.be/ecrypt/ecrypt2/documents/D.SPA.20.pdf
+    - https://cryptography.io/en/latest/hazmat/primitives/asymmetric/dsa/
     - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
     category: security
     technology:
@@ -28,5 +30,7 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::key-length::cryptography
   languages: [python]
   severity: WARNING

@@ -2,8 +2,10 @@ rules:
 - id: insecure-cipher-algorithm-idea
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
   message: >-
-    Detected IDEA cipher algorithm which is considered insecure. The algorithm is
-    considered weak and has been deprecated. Use AES instead.
+    IDEA (International Data Encryption Algorithm) is a block cipher created in 1991. 
+    It is an optional component of the OpenPGP standard. This cipher is susceptible to attacks when using weak keys. 
+    It is recommended that you do not use this cipher for new applications.
+    Use a strong symmetric cipher such as EAS instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -14,6 +16,7 @@ rules:
     bandit-code: B304
     references:
     - https://tools.ietf.org/html/rfc5469
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#cryptography.hazmat.primitives.ciphers.algorithms.IDEA
     category: security
     technology:
     - cryptography
@@ -22,6 +25,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
   severity: WARNING
   languages:
   - python
