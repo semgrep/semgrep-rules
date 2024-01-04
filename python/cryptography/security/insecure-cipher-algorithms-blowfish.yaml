@@ -2,8 +2,8 @@ rules:
 - id: insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
   message: >-
-    Detected Blowfish cipher algorithm which is considered insecure. The algorithm is
-    considered weak and has been deprecated. Use AES instead.
+    Blowfish is a block cipher developed by Bruce Schneier. It is known to be susceptible to attacks when using weak keys. 
+    The author has recommended that users of Blowfish move to newer algorithms such as AES.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -13,6 +13,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B304
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#weak-ciphers
     - https://tools.ietf.org/html/rfc5469
     category: security
     technology:
@@ -22,6 +23,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
   severity: WARNING
   languages:
   - python
