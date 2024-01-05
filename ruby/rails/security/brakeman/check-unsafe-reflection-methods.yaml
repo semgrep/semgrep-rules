@@ -22,9 +22,11 @@ rules:
       - pattern-inside: |
           $X. ... .to_proc
       - pattern-inside: |
-          $Y.method(...)
+          $Y.method(<... $X ...>)
       - pattern-inside: |
-          $Y.tap(...)
+          $Y.tap(<... $X ...>)
+      - pattern-inside: |
+          $Y.tap { |$Z| <... $X ...> }
   message: Found user-controllable input to a reflection method. This may allow a user to alter program
     behavior and potentially execute arbitrary instructions in the context of the process. Do not provide
     arbitrary user input to `tap`, `method`, or `to_proc`
