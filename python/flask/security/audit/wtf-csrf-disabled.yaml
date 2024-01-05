@@ -2,6 +2,8 @@ rules:
 - id: flask-wtf-csrf-disabled
   message: >-
     Setting 'WTF_CSRF_ENABLED' to 'False' explicitly disables CSRF protection.
+  options:
+    symbolic_propagation: true
   metadata:
     cwe:
     - 'CWE-352: Cross-Site Request Forgery (CSRF)'
@@ -25,4 +27,48 @@ rules:
   severity: WARNING
   languages:
   - python
-  pattern: $APP.config['WTF_CSRF_ENABLED'] = False
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: $APP.config["WTF_CSRF_ENABLED"] = $FALSE
+        - pattern: $APP.config.WTF_CSRF_ENABLED = $FALSE
+        - patterns:
+          - pattern: |
+              $APP.config.$UPDATE(
+                ...,
+                WTF_CSRF_ENABLED = $FALSE,
+                ...
+              )
+          - pattern-not-inside: |
+              $APP.config.$UPDATE(
+                  ...,
+                  TESTING=True,
+                  ...
+              )
+          - pattern-not-inside: |
+              $APP.config.$UPDATE(
+                  ...,
+                  DEBUG=True,
+                  ...
+              )
+          - metavariable-regex:
+              metavariable: $UPDATE
+              regex: ^(update|from_mapping)$
+        - pattern: |
+            $OBJ = $CLASS()
+            ...
+            $OBJ.WTF_CSRF_ENABLED = $FALSE
+            ...
+            $APP.config.from_object($OBJ, ...)
+        - pattern: |
+            WTF_CSRF_ENABLED = $FALSE
+            ...
+            $APP.config.from_object(__name__)
+      - metavariable-regex:
+          metavariable: $FALSE
+          regex: ^(False)$
+      - focus-metavariable: $FALSE
+  fix: 'True'
+
+
