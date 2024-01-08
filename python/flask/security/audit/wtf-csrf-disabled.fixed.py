@@ -3,10 +3,10 @@ from flask import response as r
 
 app = flask.Flask(__name__)
 # ruleid:flask-wtf-csrf-disabled
-app.config['WTF_CSRF_ENABLED'] = False
+app.config['WTF_CSRF_ENABLED'] = True
 
 # ruleid:flask-wtf-csrf-disabled
-app.config["WTF_CSRF_ENABLED"] = False
+app.config["WTF_CSRF_ENABLED"] = True
 
 # ok: flask-wtf-csrf-disabled
 app.config["WTF_CSRF_ENABLED"] = True
@@ -14,7 +14,7 @@ app.config["WTF_CSRF_ENABLED"] = True
 app.config["SESSION_COOKIE_SECURE"] = False
 
 # ruleid: flask-wtf-csrf-disabled
-app.config.WTF_CSRF_ENABLED = False
+app.config.WTF_CSRF_ENABLED = True
 # ok: flask-wtf-csrf-disabled
 app.config.WTF_CSRF_ENABLED = True
 
@@ -24,7 +24,7 @@ app.config.WTF_CSRF_ENABLED = True
 app.config.update(
     SECRET_KEY='192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf',
     # ruleid: flask-wtf-csrf-disabled
-    WTF_CSRF_ENABLED = False,
+    WTF_CSRF_ENABLED = True,
     TESTING=False
 )
 
@@ -42,14 +42,14 @@ app.config.update(
 # custom class
 appconfig = MyAppConfig()
 # ruleid: flask-wtf-csrf-disabled
-appconfig.WTF_CSRF_ENABLED = False
+appconfig.WTF_CSRF_ENABLED = True
 
 app.config.from_object(appconfig)
 
 # this file itself
 SECRET_KEY = 'development key'
 # ruleid: flask-wtf-csrf-disabled
-WTF_CSRF_ENABLED = False
+WTF_CSRF_ENABLED = True
 
 app.config.from_object(__name__)
 
@@ -59,7 +59,7 @@ app.config.from_object(__name__)
 app.config.from_mapping(
     SECRET_KEY='192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf',
     # ruleid: flask-wtf-csrf-disabled
-    WTF_CSRF_ENABLED = False,
+    WTF_CSRF_ENABLED = True,
 )
 
 # It's okay to do this during testing
