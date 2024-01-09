@@ -4,7 +4,7 @@ rules:
     ECB (Electronic Code Book) is the simplest mode of operation for block ciphers. 
     Each block of data is encrypted in the same way. 
     This means identical plaintext blocks will always result in identical ciphertext blocks, which can leave significant patterns in the output.
-    Use a different, cryptographically strong mode instead, such as CBC.
+    Use a different, cryptographically strong mode instead, such as GCM.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
     cwe:
@@ -30,4 +30,4 @@ rules:
   languages:
   - python
   pattern: cryptography.hazmat.primitives.ciphers.modes.ECB($IV)
-  fix: cryptography.hazmat.primitives.ciphers.modes.CBC($IV)
+  fix: cryptography.hazmat.primitives.ciphers.modes.GCM($IV)
