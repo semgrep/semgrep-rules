@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.ciphers.modes import ECB
 
 # Insecure mode
 # ruleid: insecure-cipher-mode-ecb
-mode = cryptography.hazmat.primitives.ciphers.modes.CBC(iv)
+mode = cryptography.hazmat.primitives.ciphers.modes.GCM(iv)
 
 # Secure cipher and mode
 # ok: insecure-cipher-mode-ecb
