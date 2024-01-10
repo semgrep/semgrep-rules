@@ -1,44 +1,29 @@
-rules:
-- id: npm-package-in-action-not-pinned-to-commit-sha
-  patterns:
-  - pattern-inside: '{steps: ...}'
-  - pattern: |
-      run: "$CMD"
-  - metavariable-pattern:
-      metavariable: $CMD
-      language: generic
-      patterns:
-      - pattern: npm install -g $...LIB
-      - metavariable-pattern:
-          metavariable: $...LIB
-          language: regex
-          patterns:
-          - pattern-regex: \b[a-zA-Z0-9\-]+(\@\S+)?\b
-          - pattern-not-regex: (github:\w+\/[a-zA-Z0-9\-]+)#([0-9a-f]{40})
-          - pattern-not-regex: (git\+https:\/\/github.com\/\w+\/[a-zA-Z0-9\-]+)#([0-9a-f]{40})
-  message: |
-    $...LIB
-    An npm script inside an action on GitHub is not pinned to a full length commit SHA. Pinning the npm package to a full length commit SHA is currently the only way to use an action as an immutable release. Pinning to a particular SHA helps mitigate the risk of a bad actor adding a backdoor to the action's repository, as they would need to generate a SHA-1 collision for a valid Git object payload.
-  languages:
-  - yaml
-  severity: WARNING
-  metadata:
-    cwe:
-    - 'CWE-1357: Reliance on Insufficiently Trustworthy Component'
-    - 'CWE-353: Missing Support for Integrity Check'
-    owasp: A06:2021 - Vulnerable and Outdated Components
-    references:
-    - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
-    - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
-    category: security
-    technology:
-    - github-actions
-    subcategory:
-    - vuln
-    likelihood: LOW
-    impact: LOW
-    confidence: HIGH
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cryptographic Issues
-    - Other
+on:
+  pull_request_target:
+  pull_request:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      # ok: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+
+      # ok: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g git+https://github.com/fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@3.1.0
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@v1246924_some_stupid_apache_versioning_scheme.123
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4 foobar@1
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g foobar@1.0.0 chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+      
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli
