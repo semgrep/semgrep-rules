@@ -21,10 +21,18 @@ rules:
     - pattern-either:
       - pattern-inside: |
           $X. ... .to_proc
-      - pattern-inside: |
-          $Y.method(...)
-      - pattern-inside: |
-          $Y.tap(...)
+      - patterns:
+          - pattern-inside: |
+              $Y.method($Z)
+          - focus-metavariable: $Z
+      - patterns:
+          - pattern-inside: |
+              $Y.tap($Z)
+          - focus-metavariable: $Z
+      - patterns:
+          - pattern-inside: |
+              $Y.tap{ |$ANY| $Z }
+          - focus-metavariable: $Z
   message: Found user-controllable input to a reflection method. This may allow a user to alter program
     behavior and potentially execute arbitrary instructions in the context of the process. Do not provide
     arbitrary user input to `tap`, `method`, or `to_proc`
