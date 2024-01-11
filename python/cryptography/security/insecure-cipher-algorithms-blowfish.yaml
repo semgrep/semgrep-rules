@@ -1,9 +1,11 @@
 rules:
 - id: insecure-cipher-algorithm-blowfish
-  pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
   message: >-
     Blowfish is a block cipher developed by Bruce Schneier. It is known to be susceptible to attacks when using weak keys. 
     The author has recommended that users of Blowfish move to newer algorithms such as AES.
+    With the `cryptography` package it is recommended to use `Fernet` which is a secure implementation
+    of AES in CBC mode with a 128-bit key. 
+    Alternatively, keep using the `Cipher` class from the hazmat primitives but use the AES algorithm instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -28,3 +30,10 @@ rules:
   severity: WARNING
   languages:
   - python
+  patterns: 
+    - pattern: cryptography.hazmat.primitives.ciphers.algorithms.$BLOWFISH($KEY)
+    - metavariable-regex:
+        metavariable: $BLOWFISH
+        regex: ^(Blowfish)$
+    - focus-metavariable: $BLOWFISH
+  fix: AES
