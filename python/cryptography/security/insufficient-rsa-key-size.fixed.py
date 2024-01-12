@@ -24,10 +24,10 @@ rsa.generate_private_key(65537,
 
 rsa.generate_private_key(public_exponent=65537,
 # ruleid: insufficient-rsa-key-size
-                         key_size=1024,
+                         key_size=2048,
                          backend=backends.default_backend())
 
 rsa.generate_private_key(65537,
 # ruleid: insufficient-rsa-key-size
-                         1024,
+                         2048,
                          backends.default_backend())
