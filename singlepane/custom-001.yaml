@@ -1,0 +1,86 @@
+rules:
+- id: CUSTOM-001
+  message: Passing unsanitized user input to a Script Engine or other means of dynamic
+    code evaluation is unsafe. This could lead to code injection with data leakage
+    or arbitrary code execution as a result. Avoid this, or use proper sandboxing
+    if user code evaluation is intended.
+  severity: ERROR
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
+      (''Eval Injection'')'
+    functional-categories:
+    - web::source::cookie::Servlet
+    - web::source::http-params::Servlet
+    - web::source::http-body::Servlet
+    - web::source::header::Servlet
+    - web::source::url-path-params::Servlet
+    - expression-lang::sink::expression::javax.script
+    - expression-lang::sink::expression::javax.el
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://cwe.mitre.org/data/definitions/95.html
+    technology:
+    - java
+    - servlets
+    license: Copyright 2023 Semgrep, Inc.
+    vulnerability_class:
+    - Code Injection
+  languages:
+  - java
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: (HttpServletRequest $REQ).$REQFUNC(...)
+      - pattern: "(ServletRequest $REQ).$REQFUNC(...) \n"
+      - patterns:
+        - pattern-inside: |
+            (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
+            ...
+            for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
+              ...
+            }
+        - pattern: |
+            $COOKIE.getValue(...)
+      - patterns:
+        - pattern-inside: |
+            $TYPE[] $VALS = (HttpServletRequest $REQ).$GETFUNC(...);
+            ...
+        - pattern: |
+            $PARAM = $VALS[$INDEX];
+    - pattern-not: "$REQ.getUserPrincipal() \n"
+    - pattern-not: "$REQ.getSession(...) \n"
+    - pattern-not: "$REQ.getAuthType(...) \n"
+    - pattern-not: "$REQ.getMethod(...) \n"
+    - pattern-not: "$REQ.getLocales(...) \n"
+    - pattern-not: "$REQ.getLocale(...) \n"
+    - pattern-not: "$REQ.isUserinRole(...) \n"
+    - pattern-not: "$REQ.isRequestdSessionIdValid(...) \n"
+    - pattern-not: "$REQ.isRequestedSessionIdFromUrl(...) \n"
+    - pattern-not: "$REQ.getIntHeader(...) \n"
+    - pattern-not: "$REQ.getDateHeader(...) \n"
+    - pattern-not: "$REQ.authenticate(...) \n"
+    - pattern-not: "$REQ.isUserInRole(...) \n"
+    - pattern-not: |
+        $REQ.getAttribute(...)
+    - pattern-not: |
+        $REQ.getAttributeNames(...)
+    - pattern-not: |
+        $REQ.getAuthType(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          (ScriptEngine $ENGINE).eval(...)
+      - pattern: |
+          (ExpressionFactory $FACTORY).createMethodExpression(...)
+      - pattern: |
+          (ExpressionFactory $FACTORY).createValueExpression(...)
