@@ -8,15 +8,16 @@ rules:
       - patterns:
           - pattern-either:
               - pattern: |
-                  render ..., file: ...
+                  render ..., file: $X
               - pattern: |
-                  render ..., inline: ...
+                  render ..., inline: $X
               - pattern: |
-                  render ..., template: ...
+                  render ..., template: $X
               - pattern: |
-                  render ..., action: ...
+                  render ..., action: $X
               - pattern: |
-                  render $FILE, ...
+                  render $X, ...
+          - focus-metavariable: $X
     pattern-sanitizers:
       - patterns:
           - pattern: $MAP[...]
