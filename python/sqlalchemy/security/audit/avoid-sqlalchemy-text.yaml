@@ -1,8 +1,37 @@
 rules:
 - id: avoid-sqlalchemy-text
-  patterns:
-  - pattern: sqlalchemy.text(...)
-  - pattern-not-inside: sqlalchemy.text("...")
+  mode: taint
+  pattern-sinks:
+    - pattern: |
+        sqlalchemy.text(...)
+  pattern-sources:
+    - patterns:
+        - pattern: |
+            $X + $Y
+        - metavariable-type:
+            metavariable: $X
+            type: string
+    - patterns:
+        - pattern: |
+            $X + $Y
+        - metavariable-type:
+            metavariable: $Y
+            type: string
+    - patterns:
+        - pattern: |
+            f"..."
+    - patterns:
+        - pattern: |
+            $X.format(...)
+        - metavariable-type:
+            metavariable: $X
+            type: string
+    - patterns:
+        - pattern: |
+            $X % $Y
+        - metavariable-type:
+            metavariable: $X
+            type: string
   message: sqlalchemy.text passes the constructed SQL statement to the database mostly unchanged. This
     means that the usual SQL injection protections are not applied and this function is vulnerable to
     SQL injection if user input can reach here. Use normal SQLAlchemy operators (such as or_, and_, etc.)
