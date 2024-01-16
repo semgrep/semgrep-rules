@@ -1,0 +1,41 @@
+rules:
+  - id: test-is-missing-assert
+    languages:
+      - python
+    message: >-
+      Comparison without assertion. The result of this
+      comparison is not used. Perhaps this expression
+      is missing an `assert` keyword.
+    patterns:
+      - pattern: $A == $B
+      - pattern-not-inside: assert ...
+      - pattern-not-inside: $X = ...
+      - pattern-not-inside: $X += ...
+      - pattern-not-inside: $X |= ...
+      - pattern-not-inside: $X &= ...
+      - pattern-not-inside: yield $X
+      - pattern-not-inside: $X and $Y
+      - pattern-not-inside: $X or $Y
+      - pattern-not-inside: return ...
+      - pattern-not-inside: $FUNC(...)
+      - pattern-not-inside: |
+          while $EXPR:
+            ...
+      - pattern-not-inside: |
+          with (...):
+            ...
+      - pattern-not-inside: |
+          [...]
+      - pattern-not-inside: |
+          $EXPR[...]
+      - pattern-not-inside: |
+          if ...:
+              ...
+    severity: WARNING
+    paths:
+      include:
+        - test*.py
+    metadata:
+      category: correctness
+      technology:
+        - python

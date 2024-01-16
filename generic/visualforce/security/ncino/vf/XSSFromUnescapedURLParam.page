@@ -1,0 +1,14 @@
+<!-- ruleid: xss-from-unescaped-url-param -->
+<apex:outputText escape="false" value="{!$CurrentPage.parameters.urlParam}" />
+
+<!-- ok: xss-from-unescaped-url-param -->
+<apex:outputText escape="true" value="{!$CurrentPage.parameters.urlParam}" />
+
+<!-- ok: xss-from-unescaped-url-param -->
+<apex:outputText value="{!$CurrentPage.parameters.urlParam}" />
+
+<!-- ruleid: xss-from-unescaped-url-param -->
+<script>var foo = '{!$CurrentPage.parameters.urlParam}';</script>
+
+<!-- ok: xss-from-unescaped-url-param -->
+<script>var foo = '{!JSENCODE($CurrentPage.parameters.urlParam)}';</script>

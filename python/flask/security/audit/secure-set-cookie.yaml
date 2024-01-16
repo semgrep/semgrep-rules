@@ -8,15 +8,16 @@ rules:
     - pattern-inside: |
         $RESP = flask.Response(...)
         ...
-  - pattern-not: $RESPONSE.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
-  - pattern-not: $RESPONSE.set_cookie(..., **$A)
-  - pattern: $RESPONSE.set_cookie(...)
+  - pattern-not: $RESP.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)
+  - pattern-not: $RESP.set_cookie(..., **$A)
+  - pattern: $RESP.set_cookie(...)
   message: >-
-    Found a Flask cookie without secure, httponly, or samesite correctly set. Flask
-    cookies should be handled securely by setting secure=True, httponly=True, and
-    samesite='Lax' in response.set_cookie(...). If these parameters are not properly
+    Found a Flask cookie with insecurely configured properties. 
+    By default the secure, httponly and samesite ar configured insecurely.
+    cookies should be handled securely by setting `secure=True`, `httponly=True`, and
+    `samesite='Lax'` in response.set_cookie(...). If these parameters are not properly
     set, your cookies are not properly protected and are at risk of being stolen by
-    an attacker. Include the 'secure=True', 'httponly=True', samesite='Lax' arguments
+    an attacker. Include the `secure=True`, `httponly=True`, `samesite='Lax'` arguments
     or set these to be true in the Flask configuration.
   metadata:
     cwe:
@@ -24,16 +25,18 @@ rules:
     owasp:
     - A05:2021 - Security Misconfiguration
     references:
-    - https://semgrep.dev/blog/2020/bento-check-keeping-cookies-safe-in-flask/
-    - https://bento.dev/checks/flask/secure-set-cookie/
-    - https://flask.palletsprojects.com/en/1.1.x/security/#set-cookie-options
+    - https://flask.palletsprojects.com/en/3.0.x/api/#flask.Response.set_cookie
+    - https://flask.palletsprojects.com/en/3.0.x/security/#set-cookie-options
     category: security
     technology:
+    - python
     - flask
     subcategory:
     - audit
     likelihood: LOW
     impact: LOW
     confidence: LOW
+    functional-categories:
+    - web::search::cookie-config::flask
   languages: [python]
   severity: WARNING

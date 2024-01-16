@@ -1,0 +1,75 @@
+rules:
+- id: tainted-session
+  severity: WARNING
+  message: >-
+    Session key based on user input risks session poisoning.
+    The user can determine the key used for the session, and thus
+    write any session variable. Session variables are typically trusted
+    to be set only by the application, and manipulating the session can
+    result in access control issues.
+  metadata:
+    technology:
+    - php
+    category: security
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://en.wikipedia.org/wiki/Session_poisoning
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: MEDIUM
+    confidence: MEDIUM
+  languages: [php]
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: $A . $B
+      - pattern: bin2hex(...)
+      - pattern: crc32(...)
+      - pattern: crypt(...)
+      - pattern: filter_input(...)
+      - pattern: filter_var(...)
+      - pattern: hash(...)
+      - pattern: md5(...)
+      - pattern: preg_filter(...)
+      - pattern: preg_grep(...)
+      - pattern: preg_match_all(...)
+      - pattern: sha1(...)
+      - pattern: sprintf(...)
+      - pattern: str_contains(...)
+      - pattern: str_ends_with(...)
+      - pattern: str_starts_with(...)
+      - pattern: strcasecmp(...)
+      - pattern: strchr(...)
+      - pattern: stripos(...)
+      - pattern: stristr(...)
+      - pattern: strnatcasecmp(...)
+      - pattern: strnatcmp(...)
+      - pattern: strncmp(...)
+      - pattern: strpbrk(...)
+      - pattern: strpos(...)
+      - pattern: strripos(...)
+      - pattern: strrpos(...)
+      - pattern: strspn(...)
+      - pattern: strstr(...)
+      - pattern: strtok(...)
+      - pattern: substr_compare(...)
+      - pattern: substr_count(...)
+      - pattern: vsprintf(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: $_SESSION[$KEY] = $VAL;
+    - pattern: $KEY

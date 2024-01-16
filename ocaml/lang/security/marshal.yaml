@@ -1,0 +1,22 @@
+rules:
+  - id: ocamllint-marshal
+    pattern-either:
+      - pattern: input_value
+      - pattern: Marshal.from_channel
+      - pattern: Marshal.from_bytes
+      - pattern: Marshal.from_string
+    message: Marshaling is currently not type-safe and can lead to insecure behaviour when untrusted data is marshalled. Marshalling can lead to out-of-bound reads as well.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - ocaml
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      references:
+      - https://eternal.red/2021/secure-ocaml-sandbox/
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - vuln

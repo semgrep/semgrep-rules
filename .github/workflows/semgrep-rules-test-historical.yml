@@ -22,7 +22,7 @@ jobs:
         python-version: 3.9.2
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v23.1
+      uses: tj-actions/changed-files@v41
       with:
         path: semgrep-rules
         separator: ","
@@ -34,6 +34,8 @@ jobs:
       run: rm -rf semgrep-rules/stats
     - name: delete fingerprints directory
       run: rm -rf semgrep-rules/fingerprints
+    - name: delete rules requiring Semgrep Pro
+      run: rm -rf semgrep-rules/apex semgrep-rules/elixir
     - name: grab historical semgrep version
       env:
         GH_TOKEN: ${{ github.token }}
