@@ -55,3 +55,7 @@
     
 
 
+  def test_render_static_template_name
+    # ok: check-render-local-file-include
+    render :update, locals: { username: params[:username] }
+  end
