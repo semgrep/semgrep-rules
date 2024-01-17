@@ -71,7 +71,6 @@ rules:
                   - metavariable-regex:
                       metavariable: $METHOD
                       regex: ^(Get|Head|Post|PostForm)$
-              - pattern: http.Redirect($W, $REQ, $URL, ...)
               - patterns:
                   - pattern: |
                       http.NewRequest("$METHOD", $URL, ...)
