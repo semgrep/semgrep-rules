@@ -138,18 +138,18 @@ func dbExecFmt(r *http.Request) {
 func dbExecContextFmt(r *http.Request) {
 	ctx := context.Background()
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
 
 	row, _ := db.ExecContext(ctx, query)
 }
 
 func dbQueryFmt(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
 
 	row, _ := db.Query(query)
 }
