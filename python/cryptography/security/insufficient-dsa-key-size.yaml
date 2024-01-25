@@ -8,6 +8,9 @@ rules:
   - metavariable-comparison:
       metavariable: $SIZE
       comparison: $SIZE < 2048
+  - focus-metavariable: $SIZE
+  fix: |
+      2048
   message: >-
     Detected an insufficient key size for DSA. NIST recommends
     a key size of 2048 or higher.

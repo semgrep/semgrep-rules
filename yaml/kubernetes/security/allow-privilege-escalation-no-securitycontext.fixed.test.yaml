@@ -3,9 +3,9 @@ kind: Pod
 spec:
   containers:
     # ruleid: allow-privilege-escalation-no-securitycontext
-    - name: nginx
-      securityContext:
+    - securityContext:
         allowPrivilegeEscalation: false
+      name: nginx
       image: nginx
     # ok: allow-privilege-escalation-no-securitycontext
     - name: postgres

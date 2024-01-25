@@ -1,0 +1,58 @@
+rules:
+  - id: open-redirect
+    languages: [ go ]
+    severity: WARNING
+    message: An HTTP redirect was found to be crafted from user-input `$REQUEST`.
+      This can lead to open redirect vulnerabilities, potentially allowing attackers
+      to redirect users to malicious web sites. It is recommend where possible to
+      not allow user-input to craft the redirect URL. When user-input is necessary
+      to craft the request, it is recommended to follow OWASP best practices to
+      restrict the URL to domains in an allowlist.
+    options:
+      interfile: true
+    metadata:
+      cwe:
+        - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      references:
+        - https://knowledge-base.secureflag.com/vulnerabilities/unvalidated_redirects___forwards/open_redirect_go_lang.html
+      category: security
+      technology:
+        - go
+      confidence: HIGH
+      description: "An HTTP redirect was found to be crafted from user-input leading to an open redirect vulnerability"
+      subcategory:
+        - vuln
+      impact: MEDIUM
+      likelihood: MEDIUM
+      interfile: true
+    mode: taint
+    pattern-sources:
+      - label: INPUT
+        patterns:
+          - pattern-either:
+              - pattern: |
+                  ($REQUEST : *http.Request).$ANYTHING
+              - pattern: |
+                  ($REQUEST : http.Request).$ANYTHING
+          - metavariable-regex:
+              metavariable: $ANYTHING
+              regex: ^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$
+      - label: CLEAN
+        requires: INPUT
+        patterns:
+          - pattern-either:
+              - pattern: |
+                  "$URLSTR" + $INPUT
+              - patterns:
+                  - pattern-either:
+                      - pattern: fmt.Fprintf($F, "$URLSTR", $INPUT, ...)
+                      - pattern: fmt.Sprintf("$URLSTR", $INPUT, ...)
+                      - pattern: fmt.Printf("$URLSTR", $INPUT, ...)
+          - metavariable-regex:
+              metavariable: $URLSTR
+              regex: .*//[a-zA-Z0-10]+\..*
+    pattern-sinks:
+      - requires: INPUT and not CLEAN
+        patterns:
+          - pattern: http.Redirect($W, $REQ, $URL, ...)
+          - focus-metavariable: $URL
