@@ -1,15 +1,16 @@
 rules:
   - id: access-foreign-keys
     patterns:
-    - pattern-either:
-      - pattern-inside: |
-          from django.$Y import $Z
-          ...
-      - pattern-inside: |
-          import django
-          ...
-    - pattern: $X.user.id
-    - pattern-not: request.user.id
+      - pattern-either:
+          - pattern-inside: |
+              from django.$Y import $Z
+              ...
+          - pattern-inside: |
+              import django
+              ...
+      - pattern: $X.user.id
+      - pattern-not: request.user.id
+      - pattern-not: self.request.user.id
     message: You should use ITEM.user_id rather than ITEM.user.id to prevent running an extra query.
     languages: [python]
     severity: WARNING
@@ -17,3 +18,5 @@ rules:
       category: performance
       technology:
         - django
+      references:
+       - https://docs.djangoproject.com/en/5.0/topics/db/optimization/#use-foreign-key-values-directly

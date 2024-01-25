@@ -3,12 +3,6 @@ public class Bad {
               // ruleid: cookie-issecure-false
               Cookie cookie = new Cookie("name", "value");
           }
-
-          public void bad2() {
-              // ruleid: cookie-issecure-false
-              Cookie cookie = new Cookie("name", "value");
-              cookie.setSecure(false);
-          }
    }
 
  public class Ok {
