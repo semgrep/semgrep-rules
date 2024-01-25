@@ -36,7 +36,7 @@ def other(user_profile: UserProfile) -> None:
     password = "testpassword"
     # ruleid: unvalidated-password
     if django.contrib.auth.password_validation.validate_password(password, user=user_profile):
-        user_profile.set_password(password)
+            user_profile.set_password(password)
 
 
     user_profile.save()
