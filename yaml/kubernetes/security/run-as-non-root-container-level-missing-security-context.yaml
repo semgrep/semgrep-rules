@@ -51,9 +51,9 @@ rules:
       regex: "image"
   - focus-metavariable: $IMAGE
   fix: |
-    $IMAGE: $IMAGEVAL
     securityContext:
       runAsNonRoot: true
+    $IMAGE
   message: >-
     When running containers in Kubernetes, it's important to ensure that they
     are properly secured to prevent privilege escalation attacks.
