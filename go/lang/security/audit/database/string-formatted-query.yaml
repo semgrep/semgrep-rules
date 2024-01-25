@@ -63,24 +63,38 @@ rules:
             - pattern: $QUERY = $X + ...
         - pattern-either:
             - pattern-inside: |
-                ...
-                $OBJ.Query($QUERY, ...)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.Query($QUERY, ...)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.ExecContext($CTX, $QUERY, ...)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.ExecContext($CTX, $QUERY, ...)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.Exec($QUERY, ...)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.Exec($QUERY, ...)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.QueryRow($CTX, $QUERY)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.QueryRow($CTX, $QUERY)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.QueryRow($QUERY)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.QueryRow($QUERY)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.QueryContext($CTX, $QUERY)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.QueryContext($CTX, $QUERY)
+                }
             - pattern-inside: |
-                ...
-                $OBJ.QueryRowContext($CTX, $QUERY, ...)
+                func $FUNC(...) {
+                    ...
+                    $OBJ.QueryRowContext($CTX, $QUERY, ...)
+                }
                 
