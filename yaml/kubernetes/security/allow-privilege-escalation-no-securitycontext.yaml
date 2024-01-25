@@ -5,7 +5,7 @@ rules:
       containers:
         ...
   - pattern-inside: |
-      - name: $CONTAINER
+      - $NAME: $CONTAINER
         ...
   - pattern: |
       image: ...
@@ -15,22 +15,25 @@ rules:
       ...
       securityContext:
         ...
-  - focus-metavariable: $CONTAINER
+  - metavariable-regex:
+      metavariable: $NAME
+      regex: "name"
+  - focus-metavariable: $NAME
   fix: |
-    $CONTAINER
-          securityContext:
-            allowPrivilegeEscalation: false
+    securityContext:
+      allowPrivilegeEscalation: false
+    $NAME
   message: >-
-    In Kubernetes, each pod runs in its own isolated environment with its own 
-    set of security policies. However, certain container images may contain 
-    `setuid` or `setgid` binaries that could allow an attacker to perform 
-    privilege escalation and gain access to sensitive resources. To mitigate 
-    this risk, it's recommended to add a `securityContext` to the container in 
-    the pod, with the parameter `allowPrivilegeEscalation` set to `false`. 
-    This will prevent the container from running any privileged processes and 
-    limit the impact of any potential attacks. 
-    By adding a `securityContext` to your Kubernetes pod, you can help to 
-    ensure that your containerized applications are more secure and less 
+    In Kubernetes, each pod runs in its own isolated environment with its own
+    set of security policies. However, certain container images may contain
+    `setuid` or `setgid` binaries that could allow an attacker to perform
+    privilege escalation and gain access to sensitive resources. To mitigate
+    this risk, it's recommended to add a `securityContext` to the container in
+    the pod, with the parameter `allowPrivilegeEscalation` set to `false`.
+    This will prevent the container from running any privileged processes and
+    limit the impact of any potential attacks.
+    By adding a `securityContext` to your Kubernetes pod, you can help to
+    ensure that your containerized applications are more secure and less
     vulnerable to privilege escalation attacks.
   metadata:
     cwe:
