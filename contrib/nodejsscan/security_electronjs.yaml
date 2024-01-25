@@ -1,0 +1,202 @@
+rules:
+  - id: electron_disable_websecurity
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {webSecurity: false}});
+          - pattern: |
+              var $X = {webPreferences: {webSecurity: false}};
+    message: >-
+      Disabling webSecurity will disable the same-origin policy and allows the
+      execution of insecure code from any domain.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-346: Origin Validation Error"
+      category: security
+      technology:
+        - electron
+  - id: electron_allow_http
+    patterns:
+      - pattern-either:
+          - pattern: >
+              new BrowserWindow({webPreferences: {allowRunningInsecureContent:
+              true}});
+          - pattern: |
+              var $X = {webPreferences: {allowRunningInsecureContent: true}};
+    message: >-
+      Application can load content over HTTP and that makes the app vulnerable
+      to Man in the middle attacks.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      category: security
+      technology:
+        - electron
+  - id: electron_blink_integration
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {enableBlinkFeatures: '...'}});
+          - pattern: |
+              var $X = {webPreferences: {enableBlinkFeatures: '...'}};
+    message: >-
+      Blink's experimental features are enabled in this application. Some of the
+      features may affect the security of the application.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-272: Least Privilege Violation"
+      category: security
+      technology:
+        - electron
+  - id: electron_nodejs_integration
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {nodeIntegration: true}});
+          - pattern: |
+              var $X = {webPreferences: {nodeIntegration: true}};
+    message: >-
+      Node integration exposes node.js APIs to the electron app and this can
+      introduce remote code execution vulnerabilities to the application if the
+      app is vulnerable to Cross Site Scripting (XSS).
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-272: Least Privilege Violation"
+      category: security
+      technology:
+        - electron
+  - id: electron_context_isolation
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {contextIsolation: false}});
+          - pattern: |
+              var $X = {webPreferences: {contextIsolation: false}};
+    message: >-
+      Disabling context isolation can introduce Prototype Pollution
+      vulnerabilities.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      technology:
+        - electron
+  - id: electron_experimental_features
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {experimentalFeatures: true}});
+          - pattern: |
+              var $X = {webPreferences: {experimentalFeatures: true}};
+    message: >-
+      Experimental features are not expected to be in production ready
+      applications.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-272: Least Privilege Violation"
+      category: security
+      technology:
+        - electron
+  - id: electron_shell_openexternal
+    patterns:
+      - pattern: shell.openExternal($X)
+      - pattern-not: shell.openExternal("...")
+    message: >-
+      The openExternal method opens the provided URL using the
+      Operating Systems native application for that URL scheme. This may lead to
+      Remote Code Execution if URL schemes such as `file:`, `smb:`, etc. are 
+      permitted. https://positive.security/blog/url-open-rce.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-913: Improper Control of Dynamically-Managed Code Resources"
+      category: security
+      technology:
+        - electron
+  - id: electron_webview_allowpopups
+    patterns:
+      - pattern-regex: allow[pP]opups\s?[=:](.*)?(true|on)
+    message: >-
+      Webview or embedded browser control is a web browser that is embedded in a 
+      native app to display web content. If a webview is configured to allow popups, 
+      and the embedded webpage is either attacker controlled, or is vulnerable to
+      Cross-Site Scripting (XSS), then an attacker can leverage that to open a new 
+      window which may be used to gain Remote Code Execution.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+      category: security
+      technology:
+        - electron
+  - id: electron_browserview_loadurl
+    patterns:
+      - pattern: $X.loadURL($Y)
+      - pattern-not: $X.loadURL("...")
+    message: >-
+      A BrowserView can be used to embed additional web content into a BrowserWindow.
+      It is meant to be an alternative to the webview tag. Allowing user controlled URLs 
+      may lead to an attacker exploiting XSS or v8 vulnerabilities to gain RCE.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "DA6:2021 - Security Misconfiguration"
+      cwe: "CWE-913: Improper Control of Dynamically-Managed Code Resources"
+      category: security
+      technology:
+        - electron
+  - id: electron_disabled_sandbox
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new BrowserWindow({webPreferences: {sandbox: false}});
+          - pattern: |
+              var $X = {webPreferences: {sandbox: false}};
+    message: >-
+      Sandbox is a security feature that isolates and restricts the access of an Electron app's 
+      renderer processes to the underlying operating system. When sandboxing is disabled, renderer
+      processes have more direct access to system resources, including the user's file system 
+      and other sensitive operations. Enabling the sandbox adds an additional layer of security
+      to the application.
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      owasp: "A06:2017 - Security Misconfiguration"
+      cwe: "CWE-272: Least Privilege Violation"
+      category: security
+      technology:
+        - electron
