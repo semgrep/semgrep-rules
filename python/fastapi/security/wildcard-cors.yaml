@@ -1,0 +1,37 @@
+rules:
+  - id: wildcard-cors
+    languages:
+      - python
+    message: CORS policy allows any origin (using wildcard '*'). This is insecure
+      and should be avoided.
+    mode: taint
+    pattern-sources:
+      - pattern: '[..., "*", ...]'
+    pattern-sinks:
+      - patterns:
+          - pattern: |
+              $APP.add_middleware(
+                CORSMiddleware,
+                allow_origins=$ORIGIN,
+                ...);
+          - focus-metavariable: $ORIGIN
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-942: Permissive Cross-domain Policy with Untrusted Domains"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      category: security
+      technology:
+        - python
+        - fastapi
+      references:
+        - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
+        - https://cwe.mitre.org/data/definitions/942.html
+      likelihood: HIGH
+      impact: LOW
+      confidence: MEDIUM
+      vulnerability_class:
+        - Configuration
+      subcategory:
+        - vuln
