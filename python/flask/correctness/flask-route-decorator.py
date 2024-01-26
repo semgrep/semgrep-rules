@@ -3,7 +3,8 @@ from flask import Blueprint
 blueprint = Blueprint()
 
 
-# ok: Only 1 decorator
+# Only 1 decorator
+# ok: flask-route-decorator
 @blueprint.route("HAI")
 def f():
     pass
