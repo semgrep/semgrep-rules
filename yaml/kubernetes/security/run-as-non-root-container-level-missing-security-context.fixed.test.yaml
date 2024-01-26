@@ -22,9 +22,9 @@ spec:
   containers:
     - name: nginx
     # ruleid: run-as-non-root-container-level-missing-security-context
-      image: nginx
       securityContext:
         runAsNonRoot: true
+      image: nginx
     - name: postgres
       image: postgres
       # this is okay because there already is a security context, requires different fix, different rule
