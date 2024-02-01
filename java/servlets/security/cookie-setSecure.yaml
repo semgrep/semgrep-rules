@@ -1,0 +1,41 @@
+rules:
+  - id: cookie-setSecure
+    patterns:
+      - patterns:
+          - pattern-inside: |
+              $COOKIE = new Cookie(...);
+              ...
+          - pattern: |
+              $COOKIE.setSecure(false);
+      - pattern-not-inside: |
+          $COOKIE = new Cookie(...);
+          ...
+          $COOKIE.setSecure(true);
+    message: "Default session middleware settings: `setSecure` not set to true. This
+      ensures that the cookie is sent only over HTTPS to prevent cross-site
+      scripting attacks."
+    fix-regex:
+      regex: setSecure\(false\)
+      replacement: setSecure(true)
+    metadata:
+      vulnerability: Insecure Transport
+      owasp:
+        - A03:2017 - Sensitive Data Exposure
+        - A02:2021 - Cryptographic Failures
+      cwe:
+        - "CWE-319: Cleartext Transmission of Sensitive Information"
+      references:
+        - https://docs.oracle.com/javaee/6/api/javax/servlet/http/Cookie.html#setSecure(boolean)
+        - https://owasp.org/www-community/controls/SecureCookieAttribute
+      category: security
+      technology: 
+       - java
+       - cookie
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+    languages:
+      - java
+    severity: WARNING

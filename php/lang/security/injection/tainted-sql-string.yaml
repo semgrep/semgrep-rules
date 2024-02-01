@@ -49,16 +49,13 @@ rules:
           regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
     - patterns:
       - pattern: |
-          "...{$EXPR}..."
-      - pattern-regex: |
-          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
-    - patterns:
-      - pattern: |
           "...$EXPR..."
-      - pattern-regex: |
-          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+      - metavariable-regex:
+          metavariable: $EXPR
+          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
     - patterns:
       - pattern: |
-          "...".$EXPR
-      - pattern-regex: |
-          .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+          "$SQLSTR".$EXPR
+      - metavariable-regex:
+          metavariable: $SQLSTR
+          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*

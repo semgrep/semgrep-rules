@@ -23,7 +23,7 @@ jobs:
     - name: delete fingerprints directory
       run: rm -rf semgrep-rules/fingerprints
     - name: delete rules requiring Semgrep Pro
-      run: rm -rf semgrep-rules/apex
+      run: rm -rf semgrep-rules/apex semgrep-rules/elixir
     - name: validate rules
       run: |
         export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep"

@@ -7,12 +7,12 @@ on:
 
 jobs:
   do-update:
-    if: github.repository == 'returntocorp/semgrep-rules'
+    if: github.repository == 'semgrep/semgrep-rules'
     name: Update semgrep.dev
     runs-on: ubuntu-latest
     steps:
     - name: update dev.semgrep.dev
-      run: curl --fail -X POST -L https://dev.semgrep.dev/api/admin/update-registry
+      run: curl --fail -X POST -L https://dev.semgrep.dev/api/admin/update-registry?rule_type=sast
       continue-on-error: true
     - name: update staging.semgrep.dev
-      run: curl --fail -X POST -L https://staging.semgrep.dev/api/admin/update-registry
+      run: curl --fail -X POST -L https://staging.semgrep.dev/api/admin/update-registry?rule_type=sast
