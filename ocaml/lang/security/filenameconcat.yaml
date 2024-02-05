@@ -1,0 +1,18 @@
+rules:
+  - id: ocamllint-filenameconcat
+    pattern: Filename.concat
+    message: When attacker supplied data is passed to Filename.concat directory traversal attacks might be possible.
+    languages: [ocaml]
+    severity: WARNING
+    metadata:
+      category: security
+      references:
+      - https://v2.ocaml.org/api/Filename.html
+      technology:
+        - ocaml
+      cwe: "CWE-35: Path Traversal"
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - audit

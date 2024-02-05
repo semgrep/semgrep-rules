@@ -11,6 +11,7 @@ d = dict(
 # ruleid: useless-literal
 d = {1: "a", 2: "b", 1: "a"}
 d = {
+    # ruleid: useless-literal
     1: "a",
     2: "b",
     # ruleid: useless-literal

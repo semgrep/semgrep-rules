@@ -71,3 +71,15 @@ function test5() {
     $info = mysql_query($query);
     return $info;
 }
+
+function ok_test6() {
+    // ok: tainted-sql-string
+    $this->delete("id:".$_GET['id']);
+}
+
+function ok_test7() {
+    // ok: tainted-sql-string
+    $select = "Foobar: = '{$_REQUEST['url']}'";
+    $info = do_smth($select);
+    return $info;
+}

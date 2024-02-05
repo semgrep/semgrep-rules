@@ -1,88 +1,58 @@
 rules:
-- id: csharp-sqli
-  patterns:
-  - metavariable-regex:
-      metavariable: $PATTERN
-      regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $S.$PATTERN = $SB.ToString();
-      - pattern: $S.$PATTERN = $SB.ToString();
-    - patterns:
-      - pattern-inside: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $PATTERN $X = new $PATTERN($SB.ToString(),...);
-      - pattern: $PATTERN $X = new $PATTERN($SB.ToString(),...);
-    - pattern: |
-        $S.$PATTERN = string.Format(...);
-    - pattern: |
-        $S.$PATTERN = string.Concat(...);
-    - pattern: |
-        $S.$PATTERN  = String.Format(...);
-    - pattern: |
-        $S.$PATTERN  = String.Concat(...);
-    - pattern: |
-        $S = string.Concat(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: |
-        $S = String.Format(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: |
-        $S = String.Concat(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: |
-        $PATTERN $S = new $PATTERN(...);
-    - patterns:
-      - pattern-inside: |
-          $T $X(...,$SQL,...)
-          {
-            ...
-            $S.$PATTERN = $SQL;
-            ...
-          }
-      - pattern: $S.$PATTERN = $SQL;
-    - patterns:
-      - pattern-inside: |
-          $T $X(...,$SQL,...)
-          {
-            ...
-            $PATTERN $S = new $PATTERN($SQL,...);
-            ...
-          }
-      - pattern: $PATTERN $S = new $PATTERN($SQL,...);
-  - pattern-not: |
-      $S.$PATTERN = "..." + "...";
-  - pattern-not-inside: |
-      ...
-      <... $S.Parameters ...>;
-  message: >-
-    Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the
-    SQL statement are not properly sanitized.
-    Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'.
-  metadata:
-    category: security
-    technology:
-    - csharp
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
-    cwe:
-    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
-    confidence: MEDIUM
-    references:
-    - https://owasp.org/Top10/A03_2021-Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-  languages: [csharp]
-  severity: ERROR
+  - id: csharp-sqli
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: |
+              (string $X)
+          - pattern-not: |
+              "..."
+    pattern-propagators:
+      - pattern: (StringBuilder $B).$ANY(...,(string $X),...)
+        from: $X
+        to: $B
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+            - patterns:
+              - pattern: |
+                  new $PATTERN($CMD,...)
+              - focus-metavariable: $CMD
+            - pattern: |
+                $CMD.$PATTERN = ...;
+          - metavariable-regex:
+              metavariable: $PATTERN
+              regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: |
+              $CMD.Parameters.add(...)
+          - pattern: |
+              $CMD.Parameters[$IDX] = ...
+        by-side-effect: true
+    message: Detected a formatted string in a SQL statement. This could lead to SQL
+      injection if variables in the SQL statement are not properly sanitized.
+      Use a prepared statements instead. You can obtain a PreparedStatement
+      using 'SqlCommand' and 'SqlParameter'.
+    metadata:
+      category: security
+      technology:
+        - csharp
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL
+          Command ('SQL Injection')"
+      confidence: MEDIUM
+      references:
+        - https://owasp.org/Top10/A03_2021-Injection
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: HIGH
+    languages:
+      - csharp
+    severity: ERROR
