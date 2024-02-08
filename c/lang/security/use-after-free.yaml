@@ -16,8 +16,8 @@ rules:
           ...
           $VAR = malloc(...);
           ...
-    message: Variable '$VAR' was used after being freed. This can lead to undefined
-      behavior.
+    message: >-
+      Variable '$VAR' was used after being freed. This can lead to undefined behavior.
     metadata:
       cwe:
         - "CWE-416: Use After Free"
@@ -27,7 +27,7 @@ rules:
       category: security
       technology:
         - c
-      confidence: MEDIUM
+      confidence: LOW
       cwe2022-top25: true
       cwe2021-top25: true
       subcategory:
