@@ -30,4 +30,7 @@ rules:
   severity: WARNING
   languages:
   - java
-  pattern: new ObjectInputStream(...);
+  patterns:
+  - pattern-either:
+    - pattern: new ObjectInputStream(...)
+    - pattern: new org.apache.commons.io.input.ClassLoaderObjectInputStream(...)
