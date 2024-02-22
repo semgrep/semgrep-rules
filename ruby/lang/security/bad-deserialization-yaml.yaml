@@ -8,17 +8,29 @@ rules:
   - pattern-not: |
       YAML.load("...", ...)
   - pattern-not-inside: |
-      $FILE = File.read("...", ...)
+      YAML.load(..., File.read(...), ...)
+  - pattern-not-inside: |
+      $FILE = File.read(...)
       ...
       YAML.load(..., $FILE, ...)
   - pattern-not-inside: |
-      $FILENAME = "..."
+      $FILENAME = ...
       ...
       $FILE = File.read($FILENAME, ...)
       ...
       YAML.load(..., $FILE, ...)
   - pattern-not-inside: |
-      YAML.load(..., File.read("...", ...), ...)
+          YAML.load(..., $X.$Y(File.read(...)), ...)
+  - pattern-not-inside: |
+      YAML.load(..., $X.$Y(File.read(...)).$Z, ...)
+  - pattern-not-inside: |
+      $T = $MOD.$MET(File.read(...))
+      ...
+      YAML.load(..., $T, ...)
+  - pattern-not-inside: |
+      $T = $MOD.$MET(File.read(...))
+      ...
+      YAML.load(..., $T.$R, ...)
   fix: Psych.safe_load($...ARGS)
   message: >-
     Unsafe deserialization from YAML. Objects in Ruby can be serialized into strings,

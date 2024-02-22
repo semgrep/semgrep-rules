@@ -26,9 +26,13 @@ rules:
   languages: [go]
   severity: ERROR
   patterns:
-  - pattern-inside: |
-      import "github.com/dgrijalva/jwt-go"
-      ...
+  - pattern-either:
+    - pattern-inside: |
+        import "github.com/golang-jwt/jwt"
+        ...
+    - pattern-inside: |
+        import "github.com/dgrijalva/jwt-go"
+        ...
   - pattern-either:
     - pattern: |
         jwt.SigningMethodNone
