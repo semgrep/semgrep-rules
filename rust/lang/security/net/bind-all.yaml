@@ -1,0 +1,17 @@
+rules:
+  - id: avoid-bind-to-all-interfaces
+    message: Listening on 0.0.0.0 or empty string could unexpectedly expose the server publicly as it binds to all available
+      interfaces
+    languages: [rust]
+    severity: WARNING
+    metadata:
+      cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+      owasp: 'A6: Security Misconfiguration'
+      source-rule-url: https://github.com/securego/gosec
+    pattern-either:
+      - pattern: TcpListener::bind("=~/^0.0.0.0:.*$/",...)
+      - pattern: UdpSocket::bind("=~/^0.0.0.0:.*$/")
+      - pattern: TcpListener::bind("=~/^:.*$/",...)
+      - pattern: UdpSocket::bind("=~/^:.*$/")
+      - pattern: Ipv4Addr::new(0, 0, 0, 0)
+      - pattern: SocketAddr::from(([0, 0, 0, 0], ...))

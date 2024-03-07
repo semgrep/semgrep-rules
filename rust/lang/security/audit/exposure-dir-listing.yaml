@@ -1,0 +1,31 @@
+rules:
+  - id: exposure-dir-listing
+    languages:
+      - rust
+    message: |
+      A directory listing is inappropriately exposed, yielding potentially sensitive
+      information to attackers. 
+    metadata:
+      owasp: 'A10: Insecure Configuration Management'
+      cwe: 'CWE-548: Exposure of Information Through Directory Listing'
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          # Check for path literals which should have application access blocked
+          - patterns:
+              - pattern: $MOD::read_dir($DIR)
+              - metavariable-pattern:
+                  metavariable: $DIR
+                  patterns:
+                    - pattern-either:
+                        - pattern: '"/System"'
+                        - pattern: '"/usr"'
+                        - pattern: '"/bin"'
+                        - pattern: '"/sbin"'
+                        - pattern: '"/var"'
+          # Check for impled sensitive file paths via regex
+          - patterns:
+              - pattern: $MOD::read_dir($DIR)
+              - metavariable-regex:
+                  metavariable: $DIR
+                  regex: (.*)(password|account_id|key|secret|social_security_number|national_id|government_id|location)(.*)

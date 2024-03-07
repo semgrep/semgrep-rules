@@ -1,0 +1,33 @@
+rules:
+  - id: XSRF_URL
+    message: >
+      A parameter being passed directly into .URL function most likely lead to
+      SSRF.
+    metadata:
+      cwe: CWE-918 Server-Side Request Forgery (SSRF)
+      owasp: A10:2021 – Server-Side Request Forgery (SSRF)
+      source-rule-url: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    severity: ERROR
+    patterns:
+
+      - pattern-either:
+          - pattern: |
+              fn $METHOD($VAR: String) {
+                ...
+                let $VAL = reqwest::$WRITE($VAR). ...;
+                ...
+              }
+
+          - pattern: |
+              fn $METHOD($VAR: String) {
+                ...
+                let $VAL = reqwest::$WRITE($VAR);
+                ...
+              }   
+
+      - metavariable-regex:
+          metavariable: $WRITE
+          regex: ^(get|post|put|patch|head)$
+
+    languages:
+      - rust

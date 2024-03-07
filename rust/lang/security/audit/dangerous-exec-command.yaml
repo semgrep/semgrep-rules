@@ -1,0 +1,32 @@
+rules:
+  - id: dangerous-exec-command
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: |
+                      Command::new($CMD)
+          - patterns:
+              - pattern-either:
+                  - pattern: |
+                      Command::new("=~/(sh|bash|ksh|csh|tcsh|zsh|ls)/").arg("-c").arg($CMD)
+                  - pattern: |
+                      Command::new("=~/(sh|bash|ksh|csh|tcsh|zsh)/").arg("-c").arg($CMD).output()
+                  - pattern: |
+                      Command::new("=~/(sh|bash|ksh|csh|tcsh|zsh)/").arg("-c").arg($CMD).output().expect(...)
+      - pattern-inside: |
+          use std::process::Command;
+          ...
+      - pattern-not-inside: |
+          $CMD = "...";
+          ...
+    message: |
+      Detected non-static command inside Command. Audit the input to 'Command:new'.
+      If unverified user data can reach this call site, this is a code injection
+      vulnerability. A malicious actor can inject a malicious script to execute
+      arbitrary code.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: 'A1: Injection'
+    severity: WARNING
+    languages: [rust]

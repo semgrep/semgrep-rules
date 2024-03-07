@@ -1,0 +1,33 @@
+rules:
+  - id: use-of-md4
+    languages: [rust]
+    message: avoid cryptographically insecure hashing function(s)
+    pattern-either:
+      - patterns:
+          - pattern: md4::new(...)
+          - pattern-inside: |
+              use md4::Md4;
+              ...
+      - patterns:
+          - pattern: md4::Md4::new()
+      - patterns:
+          - pattern: md4::new_with_prefix(...)
+          - pattern-inside: |
+              use md4::Md4;
+              ...
+      - patterns:
+          - pattern: md4::Md4::new_with_prefix(...)
+      - patterns:
+          - pattern: md4::Md4::digest(...)
+      - patterns:
+          - pattern: Md4::digest(...)
+          - pattern-inside: |
+              use md4::Digest;
+              ...
+    metadata:
+      references:
+        - https://github.com/RustCrypto/hashes
+        - https://docs.rs/md4/latest/md4/
+      category: security
+      cwe: "CWE-328: Use of Weak Hash"
+    severity: WARNING

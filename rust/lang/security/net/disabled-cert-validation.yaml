@@ -1,0 +1,10 @@
+rules:
+  - id: disabled-cert-validation
+    pattern-either:
+      - pattern: $LHS.danger_accept_invalid_certs(true);
+    message: certificate verification explicitly disabled, insecure connections possible
+    metadata:
+      cwe: 'CWE-295: Improper Certificate Validation'
+      owasp: 'A3: Sensitive Data Exposure'
+    languages: [rust]
+    severity: ERROR
