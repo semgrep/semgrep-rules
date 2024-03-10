@@ -1,0 +1,39 @@
+rules:
+- id: jwt-simple-noverify-copy-copy
+  message: jwt-simple decode has signature verification disabled, which could lead
+    to authentication bypass
+  severity: ERROR
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-287: Improper Authentication'
+    - 'CWE-345: Insufficient Verification of Data Authenticity'
+    - 'CWE-347: Improper Verification of Cryptographic Signature'
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - jwt-simple
+    - express
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://www.npmjs.com/package/jwt-simple
+    - https://cwe.mitre.org/data/definitions/287
+    - https://cwe.mitre.org/data/definitions/345
+    - https://cwe.mitre.org/data/definitions/347
+  languages:
+  - javascript
+  - typescript
+  patterns:
+  - pattern-inside: |
+      $JWT = require('jwt-simple');
+      ...
+  - pattern: $JWT.decode($TOKEN, $SECRET, $NOVERIFY, ...)
+  - metavariable-pattern:
+      metavariable: $NOVERIFY
+      patterns:
+      - pattern-not: 'false'
