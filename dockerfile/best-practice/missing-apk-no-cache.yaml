@@ -3,8 +3,8 @@ rules:
     patterns:
       - pattern: |
           RUN apk $COMMAND ...
-      - pattern-not: |
-          RUN apk $CMD ... --no-cache ...
+      - pattern-not-inside: |
+          RUN apk ... --no-cache ...
     languages:
       - dockerfile
     message: >-
