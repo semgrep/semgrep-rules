@@ -1,10 +1,10 @@
 rules:
 - id: package-dependencies-check
   patterns:
-  - pattern-not-regex: \"[\w-.]*\"\s*:\s*\"[\d.]+-[\w.]+\"
+  - pattern-not-regex: \"[\w\-.]*\"\s*:\s*\"[\d.]+-[\w.]+\"
   - pattern-either:
-    - pattern-regex: \"[\w-.]*\"\s*:\s*\"latest\"
-    - pattern-regex: \"[\w-.]*\"\s*:\s*\"[^~\-\^><=\"x]*[~\-\^><=x]+.*\"
+    - pattern-regex: \"[\w\-.]*\"\s*:\s*\"latest\"
+    - pattern-regex: \"[\w\-.]*\"\s*:\s*\"[^~\-\^><=\"x]*[~\-\^><=x]+.*\"
   - pattern-either:
     - pattern-inside: |
         "dependencies": {
