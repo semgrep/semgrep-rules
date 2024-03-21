@@ -90,3 +90,15 @@ exec "bar$(foo)bar"
 
 # ok: unquoted-command-substitution-in-command
 x=$(foo)
+
+# Assignment from arithmetic expression
+# ok: unquoted-command-substitution-in-command
+x=$((foo++))
+
+# This expression used to trigger
+# ok: unquoted-command-substitution-in-command
+echo $((2 + 2))
+
+# Real world case that used to trigger this
+# ok: unquoted-command-substitution-in-command
+printf '%-*s enter %s\n' $((call_count++)) '->' "$1"
