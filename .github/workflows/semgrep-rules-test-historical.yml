@@ -36,6 +36,12 @@ jobs:
       run: rm -rf semgrep-rules/fingerprints
     - name: delete rules requiring Semgrep Pro
       run: rm -rf semgrep-rules/apex semgrep-rules/elixir
+    # TODO: remove this in the future, there was a regression in semgrep that
+    # caused non-rule YAML files to be validated
+    - name: delete YAML files that are not rules
+      run: |
+        rm -f semgrep-rules/.pre-commit-config.yaml
+        rm -rf semgrep-rules/.github
     - name: grab historical semgrep version
       env:
         GH_TOKEN: ${{ github.token }}
