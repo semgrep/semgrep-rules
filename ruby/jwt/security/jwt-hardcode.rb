@@ -36,3 +36,14 @@ def ok1(secret_key)
     decoded_token = JWT.decode token, secret_key, true, { algorithm: 'HS256' }
     puts decoded_token
 end
+
+def ok2()
+    token = JWT.encode payload, hmac_secret, 'HS256'
+    puts token
+    jwk_loader = ->(options) do
+        # jwk_loader implementation here
+    end
+    # ok: ruby-jwt-hardcoded-secret
+    decoded_token = JWT.decode token, nil, true, { algorithm: 'HS256' }, jwks: jwk_loader
+    puts decoded_token
+end
