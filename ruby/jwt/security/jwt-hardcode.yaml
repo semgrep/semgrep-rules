@@ -44,5 +44,9 @@ rules:
         $SECRET = "..."
         ...
         JWT.decode($PAYLOAD,$SECRET,...)
+  - pattern-not: |
+      JWT.encode($PAYLOAD, nil, ... , jwks: ..., ...)
+  - pattern-not: |
+      JWT.decode($PAYLOAD, nil, ..., jwks: ..., ...)
   languages: [ruby]
   severity: ERROR
