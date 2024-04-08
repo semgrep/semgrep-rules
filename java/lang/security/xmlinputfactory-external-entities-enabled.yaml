@@ -31,6 +31,9 @@ rules:
     to XML external entity
     attacks. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities"
     to false.
-  pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+  patterns:
+  - pattern-either:
+      - pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+      - pattern: $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.SUPPORT_DTD, true);
   languages:
   - java
