@@ -33,7 +33,7 @@ rules:
     to false.
   patterns:
   - pattern-either:
-      - pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
-      - pattern: $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.SUPPORT_DTD, true);
+      - pattern: (javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+      - pattern: (javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty(javax.xml.stream.XMLInputFactory.SUPPORT_DTD, true);
   languages:
   - java
