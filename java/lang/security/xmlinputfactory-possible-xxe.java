@@ -3,10 +3,10 @@
 package example;
 
 import javax.xml.stream.XMLInputFactory;
-import static java.xml.stream.XMLFactoryInput.IS_SUPPORTING_EXTERNAL_ENTITIES;
+import static javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES;
 
 class GoodXMLInputFactory {
-    public void Blah() {
+    public void blah() {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
         // See
@@ -18,7 +18,7 @@ class GoodXMLInputFactory {
 }
 
 class GoodConstXMLInputFactory {
-    public void Blah() {
+    public GoodConstXMLInputFactory() {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
         // See
@@ -29,16 +29,24 @@ class GoodConstXMLInputFactory {
     }
 }
 
-class BadXMLInputFactory {
-    public Blah() {
+class BadXMLInputFactory1 {
+    public BadXMLInputFactory1() {
         // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
     }
 }
 
+class BadXMLInputFactory2 {
+    public BadXMLInputFactory2() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, true);
+    }
+}
+
 class MaybeBadXMLInputFactory {
-    public Blah() {
+    public void foobar() {
         // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     }
