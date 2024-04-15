@@ -14,7 +14,6 @@ rules:
   - pattern: echo $...VARS;
   pattern-sanitizers:
   - pattern: isset(...)
-  - pattern: empty(...)
   - pattern: htmlentities(...)
   - pattern: htmlspecialchars(...)
   - pattern: strip_tags(...)
@@ -25,7 +24,7 @@ rules:
   # Laravel Escapes
   - pattern: e(...)
   # Symfony Escapes
-  - pattern: twig_escape_filter($...)
+  - pattern: twig_escape_filter(...)
   # CodeIgniter Escapes
   - pattern: xss_clean(...)
   - pattern: html_escape(...)
