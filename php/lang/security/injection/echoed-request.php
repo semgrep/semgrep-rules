@@ -1,18 +1,18 @@
 <?php
 
 // example key-value: name=%3Cscript%3Econfirm%28%29%3C%2Fscript%3E
-function dangerousPrintUsage() {
+function dangerousEchoUsage() {
     $name = $_REQUEST['name'];
     // ruleid: echoed-request
-    print("Hello : $name");
+    echo "Hello : $name";
     // ruleid: echoed-request
-    print("Hello : " . $name);
+    echo "Hello : " . $name;
 }
 
-function safePrintUsage() {
+function safeEchoUsage() {
     $name = $_REQUEST['name'];
     // ok: echoed-request
-    print("Hello : " . htmlentities($name));
+    echo "Hello : " . htmlentities($name);
 }
 
 function doSmth() {
