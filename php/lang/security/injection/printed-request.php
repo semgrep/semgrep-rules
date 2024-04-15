@@ -63,11 +63,11 @@ function doOK3() {
 
 function doOK4() {
     // ok: printed-request
-    print("Hello ".isset($_POST['name'])." !");
+    print("Hello ".e($_POST['name'])." !");
 }
 
 function doOK5() {
-    $safevar = empty($_GET['name']);
+    $safevar = esc_attr($_GET['name']);
     // ok: printed-request
     print("Hello $safevar !");
 }
