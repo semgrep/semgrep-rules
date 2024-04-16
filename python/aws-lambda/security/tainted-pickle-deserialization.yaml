@@ -20,6 +20,13 @@ rules:
       - pattern: dill.load($SINK,...)
       - pattern: dill.loads($SINK,...)
       - pattern: shelve.open($SINK,...)
+    - pattern-not: pickle.load(pickle.dumps(...))
+    - pattern-not: pickle.loads(pickle.dumps(...))
+    - pattern-not: _pickle.load(_pickle.dumps(...))
+    - pattern-not: _pickle.loads(_pickle.dumps(...))
+    - pattern-not: cPickle.load(cPickle.dumps(...))
+    - pattern-not: cPickle.loads(cPickle.dumps(...))
+
   message: >-
     Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
