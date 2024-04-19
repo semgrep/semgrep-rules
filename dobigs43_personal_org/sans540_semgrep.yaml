@@ -1,0 +1,16 @@
+rules:
+- id: sans540_semgrep
+  patterns:
+  - pattern: fileService.loadFileAsString($FILE)
+  - pattern-not-inside: validateFilePath()
+  message: |
+    "fileService.loadFileAsString()" is not being validated by the function "validateFilePath" This could lead to exfiltration of data.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - docker
+    references:
+    - https://example.com
