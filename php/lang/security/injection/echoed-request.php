@@ -44,6 +44,22 @@ function doSmth5() {
     echo "Hello ".trim($_POST['name']);
 }
 
+function doSmth6() {
+   $VAR = $_GET['someval']
+    if(isset($VAR)){ 
+        // ruleid: echoed-request
+        echo $VAR; 
+    }
+}
+
+function doSmth7() {
+    $VAR = $_GET['someval']
+     if(empty($VAR)){ 
+         // ruleid: echoed-request
+         echo $VAR; 
+     }
+ }
+
 function doOK1() {
     // ok: echoed-request
     echo "Hello ".htmlentities($_POST['name'])." !";
@@ -84,4 +100,14 @@ function doOK7() {
     echo $safevar;
 }
 
+function doOK8() {
+    // ok: echoed-request
+    echo "Hello ".isset($_POST['name'])." !";
+}
+
+function doOK9() {
+    $safevar = empty($_GET['name']);
+    // ok: echoed-request
+    echo "Hello $safevar !";
+}
 
