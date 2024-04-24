@@ -45,7 +45,7 @@ function doSmth5() {
 }
 
 function doSmth6() {
-    $VAR = $_GET['someval']
+    $VAR = $_GET['someval'];
      if(isset($VAR)){ 
          // ruleid: printed-request
          print($VAR); 
@@ -53,7 +53,7 @@ function doSmth6() {
  }
  
  function doSmth7() {
-     $VAR = $_GET['someval']
+     $VAR = $_GET['someval'];
       if(empty($VAR)){ 
           // ruleid: printed-request
           print($VAR); 
