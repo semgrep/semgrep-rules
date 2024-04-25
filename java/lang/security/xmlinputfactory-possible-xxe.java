@@ -29,6 +29,18 @@ class GoodConstXMLInputFactory {
     }
 }
 
+class GoodConstXMLInputFactory1 {
+    public GoodConstXMLInputFactory1() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+
+        // See
+        // https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md#xmlinputfactory-a-stax-parser
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+        // ok
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+    }
+}
+
 class BadXMLInputFactory1 {
     public BadXMLInputFactory1() {
         // ruleid:xmlinputfactory-possible-xxe
