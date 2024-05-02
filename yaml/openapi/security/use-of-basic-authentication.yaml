@@ -5,19 +5,23 @@ rules:
       Basic authentication is considered weak and should be avoided. 
       Use a different authentication scheme, such of OAuth2, OpenID Connect, or mTLS.
     severity: ERROR
-    pattern-inside: |
-      openapi: $VERSION
-      ...
-      components:
-        ...
-        securitySchemes:
+    patterns:
+      - pattern-inside: |
+          openapi: $VERSION
           ...
-          $SCHEME:
+          components:
             ...
-    pattern: |
-      type: http
-      ...
-      scheme: basic
+            securitySchemes:
+              ...
+              $SCHEME:
+                ...
+      - metavariable-regex:
+          metavariable: $VERSION
+          regex: 3.*
+      - pattern: |
+          type: http
+          ...
+          scheme: basic
     metadata:
       category: security
       subcategory: vuln
