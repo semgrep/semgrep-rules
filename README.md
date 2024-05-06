@@ -21,7 +21,7 @@ To start writing and using Semgrep rules, see [Learn Semgrep syntax](https://sem
 
 See Semgrep documentation on [writing rules](https://semgrep.dev/docs/writing-rules/overview/), including:
 
-- Pattern syntax, describing what Semgrep patterns can do in detail, and provides example use cases of the ellipsis operator, metavariables.
+- Pattern syntax, describing what Semgrep patterns can do in detail, and example use cases of the ellipsis operator, metavariables.
 - Rule syntax, describing Semgrep YAML rule files, which can have multiple patterns, detailed output messages, and autofixes. The syntax allows the composition of individual patterns with boolean operators.
 
 You can also learn how to write rules using the [interactive, example-based Semgrep rule tutorial](https://semgrep.dev/learn).
