@@ -7,7 +7,7 @@
 
 Welcome! This repository is the standard library for open source [Semgrep](https://semgrep.dev/) rules.
 
-In addition to rules in this repository, the [Semgrep Registry](https://semgrep.dev/explore) also includes proprietary rules that enable interfile and interprocedural analsis, called [Pro rules](https://semgrep.dev/products/semgrep-code/pro-rules).
+In addition to the rules in this repository, the [Semgrep Registry](https://semgrep.dev/explore) offers proprietary [Pro rules](https://semgrep.dev/products/semgrep-code/pro-rules) that enable interfile and interprocedural analysis.
 
 - Find rules: search for open source and Pro rules through the [Semgrep registry search](https://semgrep.dev/r).
 - Use rules: Scan your code with these rules through the [Semgrep AppSec Platform](https://semgrep.dev/login)
