@@ -11,7 +11,7 @@ In addition to the rules in this repository, the [Semgrep Registry](https://semg
 
 - Find rules: search for open source and Pro rules through the [Semgrep registry search](https://semgrep.dev/r).
 - Use rules: Scan your code with these rules through [Semgrep AppSec Platform](https://semgrep.dev/login)
-- Contribute to rules: see the [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/) documentation.
+- Contribute to rules: see [Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/) for more information.
 
 ## Using the Semgrep rules repository
 
