@@ -15,7 +15,7 @@ In addition to the rules in this repository, the [Semgrep Registry](https://semg
 
 ## Using the Semgrep rules repository
 
-Run existing and custom Semgrep rules locally with the Semgrep command line interface (Semgrep CLI) or continuously with Semgrep in CI while using Semgrep AppSec Platform. To start using Semgrep rules, see [Semgrep tutorial](https://semgrep.dev/learn), [Getting started with Semgrep CLI](https://semgrep.dev/docs/getting-started/), and [Getting started with Semgrep App](https://semgrep.dev/docs/semgrep-app/getting-started-with-semgrep-app/). To write your own Semgrep rules, see the [Semgrep tutorial](https://semgrep.dev/learn) and [documentation on writing rules](https://semgrep.dev/docs/writing-rules/overview/).
+To start writing and using Semgrep rules, see [Learn Semgrep syntax](https://semgrep.dev/learn) and [Writing rules](https://semgrep.dev/docs/writing-rules/overview/). Then, run existing and custom Semgrep rules locally with the [Semgrep command line interface (Semgrep CLI)](https://semgrep.dev/docs/getting-started/) or [continuously with Semgrep in CI while using Semgrep AppSec Platform](https://semgrep.dev/docs/semgrep-app/getting-started-with-semgrep-app/).
 
 ## Writing Semgrep rules
 
