@@ -1,0 +1,43 @@
+rules:
+- id: missing-self-transfer-check-ercx
+  languages:
+  - solidity
+  message: >-
+    Missing check for 'from' and 'to' being the same before updating balances
+    could lead to incorrect balance manipulation on self-transfers.
+    Include a check to ensure 'from' and 'to' are not the same before updating balances to prevent balance manipulation during self-transfers.
+  severity: ERROR
+  metadata:
+    category: security
+    technology:
+    - blockchain
+    - solidity
+    cwe: 'CWE-682: Incorrect Calculation'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    owasp:
+    - A7:2021 Identification and Authentication Failures
+    references:
+    - https://blog.verichains.io/p/miner-project-attacked-by-vulnerabilities
+    - https://x.com/shoucccc/status/1757777764646859121
+  patterns:
+  - pattern-either:
+    - pattern: |
+        _balances[$FROM] = $FROM_BALANCE - value;
+    - pattern: |
+        _balances[$TO] = $TO_BALANCE + value;
+  - pattern-not-inside: |
+      if ($FROM != $TO) {
+        ...
+        _balances[$FROM] = $FROM_BALANCE - value;
+        ...
+        _balances[$TO] = $TO_BALANCE + value;
+        ...
+      }
+  - pattern-inside: |
+      function _update(address $FROM, address $TO, uint256 value, bool mint) internal virtual {
+        ...
+      }
