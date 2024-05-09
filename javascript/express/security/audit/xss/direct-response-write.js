@@ -132,6 +132,15 @@ app.get('/xss', function (req, res) {
     res.write('Response</br>' + html);
 });
 
+const jsonRouter = express.Router();
+jsonRouter.use(express.json());
+jsonRouter.get('/noxss-json', function (req, res) {
+    var name = req.query.name;
+    // ok: direct-response-write
+    res.write({ name });
+});
+app.use(jsonRouter);
+
 // For https://github.com/returntocorp/semgrep-rules/issues/2872
 app.post(
     "/:id",
