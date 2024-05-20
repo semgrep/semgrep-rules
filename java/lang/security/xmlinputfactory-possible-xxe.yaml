@@ -45,6 +45,18 @@ rules:
         $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
         ...
       }
+  - pattern-not-inside: |
+      $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", Boolean.FALSE);
+        ...
+      }
+  - pattern-not-inside: |
+      $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+        ...
+      }
   - pattern-either:
     - pattern: javax.xml.stream.XMLInputFactory.newFactory(...)
     - pattern: new XMLInputFactory(...)
