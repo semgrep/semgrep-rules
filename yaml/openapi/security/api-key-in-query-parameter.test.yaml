@@ -1,0 +1,37 @@
+openapi: 3.1.0
+info:
+  title: Example API
+  description: Example API
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/
+
+paths:
+  /test/{param}:
+    get:
+      operationId: test
+      parameters:
+        - name: param
+          in: path
+          required: true
+          description: test
+          schema:
+            type: string
+
+security:
+  - apiKeyAuthQuery: []
+  - apiKeyAuthHeader: []
+
+components:
+  securitySchemes:
+    # ruleid: api-key-in-query-parameter
+    apiKeyAuthQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    # ok: api-key-in-query-parameter
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

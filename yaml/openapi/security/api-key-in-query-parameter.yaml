@@ -1,0 +1,45 @@
+rules:
+  - id: api-key-in-query-parameter
+    languages: [yaml]
+    message: >-
+      The $SECURITY_SCHEME security scheme passes an API key in a query parameter.
+      API keys should not be passed as query parameters in security schemes. 
+      Pass the API key in the header or body.
+      If using a query parameter is necessary, ensure that the API key is tightly scoped and short lived.
+    severity: WARNING
+    patterns:
+    - pattern-inside: |
+        openapi: $VERSION
+        ...
+        components:
+          ...
+          securitySchemes:
+            ...
+    - metavariable-regex:
+        metavariable: $VERSION
+        regex: 3.*
+    - pattern: |
+        $SECURITY_SCHEME:
+          ...
+          type: apiKey
+          ...
+          in: query
+          
+    metadata:
+      category: security
+      subcategory: 
+        - vuln
+      technology: 
+        - openapi
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: LOW
+      cwe: 'CWE-598: Use of GET Request Method With Sensitive Query Strings'
+      owasp: 
+        - 'A04:2021 Insecure Design'
+        - 'A07:2021 Identification and Authentication Failures'
+      references:
+        - https://datatracker.ietf.org/doc/html/rfc6749
+        - https://cwe.mitre.org/data/definitions/598.html
+        - https://owasp.org/Top10/A04_2021-Insecure_Design/
+        - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/

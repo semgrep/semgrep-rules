@@ -1,0 +1,36 @@
+rules:
+- id: session-cookie-samesitenone
+  patterns:
+  - pattern-inside: |
+      &sessions.Options{
+        ...,
+        SameSite: http.SameSiteNoneMode,
+        ...,
+      }
+  - pattern: |
+      &sessions.Options{
+        ...,
+      }
+  message: Found SameSiteNoneMode setting in Gorilla session options. Consider setting
+    SameSite to Lax, Strict or Default for enhanced security.
+  metadata:
+    cwe:
+    - 'CWE-1275: Sensitive Cookie with Improper SameSite Attribute'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://pkg.go.dev/github.com/gorilla/sessions#Options
+    category: security
+    technology:
+    - gorilla
+    confidence: MEDIUM
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+  fix-regex:
+    regex: (SameSite\s*:\s+)http.SameSiteNoneMode
+    replacement: \1http.SameSiteDefaultMode
+  severity: WARNING
+  languages:
+  - go
