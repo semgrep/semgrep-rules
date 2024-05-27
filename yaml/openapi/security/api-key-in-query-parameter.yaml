@@ -6,7 +6,7 @@ rules:
       API keys should not be passed as query parameters in security schemes. 
       Pass the API key in the header or body.
       If using a query parameter is necessary, ensure that the API key is tightly scoped and short lived.
-    severity: ERROR
+    severity: WARNING
     patterns:
     - pattern-inside: |
         openapi: $VERSION
@@ -33,7 +33,7 @@ rules:
         - openapi
       likelihood: MEDIUM
       impact: HIGH
-      confidence: HIGH
+      confidence: LOW
       cwe: 'CWE-598: Use of GET Request Method With Sensitive Query Strings'
       owasp: 
         - 'A04:2021 Insecure Design'
