@@ -116,5 +116,65 @@ namespace Injections
             // ok: os-command-injection
             var process = Process.Start(processStartInfo);
         }
+
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = command,
+                    Arguments = args
+                }
+            };
+
+            // ruleid: os-command-injection
+            process.Start();
+        }
+
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "constant",
+                    Arguments = arguments
+                }
+            };
+
+            // ruleid: os-command-injection
+            process.Start();
+        }
+
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = command,
+                    Arguments = "constant"
+                }
+            };
+
+            // ruleid: os-command-injection
+            process.Start();
+        }
+
+        public void RunOsCommandAndArgsWithProcessParam(string command, string arguments)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "constant",
+                    Arguments = "constant"
+                }
+            };
+
+            // ok: os-command-injection
+            process.Start();
+        }
     }
 }

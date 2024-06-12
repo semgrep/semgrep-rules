@@ -101,7 +101,7 @@ contract DutchAuction is IMisoMarket, MISOAccessControls, BoringBatchable, SafeT
     /// @notice Address that manages auction approvals.
     address public pointList;
 
-    /// @notice The commited amount of accounts.
+    /// @notice The committed amount of accounts.
     mapping(address => uint256) public commitments; 
     /// @notice Amount of tokens to claim per address.
     mapping(address => uint256) public claimed;
@@ -148,8 +148,8 @@ contract DutchAuction is IMisoMarket, MISOAccessControls, BoringBatchable, SafeT
         address _pointList,
         address payable _wallet
     ) public {
-        require(_startTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not miliseconds");
-        require(_endTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not miliseconds");
+        require(_startTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not milliseconds");
+        require(_endTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not milliseconds");
         require(_startTime >= block.timestamp, "DutchAuction: start time is before current time");
         require(_endTime > _startTime, "DutchAuction: end time must be older than start price");
         require(_totalTokens > 0,"DutchAuction: total tokens must be greater than zero");
@@ -247,7 +247,7 @@ contract DutchAuction is IMisoMarket, MISOAccessControls, BoringBatchable, SafeT
      * @dev Attribution to the awesome delta.financial contracts
     */  
     function marketParticipationAgreement() public pure returns (string memory) {
-        return "I understand that I'm interacting with a smart contract. I understand that tokens commited are subject to the token issuer and local laws where applicable. I reviewed code of the smart contract and understand it fully. I agree to not hold developers or other people associated with the project liable for any losses or misunderstandings";
+        return "I understand that I'm interacting with a smart contract. I understand that tokens committed are subject to the token issuer and local laws where applicable. I reviewed code of the smart contract and understand it fully. I agree to not hold developers or other people associated with the project liable for any losses or misunderstandings";
     }
     /** 
      * @dev Not using modifiers is a purposeful choice for code readability.
@@ -352,7 +352,7 @@ contract DutchAuction is IMisoMarket, MISOAccessControls, BoringBatchable, SafeT
 
     /**
      * @notice Calculates total amount of tokens committed at current auction price.
-     * @return Number of tokens commited.
+     * @return Number of tokens committed.
      */
     function totalTokensCommitted() public view returns (uint256) {
         return uint256(marketStatus.commitmentsTotal).mul(1e18).div(clearingPrice());
@@ -572,8 +572,8 @@ contract DutchAuction is IMisoMarket, MISOAccessControls, BoringBatchable, SafeT
      */
     function setAuctionTime(uint256 _startTime, uint256 _endTime) external {
         require(hasAdminRole(msg.sender));
-        require(_startTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not miliseconds");
-        require(_endTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not miliseconds");
+        require(_startTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not milliseconds");
+        require(_endTime < 10000000000, "DutchAuction: enter an unix timestamp in seconds, not milliseconds");
         require(_startTime >= block.timestamp, "DutchAuction: start time is before current time");
         require(_endTime > _startTime, "DutchAuction: end time must be older than start time");
         require(marketStatus.commitmentsTotal == 0, "DutchAuction: auction cannot have already started");

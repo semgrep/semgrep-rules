@@ -34,19 +34,31 @@ rules:
     to false.
   patterns:
   - pattern-not-inside: |
-      $RETURNTYPE $METHOD(...) {
+      $METHOD(...) {
         ...
         $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
         ...
       }
   - pattern-not-inside: |
-      $RETURNTYPE $METHOD(...) {
+      $METHOD(...) {
         ...
-        $XMLFACTORY.setProperty(java.xml.stream.XMLFactoryInput.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        ...
+      }
+  - pattern-not-inside: |
+      $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", Boolean.FALSE);
+        ...
+      }
+  - pattern-not-inside: |
+      $METHOD(...) {
+        ...
+        $XMLFACTORY.setProperty(javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
         ...
       }
   - pattern-either:
-    - pattern: $XMLFACTORY = $W.newFactory(...);
-    - pattern: $XMLFACTORY = new XMLInputFactory(...);
+    - pattern: javax.xml.stream.XMLInputFactory.newFactory(...)
+    - pattern: new XMLInputFactory(...)
   languages:
   - java
