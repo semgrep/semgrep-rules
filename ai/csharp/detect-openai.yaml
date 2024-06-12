@@ -1,0 +1,9 @@
+rules:
+  - id: detect-openai
+    languages:
+      - csharp
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: using OpenAI.$ANYTHING
+      - pattern: ChatClient $CLIENT = ...;

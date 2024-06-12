@@ -1,0 +1,12 @@
+rules:
+  - id: detect-anthropic
+    languages:
+      - generic
+    severity: INFO
+    message: "Possibly found usage of AI: Anthropic"
+    pattern-either:
+      - pattern: anthropic
+      - pattern: Anthropic
+      - pattern: ANTHROPIC_API_KEY
+      - pattern: claude
+      - pattern: CLAUDE_API_KEY

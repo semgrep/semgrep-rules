@@ -1,0 +1,9 @@
+rules:
+  - id: detect-gemini
+    languages:
+      - python
+    severity: INFO
+    message: "Possibly found usage of AI: Gemini"
+    pattern-either:
+      - pattern: import google.generativeai
+      - pattern: GEMINI_API_KEY = ...

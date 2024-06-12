@@ -1,0 +1,9 @@
+rules:
+  - id: detect-gemini
+    languages:
+      - swift
+    severity: INFO
+    message: "Possibly found usage of AI: Gemini"
+    pattern-either:
+      - pattern: import GoogleGenerativeAI
+      - pattern: GenerativeModel(...)

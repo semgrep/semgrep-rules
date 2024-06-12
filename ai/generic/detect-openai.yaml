@@ -1,0 +1,10 @@
+rules:
+  - id: detect-openai
+    languages:
+      - generic
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: openai
+      - pattern: OpenAI
+      - pattern: OPENAI_API_KEY

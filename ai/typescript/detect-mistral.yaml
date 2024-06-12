@@ -1,0 +1,14 @@
+rules:
+  - id: detect-mistral
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: Mistral"
+    pattern-either:
+      - pattern: import "@mistralai"
+      - pattern: new MistralClient(...)
+      - pattern: |-
+          $CLIENT.chat({model: ...})
+      - pattern: MISTRAL_API_KEY = ...
+      - pattern: process.env.MISTRAL_API_KEY

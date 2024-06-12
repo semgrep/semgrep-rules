@@ -1,0 +1,13 @@
+rules:
+  - id: detect-openai
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: import "openai"
+      - pattern: import $ANYTHING from "openai";
+      - pattern: new OpenAI(...)
+      - pattern: $CLIENT.chat.completions.$FUNC(...)
+      - pattern: OPENAI_API_KEY = ...

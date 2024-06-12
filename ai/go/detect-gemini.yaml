@@ -1,0 +1,9 @@
+rules:
+  - id: detect-gemini
+    languages:
+      - go
+    severity: INFO
+    message: "Possibly found usage of AI: Gemini"
+    pattern-either:
+      - pattern: import "github.com/google/generative-ai-go"
+      - pattern: genai.NewClient(...)

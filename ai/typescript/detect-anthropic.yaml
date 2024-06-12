@@ -1,0 +1,14 @@
+rules:
+  - id: detect-antropic
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: Anthropic"
+    pattern-either:
+      - pattern: import "@anthropic-ai"
+      - pattern: import $ANYTHING from "@anthropic-ai";
+      - pattern: new Anthropic(...)
+      - pattern: anthropic.messages.$FUNC(...)
+      - pattern: ANTHROPIC_API_KEY = ...
+      - pattern: CLAUDE_API_KEY = ...

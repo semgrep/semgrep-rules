@@ -1,0 +1,10 @@
+rules:
+  - id: detect-promptfoo
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI tooling: promptfoo"
+    pattern-either:
+      - pattern: import "promptfoo"
+      - pattern: promptfoo.evaluate(...)
