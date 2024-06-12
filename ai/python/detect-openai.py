@@ -1,4 +1,3 @@
-# ruleid: detect-openai
 OPENAI_API_KEY = "MY_API_KEY"
 # ruleid: detect-openai
 from openai import OpenAI

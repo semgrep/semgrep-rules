@@ -1,7 +1,6 @@
 // ruleid: detect-mistral
 import MistralClient from '@mistralai/mistralai';
 
-// ruleid: detect-mistral
 const apiKey = process.env.MISTRAL_API_KEY;
 
 // ruleid: detect-mistral

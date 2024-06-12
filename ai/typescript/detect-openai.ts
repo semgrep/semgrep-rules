@@ -1,7 +1,6 @@
 // ruleid: detect-openai
 import OpenAI from "openai";
 
-// ruleid: detect-openai
 OPENAI_API_KEY = "asdf"
 
 // ruleid: detect-openai

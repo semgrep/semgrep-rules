@@ -6,6 +6,7 @@ llm = ChatOpenAI()
 
 # ruleid: detect-langchain
 from langchain_community.llms import Ollama
+# ruleid: detect-langchain
 llm = Ollama(model="llama2")
 
 # ruleid: detect-langchain
