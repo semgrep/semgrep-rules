@@ -5,8 +5,9 @@ rules:
     severity: INFO
     message: "Possibly found usage of AI: OpenAI"
     pattern-either:
-      - pattern: using OpenAI.$ANYTHING
-      - pattern: (ChatClient $CLIENT) = ...;
+      - pattern: using OpenAI
+      - pattern: (ChatClient $CLIENT)
+      - pattern: (ChatClient $CLIENT).$FUNC(...)
     metadata:
       references:
         - http://semgrep.dev/blog/2024/detecting-shadow-ai
