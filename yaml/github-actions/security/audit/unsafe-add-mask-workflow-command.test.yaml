@@ -21,6 +21,7 @@ jobs:
       - name: Run script to generate token
         run: |
           TOKEN=$(openssl rand -hex 16)
+          # ruleid: unsafe-add-mask-workflow-command
           echo "::add-mask::$TOKEN"
           echo "TOKEN=$TOKEN" >> $GITHUB_ENV
 
@@ -33,4 +34,5 @@ jobs:
         run: |
           echo "GitHub context:"
           echo "${{ toJSON(github) }}"
+          # ruleid: unsafe-add-mask-workflow-command
           echo "::add-mask::${{ secrets.GITHUB_TOKEN }}"
