@@ -1,0 +1,27 @@
+rules:
+- id: ios_ip_disclosure
+  languages:
+  - yaml
+  severity: WARNING
+  message: IP Address disclosure
+  metadata:
+    category: security
+    cvss: 4.3
+    cwe: cwe-200
+    masvs: code-2
+    owasp-mobile: ''
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    owasp:
+    - A5:2021 Security Misconfiguration
+    technology:
+    - docker
+    source_rule_url: https://github.com/MobSF/Mobile-Security-Framework-MobSF/blob/master/mobsf/StaticAnalyzer/views/ios/rules/swift_rules.yaml
+    references:
+    - https://github.com/MobSF/Mobile-Security-Framework-MobSF/blob/master/mobsf/StaticAnalyzer/views/ios/rules/swift_rules.yaml
+  pattern: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+  input_case: exact
+  type: regex
