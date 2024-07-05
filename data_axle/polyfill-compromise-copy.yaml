@@ -1,0 +1,36 @@
+rules:
+- id: polyfill-compromise-copy
+  patterns:
+  - focus-metavariable: $...URL
+  - pattern-either:
+    - pattern: |
+        '$...URL'
+    - pattern: |
+        "$...URL"
+  - metavariable-regex:
+      regex: https?://((cdn\.)?polyfill\.io)
+      metavariable: $...URL
+  message: Found compromised polyfill.io load which is currently serving malware to
+    some targets. Replace with Fastly or Cloudflare-hosted version.
+  languages:
+  - generic
+  severity: ERROR
+  fix: |
+    https://polyfill-fastly.io/v3/polyfill.min.js
+  metadata:
+    category: security
+    cwe:
+    - 'CWE 506: Embedded Malicious Code'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    owasp:
+    - A8:2021 Software and Data Integrity Failures
+    references:
+    - https://sansec.io/research/polyfill-supply-chain-attack
+    - https://cdnjs.cloudflare.com/polyfill
+    - https://community.fastly.com/t/new-options-for-polyfill-io-users/2540
+    subcategory:
+    - vuln
+    technology:
+    - react
