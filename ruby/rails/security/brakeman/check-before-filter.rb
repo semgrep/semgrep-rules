@@ -3,9 +3,13 @@ class BadController < ApplicationController
   # ruleid: check-before-filter
   skip_before_filter :login_required, :except => :do_admin_stuff
   # ruleid: check-before-filter
+  skip_before_action :login_required, :except => :do_admin_stuff
+  # ruleid: check-before-filter
   skip_filter :authenticate_user!, :except => :do_admin_stuff
   # ruleid: check-before-filter
   skip_before_filter :require_user, :except => [:do_admin_stuff, :do_other_stuff]
+  # ruleid: check-before-filter
+  skip_before_action :require_user, :except => [:do_admin_stuff, :do_other_stuff]
 
     def do_admin_stuff
         #do some stuff
@@ -21,9 +25,13 @@ class GoodController < ApplicationController
   # ok: check-before-filter
   skip_before_filter :login_required, :only => :do_anonymous_stuff
   # ok: check-before-filter
+  skip_before_action :login_required, :only => :do_anonymous_stuff
+  # ok: check-before-filter
   skip_filter :authenticate_user!, :only => :do_anonymous_stuff
   # ok: check-before-filter
   skip_before_filter :require_user, :only => [:do_anonymous_stuff, :do_nocontext_stuff]
+  # ok: check-before-filter
+  skip_before_action :require_user, :only => [:do_anonymous_stuff, :do_nocontext_stuff]
 
     def do_admin_stuff
         #do some stuff

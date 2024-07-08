@@ -10,10 +10,10 @@ rules:
     protect your queries.
   metadata:
     owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
+    - A01:2017 - Injection
     - A03:2021 - Injection
     cwe:
-    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
     references:
     - https://owasp.org/www-community/attacks/SQL_Injection
     category: security
@@ -70,5 +70,5 @@ rules:
               `$SQLSTR${$EXPR}...`
         - metavariable-regex:
             metavariable: $SQLSTR
-            regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+            regex: .*\b(?i)(select|delete|insert|create|update\s+.+\sset|alter|drop)\b.*
     - focus-metavariable: $EXPR

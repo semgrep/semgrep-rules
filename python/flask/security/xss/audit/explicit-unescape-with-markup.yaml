@@ -27,7 +27,13 @@ rules:
   - python
   severity: WARNING
   pattern-either:
-  - pattern: flask.Markup(...)
   - pattern: flask.Markup.unescape(...)
-  - pattern: markupsafe.Markup(...)
   - pattern: $MARKUPOBJ.unescape()
+  - patterns:
+    - pattern-either:
+      - pattern: flask.Markup($Q)
+      - pattern: markupsafe.Markup($Q)
+    - metavariable-pattern:
+        metavariable: $Q
+        patterns:
+        - pattern-not: '"..."'
