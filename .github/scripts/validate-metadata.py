@@ -15,7 +15,6 @@ logger.addHandler(handler)
 
 
 class RegistryMetadataValidator(Draft7Validator):
-
     required_property_messages = {
         "references": "Please include at least one URL with more information about this rule in a metadata field called 'references'.",
         "technology": "Please include a metadata field called 'technology' that is a list of relevent tech stacks. For example: [python, flask], or [javascript, jwt].",
@@ -24,12 +23,12 @@ class RegistryMetadataValidator(Draft7Validator):
         "likelihood": "Please include a 'likelihood' metadata field for security rules that is one of that is one of ['LOW', 'MEDIUM', 'HIGH'], See https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository for more info.",
         "impact": "Please include a 'impact' metadata field for security rules that is one of that is one of ['LOW', 'MEDIUM', 'HIGH'], See https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository for more info.",
         "confidence": "Please include a 'confidence' metadata field for security rules that is one of that is one of ['LOW', 'MEDIUM', 'HIGH'], See https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository for more info.",
-        "subcategory": "Please include a 'subcategory' metadata field for security rules that is one of that is one of ['audit', 'vuln', 'guardrail'], See https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository for more info.",
+        "subcategory": "Please include a 'subcategory' metadata field for security rules that is one of that is one of ['audit', 'vuln', 'secure default'], See https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository for more info.",
     }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.category_enum = self.schema.get('properties', {}).get('category', {}).get('enum', [])
+        # self.category_enum = self.schema.get('properties', {}).get('category', {}).get('enum', [])
         self.category_enum = {}
 
     def _extend_message(self, error: ValidationError) -> None:
@@ -59,7 +58,11 @@ class RegistryMetadataValidator(Draft7Validator):
         return errors
 
 
-def validate_config_file_metadata(config_path: Path, validator: Draft7Validator, invalid_configs: Optional[list] = None):
+def validate_config_file_metadata(
+    config_path: Path,
+    validator: Draft7Validator,
+    invalid_configs: Optional[list] = None,
+):
     with open(config_path) as fin:
         config = yaml.safe_load(fin)
 
@@ -83,9 +86,11 @@ def validate_config_file_metadata(config_path: Path, validator: Draft7Validator,
         else:
             logger.warning(f"Invalid config {str(config_path)}: {ve.message}")
 
+
 def is_rule(path: Path) -> bool:
     with open(path) as fin:
         return fin.readlines()[0].startswith("rules:")
+
 
 if __name__ == "__main__":
     import argparse
@@ -111,7 +116,11 @@ if __name__ == "__main__":
     invalid_configs = []
     for config_item in args.config:
         config_path = Path(config_item)
-        if config_path.is_file() and config_path.suffix == ".yaml" and is_rule(config_path):
+        if (
+            config_path.is_file()
+            and config_path.suffix == ".yaml"
+            and is_rule(config_path)
+        ):
             validate_config_file_metadata(config_path, v, invalid_configs)
         elif config_path.is_dir():
             for config_file in config_path.glob("**/*.yaml"):
@@ -122,4 +131,3 @@ if __name__ == "__main__":
         for invalid_config in sorted(invalid_configs, key=lambda t: t[0]):
             print(invalid_config)
         sys.exit(1)
-
