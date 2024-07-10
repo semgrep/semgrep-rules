@@ -1,0 +1,27 @@
+- id: unsafe-joblib-load
+  languages: [python]
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+      - pattern: $UNTRUSTED_DATA
+  pattern-sanitizers:
+      - patterns:
+          - pattern: joblib.load($DATA, safe_mode=True)
+  pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: joblib.load(...)
+              - pattern: joblib.load($X)
+              - pattern: joblib.load($X, $Y)
+              - pattern: joblib.load($X, $Y, $Z)
+          - focus-metavariable: $X
+  metadata:
+    category: security
+    confidence: HIGH
+    cwe: ["CWE-502: Deserialization of Untrusted Data"]
+    impact: HIGH
+    likelihood: MEDIUM
+    owasp: ["A08:2021 - Software and Data Integrity Failures"]
+    references: ["https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/"]
+  message: |
+    Unsafe usage of joblib.load detected. Loading untrusted data can lead to arbitrary code execution.
