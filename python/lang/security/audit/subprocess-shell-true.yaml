@@ -1,8 +1,13 @@
 rules:
 - id: subprocess-shell-true
   patterns:
-  - pattern: subprocess.$FUNC(..., shell=True, ...)
+  - pattern: subprocess.$FUNC(..., shell=$TRUE, ...)
+  - metavariable-pattern:
+      metavariable: $TRUE
+      pattern: |
+        True 
   - pattern-not: subprocess.$FUNC("...", shell=True, ...)
+  - focus-metavariable: $TRUE
   message: >-
     Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because
     this call will spawn
@@ -10,9 +15,8 @@ rules:
     and variables, which
     makes it much easier for a malicious actor to execute commands. Use 'shell=False'
     instead.
-  fix-regex:
-    regex: (shell\s*=\s*)True
-    replacement: \1False
+  fix: |
+    False
   metadata:
     source-rule-url: https://bandit.readthedocs.io/en/latest/plugins/b602_subprocess_popen_with_shell_equals_true.html
     owasp:
@@ -29,7 +33,7 @@ rules:
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
-    - vuln
+    - 'secure default'
     likelihood: HIGH
     impact: LOW
     confidence: MEDIUM
