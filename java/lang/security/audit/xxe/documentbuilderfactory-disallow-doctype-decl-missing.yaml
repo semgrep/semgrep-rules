@@ -28,6 +28,9 @@ rules:
       likelihood: LOW
       impact: HIGH
       confidence: HIGH
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - XML Injection
     message: DOCTYPE declarations are enabled for this DocumentBuilderFactory. This
       is vulnerable to XML external entity attacks. Disable this by setting the
       feature "http://apache.org/xml/features/disallow-doctype-decl" to true.
@@ -94,62 +97,64 @@ rules:
       - by-side-effect: true
         pattern-either:
           - patterns:
-            - pattern-either:
-              - pattern: >
-                  $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
-                  true);
-              - pattern: >
-                  $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",
-                  false);
+              - pattern-either:
+                  - pattern: >
+                      $FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                  - pattern: >
+                      $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
+                      true);
+                  - pattern: >
+                      $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",
+                      false);
 
-                  ...
+                      ...
 
-                  $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-              - pattern: >
-                  $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",
-                  false);
+                      $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                  - pattern: >
+                      $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",
+                      false);
 
-                  ...
+                      ...
 
-                  $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            - focus-metavariable: $FACTORY
+                      $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+              - focus-metavariable: $FACTORY
           - patterns:
               - pattern-either:
-                - pattern-inside: >
-                    class $C {
-                      ...
-                      $T $M(...) {
+                  - pattern-inside: >
+                      class $C {
                         ...
-                        $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
-                        true);
-                        ...
-                      }
-                      ...
-                    }
-                - pattern-inside: >
-                    class $C {
-                      ...
-                      $T $M(...) {
-                        ...
-                        $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                        ...
-                        $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                        $T $M(...) {
+                          ...
+                          $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
+                          true);
+                          ...
+                        }
                         ...
                       }
-                      ...
-                    }
-                - pattern-inside: >
-                    class $C {
-                      ...
-                      $T $M(...) {
+                  - pattern-inside: >
+                      class $C {
                         ...
-                        $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-                        ...
-                        $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",false);
+                        $T $M(...) {
+                          ...
+                          $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                          ...
+                          $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                          ...
+                        }
                         ...
                       }
-                      ...
-                    }
+                  - pattern-inside: >
+                      class $C {
+                        ...
+                        $T $M(...) {
+                          ...
+                          $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                          ...
+                          $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",false);
+                          ...
+                        }
+                        ...
+                      }
               - pattern: $M($X)
               - focus-metavariable: $X
     fix: >
