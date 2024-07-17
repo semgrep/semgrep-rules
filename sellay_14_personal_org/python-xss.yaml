@@ -1,0 +1,28 @@
+rules:
+- id: python-xss
+  patterns:
+  - pattern: |
+      def $FUNC(...):
+          ...
+          $HTML_VAR = $REQUEST_VAR
+          ...
+          return $HTML_VAR
+  message: 'Possible XSS vulnerability: Unescaped user input is being included in
+    the HTML response.'
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    cwe:
+    - 'CWE 79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    subcategory:
+    - vuln
+    technology:
+    - flask
+    references:
+    - https://example.com
