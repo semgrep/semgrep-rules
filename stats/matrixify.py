@@ -78,7 +78,7 @@ def get_technology(rule: Dict[str, Any]) -> List[str]:
         return [""]
 
 # Sometimes, the language as defined within the ArchList will be something that's not in the dict
-# So, the filepath seems like the only reliable way to get the lanaguage
+# So, the filepath seems like the only reliable way to get the language
 def get_lang(path: str) -> str:
     return path.split(os.path.sep)[1].strip()
     #archlist =  ArchList(rule.get('languages', [])).get(0, "")

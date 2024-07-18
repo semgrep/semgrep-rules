@@ -41,6 +41,20 @@ app.get('/test4', (req, res) => {
   res.send(results)
 })
 
+app.get('/test5', (req, res) => {
+  // ruleid: tainted-sql-string
+  const query = util.format("UPDATE User SET name = '' WHERE id = '%s'", req.query.message)
+  const [results, metadata] = await sequelize.query(query);
+  res.send(results)
+})
+
+app.get('/test6', (req, res) => {
+    // ruleid: tainted-sql-string
+    const query = util.format("UPDATE %s SET name = '' WHERE id = 0", req.query.table)
+    const [results, metadata] = await sequelize.query(query);
+    res.send(results)
+  })
+
 app.get('/ok', async (req, res) => {
     // ok: tainted-sql-string
     res.send("message: " + req.query.message);
@@ -61,6 +75,12 @@ app.post('/ok4', async (req, res) => {
     var data = "message: "
     // ok: tainted-sql-string
     data = data.concat(req.query.message)
+    res.send(data);
+})
+
+app.post('/ok5', async (req, res) => {
+    // ok: tainted-sql-string
+    var data = "This is an update message: " + req.query.message
     res.send(data);
 })
 
