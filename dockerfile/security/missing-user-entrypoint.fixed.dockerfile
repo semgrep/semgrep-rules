@@ -1,15 +1,14 @@
 FROM busybox
 
-# uncomment for ok
+# Leave this hear to test that the missing-user rule doesn't think that commented out lines satisfy the rule
 #USER notroot
 
 RUN git clone https://github.com/returntocorp/semgrep
 RUN pip3 install semgrep
 
-# ruleid: missing-user-entrypoint
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD [ "curl" ]
+
+# ok: missing-user
 USER non-root
 ENTRYPOINT semgrep -f p/xss
-
-# TODO: metavar bug
-# ok: missing-user-entrypoint
-ENTRYPOINT ["semgrep", "--config", "localfile", "targets"]

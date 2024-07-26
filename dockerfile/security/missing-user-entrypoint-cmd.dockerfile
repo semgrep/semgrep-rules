@@ -11,3 +11,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 
 # ruleid: missing-user
 ENTRYPOINT semgrep -f p/xss
+CMD "--oss-only"

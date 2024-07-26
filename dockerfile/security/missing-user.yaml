@@ -1,19 +1,44 @@
 rules:
 - id: missing-user
   patterns:
-    - pattern: |
-        CMD $...VARS
+    - pattern-not-regex: |
+        ^HEALTHCHECK .+ \\
+        ^  CMD .+
+    - pattern-not-regex: |
+        ^HEALTHCHECK .+ \\
+        ^CMD .+
+    - pattern-either:
+      - patterns:
+        - pattern: CMD ...
+        - pattern: |
+           ENTRYPOINT ...
+           ...
+      - patterns:
+        - pattern: |
+            ENTRYPOINT ...
+            ...
+            CMD
+      - patterns:
+          - pattern: |
+              CMD ...
+          - pattern-not-inside: |
+              ENTRYPOINT ...
+      - patterns:
+          - pattern: ENTRYPOINT ...
+          - pattern-not-inside: |
+              ...
+              CMD ...
     - pattern-not-inside: |
+        ...
         USER $USER
         ...
   fix: |
     USER non-root
-    CMD $...VARS
   message: By not specifying a USER, a program in the container may run as 'root'. This is a security
     hazard. If an attacker can control a process running as root, they may have control over the container.
-    Ensure that the last USER in a Dockerfile is a USER other than 'root'. 
+    Ensure that the last USER in a Dockerfile is a USER other than 'root'.
   severity: ERROR
-  languages: 
+  languages:
     - dockerfile
   metadata:
     cwe:

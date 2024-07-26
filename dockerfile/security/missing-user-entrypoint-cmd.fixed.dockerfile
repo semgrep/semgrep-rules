@@ -9,5 +9,7 @@ RUN pip3 install semgrep
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD [ "curl" ]
 
-# ruleid: missing-user
+# ok: missing-user
+USER non-root
 ENTRYPOINT semgrep -f p/xss
+CMD "--oss-only"
