@@ -80,32 +80,30 @@ urlpatterns = [
     path('path/to/view', views.other_view, {'def': 'abc'}),
 ]
 
-# I would prefer duplicate-path-assignment to not match the following test cases
-# to avoid giving two messages for the same issue, but could not find a way yet.
-# todook: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
+# ok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-name
 urlpatterns = [
     path('path/to/view', views.example_view, name="test"),
     path('path/to/view', views.example_view, name="other_name"),
 ]
 
-# todook: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
+# ok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test"),
     path('path/to/view', views.example_view, {'abc': 'def'}, name="other_name"),
 ]
 
-# todook: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
+# ok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test"),
     path('path/to/other/view', views.other_view, {'abc': 'def'}, name="some_test"),
     path('path/to/view', views.example_view, {'abc': 'def'}, name="other_name"),
 ]
 
-# todook: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
+# ok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test123"),
     path('path/to/view', views.example_view, {'def': 'abc'}, name="test456"),
