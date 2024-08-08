@@ -1,14 +1,5 @@
 rules:
 - id: insufficient-dsa-key-size
-  patterns:
-  - pattern-either:
-    - pattern: Crypto.PublicKey.DSA.generate(..., bits=$SIZE, ...)
-    - pattern: Crypto.PublicKey.DSA.generate($SIZE, ...)
-    - pattern: Cryptodome.PublicKey.DSA.generate(..., bits=$SIZE, ...)
-    - pattern: Cryptodome.PublicKey.DSA.generate($SIZE, ...)
-  - metavariable-comparison:
-      metavariable: $SIZE
-      comparison: $SIZE < 2048
   message: >-
     Detected an insufficient key size for DSA. NIST recommends
     a key size of 2048 or higher.
@@ -20,7 +11,8 @@ rules:
     - A02:2021 - Cryptographic Failures
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/weak_cryptographic_key.py
     references:
-    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
+    - https://www.pycryptodome.org/src/public_key/dsa
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
     category: security
     technology:
     - pycryptodome
@@ -28,6 +20,20 @@ rules:
     - vuln
     likelihood: LOW
     impact: MEDIUM
-    confidence: MEDIUM
+    confidence: HIGH
+    functional-categories:
+      - crypto::search::key-length::pycryptodome
+      - crypto::search::key-length::pycryptodomex
+  options:
+    symbolic_propagation: true
   languages: [python]
   severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: Crypto.PublicKey.DSA.generate(..., bits=$SIZE, ...)
+    - pattern: Crypto.PublicKey.DSA.generate($SIZE, ...)
+    - pattern: Cryptodome.PublicKey.DSA.generate(..., bits=$SIZE, ...)
+    - pattern: Cryptodome.PublicKey.DSA.generate($SIZE, ...)
+  - metavariable-comparison:
+      metavariable: $SIZE
+      comparison: $SIZE < 2048

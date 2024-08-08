@@ -1,0 +1,20 @@
+rules:
+  - id: detect-mistral
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: Mistral"
+    pattern-either:
+      - pattern: import "@mistralai"
+      - pattern: new MistralClient(...)
+      - pattern: |-
+          $CLIENT.chat({model: ...})
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

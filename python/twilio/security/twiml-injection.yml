@@ -1,0 +1,48 @@
+rules:
+  - id: twiml-injection
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Using non-constant TwiML (Twilio Markup Language) argument when creating a
+      Twilio conversation could allow the injection of additional TwiML commands
+    metadata:
+      cwe:
+      - "CWE-91: XML Injection"
+      owasp:
+      - "A03:2021 - Injection"
+      category: security
+      technology:
+      - python
+      - twilio
+      - twiml
+      confidence: MEDIUM
+      likelihood: HIGH
+      impact: MEDIUM
+      subcategory: vuln
+      references:
+      - https://codeberg.org/fennix/funjection
+    mode: taint
+    pattern-sources:
+    - pattern: |
+        f"..."
+    - pattern: |
+        "..." % ...
+    - pattern: |
+        "...".format(...)
+
+    - patterns:
+        - pattern: $ARG
+        - pattern-inside: |
+            def $F(..., $ARG, ...):
+                ...
+
+    pattern-sanitizers:
+    - pattern: xml.sax.saxutils.escape(...)
+    - pattern: html.escape(...)
+
+    pattern-sinks:
+    - patterns:
+      - pattern: |
+          $CLIENT.calls.create(..., twiml=$SINK, ...)
+
+      - focus-metavariable: $SINK

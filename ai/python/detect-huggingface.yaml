@@ -1,0 +1,16 @@
+rules:
+  - id: detect-huggingface
+    languages:
+      - python
+    severity: INFO
+    message: "Possibly found usage of AI: HuggingFace"
+    pattern-either:
+      - pattern: import huggingface_hub
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW
