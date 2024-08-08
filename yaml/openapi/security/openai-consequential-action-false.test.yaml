@@ -1,0 +1,19 @@
+openapi: 3.1.0
+info:
+  title: Email Service API
+  version: 1.0.0
+  description: API for managing emails
+paths:
+  /emails/{emailId}:
+    get:
+      operationId: getEmailById
+      # ok: openai-consequential-action-false
+      x-openai-isConsequential: false
+      summary: List Emails
+      description: Get a list of email messages.
+    delete:
+      operationId: deleteEmailById
+      # ruleid: openai-consequential-action-false
+      x-openai-isConsequential: false
+      summary: Delete Email
+      description: Delete a specific email.
