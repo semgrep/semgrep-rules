@@ -4,10 +4,15 @@ import os
 from Crypto.PublicKey import RSA as pycrypto_rsa
 from Cryptodome.PublicKey import RSA as pycryptodomex_rsa
 
-# ok:insufficient-rsa-key-size
+# ruleid:insufficient-rsa-key-size
 pycrypto_rsa.generate(bits=2048)
-# ok:insufficient-rsa-key-size
+# ruleid:insufficient-rsa-key-size
 pycryptodomex_rsa.generate(bits=2048)
+
+# ok:insufficient-rsa-key-size
+pycrypto_rsa.generate(bits=3072)
+# ok:insufficient-rsa-key-size
+pycryptodomex_rsa.generate(bits=3072)
 
 # ok:insufficient-rsa-key-size
 pycrypto_rsa.generate(4096)
