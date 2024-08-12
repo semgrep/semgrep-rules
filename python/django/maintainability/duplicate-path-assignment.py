@@ -81,7 +81,7 @@ urlpatterns = [
 ]
 
 # ok: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-name
+# ruleid: duplicate-path-assignment-different-names
 urlpatterns = [
     path('path/to/view', views.example_view, name="test"),
     path('path/to/view', views.example_view, name="other_name"),
