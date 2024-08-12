@@ -80,30 +80,30 @@ urlpatterns = [
     path('path/to/view', views.other_view, {'def': 'abc'}),
 ]
 
-# ok: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names
+# deepok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
 urlpatterns = [
     path('path/to/view', views.example_view, name="test"),
     path('path/to/view', views.example_view, name="other_name"),
 ]
 
-# ok: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names
+# deepok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test"),
     path('path/to/view', views.example_view, {'abc': 'def'}, name="other_name"),
 ]
 
-# ok: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names
+# deepok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test"),
     path('path/to/other/view', views.other_view, {'abc': 'def'}, name="some_test"),
     path('path/to/view', views.example_view, {'abc': 'def'}, name="other_name"),
 ]
 
-# ok: duplicate-path-assignment
-# ruleid: duplicate-path-assignment-different-names
+# deepok: duplicate-path-assignment
+# ruleid: duplicate-path-assignment-different-names, duplicate-path-assignment
 urlpatterns = [
     path('path/to/view', views.example_view, {'abc': 'def'}, name="test123"),
     path('path/to/view', views.example_view, {'def': 'abc'}, name="test456"),
