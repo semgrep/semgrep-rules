@@ -2,25 +2,32 @@ rules:
   - id: openai-consequential-action-false
     languages: [yaml]
     message: >-
-      Found 'x-openai-isConsequential: false' in a state changing HTTP
-      method: $METHOD $PATH . This Action configuration will enable the 'Always
-      Allow' option for state changing HTTP methods, such as POST, PUT, PATCH,
+      Found 'x-openai-isConsequential: false' in a state-changing HTTP
+      method: $METHOD $PATH. This Action configuration will enable the 'Always
+      Allow' option for state-changing HTTP methods, such as POST, PUT, PATCH,
       or DELETE. The risk of a user selecting the 'Always Allow' button is that
       the agent could perform unintended actions on behalf of the user. When
       working with sensitive functionality, it is always best to include a Human
-      In The Loop (HITL) type of control. Consider the trade off between security 
-      and user friction and then make a risk based decision about this function.
+      In The Loop (HITL) type of control. Consider the trade-off between security 
+      and user friction and then make a risk-based decision about this function.
     severity: WARNING
-    patterns:
+    pattern-either:
       - pattern-inside: |
-          $PATH:
+          post:
             ...
-            $METHOD: ...
-      - metavariable-regex:
-          metavariable: $METHOD
-          regex: (POST|post|PUT|put|PATCH|patch|DELETE|delete)
-      - pattern: |
-          x-openai-isConsequential: false
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          put:
+            ...
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          patch:
+            ...
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          delete:
+            ...
+            x-openai-isConsequential: false
     metadata:
       category: security
       subcategory:
