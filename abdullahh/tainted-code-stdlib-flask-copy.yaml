@@ -1,0 +1,338 @@
+rules:
+- id: tainted-code-stdlib-flask-copy
+  message: The application might dynamically evaluate untrusted input, which can lead
+    to a code injection vulnerability. An attacker can execute arbitrary code, potentially
+    gaining complete control of the system. To prevent this vulnerability, avoid executing
+    code containing user input. If this is unavoidable, validate and sanitize the
+    input, and use safe alternatives for evaluating user input.
+  severity: ERROR
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    cwe2020-top25: true
+    cwe2022-top25: true
+    functional-categories:
+    - code::sink::eval::stdlib
+    - code::sink::eval::stdlib2
+    - code::sink::eval::stdlib3
+    - expression-lang::sink::expression::stdlib
+    - expression-lang::sink::expression::stdlib2
+    - expression-lang::sink::expression::stdlib3
+    - web::source::cookie::flask
+    - web::source::form-data::flask
+    - web::source::form-data::flask-wtf
+    - web::source::form-data::wtforms
+    - web::source::header::flask
+    - web::source::http-body::flask
+    - web::source::http-params::flask
+    - web::source::url-path-params::flask
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    - https://www.stackhawk.com/blog/command-injection-python/
+    technology:
+    - flask
+    - flask-wtf
+    - stdlib
+    - stdlib2
+    - stdlib3
+    - web
+    - wtforms
+    license: Copyright 2023 Semgrep, Inc.
+    vulnerability_class:
+    - Code Injection
+  languages:
+  - python
+  mode: taint
+  options:
+    interfile: true
+    symbolic_propagation: true
+    taint_assume_safe_booleans: true
+    taint_assume_safe_numbers: true
+  pattern-sources:
+  - pattern-either:
+    - patterns:
+      - pattern: flask.request.$FUNC()
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: ^(from_values|get_data|get_json)$
+    - patterns:
+      - pattern-either:
+        - pattern: flask.request.$PROPERTY
+        - pattern: flask.request.$PROPERTY[...]
+        - pattern: flask.request.$PROPERTY.get(...)
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: ^(args|cookies|data|files|form|full_path|headers|input_stream|json|path|stream|values|view_args)$
+    - patterns:
+      - pattern: |
+          @$APP.$ROUTE
+          def $FUNC(..., $PARAM, ...):
+            ...
+      - metavariable-regex:
+          metavariable: $ROUTE
+          regex: ^(endpoint)$
+      - metavariable-type:
+          metavariable: $APP
+          types:
+          - flask.Flask
+          - flask.Blueprint
+      - focus-metavariable: $PARAM
+  - patterns:
+    - pattern: |
+        @$APP.$ROUTE(...)
+        def $FUNC(..., $PARAM, ...):
+          ...
+    - metavariable-regex:
+        metavariable: $ROUTE
+        regex: ^(route|delete|get|patch|post|put)$
+    - metavariable-type:
+        metavariable: $APP
+        types:
+        - flask.Flask
+        - flask.Blueprint
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$APP.$ROUTE(...)
+        def $FUNC(...):
+          ...
+    - pattern: $FORM.$FIELD.data
+    - metavariable-regex:
+        metavariable: $ROUTE
+        regex: ^(route|delete|get|patch|post|put|endpoint)$
+    - metavariable-type:
+        metavariable: $FORM
+        type: FlaskForm
+    - metavariable-type:
+        metavariable: $APP
+        types:
+        - flask.Flask
+        - flask.Blueprint
+  pattern-propagators:
+  - from: $DEFAULT
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $DICT = { ... }
+            ...
+        - pattern-inside: |
+            $DICT = dict(...)
+            ...
+      - pattern-either:
+        - pattern: $DICT.get($FIELD, $DEFAULT)
+        - pattern: $DICT.setdefault($KEY, $DEFAULT)
+    to: $DICT
+  - from: $FROM_DICT
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $TO_DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $TO_DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $TO_DICT = { ... }
+            ...
+        - pattern-inside: |
+            $TO_DICT = dict(...)
+            ...
+        - pattern-inside: |
+            $FROM_DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $FROM_DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $FROM_DICT = { ... }
+            ...
+        - pattern-inside: |
+            $FROM_DICT = dict(...)
+            ...
+      - pattern-either:
+        - pattern: $TO_DICT.update($FROM_DICT)
+        - pattern: $TO_DICT | $FROM_DICT
+        - pattern: $TO_DICT |= $FROM_DICT
+    to: $TO_DICT
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $LIST = [ ... ]
+            ...
+        - pattern-inside: |
+            $LIST = list(...)
+            ...
+      - pattern-either:
+        - pattern: $LIST.append($FROM)
+        - pattern: $LIST.extend($FROM)
+        - pattern: $LIST.insert($INDEX, $FROM)
+    to: $LIST
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $FROM.$LOG($SINK, ...)
+        - pattern: $FROM.$LOG(..., msg=$SINK, ...)
+        - pattern: $APP.logger.$LOG($SINK, ...)
+      - metavariable-regex:
+          metavariable: $LOG
+          regex: ^(info|warning|error|critical|log|exception|handle)$
+    to: $SINK
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $SET = { $ITEM, ... }
+            ...
+        - pattern-inside: |
+            $SET = set(...)
+            ...
+        - pattern-inside: |
+            $OTHERSET = { $ITEM, ... }
+            ...
+        - pattern-inside: |
+            $OTHERSET = set(...)
+            ...
+      - pattern-either:
+        - pattern: $SET.update(..., $FROM, ...)
+        - pattern: $SET.intersection_update(..., $FROM, ...)
+        - pattern: $SET.difference_update(..., $FROM, ...)
+        - pattern: $SET.symmetric_difference_update(..., $FROM, ...)
+        - pattern: $SET.add($FROM)
+        - pattern: $SET |= $FROM
+        - pattern: $SET &= $FROM
+        - pattern: $SET -= $FROM
+        - pattern: $SET ^= $FROM
+    to: $SET
+  - from: $FORM
+    patterns:
+    - pattern: $FORM.populate_obj($OBJ)
+    to: $OBJ
+  pattern-sinks:
+  - pattern-either:
+    - pattern: exec(...)
+    - pattern: eval(...)
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: int(...)
+      - pattern: bool(...)
+      - pattern: float(...)
+      - pattern: complex(...)
+      - pattern: oct(...)
+      - pattern: hex(...)
+      - pattern: bin(...)
+      - pattern: round(...)
+      - pattern: id(...)
+      - pattern: hash(...)
+      - pattern: len(...)
+      - pattern: type(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $DICT[$KEY]
+          ...
+      - pattern-inside: |
+          $DICT = { $KEY: $VALUE for ... in ...}
+          ...
+      - pattern-inside: |
+          $DICT.get($KEY, $DEFAULT)
+          ...
+      - pattern-inside: |
+          $DICT = { }
+          ...
+      - pattern-inside: |
+          $DICT = { $KEY: $VALUE, ... }
+          ...
+      - pattern-inside: |
+          $DICT = dict(...)
+          ...
+    - pattern-either:
+      - pattern: $DICT.clear()
+      - pattern: $DICT.len()
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $LIST = [ ... ]
+          ...
+      - pattern-inside: |
+          $LIST = list(...)
+          ...
+    - pattern-either:
+      - pattern: $LIST.clear()
+      - pattern: $LIST.count(...)
+      - pattern: $LIST.index(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $SET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $SET = set(...)
+          ...
+    - pattern-either:
+      - pattern: $SET.len()
+      - pattern: $SET.clear()
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $SET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $SET = { $ITEM for ... in ...}
+          ...
+      - pattern-inside: |
+          $SET = set(...)
+          ...
+      - pattern-inside: |
+          $SET = frozenset(...)
+          ...
+      - pattern-inside: |
+          $OTHERSET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $OTHERSET = set(...)
+          ...
+    - pattern-either:
+      - pattern: $SET.isdisjoint($OTHERSET)
+      - pattern: $SET.difference($OTHERSET)
+      - pattern: $SET.issubset($OTHERSET)
+      - pattern: $SET < $OTHERSET
+      - pattern: $SET <= $OTHERSET
+      - pattern: $SET.issuperset($OTHERSET)
+      - pattern: $SET > $OTHERSET
+      - pattern: $SET >= $OTHERSET
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $TUPLE = ( $ITEM, ... )
+          ...
+      - pattern-inside: |
+          $TUPLE = $ITEM, ...
+          ...
+      - pattern-inside: |
+          $TUPLE = tuple(...)
+          ...
+    - pattern-either:
+      - pattern: $TUPLE.len()
+  - pattern: django.shortcuts.get_object_or_404(...)
+  - pattern: django.shortcuts.get_list_or_404(...)
