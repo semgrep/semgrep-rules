@@ -41,13 +41,13 @@ public class CommandInjection {
         if (isValid) {
             Process process;
             if (!isWindows) {
-                // deepruleid: tainted-system-command
+                // ruleid: tainted-system-command
                 process =
                         new ProcessBuilder(new String[] {"sh", "-c", "ping -c 2 " + ipAddress})
                                 .redirectErrorStream(true)
                                 .start();
             } else {
-               	// deepruleid: tainted-system-command
+               	// ruleid: tainted-system-command
                 process =
                         new ProcessBuilder(new String[] {"cmd", "/c", "ping -n 2 " + ipAddress})
                                 .redirectErrorStream(true)
