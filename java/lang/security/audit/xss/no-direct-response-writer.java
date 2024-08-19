@@ -52,7 +52,7 @@ public class BenchmarkTest02229 extends HttpServlet {
 
 response.setHeader("X-XSS-Protection", "0");
         Object[] obj = { "a", bar};
-        // ruleid: no-direct-response-writer
+        // ruleid: deepok: no-direct-response-writer
         response.getWriter().printf(java.util.Locale.US,"Formatted like: %1$s and %2$s.",obj);
     }  // end doPost
 
@@ -191,7 +191,7 @@ public class BenchmarkTest02229 extends HttpServlet {
 
         response.setHeader("X-XSS-Protection", "0");
         Object[] obj = {"a", bar};
-        // ruleid: no-direct-response-writer
+        // ruleid: deepok: no-direct-response-writer
         response.getWriter().printf(java.util.Locale.US, "Formatted like: %1$s and %2$s.", obj);
     } // end doPost
 
