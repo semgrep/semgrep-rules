@@ -198,6 +198,7 @@ connection.execute(stmt, name='Frodon Sacquet')
 # ok: sqlalchemy-execute-raw-query
 engine = create_engine('postgresql://user@localhost/database')
 query = select(literal_column("users.fullname", String) + ', ' + literal_column("addresses.email_address").label("title")).where(and_(literal_column("users.id") == literal_column("addresses.user_id"), text("users.name BETWEEN 'm' AND 'z'"), text("(addresses.email_address LIKE :x OR addresses.email_address LIKE :y)"))).select_from(table('users')).select_from(table('addresses'))
+# deepruleid: sqlalchemy-execute-raw-query
 conn.execute(query, {"x":"%@aol.com", "y":"%@msn.com"}).fetchall()
 
 
