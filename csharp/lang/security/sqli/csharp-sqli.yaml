@@ -18,8 +18,10 @@ rules:
               - pattern: |
                   new $PATTERN($CMD,...)
               - focus-metavariable: $CMD
-            - pattern: |
-                $CMD.$PATTERN = ...;
+            - patterns:
+              - pattern: |
+                  $CMD.$PATTERN = $VALUE;
+              - focus-metavariable: $VALUE
           - metavariable-regex:
               metavariable: $PATTERN
               regex: ^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$
