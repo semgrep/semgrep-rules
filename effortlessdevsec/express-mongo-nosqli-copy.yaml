@@ -1,0 +1,185 @@
+rules:
+- id: express-mongo-nosqli
+  message: Detected a `$IMPORT` statement that comes from a `$REQ` argument. This
+    could lead to NoSQL injection if the variable is user-controlled and is not properly
+    sanitized. Be sure to properly sanitize the data if you absolutely must pass request
+    data into a mongo query.
+  severity: ERROR
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    interfile: true
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+    functional-categories:
+    - web::source::cookie::express
+    - web::source::http-params::express
+    - web::source::http-body::express
+    - web::source::header::express
+    - web::source::url-path-params::express
+    - db::sink::sql-or-nosql-query::mongoose
+    - db::sink::sql-or-nosql-query::mongojs
+    - db::sink::sql-or-nosql-query::mongodb
+    owasp:
+    - A01:2017 - Injection
+    references:
+    - https://owasp.org/www-pdf-archive/GOD16-NOSQL.pdf
+    technology:
+    - express
+    - nodejs
+    - mongodb
+    license: Copyright 2023 Semgrep, Inc.
+    vulnerability_class:
+    - Improper Validation
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: function ... (...,$REQ, ...) {...}
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+      - pattern: $REQ.cookies
+      - pattern: $REQ.headers
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          (...,{ $REQ }: Request,...) => {...}
+      - pattern-inside: |
+          (...,{ $REQ }: $EXPRESS.Request,...) => {...}
+    - focus-metavariable: $REQ
+    - pattern-either:
+      - pattern: params
+      - pattern: query
+      - pattern: cookies
+      - pattern: headers
+      - pattern: body
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $DB = require('$IMPORT')
+              ...
+          - pattern-inside: |
+              import { ...,$DB,... } from '$IMPORT'
+              ...
+          - pattern-inside: |
+              import * as $DB from '$IMPORT'
+              ...
+          - pattern-inside: |
+              import $DB from '$IMPORT'
+              ...
+        - metavariable-regex:
+            metavariable: $IMPORT
+            regex: .*(mongoose|mongodb|database|collection)
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $I = require('$IMPORT')
+              ...
+          - pattern-inside: |
+              import { ...,$I,... } from '$IMPORT'
+              ...
+          - pattern-inside: |
+              import * as $I from '$IMPORT'
+              ...
+          - pattern-inside: |
+              import $I from '$IMPORT'
+              ...
+        - metavariable-regex:
+            metavariable: $IMPORT
+            regex: ^(mongoose|mongodb|mongojs)
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $I.connect(..., function(...,$DB,...){
+                  ...
+              })
+          - pattern-inside: |
+              $DB = $I.connect(...)
+              ...
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $CLIENT = await $I.connect(...). ...
+              ...
+          - pattern-inside: |
+              $CLIENT = await $I.connect(...)
+              ...
+          - pattern-inside: |
+              $CLIENT = $I.connect(...). ...
+              ...
+          - pattern-inside: |
+              $CLIENT = $I.connect(...)
+              ...
+          - pattern-inside: |
+              $D = $CLIENT.db(...)
+               ...
+          - pattern-inside: |
+              $DB = $D.collection(...)
+               ...
+    - pattern-not-inside: |
+        $APP.use(mongoSanitize())
+    - pattern-either:
+      - pattern-inside: $DB. ... .$M($VALUE,...)
+    - metavariable-regex:
+        metavariable: $M
+        regex: (deleteMany|deleteOne|find|findById|findByIdAndDelete|findByIdAndRemove|findByIdAndUpdate|findOne|updateOne|findOneAndDelete|findOneAndRemove|findOneAndReplace|findOneAndUpdate|replaceOne|updateMany|update)
+    - focus-metavariable: $VALUE
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $EMS = require('express-mongo-sanitize')
+        ...
+    - pattern: $EMS.sanitize(...)
+  - patterns:
+    - pattern-inside: |
+        $MS = require('mongo-sanitize')
+        ...
+    - pattern: $MS.sanitize(...)
+  - patterns:
+    - pattern-inside: |
+        $OBJ = require('...'). ... .ObjectId
+        ...
+    - pattern: $OBJ(...)
+  - patterns:
+    - pattern-inside: |
+        $OBJ = require('...'). ... .isValid
+        ...
+    - pattern: $OBJ(...)
+  - patterns:
+    - pattern-either:
+      - pattern: String(...)
+      - pattern: $VALUE. ... .toString()
+      - pattern: parseInt(...)
+      - pattern: Number.parseInt(...)
+      - pattern: $TYPE. ... .isValid(...)
+      - pattern: $TYPE. ... .ObjectId(...)
+      - pattern: $TYPE. ... .ObjectID(...)
+      - pattern: ObjectID(...)
+      - pattern: ObjectId(...)
+      - pattern: new $TYPE. ... .isValid(...)
+      - pattern: new $TYPE. ... .ObjectId(...)
+      - pattern: new $TYPE. ... .ObjectID(...)
+      - pattern: new ObjectId(...)
+      - pattern: new ObjectID(...)
+  - patterns:
+    - pattern: $THIS. ... .$HASH(...)
+    - metavariable-regex:
+        metavariable: $HASH
+        regex: (hash|md5|sha1|sha256)
+  - patterns:
+    - pattern: $VALUE
+    - metavariable-regex:
+        metavariable: $VALUE
+        regex: .*(\$eq).*
