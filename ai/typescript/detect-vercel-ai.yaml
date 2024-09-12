@@ -1,0 +1,20 @@
+rules:
+  - id: detect-vercel-ai
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: VercelAI"
+    pattern-either:
+      - pattern: import "ai"
+      - pattern: import "@ai-sdk"
+      - pattern: generateText({model:...})
+      - pattern: generateText({prompt:...})
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

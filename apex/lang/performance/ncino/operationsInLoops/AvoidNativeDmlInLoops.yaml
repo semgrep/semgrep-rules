@@ -1,0 +1,47 @@
+rules:
+  - id: avoid-native-dml-in-loops
+    min-version: 1.44.0
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: performance
+      references:
+      - https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_gov_limits.htm
+      technology:
+      - salesforce
+    message: >-
+      Avoid DML statements inside loops to avoid hitting the DML governor limit.
+      Instead, try to batch up the data into a list and invoke your DML once on
+      that list of data outside the loop.
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              for (...) {
+                ...
+              }
+          - pattern-inside: |
+              while (...) {
+                ...
+              }
+          - pattern-inside: |
+              do {
+                ...
+              } while (...);
+      - pattern-either:
+          - pattern: |
+              insert $DATA;
+          - pattern: |
+              update $DATA;
+          - pattern: |
+              upsert $DATA;
+          - pattern: |
+              delete $DATA;
+          - pattern: |
+              Database.insert($DATA);
+          - pattern: |
+              Database.update($DATA);
+          - pattern: |
+              Database.upsert($DATA);
+          - pattern: |
+              Database.delete($DATA);

@@ -1,0 +1,20 @@
+rules:
+  - id: detect-anthropic
+    languages:
+      - python
+    severity: INFO
+    message: "Possibly found usage of AI: Anthropic"
+    pattern-either:
+      - pattern: import anthropic
+      - pattern: from anthropic import $ANYTHING
+      - pattern: Anthropic(...)
+      - pattern: anthropic.Anthropic(...)
+      - pattern: $CLIENT.messages.$FUNC(...,model=...,...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

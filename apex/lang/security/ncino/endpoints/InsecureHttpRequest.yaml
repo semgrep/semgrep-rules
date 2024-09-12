@@ -1,0 +1,30 @@
+rules:
+  - id: insecure-http-request
+    min-version: 1.44.0
+    severity: ERROR
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-319: Cleartext Transmission of Sensitive Information'
+      impact: MEDIUM
+      likelihood: LOW
+      confidence: MEDIUM
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      references:
+        - https://cwe.mitre.org/data/definitions/319.html
+    message: >-
+      The software transmits sensitive or security-critical data in cleartext in
+      a communication channel that can be sniffed by unauthorized actors.
+    patterns:
+      - pattern-regex: http[:][/][/]
+      - pattern-not-regex: //.*
+      - pattern-not-regex: '[*].*'
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"

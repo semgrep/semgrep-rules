@@ -1,0 +1,54 @@
+<!-- ruleid: csp-header-attribute -->
+<apex:page docType="html-5.0" sidebar="false" standardController="Account" extensions="DefaultAppController, TemplateController">
+    <apex:slds />
+    <nFORCE:Include_SLDS_A11y_Overrides />
+</apex:page>
+
+<!-- ruleid: csp-header-attribute -->
+<apex:page>
+</apex:page>
+
+<!-- ruleid: csp-header-attribute -->
+<apex:page docType="html-5.0" sidebar="false" controller="AdministrationController" cspHeader="false">
+    <apex:composition template="Template_Base">
+        <apex:define name="topbar">
+            <apex:include pageName="{!IF(isNull(route.Topbar__c),'nFORCE__InvalidRouteConfiguration',route.Topbar__c)}" />
+        </apex:define>
+        <apex:define name="navigation">
+            <apex:include pageName="{!IF(isNull(route.Navigation__c),'nFORCE__InvalidRouteConfiguration',route.Navigation__c)}" />
+        </apex:define>
+        <apex:define name="subNavigation">
+            <apex:include pageName="{!IF(isNull(route.Sub_Navigation__c),'nFORCE__InvalidRouteConfiguration',route.Sub_Navigation__c)}"
+            />
+        </apex:define>
+        <apex:define name="body">
+            <apex:include pageName="{!IF(isNull(route.Body__c),'nFORCE__InvalidRouteConfiguration',route.Body__c)}" />
+        </apex:define>
+    </apex:composition>
+
+</apex:page>
+
+<!-- ok: csp-header-attribute -->
+<apex:page docType="html-5.0" cspHeader="true">
+    <c:ManagePermissionSets />
+</apex:page>
+
+<!-- ok: csp-header-attribute -->
+<apex:page>
+<!--deprecated-->
+</apex:page>
+
+<!-- ok: csp-header-attribute -->
+<apex:page>
+	<!--deprecated-->
+</apex:page>
+
+<!-- ok: csp-header-attribute -->
+<apex:page>
+<!-- deprecated -->
+</apex:page>
+
+<!-- ok: csp-header-attribute -->
+<apex:page>
+	<!-- deprecated -->
+</apex:page>

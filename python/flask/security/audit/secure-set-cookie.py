@@ -1,8 +1,22 @@
 def test1():
     import flask
+
     response = flask.make_response()
+
     # ruleid:secure-set-cookie
     response.set_cookie("cookie_name", "cookie_value")
+
+    # ruleid:secure-set-cookie
+    response.set_cookie("username","DrewDennison")
+    # ruleid:secure-set-cookie
+    response.set_cookie("cartTotal",
+        generate_cookie_value("DrewDennison"),
+        secure=False)
+
+    # ok:secure-set-cookie
+    response.set_cookie("user—rights", "admin", secure=True,
+      httponly=True, samesite="Lax")
+
     return response
 
 def test2():
@@ -72,3 +86,4 @@ def merge_cookies(cookiejar, cookies):
                 # ok:secure-set-cookie
                 cookiejar.set_cookie(cookie_in_jar)
     return cookiejar
+

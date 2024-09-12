@@ -3,9 +3,7 @@ rules:
   message: >-
     Detected a possible denial-of-service via a zip bomb attack. By limiting the max
     bytes read, you can mitigate this attack.
-    `io.CopyN()` can specify a size. Refer to https://bomb.codes/ to learn more about
-    this attack and other ways to mitigate
-    it.
+    `io.CopyN()` can specify a size. 
   severity: WARNING
   languages: [go]
   patterns:
@@ -51,7 +49,6 @@ rules:
     - 'CWE-400: Uncontrolled Resource Consumption'
     source-rule-url: https://github.com/securego/gosec
     references:
-    - https://bomb.codes/
     - https://golang.org/pkg/io/#CopyN
     - https://github.com/securego/gosec/blob/master/rules/decompression-bomb.go
     category: security

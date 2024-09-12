@@ -1,0 +1,44 @@
+rules:
+  - id: legacy-api-clusterrole-excessive-permissions
+    patterns:
+      - pattern: |
+          "*"
+      - pattern-inside: |
+          resources: $A
+          ...
+      - pattern-inside: |
+          verbs: $A
+          ...
+      - pattern-inside: |
+          - apiGroups: [""]
+            ...
+      - pattern-inside: |
+          apiVersion: rbac.authorization.k8s.io/v1
+          ...
+      - pattern-inside: |
+          kind: ClusterRole
+          ...
+    message: >-
+      Semgrep detected a Kubernetes core API ClusterRole with excessive permissions. Attaching excessive permissions to a ClusterRole associated with the core namespace allows the V1 API to perform arbitrary actions on arbitrary resources attached to the cluster. Prefer explicit allowlists of verbs/resources when configuring the core API namespace. 
+    languages:
+      - yaml
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-269: Improper Privilege Management"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
+      references:
+        - https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+        - https://kubernetes.io/docs/concepts/security/rbac-good-practices/#general-good-practice
+        - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#api-groups
+      category: security
+      technology:
+        - kubernetes
+      cwe2021-top25: false
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH

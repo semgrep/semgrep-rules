@@ -8,6 +8,8 @@ rules:
   - pattern: (StringBuilder $STRB).append($INPUT)
     from: $INPUT
     to: $STRB
+    label: CONCAT
+    requires: INPUT
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -31,7 +33,6 @@ rules:
     - pattern-either:
       - pattern: $X + $SOURCE
       - pattern: $SOURCE + $Y
-      - pattern: (StringBuilder $STRB).append($SOURCE)
       - pattern: String.format("...", ..., $SOURCE, ...)
       - pattern: String.join("...", ..., $SOURCE, ...)
       - pattern: (String $STR).concat($SOURCE)

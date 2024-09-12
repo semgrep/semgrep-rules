@@ -1,0 +1,34 @@
+rules:
+  - id: django-no-csrf-token
+    patterns:
+      - pattern: "<form...>...</form>"
+      - pattern-either:
+          - pattern: |
+              <form ... method="$METHOD" ...>...</form>
+          - pattern: |
+              <form ... method='$METHOD' ...>...</form>
+          - pattern: |
+              <form ... method=$METHOD ...>...</form>
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (?i)(post|put|delete|patch)
+      - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
+      - pattern-not-inside: "<form...>...{{ $VAR.csrf_token }}...</form>"
+    message: Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
+    languages: [generic]
+    severity: WARNING
+    metadata:
+      category: security
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      references:
+      - https://docs.djangoproject.com/en/4.2/howto/csrf/
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - audit
+      technology:
+        - django
+    paths:
+      include:
+        - "*.html"

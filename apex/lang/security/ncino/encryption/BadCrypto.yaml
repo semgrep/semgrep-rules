@@ -1,0 +1,34 @@
+rules:
+  - id: bad-crypto
+    min-version: 1.44.0
+    severity: ERROR
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-321: Use of Hard-coded Cryptographic Key'
+      owasp:
+      - A02:2021 - Cryptographic Failures
+      impact: HIGH
+      likelihood: LOW
+      confidence: LOW
+      category: security
+      subcategory:
+      - audit
+      technology:
+      - salesforce
+      references:
+      - https://cwe.mitre.org/data/definitions/321.html
+    message: >-
+      The rule makes sure you are using randomly generated IVs and keys
+      for Crypto calls. Hard-coding these values greatly compromises the
+      security of encrypted data.
+    pattern-either:
+      - pattern: Blob $IV = Blob.valueOf('$STRING');...Crypto.encrypt($ONE, $TWO, $IV, $FOUR);
+      - pattern: Blob $IV = Blob.valueOf('$STRING');...Crypto.decrypt($ONE, $TWO, $IV, $FOUR);
+      - pattern: Blob $KEY = Blob.valueOf('$STRING');...Crypto.encrypt($ONE, $KEY, $THREE, $FOUR);
+      - pattern: Blob $KEY = Blob.valueOf('$STRING');...Crypto.decrypt($ONE, $KEY, $THREE, $FOUR);
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"

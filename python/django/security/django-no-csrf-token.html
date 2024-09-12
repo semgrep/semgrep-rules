@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ruleid: django-no-csrf-token -->
+          <form method="post">
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ruleid: django-no-csrf-token -->
+          <form method='POST'>
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ruleid: django-no-csrf-token -->
+          <form method='PUT'>
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+          <form method="post">
+<!-- ok: django-no-csrf-token -->
+            {% csrf_token %}
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+          <form method="delete">
+<!-- ok: django-no-csrf-token -->
+            {% csrf_token %}
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ok: django-no-csrf-token -->
+          <form>
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ok: django-no-csrf-token -->
+          <form method="GET">
+              <input type="text" name="some_field">Some Field</input>
+              <input type="submit" name="submit">Submit</input>
+          </form>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-6">
+<!-- ok: django-no-csrf-token -->
+        <form method="POST" action="{{ url_for('web.organization_settings') }}">
+          {{ name_form.csrf_token }}
+          {{ render_form_row([name_form.organization_name], col_map={'organization_name': 'col-md-6'}) }}
+        
+          <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+      </div>
+  </div>
+</div>

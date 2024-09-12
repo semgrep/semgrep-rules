@@ -1,0 +1,41 @@
+rules:
+- id: tainted-exec
+  mode: taint
+  pattern-sources:
+  - pattern: $_REQUEST
+  - pattern: $_GET
+  - pattern: $_POST
+  - pattern: $_COOKIE
+  pattern-sinks:
+  - pattern: exec(...)
+  - pattern: system(...)
+  - pattern: popen(...)
+  - pattern: passthru(...)
+  - pattern: shell_exec(...)
+  - pattern: pcntl_exec(...)
+  - pattern: proc_open(...)
+  pattern-sanitizers:
+  - pattern: escapeshellarg(...)
+  message: >-
+    Executing non-constant commands. This can lead to command injection. You should use `escapeshellarg()` when using command.
+  metadata:
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    references:
+    - https://www.stackhawk.com/blog/php-command-injection/
+    - https://brightsec.com/blog/code-injection-php/
+    - https://www.acunetix.com/websitesecurity/php-security-2/
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+  languages: [php]
+  severity: ERROR
+

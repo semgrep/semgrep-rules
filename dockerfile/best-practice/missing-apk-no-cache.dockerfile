@@ -29,3 +29,7 @@ RUN apk add --no-cache --virtual .build-deps \
 gcc \
 freetype-dev \
 musl-dev
+
+
+# ok: missing-apk-no-cache
+RUN apk --no-cache add

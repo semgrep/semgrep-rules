@@ -22,7 +22,13 @@ rules:
           for $ELEMENT in $LIST:
             ...
             $LIST.extend(...)
+      - pattern: |
+          for $ELEMENT in $LIST:
+            ...
+            $LIST.remove(...)
     metadata:
       category: correctness
       technology:
         - python
+      references:
+        - https://unspecified.wordpress.com/2009/02/12/thou-shalt-not-modify-a-list-during-iteration/

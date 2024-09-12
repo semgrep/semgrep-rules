@@ -1,0 +1,23 @@
+rules:
+  - id: absolute-urls
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - apex
+    metadata:
+      category: best-practice
+      references:
+      - ''
+      technology:
+      - salesforce
+    message: >-
+      Using absolute URLs to Salesforce Pages is bug prone. Different sandboxes and production
+      environments will have different instance names (like "na10", "na15" etc.). Code using
+      absolute URLs will only work when it runs in the corresponding salesforce instances. It
+      will break as soon as it is deployed in another one. Thus only relative URLs, i.e. without
+      the domain and subdomain names, should be used when pointing to a salesforce page.
+    pattern-regex: (http|https)://.*(salesforce|force|visualforce)\.com\.*
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"

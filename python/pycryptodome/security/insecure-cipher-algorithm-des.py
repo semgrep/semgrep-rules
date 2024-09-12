@@ -23,11 +23,13 @@ nonce = Random.new().read(pycrypto_des.block_size/2)
 ctr = Counter.new(pycrypto_des.block_size*8/2, prefix=nonce)
 # ruleid:insecure-cipher-algorithm-des
 cipher = pycrypto_des.new(key, pycrypto_des.MODE_CTR, counter=ctr)
+# deepruleid:insecure-cipher-algorithm-des
 msg = nonce + cipher.encrypt(plaintext)
 nonce = Random.new().read(pycryptodomex_des.block_size/2)
 ctr = Counter.new(pycryptodomex_des.block_size*8/2, prefix=nonce)
 # ruleid:insecure-cipher-algorithm-des
 cipher = pycryptodomex_des.new(key, pycryptodomex_des.MODE_CTR, counter=ctr)
+# deepruleid:insecure-cipher-algorithm-des
 msg = nonce + cipher.encrypt(plaintext)
 
 

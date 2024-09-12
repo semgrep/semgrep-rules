@@ -1,0 +1,20 @@
+rules:
+  - id: use-assert-class
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - generic
+    metadata:
+      category: best-practice
+      references:
+      - https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_System_Assert.htm
+      technology:
+      - salesforce
+    message: >-
+      Assert methods in the System class have been replaced with the Assert class:
+      https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_System_Assert.htm
+    pattern-regex: System\.assert
+    paths:
+      include:
+        - "*.cls"
+        - "UseAssertClass.cls"

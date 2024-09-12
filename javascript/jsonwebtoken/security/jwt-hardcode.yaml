@@ -36,23 +36,17 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
-    - pattern-either:
-      - patterns:
+    - patterns:
+        - pattern: |
+            $X = '...' 
+        - pattern: |
+            $X = '$Y' 
+    - patterns:
+      - pattern-either: 
         - pattern-inside: |
-            $VALUE = '$Y' 
-            ...
-        - pattern: $VALUE
-      - pattern-inside: $JWT.sign($VALUE, '$Y',...)
-      - pattern-inside: $JWT.verify($VALUE, '$Y',...)
-      - patterns:
+            $JWT.sign($DATA,"...",...);
         - pattern-inside: |
-            $SECRET = "$Y"
-            ...
-            class $FUNC {
-              ...
-            }
-        - pattern: $SECRET
+            $JWT.verify($DATA,"...",...);
   pattern-sinks:
   - patterns:
     - pattern-either:

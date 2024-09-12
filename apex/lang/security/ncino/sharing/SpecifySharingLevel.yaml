@@ -1,0 +1,32 @@
+rules:
+  - id: specify-sharing-level
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-284: Improper Access Control'
+      owasp:
+      - A04:2021 - Insecure Design
+      references:
+      - https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_keywords_sharing.htm
+      - https://cwe.mitre.org/data/definitions/284.html
+      - https://owasp.org/Top10/A04_2021-Insecure_Design/
+      category: security
+      subcategory:
+      - vuln
+      technology:
+      - salesforce
+      impact: MEDIUM
+      likelihood: MEDIUM
+      confidence: HIGH
+    message: >-
+        Every Apex class should have an explicit sharing mode declared. Use the `with sharing`
+        or `without sharing` keywords on a class to specify whether sharing rules must be enforced.
+        Use the `inherited sharing` keyword on an Apex class to run the class in the sharing mode
+        of the class that called it.
+    patterns:
+      - pattern-regex: (private|public|global).*\s(class)\s.*[{]
+      - pattern-not-regex: (private|public|global).*[with|without|inherited]\s[sharing].*\s(class)\s.*[{]
+      - pattern-not-regex: (private|public|global).*\s(class)\s.*(extends)\s(Exception).*[{]

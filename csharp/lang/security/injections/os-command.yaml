@@ -72,3 +72,22 @@ rules:
       - pattern: |
           Process.Start($PSINFO);
       - focus-metavariable: $PSINFO
+    - patterns:
+        - pattern-inside: |
+            Process $PROC = new Process()
+            {
+              StartInfo = new ProcessStartInfo()
+              {
+                ...
+              }
+            };
+            ...
+        - pattern-either:
+            - pattern-inside: |
+                FileName = $ARG;
+                ...
+            - pattern-inside: |
+                Arguments = $ARG;
+                ...
+        - pattern: |
+            $PROC.Start();

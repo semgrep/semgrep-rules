@@ -40,9 +40,12 @@ fi
 # may contain .yml files that are not Semgrep rules and would result
 # in errors.
 #
+# Skipping the "Apex" and "Elixir" folders because it will require splitting test logic
+# to run Semgrep OSS and Semgrep Pro with different expected results.
+#
 set_rule_folders() {
   rule_folders=$(find . -mindepth 1 -maxdepth 1 -type d \
-    | grep -v '^./\(\..*\|stats\|trusted_python\|fingerprints\|scripts\|libsonnet\)/\?$' \
+    | grep -v '^./\(\..*\|stats\|trusted_python\|fingerprints\|scripts\|libsonnet\|apex\|elixir\)/\?$' \
     | sort)
   if [[ -z "$rule_folders" ]]; then
     error "Cannot find any rule folders to scan in $(pwd)"

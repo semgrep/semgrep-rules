@@ -14,7 +14,10 @@ rules:
           ...
       }
   id: aws-provisioner-exec
-  message: Provisioners are a tool of last resort and should be avoided where possible. Provisioner behavior cannot be mapped by Terraform as part of a plan, and execute arbitrary shell commands by design.
+  message: >-
+    Provisioners are a tool of last resort and should be avoided where possible.
+    Provisioner behavior cannot be mapped by Terraform as part of a plan,
+    and execute arbitrary shell commands by design.
   languages:
   - terraform
   severity: WARNING
@@ -27,7 +30,7 @@ rules:
     - "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"
     - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
     subcategory:
-    - guardrail
+    - audit
     confidence: HIGH
     likelihood: HIGH
     impact: MEDIUM

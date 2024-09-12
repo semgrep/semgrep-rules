@@ -1,0 +1,25 @@
+rules:
+  - id: global-access-modifiers
+    min-version: 1.44.0
+    severity: WARNING
+    languages:
+      - apex
+    metadata:
+      cwe:
+      - 'CWE-284: Improper Access Control'
+      category: best-practice
+      technology:
+      - salesforce
+      references:
+      - https://cwe.mitre.org/data/definitions/284.html
+    message: >-
+      Global classes, methods, and variables should be avoided (especially in managed packages) as they can
+      never be deleted or changed in signature. Always check twice if something needs to be global.
+    patterns:
+      - pattern-regex: global [A-Za-z0-9_]{3,}
+      - pattern-not-regex: //(\s+([a-zA-Z]+\s+)+)[a-zA-Z]+
+      - pattern-not-regex: '[*](\s+([a-zA-Z]+\s+)+)[a-zA-Z]+'
+    paths:
+      exclude:
+        - "*Test*"
+        - "*test*"
