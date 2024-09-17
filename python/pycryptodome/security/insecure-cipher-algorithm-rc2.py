@@ -19,9 +19,11 @@ key = b'Sixteen byte key'
 iv = Random.new().read(pycrypto_arc2.block_size)
 # ruleid:insecure-cipher-algorithm-rc2
 cipher = pycrypto_arc2.new(key, pycrypto_arc2.MODE_CFB, iv)
+# deepruleid:insecure-cipher-algorithm-rc2
 msg = iv + cipher.encrypt(b'Attack at dawn')
 # ruleid:insecure-cipher-algorithm-rc2
 cipher = pycryptodomex_arc2.new(key, pycryptodomex_arc2.MODE_CFB, iv)
+# deepruleid:insecure-cipher-algorithm-rc2
 msg = iv + cipher.encrypt(b'Attack at dawn')
 
 key = b'Sixteen byte key'
