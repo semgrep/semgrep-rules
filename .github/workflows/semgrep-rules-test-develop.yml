@@ -1,3 +1,6 @@
+# Running the tests in the repo using `semgrep test --experimental` and
+# the semgrep/semgrep:pro-develop docker image (the bleeding edge!).
+
 name: semgrep-rules-test-develop
 on:
   pull_request:
@@ -18,13 +21,17 @@ jobs:
         path: semgrep-rules
     - name: delete directories not containing rules
       run: rm -rf semgrep-rules/stats semgrep-rules/fingerprints
-    #TODO: in theory we can run those tests by using --test --pro
+    #TODO: in theory we could run those tests by using --test --pro
+    # since our docker image now contains semgrep-core-pro (but
+    # it would require to be logged in though via a SEMGREP_APP_TOKEN)
     - name: delete rules requiring Semgrep Pro
       run: rm -rf semgrep-rules/apex semgrep-rules/elixir
+    # TODO: this takes 1m20 in CI and could be optimized by switching to osemgrep
     - name: validate rules
       run: |
         export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep"
         make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
+    # this now takes 21s with osemgrep instead of 3min with pysemgrep
     - name: test with semgrep pro develop branch and with --experimental
       run: |
         export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep --experimental"
