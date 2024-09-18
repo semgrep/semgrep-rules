@@ -9,8 +9,6 @@ on:
     - develop
     - release
 jobs:
-  # Note: if you change this test there will likely need to be a
-  # corresponding change in returntocorp/semgrep
   test-develop:
     name: rules-test-develop
     runs-on: ubuntu-20.04
@@ -18,17 +16,15 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
-    - name: delete stats directory
-      run: rm -rf semgrep-rules/stats
-    - name: delete fingerprints directory
-      run: rm -rf semgrep-rules/fingerprints
+    - name: delete directories not containing rules
+      run: rm -rf semgrep-rules/stats semgrep-rules/fingerprints
     - name: delete rules requiring Semgrep Pro
       run: rm -rf semgrep-rules/apex semgrep-rules/elixir
     - name: validate rules
       run: |
-        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep"
+        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep"
         make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
-    - name: test with semgrep develop branch
+    - name: test with semgrep pro develop branch and with --experimental
       run: |
-        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:develop semgrep"
+        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep --experimental"
         make -C "$GITHUB_WORKSPACE"/semgrep-rules test-only
