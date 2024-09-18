@@ -18,6 +18,7 @@ jobs:
         path: semgrep-rules
     - name: delete directories not containing rules
       run: rm -rf semgrep-rules/stats semgrep-rules/fingerprints
+    #TODO: in theory we can run those tests by using --test --pro
     - name: delete rules requiring Semgrep Pro
       run: rm -rf semgrep-rules/apex semgrep-rules/elixir
     - name: validate rules
