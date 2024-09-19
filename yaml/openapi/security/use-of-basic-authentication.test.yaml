@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: Example API
+  description: Example API
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/
+
+paths:
+  /test/{param}:
+    get:
+      operationId: test
+      parameters:
+        - name: param
+          in: path
+          required: true
+          description: test
+          schema:
+            type: string
+
+security:
+  - basicAuth: []
+  - apiKeyAuth: []
+
+components:
+  securitySchemes:
+    basicAuth:
+      # ruleid: use-of-basic-authentication
+      type: http
+      scheme: basic
+    apiKeyAuth:
+      # ok: use-of-basic-authentication
+      type: apiKey
+      in: header
+      name: X-API-Key

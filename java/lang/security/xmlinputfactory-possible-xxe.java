@@ -3,10 +3,10 @@
 package example;
 
 import javax.xml.stream.XMLInputFactory;
-import static java.xml.stream.XMLFactoryInput.IS_SUPPORTING_EXTERNAL_ENTITIES;
+import static javax.xml.stream.XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES;
 
 class GoodXMLInputFactory {
-    public void Blah() {
+    public void blah() {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
         // See
@@ -18,7 +18,7 @@ class GoodXMLInputFactory {
 }
 
 class GoodConstXMLInputFactory {
-    public void Blah() {
+    public GoodConstXMLInputFactory() {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
         // See
@@ -29,16 +29,36 @@ class GoodConstXMLInputFactory {
     }
 }
 
-class BadXMLInputFactory {
-    public Blah() {
+class GoodConstXMLInputFactory1 {
+    public GoodConstXMLInputFactory1() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+
+        // See
+        // https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md#xmlinputfactory-a-stax-parser
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+        // ok
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+    }
+}
+
+class BadXMLInputFactory1 {
+    public BadXMLInputFactory1() {
         // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
     }
 }
 
+class BadXMLInputFactory2 {
+    public BadXMLInputFactory2() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, true);
+    }
+}
+
 class MaybeBadXMLInputFactory {
-    public Blah() {
+    public void foobar() {
         // ruleid:xmlinputfactory-possible-xxe
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     }

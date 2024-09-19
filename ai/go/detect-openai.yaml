@@ -1,0 +1,17 @@
+rules:
+  - id: detect-openai
+    languages:
+      - go
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: import "github.com/sashabaranov/go-openai"
+      - pattern: gogpt.NewClient(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW
