@@ -19,11 +19,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
+    - name: run osemgrep test --pro
+      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep test --pro .
+    #TODO: we can delete all the rest below and also scripts/run-tests
     - name: delete directories not containing rules
       run: rm -rf semgrep-rules/stats
-    #TODO: in theory we could run those tests by using --test --pro
-    # since our docker image now contains semgrep-core-pro (but
-    # it would require to be logged in though via a SEMGREP_APP_TOKEN)
     - name: delete rules requiring Semgrep Pro
       run: rm -rf semgrep-rules/apex semgrep-rules/elixir
     # TODO: this takes 1m20 in CI and could be optimized by switching to osemgrep
