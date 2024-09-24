@@ -7,9 +7,10 @@ RUN git clone https://github.com/returntocorp/semgrep
 RUN pip3 install semgrep
 
 # ruleid: missing-user-entrypoint
-USER non-root
 ENTRYPOINT semgrep -f p/xss
 
-# TODO: metavar bug
+# TODO: metavar ellipses bug
 # ok: missing-user-entrypoint
 ENTRYPOINT ["semgrep", "--config", "localfile", "targets"]
+
+USER non-root
