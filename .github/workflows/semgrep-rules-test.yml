@@ -21,6 +21,10 @@ jobs:
       run: pip3 install semgrep
     - name: remove stats directory
       run: rm -rf stats
+    - name: remove .github from testing
+      run: rm -rf .github
+    - name: remove pre-commit-config.yaml
+      run: rm -f .pre-commit-config.yaml
     - name: remove rules requiring Semgrep Pro
       run: rm -rf apex elixir
     - name: validate rules
