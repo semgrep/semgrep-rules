@@ -1,0 +1,19 @@
+rules:
+- id: check-is-none-explicitly
+  pattern-either:
+  - pattern: $X and $X == 0
+  - pattern: $X.get($FIELD) and $X[$FIELD] == 0
+  fix: ($X != None) and $X == 0
+  message: This expression will always return False because 0 is a false-y value.
+    So if $X is 0, then the first part of this expression will return False but if
+    it is not, the second part will return False. Perhaps you meant to check if $X
+    was None explicitly.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: correctness
+    technology:
+    - none
+    references:
+    - https://www.freecodecamp.org/news/truthy-and-falsy-values-in-python/
