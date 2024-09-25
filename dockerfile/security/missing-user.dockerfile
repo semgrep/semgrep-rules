@@ -12,6 +12,5 @@ CMD semgrep -f p/xss
 # ruleid: missing-user
 CMD semgrep --config localfile targets
 
-# TODO: metavar ellipses bug
-# ok: missing-user
+# ruleid: missing-user
 CMD ["semgrep", "--version"]
