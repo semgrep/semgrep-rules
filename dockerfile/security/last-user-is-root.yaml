@@ -1,23 +1,17 @@
 rules:
 - id: last-user-is-root
   patterns:
-    - pattern-inside: |
-        USER $F
-        ...
-        USER $X
-    # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
-    - pattern-not-inside: |
-        ...
-        USER $X
-        ...
-        USER $F
-    - focus-metavariable: $X
-    - metavariable-regex:
-        metavariable: $X
-        regex: ^(root)$
-    - metavariable-regex:
-        metavariable: $F
-        regex: (.*(?!root))
+    - pattern: USER root
+    - pattern-not-inside:
+        patterns:
+          - pattern: |
+              USER root
+              ...
+              USER $X
+          - metavariable-pattern:
+              metavariable: $X
+              patterns:
+                - pattern-not: root
   message: >-
     The last user in the container is 'root'. This is a security
     hazard because if an attacker gains control of the container

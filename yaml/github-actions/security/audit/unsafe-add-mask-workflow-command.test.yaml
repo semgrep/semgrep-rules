@@ -1,0 +1,38 @@
+name: Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Run script to generate token
+        run: |
+          TOKEN=$(openssl rand -hex 16)
+          # ruleid: unsafe-add-mask-workflow-command
+          echo "::add-mask::$TOKEN"
+          echo "TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Use the token
+        run: |
+          echo "Using the token in the next step"
+          curl -H "Authorization: Bearer $TOKEN" https://api.example.com
+
+      - name: Print GitHub context
+        run: |
+          echo "GitHub context:"
+          echo "${{ toJSON(github) }}"
+          # ruleid: unsafe-add-mask-workflow-command
+          echo "::add-mask::${{ secrets.GITHUB_TOKEN }}"

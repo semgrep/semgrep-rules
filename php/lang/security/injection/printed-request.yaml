@@ -1,0 +1,62 @@
+rules:
+- id: printed-request
+  mode: taint
+  message: >-
+    `Printing user input risks cross-site scripting vulnerability.
+    You should use `htmlentities()` when showing data to users.
+  languages: [php]
+  severity: ERROR
+  pattern-sources:
+  - pattern: $_REQUEST
+  - pattern: $_GET
+  - pattern: $_POST
+  pattern-sinks:
+  - pattern: print($...VARS);
+  pattern-sanitizers:
+  - pattern: htmlentities(...)
+  - pattern: htmlspecialchars(...)
+  - pattern: strip_tags(...)
+  - pattern: isset(...)
+  - pattern: empty(...)
+  # Wordpress Escapes
+  - pattern: esc_html(...)
+  - pattern: esc_attr(...)
+  - pattern: wp_kses(...)
+  # Laravel Escapes
+  - pattern: e(...)
+  # Symfony Escapes
+  - pattern: twig_escape_filter(...)
+  # CodeIgniter Escapes
+  - pattern: xss_clean(...)
+  - pattern: html_escape(...)
+  # Drupal Escapes
+  - pattern: Html::escape(...)
+  - pattern: Xss::filter(...)
+  # Magento Escapes
+  - pattern: escapeHtml(...)
+  # Laminas Escapes
+  - pattern: escapeHtml(...)
+  - pattern: escapeHtmlAttr(...)
+  fix: print(htmlentities($...VARS));
+  metadata:
+    technology:
+    - php
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    category: security
+    references:
+    - https://www.php.net/manual/en/function.htmlentities.php
+    - https://www.php.net/manual/en/reserved.variables.request.php
+    - https://www.php.net/manual/en/reserved.variables.post.php
+    - https://www.php.net/manual/en/reserved.variables.get.php
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM

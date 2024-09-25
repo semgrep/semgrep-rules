@@ -11,13 +11,33 @@ rules:
   - pattern: $_GET
   - pattern: $_POST
   pattern-sinks:
-  - pattern: echo ...;
-  - pattern: print(...);
+  - pattern: echo $...VARS;
   pattern-sanitizers:
-  - pattern: isset(...)
-  - pattern: empty(...)
   - pattern: htmlentities(...)
   - pattern: htmlspecialchars(...)
+  - pattern: strip_tags(...)
+  - pattern: isset(...)
+  - pattern: empty(...)
+  # Wordpress Escapes
+  - pattern: esc_html(...)
+  - pattern: esc_attr(...)
+  - pattern: wp_kses(...)
+  # Laravel Escapes
+  - pattern: e(...)
+  # Symfony Escapes
+  - pattern: twig_escape_filter(...)
+  # CodeIgniter Escapes
+  - pattern: xss_clean(...)
+  - pattern: html_escape(...)
+  # Drupal Escapes
+  - pattern: Html::escape(...)
+  - pattern: Xss::filter(...)
+  # Magento Escapes
+  - pattern: escapeHtml(...)
+  # Laminas Escapes
+  - pattern: escapeHtml(...)
+  - pattern: escapeHtmlAttr(...)
+  fix: echo htmlentities($...VARS);
   metadata:
     technology:
     - php
