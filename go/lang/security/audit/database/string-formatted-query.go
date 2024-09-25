@@ -57,6 +57,24 @@ func dbQuery3(r *http.Request, username string) {
     }
 }
 
+func dbQuery4(r *http.Request, username string) {
+    // ruleid: string-formatted-query
+    query := fmt.Sprintf("%s AND INSERT into users (username, password)", username)
+    _, err = db.Exec(query)
+    if err != nil {
+        http.Error("mistake")
+    }
+}
+
+func dbQuery5(r *http.Request, username string, password string) {
+	// ruleid: string-formatted-query
+	query := fmt.Sprintf("INSERT into users (username, password) VALUES(%s, %s)", username, password)
+	_, err = db.QueryRow(query)
+	if err != nil {
+		http.Error("mistake")
+	}
+}
+
 func okDbQuery1(r *http.Request) {
     // ok: string-formatted-query
     _, err = db.Exec("INSERT into users (username, password) VALUES(" + "username" + ", " + "smth)")
@@ -110,9 +128,9 @@ func dbQueryRowContext(r *http.Request) {
 
 func dbExecFmt(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
 
 	row, _ := db.Exec(query)
 }
@@ -120,47 +138,65 @@ func dbExecFmt(r *http.Request) {
 func dbExecContextFmt(r *http.Request) {
 	ctx := context.Background()
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
 
 	row, _ := db.ExecContext(ctx, query)
 }
 
 func dbQueryFmt(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
 
 	row, _ := db.Query(query)
 }
+
+func dbQueryContextFmtReassign(r *http.Request) {
+	ctx := context.Background()
+	customerId := r.URL.Query().Get("id")
+	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
+
+	row, _ := db.QueryContext(ctx, query)
+}
+
 
 func dbQueryContextFmt(r *http.Request) {
 	ctx := context.Background()
 	customerId := r.URL.Query().Get("id")
 	// ruleid: string-formatted-query
-	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
-
+	query := fmt.Sprintf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId)
 	row, _ := db.QueryContext(ctx, query)
 }
 
 func dbQueryRowFmt(r *http.Request) {
 	customerId := r.URL.Query().Get("id")
-	// ruleid: string-formatted-query
 	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+		// ruleid: string-formatted-query
+	query = fmt.Printf(query, customerId)
 
 	row, _ := db.QueryRow(query)
+}
+
+func dbQueryRowContextReassign(r *http.Request) {
+	ctx := context.Background()
+	customerId := r.URL.Query().Get("id")
+	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
+	// ruleid: string-formatted-query
+    query = fmt.Printf(query, customerId)
+
+	row, _ := db.QueryRowContext(ctx, query)
 }
 
 func dbQueryRowContextFmt(r *http.Request) {
 	ctx := context.Background()
 	customerId := r.URL.Query().Get("id")
 	// ruleid: string-formatted-query
-	query := "SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s"
-    	query = fmt.Printf(query, customerId)
+	query := fmt.Sprintf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId)
 
 	row, _ := db.QueryRowContext(ctx, query)
 }
@@ -198,6 +234,15 @@ func postgresBadDirectQueryFmt(r *http.Request) {
 
 	// ruleid: string-formatted-query
     row, _ := postgresDb.QueryRow(ctx, fmt.Printf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId))
+}
+
+func postgresQueryFmt(r *http.Request) {
+    ctx := context.Background()
+    customerId := r.URL.Query().Get("id")
+	// ruleid: string-formatted-query
+	query := fmt.Sprintf("SELECT number, expireDate, cvv FROM creditcards WHERE customerId = %s", customerId)
+
+    row, _ := postgresDb.QueryRow(ctx, query)
 }
 
 package main

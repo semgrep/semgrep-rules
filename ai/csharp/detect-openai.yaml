@@ -1,0 +1,18 @@
+rules:
+  - id: detect-openai
+    languages:
+      - csharp
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: using OpenAI
+      - pattern: (ChatClient $CLIENT)
+      - pattern: (ChatClient $CLIENT).$FUNC(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

@@ -1,0 +1,20 @@
+rules:
+  - id: detect-openai
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: import "openai"
+      - pattern: import $ANYTHING from "openai";
+      - pattern: new OpenAI(...)
+      - pattern: $CLIENT.chat.completions.$FUNC(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

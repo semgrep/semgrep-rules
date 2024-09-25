@@ -1,0 +1,17 @@
+rules:
+  - id: detect-generic-ai-api
+    languages:
+      - generic
+    severity: INFO
+    message: "Possibly found usage of AI: HTTP Request"
+    pattern-either:
+      - pattern: /chat/completions
+      - pattern: api.openai.com
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

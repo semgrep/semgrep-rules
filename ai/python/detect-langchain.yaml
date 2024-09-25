@@ -1,0 +1,25 @@
+rules:
+  - id: detect-langchain
+    languages:
+      - python
+    severity: INFO
+    message: "Possibly found usage of AI tooling: LangChain"
+    pattern-either:
+      - pattern: import langchain_openai
+      - pattern: ChatOpenAI(...)
+      - pattern: import langchain_community
+      - pattern: Ollama(...)
+      - pattern: import langchain_anthropic
+      - pattern: ChatAnthropic(...)
+      - pattern: import langchain_cohere
+      - pattern: ChatCohere(...)
+      - pattern: import langchain_core
+      - pattern: import langchain
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

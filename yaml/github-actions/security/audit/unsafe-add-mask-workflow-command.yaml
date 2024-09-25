@@ -1,0 +1,37 @@
+rules:
+- id: unsafe-add-mask-workflow-command
+  patterns:
+  - pattern-regex: '::add-mask::'
+  languages:
+  - yaml
+  severity: WARNING
+  message: GitHub Actions provides the **'add-mask'** workflow command to mask sensitive
+    data in the workflow logs. If **'add-mask'** is not used or if workflow commands
+    have been stopped, sensitive data can leaked into the workflow logs. An attacker
+    could simply copy the workflow to another branch and add the following payload
+    `echo "::stop-commands::$stopMarker"` to stop workflow command processing ([described
+    here](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#stopping-and-starting-workflow-commands)),
+    which will cause the secret token to be exposed despite the **'add-mask'** usage.
+    For more information, please refer to the [GitHub documentation](https://github.com/actions/toolkit/blob/main/docs/commands.md#register-a-secret).
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp: A06:2017 - Security Misconfiguration
+    category: security
+    technology:
+    - github-actions
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Dangerous Method or Function
+    references:
+    - https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
+    - https://github.com/actions/runner/issues/159
+    - https://github.com/actions/runner/issues/475
+    - https://github.com/actions/runner/issues/807
+    - https://0xn3va.gitbook.io/cheat-sheets/ci-cd/github/actions#misuse-of-sensitive-data-in-workflows
+    - https://github.com/github/docs/blob/main/content/actions/using-workflows/workflow-commands-for-github-actions.md#masking-a-value-in-a-log

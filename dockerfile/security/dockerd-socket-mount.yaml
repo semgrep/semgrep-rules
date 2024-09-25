@@ -1,0 +1,36 @@
+rules:
+  - id: dockerfile-dockerd-socket-mount
+    message: >-
+        The Dockerfile(image) mounts docker.sock to the container which may allow an attacker already inside of the container
+        to escape container and execute arbitrary commands on the host machine.
+    languages:
+      - dockerfile
+      - yaml
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-862: Missing Authorization"
+        - "CWE-269: Improper Privilege Management"
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - audit
+      technology:
+        - dockerfile
+      category: security
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+        - https://redfoxsec.com/blog/insecure-volume-mounts-in-docker/
+        - https://blog.quarkslab.com/why-is-exposing-the-docker-socket-a-really-bad-idea.html
+    pattern-either:
+      - patterns:
+        - pattern: VOLUME $X
+        - metavariable-regex:
+            metavariable: $X
+            regex: "/var/run/docker.sock"
+      - patterns:
+        - pattern-regex: '- "/var/run/docker.sock:.*"'
+        - pattern-inside: |
+            volumes:
+              ...

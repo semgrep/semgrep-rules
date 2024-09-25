@@ -10,6 +10,6 @@ RUN pip3 install semgrep
 USER non-root
 ENTRYPOINT semgrep -f p/xss
 
-# TODO: metavar bug
-# ok: missing-user-entrypoint
+# ruleid: missing-user-entrypoint
+USER non-root
 ENTRYPOINT ["semgrep", "--config", "localfile", "targets"]

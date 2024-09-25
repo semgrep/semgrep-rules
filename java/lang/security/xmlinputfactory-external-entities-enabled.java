@@ -3,6 +3,7 @@
 package example;
 
 import javax.xml.stream.XMLInputFactory;
+import static javax.xml.stream.XMLInputFactory.SUPPORT_DTD;
 
 class GoodXMLInputFactory {
     public GoodXMLInputFactory() {
@@ -16,6 +17,17 @@ class GoodXMLInputFactory {
     }
 }
 
+class GoodXMLInputFactory1 {
+    public GoodXMLInputFactory1() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+
+        // See
+        // https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md#xmlinputfactory-a-stax-parser
+        // ok:xmlinputfactory-external-entities-enabled
+        xmlInputFactory.setProperty(SUPPORT_DTD, false);
+    }
+}
+
 class BadXMLInputFactory {
     public BadXMLInputFactory() {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
@@ -23,3 +35,13 @@ class BadXMLInputFactory {
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
     }
 }
+
+class BadXMLInputFactory1 {
+    public BadXMLInputFactory1() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+        // ruleid:xmlinputfactory-external-entities-enabled
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+    }
+}
+
+

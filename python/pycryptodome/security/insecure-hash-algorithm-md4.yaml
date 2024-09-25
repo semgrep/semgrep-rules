@@ -3,7 +3,8 @@ rules:
   message: >-
     Detected MD4 hash algorithm which is considered insecure. MD4 is not
     collision resistant and is therefore not suitable as a cryptographic
-    signature. Use SHA256 or SHA3 instead.
+    signature.
+    Use a modern hash algorithm from the SHA-2, SHA-3, or BLAKE2 family instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L59
     cwe:
@@ -12,6 +13,7 @@ rules:
     - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
     references:
+    - https://www.pycryptodome.org/src/hash/hash#modern-hash-algorithms
     - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
     - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
     - http://2012.sharcs.org/slides/stevens.pdf
@@ -23,7 +25,12 @@ rules:
     - vuln
     likelihood: LOW
     impact: MEDIUM
-    confidence: MEDIUM
+    confidence: HIGH
+    functional-categories:
+    - crypto::search::hash-algorithm::pycryptodome
+    - crypto::search::hash-algorithm::pycryptodomex
+  options:
+    symbolic_propagation: true
   severity: WARNING
   languages:
   - python
