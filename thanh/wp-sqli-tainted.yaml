@@ -1,0 +1,40 @@
+rules:
+- id: wp-sqli-tainted
+  mode: taint
+  options:
+    interfile: true
+  pattern-sources:
+  - pattern: $_POST
+  - pattern: $_GET
+  - pattern: $_COOKIE
+  - pattern: $_REQUEST
+  - pattern: $_SERVER
+  pattern-sanitizers:
+  - pattern: $wpdb->prepare(...)
+  pattern-sinks:
+  - pattern: $wpdb->query(...)
+  - pattern: $wpdb->get_var(...)
+  - pattern: $wpdb->get_row(...)
+  - pattern: $wpdb->get_col(...)
+  - pattern: $wpdb->get_results(...)
+  - pattern: $wpdb->replace(...)
+  message: Tainted SQL query worth investigating
+  languages:
+  - php
+  severity: WARNING
+  vulnerability_class:
+  - SQL Injection
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe:
+    - 'CWE 89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    confidence: LOW
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - wordpress
+    references:
+    - https://example.com
