@@ -19,6 +19,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
+    - name: run osemgrep validate --pro
+      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep validate --pro .
     - name: run osemgrep test --pro
       run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep test --pro .
     #TODO: we can delete all the rest below and also scripts/run-tests
