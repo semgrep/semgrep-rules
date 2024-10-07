@@ -12,5 +12,5 @@ connection = multiprocessing.connection.Client(
 output = {}
 connection.send(output)
 
-# todoruleid:multiprocessing.recv
+# todoruleid:multiprocessing-recv
 rx = connection.recv()
