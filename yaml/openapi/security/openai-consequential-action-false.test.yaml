@@ -1,0 +1,41 @@
+openapi: 3.1.0
+info:
+  title: Email Service API
+  version: 1.0.0
+  description: API for managing emails
+paths:
+  /emails/{emailId}:
+    # ok: openai-consequential-action-false
+    get:
+      operationId: getEmailById
+      x-openai-isConsequential: false
+      summary: List Emails
+      description: Get a list of email messages.
+
+    # ruleid: openai-consequential-action-false
+    delete:
+      operationId: deleteEmailById
+      x-openai-isConsequential: false
+      summary: Delete Email
+      description: Delete a specific email.
+
+    # ruleid: openai-consequential-action-false
+    post:
+      operationId: createEmail
+      x-openai-isConsequential: false
+      summary: Create Email
+      description: Create a new email.
+
+    # ruleid: openai-consequential-action-false
+    put:
+      operationId: updateEmail
+      x-openai-isConsequential: false
+      summary: Update Email
+      description: Update an existing email.
+      
+    # ruleid: openai-consequential-action-false
+    patch:
+      operationId: partialUpdateEmail
+      x-openai-isConsequential: false
+      summary: Partially Update Email
+      description: Update certain fields of an existing email.
