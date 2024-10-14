@@ -11,7 +11,7 @@
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="600" />
 <meta property="og:image:height" content="600" />
-<!-- ok -->
+<!-- ok: unquoted-attribute-var -->
 <meta property="not-real-only-for-testing" content="{{ safe }}" />
 
 <!-- Google OAuth sign-in -->
@@ -83,3 +83,68 @@
     </ul>
     <hr/>
 {% endfor %}
+
+<!-- Octane engine used in newer versions of ember.js -->
+
+<TodoList as |item|>
+    <!-- ok: unquoted-attribute-var -->
+    <Todo @item={{item}} />
+</TodoList>
+
+<!-- ok: unquoted-attribute-var -->
+<MyGreeting @params={{array "Hello" "World"}}>
+
+<!-- ok: unquoted-attribute-var -->
+<h1>{{@title}}</h1>
+
+<!-- ok: unquoted-attribute-var -->
+<h1>{{this.title}}</h1>
+
+<!-- ok: unquoted-attribute-var -->
+<h1>{{or @title "Untitled"}}</h1>
+
+<Message::Avatar
+  // ok: unquoted-attribute-var
+  @title="{{@username}}'s avatar"
+  // ok: unquoted-attribute-var
+  @initial={{@avatarInitial}}
+  // ok: unquoted-attribute-var
+  @initial={{substring @username 0 1}}
+  // ok: unquoted-attribute-var
+  @isActive={{@userIsActive}}
+  // ok: unquoted-attribute-var
+  class={{if @isCurrentUser "current-user"}}
+/>
+<section>
+  <Message::Username
+    // ok: unquoted-attribute-var
+    @name={{@username}}
+    // ok: unquoted-attribute-var
+    @localTime={{@userLocalTime}}
+  />
+
+  {{yield}}
+</section>
+
+<button
+type="button"
+// todook: unquoted-attribute-var
+{{on "click" this.onClickShowDropdown}}
+>
+More Actions
+</button>
+<div id="dropdown-destination" />
+
+<MyDropdownComponent
+// ok: unquoted-attribute-var
+@show={{this.showDropdown}}
+/>
+
+<MyComponent
+  // ok: unquoted-attribute-var
+  @people={{array
+    'Tom Dale'
+    'Yehuda Katz'
+    this.myOtherPerson
+  }}
+/>
