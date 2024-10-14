@@ -10,7 +10,7 @@ resource "aws_lambda_function" "fail" {
       mode = "PassThrough"
    }
 
-   # ruleid: aws-lambda-environment-unencrypted
+   # ruleid: aws-lambda-environment-encrypted-with-cmk
    environment {
       test="true"
    }
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "failkmsnovars" {
    tracing_config {
        mode = "PassThrough"
     }
-   # ruleid: aws-lambda-environment-unencrypted
+   # ruleid: aws-lambda-environment-encrypted-with-cmk
    kms_key_arn = aws_kms_key.anyoldguff.arn
 }
 
@@ -70,6 +70,6 @@ resource "aws_lambda_function" "failasempty" {
    tracing_config {
        mode = "PassThrough"
     }
-   # ruleid: aws-lambda-environment-unencrypted
+   # ruleid: aws-lambda-environment-encrypted-with-cmk
    kms_key_arn = ""
 }
