@@ -3,6 +3,8 @@ rules:
   mode: taint
   options:
     symbolic_propagation: true
+  pattern-sanitizers:
+    - pattern: shlex.quote(...)
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -81,7 +83,7 @@ rules:
   message: >-
     Detected subprocess function '$FUNC' with user controlled data. A malicious actor
     could leverage this to perform command injection.
-    You may consider using 'shlex.escape()'.
+    You may consider using 'shlex.quote()'.
   metadata:
     owasp:
     - A01:2017 - Injection
