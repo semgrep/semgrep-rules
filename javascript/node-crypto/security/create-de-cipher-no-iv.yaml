@@ -1,0 +1,31 @@
+rules:
+- id: create-de-cipher-no-iv
+  message: >-
+    The deprecated functions 'createCipher' and 'createDecipher' generate the same initialization vector every time.
+    For counter modes such as CTR, GCM, or CCM this leads to break of both confidentiality and integrity, if the key is used more than once.
+    Other modes are still affected in their strength, though they're not completely broken.
+    Use 'createCipheriv' or 'createDecipheriv' instead.
+  metadata:
+    cwe:
+    - 'CWE-1204: Generation of Weak Initialization Vector (IV)'
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    references:
+    - https://nodejs.org/api/crypto.html#cryptocreatecipheralgorithm-password-options
+    - https://nodejs.org/api/crypto.html#cryptocreatedecipheralgorithm-password-options
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+    - pattern-either:
+      - pattern: |
+          $CRYPTO.createCipher(...)
+      - pattern: |
+          $CRYPTO.createDecipher(...)
