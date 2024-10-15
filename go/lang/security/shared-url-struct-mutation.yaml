@@ -1,0 +1,52 @@
+rules:
+- id: shared-url-struct-mutation
+  message: >-
+    Shared URL struct may have been accidentally mutated. Ensure that
+    this behavior is intended.
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      import "net/url"
+      ...
+  - pattern-not-inside: |
+      ... = url.Parse(...)
+      ...
+  - pattern-not-inside: |
+      ... = url.ParseRequestURI(...)
+      ...
+  - pattern-not-inside: |
+      ... = url.URL{...}
+      ...
+  - pattern-not-inside: |
+      var $URL *$X.URL
+      ...
+  - pattern-either:
+      - pattern: $URL.RawQuery = ...
+      - pattern: $URL.Path = ...
+      - pattern: $URL.RawPath = ...
+      - pattern: $URL.Fragment = ...
+      - pattern: $URL.RawFragment = ...
+      - pattern: $URL.Scheme = ...
+      - pattern: $URL.Opaque = ...
+      - pattern: $URL.Host = ...
+      - pattern: $URL.User = ...
+  - metavariable-pattern:
+      metavariable: $URL
+      patterns:
+        - pattern-not: $X.$Y
+        - pattern-not: $X[...]
+  metadata:
+    cwe:
+    - "CWE-436: Interpretation Conflict"
+    category: security
+    subcategory:
+    - audit
+    technology:
+      - go
+    confidence: LOW
+    likelihood: LOW
+    impact: LOW
+    references:
+      - https://github.com/golang/go/issues/63777
+            

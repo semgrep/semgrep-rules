@@ -14,11 +14,12 @@ def markup_test():
 
     playlist = request.args.get('p')
     if playlist:
-        playlist = '"{0}"'.format(playlist.replace('\"', '\\\"').strip())
+        # ok: explicit-unescape-with-markup
+        playlist = Markup('"{0}"').format(playlist.replace('\"', '\\\"').strip())
     else:
         playlist = '""'
     # ruleid: explicit-unescape-with-markup
-    return render_template('/markup.html', query=Markup(search_query), playlist=Markup(playlist))
+    return render_template('/markup.html', query=Markup(search_query), playlist=playlist)
 
 @app.route('/markup_unescape')
 def markup_unescape_test():
@@ -29,8 +30,10 @@ def markup_unescape_test():
 @app.route('/markupsafe')
 def markupsafe_test():
     search_query = request.args.get('q')
+    # ok: explicit-unescape-with-markup
+    playlist = Markup("<i>empty</i>")
     # ruleid: explicit-unescape-with-markup
-    return render_template('/markup-unescape.html', query=mkup(search_query))
+    return render_template('/markup-unescape.html', query=mkup(search_query), playlist=playlist)
 
 @app.route('/good')
 def good_test():

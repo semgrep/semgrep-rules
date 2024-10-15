@@ -25,10 +25,12 @@ padding = pack('b'*plen, *padding)
 bs = pycrypto_blowfish.block_size
 # ruleid:insecure-cipher-algorithm-blowfish
 cipher = pycrypto_blowfish.new(key, pycrypto_blowfish.MODE_CBC, iv)
+# deepruleid:insecure-cipher-algorithm-blowfish
 msg = iv + cipher.encrypt(plaintext + padding)
 bs = pycryptodomex_blowfish.block_size
 # ruleid:insecure-cipher-algorithm-blowfish
 cipher = pycryptodomex_blowfish.new(key, pycryptodomex_blowfish.MODE_CBC, iv)
+# deepruleid:insecure-cipher-algorithm-blowfish
 msg = iv + cipher.encrypt(plaintext + padding)
 
 key = b'Sixteen byte key'

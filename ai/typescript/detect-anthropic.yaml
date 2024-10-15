@@ -1,0 +1,20 @@
+rules:
+  - id: detect-anthropic
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI: Anthropic"
+    pattern-either:
+      - pattern: import "@anthropic-ai"
+      - pattern: import $ANYTHING from "@anthropic-ai";
+      - pattern: new Anthropic(...)
+      - pattern: anthropic.messages.$FUNC(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

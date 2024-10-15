@@ -1,0 +1,115 @@
+rules:
+- id: tainted-callable
+  severity: WARNING
+  message: >-
+    Callable based on user input risks remote code execution.
+  metadata:
+    technology:
+    - php
+    category: security
+    cwe:
+    - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://www.php.net/manual/en/language.types.callable.php
+    subcategory:
+    - vuln
+    impact: HIGH
+    likelihood: MEDIUM
+    confidence: MEDIUM
+  languages: [php]
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+      - pattern: file_get_contents('php://input')
+  pattern-sinks:
+  - patterns:
+    - pattern: $CALLABLE
+    - pattern-either:
+      - pattern-inside: $ARRAYITERATOR->uasort($CALLABLE)
+      - pattern-inside: $ARRAYITERATOR->uksort($CALLABLE)
+      - pattern-inside: $EVENTHTTP->setCallback($CALLABLE, ...)
+      - pattern-inside: $EVENTHTTPCONNECTION->setCloseCallback($CALLABLE, ...)
+      - pattern-inside: $EVLOOP->fork($CALLABLE, ...)
+      - pattern-inside: $EVLOOP->idle($CALLABLE, ...)
+      - pattern-inside: $EVLOOP->prepare($CALLABLE, ...)
+      - pattern-inside: $EVWATCHER->setCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setClientCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setCompleteCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setCreatedCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setDataCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setExceptionCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setFailCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setStatusCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setWarningCallback($CALLABLE)
+      - pattern-inside: $GEARMANCLIENT->setWorkloadCallback($CALLABLE)
+      - pattern-inside: $IMAGICK->setProgressMonitor($CALLABLE)
+      - pattern-inside: $OAUTHPROVIDER->consumerHandler($CALLABLE)
+      - pattern-inside: $OAUTHPROVIDER->tokenHandler($CALLABLE)
+      - pattern-inside: $PDO->sqliteCreateCollation($NAME, $CALLABLE)
+      - pattern-inside: $PDOSTATEMENT->fetchAll(PDO::FETCH_FUNC, $CALLABLE)
+      - pattern-inside: $SQLITE3->createCollation($NAME, $CALLABLE)
+      - pattern-inside: $SQLITE3->setAuthorizer($CALLABLE)
+      - pattern-inside: $ZIPARCHIVE->registerCancelCallback($CALLABLE)
+      - pattern-inside: $ZIPARCHIVE->registerProgressCallback($RATE, $CALLABLE)
+      - pattern-inside: $ZMQDEVICE->setIdleCallback($CALLABLE, ...)
+      - pattern-inside: $ZMQDEVICE->setTimerCallback($CALLABLE, ...)
+      - pattern-inside: apcu_entry($KEY, $CALLABLE, ...)
+      - pattern-inside: array_filter($ARRAY, $CALLABLE, ...)
+      - pattern-inside: array_map($CALLABLE, ...)
+      - pattern-inside: array_reduce($ARRAY, $CALLABLE, ...)
+      - pattern-inside: array_walk_recursive($ARRAY, $CALLABLE, ...)
+      - pattern-inside: array_walk($ARRAY, $CALLABLE, ...)
+      - pattern-inside: call_user_func_array($CALLABLE, ...)
+      - pattern-inside: call_user_func($CALLABLE, ...)
+      - pattern-inside: Closure::fromCallable($CALLABLE)
+      - pattern-inside: createCollation($NAME, $CALLABLE)
+      - pattern-inside: eio_grp($CALLABLE, ...)
+      - pattern-inside: eio_nop($PRI, $CALLABLE, ...)
+      - pattern-inside: eio_sync($PRI, $CALLABLE, ...)
+      - pattern-inside: EvPrepare::createStopped($CALLABLE, ...)
+      - pattern-inside: fann_set_callback($ANN, $CALLABLE)
+      - pattern-inside: fdf_enum_values($FDF_DOCUMENT, $CALLABLE, ...)
+      - pattern-inside: forward_static_call_array($CALLABLE, ...)
+      - pattern-inside: forward_static_call($CALLABLE, ...)
+      - pattern-inside: header_register_callback($CALLABLE)
+      - pattern-inside: ibase_set_event_handler($CALLABLE, ...)
+      - pattern-inside: IntlChar::enumCharTypes($CALLABLE)
+      - pattern-inside: iterator_apply($ITERATOR, $CALLABLE)
+      - pattern-inside: ldap_set_rebind_proc($LDAP, $CALLABLE)
+      - pattern-inside: libxml_set_external_entity_loader($CALLABLE, ...)
+      - pattern-inside: new CallbackFilterIterator($ITERATOR, $CALLABLE)
+      - pattern-inside: new EvCheck($CALLABLE, ...)
+      - pattern-inside: new EventHttpRequest($CALLABLE, ...)
+      - pattern-inside: new EvFork($CALLABLE, ...)
+      - pattern-inside: new EvIdle($CALLABLE, ...)
+      - pattern-inside: new Fiber($CALLABLE)
+      - pattern-inside: new Memcached($PERSISTENT_ID, $CALLABLE, ...)
+      - pattern-inside: new RecursiveCallbackFilterIterator($ITERATOR, $CALLABLE)
+      - pattern-inside: new Zookeeper($HOST, $CALLABLE, ...)
+      - pattern-inside: ob_start($CALLABLE, ...)
+      - pattern-inside: oci_register_taf_callback($CONNECTION, $CALLABLE)
+      - pattern-inside: readline_callback_handler_install($PROMPT, $CALLABLE)
+      - pattern-inside: readline_completion_function($CALLABLE)
+      - pattern-inside: register_shutdown_function($CALLABLE, ...)
+      - pattern-inside: register_tick_function($CALLABLE, ...)
+      - pattern-inside: rnp_ffi_set_pass_provider($FFI, $CALLABLE)
+      - pattern-inside: sapi_windows_set_ctrl_handler($CALLABLE, ...)
+      - pattern-inside: set_error_handler($CALLABLE, ...)
+      - pattern-inside: set_exception_handler($CALLABLE)
+      - pattern-inside: setAuthorizer($CALLABLE)
+      - pattern-inside: spl_autoload_register($CALLABLE, ...)
+      - pattern-inside: uasort($ARRAY, $CALLABLE)
+      - pattern-inside: uksort($ARRAY, $CALLABLE)
+      - pattern-inside: usort($ARRAY, $CALLABLE)
+      - pattern-inside: xml_set_character_data_handler($PARSER, $CALLABLE)
+      - pattern-inside: xml_set_default_handler($PARSER, $CALLABLE)
+      - pattern-inside: xml_set_element_handler($PARSER, $CALLABLE, $CALLABLE)
+      - pattern-inside: xml_set_notation_decl_handler($PARSER, $CALLABLE)
+      - pattern-inside: Yar_Concurrent_Client::loop($CALLABLE, ...)

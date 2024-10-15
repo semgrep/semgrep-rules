@@ -1,0 +1,18 @@
+rules:
+  - id: detect-generic-ai-anthprop
+    languages:
+      - generic
+    severity: INFO
+    message: "Possibly found usage of AI: Anthropic"
+    pattern-either:
+      - pattern: anthropic
+      - pattern: Anthropic
+      - pattern: claude
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

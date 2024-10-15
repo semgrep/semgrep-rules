@@ -34,7 +34,11 @@ rules:
   pattern-sanitizers:
   - pattern: jinja2.escape(...)
   - pattern: flask.escape(...)
-  - pattern: flask.render_template("~=/.*\.html", ...)
+  - patterns:
+    - pattern: flask.render_template($TPL, ...)
+    - metavariable-regex:
+        metavariable: $TPL
+        regex: .*\.html
   pattern-sources:
   - patterns:
     - pattern-either:

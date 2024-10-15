@@ -1,0 +1,17 @@
+rules:
+  - id: detect-generic-ai-oai
+    languages:
+      - generic
+    severity: INFO
+    message: "Possibly found usage of AI: OpenAI"
+    pattern-either:
+      - pattern: openai
+      - pattern: OpenAI
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

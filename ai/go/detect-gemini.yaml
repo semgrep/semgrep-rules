@@ -1,0 +1,17 @@
+rules:
+  - id: detect-gemini
+    languages:
+      - go
+    severity: INFO
+    message: "Possibly found usage of AI: Gemini"
+    pattern-either:
+      - pattern: import "github.com/google/generative-ai-go"
+      - pattern: genai.NewClient(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW
