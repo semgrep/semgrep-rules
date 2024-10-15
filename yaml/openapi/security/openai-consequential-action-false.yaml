@@ -1,0 +1,47 @@
+rules:
+  - id: openai-consequential-action-false
+    languages: [yaml]
+    message: >-
+      Found 'x-openai-isConsequential: false' in a state-changing HTTP
+      method: $METHOD $PATH. This Action configuration will enable the 'Always
+      Allow' option for state-changing HTTP methods, such as POST, PUT, PATCH,
+      or DELETE. The risk of a user selecting the 'Always Allow' button is that
+      the agent could perform unintended actions on behalf of the user. When
+      working with sensitive functionality, it is always best to include a Human
+      In The Loop (HITL) type of control. Consider the trade-off between security 
+      and user friction and then make a risk-based decision about this function.
+    severity: WARNING
+    pattern-either:
+      - pattern-inside: |
+          post:
+            ...
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          put:
+            ...
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          patch:
+            ...
+            x-openai-isConsequential: false
+      - pattern-inside: |
+          delete:
+            ...
+            x-openai-isConsequential: false
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      technology:
+        - openapi
+        - openai
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+      owasp:
+        - 'A04:2021 Insecure Design'
+        - 'LLM08:2023 - Excessive Agency'
+      references:
+        - https://platform.openai.com/docs/actions/consequential-flag
+        - https://owasp.org/Top10/A04_2021-Insecure_Design/
+        - https://owasp.org/www-project-top-10-for-large-language-model-applications/assets/PDF/OWASP-Top-10-for-LLMs-2023-v1_1.pdf
