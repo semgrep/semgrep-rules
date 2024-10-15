@@ -1,0 +1,14 @@
+rules:
+  - id: tls-with-insecure-cipher
+    message: |
+      Detected an insecure CipherSuite via the 'tls' module. This suite is considered weak.
+      Use the function 'acceptor.set_ciphersuites()' to get a list of good cipher suites.
+    metadata:
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+    languages: [rust]
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          $VAR.set_ciphersuites("=~/(TLS_RSA_WITH_RC4_128_SHA|TLS_RSA_WITH_AES_128_CBC_SHA256|TLS_RSA_WITH_AES_128_CBC_SHA256|TLS_ECDHE_ECDSA_WITH_RC4_128_SHA|TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256|TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256|TLS_AES_256_GCM_SHA384)/")
+

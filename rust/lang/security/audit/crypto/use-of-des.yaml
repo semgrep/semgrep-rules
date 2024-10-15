@@ -1,0 +1,15 @@
+rules:
+  - id: use-of-DES
+    message: |
+      Detected DES cipher algorithm which is insecure. The algorithm is
+      considered weak and has been deprecated. Use AES instead.
+    languages: [rust]
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      references:
+        - https://docs.rs/des/latest/des/
+    pattern-either:
+      - pattern: use des;
+      - pattern: use des::Des;

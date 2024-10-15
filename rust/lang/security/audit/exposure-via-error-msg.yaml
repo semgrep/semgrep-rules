@@ -1,0 +1,29 @@
+rules:
+  - id: exposure-error-msg
+    languages:
+      - rust
+    message: |
+      The software generates an error message that includes sensitive information
+      about its environment, users, or associated data.
+    metadata:
+      owasp: 'A3: Sensitive Data Expsoure'
+      cwe: 'CWE-209: Generation of Error Message Containing Sensitive Information'
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  fn $FUNC1(...) -> Result<$T, Box<dyn Error>> {
+                    ...
+                  }
+                  
+                  fn $FUNC2(...) {
+                    ...
+                    let $X = $FUNC1(...);
+                    ...
+                    $WRITE(..., $X, ...);
+                    ...
+                  }
+              - metavariable-regex:
+                  metavariable: $WRITE
+                  regex: ^(println!|debug!|warn!|error!|info!|trace!|format!)$

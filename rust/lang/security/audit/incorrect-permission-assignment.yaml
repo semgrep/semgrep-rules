@@ -1,0 +1,16 @@
+rules:
+  - id: incorrect-permission-assignment
+    languages:
+      - rust
+    message: The product specifies permissions for a security-critical resource in a way that allows that resource to be read or modified by unintended actors.
+    metadata:
+      cwe: |
+        - "CWE-276: Incorrect Default Permissions"
+        - "CWE-732: Incorrect Permission Assignment for Critical Resource"
+      cwe-url: "https://cwe.mitre.org/data/definitions/276.html"
+    patterns:
+      - pattern: OpenOptions::new().mode($ARG).open("...");
+      - metavariable-regex:
+          metavariable: $ARG
+          regex: 0[0-7][0-7](2|6|7)
+    severity: WARNING

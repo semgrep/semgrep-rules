@@ -1,0 +1,18 @@
+rules:
+  - id: ldap-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              let $DATA = requests::$METHOD(...).unwrap();
+              ...
+              let mut $LDAP = LdapConn::new(...)?;
+              ...
+              let $RESULT = $LDAP.search(...,$DATA,...)?.success()?;
+
+    message: |
+      "The software constructs all or part of an LDAP query using externally-influenced input from an upstream component, but it does not neutralize or incorrectly neutralizes special elements that could modify the intended LDAP query when it is sent to a downstream component."
+    metadata:
+      cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+      owasp: 'A2: Injection Flaws'
+    languages: [rust]
+    severity: WARNING

@@ -1,0 +1,34 @@
+rules:
+  - id: cookie-missing-set_secure
+    patterns:
+      - pattern: $VAR.set_secure(false)
+    message: |
+      A session cookie was detected without setting the 'Secure' flag.
+      The 'secure' flag for cookies prevents the client from transmitting
+      the cookie over insecure channels such as HTTP.  Set the 'Secure'
+      flag by setting 'Secure' to 'true' in the Options struct.
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: 'A3: Sensitive Data Exposure'
+    fix-regex:
+      regex: (set_secure(\s*false\s+))
+      replacement: \1true
+    severity: WARNING
+    languages: [rust]
+
+  - id: cookie-build-secure_false
+    patterns:
+      - pattern: $VAR.secure(false)
+    message: |
+      A session cookie was detected without setting the 'Secure' flag.
+      The 'secure' flag for cookies prevents the client from transmitting
+      the cookie over insecure channels such as HTTP.  Set the 'Secure'
+      flag by setting 'Secure' to 'true' in the Options struct.
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: 'A3: Sensitive Data Exposure'
+    fix-regex:
+      regex: (secure(\s*false\s+))
+      replacement: \1true
+    severity: WARNING
+    languages: [rust]
