@@ -52,8 +52,6 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           REPO_NAME: ${{ github.event.repository.name }}
           PR_HEAD_SHA: ${{github.event.pull_request.head.sha}}
-        if: |
-          github.event_name == 'pull_request' &&
-          env.changed_lang_count > 0
+        if: github.event_name == 'pull_request' && env.changed_lang_count > 0
         run: |
           curl -X POST https://argoworkflows-dev2.corp.r2c.dev/api/v1/events/security-research/initiate-scan-argo -H "Authorization: ${{ secrets.ARGO_WORKFLOWS_TOKEN }}" -d "{\"branch\" : \"$HEAD_REF\", \"repo\" : \"$REPO_NAME\", \"commit\" : \"$PR_HEAD_SHA\", \"changed_files\" : \"$CHANGED_FILES\" , \"langs\" : \"$CHANGED_LANGS\"}"
