@@ -88,7 +88,7 @@ func main() {
 // 			urlPath = "/" + urlPath
 // 			r.URL.Path = urlPath
 // 		}
-// 		// ok filepath-clean-misuse
+// 		// ok: filepath-clean-misuse
 // 		_, err := root.Open(path.Clean(urlPath))
 // 		if err != nil && os.IsNotExist(err) {
 // 			r.URL.Path = defaultPath

@@ -259,11 +259,11 @@ public class bad4 extends HttpServlet {
         // ruleid: tainted-cmd-from-http-request
         argList.add("echo " + bar);
 
-        // deeptodoruleid: tainted-cmd-from-http-request
+        // deepruleid: tainted-cmd-from-http-request
         ProcessBuilder pb = new ProcessBuilder(argList);
 
         try {
-            // deeptodoruleid: tainted-cmd-from-http-request
+            // deepruleid: tainted-cmd-from-http-request
             Process p = pb.start();
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {

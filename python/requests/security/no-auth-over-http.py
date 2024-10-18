@@ -2,7 +2,7 @@ import requests
 
 # ok:no-auth-over-http
 good_url = "https://www.github.com"
-# deeptodoruleid:no-auth-over-http
+# deepruleid:no-auth-over-http
 bad_url = "http://www.github.com"
 
 # ruleid:no-auth-over-http
