@@ -14,7 +14,7 @@ $(function ($) {
                 
                 var x = `<div align="left">${content}</div>`
 
-                // ruleid: deepok: raw-html-concat
+                // ruleid: deeptodook: raw-html-concat
                 return '<div align="' + (attrs.defaultattr || 'left') + '">' + newContent + '</div>';
             },
             isInline: false
