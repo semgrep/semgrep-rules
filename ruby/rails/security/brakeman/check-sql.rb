@@ -147,7 +147,7 @@ class Product < ActiveRecord::Base
       "blah"
     end
 
-    # ruleid: deepok: check-sql
+    # ruleid: deeptodook: check-sql
     Product.last("blah = '#{x}'")
 
     #ok: check-sql
