@@ -1,4 +1,4 @@
-# Running the tests in the repo using `semgrep test --experimental` and
+# Running the tests in the repo using `semgrep test` (osemgrep) and
 # the semgrep/semgrep:pro-develop docker image (the bleeding edge!).
 
 name: semgrep-rules-test-develop
@@ -15,26 +15,16 @@ jobs:
   test-develop:
     name: rules-test-develop
     runs-on: ubuntu-20.04
+    # TODO: remove the with: path: below to simplify
     steps:
     - uses: actions/checkout@v2
       with:
         path: semgrep-rules
+    # alt: call 'make validate' but would require 'make' in the docker image
+    # alt: export SEMGREP="docker run semgrep"
+    #    make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
     - name: run osemgrep validate --pro
       run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep validate --pro .
+    # alt: call 'make test-only' but would require 'make' in the docker image
     - name: run osemgrep test --pro
       run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep test --pro .
-    #TODO: we can delete all the rest below and also scripts/run-tests
-    - name: delete directories not containing rules
-      run: rm -rf semgrep-rules/stats
-    - name: delete rules requiring Semgrep Pro
-      run: rm -rf semgrep-rules/apex semgrep-rules/elixir
-    # TODO: this takes 1m20 in CI and could be optimized by switching to osemgrep
-    - name: validate rules
-      run: |
-        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep"
-        make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
-    # this now takes 21s with osemgrep instead of 3min with pysemgrep
-    - name: test with semgrep pro develop branch and with --experimental
-      run: |
-        export SEMGREP="docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep --experimental"
-        make -C "$GITHUB_WORKSPACE"/semgrep-rules test-only
