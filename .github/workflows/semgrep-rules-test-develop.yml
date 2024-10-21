@@ -14,6 +14,8 @@ on:
 jobs:
   test-develop:
     name: rules-test-develop
+    # alt: use directly the semgrep/semgrep:pro-develop container here so we
+    # don't need the calls to 'docker run ...' below
     runs-on: ubuntu-20.04
     # TODO: remove the with: path: below to simplify
     steps:
@@ -21,10 +23,11 @@ jobs:
       with:
         path: semgrep-rules
     # alt: call 'make validate' but would require 'make' in the docker image
-    # alt: export SEMGREP="docker run semgrep"
+    # alt: export SEMGREP="docker run --rm -w ... semgrep"
     #    make -C "$GITHUB_WORKSPACE"/semgrep-rules validate
+    #TODO: this actually currently fails because of errors in stats/ but GHA
+    # still continue, weird
     - name: run osemgrep validate --pro
       run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep validate --pro .
-    # alt: call 'make test-only' but would require 'make' in the docker image
     - name: run osemgrep test --pro
       run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep test --pro .
