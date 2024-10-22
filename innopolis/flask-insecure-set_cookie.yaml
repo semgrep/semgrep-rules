@@ -1,0 +1,24 @@
+rules:
+- id: flask-insecure-set_cookie
+  languages:
+  - python
+  message: secure and httponly flags are false by default, therefore cookie will be
+    available in HTTP and in javascript.
+  patterns:
+  - pattern: '... .set_cookie(...)'
+  - pattern-not: '... .set_cookie(..., secure=True, ..., httponly=True, ...)'
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE 1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    - 'CWE 614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    confidence: LOW
+    likelihood: LOW
+    technology:
+    - flask
+    impact: MEDIUM
+    references:
+    - https://www.easydevguide.com/posts/flask_cookie_security
