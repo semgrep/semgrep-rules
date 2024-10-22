@@ -1,0 +1,45 @@
+rules:
+  - id: use-of-md5
+    message: |
+      Detected MD5 hash algorithm which is considered insecure. MD5 is not
+      collision resistant and is therefore not suitable as a cryptographic
+      signature. Use SHA256 or SHA3 instead.
+    languages: [rust]
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      references:
+        - https://docs.rs/md5/latest/md5/
+        - https://www.rfc-editor.org/rfc/rfc6151
+    pattern-either:
+      - patterns:
+          - pattern: md5::Context::new(...)
+          - pattern-inside: |
+              use md5;
+              ...
+      - patterns:
+          - pattern: Context::new(...)
+          - pattern-inside: |
+              use md5::Context;
+              ...
+      - patterns:
+          - pattern: new(...)
+          - pattern-inside: |
+              use md5::Md5;
+              ...
+      - patterns:
+          - pattern: <...compute(...)...>
+          - pattern-inside: |
+              use md5::*;
+              ...
+      - patterns:
+          - pattern: md5::compute(...)
+          - pattern-inside: |
+              use md5;
+              ...
+      - patterns:
+        - pattern: Md5::new()
+        - pattern-inside: |
+            use md5;
+            ...

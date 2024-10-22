@@ -1,0 +1,32 @@
+rules:
+  - id: sql-string
+    message: |
+      Avoiding SQL string concatenation: untrusted input concatinated with raw
+      SQL query can result in SQL Injection. This could lead to SQL
+      injection if variables in the SQL statement are not properly sanitized.
+    metadata:
+      cwe:"CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp: 'A1: Injection'
+      source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION
+      asvs:
+        section: "V5: Validation, Sanitization and Encoding Verification Requirements"
+        control_id: "5.3.5 Injection"
+        control_url: "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v53-output-encoding-and-injection-prevention-requirements"
+        version: "4"
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+        - https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html#create_ps
+        - https://software-security.sans.org/developer-how-to/fix-sql-injection-in-java-using-prepared-callable-statement
+    languages: [rust]
+    severity: WARNING
+    pattern-either:
+      - patterns:
+          - pattern: |
+              fn $FUNC(...) {
+               requests::$METHOD(...);
+               ...
+               PgPoolOptions::new(...);
+               ...
+                sqlx::query_as(...);
+                       }
+       

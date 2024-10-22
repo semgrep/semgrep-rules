@@ -1,0 +1,33 @@
+rules:
+  - id: xml-entity-injection
+    languages:
+      - rust
+    message: |
+      The software processes an XML document that can contain XML entities with URIs that
+      resolve to documents outside of the intended sphere of control, causing the product
+      to embed incorrect documents into its output. It is also possible for recursive DTDs
+      to create an explosive growth of data when processed, similar to a zip bomb.
+    metadata:
+      owasp: 'A1: Injection'
+      cwe:
+        - 'CWE-611: Improper Restriction of XML External Entity Reference'
+        - 'CWE-776: Improper Restriction of Recursive Entity References in DTDs'
+      reference: 'https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html'
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: xmlCtxtReadDoc(...);
+          - pattern: xmlCtxtReadFd(...);
+          - pattern: xmlCtxtReadFile(...);
+          - pattern: xmlCtxtReadIO(...);
+          - pattern: xmlCtxtReadMemory(...);
+          - pattern: xmlCtxtUseOptions(...);
+          - pattern: xmlParseInNodeContext(...);
+          - pattern: xmlReadDoc(...);
+          - pattern: xmlReadFd(...);
+          - pattern: xmlReadFile(...);
+          - pattern: xmlReadIO(...);
+          - pattern: xmlReadMemory(...);
+          - pattern: <... xmlParserOption_XML_PARSE_NOENT ...>
+          - pattern: <... xmlParserOption_XML_PARSE_DTDLOAD ...>          
+

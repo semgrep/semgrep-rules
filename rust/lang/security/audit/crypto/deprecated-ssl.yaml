@@ -1,0 +1,50 @@
+rules:
+  - id: ssl-v3-is-insecure
+    message: |
+      SSLv3 is insecure because it has known vulnerabilities.
+      Instead, use 'SslVersion::TLS1_2 or SslVersion::TLS1_3'.
+    metadata:
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      references:
+        - https://golang.org/doc/go1.14#crypto/tls
+        - https://www.us-cert.gov/ncas/alerts/TA14-290A
+    languages: [rust]
+    severity: ERROR
+    fix-regex:
+      regex: SslVersion::SSL3
+      replacement: SslVersion::TLS1_3
+    pattern: $VAR.set_min_proto_version(Some(SslVersion::SSL3))
+
+  - id: tls-v1-is-insecure
+    message: |
+      TLSv1 is insecure because it has known vulnerabilities.
+      Instead, use 'SslVersion::TLS1_2 or SslVersion::TLS1_3'.
+    metadata:
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      references:
+        - https://www.us-cert.gov/ncas/alerts/TA14-290A
+    languages: [rust]
+    severity: ERROR
+    fix-regex:
+      regex: SslVersion::TLSv1
+      replacement: SslVersion::TLS1_3
+    pattern:  $VAR.set_min_proto_version(Some(SslVersion::TLS1))
+
+
+  - id: tls-v1_1-is-insecure
+    message: |
+      TLSv1_1 is insecure because it has known vulnerabilities.
+      Instead, use 'SslVersion::TLS1_2 or SslVersion::TLS1_3'.
+    metadata:
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      references:
+        - https://www.us-cert.gov/ncas/alerts/TA14-290A
+    languages: [rust]
+    severity: ERROR
+    fix-regex:
+      regex: SslVersion::TLSv1_1
+      replacement: SslVersion::TLS1_3
+    pattern:  $VAR.set_min_proto_version(Some(SslVersion::TLS1_1))

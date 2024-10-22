@@ -1,0 +1,36 @@
+rules:
+  - id: cookie-set-httponly-false
+    patterns:
+      - pattern: $VAR.set_http_only(false)
+    message: |
+      A session cookie was detected without setting the 'HttpOnly' flag.
+      The 'HttpOnly' flag for cookies instructs the browser to forbid
+      client-side scripts from reading the cookie which mitigates XSS
+      attacks. Set the 'HttpOnly' flag by setting 'set_http_only' to 'true'
+      in the Cookie.
+    metadata:
+      cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+      owasp: 'A3: Sensitive Data Exposure'
+    fix-regex:
+      regex: (set_http_only(\s*false\s+))
+      replacement: \1true
+    severity: WARNING
+    languages: [rust]
+
+  - id: cookie-build-httponly
+    patterns:
+      - pattern: $VAR.http_only(false)
+    message: |
+      A session cookie was detected without setting the 'HttpOnly' flag.
+      The 'HttpOnly' flag for cookies instructs the browser to forbid
+      client-side scripts from reading the cookie which mitigates XSS
+      attacks. Set the 'HttpOnly' flag by setting 'set_http_only' to 'true'
+      in the Cookie.
+    metadata:
+      cwe: "CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag"
+      owasp: 'A3: Sensitive Data Exposure'
+    fix-regex:
+      regex: (http_only(\s*false\s+))
+      replacement: \1true
+    severity: WARNING
+    languages: [rust]

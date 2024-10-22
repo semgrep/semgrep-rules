@@ -1,0 +1,14 @@
+rules:
+  - id: unsecure-transmission
+    patterns:
+      - pattern-either:
+          - pattern: $LHS.danger_accept_invalid_hostnames(true)
+    message: |
+      The software transmits sensitive or security-critical data in cleartext
+      in a communication channel that can be sniffed by unauthorized actors.
+    metadata:
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp: 'A3: Sensitive Data Exposure'
+    severity: WARNING
+    languages: [rust]
+

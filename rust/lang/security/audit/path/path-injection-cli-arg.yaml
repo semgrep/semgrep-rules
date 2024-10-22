@@ -1,0 +1,35 @@
+rules:
+  - id: path-injection-cli-arg
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: |
+                  fn $FUNC(...) {
+                    let $VAR = $F_ENV(...);
+                    ...
+                    $X.push(...);
+                    ...
+                    $F_FS($X);
+                  }
+              - metavariable-pattern:
+                  metavariable: $F_ENV
+                  patterns:
+                    - pattern-either:
+                        - pattern: "args"
+                        - pattern: "$PATH::args"
+                    - metavariable-pattern:
+                        metavariable: $PATH
+                        patterns:
+                          - pattern-either:
+                              - pattern: std::env
+                              - pattern: env
+    message: |
+      Detected path injection from external input. If input is user supplied, this can
+      result in a program accessing the file system outside it's parent directory. For
+      example, a malicious actor could feed in '..' or '/' as input data to cause this
+      program to access a path outside the current parent directory. 
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: 'A1: Injection'
+    severity: WARNING
+    languages: [rust]

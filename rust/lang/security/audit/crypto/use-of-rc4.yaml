@@ -1,0 +1,33 @@
+rules:
+  - id: use-of-rc4
+    message: |
+      Detected RC4 cipher algorithm which is insecure. The algorithm has many
+      known vulnerabilities. Use AES instead.
+    languages: [rust]
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      references: https://docs.rs/rc4/latest/rc4/
+    pattern-either:
+      - patterns:
+          - pattern: Rc4::new(...)
+          - pattern-inside: |
+              use rc4::Rc4;
+              ...
+      - patterns:
+          - pattern: rc4::Rc4::new(...)
+      - patterns:
+          - pattern: Rc4::<$TYPE>::new_from_slice(...)
+          - pattern-inside: |
+              use rc4::Rc4;
+              ...
+      - patterns:
+          - pattern: rc4::Rc4::<$TYPE>::new_from_slice(...)
+      - patterns:
+          - pattern: rc4::Rc4::digest(...)
+      - patterns:
+          - pattern: Rc4::digest(...)
+          - pattern-inside: |
+              use rc4::Digest;
+              ...

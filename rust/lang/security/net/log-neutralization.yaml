@@ -1,0 +1,43 @@
+rules:
+  - id: log-neutralization
+    languages:
+      - rust
+    message: >
+      This can allow an attacker to forge log entries or inject malicious content into logs.
+      
+      Log forging vulnerabilities occur when:
+      
+      - Data enters an application from an untrusted source.
+      - The data is written to an application or system log file.
+    metadata:
+      owasp: 'A9: Injection'
+      cwe: "CWE-117: Improper Output Neutralization for Logs"
+      references:
+        - https://cwe.mitre.org/data/definitions/117.html
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => info!(Err($ERR)),
+              };
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => debug!(Err($ERR)),
+              };
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => println!(Err($ERR)),
+              };
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => warn!(Err($ERR)),
+              };
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => error!(Err($ERR)),
+              };
+          - pattern: |
+              match $VAR() {
+                  Err($ERR) => trace!(Err($ERR)),
+              };    

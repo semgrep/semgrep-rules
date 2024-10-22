@@ -1,0 +1,22 @@
+rules:
+  - id: use-of-sha1
+    message: |
+      Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+      collision resistant and is therefore not suitable as a cryptographic
+      signature. Use SHA256 or SHA3 instead.
+    languages: [rust]
+    severity: WARNING
+    metadata:
+      owasp: 'A9: Using Components with Known Vulnerabilities'
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      references:
+        - https://docs.rs/sha-1/latest/sha1/
+    pattern-either:
+      - patterns:
+          - pattern: Sha1::new(...)
+          - pattern-inside: |
+              use sha1::Sha1;
+              ...
+      - pattern: sha1::Sha1::new(...)
+      - pattern: $MOD::sha1(...)
+      - pattern: $MOD::Sha1(...)

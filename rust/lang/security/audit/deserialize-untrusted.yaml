@@ -1,0 +1,16 @@
+rules:
+  - id: deserialize-untrusted-data
+    message: |
+      Data that is untrusted can not be trusted to be well-formed.
+      The application deserializes untrusted data without sufficiently verifying that the resulting data will be valid.
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: 'A8: Insecure Deserialization'
+    languages: [rust]
+    severity: WARNING
+    pattern-either:
+      - pattern: $OBJECT::from_str(...).unwrap();
+      - pattern: $OBJECT::from_slice(...).unwrap();
+      - pattern: $OBJECT::from_value(...).unwrap();
+      - pattern: $OBJECT::from_reader(...).unwrap();
+        
