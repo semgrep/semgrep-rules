@@ -29,3 +29,27 @@ def lambda_handler(event, context):
   # ok: tainted-pickle-deserialization
   name = 'foobar'
   shelve.open(f"/tmp/path/{name}")
+
+  # ok: tainted-pickle-deserialization
+  pickle.load(pickle.dumps({"key": "value"}))
+
+  # ok: tainted-pickle-deserialization
+  _pickle.loads(_pickle.dumps([1, 2, 3]))
+
+  # ok: tainted-pickle-deserialization
+  cPickle.load(cPickle.dumps(42))
+
+  # ok: tainted-pickle-deserialization
+  dill.loads(dill.dumps(event['safe_data']))
+
+  # ruleid: tainted-pickle-deserialization
+  pickle.load(pickle.dumps(event['exploit_code']))
+
+  # ruleid: tainted-pickle-deserialization
+  _pickle.loads(_pickle.dumps(event['exploit_code']))
+
+  # ruleid: tainted-pickle-deserialization
+  cPickle.load(cPickle.dumps(event['exploit_code']))
+
+  # ruleid: tainted-pickle-deserialization
+  dill.loads(dill.dumps(event['exploit_code']))
