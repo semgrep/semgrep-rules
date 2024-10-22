@@ -1,0 +1,29 @@
+on:
+  pull_request_target:
+  pull_request:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      # ok: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+
+      # ok: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g git+https://github.com/fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@3.1.0
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@v1246924_some_stupid_apache_versioning_scheme.123
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4 foobar@1
+
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g foobar@1.0.0 chrome-webstore-upload-cli@github:fregante/chrome-webstore-upload-cli#3629c3c2f2e25c21143f2e003f11b27acfe7c6e4
+      
+      # ruleid: npm-package-in-action-not-pinned-to-commit-sha
+      - run: npm install -g chrome-webstore-upload-cli
