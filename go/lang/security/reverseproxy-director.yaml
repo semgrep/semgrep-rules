@@ -1,0 +1,33 @@
+rules:
+- id: reverseproxy-director
+  message: >-
+    ReverseProxy can remove headers added by Director. Consider using ReverseProxy.Rewrite
+    instead of ReverseProxy.Director.
+  languages: [go]
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      import "net/http/httputil"
+      ...
+  - pattern-either:
+      - pattern: $PROXY.Director = $FUNC
+      - patterns:
+          - pattern-inside: |
+              httputil.ReverseProxy{
+                  ...
+              }
+          - pattern: |
+              Director: $FUNC
+  metadata:
+    cwe:
+    - "CWE-115: Misinterpretation of Input"
+    category: security
+    subcategory:
+    - audit
+    technology:
+      - go
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    references:
+      - https://github.com/golang/go/issues/50580

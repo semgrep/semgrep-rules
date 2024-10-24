@@ -17,15 +17,13 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: 3.9.2
-    - name: install semgrep
+    - name: install semgrep via pip
       run: pip3 install semgrep
     - name: remove stats directory
       run: rm -rf stats
-    - name: remove fingerprints from testing
-      run: rm -rf fingerprints
     - name: remove rules requiring Semgrep Pro
       run: rm -rf apex elixir
     - name: validate rules
-      run: semgrep --validate --config .
-    - name: run semgrep
-      run: semgrep --test --test-ignore-todo
+      run: semgrep validate .
+    - name: run semgrep test
+      run: semgrep test .

@@ -1,0 +1,33 @@
+rules:
+- id: gcm-no-tag-length
+  message: >-
+    The call to 'createDecipheriv' with the Galois Counter Mode (GCM) mode of operation is missing an expected authentication tag length.
+    If the expected authentication tag length is not specified or otherwise checked, the application might be tricked into verifying a shorter-than-expected authentication tag.
+    This can be abused by an attacker to spoof ciphertexts or recover the implicit authentication key of GCM, allowing arbitrary forgeries.
+  metadata:
+    cwe:
+    - 'CWE-310: CWE CATEGORY: Cryptographic Issues'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    references:
+    - https://www.securesystems.de/blog/forging_ciphertexts_under_Galois_Counter_Mode_for_the_Node_js_crypto_module/
+    - https://nodejs.org/api/crypto.html#cryptocreatedecipherivalgorithm-key-iv-options
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern: |
+      $CRYPTO.createDecipheriv('$ALGO', $KEY, $IV)
+  - metavariable-regex:
+      metavariable: $ALGO
+      regex: ".*(-gcm)$"

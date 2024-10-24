@@ -16,6 +16,25 @@
 * @created 2015
 */
 
+/** From: Iago
+   Java/tainting:
+   This is a test that comes from the OWASP Benchmark v1.2.
+   Here DeepSemgrep doesn't report lines 56, 128, and 195.
+   But these are actually false positives! This benchmark tries
+   to confuse analyzers into reporting these false positives.
+   It does this in two ways, 1) by using a third-function
+   `doSomething` that receives tainted data, even though it
+   returns safe data; and 2) by putting both safe and unsafe
+   data into a `HashMap`, but ultimately only returning the
+   safe data. FOSS Semgrep falls into the first trap.
+   DeepSemgrep does inter-procedural analysis so it is only
+   affected by the second trap, but it seems to not fall
+   into it because we are lacking a `pattern-propagators` spec
+   for `HashMap`s. If we told DeepSemgrep that `HashMap`s
+   store/propagate taint, then it should report the same
+   false positives.
+*/
+
 package org.owasp.benchmark.testcode;
 
 import java.io.IOException;
@@ -52,7 +71,8 @@ public class BenchmarkTest02229 extends HttpServlet {
 
 response.setHeader("X-XSS-Protection", "0");
         Object[] obj = { "a", bar};
-        // ruleid: no-direct-response-writer
+        // NOTE: see comment at start of file
+        // ruleid: deepok: no-direct-response-writer
         response.getWriter().printf(java.util.Locale.US,"Formatted like: %1$s and %2$s.",obj);
     }  // end doPost
 
@@ -191,7 +211,8 @@ public class BenchmarkTest02229 extends HttpServlet {
 
         response.setHeader("X-XSS-Protection", "0");
         Object[] obj = {"a", bar};
-        // ruleid: no-direct-response-writer
+        // NOTE: see comment at start of file
+        // ruleid: deepok: no-direct-response-writer
         response.getWriter().printf(java.util.Locale.US, "Formatted like: %1$s and %2$s.", obj);
     } // end doPost
 

@@ -1,0 +1,18 @@
+rules:
+  - id: detect-promptfoo
+    languages:
+      - js
+      - ts
+    severity: INFO
+    message: "Possibly found usage of AI tooling: promptfoo"
+    pattern-either:
+      - pattern: import "promptfoo"
+      - pattern: promptfoo.evaluate(...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW

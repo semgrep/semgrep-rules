@@ -121,3 +121,11 @@ jobs:
             gh api $url > "$name.zip"
             unzip -d "$name" "$name.zip"
           done
+      - name: Show discussion title
+        # ruleid: run-shell-injection
+        run: |
+          echo "${{ github.event.discussion.title }}"
+      - name: Show discussion body
+        # ruleid: run-shell-injection
+        run: |
+          echo "${{ github.event.discussion.body }}"

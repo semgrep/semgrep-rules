@@ -4,6 +4,12 @@ import (
 	"crypto/rand"
 	// ruleid: math-random-used
 	mrand "math/rand"
+	// ruleid: math-random-used
+	mrand "math/rand/v2"
+	// ruleid: math-random-used
+	mrand "math/rand/v222"
+	// ok: math-random-used
+	mrand "math/rand/something"
 )
 
 func main() {

@@ -1,0 +1,37 @@
+rules:
+- id: aead-no-final
+  message: >-
+    The 'final' call of a Decipher object checks the authentication tag in a mode for authenticated encryption.
+    Failing to call 'final' will invalidate all integrity guarantees of the released ciphertext.
+  metadata:
+    cwe:
+    - 'CWE-310: CWE CATEGORY: Cryptographic Issues'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    references:
+    - https://nodejs.org/api/crypto.html#deciphersetauthtagbuffer-encoding
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern: |
+      $DECIPHER = $CRYPTO.createDecipheriv('$ALGO', ...)
+      ...
+      $DECIPHER.update(...)
+  - pattern-not-inside: |
+        $DECIPHER = $CRYPTO.createDecipheriv('$ALGO', ...)
+        ...
+        $DECIPHER.final(...)
+  - metavariable-regex:
+      metavariable: $ALGO
+      regex: ".*(-gcm|-ccm|-ocb|chacha20-poly1305)$"
