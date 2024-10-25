@@ -73,6 +73,7 @@ rules:
         - pattern-regex: |
             .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
     - pattern-not-inside: println(...)
+    - pattern-not-inside: throw new $EXCEPTION(...)
   pattern-sanitizers:
   - pattern-either:
     - patterns:
