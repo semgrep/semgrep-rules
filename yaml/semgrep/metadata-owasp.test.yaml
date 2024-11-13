@@ -15,6 +15,22 @@ rules:
     metadata:
       # ok: metadata-owasp
       owasp: A05:2021 - Security Misconfiguration
+  - id: example-k8s-1
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ok: metadata-owasp
+      owasp: "K1: Insecure Workload Configurations"
+  - id: example-k8s-1b
+    message: Example
+    severity: ERROR
+    languages: [json, yaml]
+    pattern: "..."
+    metadata:
+      # ok: metadata-owasp
+      owasp: K01:2022 - Insecure Workload Configurations
   - id: example-bad-zero
     message: Example
     severity: ERROR
@@ -75,6 +91,8 @@ rules:
         - A05:2021 - Security Misconfiguration
         # ok: metadata-owasp
         - A06:2017 - Security Misconfiguration
+        # ok: metadata-owasp
+        - K01:2022 - Insecure Workload Configurations
   - id: example-bad-list
     message: Example
     severity: ERROR
