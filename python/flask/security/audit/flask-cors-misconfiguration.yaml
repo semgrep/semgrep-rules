@@ -1,0 +1,36 @@
+rules:
+  - id: flask-cors-misconfiguration
+    message: >-
+      Setting 'support_credentials=True' together with 'origin="*"' is a CORS
+      misconfiguration that can allow third party origins to read sensitive
+      data. Using this configuration, flask_cors will dynamically reflects the
+      Origin of each request in the Access-Control-Allow-Origin header, allowing
+      all origins and allowing cookies and credentials to be sent along with
+      request. It is recommended to specify allowed origins instead of using "*"
+      when setting 'support_credentials=True'.
+    languages:
+      - python
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              @cross_origin(..., origins="*", supports_credentials=True, ...)
+          - pattern: |
+              CORS(..., supports_credentials=True, origins="*", ...)
+          - pattern: |
+              CORS(..., resources={"...": {...,"origins": "*",
+              "supports_credentials": True,...}})
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      cwe:
+        - "CWE 942: Permissive Cross-domain Policy with Untrusted Domains"
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      technology:
+        - flask
+      references:
+        - https://pypi.org/project/Flask-Cors/
+        - https://flask-cors.readthedocs.io/en/latest/index.html
