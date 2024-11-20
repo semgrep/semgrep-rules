@@ -2,7 +2,7 @@ rules:
   - id: insecure-uuid-version
     patterns:
       - pattern: uuid.uuid1(...)
-    message: |
+    message: >-
       Using UUID version 1 for UUID generation can lead to predictable UUIDs based on system information (e.g., MAC address, timestamp). This may lead to security risks such as the sandwich attack. Consider using `uuid.uuid4()` instead for better randomness and security.
     metadata:
       references:
