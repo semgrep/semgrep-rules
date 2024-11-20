@@ -40,3 +40,15 @@ rules:
       $QUERY = $SQL + $VALUE
       ...
       $DATABASE.sequelize.query($QUERY, ...)
+  - pattern: |
+      Sequelize.literal(`...${...}...`)
+  - pattern: |
+      $QUERY = `...${...}...`
+      ...
+      Sequelize.literal($QUERY)
+  - pattern: |
+      Sequelize.literal($SQL + $VALUE)
+  - pattern: |
+      $QUERY = $SQL + $VALUE
+      ...
+      Sequelize.literal($QUERY)

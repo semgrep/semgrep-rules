@@ -2,7 +2,7 @@ rules:
   - id: metadata-owasp
     message: >-
       The `owasp` tag in Semgrep rule metadata should start with the format "A00:YYYY",
-      where A00 is the OWASP top ten number and YYYY is the OWASP top ten year.
+      where A00 is the OWASP Top 10 number and YYYY is the OWASP Top 10 year.
     severity: ERROR
     languages: [json, yaml]
     patterns:
@@ -13,13 +13,13 @@ rules:
         # If there's a year, need leading zero, e.g. `A01:2021 blah` rather than `A1:2021 blah`.
           - patterns:
               - pattern: 'owasp: "..."'
-              - pattern-not: 'owasp: "=~/^A(0?[1-9]|10):\s+.+$/"'
-              - pattern-not: 'owasp: "=~/^A(0[1-9]|10):([0-9]{4})?\s+.+$/"'
+              - pattern-not: 'owasp: "=~/^(A|K|LLM)(0?[1-9]|10):\s+.+$/"'
+              - pattern-not: 'owasp: "=~/^(A|K|LLM)(0[1-9]|10):([0-9]{4})?\s+.+$/"'
           # A list, must have the year, e.g. `- A01:2021 blah`
           - patterns:
               - pattern-inside: "owasp: [...]"
               - pattern: '"$ANYTHING"'
-              - pattern-not-regex: .*A(0[1-9]|10):[0-9]{4}\s+.*
+              - pattern-not-regex: .*(A|K|LLM)(0[1-9]|10):[0-9]{4}\s+.*
               - pattern-not-regex: "owasp:"
     metadata:
       category: best-practice

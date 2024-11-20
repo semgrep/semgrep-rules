@@ -54,7 +54,7 @@ app.get('/3', function (req, res) {
 app.get('/2', function (req, res) {
     var user = { user: req.query.name };
     // ruleid: direct-response-write
-    res.send('Response</br>' + user.name);
+    res.send('Response</br>' + user.user);
 });
 
 

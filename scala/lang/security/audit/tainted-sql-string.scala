@@ -94,4 +94,9 @@ object Smth {
         logWarning(s"Create user $name")
     }
   }
+
+  def throwException(name: String) = {
+    // ok: tainted-sql-string
+    throw new IllegalArgumentException(s"Can't create a ${name}")
+  }
 }
