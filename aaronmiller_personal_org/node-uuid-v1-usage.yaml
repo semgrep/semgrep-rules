@@ -1,0 +1,30 @@
+rules:
+- id: node-uuid-v1-usage
+  pattern-either:
+  - pattern: |
+      $UUID.v1()
+  - pattern: |
+      require('uuid').v1()
+  - pattern: |
+      import { v1 } from 'uuid'
+  message: UUID v1 usage detected. Prefer UUID v4 for better security properties.
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  fix-regex:
+    regex: v1
+    replacement: v4
+  metadata:
+    category: security
+    subcategory:
+    - guardrail
+    cwe:
+    - 'CWE 330: Use of Insufficiently Random Values'
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - nginx
+    references:
+    - https://medium.com/appsec-untangled/lessons-learned-3-is-your-random-uuid-really-random-1a8a62207c8b
