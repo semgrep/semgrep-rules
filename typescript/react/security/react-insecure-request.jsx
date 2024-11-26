@@ -34,3 +34,6 @@ const options = {
   url: 'https://www.example.com',
 };
 axios(options);
+
+// ok: react-insecure-request
+axios.get('http://localhost/foo');
