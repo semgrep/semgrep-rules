@@ -1,0 +1,24 @@
+rules:
+- id: detect-new-function
+  languages:
+  - javascript
+  severity: ERROR
+  message: |
+    Using `new Function(...)` can lead to potential security vulnerabilities like arbitrary code execution. Avoid using it.
+  pattern: |
+    new Function(...)
+  metadata:
+    category: security
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    cwe:
+    - 'CWE 94: Improper Control of Generation of Code (''Code Injection'')'
+    owasp:
+    - A3:2021 Injection
+    technology:
+    - javascript
+    references:
+    - https://nvd.nist.gov/vuln/detail/cve-2023-23623
+    subcategory:
+    - guardrail
