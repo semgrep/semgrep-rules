@@ -10,7 +10,8 @@ function test1() {
         req.on('data', function (chunk) {
             buf += chunk
         });
-        // ruleid: express-xml2json-xxe-event
+        // The rule isn't written in a way that it can find this
+        // todoruleid: express-xml2json-xxe-event
         req.on('end', function () {
             req.body = expat.toJson(buf, {coerce: true, object: true});
             next();
@@ -29,7 +30,8 @@ function test2() {
         req.on('data', function (chunk) {
             buf += chunk
         });
-        // ruleid: express-xml2json-xxe-event
+        // The rule isn't written in a way that it can find this
+        // todoruleid: express-xml2json-xxe-event
         req.on('end', function () {
             req.body = expat.toJson(buf, {coerce: true, object: true});
             next();

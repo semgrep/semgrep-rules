@@ -1,0 +1,33 @@
+rules:
+  - id: insecure-uuid-version
+    patterns:
+      - pattern: uuid.uuid1(...)
+    message: >-
+      Using UUID version 1 for UUID generation can lead to predictable UUIDs based on system information (e.g., MAC address, timestamp). This may lead to security risks such as the sandwich attack. Consider using `uuid.uuid4()` instead for better randomness and security.
+    metadata:
+      references:
+        - https://www.landh.tech/blog/20230811-sandwich-attack/
+      cwe: 
+      - 'CWE-330: Use of Insufficiently Random Values'
+      owasp: 
+      - A02:2021 - Cryptographic Failures
+      asvs:
+        section: V6 Stored Cryptography Verification Requirements
+        control_id: 6.3.2 Insecure UUID Generation
+        control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v63-random-values
+        version: '4'
+      category: security
+      technology:
+      - python
+      subcategory:
+      - audit
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+    languages:
+      - python
+    severity: WARNING
+    fix-regex:
+      regex: uuid1
+      replacement: uuid4
+    
