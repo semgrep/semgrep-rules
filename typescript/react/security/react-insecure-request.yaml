@@ -23,39 +23,39 @@ rules:
   - typescript
   - javascript
   severity: ERROR
-  pattern-either:
-  - patterns:
+  patterns:
     - pattern-either:
-      - pattern-inside: |
-          import $AXIOS from 'axios';
-          ...
-          $AXIOS.$METHOD(...)
-      - pattern-inside: |
-          $AXIOS = require('axios');
-          ...
-          $AXIOS.$METHOD(...)
-    - pattern-either:
-      - pattern: $AXIOS.get("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.post("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.delete("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.head("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.patch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.put("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.options("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $AXIOS from 'axios';
-          ...
-          $AXIOS(...)
-      - pattern-inside: |
-          $AXIOS = require('axios');
-          ...
-          $AXIOS(...)
-    - pattern-either:
-      - pattern: '$AXIOS({url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}, ...)'
-      - pattern: |
-          $OPTS = {url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}
-          ...
-          $AXIOS($OPTS, ...)
-  - pattern: fetch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+        - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $AXIOS from 'axios';
+                  ...
+                  $AXIOS.$METHOD(...)
+              - pattern-inside: |
+                  $AXIOS = require('axios');
+                  ...
+                  $AXIOS.$METHOD(...)
+          - pattern: $AXIOS.$VERB("$URL",...)
+          - metavariable-regex:
+              metavariable: $VERB
+              regex: ^(get|post|delete|head|patch|put|options)
+        - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import $AXIOS from 'axios';
+                  ...
+                  $AXIOS(...)
+              - pattern-inside: |
+                  $AXIOS = require('axios');
+                  ...
+                  $AXIOS(...)
+          - pattern-either:
+              - pattern: '$AXIOS({url: "$URL"}, ...)'
+              - pattern: |
+                  $OPTS = {url: "$URL"}
+                  ...
+                  $AXIOS($OPTS, ...)
+        - pattern: fetch("$URL", ...)
+    - metavariable-regex:
+          metavariable: $URL
+          regex: ^([Hh][Tt][Tt][Pp]:\/\/(?!localhost).*)
