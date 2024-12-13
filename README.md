@@ -28,11 +28,12 @@ You can also learn how to write rules using the [interactive, example-based Semg
 
 ## Contributing
 
-We welcome Semgrep rule contributions directly to this repository! When submitting your contribution to this repository, we’ll ask you to make Semgrep, Inc. a joint owner of your contributions. While you still own copyright rights to your rule, joint ownership allows Semgrep, Inc. to license these contributions to other [Semgrep Registry](https://semgrep.dev/r) users pursuant to the LGPL 2.1 under the [Commons Clause](https://commonsclause.com/). See full [license details](https://github.com/returntocorp/semgrep-rules/blob/develop/LICENSE).
+We welcome Semgrep rule contributions directly to this repository! When submitting your contribution, you grant Semgrep, Inc. a license to use, modify, and distribute your contribution under the {Semgrep Rules License v. 1.0](semgrep.dev/legal/rules-license). This ensures your rule can be shared with other Semgrep Registry users.
 
-Note: To contribute, review the **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** documentation.
+To contribute, please review our  **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** guidelines.
 
-You can also contact us at support@semgrep.com to make Semgrep rule contributions. We will import your rules for everyone to use!
+You can also reach out to us at support@semgrep.com, and we will help import your rules for others to use!
+
 
 ## Additional information
 

@@ -5,9 +5,10 @@ rules:
     message: path for `$URL` is uselessly assigned twice
     metadata:
       category: maintainability
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       technology:
         - django
+      references:
+        - https://docs.djangoproject.com/en/3.2/topics/http/urls/#naming-url-patterns
     patterns:
       - pattern: |
           [..., django.urls.path('$URL', $VIEW, ...), ..., django.urls.path('$URL', $VIEW, ...), ...]
@@ -20,9 +21,10 @@ rules:
       Verify what the intended target view is and delete the other route.
     metadata:
       category: maintainability
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       technology:
         - django
+      references:
+        - https://docs.djangoproject.com/en/3.2/topics/http/urls/#naming-url-patterns
     patterns:
       - pattern: |
           [..., django.urls.path('$URL', $VIEW, ...), ..., django.urls.path('$URL', $DIFFERENT_VIEW, ...), ...]
@@ -35,9 +37,10 @@ rules:
     message: path for `$URL` is assigned twice with different names
     metadata:
       category: maintainability
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       technology:
         - django
+      references:
+        - https://docs.djangoproject.com/en/3.2/topics/http/urls/#naming-url-patterns
     patterns:
       - pattern: |
           [..., django.urls.path('$URL', $VIEW, name='$NAME', ...), ..., django.urls.path('$URL', $VIEW, name='$OTHER_NAME', ...), ...]
@@ -52,7 +55,6 @@ rules:
       Pick a unique name for each path.
     metadata:
       category: maintainability
-      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
       technology:
         - django
       references:
