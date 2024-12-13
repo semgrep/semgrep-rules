@@ -28,7 +28,7 @@ You can also learn how to write rules using the [interactive, example-based Semg
 
 ## Contributing
 
-We welcome Semgrep rule contributions directly to this repository! When submitting your contribution, you grant Semgrep, Inc. a license to use, modify, and distribute your contribution under the [Semgrep Rules License v. 1.0](semgrep.dev/legal/rules-license). This ensures your rule can be shared with other Semgrep Registry users.
+We welcome Semgrep rule contributions directly to this repository! When submitting your contribution, you grant Semgrep, Inc. a license to use, modify, and distribute your contribution under the [Semgrep Rules License v. 1.0](https://semgrep.dev/legal/rules-license). This ensures your rule can be shared with other Semgrep Registry users.
 
 To contribute, please review our  **[Contributing to Semgrep rules](https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/)** guidelines.
 
