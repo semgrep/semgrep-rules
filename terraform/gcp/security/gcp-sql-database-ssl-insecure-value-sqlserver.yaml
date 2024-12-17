@@ -1,0 +1,58 @@
+rules:
+- id: gcp-sql-database-ssl-insecure-value-sqlserver
+  patterns:
+  - pattern-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          database_version = "$DB"
+          ...
+      }
+  - pattern-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          ip_configuration {
+              ...
+              ssl_mode = $VALUE
+              ...
+          }
+          ...
+      }
+  - pattern-not-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          ip_configuration {
+              ...
+              ssl_mode = "ENCRYPTED_ONLY"
+              ...
+          }
+          ...
+      }
+  - metavariable-regex:
+      metavariable: $DB
+      regex:  .*(SQLSERVER).*
+  - focus-metavariable: $VALUE
+  fix: |
+    "ENCRYPTED_ONLY"
+  message: >-
+    Ensure all Cloud SQL database instance require incoming connections to use SSL. For SQL Server, `ssl_mode="ENCRYPTED_ONLY"` is the most secure value that is supported.
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    category: security
+    technology:
+    - terraform
+    - gcp
+    references:
+    - "https://cloud.google.com/sql/docs/postgres/admin-api/rest/v1/instances#ipconfiguration"
+    - "https://owasp.org/Top10/A02_2021-Cryptographic_Failures"
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: WARNING
+
