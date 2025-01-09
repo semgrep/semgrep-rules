@@ -1,0 +1,32 @@
+rules:
+- id: sha224-hash
+  pattern-either:
+  - pattern: hash('sha224', ...);
+  - pattern: hash('sha512/224', ...);
+  - pattern: hash('sha3-224', ...);
+  - pattern: hash_hmac('sha224', ...);
+  - pattern: hash_hmac('sha512/224', ...);
+  - pattern: hash_hmac('sha3-224', ...);
+  message: >-
+    This code uses a 224-bit hash function, which is deprecated or disallowed
+    in some security policies. Consider updating to a stronger hash function such
+    as SHA-384 or higher to ensure compliance and security.
+  metadata:
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar3.ipd.pdf
+    - https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism/cyber-security-guidelines/guidelines-cryptography
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+  languages: [php]
+  severity: WARNING

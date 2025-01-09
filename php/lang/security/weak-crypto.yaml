@@ -1,10 +1,15 @@
 rules:
 - id: weak-crypto
   patterns:
-  - pattern: $FUNC(...);
-  - metavariable-regex:
-      metavariable: $FUNC
-      regex: crypt|md5|md5_file|sha1|sha1_file|str_rot13
+  - pattern-either:
+    - pattern: crypt(...)
+    - pattern: hash('md5', ...)
+    - pattern: hash('sha1', ...)
+    - pattern: md5_file(...)
+    - pattern: md5(...)
+    - pattern: sha1_file(...)
+    - pattern: sha1(...)
+    - pattern: str_rot13(...)
   message: >-
     Detected usage of weak crypto function. Consider using stronger alternatives.
   metadata:
