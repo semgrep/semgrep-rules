@@ -1,0 +1,48 @@
+rules:
+- id: public-randomness
+  languages:
+  - move_on_aptos
+  message: If a public function directly or indirectly invokes the randomness API,
+    a malicious user can abuse the composability of this function and abort the transaction
+    if the result is not as desired. This allows the user to keep trying until they
+    achieve a beneficial outcome, undermining the randomness.
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+    category: security
+    references:
+    - https://aptos.dev/en/build/smart-contracts/move-security-guidelines#randomness---test-and-abort
+    license: Copyright 2024 Aptos Labs
+    rule-origin-note: published from rules/move_on_aptos/randomness/security/public-randomness.yaml
+      in https://github.com/aptos-labs/semgrep-move-rules.git
+  patterns:
+  - pattern-either:
+    - pattern: |
+        #[lint::allow_unsafe_randomness]
+        fun $FUN (...) : ...
+    - pattern: |
+        #[randomness]
+        fun $FUN (...) : ...
+  - pattern-either:
+    - pattern: |
+        public fun $FUN (...) : ...
+    - pattern: |
+        public entry fun $FUN (...) : ...
+  - pattern-not-inside: |
+      fun $ENTRYPOINT(...): ... {
+        abort $_
+      }
+  - pattern-not: |
+      #[test]
+      fun $FUN(...) : ...
+  - pattern-not: |
+      #[test(...)]
+      fun $FUN(...) : ...
+  - pattern-not: |
+      #[test_only]
+      fun $FUN(...) : ...
+  - pattern-not-inside: |
+      #[test_only]
+      module $ADDR::$MODULE { ... }
