@@ -1,0 +1,44 @@
+rules:
+- id: sha224-hash
+  pattern-either:
+    - patterns:
+      - pattern-inside: |
+          import "crypto/sha256"
+          ...
+      - pattern-either:
+        - pattern: |
+            sha256.New224()
+        - pattern: |
+            sha256.Sum224(...)
+    - patterns:
+      - pattern-inside: |
+          import "golang.org/x/crypto/sha3"
+          ...
+      - pattern-either:
+        - pattern: |
+            sha3.New224()
+        - pattern: |
+            sha3.Sum224(...)
+  message: >-
+    This code uses a 224-bit hash function, which is deprecated or disallowed
+    in some security policies. Consider updating to a stronger hash function such
+    as SHA-384 or higher to ensure compliance and security.
+  languages: [go]
+  severity: WARNING
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    category: security
+    technology:
+    - go
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar3.ipd.pdf
+    - https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism/cyber-security-guidelines/guidelines-cryptography
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH

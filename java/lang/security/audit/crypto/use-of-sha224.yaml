@@ -1,0 +1,47 @@
+rules:
+- id: use-of-sha224
+  message: >-
+    This code uses a 224-bit hash function, which is deprecated or disallowed
+    in some security policies. Consider updating to a stronger hash function such
+    as SHA-384 or higher to ensure compliance and security.
+  languages: [java]
+  severity: WARNING
+  metadata:
+    functional-categories:
+      - 'crypto::search::hash-algorithm::javax.crypto'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.5 Insecure Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
+    category: security
+    technology:
+    - java
+    references:
+    - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar3.ipd.pdf
+    - https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism/cyber-security-guidelines/guidelines-cryptography
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+  pattern-either:
+  - pattern: org.apache.commons.codec.digest.DigestUtils.getSha3_224Digest()
+  - pattern: org.apache.commons.codec.digest.DigestUtils.getSha512_224Digest()
+  - pattern: org.apache.commons.codec.digest.DigestUtils.sha3_224(...)
+  - pattern: org.apache.commons.codec.digest.DigestUtils.sha3_224Hex(...)
+  - pattern: org.apache.commons.codec.digest.DigestUtils.sha512_224(...)
+  - pattern: org.apache.commons.codec.digest.DigestUtils.sha512_224Hex(...)
+  - pattern: new org.apache.commons.codec.digest.DigestUtils(org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_224)
+  - pattern: new org.apache.commons.codec.digest.DigestUtils(org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_512_224)
+  - pattern: new org.apache.commons.codec.digest.DigestUtils(org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA3_224)
+  - patterns:
+    - pattern: java.security.MessageDigest.getInstance("$ALGO", ...);
+    - metavariable-regex:
+        metavariable: $ALGO
+        regex: '.*224'
