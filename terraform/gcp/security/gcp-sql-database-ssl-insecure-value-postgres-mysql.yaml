@@ -1,17 +1,18 @@
 rules:
-- id: gcp-sql-database-require-ssl
+- id: gcp-sql-database-ssl-insecure-value-postgres-mysql
   patterns:
-  - pattern: resource
   - pattern-inside: |
       resource "google_sql_database_instance" "..." {
           ...
+          database_version = "$DB"
+          ...
       }
-  - pattern-not-inside: |
+  - pattern-inside: |
       resource "google_sql_database_instance" "..." {
           ...
           ip_configuration {
               ...
-              require_ssl = true
+              ssl_mode = $VALUE
               ...
           }
           ...
@@ -21,13 +22,19 @@ rules:
           ...
           ip_configuration {
               ...
-              ssl_mode = ...
+              ssl_mode = "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
               ...
           }
           ...
       }
+  - metavariable-regex:
+      metavariable: $DB
+      regex:  .*(MYSQL|POSTGRES).*
+  - focus-metavariable: $VALUE
+  fix: |
+    "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
   message: >-
-    Ensure all Cloud SQL database instance requires all incoming connections to use SSL
+    Ensure all Cloud SQL database instance require incoming connections to use SSL. To enable this for PostgresSQL and MySQL, use `ssl_mode="TRUSTED_CLIENT_CERTIFICATE_REQUIRED"`.
   metadata:
     owasp:
     - A03:2017 - Sensitive Data Exposure
@@ -48,3 +55,4 @@ rules:
     confidence: MEDIUM
   languages: [hcl]
   severity: WARNING
+
