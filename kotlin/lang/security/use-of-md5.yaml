@@ -24,6 +24,6 @@ rules:
     confidence: MEDIUM
   pattern-either:
   - pattern: |
-      $VAR = $MD.getInstance("MD5")
+      java.security.MessageDigest.getInstance("MD5")
   - pattern: |
-      $DU.getMd5Digest().digest(...)
+      org.apache.commons.codec.digest.DigestUtils.getMd5Digest()
