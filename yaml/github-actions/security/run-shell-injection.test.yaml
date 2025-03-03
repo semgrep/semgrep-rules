@@ -129,3 +129,11 @@ jobs:
         # ruleid: run-shell-injection
         run: |
           echo "${{ github.event.discussion.body }}"
+      - name: print input message
+        # ruleid: run-shell-injection
+        run: |
+          echo "${{ inputs.message_to_print }}"
+      - name: Use steps output
+        # ruleid: run-shell-injection
+        run: |
+          echo "${{ steps.shell_command.outputs.some_value }}"
