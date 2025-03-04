@@ -1,0 +1,39 @@
+rules:
+- id: wp-ssrf-wp_remote_get
+  patterns:
+  - pattern: wp_remote_get($URL, ...)
+  - metavariable-pattern:
+      metavariable: $URL
+      patterns:
+      - pattern: $_GET[...]
+      - pattern: $_POST[...]
+      - pattern: $_REQUEST[...]
+      - pattern: get_option(...)
+      - pattern: get_user_meta(...)
+      - pattern: get_query_var(...)
+  message: "Detected usage of `wp_remote_get()` with user input. This can lead to
+    SSRF vulnerabilities. \nConsider using `wp_safe_remote_get()` instead, which provides
+    additional validation to prevent SSRF.\n"
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: A10:2021 - Server-Side Request Forgery (SSRF)
+    category: security
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://developer.wordpress.org/reference/functions/wp_safe_remote_get/
+    - https://developer.wordpress.org/reference/functions/wp_remote_get/
+    - https://patchstack.com/articles/exploring-the-unpatched-wordpress-ssrf/
+    vulnerability_class:
+    - Server-Side Request Forgery (SSRF)
