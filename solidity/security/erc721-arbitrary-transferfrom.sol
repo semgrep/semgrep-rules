@@ -1498,8 +1498,8 @@ contract Distortion is ERC721A, Ownable, ReentrancyGuard {
 
 
   bool public isClaimActive = false;
-  uint public maxSupply = 1000;
-  uint public maxFree = 200;
+  uint public immutable maxSupply = 1000;
+  uint public constant maxFree = 200;
   uint256 public price = 0.05 ether;    
   address payable private immutable payoutAddress;
 
