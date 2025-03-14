@@ -1,0 +1,29 @@
+# Name of this GitHub Actions workflow.
+name: StartLeft
+on:
+  workflow_dispatch:  # Allows manual triggering
+  push:
+    tags:
+      - '*'  # Triggers when any tag is pushed
+permissions:
+  contents: read
+jobs:
+  sls:
+    # User definable name of this GitHub Actions job.
+    name: sls/scan
+    # If you are self-hosting, change the following `runs-on` value:
+    runs-on: ubuntu-latest
+    # Skip any PR created by dependabot to avoid permission issues:
+    # TODO: Add [DevOps Prisidio] and [Prisidio ActionsBot] to the list.
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      # Fetch project source with GitHub Actions Checkout.
+      - uses: actions/checkout@v4
+      - name: Pull and Run SLS Scanner
+        uses: tauruseer/sls-pipeline-scanner@v1.1.0
+        with:
+          scanKey: ${{ secrets.SLS_SCAN_KEY }}
+          username: ${{ vars.SLS_CLIENT_ID }}
+          password: ${{ secrets.SLS_CLIENT_SECRET }}
+          runSCA: 'true'
+          runSAST: 'true'
