@@ -20,12 +20,13 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9.2
-      # - name: Get changed files
-      #   id: changed-files
-      #   uses: tj-actions/changed-files@v41
-      #   with:
-      #     path: semgrep-rules
-      #     separator: ","
+      - name: Find merge base with develop
+        id: merge_base
+        run: echo "BASE_COMMIT=$(git merge-base origin/develop HEAD)" >> $GITHUB_ENV
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "all_changed_files=$(git diff --quiet $BASE_COMMIT HEAD -- semgrep-rules | xargs | sed -e 's/ /,/g')" >> $GITHUB_OUTPUT
       # need to delete these directories or else we get linter errors during
       # the "validate" step.
       - name: install semgrep
@@ -57,11 +58,11 @@ jobs:
           echo "=== All test failures ==="
           echo "${FAILURES}"
           echo "=== Changed files ==="
-          echo ${{ steps.changed-files.outputs.all_changed_files }}
+          echo ${{ steps.changed-files.all_changed_files }}
           echo "====================="
           PR_FAILURES=()
           if [ ! -z "${FAILURES}" ] ; then
-            CHANGED=${{ steps.changed-files.outputs.all_changed_files }}
+            CHANGED=${{ steps.changed-files.all_changed_files }}
             for file in ${CHANGED//,/ } ; do
               if echo "${FAILURES}" | grep -w $file > /dev/null ; then
                 PR_FAILURES+=("${file}")
