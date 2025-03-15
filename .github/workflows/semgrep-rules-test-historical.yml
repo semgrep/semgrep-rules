@@ -58,11 +58,11 @@ jobs:
           echo "=== All test failures ==="
           echo "${FAILURES}"
           echo "=== Changed files ==="
-          echo ${{ steps.changed-files.all_changed_files }}
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
           echo "====================="
           PR_FAILURES=()
           if [ ! -z "${FAILURES}" ] ; then
-            CHANGED=${{ steps.changed-files.all_changed_files }}
+            CHANGED=${{ steps.changed-files.outputs.all_changed_files }}
             for file in ${CHANGED//,/ } ; do
               if echo "${FAILURES}" | grep -w $file > /dev/null ; then
                 PR_FAILURES+=("${file}")
