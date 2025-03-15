@@ -26,7 +26,7 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          echo "all_changed_files=$(git diff --quiet $BASE_COMMIT HEAD -- semgrep-rules | xargs | sed -e 's/ /,/g')" >> $GITHUB_OUTPUT
+          echo "all_changed_files=$(git -C semgrep-rules diff --quiet $BASE_COMMIT HEAD | xargs | sed -e 's/ /,/g')" >> $GITHUB_OUTPUT
       # need to delete these directories or else we get linter errors during
       # the "validate" step.
       - name: install semgrep
