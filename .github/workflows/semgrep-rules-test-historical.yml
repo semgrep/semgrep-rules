@@ -22,7 +22,7 @@ jobs:
           python-version: 3.9.2
       - name: Find merge base with develop
         id: merge_base
-        run: echo "BASE_COMMIT=$(git merge-base origin/develop HEAD)" >> $GITHUB_ENV
+        run: echo "BASE_COMMIT=$(git -C semgrep-rules merge-base origin/develop HEAD)" >> $GITHUB_ENV
       - name: Get changed files
         id: changed-files
         run: |
