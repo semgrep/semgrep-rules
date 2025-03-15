@@ -37,19 +37,14 @@ rules:
   pattern-sources:
   - patterns:
     - pattern-either:
-      - pattern-inside: |
-          $PROP = new URLSearchParams($WINDOW. ... .location.search).get('...')
-          ...
-      - pattern-inside: |
-          $PROP = new URLSearchParams(location.search).get('...')
-          ...
-      - pattern-inside: |
-          $PROP = new URLSearchParams($WINDOW. ... .location.hash.substring(1)).get('...')
-          ...
-      - pattern-inside: |
-          $PROP = new URLSearchParams(location.hash.substring(1)).get('...')
-          ...
-    - pattern: $PROP
+      - pattern: |
+          new URLSearchParams($WINDOW. ... .location.search).get('...')
+      - pattern: |
+          new URLSearchParams(location.search).get('...')
+      - pattern: |
+          new URLSearchParams($WINDOW. ... .location.hash.substring(1)).get('...')
+      - pattern: |
+          new URLSearchParams(location.hash.substring(1)).get('...')
   - patterns:
     - pattern-either:
       - pattern-inside: |
@@ -76,13 +71,10 @@ rules:
     - pattern: $PROPS.searchParams.get('...')
   - patterns:
     - pattern-either:
-      - pattern-inside: |
-          $PROPS = new URL($WINDOW. ... .location.href).searchParams.get('...')
-          ...
-      - pattern-inside: |
-          $PROPS = new URL(location.href).searchParams.get('...')
-          ...
-    - pattern: $PROPS
+      - pattern: |
+          new URL($WINDOW. ... .location.href).searchParams.get('...')
+      - pattern: |
+          new URL(location.href).searchParams.get('...')
   pattern-sinks:
   - patterns:
     - pattern-either:

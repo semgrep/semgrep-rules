@@ -1,13 +1,32 @@
 rules:
 - id: md5-loose-equality
-  patterns:
-  - pattern-either:
-    - pattern: $X == $FUNC(...)
-    - pattern: $FUNC(...) == $X
-    - pattern: $FUNC(...) == $FUNC(...)
-  - metavariable-regex:
-      metavariable: $FUNC
-      regex: md5|md5_file
+  mode: taint
+  pattern-sinks:
+    - pattern: |
+        $VAR1 == $VAR2
+    - pattern: |
+        $VAR1 != $VAR2
+  pattern-sources:
+    - pattern: $PHAR->getSignature()
+    - pattern: $RARENTRY->getCrc()
+    - pattern: base_convert(...)
+    - pattern: bin2hex(...)
+    - pattern: dechex(...)
+    - pattern: hash_file(...)
+    - pattern: hash_final(...)
+    - pattern: hash_hmac_file(...)
+    - pattern: hash_hmac(...)
+    - pattern: hash_pbkdf2(...)
+    - pattern: hash(...)
+    - pattern: md5_file(...)
+    - pattern: md5(...)
+    - pattern: openssl_x509_fingerprint(...)
+    - pattern: rnp_locate_key(...)
+    - pattern: sha1_file(...)
+    - pattern: sha1(...)
+    - pattern: sodium_bin2hex(...)
+  pattern-sanitizers:
+    - pattern: strlen(...)
   message: >-
     Make sure comparisons involving md5 values are strict (use `===` not `==`) to
     avoid type juggling issues

@@ -1,0 +1,16 @@
+rules:
+- id: empty-with-boolean-expression
+  pattern-either:
+  - pattern: |
+      empty($A && $B)
+  - pattern: |
+      empty($A || $B)
+  message: >-
+    Calling `empty` on a boolean expression may be an indication that a parenthesis is misplaced.
+  metadata:
+    category: correctness
+    technology:
+    - php
+    confidence: LOW
+  languages: [php]
+  severity: WARNING
