@@ -24,9 +24,6 @@ rules:
     confidence: HIGH
   patterns:
   - pattern: |
-      jwt.encode($X, $SECRET, ...)
-  - focus-metavariable: $SECRET
-  - pattern: |
-      "..."
+      jwt.encode($_, "...", ...)
   languages: [python]
   severity: ERROR
