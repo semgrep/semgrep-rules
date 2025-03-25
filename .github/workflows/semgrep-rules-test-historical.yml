@@ -2,76 +2,77 @@ name: semgrep-rules-test-historical
 on:
   pull_request:
     branches:
-    - develop
-    - release
+      - develop
+      - release
   push:
     branches:
-    - develop
-    - release
+      - develop
+      - release
 jobs:
   test-historical:
     name: rules-test-historical
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-      with:
-        path: semgrep-rules
-        fetch-depth: 0
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.9.2
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v41
-      with:
-        path: semgrep-rules
-        separator: ","
-    # need to delete these directories or else we get linter errors during 
-    # the "validate" step.
-    - name: install semgrep
-      run: pip3 install semgrep
-    - name: delete stats directory
-      run: rm -rf semgrep-rules/stats
-    - name: delete rules requiring Semgrep Pro
-      run: rm -rf semgrep-rules/apex semgrep-rules/elixir
-    # TODO: remove this in the future, there was a regression in semgrep that
-    # caused non-rule YAML files to be validated
-    - name: delete YAML files that are not rules
-      run: |
-        rm -f semgrep-rules/.pre-commit-config.yaml
-        rm -rf semgrep-rules/.github
-    - name: grab historical semgrep version
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: semgrep-rules/scripts/historical-semgrep-version
-    - name: validate rules on historical semgrep version
-      run: |
-        docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
-    - name: test with historical semgrep version
-      run: |
-        TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
-        echo "=== Testsuite output ==="
-        echo "${TESTSUITE_OUTPUT}"
-        echo "========================"
-        FAILURES=$(echo "${TESTSUITE_OUTPUT}" | grep -oh "test file path: .*" | sed -E "s/.*test file path: (.*)/\\1/")
-        echo "=== All test failures ==="
-        echo "${FAILURES}"
-        echo "=== Changed files ==="
-        echo ${{ steps.changed-files.outputs.all_changed_files }}
-        echo "====================="
-        PR_FAILURES=()
-        if [ ! -z "${FAILURES}" ] ; then
-          CHANGED=${{ steps.changed-files.outputs.all_changed_files }}
-          for file in ${CHANGED//,/ } ; do
-            if echo "${FAILURES}" | grep -w $file > /dev/null ; then
-              PR_FAILURES+=("${file}")
-            fi
-          done
-        fi
-        if (( ${#PR_FAILURES[@]} != 0 )) ; then
-          echo "The following test(s) failed with Semgrep v${SEMGREP_OLD_VERSION} are caused by this PR:"
-          for i in "${PR_FAILURES[@]}" ; do
-            echo $i
-          done
-          exit 1
-        fi
+      - uses: actions/checkout@v2
+        with:
+          path: semgrep-rules
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.2
+      - name: Find merge base with develop
+        id: merge_base
+        run: echo "BASE_COMMIT=$(git -C semgrep-rules merge-base origin/develop HEAD)" >> $GITHUB_ENV
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "all_changed_files=$(git -C semgrep-rules diff --quiet $BASE_COMMIT HEAD | xargs | sed -e 's/ /,/g')" >> $GITHUB_OUTPUT
+      # need to delete these directories or else we get linter errors during
+      # the "validate" step.
+      - name: install semgrep
+        run: pip3 install semgrep
+      - name: delete stats directory
+        run: rm -rf semgrep-rules/stats
+      - name: delete rules requiring Semgrep Pro
+        run: rm -rf semgrep-rules/apex semgrep-rules/elixir
+      # TODO: remove this in the future, there was a regression in semgrep that
+      # caused non-rule YAML files to be validated
+      - name: delete YAML files that are not rules
+        run: |
+          rm -f semgrep-rules/.pre-commit-config.yaml
+          rm -rf semgrep-rules/.github
+      - name: grab historical semgrep version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: semgrep-rules/scripts/historical-semgrep-version
+      - name: validate rules on historical semgrep version
+        run: |
+          docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --validate --config /src
+      - name: test with historical semgrep version
+        run: |
+          TESTSUITE_OUTPUT="$(docker run --rm -v ${GITHUB_WORKSPACE}/semgrep-rules:/src returntocorp/semgrep:${SEMGREP_OLD_VERSION} semgrep --test --test-ignore-todo /src || true)"
+          echo "=== Testsuite output ==="
+          echo "${TESTSUITE_OUTPUT}"
+          echo "========================"
+          FAILURES=$(echo "${TESTSUITE_OUTPUT}" | grep -oh "test file path: .*" | sed -E "s/.*test file path: (.*)/\\1/")
+          echo "=== All test failures ==="
+          echo "${FAILURES}"
+          echo "=== Changed files ==="
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+          echo "====================="
+          PR_FAILURES=()
+          if [ ! -z "${FAILURES}" ] ; then
+            CHANGED=${{ steps.changed-files.outputs.all_changed_files }}
+            for file in ${CHANGED//,/ } ; do
+              if echo "${FAILURES}" | grep -w $file > /dev/null ; then
+                PR_FAILURES+=("${file}")
+              fi
+            done
+          fi
+          if (( ${#PR_FAILURES[@]} != 0 )) ; then
+            echo "The following test(s) failed with Semgrep v${SEMGREP_OLD_VERSION} are caused by this PR:"
+            for i in "${PR_FAILURES[@]}" ; do
+              echo $i
+            done
+            exit 1
+          fi
