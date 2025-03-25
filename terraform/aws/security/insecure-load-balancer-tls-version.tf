@@ -137,6 +137,48 @@ resource "aws_alb_listener" "https_fs_1_2" {
   }
 }
 
+resource "aws_alb_listener" "tls_1_3_1_2" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls_1_3_1_2_res" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls_1_3_1_3" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-3-2021-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
 resource "aws_lb_target_group" "foo" {
     name = "foo"
     port = 80
@@ -207,12 +249,12 @@ resource "aws_alb_listener" "tls_fs_1_1" {
   }
 }
 
-resource "aws_alb_listener" "tls_1_3" {
+resource "aws_alb_listener" "tls_fs_1_0" {
   load_balancer_arn = var.aws_lb_arn
   protocol          = "TLS"
   port              = "8080"
-  # ok: insecure-load-balancer-tls-version
-  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-068"
+  # ruleid: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-FS-2018-06"
   certificate_arn   = var.certificate_arn
 
   default_action {
