@@ -1,0 +1,52 @@
+rules:
+- id: avoid-logging-everything
+  languages: [ruby]
+  severity: ERROR
+  message: Avoid logging `params` and `params.inspect` as this bypasses Rails filter_parameters and may inadvertently log sensitive data. Instead, reference specific fields to ensure only expected data is logged.
+  metadata:
+    category: security
+    technology:
+      - rails
+    references:
+      - https://guides.rubyonrails.org/configuring.html#config-filter-parameters
+      - https://api.rubyonrails.org/v7.1/classes/ActiveSupport/ParameterFilter.html
+    cwe: 
+    - 'CWE-532: Insertion of Sensitive Information into Log File'
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: LOW
+    subcategory:
+      - audit
+  patterns:
+    - pattern-either:
+      - pattern: Rails.logger.$METHOD(params)
+      - pattern: Rails.logger.$METHOD("...#{params}...")
+      - pattern: Rails.logger.$METHOD(params.inspect)
+      - pattern: Rails.logger.$METHOD("...#{params.inspect}...")
+      - pattern: |
+          Rails.logger.$METHOD do
+            "...#{params}..."
+          end
+      - pattern: |
+          Rails.logger.$METHOD do
+            "...#{params.inspect}..."
+          end
+      - pattern: |
+          Rails.logger.$METHOD do
+            params
+          end
+      - pattern: |
+          Rails.logger.$METHOD do
+            params.inspect
+          end
+    - pattern-not: |
+        Rails.logger.$METHOD do
+          params[...]
+        end
+    - pattern-not: |
+        Rails.logger.$METHOD do
+          "#{params.inspect[...]}"
+        end
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: (info|warn|error|fatal|unknown)
