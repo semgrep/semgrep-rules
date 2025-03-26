@@ -7,13 +7,13 @@ on:
 
 jobs:
   semgrep:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: semgrep-rule-lints
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
-          python-version: 3.9.2
+          python-version: '3.10'
       - name: install semgrep
         run: pip3 install semgrep
       - name: lints for semgrep rules
