@@ -1,0 +1,33 @@
+rules:
+- id: flask-url-for-external-true
+  message: Function `flask.url_for` with `_external=True` argument will generate URLs
+    using the `Host` header of the HTTP request, which may lead to security risks
+    such as Host header injection
+  metadata:
+    cwe:
+    - 'CWE-673: External Influence of Sphere Definition'
+    owasp:
+    - A03:2021 - Injection
+    category: security
+    technology:
+    - flask
+    references:
+    - https://flask.palletsprojects.com/en/latest/api/#flask.url_for
+    - https://portswigger.net/kb/issues/00500300_host-header-injection
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: LOW
+    confidence: HIGH
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Other
+  languages:
+  - python
+  severity: WARNING
+  patterns:
+  - pattern-not: flask.url_for(..., _external=False, ...)
+  - pattern-not: url_for(..., _external=False, ...)
+  - pattern-either:
+    - pattern: flask.url_for(..., _external=$VAR, ...)
+    - pattern: url_for(..., _external=$VAR, ...)

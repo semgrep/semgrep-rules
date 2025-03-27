@@ -2,7 +2,7 @@ import requests
 
 # ok:no-auth-over-http
 good_url = "https://www.github.com"
-# deepruleid:no-auth-over-http
+# ruleid:no-auth-over-http
 bad_url = "http://www.github.com"
 
 # ruleid:no-auth-over-http
@@ -31,6 +31,10 @@ def test3():
     # ok:no-auth-over-http
     good_url = "https://www.github.com"
     r = requests.get(good_url, auth=('user', 'pass'))
+
+def test4():
+    # ruleid:no-auth-over-http
+    r = requests.get(bad_url, auth=('user', 'pass'))
 
 def from_import_test1(url):
     from requests import get, post
