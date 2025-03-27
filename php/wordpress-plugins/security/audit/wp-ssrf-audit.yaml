@@ -5,24 +5,26 @@ rules:
   severity: WARNING
   message: Detected usage of vulnerable functions with user input, which could lead
     to SSRF vulnerabilities.
-  patterns:
-  - pattern-either:
-    - pattern: wp_remote_get($URL, ...)
-    - pattern: wp_safe_remote_get($URL, ...)
-    - pattern: wp_safe_remote_request($URL, ...)
-    - pattern: wp_safe_remote_head($URL, ...)
-    - pattern: wp_oembed_get($URL, ...)
-    - pattern: vip_safe_wp_remote_get($URL, ...)
-    - pattern: wp_safe_remote_post($URL, ...)
-  - metavariable-pattern:
-      metavariable: $URL
-      patterns:
-      - pattern: $_GET[...]
-      - pattern: $_POST[...]
-      - pattern: $_REQUEST[...]
-      - pattern: get_option(...)
-      - pattern: get_user_meta(...)
-      - pattern: get_query_var(...)
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: $_GET[...]
+        - pattern: $_POST[...]
+        - pattern: $_REQUEST[...]
+        - pattern: get_option(...)
+        - pattern: get_user_meta(...)
+        - pattern: get_query_var(...)
+  pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: wp_remote_get($URL, ...)
+        - pattern: wp_safe_remote_get($URL, ...)
+        - pattern: wp_safe_remote_request($URL, ...)
+        - pattern: wp_safe_remote_head($URL, ...)
+        - pattern: wp_oembed_get($URL, ...)
+        - pattern: vip_safe_wp_remote_get($URL, ...)
+        - pattern: wp_safe_remote_post($URL, ...)
   paths:
     include:
     - wp-content/plugins/**/*.php
@@ -30,8 +32,8 @@ rules:
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
     owasp: A10:2021 - Server-Side Request Forgery (SSRF)
     category: security
-    confidence: HIGH
-    likelihood: HIGH
+    confidence: MEDIUM
+    likelihood: MEDIUM
     impact: HIGH
     subcategory:
     - audit
