@@ -17,6 +17,7 @@ rules:
         - pattern: get_query_var(...)
   pattern-sinks:
     - patterns:
+      - focus-metavariable: $URL
       - pattern-either:
         - pattern: wp_remote_get($URL, ...)
         - pattern: wp_safe_remote_get($URL, ...)
