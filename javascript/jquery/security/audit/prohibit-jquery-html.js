@@ -38,3 +38,8 @@ function ok3() {
     // ok: prohibit-jquery-html
     $('.js-piechart-container').html('<canvas class="js-pie-chart" style="width:100%;height:300px;"></canvas>')
 }
+
+function ok3() {
+    // ok: prohibit-jquery-html
+    $('.p').html()
+}
