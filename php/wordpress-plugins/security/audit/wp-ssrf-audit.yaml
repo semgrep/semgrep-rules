@@ -1,0 +1,48 @@
+rules:
+- id: wp-ssrf-audit
+  languages:
+  - php
+  severity: WARNING
+  message: Detected usage of vulnerable functions with user input, which could lead
+    to SSRF vulnerabilities.
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: $_GET[...]
+        - pattern: $_POST[...]
+        - pattern: $_REQUEST[...]
+        - pattern: get_option(...)
+        - pattern: get_user_meta(...)
+        - pattern: get_query_var(...)
+  pattern-sinks:
+    - patterns:
+      - focus-metavariable: $URL
+      - pattern-either:
+        - pattern: wp_remote_get($URL, ...)
+        - pattern: wp_safe_remote_get($URL, ...)
+        - pattern: wp_safe_remote_request($URL, ...)
+        - pattern: wp_safe_remote_head($URL, ...)
+        - pattern: wp_oembed_get($URL, ...)
+        - pattern: vip_safe_wp_remote_get($URL, ...)
+        - pattern: wp_safe_remote_post($URL, ...)
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  metadata:
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp: A10:2021 - Server-Side Request Forgery (SSRF)
+    category: security
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://developer.wordpress.org/reference/functions/wp_safe_remote_get/
+    - https://developer.wordpress.org/reference/functions/wp_remote_get/
+    - https://patchstack.com/articles/exploring-the-unpatched-wordpress-ssrf/
+    vulnerability_class:
+    - Server-Side Request Forgery (SSRF)
