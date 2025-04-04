@@ -118,7 +118,8 @@ if __name__ == "__main__":
         config_path = Path(config_item)
         if (
             config_path.is_file()
-            and config_path.suffix == ".yaml"
+            and ".yaml" in config_path.suffixes 
+            and not ".test" in config_path.suffixes 
             and is_rule(config_path)
         ):
             validate_config_file_metadata(config_path, v, invalid_configs)
