@@ -45,4 +45,37 @@ jobs:
             --exclude *.test.yaml \
             --exclude contrib/ \
             --exclude stats/ \
+            --exclude .github/ \
             --exclude yaml/semgrep/
+
+  semgrep-changed-files:
+    runs-on: ubuntu-22.04
+    name: semgrep-rules-on-changed-files
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: install semgrep
+        run: pip3 install semgrep
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT origin/${{ github.base_ref }} ${{ github.sha }} | grep -E "\.ya?ml$" | grep -v "\.test\.ya?ml$" | grep -v "^contrib/" | grep -v "^stats/" | grep -v "^yaml/semgrep/" | tr '\n' ' ')" >> $GITHUB_ENV
+      - name: Run strict lints on changed files only
+        if: env.CHANGED_FILES != ''
+        run: |
+          echo "Running stricter lints on changed files: ${{ env.CHANGED_FILES }}"
+          # Add stricter lints here that are hard to enforce on existing rules
+          semgrep \
+            --error \
+            --config yaml/semgrep/metadata-cwe-prohibited-or-discouraged.yaml \
+            --exclude .github/ \
+            --exclude *.test.yaml \
+            --exclude contrib/ \
+            --exclude stats/ \
+            --exclude yaml/semgrep/ \
+            ${{ env.CHANGED_FILES }}
