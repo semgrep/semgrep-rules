@@ -11,7 +11,7 @@ jobs:
     # do not run automatically if rule is posted from the playground (can still be started manually)
     # PRs posted by first time contributors already need approval as well
     if: github.actor != 'semgrep-dev-pr-bot'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - id: trigger-run
         name: Trigger semgrep-rules-pro benchmarking argo workflow on PR/push to develop or release

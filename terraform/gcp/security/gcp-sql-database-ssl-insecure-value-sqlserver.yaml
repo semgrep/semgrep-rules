@@ -1,17 +1,18 @@
 rules:
-- id: gcp-sql-database-require-ssl
+- id: gcp-sql-database-ssl-insecure-value-sqlserver
   patterns:
-  - pattern: resource
   - pattern-inside: |
       resource "google_sql_database_instance" "..." {
           ...
+          database_version = "$DB"
+          ...
       }
-  - pattern-not-inside: |
+  - pattern-inside: |
       resource "google_sql_database_instance" "..." {
           ...
           ip_configuration {
               ...
-              require_ssl = true
+              ssl_mode = $VALUE
               ...
           }
           ...
@@ -21,13 +22,19 @@ rules:
           ...
           ip_configuration {
               ...
-              ssl_mode = ...
+              ssl_mode = "ENCRYPTED_ONLY"
               ...
           }
           ...
       }
+  - metavariable-regex:
+      metavariable: $DB
+      regex:  .*(SQLSERVER).*
+  - focus-metavariable: $VALUE
+  fix: |
+    "ENCRYPTED_ONLY"
   message: >-
-    Ensure all Cloud SQL database instance requires all incoming connections to use SSL
+    Ensure all Cloud SQL database instance require incoming connections to use SSL. For SQL Server, `ssl_mode="ENCRYPTED_ONLY"` is the most secure value that is supported.
   metadata:
     owasp:
     - A03:2017 - Sensitive Data Exposure
@@ -48,3 +55,4 @@ rules:
     confidence: MEDIUM
   languages: [hcl]
   severity: WARNING
+
