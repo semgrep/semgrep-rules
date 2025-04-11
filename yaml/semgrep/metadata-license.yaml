@@ -1,0 +1,20 @@
+rules:
+- id: metadata-license
+  message: >-
+    The license should not be set in rule metadata, it gets added by Semgrep app at the registry level.
+  severity: ERROR
+  metadata:
+    category: correctness
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    technology:
+    - semgrep
+  languages:
+  - yaml
+  patterns:
+  - pattern-inside: |
+      rules: ...
+  - pattern-inside: |
+      metadata: ...
+  - pattern: |
+      license: ...
+

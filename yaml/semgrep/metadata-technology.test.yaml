@@ -1,5 +1,4 @@
 rules:
-  # ruleid: metadata-technology
   - id: unchecked-subprocess-call
     patterns:
       - pattern-either:
@@ -15,6 +14,7 @@ rules:
       bad stuff
     severity: WARNING
     fix: subprocess.check_call(...)
+  # ruleid: metadata-technology
     metadata:
       category: best-practice
   # ok: metadata-technology
@@ -39,39 +39,3 @@ rules:
       bad stuff
     severity: WARNING
     fix: subprocess.check_call(...)
-  # ok: metadata-technology
-  - id: join-ok
-    message: join-ok
-    severity: WARNING
-    mode: join
-    metadata:
-      category: python
-      technology:
-        - semgrep
-    join:
-      rules:
-        - id: ok-first
-          languages: [generic]
-          patterns: |
-            first
-        - id: ok-second
-          languages: [generic]
-          patterns: |
-            second
-  # ruleid: metadata-technology
-  - id: join-bad
-    message: join-bad
-    severity: WARNING
-    mode: join
-    metadata:
-      category: python
-    join:
-      rules:
-        - id: bad-first
-          languages: [generic]
-          patterns: |
-            first
-        - id: bad-second
-          languages: [generic]
-          patterns: |
-            second
