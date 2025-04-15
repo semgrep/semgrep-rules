@@ -1,48 +1,23 @@
 rules:
-  - id: metadata-technology
-    message: >-
-      This Semgrep rule is missing a 'technology' field in the 'metadata'.
-      Consider adding a list of technologies based on the rule's associated
-      library or framework, or another piece of relevant information.
-    severity: INFO
-    pattern-either:
-      # non join mode
-      - patterns:
-          - pattern-not-inside: |
-              - ...
-                mode: join
-          - pattern-inside: "rules: [..., $RULE, ...]"
-          - pattern: $RULE
-          - pattern: |
-              id: ...
-              ...
-          - pattern-not: |
-              id: ...
-              ...
-              metadata:
-                ...
-                technology:
-                  - ...
-      # join mode
-      - patterns:
-          - pattern-inside: |
-              id: $OUTER_RULEID
-              mode: join
-              join:
-                rules: [ ..., $INNER_RULE, ...]
-                ...
-              ...
-          - pattern-not: |
-              id: $OUTER_RULEID
-              ...
-              metadata:
-                ...
-                technology:
-                  - ...
-    languages: [yaml]
-    metadata:
-      category: best-practice
-      technology:
-        - semgrep
-      references:
-        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/#technology
+- id: metadata-technology
+  message: >-
+    This Semgrep rule is missing a 'technology' field in the 'metadata'. Consider adding a list of technologies
+    based on the rule's associated library or framework, or another piece of relevant information.
+  severity: INFO
+  metadata:
+    category: best-practice
+    technology:
+    - semgrep
+  languages: [yaml]
+  patterns:
+  - pattern-inside: |
+      rules:
+        ...
+  - pattern-inside: |
+      metadata:
+        ...
+  - pattern-not-inside: |
+      metadata:
+        ...
+        technology: $VALUE
+

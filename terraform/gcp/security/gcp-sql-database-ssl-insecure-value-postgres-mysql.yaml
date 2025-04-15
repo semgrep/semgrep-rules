@@ -1,0 +1,58 @@
+rules:
+- id: gcp-sql-database-ssl-insecure-value-postgres-mysql
+  patterns:
+  - pattern-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          database_version = "$DB"
+          ...
+      }
+  - pattern-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          ip_configuration {
+              ...
+              ssl_mode = $VALUE
+              ...
+          }
+          ...
+      }
+  - pattern-not-inside: |
+      resource "google_sql_database_instance" "..." {
+          ...
+          ip_configuration {
+              ...
+              ssl_mode = "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
+              ...
+          }
+          ...
+      }
+  - metavariable-regex:
+      metavariable: $DB
+      regex:  .*(MYSQL|POSTGRES).*
+  - focus-metavariable: $VALUE
+  fix: |
+    "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
+  message: >-
+    Ensure all Cloud SQL database instance require incoming connections to use SSL. To enable this for PostgresSQL and MySQL, use `ssl_mode="TRUSTED_CLIENT_CERTIFICATE_REQUIRED"`.
+  metadata:
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-326: Inadequate Encryption Strength'
+    category: security
+    technology:
+    - terraform
+    - gcp
+    references:
+    - "https://cloud.google.com/sql/docs/postgres/admin-api/rest/v1/instances#ipconfiguration"
+    - "https://owasp.org/Top10/A02_2021-Cryptographic_Failures"
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+  languages: [hcl]
+  severity: WARNING
+

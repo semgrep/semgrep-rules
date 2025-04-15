@@ -1,36 +1,36 @@
 rules:
-  - id: metadata-subcategory-incorrect-value
-    patterns:
-      - pattern-inside: |
-          rules: 
-            ...
-      - pattern-inside: |
-          metadata: 
-            ...
-            category: security
-            ...
-      - pattern: |
-          subcategory: 
-            - $VALUE
-      - pattern-not: |
-          subcategory: 
-            - vuln
-      - pattern-not: |
-          subcategory: 
-            - audit
-      - pattern-not: |
-          subcategory: 
-            - secure default
-    message: >-
-      Semgrep rule likelihood: $VALUE detected, but the value must be vuln,
-      audit, or secure default. For more information visit:
-      https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
-    languages:
-      - yaml
-    severity: WARNING
-    metadata:
-      references:
-        - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
-      category: correctness
-      technology:
-        - semgrep
+- id: metadata-subcategory-incorrect-value
+  message: >-
+    Semgrep rule likelihood: $VALUE detected, but the value must be vuln, audit, or secure default. For
+    more information visit: https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+  severity: WARNING
+  metadata:
+    category: correctness
+    references:
+    - https://semgrep.dev/docs/contributing/contributing-to-semgrep-rules-repository/
+    technology:
+    - semgrep
+  languages:
+  - yaml
+  patterns:
+  - pattern-inside: |
+      rules: 
+        ...
+  - pattern-inside: |
+      metadata: 
+        ...
+        category: security
+        ...
+  - pattern: |
+      subcategory: 
+        - $VALUE
+  - pattern-not: |
+      subcategory: 
+        - vuln
+  - pattern-not: |
+      subcategory: 
+        - audit
+  - pattern-not: |
+      subcategory: 
+        - secure default
+

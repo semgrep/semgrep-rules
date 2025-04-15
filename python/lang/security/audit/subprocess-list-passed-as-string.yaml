@@ -1,0 +1,42 @@
+rules:
+- id: subprocess-list-passed-as-string
+  languages: [python]
+  severity: WARNING
+  message: >-
+    Detected `" ".join(...)` being passed to `subprocess.run`. This can lead to
+    argument splitting issues and potential security vulnerabilities. Instead, pass
+    the list directly to `subprocess.run` to preserve argument separation.
+  mode: taint
+  pattern-sources:
+    - pattern: |
+        " ".join($LIST)
+  pattern-sinks:
+    - patterns:
+      - pattern: subprocess.run($ARGS, ...)
+      - focus-metavariable: $ARGS
+    - patterns:
+      - pattern: subprocess.Popen($ARGS, ...)
+      - focus-metavariable: $ARGS
+    - patterns:
+      - pattern: subprocess.call($ARGS, ...)
+      - focus-metavariable: $ARGS
+    - patterns:
+      - pattern: subprocess.check_call($ARGS, ...)
+      - focus-metavariable: $ARGS
+    - patterns:
+      - pattern: subprocess.check_output($ARGS, ...)
+      - focus-metavariable: $ARGS
+  metadata:
+    category: security
+    cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    references:
+      - "https://docs.python.org/3/library/subprocess.html#frequently-used-arguments"
+    owasp:
+    - A03:2021 - Injection
+    technology:
+    - python
+    confidence: LOW
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
