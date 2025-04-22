@@ -31,3 +31,17 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             // ok: stacktrace-disclosure
             app.UseDeveloperExceptionPage();
 }
+
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+        if (env.EnvironmentName == "NotDevelopment")
+            // ruleid: stacktrace-disclosure
+            app.UseDeveloperExceptionPage();
+}
+
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+        if (env.EnvironmentName == "Development")
+            // ok: stacktrace-disclosure
+            app.UseDeveloperExceptionPage();
+}

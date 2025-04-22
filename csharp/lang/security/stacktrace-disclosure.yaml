@@ -6,6 +6,10 @@ rules:
       if ($ENV.IsDevelopment(...)) {
         ...
       }
+  - pattern-not-inside: |
+      if ($ENV.EnvironmentName == "Development") {
+        ...
+      }
   message: >-
     Stacktrace information is displayed in a non-Development environment.
     Accidentally disclosing sensitive stack trace information in a production
