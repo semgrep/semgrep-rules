@@ -14,3 +14,6 @@ CMD semgrep --config localfile targets
 
 # ruleid: missing-user
 CMD ["semgrep", "--version"]
+
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -sSfI --retry 0 --tcp-nodelay http://localhost:18253/actuator/health/liveness || exit 1

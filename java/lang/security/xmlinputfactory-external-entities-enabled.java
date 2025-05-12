@@ -33,6 +33,8 @@ class BadXMLInputFactory {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
         // ruleid:xmlinputfactory-external-entities-enabled
         xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+        // ruleid:xmlinputfactory-external-entities-enabled
+        xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, true);
     }
 }
 

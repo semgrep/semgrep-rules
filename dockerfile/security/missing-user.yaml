@@ -6,6 +6,8 @@ rules:
     - pattern-not-inside: |
         USER $USER
         ...
+    - pattern-not-inside: |
+        HEALTHCHECK ... CMD ...
   fix: |
     USER non-root
     CMD $...VARS
@@ -17,7 +19,7 @@ rules:
     - dockerfile
   metadata:
     cwe:
-    - 'CWE-269: Improper Privilege Management'
+    - 'CWE-250: Execution with Unnecessary Privileges'
     category: security
     technology:
     - dockerfile
