@@ -1,0 +1,91 @@
+rules:
+  - id: ban-drizzle-sql-raw
+    message:
+      Use of sql.raw() with SQL string concatenation is not allowed as it may lead to SQL injection.
+      Use parameterized queries with Drizzle's query builders instead.
+    fix: "/* Use sql`...` template literals or parameterized queries instead */"
+    metadata:
+      category: security
+      references:
+        - https://orm.drizzle.team/docs/sql#sqlraw
+      technology:
+        - javascript
+        - typescript
+        - drizzle-orm
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  const { sql } = require('drizzle-orm')
+                  ...
+              - pattern-inside: |
+                  import { sql } from 'drizzle-orm'
+                  ...
+          - pattern-either:
+              - pattern: |
+                  sql.raw(`...${...}...`)
+              - pattern: |
+                  $QUERY = `...${...}...`
+                  ...
+                  sql.raw($QUERY)
+              - pattern: |
+                  $QUERY = $SQL + $VALUE
+                  ...
+                  sql.raw($QUERY)
+              - pattern: |
+                  sql.raw($SQL + $VALUE)
+
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import { sql as $ALIAS } from 'drizzle-orm'
+                  ...
+              - pattern-inside: |
+                  const { sql: $ALIAS } = require('drizzle-orm')
+                  ...
+          - pattern-either:
+              - pattern: |
+                  $ALIAS.raw(`...${...}...`)
+              - pattern: |
+                  $QUERY = `...${...}...`
+                  ...
+                  $ALIAS.raw($QUERY)
+              - pattern: |
+                  $QUERY = $SQL + $VALUE
+                  ...
+                  $ALIAS.raw($QUERY)
+              - pattern: |
+                  $ALIAS.raw($SQL + $VALUE)
+
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  const $DRIZZLE = require('drizzle-orm')
+                  ...
+              - pattern-inside: |
+                  import $DRIZZLE from 'drizzle-orm'
+                  ...
+          - pattern-either:
+              - pattern: |
+                  $DRIZZLE.sql.raw(`...${...}...`)
+              - pattern: |
+                  $QUERY = `...${...}...`
+                  ...
+                  $DRIZZLE.sql.raw($QUERY)
+              - pattern: |
+                  $QUERY = $SQL + $VALUE
+                  ...
+                  $DRIZZLE.sql.raw($QUERY)
+              - pattern: |
+                  $DRIZZLE.sql.raw($SQL + $VALUE)
