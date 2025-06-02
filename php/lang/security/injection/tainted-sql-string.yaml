@@ -46,16 +46,16 @@ rules:
           sprintf($SQLSTR, ...)
       - metavariable-regex:
           metavariable: $SQLSTR
-          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+          regex: (?is).*\b(select|delete|insert|create|update|alter|drop)\b.*
     - patterns:
       - pattern: |
           "...$EXPR..."
       - metavariable-regex:
           metavariable: $EXPR
-          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+          regex: (?is).*\b(select|delete|insert|create|update|alter|drop)\b.*
     - patterns:
       - pattern: |
           "$SQLSTR".$EXPR
       - metavariable-regex:
           metavariable: $SQLSTR
-          regex: .*\b(?i)(select|delete|insert|create|update|alter|drop)\b.*
+          regex: (?is).*\b(select|delete|insert|create|update|alter|drop)\b.*
