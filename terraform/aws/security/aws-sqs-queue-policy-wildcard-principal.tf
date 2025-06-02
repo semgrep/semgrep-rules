@@ -723,3 +723,37 @@ resource "aws_sqs_queue" "pass_8_hcl" {
       ]
   })
 }
+
+resource "aws_sqs_queue_policy" "fail_1_json" {
+  queue_url = aws_sqs_queue.example.id
+  # ok: aws-sqs-queue-policy-wildcard-principal
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:root"
+      },
+      "Action": "sqs:*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch"
+      ],
+      "Condition": {
+        "ArnNotLike": {
+          "aws:SourceArn": "<SNS topic ARN>"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
