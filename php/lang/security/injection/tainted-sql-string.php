@@ -31,6 +31,14 @@ function test4() {
     return $info;
 }
 
+function test5() {
+    // ruleid: tainted-sql-string
+    $query = "
+    SELECT * FROM table WHERE Id = '".$_GET['url']."'";
+    $info = mysql_query($query);
+    return $info;
+}
+
 // True Negatives
 
 function test1() {
