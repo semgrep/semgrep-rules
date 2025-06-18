@@ -1,0 +1,41 @@
+rules:
+- id: wp-xss-audit
+  patterns:
+  - pattern-either:
+    - pattern: $_GET[...]
+    - pattern: $_POST[...]
+    - pattern: $_REQUEST[...]
+    - pattern: $_COOKIE[...]
+    - pattern: $_SERVER[...]
+  - pattern-not: esc_html(...)
+  - pattern-not: esc_attr(...)
+  - pattern-not: wp_kses(...)
+  - pattern-not: htmlspecialchars(...)
+  message: |
+    Possible XSS vulnerability: user-controlled input is echoed or printed without escaping. Use escaping functions like `esc_html()`, `esc_attr()`, or `wp_kses()` for output.
+  paths:
+    include:
+    - '**/wp-content/plugins/**/*.php'
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://owasp.org/www-community/attacks/xss/
+    - https://developer.wordpress.org/themes/theme-security/data-sanitization-escaping/
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    license: Semgrep Rules License v1.0
+    vulnerability_class:
+    - Cross-site Scripting (XSS)
