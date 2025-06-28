@@ -1,0 +1,9 @@
+rules:
+- id: insecure-sql-injection
+ patterns:
+- pattern: |
+$sql = "... $USER_INPUT ...";
+ message: "Potential SQL Injection: avoid concatenating user input
+directly into SQL queries."
+ languages: [php]
+ severity: ERROR
