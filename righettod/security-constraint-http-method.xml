@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>My Secure Web Application</display-name>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.example.servlet.HomeServlet</servlet-class>
+        <init-param>
+            <param-name>welcomeMessage</param-name>
+            <param-value>Welcome to our application!</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ProductServlet</servlet-name>
+        <servlet-class>com.example.servlet.ProductServlet</servlet-class>
+        <init-param>
+            <param-name>productServiceUrl</param-name>
+            <param-value>http://api.example.com/products</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+        <url-pattern>/</url-pattern> </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProductServlet</servlet-name>
+        <url-pattern>/products/*</url-pattern> </servlet-mapping>
+
+    <filter>
+        <filter-name>LoggingFilter</filter-name>
+        <filter-class>com.example.filter.LoggingFilter</filter-class>
+        <init-param>
+            <param-name>logLevel</param-name>
+            <param-value>INFO</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.example.filter.AuthenticationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <servlet-name>ProductServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+
+    <security-constraint>
+        <display-name>Admin Area Constraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin Pages</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+            <!-- ruleid: security-constraint-http-method -->
+            <http-method>GET</http-method>
+            <!-- ruleid: security-constraint-http-method -->
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <display-name>Secure Connection Constraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>HTTPS Required Pages</web-resource-name>
+            <url-pattern>/secure/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>MyWebAppRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/login.jsp</form-login-page>
+            <form-error-page>/login-error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+
+    <security-role>
+        <description>Administrator Role</description>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description>User Role</description>
+        <role-name>user</role-name>
+    </security-role>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404.html</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/errors/general-error.html</location>
+    </error-page>
+
+</web-app>
