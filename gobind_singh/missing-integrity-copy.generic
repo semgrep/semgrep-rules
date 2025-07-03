@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- ruleid: missing-integrity -->
+    <script src='https://somewhere-external.com/something-external.js'></script>
+    <!-- ruleid: missing-integrity -->
+    <script src='//somewhere-external.com/something-external.js'></script>
+    <!-- ok: missing-integrity -->
+    <script src="https://somewhere-external.com/something-external.js" integrity="sha512-blahblah"></script>
+    <!-- ok: missing-integrity -->
+    <script src="./something-internal.js"></script>
+    <!-- ok: missing-integrity -->
+    <script>console.log('something')</script>
+    <!-- ruleid: missing-integrity -->
+    <link href="https://somewhere-external.com/something-external.css" rel="stylesheet">
+    <!-- ruleid: missing-integrity -->
+    <link rel="stylesheet" href="https://somewhere-external.com/something-external.css">
+    <!-- ok: missing-integrity -->
+    <link href="https://somewhere-external.com/something-external.css" rel="stylesheet"
+        integrity="sha512-blahblah">
+    <!-- ok: missing-integrity -->
+    <link rel="stylesheet" type="text/css" href="./something-internal.css" />
+    <!-- ok: missing-integrity -->
+    <script src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <!-- ok: missing-integrity -->
+    <script src="https://www.google-analytics.com/analytics.js"></script>
+    <!-- ok: missing-integrity -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <!-- ruleid: missing-integrity -->
+    <link rel="stylesheet" href="https://otherfontsxgoogleapis.com/css?family=Tangerine">
+    <!-- ok: missing-integrity -->
+    <link rel="stylesheet" href="https://someurl/style.css" integrity="sha256-somehashdigest">
+    <!-- ok: missing-integrity -->
+    <link rel="stylesheet" integrity="sha256-somehashdigest href="https://someurl/style.css">
+    <!-- ok: missing-integrity -->
+    <link rel="stylesheet" href="./css/mystyle.css">
+	<!-- ok: missing-integrity -->
+	<link rel="preconnect" href="https://fonts.gstatic.com/" />
+	<!-- ok: missing-integrity -->
+	<link rel=preconnect href="https://fonts.gstatic.com/" />
+</head>
+<body>
+
+</body>
+</html>
