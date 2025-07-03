@@ -13,8 +13,7 @@ rules:
       - pattern-either:
         - pattern: java.util.regex.Pattern.matches($PARAM, $ANY_STRING_TO_MATCH)
         - pattern: java.util.regex.Pattern.compile($PARAM,...)
-    fix: Ensure that a validation is in place to prevent evaluation using a regular
-      expression prone to ReDoS.
+    fix: Ensure that a validation is in place to prevent evaluation using a regular expression prone to ReDoS.
     paths:
       include:
         - "**/*.java"
