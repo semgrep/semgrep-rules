@@ -1,0 +1,19 @@
+rules:
+- id: infinite-loop
+  patterns:
+  - pattern-either:
+    - pattern: while(true) { ... }
+    - pattern: for (;;) { ... }
+  message: This loop is infinite. Make sure it terminates or has an exit condition
+    (e.g., break or return).
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: correctness
+    technology:
+    - java
+    license: Semgrep Rules License v1.0
+    source_rule_url: https://example.com
+    references:
+    - https://example.com
