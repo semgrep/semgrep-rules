@@ -1,0 +1,63 @@
+rules:
+  - id: python.lang.security.unhandled-key-error
+    languages: [python]
+    message: >-
+      Direct access to a dictionary-like object with '$DICT[$KEY]' can raise a 'KeyError' if the key is not present. 
+      Prefer safer alternatives like '$DICT.get($KEY)' or checking 'if $KEY in $DICT:' before access.
+    severity: WARNING
+    metadata:
+      category: security
+      confidence: MEDIUM
+      cwe: "CWE-248: Uncaught Exception"
+      owasp: "A04:2021 - Insecure Design"
+      references:
+        - https://realpython.com/python-keyerror/
+      technology:
+        - python
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+    fix: $DICT.get($KEY)
+    patterns:
+      - pattern: $DICT[$KEY]
+      # Exclude if the access is on the left-hand side of an assignment.
+      # This is a safe operation that creates or updates a key.
+      - pattern-not-inside: $DICT[$KEY] =...
+      # Exclude if the access is the target of a 'del' statement.
+      - pattern-not: del $DICT[$KEY]
+      # Exclude if the access is inside a 'try' block.
+      # This is the EAFP (Easier to Ask for Forgiveness) safe-handling pattern.
+      - pattern-not-inside: |
+          try:
+           ...
+          except...:
+           ...
+      # Exclude if the access is guarded by an 'if key in dict' check.
+      # This is the LBYL (Look Before You Leap) safe-handling pattern.
+      # Metavariable binding ensures $KEY and $DICT match the access.
+      - pattern-not-inside: |
+          if $KEY in $DICT:
+           ...
+      # Exclude if the access is guarded by an 'if key not in dict' check,
+      # typically inside the 'else' block of such a check.
+      - pattern-not-inside: |
+          if $KEY not in $DICT:
+           ...
+          else:
+           ...
+      # Exclude if the access is on a defaultdict. This is a best-effort
+      # attempt and may not catch all cases (e.g., aliasing, cross-function flow).
+      # It helps reduce noise in codebases that heavily use defaultdict.
+      - pattern-not-inside: |
+          $DICT = collections.defaultdict(...)
+          ...
+      - pattern-not-inside: |
+          from collections import defaultdict
+          ...
+          $DICT = defaultdict(...)
+          ...
+
+      - pattern-not-inside: |
+          def $FUNC(..., $DICT: defaultdict, ...):
+            ...
