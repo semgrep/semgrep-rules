@@ -28,6 +28,6 @@ jobs:
     #TODO: this actually currently fails because of errors in stats/ but GHA
     # still continue, weird
     - name: run osemgrep validate --pro
-      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep validate --pro .
+      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep-nightly:develop semgrep validate --pro .
     - name: run osemgrep test --pro
-      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep:pro-develop semgrep test --pro .
+      run: docker run --rm -w /src -v ${GITHUB_WORKSPACE}/semgrep-rules:/src semgrep/semgrep-nightly:develop semgrep test --pro .
