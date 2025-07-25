@@ -28,9 +28,13 @@ rules:
     pattern-sanitizers:
       - pattern-either:
           - pattern: |
-              $CMD.Parameters.add(...)
+              $CMD.Parameters.Add(...)
           - pattern: |
-              $CMD.Parameters[$IDX] = ...
+              $CMD.Parameters.AddRange(...)
+          - pattern: |
+              $CMD.Parameters.AddWithValue(...)
+          - pattern: |
+              $CMD.Parameters[$IDX].Value = ...
         by-side-effect: true
     message: Detected a formatted string in a SQL statement. This could lead to SQL
       injection if variables in the SQL statement are not properly sanitized.

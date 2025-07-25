@@ -2,7 +2,7 @@ rules:
 - id: missing-ssl-minversion
   message: >-
     `MinVersion` is missing from this TLS configuration. 
-    By default, TLS 1.2 is currently used as the minimum when acting as a client, and TLS 1.0 when acting as a server.
+    By default, as of Go 1.22, TLS 1.2 is currently used as the minimum.
     General purpose web applications should default to TLS 1.3 with all other protocols disabled. 
     Only where it is known that a web server must support legacy clients
     with unsupported an insecure browsers (such as Internet Explorer 10), it may be necessary to enable TLS 1.0 to provide support.
@@ -15,8 +15,8 @@ rules:
     - A02:2021 - Cryptographic Failures
     source-rule-url: https://github.com/securego/gosec/blob/master/rules/tls_config.go
     references:
-    - https://golang.org/doc/go1.14#crypto/tls
-    - https://golang.org/pkg/crypto/tls/#:~:text=MinVersion
+    - https://go.dev/doc/go1.22#minor_library_changes
+    - https://pkg.go.dev/crypto/tls#:~:text=MinVersion
     - https://www.us-cert.gov/ncas/alerts/TA14-290A
     category: security
     technology:

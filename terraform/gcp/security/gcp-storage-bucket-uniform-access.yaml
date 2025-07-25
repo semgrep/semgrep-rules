@@ -13,13 +13,15 @@ rules:
       ...
       }
   message: >-
-    Ensure that Cloud Storage buckets have uniform bucket-level access enabled
+    Ensure that Cloud Storage buckets have uniform bucket-level access enabled. Setting
+    `uniform_bucket_level_access` to `true` ensures that access is managed uniformly at
+    the bucket level, which improves security by disabling object-level ACLs.
   metadata:
     owasp:
     - A05:2017 - Broken Access Control
     - A01:2021 - Broken Access Control
     cwe:
-    - 'CWE-284: Improper Access Control'
+    - 'CWE-1220: Insufficient Granularity of Access Control'
     category: security
     technology:
     - terraform
