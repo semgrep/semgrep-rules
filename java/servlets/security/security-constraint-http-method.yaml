@@ -1,0 +1,31 @@
+rules:
+  - id: security-constraint-http-method
+    languages:
+      - xml
+    severity: WARNING
+    message: >-
+      The tag "http-method" is used to specify on which HTTP methods the java web security constraint apply.
+      The target security constraints could be bypassed if a non listed HTTP method is used.
+      Inverse the logic by using the tag "http-method-omission" to define for which HTTP methods the security constraint do not apply.
+      Using this way, only expected allowed HTTP methods will be skipped by the security constraint.
+    pattern: <http-method>$X</http-method>
+    paths:
+      include:
+        - "**/web.xml"
+    metadata:
+      category: security
+      owasp:
+        - A05:2021 Security Misconfiguration
+        - A01:2021 Broken Access Control
+      technology:
+        - java
+      references:
+        - https://docs.oracle.com/javaee/7/tutorial/security-webtier002.htm
+        - https://jakarta.ee/learn/docs/jakartaee-tutorial/current/security/security-advanced/security-advanced.html#_securing_http_resources
+      cwe:
+        - "CWE-863: Incorrect Authorization"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit

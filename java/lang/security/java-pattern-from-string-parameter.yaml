@@ -1,0 +1,37 @@
+rules:
+  # The rule focus on specific code patterns to prevent as much as possible False Positive detection case
+  - id: java-pattern-from-string-parameter
+    languages:
+      - java
+    severity: INFO
+    message: >-
+      A regular expression is being used directly from a String method parameter.
+      This could be a Regular Expression Denial of Service (ReDoS) vulnerability if the parameter is user-controlled and not properly validated.
+      Ensure that a validation is in place to prevent evaluation using a regular expression prone to ReDoS.
+    patterns:
+      - pattern-inside: |-
+          $TYPE $METHOD(..., String $PARAM, ...) {
+            ...
+          }
+      - pattern-either:
+        - pattern: java.util.regex.Pattern.matches($PARAM, $ANY_STRING_TO_MATCH)
+        - pattern: java.util.regex.Pattern.compile($PARAM,...)
+    paths:
+      include:
+        - "**/*.java"
+    metadata:
+      category: security
+      owasp:
+        - A03:2021 Injection
+      technology:
+        - java
+      references:
+        - https://en.wikipedia.org/wiki/ReDoS
+        - https://learn.snyk.io/lesson/redos
+      cwe:
+        - "CWE-1333: Inefficient Regular Expression Complexity"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit
