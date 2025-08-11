@@ -143,3 +143,13 @@ public class FalsePositiveCase {
         return students;
     }
 }
+
+public class SqlExampleFocusMetavar {
+    public void get(HttpServletRequest req) {
+        Connection c = DB.getConnection();
+        String p = req.getParam("param");
+        PreparedStatement statement = c.prepareStatment("SELECT * FROM " + p);
+        // ruleid: formatted-sql-string
+        ResultSet rs = statement.executeQuery();
+    }
+}
