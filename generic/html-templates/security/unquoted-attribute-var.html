@@ -83,3 +83,21 @@
     </ul>
     <hr/>
 {% endfor %}
+
+<!-- ok: unquoted-attribute-var -->
+<span class="{{ isadmin ? 'admin' : 'user' }}"></span>
+
+<!-- ok: unquoted-attribute-var -->
+<span class="{{ isadmin ? "admin" : "user" }}"></span>
+
+<!-- ok: unquoted-attribute-var -->
+<span class='{{ isadmin ? "admin" : "user" }}'></span>
+
+<!-- ok: unquoted-attribute-var -->
+<span class='{{ isadmin ? 'admin' : 'user' }}'></span>
+
+<!-- ruleid: unquoted-attribute-var -->
+<span class={{ isadmin ? "admin" : "user" }}></span>
+
+<!-- ruleid: unquoted-attribute-var -->
+<span class={{ isadmin ? 'admin' : 'user' }}></span>
