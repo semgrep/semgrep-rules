@@ -50,12 +50,24 @@ rules:
         - pattern: ${{ github.event.head_commit.author.name }}
         - pattern: ${{ github.event.commits ... .author.email }}
         - pattern: ${{ github.event.commits ... .author.name }}
+        - pattern: ${{ github.event.commits ... .message }}
         - pattern: ${{ github.event.pull_request.head.ref }}
         - pattern: ${{ github.event.pull_request.head.label }}
         - pattern: ${{ github.event.pull_request.head.repo.default_branch }}
         - pattern: ${{ github.head_ref }}
+        - pattern: ${{ github.base_ref }}
+        - pattern: ${{ github.ref_name }}
         - pattern: ${{ github.event.inputs ... }}
         - pattern: ${{ github.event.discussion.title }}
         - pattern: ${{ github.event.discussion.body }}
+        - pattern: ${{ github.event.workflow_run.head_branch }}
+        - pattern: ${{ github.event.milestone.title }}
+        - pattern: ${{ github.event.milestone.description }}
+        - pattern: ${{ github.event.project_card.note }}
+        - pattern: ${{ github.event.project.name }}
+        - pattern: ${{ github.event.project_column.name }}
+        - pattern: ${{ github.event.release.name }}
+        - pattern: ${{ github.event.release.body }}
+        - pattern: ${{ github.event.deployment.ref }}
         - pattern: ${{ inputs ... }}
   severity: ERROR

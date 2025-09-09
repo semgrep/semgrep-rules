@@ -27,6 +27,58 @@ jobs:
             })
 
             return true;
+      
+      - name: Script with base_ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Base ref: ${{ github.base_ref }}");
+      
+      - name: Script with ref_name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Ref name: ${{ github.ref_name }}");
+      
+      - name: Script with commit message
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const message = "${{ github.event.commits[0].message }}";
+            console.log(message);
+      
+      - name: Script with workflow run branch
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("${{ github.event.workflow_run.head_branch }}");
+      
+      - name: Script with milestone title
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const title = "${{ github.event.milestone.title }}";
+            console.log(title);
+      
+      - name: Script with release name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Release: ${{ github.event.release.name }}");
+      
+      - name: Script with deployment ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const ref = "${{ github.event.deployment.ref }}";
+            console.log(ref);
 
       - name: Run script 2
         uses: actions/github-script@latest
@@ -44,6 +96,58 @@ jobs:
             })
 
             return true;
+      
+      - name: Script with base_ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Base ref: ${{ github.base_ref }}");
+      
+      - name: Script with ref_name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Ref name: ${{ github.ref_name }}");
+      
+      - name: Script with commit message
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const message = "${{ github.event.commits[0].message }}";
+            console.log(message);
+      
+      - name: Script with workflow run branch
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("${{ github.event.workflow_run.head_branch }}");
+      
+      - name: Script with milestone title
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const title = "${{ github.event.milestone.title }}";
+            console.log(title);
+      
+      - name: Script with release name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Release: ${{ github.event.release.name }}");
+      
+      - name: Script with deployment ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const ref = "${{ github.event.deployment.ref }}";
+            console.log(ref);
 
       - name: Ok script 1
         uses: not-github/custom-action@latest
@@ -67,3 +171,55 @@ jobs:
             })
 
             return true;
+      
+      - name: Script with base_ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Base ref: ${{ github.base_ref }}");
+      
+      - name: Script with ref_name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Ref name: ${{ github.ref_name }}");
+      
+      - name: Script with commit message
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const message = "${{ github.event.commits[0].message }}";
+            console.log(message);
+      
+      - name: Script with workflow run branch
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("${{ github.event.workflow_run.head_branch }}");
+      
+      - name: Script with milestone title
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const title = "${{ github.event.milestone.title }}";
+            console.log(title);
+      
+      - name: Script with release name
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            console.log("Release: ${{ github.event.release.name }}");
+      
+      - name: Script with deployment ref
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const ref = "${{ github.event.deployment.ref }}";
+            console.log(ref);
