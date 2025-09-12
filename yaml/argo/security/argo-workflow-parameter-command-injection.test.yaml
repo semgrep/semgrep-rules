@@ -39,6 +39,25 @@ spec:
         # ruleid: argo-workflow-parameter-command-injection
         source: |
           print("{{inputs.parameters.message}}")
+    - script:
+        name: ''
+        image: node:9.1-alpine
+        command:
+          - node
+        resources: {}
+        # ruleid: argo-workflow-parameter-command-injection
+        source: |
+          var rand = Math.floor(Math.random() * 100);
+          console.log("{{inputs.parameters.message}}");
+    - script:
+        name: ''
+        image: ruby:3.0
+        command:
+          - ruby
+        resources: {}
+        # ruleid: argo-workflow-parameter-command-injection
+        source: |
+          puts "{{inputs.parameters.message}}"
     - name: print-message-args
       inputs:
         parameters:
@@ -48,6 +67,41 @@ spec:
         command: [sh, -c]
         # ruleid: argo-workflow-parameter-command-injection
         args: ["echo result was: {{inputs.parameters.message}}"]
+    - name: print-message-python
+      inputs:
+        parameters:
+          - name: message
+      outputs: {}
+      metadata: {}
+      containerSet:
+        containers:
+          - name: main
+            image: python:alpine3.6
+            command:
+              - python
+              - '-c'
+            # ruleid: argo-workflow-parameter-command-injection
+            args: ["echo result was: {{inputs.parameters.message}}"]
+            resources: {}
+    - name: print-message-python2
+      inputs:
+        parameters:
+          - name: message
+      outputs: {}
+      metadata: {}
+      containerSet:
+        containers:
+          - name: main
+            image: python:alpine3.6
+            command:
+              - python
+              - '-c'
+            args:
+            # ruleid: argo-workflow-parameter-command-injection
+              - |
+                print("hi")
+                print("{{inputs.parameters.message}}")
+            resources: {}
     - name: print-message-secure
       inputs:
         parameters:
@@ -73,3 +127,4 @@ spec:
         command: [sh, -c]
         # ok: argo-workflow-parameter-command-injection
         args: ["echo result was: $MESSAGE"]
+
