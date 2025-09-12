@@ -1,0 +1,101 @@
+rules:
+- id: awscdk-rds-unencrypted-database
+  message: >-
+    RDS database $X is not encrypted at rest. Add "storageEncrypted: true" to the database props
+    to enable encryption at rest for the database. Unencrypted databases expose sensitive data
+    and may violate compliance requirements.
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    technology:
+    - AWS-CDK
+    references:
+    - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html
+    - https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds.DatabaseInstance.html
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+  languages:
+  - ts
+  severity: WARNING
+  pattern-either:
+  # DatabaseInstance patterns with namespace import
+  - patterns:
+    - pattern-inside: |
+        import * as $Y from '@aws-cdk/aws-rds'
+        ...
+    - pattern: const $X = new $Y.DatabaseInstance(...)
+    - pattern-not: |
+        const $X = new $Y.DatabaseInstance(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import * as $Y from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new $Y.DatabaseInstance(...)
+    - pattern-not: |
+        const $X = new $Y.DatabaseInstance(..., {..., storageEncrypted: true, ...})
+  # DatabaseCluster patterns with namespace import
+  - patterns:
+    - pattern-inside: |
+        import * as $Y from '@aws-cdk/aws-rds'
+        ...
+    - pattern: const $X = new $Y.DatabaseCluster(...)
+    - pattern-not: |
+        const $X = new $Y.DatabaseCluster(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import * as $Y from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new $Y.DatabaseCluster(...)
+    - pattern-not: |
+        const $X = new $Y.DatabaseCluster(..., {..., storageEncrypted: true, ...})
+  # Direct import patterns
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseInstance} from '@aws-cdk/aws-rds'
+        ...
+    - pattern: const $X = new DatabaseInstance(...)
+    - pattern-not: |
+        const $X = new DatabaseInstance(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseInstance} from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new DatabaseInstance(...)
+    - pattern-not: |
+        const $X = new DatabaseInstance(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseCluster} from '@aws-cdk/aws-rds'
+        ...
+    - pattern: const $X = new DatabaseCluster(...)
+    - pattern-not: |
+        const $X = new DatabaseCluster(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseCluster} from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new DatabaseCluster(...)
+    - pattern-not: |
+        const $X = new DatabaseCluster(..., {..., storageEncrypted: true, ...})
+  # Handle aliased imports from CDK v2
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseInstance as $ALIAS} from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new $ALIAS(...)
+    - pattern-not: |
+        const $X = new $ALIAS(..., {..., storageEncrypted: true, ...})
+  - patterns:
+    - pattern-inside: |
+        import {DatabaseCluster as $ALIAS} from 'aws-cdk-lib/aws-rds'
+        ...
+    - pattern: const $X = new $ALIAS(...)
+    - pattern-not: |
+        const $X = new $ALIAS(..., {..., storageEncrypted: true, ...})
