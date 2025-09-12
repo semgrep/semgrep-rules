@@ -3,19 +3,23 @@ rules:
   message: >-
     RDS database $X is not encrypted at rest. Add "storageEncrypted: true" to the database props
     to enable encryption at rest for the database. Unencrypted databases expose sensitive data
-    and may violate compliance requirements.
+    to unauthorized access and may violate compliance requirements such as GDPR, HIPAA, and PCI DSS.
   metadata:
     category: security
     cwe:
     - 'CWE-311: Missing Encryption of Sensitive Data'
     technology:
     - AWS-CDK
+    - rds
+    - database
+    - encryption
     references:
     - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html
     - https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds.DatabaseInstance.html
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
     owasp:
-    - A02:2017 - Broken Authentication
-    - A04:2021 - Insecure Design
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
     subcategory:
     - vuln
     likelihood: MEDIUM
