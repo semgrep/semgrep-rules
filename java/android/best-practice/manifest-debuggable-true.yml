@@ -1,0 +1,22 @@
+  - id: manifest-debuggable-true
+    languages:
+      - generic
+    message: >-
+      The Android manifest is configured to allow debugging the application, making
+      it easier for attackers to gain more access to the application than intended.
+      Evaluate if this is necessary for your app, and disable it if appropriate.
+    metadata:
+      category: best-practice
+      technology:
+        - android
+      references:
+        - https://developer.android.com/privacy-and-security/risks/android-debuggable
+    patterns:
+      - pattern: |
+          android:debuggable="true"
+      - pattern-not-inside: |
+          <!-- ... -->
+    severity: INFO
+    paths:
+      include:
+        - "*.xml"
