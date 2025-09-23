@@ -33,60 +33,43 @@ rules:
             - pattern-inside: |
                 command:
                   ...
-                  - python
-                  ...
-                ...
-                source: 
-                  $SCRIPT
-            - focus-metavariable: $SCRIPT
-            - metavariable-pattern:
-                metavariable: $SCRIPT
-                language: python
-                patterns: 
-                  - pattern: |
-                      $FUNC(..., $PARAM, ...)
-                  - metavariable-pattern:
-                      metavariable: $PARAM
-                      pattern-either: 
-                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
-                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
-          - patterns:
-            - pattern-inside: |
-                command:
-                  ...
                   - $LANG
                   ...
                 ...
-                source: 
+                source:
                   $SCRIPT
             - metavariable-regex:
                 metavariable: $LANG
-                regex: (bash|sh)
-            - focus-metavariable: $SCRIPT
+                regex: .*(sh|bash|ksh|csh|tcsh|zsh|python|python3|node|perl|ruby|php|lua|awk|sed|powershell|fish|dash|R|grooby|scala|clj|elixir|coffee|dart|haskell|ocaml).*
             - metavariable-pattern:
                 metavariable: $SCRIPT
-                language: bash
-                patterns: 
-                  - pattern: |
-                      $CMD ... $PARAM  ...
-                  - metavariable-pattern:
-                      metavariable: $PARAM
-                      pattern-either: 
-                        - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
-                        - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+                pattern-either:
+                  - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
+                  - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
+            - focus-metavariable: $SCRIPT
           - patterns:
-            - pattern-inside: |
-                container:
-                  ...
-                  command: $LANG
-                  ...
-                  args: $PARAM
+            - pattern-either:
+              - pattern-inside: |
+                  container:
+                    ...
+                    command: $LANG
+                    ...
+                    args: $PARAM
+              - pattern-inside: |
+                  containerSet:
+                    ...
+                    containers:
+                      - ...
+                        command: $LANG
+                        ...
+                        args: $PARAM
             - metavariable-regex:
                 metavariable: $LANG
-                regex: .*(sh|bash|ksh|csh|tcsh|zsh).*
+                regex: .*(sh|bash|ksh|csh|tcsh|zsh|python|python3|node|perl|ruby|php|lua|awk|sed|powershell|fish|dash|R|grooby|scala|clj|elixir|coffee|dart|haskell|ocaml).*
             - metavariable-pattern:
                 metavariable: $PARAM
-                pattern-either: 
+                pattern-either:
                   - pattern-regex: (.*{{.*inputs.parameters.*}}.*)
                   - pattern-regex: (.*{{.*workflow.parameters.*}}.*)
             - focus-metavariable: $PARAM
+
