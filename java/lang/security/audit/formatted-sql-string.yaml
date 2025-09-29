@@ -32,8 +32,10 @@ rules:
   message: >-
     Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized.
-    Use a prepared statements (java.sql.PreparedStatement) instead. You
-    can obtain a PreparedStatement using 'connection.prepareStatement'.
+    To prevent this vulnerability, use prepared statements that do not 
+    concatenate user-controllable strings and use parameterized queries where 
+    SQL commands and user data are strictly separated. You can obtain a 
+    PreparedStatement using 'connection.prepareStatement'.
   mode: taint
   pattern-sources:
   - patterns:
