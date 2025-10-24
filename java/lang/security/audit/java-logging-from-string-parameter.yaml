@@ -3,16 +3,21 @@ rules:
     languages:
       - java
     severity: WARNING
-    message: An unsanitized String method parameter is used as an argument to a logger call, which could lead to a log injection vulnerability.
+    message: An unsanitized String method parameter is used as an argument to a
+      logger call, which could lead to a log injection vulnerability.
     patterns:
       - pattern-inside: |
-              $TYPE $METHOD(..., String $PARAM, ...) {
-                ...
-              }
-      - pattern: $LOGGER.$LEVEL($FORMAT_STRING, $PARAM, ...)
-    metavariable-regex:
-      $LEVEL: 'trace|debug|info|warn|error'          
-    fix: Ensure that a validation is in place prior to use a user-controller information to create a log event.
+          $TYPE $METHOD(..., String $PARAM, ...) {
+            ...
+          }
+      - pattern-either:        
+          - pattern: $LOGGER.trace($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.debug($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.info($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.warn($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.error($FORMAT_STRING, $PARAM, ...)
+    fix: Ensure that a validation is in place prior to use a user-controller
+      information to create a log event.
     paths:
       include:
         - "**/*.java"
