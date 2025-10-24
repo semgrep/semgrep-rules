@@ -1,0 +1,37 @@
+rules:
+  - id: java-logging-from-string-parameter
+    languages:
+      - java
+    severity: WARNING
+    message: An unsanitized String method parameter is used as an argument to a logger call, which could lead to a log injection vulnerability.
+    patterns:
+      - pattern-inside: |
+              $TYPE $METHOD(..., String $PARAM, ...) {
+                ...
+              }
+      - pattern: $LOGGER.$LEVEL($FORMAT_STRING, $PARAM, ...)
+    metavariable-regex:
+      $LEVEL: 'trace|debug|info|warn|error'          
+    fix: Ensure that a validation is in place prior to use a user-controller information to create a log event.
+    paths:
+      include:
+        - "**/*.java"
+    metadata:
+      category: security
+      owasp:
+        - A03:2021 Injection
+      technology:
+        - java
+      references:
+        - https://capec.mitre.org/data/definitions/93.html
+        - https://vulncat.fortify.com/en/weakness?q=log%20forging
+        - https://learn.snyk.io/lesson/logging-vulnerabilities/?ecosystem=java
+        - https://owasp.org/www-project-java-encoder/
+        - https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+      cwe:
+        - "CWE-117: Improper Output Neutralization for Logs"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit
