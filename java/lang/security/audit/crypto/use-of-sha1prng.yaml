@@ -5,7 +5,7 @@ rules:
     severity: WARNING
     message: Detected usage of SHA1PRNG, a pseudo random number generator algorithm which is considered insecure.
     pattern: SecureRandom.getInstance("SHA1PRNG")
-    fix: Use 'SecureRandom.getInstanceStrong()' to obtain a secure random instance using a pseudo random number generator algorithm suited for security related processing.
+    fix: On Java 8- use 'SecureRandom.getInstanceStrong()' and on Java 9+ use 'new SecureRandom()' to obtain a secure random instance using a pseudo random number generator algorithm suited for security related processing.
     paths:
       include:
         - "**/*.java"
