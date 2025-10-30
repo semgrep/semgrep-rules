@@ -1,0 +1,31 @@
+rules:
+  - id: use-of-sha1prng
+    languages:
+      - java
+    severity: WARNING
+    message: Detected usage of SHA1PRNG, a pseudo random number generator algorithm which is considered insecure.
+    pattern: SecureRandom.getInstance("SHA1PRNG")
+    fix: Use 'SecureRandom.getInstanceStrong()' to obtain a secure random instance using a pseudo random number generator algorithm suited for security related processing.
+    paths:
+      include:
+        - "**/*.java"
+    metadata:
+      category: security
+      owasp:
+        - A02:2021 Cryptographic Failures
+      technology:
+        - java
+      references:
+        - https://precli.readthedocs.io/0.5.9/rules/java/stdlib/java-security-weak-random/
+        - https://thesecurityvault.com/weak-random/
+        - https://android-developers.googleblog.com/2016/06/security-crypto-provider-deprecated-in.html
+        - https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#securerandom-number-generation-algorithms
+        - https://github.com/OWASP/mastg/issues/1685
+        - https://metebalci.com/blog/everything-about-javas-securerandom/
+      cwe:
+        - "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit
