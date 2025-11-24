@@ -4,16 +4,22 @@ rules:
       - pattern: |
           Hashtbl.find ...
       - pattern-not-inside: |
-          try ... with ... -> ...
-      # TODO:
-      # We should restrict this to match-with plus exception pattern:
-      #
-      #     match ... with | exception ... -> ... | ... -> ...
-      #
-      # But first we need to switch to tree-sitter-ocaml for parsing patterns.
-      - pattern-not-inside: |
-          match ... with | ... -> ...
-    message: You should not use Hashtbl.find outside of a try, or you should use Hashtbl.find_opt
+          try ... with Not_found -> ...
+      # TODO: add support for the syntax match ... with | exception ... -> ...
+      # First, we'd need to switch to tree-sitter-ocaml for parsing
+      # patterns.
+      # - pattern-not-inside: |
+      #    match Hashtbl.find ... with exception Not_found -> ...
+    message: >-
+      'Hashtbl.find' raises the 'Not_found' exception.
+      Handle the exception or use 'Hashtbl.find_opt' instead.
+      If you have proof that the key exists in the table,
+      use 'assert false' as the exception handler to demonstrate awareness
+      of the issue.
+      If your code uses the syntax 'match Hashtbl.find ... with
+      exception Not_found -> ...', it's fine and we apologize for not
+      detecting it. Consider using 'Hashtbl.find_opt' to please
+      Semgrep and stay safe.
     languages: [ocaml]
     severity: WARNING
     metadata:
