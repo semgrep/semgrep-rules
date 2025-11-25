@@ -25,7 +25,6 @@ def prompt(user_id: int, user_name: str):
     )
 
     client.chat.completions.create(
-        # ok: prompt-injection-fastapi
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": safe_user_chat},
