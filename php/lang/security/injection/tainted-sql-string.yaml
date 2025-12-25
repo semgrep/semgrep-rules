@@ -32,6 +32,11 @@ rules:
     - pattern: mysqli_real_escape_string(...)
     - pattern: real_escape_string(...)
     - pattern: $MYSQLI->real_escape_string(...)
+    - pattern: intval(...)
+    - pattern: floatval(...)
+    - pattern: (int) $VAR
+    - pattern: (integer) $VAR
+    - pattern: (float) $VAR
   pattern-sources:
   - patterns:
     - pattern-either:
