@@ -1,0 +1,41 @@
+rules:
+  - id: go-unsafe-deserialization-interface
+    languages:
+      - go
+    message: >-
+      Deserializing into `interface{}` allows arbitrary data structures and types,
+      which can lead to security vulnerabilities (CWE-502). Use a concrete struct
+      type instead. Consider using github.com/ravisastryk/go-safeinput/safedeserialize
+      for automatic protection.
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+      category: security
+      technology:
+        - go
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://cwe.mitre.org/data/definitions/502.html
+        - https://github.com/ravisastryk/go-safeinput
+    patterns:
+      - pattern-either:
+          - pattern: |
+              var $VAR interface{}
+              ...
+              json.Unmarshal($DATA, &$VAR)
+          - pattern: |
+              var $VAR interface{}
+              ...
+              yaml.Unmarshal($DATA, &$VAR)
+          - pattern: |
+              var $VAR interface{}
+              ...
+              xml.Unmarshal($DATA, &$VAR)
