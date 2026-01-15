@@ -137,3 +137,33 @@ jobs:
         # ok: run-shell-injection
         run: |
           echo "${{ steps.shell_command.outputs.some_value }}"
+
+      # ruleid: run-shell-injection
+      - run: echo "${{ github.head_ref || 'default' }}"
+
+      # ruleid: run-shell-injection
+      - run: echo "${{ foo && github.head_ref }}"
+
+      # ruleid: run-shell-injection
+      - run: echo "${{ foo && github.head_ref || 'default' }}"
+
+      # ruleid: run-shell-injection
+      - run: echo "${{ foo || github.head_ref }}"
+
+      # ruleid: run-shell-injection
+      - run: echo "${{ foo || github.head_ref || bar }}"
+
+      # ok: run-shell-injection
+      - run: echo "${{ github.head_ref && 'yes' }}"
+
+      # ok: run-shell-injection
+      - run: echo "${{ github.head_ref && foo || bar }}"
+
+      # ok: run-shell-injection
+      - run: echo "${{ foo || github.head_ref && bar }}"
+
+      # ok: run-shell-injection
+      - run: echo "${{ github.sha }}"
+
+      # ok: run-shell-injection
+      - run: echo "${{ github.repository }}"
