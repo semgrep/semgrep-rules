@@ -1,0 +1,21 @@
+rules:
+  - id: thymeleaf-preprocess-ssti
+    languages: 
+      - html
+    severity: ERROR
+    message: >
+      Thymeleaf template contains a double-evaluation marker (__${...}__).
+      This enables expression preprocessing and may allow Server-Side Template Injection (SSTI),
+      potentially leading to arbitrary code execution depending on classpath and context.
+
+    metadata:
+      cwe: "CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine"
+      category: "security"
+      confidence: "high"
+      likelihood: "medium"
+      impact: "high"
+      references:
+        - https://modzero.com/en/blog/spring_boot_ssti/
+
+    patterns:
+      - pattern-regex: '@\{[^}]*__\$\{[^}]+\}__[^}]*\}'
