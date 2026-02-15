@@ -7,7 +7,7 @@ public IActionResult Create(UserModel model)
     return View("Index", model);
 }
 
-public IActionResult Create([Bind(nameof(UserModel.Name))] UserModel model)
+public IActionResult Create1([Bind(nameof(UserModel.Name))] UserModel model)
 {
     context.SaveChanges();
     // ok: mass-assignment
