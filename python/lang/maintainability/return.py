@@ -32,5 +32,8 @@ def resolve(key: str) -> str:
     # ok: code-after-unconditional-return
     return key, key
 
+# ok: return-not-in-function
+magic = lambda: 13
+
 # ruleid: return-not-in-function
 return (a, b)
