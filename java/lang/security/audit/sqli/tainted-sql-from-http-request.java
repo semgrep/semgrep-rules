@@ -251,7 +251,7 @@ public class bad5 extends HttpServlet {
 }
 
 @WebServlet(value = "/sqli-00/BenchmarkTest00008")
-public class bad1 extends HttpServlet {
+public class bad6 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
