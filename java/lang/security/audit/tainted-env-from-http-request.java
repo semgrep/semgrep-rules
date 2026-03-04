@@ -71,8 +71,8 @@ public class bad2 extends HttpServlet {
     }
 }
 
-@WebServlet(value = "/cmdi-00/BenchmarkTest00007")
-public class bad2 extends HttpServlet {
+@WebServlet(value = "/cmdi-00/BenchmarkTest00007ok")
+public class bad2ok extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -110,7 +110,7 @@ public class bad2 extends HttpServlet {
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
 
             // ok: tainted-env-from-http-request
-            Process p = r.exec(param, argsEnv);
+            Process p2 = r.exec(param, argsEnv);
         } catch (IOException e) {
             System.out.println("Problem executing cmdi - TestCase");
             response.getWriter()

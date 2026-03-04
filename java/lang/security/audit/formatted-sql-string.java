@@ -66,7 +66,7 @@ public class SqlExample2 {
         ResultSet rs = c.createStatement().execute(sql);
     }
 
-    public List<AccountDTO> findAccountsById(String id) {
+    public List<AccountDTO> findAccountsById(String id, String unused) {
         String jql = "from Account where id = '" + id + "'";
         EntityManager em = emfactory.createEntityManager();
         // ruleid:formatted-sql-string
@@ -92,7 +92,7 @@ public class SQLExample3 {
         ResultSet rs = c.createStatement().execute(sql);
     }
 
-    public List<AccountDTO> findAccountsById(String id) {
+    public List<AccountDTO> findAccountsById(String id, String unused) {
         String jql = String.format("from Account where id = '%s'", id);
         EntityManager em = emfactory.createEntityManager();
         // ruleid: formatted-sql-string
