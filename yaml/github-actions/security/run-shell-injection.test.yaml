@@ -167,3 +167,34 @@ jobs:
 
       # ok: run-shell-injection
       - run: echo "${{ github.repository }}"
+
+      # =============================================
+      # script: block tests
+      # =============================================
+
+      # ruleid: run-shell-injection
+      - script: |
+          const title = "${{ github.event.pull_request.title }}";
+
+      # ruleid: run-shell-injection
+      - script: console.log("${{ github.event.comment.body }}")
+
+      # ruleid: run-shell-injection
+      - script: |
+          return "${{ github.event.issue.body }}";
+
+      # ruleid: run-shell-injection
+      - script: |
+          echo "${{ github.head_ref || 'default' }}"
+
+      # ok: run-shell-injection
+      - script: |
+          console.log("safe string, no interpolation")
+
+      # ok: run-shell-injection
+      - script: |
+          console.log("${{ github.head_ref && 'literal' }}")
+
+      # ok: run-shell-injection
+      - script: |
+          console.log("${{ github.sha }}")
