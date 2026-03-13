@@ -17,7 +17,7 @@ async function test1(userInput) {
   await p.status();
 }
 
-async function test1(userInput) {
+async function test2(userInput) {
   const p = Deno.run({
     // ruleid: deno-dangerous-run
     cmd: ["bash", "-c", userInput],

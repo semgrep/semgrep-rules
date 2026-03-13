@@ -55,7 +55,7 @@ def insert_person():
     engine.execute(query, {"x":"%@aol.com", "y":name}).fetchall()
 
 @app.route("/insert/person/path")
-def insert_person(path):
+def insert_person_path(path):
     name = path
     lastname = "you don't get to pick >:)"
 

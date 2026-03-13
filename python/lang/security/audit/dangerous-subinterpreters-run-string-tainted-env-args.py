@@ -8,7 +8,7 @@ def run_payload(payload: str) -> None:
     _xxsubinterpreters.run_string(_xxsubinterpreters.create(), payload)
 
 
-def run_payload(payload: str) -> None:
+def run_payload_param(payload: str) -> None:
     # fn: dangerous-subinterpreters-run-string-tainted-env-args
     _xxsubinterpreters.run_string(_xxsubinterpreters.create(), payload)
 
