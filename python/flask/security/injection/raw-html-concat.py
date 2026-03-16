@@ -83,8 +83,8 @@ def ok():
     # ok: raw-html-format
     return "<a href='https://example.com'>Click me!</a>"
 
-@app.route("/post_param_branch", methods=["POST"])
-def post_param_branch():
+@app.route("/post_param_branch_ok", methods=["POST"])
+def post_param_branch_ok():
     param = flask.request.form['param']
     part = flask.render_template("link.html", data=param)
     if True:

@@ -115,7 +115,7 @@ def load_model(model):
 
 # Real world example
 @app.route('/models/<model>')
-def load_model(model):
+def load_model_ok(model):
     # ok: tainted-url-host
     htmlpage = '''
     <body style='margin : 0px; overflow: hidden;'>

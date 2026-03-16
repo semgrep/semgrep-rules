@@ -44,7 +44,7 @@ class ActionPackAssertionsController < ActionController::Base
     render inline: Kernel::sprintf("<div>%s</div>", name)
   end
 
-  def render_url
+  def render_url_ok
     # ok: raw-html-format
     render html: "boo, %s" % params[:name]
   end
