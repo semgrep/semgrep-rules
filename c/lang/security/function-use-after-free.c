@@ -66,3 +66,24 @@ int okay_code2() {
     other_func((char*)*var);
     return 0;
 }
+
+// calloc reallocation between free and use
+int okay_code3_calloc() {
+    NAME *var;
+    var = (NAME *)malloc(sizeof(struct name));
+    free(var);
+    var = calloc(1, sizeof(struct name));
+    // ok: function-use-after-free
+    other_func((char*)var);
+    return 0;
+}
+
+// strdup reallocation between free and use
+int okay_code4_strdup() {
+    char *var = strdup("hello");
+    free(var);
+    var = strdup("world");
+    // ok: function-use-after-free
+    other_func(var);
+    return 0;
+}

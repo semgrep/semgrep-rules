@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct name {
     char *myname;
@@ -185,5 +186,37 @@ int bad_code7() {
     char buf[0] = var[0];
     // todo rule/id: use-after-free	// todo
     strcpy(buf, var);
+    return 0;
+}
+
+// calloc reallocation between free and use
+int ok_code7_calloc() {
+    NAME *var;
+    var = (NAME *)malloc(sizeof(struct name));
+    free(var);
+    var = calloc(1, sizeof(struct name));
+    // ok: use-after-free
+    var->func("new allocation");
+    return 0;
+}
+
+// realloc reallocation between free and use
+int ok_code8_realloc() {
+    char *var;
+    var = (char *)malloc(100);
+    free(var);
+    var = realloc(NULL, 200);
+    // ok: use-after-free
+    char c = var[0];
+    return 0;
+}
+
+// strdup reallocation between free and use
+int ok_code9_strdup() {
+    char *var = strdup("hello");
+    free(var);
+    var = strdup("world");
+    // ok: use-after-free
+    char c = var[0];
     return 0;
 }
