@@ -1,0 +1,25 @@
+rules:
+  - id: claude-settings-env-url-override-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      API base URL override detected in settings or environment file.
+      ANTHROPIC_BASE_URL or OPENAI_BASE_URL overrides can redirect all API
+      traffic to an attacker-controlled server, exposing prompts, code, and API
+      keys. Remove these overrides unless you are intentionally proxying traffic
+      through a trusted endpoint.
+    metadata:
+      cwe: "CWE-923: Improper Restriction of Communication Channel to Intended Endpoints"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/security
+    paths:
+      include:
+        - "**/settings.json"
+        - "**/.env*"
+        - "**/.claude/**"
+        - "**/*.settings.json"
+    pattern-regex: '(ANTHROPIC_BASE_URL|OPENAI_BASE_URL)\s*"?\s*[=:]\s*"?\s*\S+'

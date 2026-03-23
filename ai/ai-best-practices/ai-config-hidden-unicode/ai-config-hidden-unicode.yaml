@@ -1,0 +1,27 @@
+rules:
+  - id: ai-config-hidden-unicode-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Invisible or zero-width Unicode character detected in AI coding assistant
+      config file. These characters can be used in "Rules File Backdoor" attacks
+      to inject hidden malicious instructions that are invisible to developers
+      but interpreted by AI assistants. Remove all zero-width and bidirectional
+      override characters from this file.
+    metadata:
+      cwe: "CWE-116: Improper Encoding or Escaping of Output"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      technology: [cursor, github-copilot, windsurf, claude-code]
+      references:
+        - https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents
+    paths:
+      include:
+        - "*.cursorrules"
+        - "*.mdc"
+        - "*copilot-instructions*"
+        - "*.windsurfrules"
+        - "*CLAUDE.md"
+        - "*AGENTS.md"
+    pattern-regex: '[\x{200B}\x{200C}\x{200D}\x{2063}\x{FEFF}\x{202A}-\x{202E}]'

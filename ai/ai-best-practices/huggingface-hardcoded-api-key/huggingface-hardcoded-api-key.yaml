@@ -1,0 +1,61 @@
+rules:
+  - id: huggingface-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Hugging Face API token is hardcoded in source code. Use environment
+      variables or a secrets manager instead. See
+      https://huggingface.co/docs/hub/en/security-tokens
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [huggingface]
+      references:
+        - https://huggingface.co/docs/hub/en/security-tokens
+    pattern-either:
+      - patterns:
+          - pattern: InferenceClient(token="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^hf_
+      - patterns:
+          - pattern: InferenceClient(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^hf_
+      - patterns:
+          - pattern: AsyncInferenceClient(token="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^hf_
+      - patterns:
+          - pattern: AsyncInferenceClient(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^hf_
+      - patterns:
+          - pattern: AutoModel.from_pretrained(..., token="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^hf_
+
+  - id: huggingface-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Hugging Face API token is hardcoded in source code. Use environment
+      variables or a secrets manager instead. See
+      https://huggingface.co/docs/hub/en/security-tokens
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [huggingface]
+      references:
+        - https://huggingface.co/docs/hub/en/security-tokens
+    patterns:
+      - pattern: new InferenceClient("$KEY", ...)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^hf_

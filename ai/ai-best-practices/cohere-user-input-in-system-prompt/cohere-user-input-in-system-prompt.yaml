@@ -1,0 +1,59 @@
+rules:
+  - id: cohere-user-input-in-system-prompt-python
+    mode: taint
+    languages: [python]
+    severity: ERROR
+    message: >-
+      User input flows into the Cohere preamble/system prompt. This enables
+      prompt injection attacks where users can override system instructions.
+      Validate and sanitize user input, or keep preamble text hardcoded.
+    metadata:
+      cwe: "CWE-77: Command Injection"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/docs/safety-modes
+    pattern-sources:
+      - pattern: request.args.get(...)
+      - pattern: request.form[...]
+      - pattern: request.form.get(...)
+      - pattern: request.json[...]
+      - pattern: request.json.get(...)
+      - pattern: request.data
+      - pattern: request.GET[...]
+      - pattern: request.GET.get(...)
+      - pattern: request.POST[...]
+      - pattern: request.POST.get(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: $CLIENT.chat(..., preamble=$SINK, ...)
+          - focus-metavariable: $SINK
+
+  - id: cohere-user-input-in-system-prompt-js
+    mode: taint
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      User input flows into the Cohere preamble/system prompt. This enables
+      prompt injection attacks where users can override system instructions.
+      Validate and sanitize user input, or keep preamble text hardcoded.
+    metadata:
+      cwe: "CWE-77: Command Injection"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/docs/safety-modes
+    pattern-sources:
+      - pattern: req.body.$F
+      - pattern: req.query.$F
+      - pattern: req.params.$F
+      - pattern: req.body
+    pattern-sinks:
+      - patterns:
+          - pattern: |
+              $CLIENT.chat({..., preamble: $SINK, ...})
+          - focus-metavariable: $SINK

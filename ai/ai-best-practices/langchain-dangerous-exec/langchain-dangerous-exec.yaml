@@ -1,0 +1,27 @@
+rules:
+  - id: langchain-dangerous-exec-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Dangerous LangChain execution utility detected. PythonREPL, BashProcess,
+      PythonAstREPLTool, and LLMMathChain allow arbitrary code execution and
+      should not be used in production. If an LLM agent can invoke these tools,
+      prompt injection can lead to remote code execution.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [audit]
+      technology: [langchain]
+      references:
+        - https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/
+    mode: taint
+    pattern-sources:
+      - pattern: PythonREPL(...)
+      - pattern: PythonREPL()
+      - pattern: BashProcess(...)
+      - pattern: BashProcess()
+      - pattern: PythonAstREPLTool(...)
+      - pattern: PythonAstREPLTool()
+    pattern-sinks:
+      - pattern: $OBJ.run(...)

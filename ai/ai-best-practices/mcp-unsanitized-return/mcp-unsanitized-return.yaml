@@ -1,0 +1,37 @@
+rules:
+  - id: mcp-unsanitized-return-python
+    mode: taint
+    languages: [python]
+    severity: WARNING
+    message: >-
+      External HTTP response data flows directly into an MCP tool return value
+      without sanitization. Untrusted API responses may contain prompt injection
+      payloads or malicious content that could manipulate the LLM. Sanitize or
+      validate external data before returning it from MCP tools.
+    metadata:
+      cwe: "CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: requests.get(...)
+              - pattern: requests.post(...)
+              - pattern: urllib.request.urlopen(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-inside: |
+              @$SERVER.tool()
+              def $FUNC(...):
+                  ...
+          - pattern: return $SINK
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: sanitize(...)
+      - pattern: bleach.clean(...)
+      - pattern: html.escape(...)
+      - pattern: str.strip(...)

@@ -1,0 +1,31 @@
+rules:
+  - id: mistral-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Mistral API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [mistral]
+      references:
+        - https://docs.mistral.ai/getting-started/quickstart/
+    pattern-either:
+      - pattern: Mistral(api_key="$KEY", ...)
+      - pattern: MistralClient(api_key="$KEY", ...)
+
+  - id: mistral-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Mistral API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [mistral]
+      references:
+        - https://docs.mistral.ai/getting-started/quickstart/
+    pattern: |
+      new Mistral({apiKey: "$KEY", ...})

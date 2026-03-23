@@ -1,0 +1,86 @@
+rules:
+  - id: gemini-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Google Gemini API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [gemini, google]
+      references:
+        - https://ai.google.dev/gemini-api/docs/api-key
+    pattern-either:
+      - patterns:
+          - pattern: genai.configure(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^AIza
+      - patterns:
+          - pattern: genai.Client(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^AIza
+      - patterns:
+          - pattern: $MOD.Client(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^AIza
+          - metavariable-regex:
+              metavariable: $MOD
+              regex: genai
+
+  - id: gemini-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Google Gemini API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [gemini, google]
+      references:
+        - https://ai.google.dev/gemini-api/docs/api-key
+    patterns:
+      - pattern: new GoogleGenerativeAI("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^AIza
+
+  - id: gemini-hardcoded-api-key-go
+    languages: [go]
+    severity: ERROR
+    message: >-
+      Google Gemini API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [gemini, google]
+      references:
+        - https://ai.google.dev/gemini-api/docs/api-key
+    patterns:
+      - pattern: option.WithAPIKey("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^AIza
+
+  - id: gemini-hardcoded-api-key-java
+    languages: [java]
+    severity: ERROR
+    message: >-
+      Google Gemini API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [gemini, google]
+      references:
+        - https://ai.google.dev/gemini-api/docs/api-key
+    patterns:
+      - pattern: $OBJ.apiKey("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^AIza

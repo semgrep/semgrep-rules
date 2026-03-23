@@ -1,0 +1,36 @@
+rules:
+  - id: openai-missing-max-tokens-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      OpenAI chat completion created without 'max_tokens' parameter. Setting
+      max_tokens prevents unexpectedly long or expensive responses and limits
+      potential abuse. See https://developers.openai.com/api/docs/guides/safety-best-practices
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices
+    patterns:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern-not: $CLIENT.chat.completions.create(..., max_tokens=$MT, ...)
+
+  - id: openai-missing-max-tokens-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      OpenAI chat completion created without 'max_tokens' parameter. Setting
+      max_tokens prevents unexpectedly long or expensive responses and limits
+      potential abuse. See https://developers.openai.com/api/docs/guides/safety-best-practices
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices
+    patterns:
+      - pattern: "$CLIENT.chat.completions.create({...})"
+      - pattern-not: "$CLIENT.chat.completions.create({..., max_tokens: $MT, ...})"

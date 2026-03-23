@@ -1,0 +1,46 @@
+rules:
+  - id: mcp-command-injection-python
+    mode: taint
+    languages: [python]
+    severity: ERROR
+    message: >-
+      User input from an MCP tool handler flows into a command execution sink
+      without sanitization. An attacker could inject arbitrary OS commands via
+      tool arguments. Use subprocess with a list of arguments (shell=False) or
+      sanitize input with shlex.quote() before passing to shell commands.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-sources:
+      - patterns:
+          - pattern: |
+              @$SERVER.tool()
+              def $FUNC(..., $PARAM, ...):
+                  ...
+          - focus-metavariable: $PARAM
+    pattern-sinks:
+      - patterns:
+          - pattern: os.system($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.run($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.call($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.Popen($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: eval($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: exec($SINK)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: shlex.quote(...)

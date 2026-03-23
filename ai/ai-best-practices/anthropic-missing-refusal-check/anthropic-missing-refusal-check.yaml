@@ -1,0 +1,60 @@
+rules:
+  - id: anthropic-missing-refusal-check-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Anthropic response content accessed without checking stop_reason. Check
+      response.stop_reason to handle cases where the model stops unexpectedly
+      (e.g., due to max_tokens or content filtering).
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $RESP.content
+      - pattern-inside: |
+          $RESP = $CLIENT.messages.create(...)
+          ...
+      - pattern-not-inside: |
+          if $RESP.stop_reason == "end_turn":
+              ...
+      - pattern-not-inside: |
+          if $RESP.stop_reason != ...:
+              ...
+          else:
+              ...
+
+  - id: anthropic-missing-refusal-check-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Anthropic response content accessed without checking stop_reason. Check
+      response.stop_reason to handle cases where the model stops unexpectedly
+      (e.g., due to max_tokens or content filtering).
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $RESP.content
+      - pattern-either:
+          - pattern-inside: |
+              $RESP = await $CLIENT.messages.create(...)
+              ...
+          - pattern-inside: |
+              $RESP = $CLIENT.messages.create(...)
+              ...
+      - pattern-not-inside: |
+          if ($RESP.stopReason === "end_turn") {
+              ...
+          }
+      - pattern-not-inside: |
+          if ($RESP.stop_reason === "end_turn") {
+              ...
+          }

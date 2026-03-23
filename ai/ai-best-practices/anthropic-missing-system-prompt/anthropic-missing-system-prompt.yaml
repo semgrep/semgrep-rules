@@ -1,0 +1,34 @@
+rules:
+  - id: anthropic-missing-system-prompt-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without a 'system' parameter. A system
+      prompt helps set behavioral guidelines and safety boundaries for the model.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $CLIENT.messages.create(...)
+      - pattern-not: $CLIENT.messages.create(..., system=$SYS, ...)
+
+  - id: anthropic-missing-system-prompt-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without a 'system' parameter. A system
+      prompt helps set behavioral guidelines and safety boundaries for the model.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: "$CLIENT.messages.create({...})"
+      - pattern-not: "$CLIENT.messages.create({..., system: $SYS, ...})"

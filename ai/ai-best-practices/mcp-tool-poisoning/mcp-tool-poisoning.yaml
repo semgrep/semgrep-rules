@@ -1,0 +1,29 @@
+rules:
+  - id: mcp-tool-poisoning-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      MCP tool docstring contains suspicious directives that may indicate tool
+      poisoning. Attackers can embed hidden instructions in tool descriptions
+      to manipulate LLM behavior, exfiltrate data, or access sensitive files.
+      Review the tool description for hidden instructions or social engineering.
+    metadata:
+      cwe: "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    paths:
+      include:
+        - "*.py"
+    pattern-either:
+      - pattern-regex: '"""[^"]*<IMPORTANT>[^"]*"""'
+      - pattern-regex: '"""[^"]*~/\.ssh[^"]*"""'
+      - pattern-regex: '"""[^"]*~/\.cursor/mcp\.json[^"]*"""'
+      - pattern-regex: '"""[^"]*(?:/etc/shadow)[^"]*"""'
+      - pattern-regex: '"""[^"]*(?:read|cat|load|parse|open|access)\s+\.env[^"]*"""'
+      - pattern-regex: '"""[^"]*do not mention[^"]*"""'
+      - pattern-regex: '"""[^"]*do not tell the user[^"]*"""'
+      - pattern-regex: '"""[^"]*ignore previous instructions[^"]*"""'

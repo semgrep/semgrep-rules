@@ -1,0 +1,34 @@
+rules:
+  - id: anthropic-missing-max-tokens-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without 'max_tokens' parameter. Setting
+      max_tokens prevents unexpectedly long or expensive responses.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $CLIENT.messages.create(...)
+      - pattern-not: $CLIENT.messages.create(..., max_tokens=$MT, ...)
+
+  - id: anthropic-missing-max-tokens-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without 'max_tokens' parameter. Setting
+      max_tokens prevents unexpectedly long or expensive responses.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: "$CLIENT.messages.create({...})"
+      - pattern-not: "$CLIENT.messages.create({..., max_tokens: $MT, ...})"

@@ -1,0 +1,42 @@
+rules:
+  - id: cohere-missing-safety-mode-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Cohere chat called without explicit 'safety_mode' parameter. Set
+      safety_mode to 'STRICT' or 'CONTEXTUAL' to explicitly configure content
+      safety guardrails. See https://docs.cohere.com/docs/safety-modes
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/docs/safety-modes
+    patterns:
+      - pattern: $CLIENT.chat(...)
+      - pattern-not: $CLIENT.chat(..., safety_mode=$SM, ...)
+      - pattern-inside: |
+          $CLIENT = cohere.$CLIENTCLASS(...)
+          ...
+
+  - id: cohere-missing-safety-mode-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Cohere chat called without explicit 'safety_mode' parameter. Set
+      safetyMode to 'STRICT' or 'CONTEXTUAL' to explicitly configure content
+      safety guardrails. See https://docs.cohere.com/docs/safety-modes
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/docs/safety-modes
+    patterns:
+      - pattern: "$CLIENT.chat({...})"
+      - pattern-not: "$CLIENT.chat({..., safetyMode: $SM, ...})"
+      - pattern-inside: |
+          $CLIENT = new CohereClient(...)
+          ...

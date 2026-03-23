@@ -1,0 +1,38 @@
+rules:
+  - id: gemini-missing-system-instruction-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Gemini GenerativeModel created without 'system_instruction' parameter. A
+      system instruction helps establish behavioral guidelines and safety
+      boundaries for the model. See
+      https://ai.google.dev/gemini-api/docs/safety-guidance
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-guidance
+    patterns:
+      - pattern: genai.GenerativeModel(...)
+      - pattern-not: genai.GenerativeModel(..., system_instruction=$SI, ...)
+
+  - id: gemini-missing-system-instruction-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Gemini GenerativeModel created without 'systemInstruction' parameter. A
+      system instruction helps establish behavioral guidelines and safety
+      boundaries for the model. See
+      https://ai.google.dev/gemini-api/docs/safety-guidance
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-guidance
+    patterns:
+      - pattern: "$CLIENT.getGenerativeModel({...})"
+      - pattern-not: "$CLIENT.getGenerativeModel({..., systemInstruction: $SI, ...})"

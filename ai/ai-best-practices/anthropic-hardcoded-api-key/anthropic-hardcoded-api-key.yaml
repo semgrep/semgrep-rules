@@ -1,0 +1,98 @@
+rules:
+  - id: anthropic-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Anthropic API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/docs/initial-setup
+    pattern-either:
+      - patterns:
+          - pattern: Anthropic(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^sk-ant-
+      - patterns:
+          - pattern: AsyncAnthropic(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^sk-ant-
+
+  - id: anthropic-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Anthropic API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/docs/initial-setup
+    patterns:
+      - pattern: |
+          new Anthropic({apiKey: "$KEY", ...})
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-ant-
+
+  - id: anthropic-hardcoded-api-key-go
+    languages: [go]
+    severity: ERROR
+    message: >-
+      Anthropic API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/docs/initial-setup
+    patterns:
+      - pattern: option.WithAPIKey("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-ant-
+
+  - id: anthropic-hardcoded-api-key-java
+    languages: [java]
+    severity: ERROR
+    message: >-
+      Anthropic API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/docs/initial-setup
+    patterns:
+      - pattern: $OBJ.apiKey("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-ant-
+
+  - id: anthropic-hardcoded-api-key-ruby
+    languages: [ruby]
+    severity: ERROR
+    message: >-
+      Anthropic API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/docs/initial-setup
+    patterns:
+      - pattern: |
+          Anthropic::Client.new(api_key: "$KEY", ...)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-ant-

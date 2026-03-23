@@ -1,0 +1,36 @@
+rules:
+  - id: mistral-missing-safe-prompt-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Mistral chat completion called without 'safe_prompt' parameter. Setting
+      safe_prompt=True enables Mistral's built-in safety guardrailing. See
+      https://docs.mistral.ai/capabilities/guardrailing/
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [mistral]
+      references:
+        - https://docs.mistral.ai/capabilities/guardrailing/
+    patterns:
+      - pattern: $CLIENT.chat.complete(...)
+      - pattern-not: $CLIENT.chat.complete(..., safe_prompt=$SP, ...)
+
+  - id: mistral-missing-safe-prompt-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Mistral chat completion called without 'safe_prompt' parameter. Setting
+      safePrompt=true enables Mistral's built-in safety guardrailing. See
+      https://docs.mistral.ai/capabilities/guardrailing/
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [mistral]
+      references:
+        - https://docs.mistral.ai/capabilities/guardrailing/
+    patterns:
+      - pattern: "$CLIENT.chat.complete({...})"
+      - pattern-not: "$CLIENT.chat.complete({..., safePrompt: $SP, ...})"

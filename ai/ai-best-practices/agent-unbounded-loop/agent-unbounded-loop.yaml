@@ -1,0 +1,30 @@
+rules:
+  - id: agent-unbounded-loop-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      LLM API call inside a `while True` loop without a break condition. This
+      creates an unbounded agent loop that may run indefinitely, consuming
+      API credits and resources. Add a break condition, iteration counter, or
+      timeout to prevent runaway execution.
+    metadata:
+      cwe: "CWE-835: Loop with Unreachable Exit Condition ('Infinite Loop')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [audit]
+      technology: [openai, anthropic, gemini]
+      references:
+        - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    patterns:
+      - pattern-inside: |
+          while True:
+              ...
+      - pattern-either:
+          - pattern: $CLIENT.chat.completions.create(...)
+          - pattern: $CLIENT.messages.create(...)
+          - pattern: $MODEL.generate_content(...)
+      - pattern-not-inside: |
+          while True:
+              ...
+              break
+              ...

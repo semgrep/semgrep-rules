@@ -1,0 +1,98 @@
+rules:
+  - id: openai-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      OpenAI API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+    pattern-either:
+      - patterns:
+          - pattern: OpenAI(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^sk-
+      - patterns:
+          - pattern: AsyncOpenAI(api_key="$KEY", ...)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: ^sk-
+
+  - id: openai-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      OpenAI API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+    patterns:
+      - pattern: |
+          new OpenAI({apiKey: "$KEY", ...})
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-
+
+  - id: openai-hardcoded-api-key-go
+    languages: [go]
+    severity: ERROR
+    message: >-
+      OpenAI API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+    patterns:
+      - pattern: openai.NewClient("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-
+
+  - id: openai-hardcoded-api-key-java
+    languages: [java]
+    severity: ERROR
+    message: >-
+      OpenAI API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+    patterns:
+      - pattern: new OpenAiService("$KEY")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-
+
+  - id: openai-hardcoded-api-key-ruby
+    languages: [ruby]
+    severity: ERROR
+    message: >-
+      OpenAI API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+    patterns:
+      - pattern: |
+          OpenAI::Client.new(access_token: "$KEY", ...)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^sk-

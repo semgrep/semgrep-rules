@@ -1,0 +1,43 @@
+rules:
+  - id: mcp-ssrf-python
+    mode: taint
+    languages: [python]
+    severity: ERROR
+    message: >-
+      User input from an MCP tool handler flows into an HTTP request URL without
+      validation. An attacker could supply internal network URLs to access
+      internal services (SSRF). Validate and restrict URLs with an allowlist
+      or parse with urllib.parse.urlparse() before making requests.
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-sources:
+      - patterns:
+          - pattern: |
+              @$SERVER.tool()
+              def $FUNC(..., $PARAM, ...):
+                  ...
+          - focus-metavariable: $PARAM
+    pattern-sinks:
+      - patterns:
+          - pattern: requests.get($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.post($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.put($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.delete($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: urllib.request.urlopen($SINK)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: urllib.parse.urlparse(...)

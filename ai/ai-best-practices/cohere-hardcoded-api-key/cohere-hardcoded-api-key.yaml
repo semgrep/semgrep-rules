@@ -1,0 +1,31 @@
+rules:
+  - id: cohere-hardcoded-api-key-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Cohere API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/reference/about
+    pattern-either:
+      - pattern: cohere.Client(api_key="$KEY", ...)
+      - pattern: cohere.ClientV2(api_key="$KEY", ...)
+
+  - id: cohere-hardcoded-api-key-javascript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Cohere API key is hardcoded in source code. Use environment variables or a secrets manager instead.
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      category: security
+      confidence: HIGH
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/reference/about
+    pattern: |
+      new CohereClient({token: "$KEY", ...})

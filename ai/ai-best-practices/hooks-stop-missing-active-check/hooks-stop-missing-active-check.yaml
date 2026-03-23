@@ -1,0 +1,21 @@
+rules:
+  - id: hooks-stop-missing-active-check-generic
+    languages: [generic]
+    severity: WARNING
+    message: >-
+      Stop hook outputs a "block" decision. Ensure you check stop_hook_active first
+      and exit 0 if true, otherwise the hook will cause an infinite loop by blocking
+      its own stop attempts.
+    metadata:
+      cwe: "CWE-835: Loop with Unreachable Exit Condition"
+      category: security
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    paths:
+      include:
+        - "*.sh"
+        - "*.bash"
+    pattern-regex: '"decision".*"block"'

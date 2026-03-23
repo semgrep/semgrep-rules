@@ -1,0 +1,21 @@
+rules:
+  - id: hooks-wget-pipe-bash-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Remote script is fetched and piped directly to a shell interpreter. In Claude
+      Code and Cursor hooks, this enables remote code execution from untrusted sources.
+      Download the script first, inspect it, then execute it separately.
+    metadata:
+      cwe: "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      category: security
+      confidence: HIGH
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    paths:
+      include:
+        - "*.sh"
+        - "*.bash"
+    pattern-regex: '(curl|wget)\s+.*\|\s*(bash|sh|zsh)\b'

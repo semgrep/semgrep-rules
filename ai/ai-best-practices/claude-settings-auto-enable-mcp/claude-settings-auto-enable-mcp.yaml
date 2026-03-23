@@ -1,0 +1,24 @@
+rules:
+  - id: claude-settings-auto-enable-mcp-generic
+    languages: [generic]
+    severity: WARNING
+    message: >-
+      "enableAllProjectMcpServers" is set to true in settings. This
+      automatically enables all MCP servers defined in project configuration
+      without user confirmation, allowing malicious repositories to register
+      arbitrary MCP servers that execute code on your machine. Remove this
+      setting or set it to false so that MCP servers require explicit approval.
+    metadata:
+      cwe: "CWE-862: Missing Authorization"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      technology: [claude-code]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/security
+    paths:
+      include:
+        - "**/settings.json"
+        - "**/.claude/**"
+        - "**/*.settings.json"
+    pattern-regex: '"enableAllProjectMcpServers"\s*:\s*true'

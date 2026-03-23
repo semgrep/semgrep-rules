@@ -1,0 +1,22 @@
+rules:
+  - id: hooks-unconditional-allow-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Hook unconditionally allows tool execution by outputting a permissionDecision
+      of "allow" without any conditional check. This bypasses the entire permission
+      system. Add a conditional check to validate the tool or command before allowing.
+    metadata:
+      cwe: "CWE-862: Missing Authorization"
+      category: security
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    paths:
+      include:
+        - "*.sh"
+        - "*.bash"
+        - "*.py"
+    pattern-regex: 'permissionDecision.*allow'

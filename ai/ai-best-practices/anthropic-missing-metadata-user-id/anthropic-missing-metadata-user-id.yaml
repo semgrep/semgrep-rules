@@ -1,0 +1,36 @@
+rules:
+  - id: anthropic-missing-metadata-user-id-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without 'metadata' parameter. Pass a
+      metadata object with a hashed user_id to enable abuse tracking and policy
+      enforcement. See https://docs.anthropic.com/en/api/messages
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $CLIENT.messages.create(...)
+      - pattern-not: $CLIENT.messages.create(..., metadata=$META, ...)
+
+  - id: anthropic-missing-metadata-user-id-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without 'metadata' parameter. Pass a
+      metadata object with a hashed user_id to enable abuse tracking and policy
+      enforcement. See https://docs.anthropic.com/en/api/messages
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: "$CLIENT.messages.create({...})"
+      - pattern-not: "$CLIENT.messages.create({..., metadata: $META, ...})"

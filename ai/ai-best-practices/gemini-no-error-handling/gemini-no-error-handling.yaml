@@ -1,0 +1,24 @@
+rules:
+  - id: gemini-no-error-handling
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Google Gemini API call without error handling. Wrap API calls in
+      try/except to handle API errors and network issues gracefully.
+    metadata:
+      cwe: "CWE-755: Improper Handling of Exceptional Conditions"
+      category: security
+      confidence: MEDIUM
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-guidance
+    patterns:
+      - pattern: $MODEL.generate_content(...)
+      - pattern-inside: |
+          $MODEL = genai.GenerativeModel(...)
+          ...
+      - pattern-not-inside: |
+          try:
+              ...
+          except ...:
+              ...

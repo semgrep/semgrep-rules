@@ -1,0 +1,51 @@
+rules:
+  - id: openai-missing-moderation-check
+    languages: [python]
+    severity: WARNING
+    message: >-
+      OpenAI moderation response accessed without checking the 'flagged' field.
+      Always check results[0].flagged before processing moderation categories to
+      properly filter harmful content. See
+      https://developers.openai.com/api/docs/guides/moderation
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: MEDIUM
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/moderation
+    pattern-either:
+      - patterns:
+          - pattern: $RESP.results[0].categories
+          - pattern-inside: |
+              def $FUNC(...):
+                  ...
+          - pattern-not-inside: |
+              def $FUNC(...):
+                  ...
+                  if $RESP.results[0].flagged:
+                      ...
+                  ...
+          - pattern-not-inside: |
+              def $FUNC(...):
+                  ...
+                  if $RESP.results[0].flagged == True:
+                      ...
+                  ...
+      - patterns:
+          - pattern: $RESP.results[0].category_scores
+          - pattern-inside: |
+              def $FUNC(...):
+                  ...
+          - pattern-not-inside: |
+              def $FUNC(...):
+                  ...
+                  if $RESP.results[0].flagged:
+                      ...
+                  ...
+          - pattern-not-inside: |
+              def $FUNC(...):
+                  ...
+                  if $RESP.results[0].flagged == True:
+                      ...
+                  ...

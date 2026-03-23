@@ -1,0 +1,36 @@
+rules:
+  - id: gemini-missing-safety-settings-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Gemini generate_content() called without safety_settings. Configure safety
+      settings to control content filtering thresholds for harmful content
+      categories.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-settings
+    patterns:
+      - pattern: $MODEL.generate_content(...)
+      - pattern-not: $MODEL.generate_content(..., safety_settings=$SETTINGS, ...)
+
+  - id: gemini-missing-safety-settings-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Gemini generate_content() called without safety_settings. Configure safety
+      settings to control content filtering thresholds for harmful content
+      categories.
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      category: security
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-settings
+    patterns:
+      - pattern: "$MODEL.generateContent({...})"
+      - pattern-not: "$MODEL.generateContent({..., safetySettings: $S, ...})"

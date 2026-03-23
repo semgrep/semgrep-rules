@@ -1,0 +1,27 @@
+rules:
+  - id: claude-settings-bypass-permissions-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Dangerous permission bypass detected in Claude Code or Cursor settings.
+      Settings like "bypassPermissions", "allowUnsandboxedCommands: true", or
+      "enableWeakerNestedSandbox: true" disable critical security controls that
+      protect against malicious tool use. Remove these settings or set them to
+      false to maintain proper sandboxing and permission checks.
+    metadata:
+      cwe: "CWE-862: Missing Authorization"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/security
+    paths:
+      include:
+        - "**/settings.json"
+        - "**/.claude/**"
+        - "**/*.settings.json"
+    pattern-either:
+      - pattern-regex: '"bypassPermissions"'
+      - pattern-regex: '"allowUnsandboxedCommands"\s*:\s*true'
+      - pattern-regex: '"enableWeakerNestedSandbox"\s*:\s*true'
