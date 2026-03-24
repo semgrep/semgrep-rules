@@ -6,7 +6,7 @@ rules:
       Claude Code and Cursor hook reads stdin without input validation. Wrap json.loads/json.load
       calls in try/except to handle malformed or unexpected input gracefully.
     metadata:
-      cwe: "CWE-20: Improper Input Validation"
+      cwe: "CWE-1287: Improper Validation of Specified Type of Input"
       category: security
       subcategory: audit
       likelihood: MEDIUM
@@ -32,7 +32,7 @@ rules:
       Piping untrusted input directly to eval, bash, or sh is dangerous in Claude Code
       and Cursor hooks. Validate and sanitize input before executing it.
     metadata:
-      cwe: "CWE-20: Improper Input Validation"
+      cwe: "CWE-1287: Improper Validation of Specified Type of Input"
       category: security
       subcategory: audit
       likelihood: MEDIUM
