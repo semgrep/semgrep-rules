@@ -1,0 +1,54 @@
+rules:
+  - id: hooks-unquoted-variable-bash-taint
+    mode: taint
+    languages: [bash]
+    severity: ERROR
+    message: >-
+      Untrusted input from stdin (e.g., via `cat | jq`) flows into a dangerous
+      command execution sink such as `eval`, `bash -c`, or `sh -c`. In Claude
+      Code and Cursor hooks, stdin contains JSON that may include user-controlled data.
+      Passing this data unquoted or unsanitized to command execution functions
+      enables OS command injection. Use safe alternatives like arrays or direct
+      command invocation instead of eval, and always quote variable expansions.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern-sources:
+      - pattern: $(cat | jq ...)
+      - pattern: $(cat)
+    pattern-sinks:
+      - pattern: eval $...SINK
+      - pattern: bash -c $...SINK
+      - pattern: sh -c $...SINK
+      - pattern: exec $...SINK
+      - pattern: source $...SINK
+
+  - id: hooks-unquoted-variable-bash-eval
+    languages: [bash]
+    severity: WARNING
+    message: >-
+      Use of `eval` in a Claude Code or Cursor hook script is dangerous. The `eval`
+      command re-parses its arguments, which can lead to command injection if
+      any variable contains special characters or attacker-controlled data.
+      Avoid `eval` entirely; use arrays, direct command invocation, or other
+      safe alternatives.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern: eval $...ARGS
