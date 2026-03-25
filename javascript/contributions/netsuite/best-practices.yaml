@@ -1,0 +1,85 @@
+rules:
+  - id: netsuite-no-console-log
+    languages:
+      - javascript
+    severity: ERROR
+    message: "**NetSuite Disclosure/Audit Risk:** Use NetSuite's native `N/log`
+      module (`log.debug, log.audit, log.error`) instead of `console.log` for
+      persistent audit trails. Bad if left in Production."
+    pattern: console.log(...)
+    metadata:
+      type: Security
+      category: best-practice
+      risk: Console
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      technology:
+        - netsuite
+      references:
+        - https://www.origamiprecision.com/
+
+  - id: netsuite-no-record-load-save-in-loop
+    languages:
+      - javascript
+      - typescript
+    message: >
+      **NetSuite Governance Trap:** Database call (`load/save`) detected inside
+      a loop. This leads to O(n^2) performance and will cause
+      `SSS_USAGE_LIMIT_EXCEEDED`. Use `N/search` or `N/query` instead.
+    severity: ERROR
+    metadata:
+      type: Governance
+      category: best-practice
+      risk: Blow-up
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      references:
+        - https://www.origamiprecision.com/
+      technology:
+        - netsuite
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              for (...) { ... }
+          - pattern-inside: |
+              while (...) { ... }
+          - pattern-inside: |
+              $ARRAY.forEach(...)
+      - pattern-either:
+          - pattern: $RECORD.load(...)
+          - pattern: $RECORD.save(...)
+
+  - id: netsuite-unhandled-aftersubmit-try-catch
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      type: Reliability
+      category: best-practice
+      risk: Try/Catch
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      technology:
+        - netsuite
+      source_rule_url:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
+      references:
+        - https://www.origamiprecision.com/
+    message: "**NetSuite Reliability Risk:** afterSubmit function lacks a root
+      `try/catch` block. Unhandled errors here will block the record from
+      saving."
+    patterns:
+      - pattern-inside: |
+          function afterSubmit($CONTEXT) {
+            ...
+          }
+      - pattern-not-inside: |
+          function afterSubmit($CONTEXT) {
+            try {
+              ...
+            } catch ($E) {
+              ...
+            }
+          }
+      - pattern: $SOMETHING(...)
