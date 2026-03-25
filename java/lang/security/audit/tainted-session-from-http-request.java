@@ -120,8 +120,8 @@ public class BenchmarkTest00321 extends HttpServlet {
     }
 }
 
-@WebServlet(value = "/trustbound-00/BenchmarkTest00004")
-public class BenchmarkTest00004 extends HttpServlet {
+@WebServlet(value = "/trustbound-00/BenchmarkTest00004ok")
+public class BenchmarkTest00004ok extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 

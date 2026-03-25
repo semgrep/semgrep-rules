@@ -1,0 +1,20 @@
+rules:
+  - id: hooks-relative-script-path-bash
+    languages: [bash]
+    severity: WARNING
+    message: >-
+      Relative path used for script invocation in hook. Use absolute paths or
+      environment variables like $CLAUDE_PROJECT_DIR, $CURSOR_PROJECT_DIR, or
+      $HOME to ensure the correct script is executed regardless of working directory.
+    metadata:
+      cwe: "CWE-426: Untrusted Search Path"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern-regex: (source|bash|sh|\.)\s+\./\S+

@@ -8,7 +8,7 @@ function a(args) {
   });
 }
 
-function a(userInput) {
+function a2(userInput) {
   // ruleid:detect-child-process
   cp.spawnSync(userInput);
 }

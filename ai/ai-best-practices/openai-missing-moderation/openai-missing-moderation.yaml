@@ -1,0 +1,28 @@
+rules:
+  - id: openai-missing-moderation
+    languages: [python]
+    severity: WARNING
+    message: >-
+      OpenAI chat completion used without content moderation. Consider using the
+      Moderations API (client.moderations.create()) to check user input for
+      harmful content before sending to the model.
+    metadata:
+      cwe: "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/moderation
+    patterns:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern-inside: |
+          def $FUNC(...):
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              $CLIENT.moderations.create(...)
+              ...

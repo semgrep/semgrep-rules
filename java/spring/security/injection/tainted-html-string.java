@@ -284,7 +284,7 @@ public class XSSInImgTagAttribute {
             value = LevelConstants.LEVEL_7,
             variant = Variant.SECURE,
             htmlTemplate = "LEVEL_1/XSS")
-    public ResponseEntity<String> getVulnerablePayloadLevelSecure3(
+    public ResponseEntity<String> getVulnerablePayloadLevelSecure3ok(
             @RequestParam(PARAMETER_NAME) String imageLocation) {
         String vulnerablePayloadWithPlaceHolder = "not html";
 

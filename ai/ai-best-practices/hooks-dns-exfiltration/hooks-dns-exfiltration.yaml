@@ -1,0 +1,25 @@
+rules:
+  - id: hooks-dns-exfiltration-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      DNS lookup command uses a variable in the hostname, which could exfiltrate
+      sensitive data via DNS queries. In Claude Code and Cursor hooks, this pattern
+      can leak secrets or environment data to attacker-controlled domains. Use
+      static hostnames only in DNS commands.
+    metadata:
+      cwe: "CWE-201: Insertion of Sensitive Information Into Sent Data"
+      category: security
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    paths:
+      include:
+        - "*.sh"
+        - "*.bash"
+    pattern-regex: '\b(ping|nslookup|dig|host)\s+.*\$'

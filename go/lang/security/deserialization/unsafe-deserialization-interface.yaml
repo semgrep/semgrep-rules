@@ -5,8 +5,7 @@ rules:
     message: >-
       Deserializing into `interface{}` allows arbitrary data structures and types,
       which can lead to security vulnerabilities (CWE-502). Use a concrete struct
-      type instead. Consider using github.com/ravisastryk/go-safeinput/safedeserialize
-      for automatic protection.
+      type instead.
     severity: WARNING
     metadata:
       cwe:
@@ -24,7 +23,6 @@ rules:
         - vuln
       references:
         - https://cwe.mitre.org/data/definitions/502.html
-        - https://github.com/ravisastryk/go-safeinput
     patterns:
       - pattern-either:
           - pattern: |

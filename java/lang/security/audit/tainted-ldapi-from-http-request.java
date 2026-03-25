@@ -302,8 +302,8 @@ public class BenchmarkTest00630 extends HttpServlet {
     }
 }
 
-@WebServlet(value = "/ldapi-00/BenchmarkTest00021")
-public class BenchmarkTest00021 extends HttpServlet {
+@WebServlet(value = "/ldapi-00/BenchmarkTest00021ok")
+public class BenchmarkTest00021ok extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 

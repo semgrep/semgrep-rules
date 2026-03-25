@@ -1,0 +1,34 @@
+rules:
+  - id: mistral-missing-moderation
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Mistral chat completion used without content moderation. Consider using
+      the Moderation API (client.classifiers.moderate() or
+      client.classifiers.moderate_chat()) to check content for harmful material.
+      See https://docs.mistral.ai/capabilities/guardrailing/
+    metadata:
+      cwe: "CWE-1188: Initialization with an Insecure Default"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [mistral]
+      references:
+        - https://docs.mistral.ai/capabilities/guardrailing/
+    patterns:
+      - pattern: $CLIENT.chat.complete(...)
+      - pattern-inside: |
+          def $FUNC(...):
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              $CLIENT.classifiers.moderate(...)
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              $CLIENT.classifiers.moderate_chat(...)
+              ...
