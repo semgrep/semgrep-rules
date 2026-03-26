@@ -1,5 +1,6 @@
 # ruleid: ps-lsass-process-targeting
 $lsass = Get-Process lsass
+# ruleid: ps-lsass-process-targeting
 $handle = [Win32]::OpenProcess(0x1F0FFF, $false, $lsass.Id)
 
 # ruleid: ps-lsass-process-targeting

