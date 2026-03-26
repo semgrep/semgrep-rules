@@ -1,0 +1,31 @@
+rules:
+  - id: ps-pinvoke-injection-apis
+    message: >-
+      P/Invoke shellcode injection API import detected (T1055 / T1620).
+      Importing VirtualAlloc, VirtualAllocEx, WriteProcessMemory,
+      CreateRemoteThread, QueueUserAPC, or NtCreateThreadEx via Add-Type with
+      [DllImport] in PowerShell is the foundational technique for process
+      injection and reflective PE loading. These APIs are present in all major
+      C2 framework stager payloads (Cobalt Strike, Metasploit, Empire). No
+      legitimate administrative script requires direct shellcode injection APIs.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1055/
+        - https://attack.mitre.org/techniques/T1620/
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(Add-Type|DllImport)(.{0,300})(VirtualAlloc(?:Ex)?|WriteProcessMemory|CreateRemoteThread|QueueUserAPC|NtCreateThreadEx|NtAllocateVirtualMemory)'

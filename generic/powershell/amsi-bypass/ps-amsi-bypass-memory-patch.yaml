@@ -1,0 +1,30 @@
+rules:
+  - id: ps-amsi-bypass-memory-patch
+    message: >-
+      Memory-patching AMSI bypass pattern detected (T1562.001 / T1055).
+      Combining VirtualProtect, WriteProcessMemory, or AllocHGlobal with
+      Add-Type or DllImport is the structural pattern for directly patching
+      amsi.dll functions in process memory, rendering AMSI non-functional.
+      This P/Invoke approach is used in advanced bypasses to avoid the
+      reflection-based technique that is more widely detected.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-693: Protection Mechanism Failure"
+      owasp:
+        - "A05:2021 - Security Misconfiguration"
+        - "A05:2025 - Security Misconfiguration"
+      references:
+        - https://attack.mitre.org/techniques/T1562/001/
+        - https://www.r-tec.net/r-tec-blog-bypass-amsi-in-2025.html
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(VirtualProtect|WriteProcessMemory|AllocHGlobal)(.{0,500})(Add-Type|DllImport|amsi)'

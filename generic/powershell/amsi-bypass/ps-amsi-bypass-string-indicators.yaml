@@ -1,0 +1,29 @@
+rules:
+  - id: ps-amsi-bypass-string-indicators
+    message: >-
+      AMSI-related internal string detected (T1562.001). Direct references to
+      AmsiUtils, amsiInitFailed, amsiContext, amsiSession, AmsiScanBuffer, or
+      amsi.dll are only meaningful in bypass code; no legitimate PowerShell
+      module accesses these private reflection targets. This rule also fires on
+      split-string variants commonly produced by Invoke-Obfuscation.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-693: Protection Mechanism Failure"
+      owasp:
+        - "A05:2021 - Security Misconfiguration"
+        - "A05:2025 - Security Misconfiguration"
+      references:
+        - https://attack.mitre.org/techniques/T1562/001/
+        - https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(AmsiUtils|amsiInitFailed|amsiContext|amsiSession|AmsiScanBuffer|amsi\.dll)'

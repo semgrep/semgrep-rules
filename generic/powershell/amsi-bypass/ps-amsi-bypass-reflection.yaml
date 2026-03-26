@@ -1,0 +1,31 @@
+rules:
+  - id: ps-amsi-bypass-reflection
+    message: >-
+      AMSI bypass via reflection detected (T1562.001). The pattern
+      [Ref].Assembly.GetType(...AmsiUtils...) combined with SetValue() is the
+      canonical method to set amsiInitFailed=true, disabling runtime AV scanning
+      for the remainder of the PowerShell session. All major offensive frameworks
+      (Empire, Covenant, Sliver) use variants of this technique as a prerequisite
+      step before delivering payloads. Investigate the full script for follow-on
+      payload delivery.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-693: Protection Mechanism Failure"
+      owasp:
+        - "A05:2021 - Security Misconfiguration"
+        - "A05:2025 - Security Misconfiguration"
+      references:
+        - https://attack.mitre.org/techniques/T1562/001/
+        - https://www.elastic.co/docs/reference/security/prebuilt-rules/rules/windows/defense_evasion_amsi_bypass_powershell
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)\[Ref\]\s*\.\s*Assembly\s*\.\s*GetType\s*\('

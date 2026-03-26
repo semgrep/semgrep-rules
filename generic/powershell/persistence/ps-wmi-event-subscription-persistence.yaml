@@ -1,0 +1,31 @@
+rules:
+  - id: ps-wmi-event-subscription-persistence
+    message: >-
+      WMI permanent event subscription persistence detected (T1546.003).
+      Registering a WMI event filter bound to a CommandLineEventConsumer or
+      ActiveScriptEventConsumer creates a persistent execution mechanism that
+      survives reboots and is invisible to standard autoruns tools. This
+      technique is used by APT28, APT29, and numerous commodity malware
+      families including PowerSploit Add-Persistence module. The WMI
+      subscription persists even after the creating process exits.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-114: Process Control"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1546/003/
+        - https://practicalsecurityanalytics.com/persistence-with-wmi-event-subscription-and-powershell-cradles/
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(Register-WmiEvent|Set-WMIInstance|CommandLineEventConsumer|ActiveScriptEventConsumer|__EventFilter|__EventConsumer|__FilterToConsumerBinding)'

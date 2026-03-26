@@ -1,0 +1,32 @@
+rules:
+  - id: ps-reflective-pe-loader-mimikatz
+    message: >-
+      Reflective PE loader pattern detected (T1620 / T1003.001). Combining
+      IO.Compression.DeflateStream or GZipStream with
+      [System.Reflection.Assembly]::Load is the canonical Invoke-Mimikatz and
+      PowerSploit loader structure: a compressed, base64-encoded PE is embedded
+      in the script and loaded directly into memory without touching disk.
+      Credential dumping tools (Mimikatz) and shellcode loaders both use this
+      pattern. Detonate only in a controlled sandbox environment.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://attack.mitre.org/techniques/T1620/
+        - https://attack.mitre.org/techniques/T1003/001/
+        - https://www.elastic.co/docs/reference/security/prebuilt-rules/rules/windows/credential_access_mimikatz_powershell_module
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(DeflateStream|GZipStream|FromBase64String|Reflection\.Assembly|Assembly::Load|\[Reflection\.Assembly\]).{0,200}(DeflateStream|GZipStream|FromBase64String|Reflection\.Assembly|Assembly::Load)'

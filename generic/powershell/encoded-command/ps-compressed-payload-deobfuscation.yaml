@@ -1,0 +1,31 @@
+rules:
+  - id: ps-compressed-payload-deobfuscation
+    message: >-
+      Compressed base64 payload deobfuscation chain detected (T1027 / T1140).
+      Combining [Convert]::FromBase64String with IO.Compression.DeflateStream or
+      GZipStream and a StreamReader is the canonical multi-layer encoding pattern
+      produced by Invoke-Obfuscation COMPRESS mode. The actual payload is hidden
+      inside the base64 blob and will only be visible after decompression.
+      Extract and decode the embedded blob for further analysis.
+    severity: ERROR
+    languages:
+      - generic
+    metadata:
+      category: security
+      cwe:
+        - "CWE-116: Improper Encoding or Escaping of Output"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1027/
+        - https://attack.mitre.org/techniques/T1140/
+        - https://github.com/danielbohannon/Invoke-Obfuscation
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(FromBase64String|DeflateStream|GZipStream).{0,200}(DeflateStream|GZipStream|FromBase64String)'
