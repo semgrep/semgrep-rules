@@ -5,6 +5,7 @@ $handle = [Win32]::OpenProcess(0x1F0FFF, $false, $lsass.Id)
 
 # ruleid: ps-lsass-process-targeting
 $processId = (Get-Process lsass).Id
+# ruleid: ps-lsass-process-targeting
 $hProcess = [Win32]::OpenProcess(0x1F0FFF, $false, $processId)
 [Win32]::MiniDumpWriteDump($hProcess, $processId, $fileStream, 2, [IntPtr]::Zero, [IntPtr]::Zero, [IntPtr]::Zero)
 
