@@ -1,0 +1,52 @@
+rules:
+  - id: gha-pwn-request-fork-checkout
+    message: >-
+      This `pull_request_target` workflow checks out fork-controlled code using
+      a fork-head ref (`github.event.pull_request.head.sha`, `github.head_ref`,
+      or `github.event.pull_request.head.ref`). The `pull_request_target`
+      trigger executes with the base repository's secrets even for PRs from
+      external forks. Checking out the attacker's fork code in this context
+      allows arbitrary code execution with access to repository secrets — this
+      is the "Pwn Request" attack pattern. Remediate by: (1) using the
+      `pull_request` trigger instead, (2) splitting into an upload/download
+      pattern using `workflow_run`, or (3) pinning the checkout to the base
+      branch without a `ref:` override.
+    severity: ERROR
+    languages:
+      - yaml
+    metadata:
+      category: security
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+        - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
+      technology:
+        - github-actions
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+    patterns:
+      - pattern-either:
+        - pattern-inside: |
+            on:
+              ...
+              pull_request_target: ...
+              ...
+            ...
+        - pattern-inside: |
+            on: [..., pull_request_target, ...]
+            ...
+        - pattern-inside: |
+            on: pull_request_target
+            ...
+      - pattern: |
+          ref: $REF
+      - metavariable-regex:
+          metavariable: $REF
+          regex: '.*github\.event\.pull_request\.head\.(sha|ref)|.*github\.head_ref'
