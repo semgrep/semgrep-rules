@@ -66,9 +66,9 @@ rules:
         - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
       references:
         - https://www.origamiprecision.com/
-    message: "**NetSuite Reliability Risk:** afterSubmit function lacks a root
-      `try/catch` block. Unhandled errors here will block the record from
-      saving."
+    message: "**NetSuite Reliability Risk:** Root try-catch missing in afterSubmit. 
+             While NetSuite handles uncaught exceptions, explicit error handling allows for better logging, notification of admins, and graceful recovery of side-effects
+             (like integrations or related record updates) that occur post-save."
     patterns:
       - pattern-inside: |
           function afterSubmit($CONTEXT) {
