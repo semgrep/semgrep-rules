@@ -21,9 +21,11 @@ rules:
         - https://attack.mitre.org/techniques/T1003/001/
       technology:
         - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
       subcategory:
         - vuln
       likelihood: HIGH
       impact: HIGH
       confidence: HIGH
-    pattern-regex: '(?i)(Get-Process\s+lsass|0x1[Ff]0[Ff]{2}[Ff]{2}|OpenProcess.{0,200}lsass)'
+    pattern-regex: '(?i)(Get-Process\s+lsass|0x1[Ff]0[Ff]{3}|OpenProcess.{0,200}lsass)'
