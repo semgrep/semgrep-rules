@@ -29,4 +29,8 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: MEDIUM
+    paths:
+      exclude:
+        - "*.md"
+        - "*.txt"
     pattern-regex: '(?i)(I`?E`?X|Invoke-Expression|InvokeExpression|\[ScriptBlock\]::Create|\.Invoke\(\))(.{0,300})(DownloadString|DownloadFile|Invoke-WebRequest|Invoke-RestMethod|\biwr\b|\birm\b)'

@@ -13,6 +13,16 @@ Add-Type -TypeDefinition '[DllImport("kernel32")] public static extern IntPtr Vi
 # ruleid: ps-pinvoke-injection-apis
 Add-Type -TypeDefinition '[DllImport("kernel32")] public static extern IntPtr QueueUserAPC(IntPtr pfnAPC, IntPtr hThread, IntPtr dwData);'
 
+# ruleid: ps-pinvoke-injection-apis
+$VirtualAllocAddr = Get-ProcAddress kernel32.dll VirtualAlloc; $VirtualAllocDelegate = Get-DelegateType @([IntPtr],[UInt32],[UInt32],[UInt32]) ([IntPtr]); $VirtualAlloc = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($VirtualAllocAddr, $VirtualAllocDelegate)
+
+# ruleid: ps-pinvoke-injection-apis
+$WriteMemory = [Marshal]::GetDelegateForFunctionPointer((Get-ProcAddress kernel32.dll WriteProcessMemory), $WriteProcessMemoryDelegate)
+
+# ok: ps-pinvoke-injection-apis
+$sb = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($funcPtr, $delegateType)
+Write-Output $sb.Invoke()
+
 # ok: ps-pinvoke-injection-apis
 Add-Type -AssemblyName System.Drawing
 $bitmap = [System.Drawing.Bitmap]::new(100, 100)

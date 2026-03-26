@@ -28,4 +28,8 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: MEDIUM
+    paths:
+      exclude:
+        - "*.md"
+        - "*.txt"
     pattern-regex: '(?i)(New-Object\s+(?:System\.)?Net\.WebClient|New-Object\s+(?:System\.)?Net\.Http\.HttpClient)(.{0,200})(\.DownloadString\s*\(|\.DownloadFile\s*\()'

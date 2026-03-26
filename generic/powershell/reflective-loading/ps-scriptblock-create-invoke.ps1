@@ -8,6 +8,12 @@ $decodedScript = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String(
 # ruleid: ps-scriptblock-create-invoke
 [ScriptBlock]::Create($decodedScript).Invoke()
 
+# ruleid: ps-scriptblock-create-invoke
+& ([ScriptBlock]::Create($encodedCommand))
+
+# ruleid: ps-scriptblock-create-invoke
+Invoke-Command ([scriptblock]::Create($decodedPayload))
+
 # ok: ps-scriptblock-create-invoke
 $sb = [ScriptBlock]::Create("Write-Host 'Hello'")
 Invoke-Command -ScriptBlock $sb
