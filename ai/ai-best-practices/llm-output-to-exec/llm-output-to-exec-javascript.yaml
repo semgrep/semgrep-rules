@@ -1,0 +1,36 @@
+rules:
+  - id: llm-output-to-exec-javascript
+    mode: taint
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      LLM API response data flows into a dangerous code execution function
+      (eval, new Function, child_process.exec). This enables code injection
+      attacks where a compromised or manipulated LLM response can execute
+      arbitrary code on the host system. Validate and sandbox LLM outputs
+      before execution.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [openai, anthropic]
+      references:
+        - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    pattern-sources:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern: await $CLIENT.chat.completions.create(...)
+      - pattern: $CLIENT.messages.create(...)
+      - pattern: await $CLIENT.messages.create(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: eval($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: new Function($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: exec($SINK)
+          - focus-metavariable: $SINK
