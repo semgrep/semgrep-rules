@@ -1,0 +1,41 @@
+rules:
+  - id: pnpm-missing-minimum-release-age
+    patterns:
+      - pattern-regex: (?ms)(^[a-zA-Z].*)
+      - pattern-not-regex: minimumReleaseAge
+    message: >-
+      This pnpm workspace configuration does not set a minimum release age.
+      Newly published packages can be malicious or unstable. Add
+      `minimumReleaseAge: 1440` (minutes) to wait at least one day before
+      installing newly published package versions.
+
+      Example:
+
+      ```yaml
+      minimumReleaseAge: 1440
+      ```
+
+      Reference: https://pnpm.io/settings#minimumreleaseage
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/pnpm-workspace.yaml"
+    metadata:
+      category: security
+      technology:
+        - pnpm
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://pnpm.io/settings#minimumreleaseage

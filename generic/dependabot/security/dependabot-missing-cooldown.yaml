@@ -1,0 +1,48 @@
+rules:
+  - id: dependabot-missing-cooldown
+    patterns:
+      - pattern-regex: (?s)(version\s*:.*)
+      - pattern-not-regex: cooldown
+    message: >-
+      This Dependabot configuration does not set a cooldown period. Newly
+      published packages can be malicious or unstable. Add a `cooldown` block
+      with `default-days: 7` to each entry under `updates` to wait 7 days
+      before proposing updates to newly published package versions.
+
+      Example:
+
+      ```yaml
+      updates:
+        - package-ecosystem: "npm"
+          directory: "/"
+          schedule:
+            interval: "weekly"
+          cooldown:
+            default-days: 7
+      ```
+
+      Reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#cooldown
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/.github/dependabot.yml"
+        - "**/.github/dependabot.yaml"
+    metadata:
+      category: security
+      technology:
+        - dependabot
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#cooldown

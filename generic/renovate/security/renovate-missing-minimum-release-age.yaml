@@ -1,0 +1,47 @@
+rules:
+  - id: renovate-missing-minimum-release-age
+    patterns:
+      - pattern-regex: (?s)(\{.*)
+      - pattern-not-regex: minimumReleaseAge
+    message: >-
+      This Renovate configuration does not set a minimum release age. Newly
+      published packages can be malicious or unstable. Add
+      `"minimumReleaseAge": "7 days"` at the top level or within a
+      `packageRules` entry to wait 7 days before proposing updates to newly
+      published package versions.
+
+      Example:
+
+      ```json
+      {
+        "minimumReleaseAge": "7 days"
+      }
+      ```
+
+      Reference: https://docs.renovatebot.com/configuration-options/#minimumreleaseage
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/renovate.json"
+        - "**/.renovaterc"
+        - "**/.renovaterc.json"
+        - "**/renovate.json5"
+    metadata:
+      category: security
+      technology:
+        - renovate
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.renovatebot.com/configuration-options/#minimumreleaseage

@@ -1,0 +1,53 @@
+rules:
+  - id: uv-script-unpinned-dependency
+    patterns:
+      - pattern-inside: |
+          # /// script
+          ...
+          # ///
+      - pattern-regex: '"[a-zA-Z][\w.-]*[^"]*"'
+      - pattern-not-regex: ==\s*[0-9]
+      - pattern-not-regex: "://"
+    message: >-
+      This inline script dependency is not pinned to an exact version with
+      `==`. Unpinned dependencies can resolve to different versions over time,
+      including newly published malicious versions. Pin each dependency to a
+      specific version using `==`.
+
+      Example:
+
+      ```python
+      # dependencies = [
+      #   "httpx==0.27.0",
+      # ]
+      ```
+
+      Reference: https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/*.py"
+        - "**/*.pyw"
+    options:
+      generic_ellipsis_max_span: 50
+    metadata:
+      category: security
+      technology:
+        - uv
+        - python
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies
+        - https://packaging.python.org/en/latest/specifications/inline-script-metadata/

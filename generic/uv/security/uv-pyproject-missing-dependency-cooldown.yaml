@@ -1,0 +1,43 @@
+rules:
+  - id: uv-pyproject-missing-dependency-cooldown
+    patterns:
+      - pattern-regex: (?s)(\[tool\.uv\].*)
+      - pattern-not-regex: exclude-newer
+    message: >-
+      This pyproject.toml configures uv but does not set a dependency cooldown.
+      Newly published packages can be malicious or unstable. Add
+      `exclude-newer = "7 days"` under the `[tool.uv]` section to wait 7 days
+      before resolving newly published package versions.
+
+      Example:
+
+      ```toml
+      [tool.uv]
+      exclude-newer = "7 days"
+      ```
+
+      Reference: https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/pyproject.toml"
+    metadata:
+      category: security
+      technology:
+        - uv
+        - python
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns

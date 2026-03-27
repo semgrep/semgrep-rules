@@ -1,0 +1,41 @@
+rules:
+  - id: uv-toml-missing-dependency-cooldown
+    patterns:
+      - pattern-regex: (?ms)(^[a-zA-Z].*)
+      - pattern-not-regex: exclude-newer
+    message: >-
+      This uv.toml does not set a dependency cooldown. Newly published packages
+      can be malicious or unstable. Add `exclude-newer = "7 days"` to wait
+      7 days before resolving newly published package versions.
+
+      Example:
+
+      ```toml
+      exclude-newer = "7 days"
+      ```
+
+      Reference: https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/uv.toml"
+    metadata:
+      category: security
+      technology:
+        - uv
+        - python
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns
