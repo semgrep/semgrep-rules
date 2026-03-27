@@ -183,7 +183,7 @@ int bad_code7() {
     free(var);
     // ruleid: use-after-free
     char buf[0] = var[0];
-    // todo rule/id: use-after-free	// todo
+    // ruleid: use-after-free
     strcpy(buf, var);
     return 0;
 }

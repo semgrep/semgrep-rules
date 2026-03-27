@@ -5,6 +5,12 @@ rules:
         - pattern: $VAR->$ACCESSOR
         - pattern: (*$VAR).$ACCESSOR
         - pattern: $VAR[$NUM]
+        - patterns:
+          - pattern-either:
+              - pattern: $FUN($VAR, ...)
+              - pattern: $FUN(..., $VAR)
+              - pattern: $FUN(..., $VAR ...)
+          - pattern-not: free($VAR)
       - pattern-inside:
           free($VAR);
           ...
