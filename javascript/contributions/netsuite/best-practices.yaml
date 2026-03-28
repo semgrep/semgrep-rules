@@ -121,26 +121,6 @@ rules:
           - pattern: $SEARCH.create(...)
           - pattern: $QUERY.run(...)
 
-  - id: netsuite-query-injection
-    languages: [javascript, typescript]
-    severity: WARNING
-    metadata:
-      technology: [netsuite]
-      type: Security
-      category: Injection
-      author: Joshua Meiri (Origami Precision, LLC)
-      references: [https://www.origamiprecision.com/]
-      origami-rationale: Concatenating variables into query strings can lead to SuiteQL injection. Using parameter binding with `params` ensures that variables are safely escaped, preventing malicious data extraction or manipulation.
-    message: "**Injection Risk:** Potential SuiteQL injection via string concatenation. Use the `params` property in `query.runSuiteQL()` to safely bind variables."
-    patterns:
-      - pattern-either:
-          - pattern: |
-              query.runSuiteQL({ query: ... + $VAR + ..., ... })
-          - pattern: |
-              query.runSuiteQL({ query: ... + $VAR, ... })
-          - pattern: |
-              query.runSuiteQL({ query: $VAR + ..., ... })
-
   - id: netsuite-enforce-sri-cdn
     languages: [javascript, typescript, html]
     severity: WARNING
