@@ -187,3 +187,14 @@ int bad_code7() {
     strcpy(buf, var);
     return 0;
 }
+
+int bad_code8() {
+    int *var;
+    var = (int *)calloc(sizeof(int), 5);
+    free(var);
+    // ruleid: use-after-free
+    *var = 256;
+    // ruleid: use-after-free
+    *var + 2 = 64;
+    return 0;
+}

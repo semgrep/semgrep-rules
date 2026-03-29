@@ -7,12 +7,18 @@ rules:
       $VAR = NULL;
       ...
       free($VAR);
-  - pattern-not: |
-      free($VAR);
-      ...
-      $VAR = malloc(...);
-      ...
-      free($VAR);
+  - pattern-not:
+        patterns:
+            - pattern-inside: |
+                free($VAR);
+                ...
+                $VAR = $ALLOC(...);
+                ...
+            - metavariable-pattern:
+                metavariable: $ALLOC
+                pattern-either:
+                  - pattern: malloc
+                  - pattern: calloc
   - pattern-inside: |
       free($VAR);
       ...

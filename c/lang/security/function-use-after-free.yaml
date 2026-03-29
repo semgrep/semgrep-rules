@@ -17,11 +17,18 @@ rules:
           ...
           $VAR = NULL;
           ...
-      - pattern-not-inside:
-          free($VAR);
-          ...
-          $VAR = malloc(...);
-          ...
+      - pattern-not:
+          patterns:
+            - pattern-inside: |
+                free($VAR);
+                ...
+                $VAR = $ALLOC(...);
+                ...
+            - metavariable-pattern:
+                metavariable: $ALLOC
+                pattern-either:
+                  - pattern: malloc
+                  - pattern: calloc
     message: Variable '$VAR' was passed to a function after being freed. This can lead to undefined behavior.
     metadata:
       cwe:
