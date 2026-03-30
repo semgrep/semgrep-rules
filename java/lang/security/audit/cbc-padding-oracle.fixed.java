@@ -22,6 +22,13 @@ public class Cls extends HttpServlet
         byte[] cipherText = c.doFinal(plainText);
     }
 
+    protected void danger_lowercase(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // ruleid:cbc-padding-oracle
+        Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+        c.init(Cipher.ENCRYPT_MODE, k, iv);
+        byte[] cipherText = c.doFinal(plainText);
+    }
+
     protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // ok:cbc-padding-oracle
         Cipher c = Cipher.getInstance("AES/GCM/NoPadding");

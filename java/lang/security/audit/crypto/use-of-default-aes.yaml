@@ -7,8 +7,8 @@ rules:
                   import javax;
                   ...
           - pattern-either:
-              - pattern: javax.crypto.Cipher.getInstance("AES")
-              - pattern: (javax.crypto.Cipher $CIPHER).getInstance("AES")
+              - pattern: javax.crypto.Cipher.getInstance("=~/(?i)^AES$/")
+              - pattern: (javax.crypto.Cipher $CIPHER).getInstance("=~/(?i)^AES$/")
       - patterns:
           - pattern-either:
               - pattern-inside: |
@@ -18,8 +18,8 @@ rules:
                   import javax.crypto;
                   ...
           - pattern-either:
-              - pattern: crypto.Cipher.getInstance("AES")
-              - pattern: (crypto.Cipher $CIPHER).getInstance("AES")
+              - pattern: crypto.Cipher.getInstance("=~/(?i)^AES$/")
+              - pattern: (crypto.Cipher $CIPHER).getInstance("=~/(?i)^AES$/")
       - patterns:
           - pattern-either:
               - pattern-inside: |
@@ -29,8 +29,8 @@ rules:
                   import javax.crypto.Cipher;
                   ...
           - pattern-either:
-              - pattern: Cipher.getInstance("AES")
-              - pattern: (Cipher $CIPHER).getInstance("AES")
+              - pattern: Cipher.getInstance("=~/(?i)^AES$/")
+              - pattern: (Cipher $CIPHER).getInstance("=~/(?i)^AES$/")
     metadata:
       functional-categories:
         - 'crypto::search::mode::javax.crypto'

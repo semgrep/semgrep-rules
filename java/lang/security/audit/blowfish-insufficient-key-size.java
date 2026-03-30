@@ -17,6 +17,12 @@ public class Cls {
         keyGen.init(128);
     }
 
+    public void unsafeKeySize_lowercase() {
+        // ruleid: blowfish-insufficient-key-size
+        KeyGenerator keyGen = KeyGenerator.getInstance("blowfish");
+        keyGen.init(64);
+    }
+
     public void superSafeKeySize() {
         // ok: blowfish-insufficient-key-size
         KeyGenerator keyGen = KeyGenerator.getInstance("Blowfish");

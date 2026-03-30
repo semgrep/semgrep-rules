@@ -25,6 +25,6 @@ rules:
     confidence: MEDIUM
   pattern-either:
   - pattern: |
-      java.security.MessageDigest.getInstance("MD5")
+      java.security.MessageDigest.getInstance("=~/(?i)^MD5$/")
   - pattern: |
       org.apache.commons.codec.digest.DigestUtils.getMd5Digest()

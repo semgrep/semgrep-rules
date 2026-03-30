@@ -8,6 +8,12 @@ public class WeakRSA {
     keyGen.initialize(512)
   }
 
+  fun rsaWeak_lowercase(): Void {
+    // ruleid: use-of-weak-rsa-key
+    val keyGen: KeyPairGenerator = KeyPairGenerator.getInstance("rsa")
+    keyGen.initialize(512)
+  }
+
   fun rsaOK(): Void {
     // ok: use-of-weak-rsa-key
     val keyGen = KeyPairGenerator.getInstance("RSA");

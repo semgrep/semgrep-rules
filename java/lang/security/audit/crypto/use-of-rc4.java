@@ -9,6 +9,16 @@ class RC4{
     useCipher(Cipher.getInstance("RC4"));
   }
 
+  public void useofRC4_lowercase() {
+    // ruleid: use-of-rc4
+    Cipher.getInstance("rc4");
+  }
+
+  public void useofRC4_mixedcase() {
+    // ruleid: use-of-rc4
+    Cipher.getInstance("Rc4");
+  }
+
   public void ok() {
     // ok: use-of-rc4 
     Cipher.getInstance("AES/CBC/PKCS7PADDING");
