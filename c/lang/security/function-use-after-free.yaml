@@ -29,6 +29,10 @@ rules:
                 pattern-either:
                   - pattern: malloc
                   - pattern: calloc
+                  - pattern: realloc
+                  - pattern: reallocarray
+                  - pattern: strdup
+                  - pattern: strndup
     message: Variable '$VAR' was passed to a function after being freed. This can lead to undefined behavior.
     metadata:
       cwe:

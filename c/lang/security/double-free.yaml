@@ -19,6 +19,10 @@ rules:
                 pattern-either:
                   - pattern: malloc
                   - pattern: calloc
+                  - pattern: realloc
+                  - pattern: reallocarray
+                  - pattern: strdup
+                  - pattern: strndup
   - pattern-inside: |
       free($VAR);
       ...
