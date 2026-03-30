@@ -72,3 +72,32 @@ public class UnencryptedServerSocket {
     }
 
 }
+
+public class EphemeralPortDetection {
+
+    fun getOpenPort(): Int {
+        // ok: unencrypted-socket
+        val ss = ServerSocket(0)
+        val port = ss.localPort
+        ss.reuseAddress = true
+        ss.close()
+        return port
+    }
+
+    fun getAvailablePort(): Int {
+        // ok: unencrypted-socket
+        val ss = ServerSocket(0)
+        ss.reuseAddress = true
+        val port = ss.localPort
+        ss.close()
+        return port
+    }
+
+    fun serverSocketZeroButAccepts(): Void {
+        // ruleid: unencrypted-socket
+        val ss = ServerSocket(0)
+        val client = ss.accept()
+        client.close()
+        ss.close()
+    }
+}
