@@ -48,9 +48,23 @@ rules:
     - pattern-inside: |
         on: pull_request_target
         ...
+  - pattern-inside: |
+      jobs:
+        ...
+        $JOBNAME:
+          ...
+          steps:
+            ...
   - pattern: |
-      ref: $REF
+      ...
+      uses: "$ACTION"
+      with:
+        ...
+        ref: $EXPR
   - metavariable-regex:
-      metavariable: $REF
+      metavariable: $ACTION
+      regex: actions/checkout@.*
+  - metavariable-regex:
+      metavariable: $EXPR
       regex: '.*github\.event\.pull_request\.head\.(sha|ref)|.*github\.head_ref|refs/pull/'
   severity: ERROR
