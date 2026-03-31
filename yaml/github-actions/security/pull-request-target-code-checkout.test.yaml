@@ -76,13 +76,13 @@ jobs:
         with:
           ref: refs/pull/${{github.event.pull_request.number}}/merge
 
-  # TP-4: github.head_ref (shorthand form, non-checkout action)
+  # TP-4: github.head_ref (shorthand form)
   tp_head_ref:
     runs-on: ubuntu-latest
     steps:
+      # ruleid: pull-request-target-code-checkout
       - uses: actions/checkout@v4
         with:
-          # ruleid: pull-request-target-code-checkout
           ref: ${{ github.head_ref }}
       - run: npm test
 
@@ -90,9 +90,9 @@ jobs:
   tp_sha_or_ref:
     runs-on: ubuntu-latest
     steps:
+      # ruleid: pull-request-target-code-checkout
       - uses: actions/checkout@v4
         with:
-          # ruleid: pull-request-target-code-checkout
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
       - run: go vet ./...
 
@@ -100,9 +100,9 @@ jobs:
   tp_head_ref_full:
     runs-on: ubuntu-latest
     steps:
+      # ruleid: pull-request-target-code-checkout
       - uses: actions/checkout@v4
         with:
-          # ruleid: pull-request-target-code-checkout
           ref: ${{ github.event.pull_request.head.ref }}
       - run: make build
 
