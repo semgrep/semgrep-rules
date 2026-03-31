@@ -67,11 +67,13 @@ rules:
   - metavariable-pattern:
       language: generic
       metavariable: $EXPR
-      pattern-either:
-      - patterns:
-        - pattern: github.event.pull_request.head.$PR_REF ...
-        - metavariable-regex:
-            metavariable: $PR_REF
-            regex: '^(sha|ref)$'
-      - pattern: github.head_ref ...
+      patterns:
+      - pattern: ${{ $...PR_REF }}
+      - metavariable-pattern:
+          language: generic
+          metavariable: $...PR_REF
+          pattern-either:
+          - pattern: github.event.pull_request.head.sha ...
+          - pattern: github.event.pull_request.head.ref ...
+          - pattern: github.head_ref ...
   severity: ERROR
