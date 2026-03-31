@@ -1,0 +1,23 @@
+rules:
+- id: javascript.npm.supply-chain.axios-compromised-version
+  pattern-either:
+  - pattern-regex: '"axios"\s*:\s*"1\.14\.1"'
+  - pattern-regex: axios@1\.14\.1
+  message: |
+    axios@1.14.1 is a compromised version. It pulls in plain-crypto-js, a malicious dropper that executes shell commands, stages payloads in OS temp directories, and destroys forensic evidence post-execution. Downgrade to 1.7.9 immediately and rotate any secrets present in the environment where this version ran.
+  languages:
+  - json
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-1357: Reliance on Insufficiently Trustworthy Component'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    subcategory:
+    - vuln
+    references:
+    - https://x.com/feross/status/2038807290422370479
+    fix: Downgrade axios to 1.7.9 and run `npm ci` to enforce the lockfile.
+    technology:
+    - javascript
