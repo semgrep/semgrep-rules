@@ -3,36 +3,34 @@ rules:
   languages:
   - yaml
   message: >-
-    This GitHub Actions workflow file uses `pull_request_target` and checks out code
-    from the incoming pull request. When using `pull_request_target`, the Action
-    runs in the context of the target repository, which includes access to all repository
-    secrets. Normally, this is safe because the Action only runs code from the target
-    repository, not the incoming PR. However, by checking out the incoming PR code, you're now using
-    the incoming code for the rest of the action. You may be inadvertently executing arbitrary code
-    from the incoming PR with access to repository secrets, which would let an attacker steal repository
-    secrets.
-    This normally happens by running build scripts (e.g., `npm build` and `make`) or dependency installation
-    scripts (e.g., `python setup.py install`).
-    Audit your workflow file to make sure no code from the incoming PR is executed.
-    Please see https://securitylab.github.com/research/github-actions-preventing-pwn-requests/ for additional
-    mitigations.
+    This `pull_request_target` workflow checks out fork-controlled code using a
+    fork-head ref (`github.event.pull_request.head.sha`, `github.head_ref`,
+    `github.event.pull_request.head.ref`, or a `refs/pull/` merge ref). The
+    `pull_request_target` trigger executes with the base repository's secrets
+    even for PRs from external forks. Checking out the attacker's fork code
+    allows arbitrary code execution with access to repository secrets — this is
+    the "Pwn Request" attack pattern. Remediate by: (1) using the
+    `pull_request` trigger instead, (2) splitting into an upload/download
+    pattern using `workflow_run`, or (3) pinning the checkout to the base
+    branch without a `ref:` override.
   metadata:
     category: security
     owasp:
-    - A01:2021 - Broken Access Control
-    - A01:2025 - Broken Access Control
+    - A08:2021 - Software and Data Integrity Failures
+    - A08:2025 - Software and Data Integrity Failures
     cwe:
-    - 'CWE-913: Improper Control of Dynamically-Managed Code Resources'
+    - 'CWE-829: Inclusion of Functionality from Untrusted Control Sphere'
     references:
     - https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+    - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
     - https://github.com/justinsteven/advisories/blob/master/2021_github_actions_checkspelling_token_leak_via_advice_symlink.md
     technology:
     - github-actions
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -47,25 +45,9 @@ rules:
     - pattern-inside: |
         on: pull_request_target
         ...
-  - pattern-inside: |
-      jobs:
-        ...
-        $JOBNAME:
-          ...
-          steps:
-            ...
   - pattern: |
-      ...
-      uses: "$ACTION"
-      with:
-        ...
-        ref: $EXPR
+      ref: $REF
   - metavariable-regex:
-      metavariable: $ACTION
-      regex: actions/checkout@.*
-  - metavariable-pattern:
-      language: generic
-      metavariable: $EXPR
-      patterns:
-      - pattern: ${{ github.event.pull_request ... }}
-  severity: WARNING
+      metavariable: $REF
+      regex: '.*github\.event\.pull_request\.head\.(sha|ref)|.*github\.head_ref|refs/pull/'
+  severity: ERROR
