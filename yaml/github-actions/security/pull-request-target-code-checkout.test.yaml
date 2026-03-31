@@ -63,7 +63,20 @@ jobs:
         run: |
           echo "Hello, world"
 
-  # TP-3: github.head_ref (shorthand form)
+  # cf. https://github.com/justinsteven/advisories/blob/master/2021_github_actions_checkspelling_token_leak_via_advice_symlink.md
+  # TP-3: refs/pull/.../merge (fork merge ref)
+  spelling:
+    name: Spell checking
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: pull-request-target-code-checkout
+      - name: checkout-merge
+        if: contains(github.event_name, 'pull_request')
+        uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{github.event.pull_request.number}}/merge
+
+  # TP-4: github.head_ref (shorthand form)
   tp_head_ref:
     runs-on: ubuntu-latest
     steps:
