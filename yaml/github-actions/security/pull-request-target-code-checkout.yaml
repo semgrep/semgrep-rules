@@ -64,7 +64,14 @@ rules:
   - metavariable-regex:
       metavariable: $ACTION
       regex: actions/checkout@.*
-  - metavariable-regex:
+  - metavariable-pattern:
+      language: generic
       metavariable: $EXPR
-      regex: '.*github\.event\.pull_request\.head\.(sha|ref)|.*github\.head_ref|refs/pull/'
+      pattern-either:
+      - patterns:
+        - pattern: github.event.pull_request.head.$PR_REF ...
+        - metavariable-regex:
+            metavariable: $PR_REF
+            regex: '^(sha|ref)$'
+      - pattern: github.head_ref ...
   severity: ERROR
