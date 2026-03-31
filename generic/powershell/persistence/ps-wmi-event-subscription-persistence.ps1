@@ -13,7 +13,8 @@ $consumer = New-Object PSObject -Property @{Name='BackdoorConsumer'; ScriptingEn
 $consumer | ForEach-Object { Set-WMIInstance -Path "root\subscription:ActiveScriptEventConsumer" -Arguments @{Name=$_.Name; ScriptText='Set objShell = CreateObject("WScript.Shell") : objShell.Run "powershell -enc ..."'} }
 
 # ok: ps-wmi-event-subscription-persistence
-Get-WmiObject -Class Win32_Process | Where-Object { $_.Name -eq "notepad.exe" } | Select-Object ProcessId, Name
+$procs = Get-WmiObject -Class Win32_Process | Where-Object { $_.Name -eq "notepad.exe" }
+Write-Host $procs.ProcessId
 
 # ok: ps-wmi-event-subscription-persistence
 $os = Get-WmiObject -Class Win32_OperatingSystem

@@ -10,7 +10,7 @@ rules:
       payload delivery.
     severity: ERROR
     languages:
-      - generic
+      - powershell
     metadata:
       category: security
       cwe:
@@ -30,4 +30,5 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: HIGH
-    pattern-regex: '(?i)\[Ref\]\s*\.\s*Assembly\s*\.\s*GetType\s*\('
+    patterns:
+      - pattern: '[Ref].Assembly.GetType($A)'

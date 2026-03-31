@@ -15,4 +15,5 @@ Invoke-Mimikatz -DumpCreds
 Write-Host "Security audit: checking credential hygiene per policy"
 
 # ok: ps-mimikatz-command-strings
-Get-ADUser -Filter * -Properties PasswordLastSet | Select-Object Name, PasswordLastSet
+$users = Get-ADUser -Filter * -Properties PasswordLastSet
+Write-Host $users.Count

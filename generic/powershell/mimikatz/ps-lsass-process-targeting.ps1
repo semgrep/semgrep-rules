@@ -17,4 +17,5 @@ $procs = Get-Process | Where-Object { $_.CPU -gt 50 }
 Write-Host "High CPU processes: $($procs.Count)"
 
 # ok: ps-lsass-process-targeting
-Get-Process | Where-Object { $_.WorkingSet64 -gt 500MB } | Select-Object Name, Id
+$procs = Get-Process | Where-Object { $_.WorkingSet64 -gt 524288000 }
+Write-Host $procs.Count

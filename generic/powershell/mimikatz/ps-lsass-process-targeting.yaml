@@ -9,7 +9,7 @@ rules:
       and custom credential dumping tools.
     severity: ERROR
     languages:
-      - generic
+      - powershell
     metadata:
       category: security
       cwe:
@@ -28,4 +28,6 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: HIGH
-    pattern-regex: '(?i)(Get-Process\s+lsass|0x1[Ff]0[Ff]{3}|OpenProcess.{0,200}lsass)'
+    pattern-either:
+      - pattern: Get-Process lsass
+      - pattern-regex: '(?i)(0x1[Ff]0[Ff]{3}|OpenProcess.{0,200}lsass)'

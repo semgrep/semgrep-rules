@@ -10,7 +10,7 @@ rules:
       and whether the script belongs in your environment.
     severity: WARNING
     languages:
-      - generic
+      - powershell
     metadata:
       category: security
       cwe:
@@ -28,8 +28,8 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: MEDIUM
-    paths:
-      exclude:
-        - "*.md"
-        - "*.txt"
-    pattern-regex: '(?i)(New-Object\s+(?:System\.)?Net\.WebClient|New-Object\s+(?:System\.)?Net\.Http\.HttpClient)(.{0,200})(\.DownloadString\s*\(|\.DownloadFile\s*\()'
+    pattern-either:
+      - pattern: (New-Object Net.WebClient).DownloadString($A)
+      - pattern: (New-Object System.Net.WebClient).DownloadString($A)
+      - pattern: (New-Object Net.WebClient).DownloadFile($A, $B)
+      - pattern: (New-Object System.Net.WebClient).DownloadFile($A, $B)

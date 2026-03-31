@@ -9,7 +9,7 @@ rules:
       being loaded.
     severity: ERROR
     languages:
-      - generic
+      - powershell
     metadata:
       category: security
       cwe:
@@ -27,4 +27,6 @@ rules:
       likelihood: HIGH
       impact: HIGH
       confidence: HIGH
-    pattern-regex: '(?i)\[(?:System\.)?Reflection\.Assembly\]::Load\s*\('
+    pattern-either:
+      - pattern: '[System.Reflection.Assembly]::Load($X)'
+      - pattern: '[Reflection.Assembly]::Load($X)'
