@@ -1,11 +1,11 @@
 rules:
   - id: uv-pyproject-missing-dependency-cooldown
     patterns:
-      - pattern-regex: (?s)(\[tool\.uv\].*)
+      - pattern-regex: (?ms)(^[\[a-zA-Z].*)
       - pattern-not-regex: exclude-newer
     message: >-
-      This pyproject.toml configures uv but does not set a dependency cooldown.
-      Newly published packages can be malicious or unstable. Add
+      This pyproject.toml does not set a uv dependency cooldown. Newly
+      published packages can be malicious or unstable. If you use uv, add
       `exclude-newer = "7 days"` under the `[tool.uv]` section to wait 7 days
       before resolving newly published package versions.
 
@@ -32,7 +32,7 @@ rules:
         - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
       owasp:
         - A08:2021 - Software and Data Integrity Failures
-      confidence: MEDIUM
+      confidence: LOW
       likelihood: LOW
       impact: MEDIUM
       subcategory:

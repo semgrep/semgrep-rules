@@ -1,0 +1,46 @@
+rules:
+  - id: npmrc-missing-min-release-age
+    patterns:
+      - pattern-regex: (?ms)(^[a-zA-Z].*)
+      - pattern-not-regex: min-release-age
+    message: >-
+      This .npmrc does not set a minimum release age. Newly published packages
+      can be malicious or unstable. Add `min-release-age=7` to wait 7 days
+      before installing newly published package versions.
+
+      You should also add `ignore-scripts=true` to disable lifecycle scripts,
+      which are a common attack vector in supply chain attacks. npm executes
+      lifecycle scripts by default, unlike pnpm and bun.
+
+      Example:
+
+      ```ini
+      min-release-age=7
+      ignore-scripts=true
+      ```
+
+      Reference: https://docs.npmjs.com/cli/using-npm/config#min-release-age
+    languages:
+      - generic
+    severity: WARNING
+    paths:
+      include:
+        - "**/.npmrc"
+    metadata:
+      category: security
+      technology:
+        - npm
+        - nodejs
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: LOW
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.npmjs.com/cli/using-npm/config#min-release-age
