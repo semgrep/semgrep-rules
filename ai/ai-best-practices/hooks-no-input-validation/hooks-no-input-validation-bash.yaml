@@ -1,0 +1,22 @@
+rules:
+  - id: hooks-no-input-validation-bash
+    languages: [bash]
+    severity: WARNING
+    message: >-
+      Piping untrusted input directly to eval, bash, or sh is dangerous in Claude Code
+      and Cursor hooks. Validate and sanitize input before executing it.
+    metadata:
+      cwe: "CWE-1287: Improper Validation of Specified Type of Input"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern-either:
+      - pattern: eval $...ARGS
+      - pattern: echo $...ARGS | bash
+      - pattern: echo $...ARGS | sh

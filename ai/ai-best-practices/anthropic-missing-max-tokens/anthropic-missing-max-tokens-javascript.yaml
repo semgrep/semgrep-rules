@@ -1,0 +1,20 @@
+rules:
+  - id: anthropic-missing-max-tokens-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Anthropic messages.create() called without 'max_tokens' parameter. Setting
+      max_tokens prevents unexpectedly long or expensive responses.
+    metadata:
+      cwe: "CWE-770: Allocation of Resources Without Limits or Throttling"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: "$CLIENT.messages.create({...})"
+      - pattern-not: "$CLIENT.messages.create({..., max_tokens: $MT, ...})"

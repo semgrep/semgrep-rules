@@ -1,0 +1,31 @@
+rules:
+  - id: anthropic-missing-refusal-check-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Anthropic response content accessed without checking stop_reason. Check
+      response.stop_reason to handle cases where the model stops unexpectedly
+      (e.g., due to max_tokens or content filtering).
+    metadata:
+      cwe: "CWE-1188: Initialization with an Insecure Default"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [anthropic]
+      references:
+        - https://docs.anthropic.com/en/api/messages
+    patterns:
+      - pattern: $RESP.content
+      - pattern-inside: |
+          $RESP = $CLIENT.messages.create(...)
+          ...
+      - pattern-not-inside: |
+          if $RESP.stop_reason == "end_turn":
+              ...
+      - pattern-not-inside: |
+          if $RESP.stop_reason != ...:
+              ...
+          else:
+              ...
