@@ -1,0 +1,31 @@
+rules:
+  - id: openai-missing-refusal-check-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      OpenAI response content accessed without checking for refusal. The model
+      may refuse requests, and accessing .content without checking .refusal
+      first may lead to unexpected behavior. Check
+      response.choices[0].message.refusal before accessing content.
+    metadata:
+      cwe: "CWE-252: Unchecked Return Value"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices/
+    patterns:
+      - pattern: $RESP.choices[0].message.content
+      - pattern-not-inside: |
+          if ($RESP.choices[0].message.refusal) {
+              ...
+          } else {
+              ...
+          }
+      - pattern-not-inside: |
+          if (!$RESP.choices[0].message.refusal) {
+              ...
+          }

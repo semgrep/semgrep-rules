@@ -66,7 +66,7 @@ public class SqlExample2 {
         ResultSet rs = c.createStatement().execute(sql);
     }
 
-    public List<AccountDTO> findAccountsById(String id) {
+    public List<AccountDTO> findAccountsById(String id, String unused) {
         String jql = "from Account where id = '" + id + "'";
         EntityManager em = emfactory.createEntityManager();
         // ruleid:formatted-sql-string
@@ -92,7 +92,7 @@ public class SQLExample3 {
         ResultSet rs = c.createStatement().execute(sql);
     }
 
-    public List<AccountDTO> findAccountsById(String id) {
+    public List<AccountDTO> findAccountsById(String id, String unused) {
         String jql = String.format("from Account where id = '%s'", id);
         EntityManager em = emfactory.createEntityManager();
         // ruleid: formatted-sql-string
@@ -151,5 +151,24 @@ public class SqlExampleFocusMetavar {
         PreparedStatement statement = c.prepareStatment("SELECT * FROM " + p);
         // ruleid: formatted-sql-string
         ResultSet rs = statement.executeQuery();
+    }
+}
+
+public class SqlExampleNonStringBuilderConstructor{
+
+    public Retry<ResultSet> getRetry(final String mainQuery, final Connection connection) {
+        // not a StringBuilder
+        return new Retry<>(
+            // also not a StringBuilder
+            new Callable<ResultSet>() {
+                public ResultSet call() throws SQLException {
+                    PreparedStatement statement = connection.prepareStatement(
+                        mainQuery, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+                    statement.setFetchSize(Integer.MIN_VALUE);
+                    // ok: formatted-sql-string
+                    return statement.executeQuery ();
+                }
+            },
+            Retry.RETRY_FOREVER);
     }
 }

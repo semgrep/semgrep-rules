@@ -1,0 +1,25 @@
+rules:
+  - id: openai-missing-system-message-js
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      OpenAI chat completion created without a system message. A system message
+      helps establish behavioral guidelines and safety boundaries for the model.
+    metadata:
+      cwe: "CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices/
+    patterns:
+      - pattern: |
+          $CLIENT.chat.completions.create({..., messages: $MSGS, ...})
+      - metavariable-pattern:
+          metavariable: $MSGS
+          patterns:
+            - pattern: '[..., {role: "user", ...}, ...]'
+            - pattern-not: '[..., {role: "system", ...}, ...]'

@@ -1,0 +1,40 @@
+rules:
+  - id: github-actions-mutable-action-tag
+    message: >-
+      GitHub Actions step uses a mutable tag or branch reference. Tags and
+      branch names can be silently repointed by the action owner, enabling
+      supply-chain attacks — as seen in the trivy-action and
+      kics-github-action compromises. Pin the reference to a full 40-character
+      commit SHA instead, e.g.
+      `uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.
+    severity: WARNING
+    languages:
+      - yaml
+    metadata:
+      category: security
+      cwe:
+        - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+        - "CWE-353: Missing Support for Integrity Check"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+      technology:
+        - github-actions
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+    patterns:
+      - pattern-inside: "{steps: ...}"
+      - pattern: |
+          uses: "$ACTION"
+      - metavariable-pattern:
+          metavariable: $ACTION
+          language: generic
+          patterns:
+            - pattern-not-regex: '^\./'
+            - pattern-not-regex: '^docker://'
+            - pattern-not-regex: '@[0-9a-f]{40}(\s|$)'

@@ -17,7 +17,7 @@ func a() {
 	path.Join("/", path.Base(p))
 }
 
-func a() {
+func a2() {
 	url, err := url.Parse("http://foo:666/bar")
 	if err != nil {
 		panic(err)
@@ -27,7 +27,7 @@ func a() {
 	fmt.Println(path.Join(url.Path, "baz"))
 }
 
-func a(p string) {
+func a3(p string) {
 	// ruleid: use-filepath-join
 	fmt.Println(path.Join(p, "baz"))
 

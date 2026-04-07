@@ -6,6 +6,7 @@ rules:
     owasp:
     - A01:2017 - Injection
     - A03:2021 - Injection
+    - A05:2025 - Injection
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#SQL_INJECTION
     asvs:
       section: 'V5: Validation, Sanitization and Encoding Verification Requirements'
@@ -52,12 +53,17 @@ rules:
     - pattern-either:
       - pattern: $X + $INPUT
       - pattern: $X += $INPUT
-      - pattern: $STRB.append($INPUT)
       - pattern: String.format(..., $INPUT, ...)
       - pattern: String.join(..., $INPUT, ...)
       - pattern: (String $STR).concat($INPUT)
       - pattern: $INPUT.concat(...)
-      - pattern: new $STRB(..., $INPUT, ...)
+      - patterns:
+        - pattern-either:
+          - pattern: $STRB.append($INPUT)
+          - pattern: new $STRB(..., $INPUT, ...)
+        - metavariable-type:
+            metavariable: $STRB
+            type: StringBuilder
     label: CONCAT
     requires: INPUT
   pattern-propagators:

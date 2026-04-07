@@ -110,7 +110,7 @@ func SelectHandler3(db *sql.DB) func(w http.ResponseWriter, req *http.Request) {
     }
 }
 
-func SelectHandler3(db *sql.DB) func(w http.ResponseWriter, req *http.Request) {
+func SelectHandler3ok(db *sql.DB) func(w http.ResponseWriter, req *http.Request) {
     return func(w http.ResponseWriter, req *http.Request) {
         del := req.URL.Query().Get("del")
         id := req.URL.Query().Get("Id")

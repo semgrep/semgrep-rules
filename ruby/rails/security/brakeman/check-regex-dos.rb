@@ -4,13 +4,13 @@ def some_rails_controller
   Regexp.new(foo).match("some_string")
 end
 
-def some_rails_controller
+def some_rails_controller2
   foo = Record[something]
   #ruleid: check-regex-dos
   Regexp.new(foo).match("some_string")
 end
 
-def some_rails_controller
+def some_rails_controller3
   foo = Record.read_attribute("some_attribute")
   #ruleid: check-regex-dos
   Regexp.new(foo).match("some_string")

@@ -22,7 +22,7 @@ let zzz = <Foo className={"foobar"} href={SEMGREP_REPO} />;
 // ok: react-href-var
 let zzz = <Foo className={"foobar"} href={SEMGREP_REPO1} />;
 
-function test1(input) {
+function test1_ok(input) {
 // ok: react-href-var
   if(input.startsWith("https:")) {
     const params = {href: input};
@@ -36,7 +36,7 @@ function test2(input) {
   return React.createElement("a", params);
 }
 
-function test2(input) {
+function test2_ok(input) {
   // ok: react-href-var
   const params = {href: "#"+input};
   return React.createElement("a", params);

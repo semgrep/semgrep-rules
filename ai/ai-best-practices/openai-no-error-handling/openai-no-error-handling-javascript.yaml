@@ -1,0 +1,27 @@
+rules:
+  - id: openai-no-error-handling-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      OpenAI API call without error handling. Wrap API calls in try/catch to
+      handle rate limits, API errors, and network issues gracefully.
+    metadata:
+      cwe: "CWE-252: Unchecked Return Value"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices/
+    patterns:
+      - pattern-either:
+          - pattern: await $CLIENT.chat.completions.create({...})
+          - pattern: $CLIENT.chat.completions.create({...})
+      - pattern-not-inside: |
+          try {
+              ...
+          } catch ($ERR) {
+              ...
+          }
