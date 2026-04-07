@@ -223,3 +223,19 @@ jobs:
           script: |
             const ref = "${{ github.event.deployment.ref }}";
             console.log(ref);
+
+      - name: Test 123
+        uses: actions/github-script@v6
+        with:
+          # ruleid: github-script-injection
+          script: |
+            const ref = "${{ foo && github.head_ref || 'default' }}";
+            console.log(ref);
+
+      - name: Test OK
+        uses: actions/github-script@v6
+        with:
+          # ok: github-script-injection
+          script: |
+            const ref = "${{ github.head_ref && foo || bar }}";
+            console.log(ref);
