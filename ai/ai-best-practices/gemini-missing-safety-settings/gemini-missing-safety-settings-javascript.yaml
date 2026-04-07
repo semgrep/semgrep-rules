@@ -1,0 +1,21 @@
+rules:
+  - id: gemini-missing-safety-settings-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      Gemini generate_content() called without safety_settings. Configure safety
+      settings to control content filtering thresholds for harmful content
+      categories.
+    metadata:
+      cwe: "CWE-1188: Initialization with an Insecure Default"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-settings
+    patterns:
+      - pattern: "$MODEL.generateContent({...})"
+      - pattern-not: "$MODEL.generateContent({..., safetySettings: $S, ...})"
