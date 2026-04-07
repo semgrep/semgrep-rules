@@ -137,6 +137,54 @@ jobs:
         # ok: run-shell-injection
         run: |
           echo "${{ steps.shell_command.outputs.some_value }}"
+      - name: Show base ref
+        # ruleid: run-shell-injection
+        run: |
+          echo "Base branch: ${{ github.base_ref }}"
+      - name: Show ref name
+        # ruleid: run-shell-injection
+        run: |
+          echo "Branch name: ${{ github.ref_name }}"
+      - name: Show commit message
+        # ruleid: run-shell-injection
+        run: |
+          echo "Commit message: ${{ github.event.commits[0].message }}"
+      - name: Show workflow run branch
+        # ruleid: run-shell-injection
+        run: |
+          echo "Workflow branch: ${{ github.event.workflow_run.head_branch }}"
+      - name: Show milestone title
+        # ruleid: run-shell-injection
+        run: |
+          echo "Milestone: ${{ github.event.milestone.title }}"
+      - name: Show milestone description
+        # ruleid: run-shell-injection
+        run: |
+          echo "Milestone desc: ${{ github.event.milestone.description }}"
+      - name: Show project card note
+        # ruleid: run-shell-injection
+        run: |
+          echo "Card note: ${{ github.event.project_card.note }}"
+      - name: Show project name
+        # ruleid: run-shell-injection
+        run: |
+          echo "Project: ${{ github.event.project.name }}"
+      - name: Show project column name
+        # ruleid: run-shell-injection
+        run: |
+          echo "Column: ${{ github.event.project_column.name }}"
+      - name: Show release name
+        # ruleid: run-shell-injection
+        run: |
+          echo "Release: ${{ github.event.release.name }}"
+      - name: Show release body
+        # ruleid: run-shell-injection
+        run: |
+          echo "Release body: ${{ github.event.release.body }}"
+      - name: Show deployment ref
+        # ruleid: run-shell-injection
+        run: |
+          echo "Deployment: ${{ github.event.deployment.ref }}"
 
       # ruleid: run-shell-injection
       - run: echo "${{ github.head_ref || 'default' }}"

@@ -51,6 +51,7 @@ rules:
         - pattern: ${{ ... github.event.head_commit.author.name ... }}
         - pattern: ${{ ... github.event.commits ... .author.email ... }}
         - pattern: ${{ ... github.event.commits ... .author.name ... }}
+        - pattern: ${{ ... github.event.commits ... .message ... }}
         - pattern: ${{ ... github.event.pull_request.head.ref ... }}
         - pattern: ${{ ... github.event.pull_request.head.label ... }}
         - pattern: ${{ ... github.event.pull_request.head.repo.default_branch ... }}
@@ -62,6 +63,15 @@ rules:
         - pattern: ${{ ... github.event.inputs ... }}
         - pattern: ${{ ... github.event.discussion.title ... }}
         - pattern: ${{ ... github.event.discussion.body ... }}
+        - pattern: ${{ ... github.event.workflow_run.head_branch ... }}
+        - pattern: ${{ ... github.event.milestone.title ... }}
+        - pattern: ${{ ... github.event.milestone.description ... }}
+        - pattern: ${{ ... github.event.project_card.note ... }}
+        - pattern: ${{ ... github.event.project.name ... }}
+        - pattern: ${{ ... github.event.project_column.name ... }}
+        - pattern: ${{ ... github.event.release.name ... }}
+        - pattern: ${{ ... github.event.release.body ... }}
+        - pattern: ${{ ... github.event.deployment.ref ... }}
         - pattern: ${{ ... inputs ... }}
       # Exclude safe patterns where variable is only checked for truthiness (left of &&)
       # e.g., ${{ github.head_ref && 'literal' }} is safe - value not interpolated
@@ -72,9 +82,13 @@ rules:
       - pattern-not: ${{ ... github.event.comment.body && ... }}
       - pattern-not: ${{ ... github.event.review.body && ... }}
       - pattern-not: ${{ ... github.event.review_comment.body && ... }}
+      - pattern-not: ${{ ... github.event.pages ... .page_name && ... }}
       - pattern-not: ${{ ... github.event.head_commit.message && ... }}
       - pattern-not: ${{ ... github.event.head_commit.author.email && ... }}
       - pattern-not: ${{ ... github.event.head_commit.author.name && ... }}
+      - pattern-not: ${{ ... github.event.commits ... .author.email && ... }}
+      - pattern-not: ${{ ... github.event.commits ... .author.name && ... }}
+      - pattern-not: ${{ ... github.event.commits ... .message && ... }}
       - pattern-not: ${{ ... github.event.pull_request.head.ref && ... }}
       - pattern-not: ${{ ... github.event.pull_request.head.label && ... }}
       - pattern-not: ${{ ... github.event.pull_request.head.repo.default_branch && ... }}
@@ -83,6 +97,16 @@ rules:
       - pattern-not: ${{ ... github.head_ref && ... }}
       - pattern-not: ${{ ... github.ref_name && ... }}
       - pattern-not: ${{ ... github.workflow && ... }}
+      - pattern-not: ${{ ... github.event.inputs && ... }}
       - pattern-not: ${{ ... github.event.discussion.title && ... }}
       - pattern-not: ${{ ... github.event.discussion.body && ... }}
+      - pattern-not: ${{ ... github.event.workflow_run.head_branch && ... }}
+      - pattern-not: ${{ ... github.event.milestone.title && ... }}
+      - pattern-not: ${{ ... github.event.milestone.description && ... }}
+      - pattern-not: ${{ ... github.event.project_card.note && ... }}
+      - pattern-not: ${{ ... github.event.project.name && ... }}
+      - pattern-not: ${{ ... github.event.project_column.name && ... }}
+      - pattern-not: ${{ ... github.event.release.name && ... }}
+      - pattern-not: ${{ ... github.event.release.body && ... }}
+      - pattern-not: ${{ ... github.event.deployment.ref && ... }}
   severity: ERROR
