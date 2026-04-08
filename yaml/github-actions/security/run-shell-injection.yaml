@@ -64,6 +64,7 @@ rules:
         - pattern: ${{ ... github.event.discussion.title ... }}
         - pattern: ${{ ... github.event.discussion.body ... }}
         - pattern: ${{ ... github.event.workflow_run.head_branch ... }}
+        - pattern: ${{ ... github.event.workflow_run.head_commit.message ... }}
         - pattern: ${{ ... github.event.milestone.title ... }}
         - pattern: ${{ ... github.event.milestone.description ... }}
         - pattern: ${{ ... github.event.project_card.note ... }}
@@ -92,6 +93,7 @@ rules:
       - pattern-not: ${{ ... github.event.pull_request.head.ref && ... }}
       - pattern-not: ${{ ... github.event.pull_request.head.label && ... }}
       - pattern-not: ${{ ... github.event.pull_request.head.repo.default_branch && ... }}
+      - pattern-not: ${{ ... github.event.workflow_run.head_commit.message && ... }}
       - pattern-not: ${{ ... github.ref && ... }}
       - pattern-not: ${{ ... github.base_ref && ... }}
       - pattern-not: ${{ ... github.head_ref && ... }}
