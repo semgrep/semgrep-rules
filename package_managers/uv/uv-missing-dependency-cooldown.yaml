@@ -28,17 +28,9 @@ rules:
     message: >-
       This pyproject.toml configures uv but does not set a dependency cooldown.
       Newly published packages can be malicious or unstable. Add
-      `exclude-newer = "7 days"` under the `[tool.uv]` section to wait 7 days
+      `exclude-newer = "7 days"` under `[tool.uv]` to wait 7 days
       before resolving newly published package versions.
-
-      Example:
-      ```toml
-      [tool.uv]
-      exclude-newer = "7 days"
-      ```
-
       Added in: 0.9.17
-
       Reference: https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns
     languages:
       - generic
