@@ -44,21 +44,8 @@ rules:
     message: >-
       This Dependabot configuration does not set a cooldown period. Newly
       published packages can be malicious or unstable. Add a `cooldown` block
-      with `default-days: 7` to each entry under `updates` to wait 7 days
+      with `default-days: 7` to each `package-ecosystem` entry under `updates` to wait 7 days
       before proposing updates to newly published package versions.
-
-      Example:
-
-      ```yaml
-      updates:
-        - package-ecosystem: "npm"
-          directory: "/"
-          schedule:
-            interval: "weekly"
-          cooldown:
-            default-days: 7
-      ```
-
       Reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#cooldown
     languages:
       - yaml
