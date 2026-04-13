@@ -4,11 +4,9 @@ rules:
     pattern-either:
       # Branch 1: Missing min-release-age
       - patterns:
-          - pattern-regex: '(?:(?:^---\n)(?:[^\n]*\n)|^)(?P<TARGET>(?:(?!\n---)[\s\S])*)'
-          - metavariable-regex:
-              metavariable: $TARGET
-              regex: '^(?![\s\S]*min-release-age)'
-          - focus-metavariable: $TARGET
+        - pattern-regex: '(?:(?:^---\n)(?:[^\n]*\n)|^)(?P<TARGET>(?:(?!\n---)[\s\S])*\S(?:(?!\n---)[\s\S])*)'
+        - pattern-not-regex: 'min-release-age'
+        - focus-metavariable: $TARGET
 
       # Branch 2: Value too low (< 7 days)
       - patterns:
