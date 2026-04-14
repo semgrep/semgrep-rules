@@ -1,0 +1,30 @@
+rules:
+- id: github-actions-mutable-action-tag
+  message: >-
+    GitHub Actions step uses a mutable tag or branch reference (`$1`). Tags and
+    branch names can be silently repointed by the action owner, enabling supply-chain
+    attacks. Pin the reference to a full 40-character commit SHA instead, e.g. `uses:
+    actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-1104: Use of Unmaintained Third Party Components'
+    owasp:
+    - A03:2025 - Software Supply Chain Failures
+    - A06:2021 - Vulnerable and Outdated Components
+    references:
+    - https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/
+    - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
+    - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+    technology:
+    - github-actions
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: HIGH
+  languages:
+  - yaml
+  patterns:
+  - pattern-regex: (?m)^[^#\n]*uses:\s+[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+@(?![0-9a-f]{40}(\s|$))[^\s@]+
