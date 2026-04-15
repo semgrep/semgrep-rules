@@ -1,0 +1,61 @@
+---
+rules:
+  - id: yarn-missing-minimal-age-gate
+    pattern-either:
+
+      # Branch 1: Missing entirely
+      - patterns:
+          - pattern-regex: '(?ms)(?:\A|^---$\n)(?:(?!^npmMinimalAgeGate\s*:)(?!^---$)[\s\S])*?(?P<TARGET>^(?:nodeLinker|yarnPath|enableGlobalCache|npmScopes|npmRegistryServer)\s*:)(?:(?!^npmMinimalAgeGate\s*:)(?!^---$)[\s\S])*?(?=^---$|\z)'
+          - focus-metavariable: $TARGET
+
+      # Branch 2: Value too low (< 7 days) - valid format, number too small
+      - patterns:
+          - pattern-regex: '(?m)npmMinimalAgeGate\s*:\s*[''"]?(?P<DAYS>\d+)d[''"]?'
+          - metavariable-comparison:
+              metavariable: $DAYS
+              comparison: int($DAYS) < 7
+          - focus-metavariable: $DAYS
+
+      # Branch 3: Invalid format (not Nd pattern)
+      - patterns:
+          - pattern-regex: '(?m)npmMinimalAgeGate[ \t]*:[ \t]*(?P<VAL>\S+)'
+          - metavariable-regex:
+              metavariable: $VAL
+              regex: '^(?![''"]?\d+d[''"]?$)'
+          - focus-metavariable: $VAL
+
+      # Branch 4: Empty value
+      - patterns:
+          - pattern-regex: '(?m)^npmMinimalAgeGate\s*:\s*$'
+
+    message: >-
+      This .yarnrc.yml does not set a minimal age gate or sets it too low.
+      Newly published packages can be malicious or unstable. Add
+      `npmMinimalAgeGate: "7d"` to wait 7 days before resolving newly
+      published package versions.
+      Added in: 4.10
+      Reference: https://yarnpkg.com/configuration/yarnrc#npmMinimalAgeGate
+    languages:
+      - yaml
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/.yarnrc.yml"
+    metadata:
+      category: security
+      technology:
+        - yarn
+        - javascript
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://yarnpkg.com/configuration/yarnrc#npmMinimalAgeGate
