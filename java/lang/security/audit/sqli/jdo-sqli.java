@@ -21,6 +21,8 @@ public class JdoSqlFilter {
         Query q = pm.newQuery(UserEntity.class);
         // ruleid: jdo-sqli
         q.setFilter("id == "+filterValue);
+        // ruleid: jdo-sqli
+        q.setFilter("id == %s".formatted(filterValue));
     }
 
     public void testJdoSafeFilter(String filterValue) {
@@ -46,6 +48,8 @@ public class JdoSqlFilter {
         Query q = pm.newQuery(UserEntity.class);
         // ruleid: jdo-sqli
         q.setGrouping(groupByField);
+        // ruleid: jdo-sqli
+        q.setGrouping("%s".formatted(groupByField));
     }
 
     public void testJdoSafeGrouping() {
@@ -87,14 +91,20 @@ public class JdoSql {
         PersistenceManager pm = getPM();
         // ruleid: jdo-sqli
         pm.newQuery(UserEntity.class,new ArrayList(),"id == "+ input);
+        // ruleid: jdo-sqli
+        pm.newQuery(UserEntity.class,new ArrayList(),"id == %s".formatted(input));
         // ok: jdo-sqli
         pm.newQuery(UserEntity.class,new ArrayList(),"id == 1");
         // ruleid: jdo-sqli
         pm.newQuery(UserEntity.class,"id == "+ input);
+        // ruleid: jdo-sqli
+        pm.newQuery(UserEntity.class,"id == %s".formatted(input));
         // ok: jdo-sqli
         pm.newQuery(UserEntity.class,"id == 1");
         // ruleid: jdo-sqli
         pm.newQuery((Extent) null,"id == "+input);
+        // ruleid: jdo-sqli
+        pm.newQuery((Extent) null,"id == %s".formatted(input));
         // ok: jdo-sqli
         pm.newQuery((Extent) null,"id == 1");
     }
