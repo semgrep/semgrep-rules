@@ -14,9 +14,21 @@ function vulnerable_sha1_password($user_password) {
     return $hashed;
 }
 
-function vulnerable_crypt_password($password) {
+function vulnerable_crypt_md5_password($password) {
     // ruleid: laravel-weak-password-hash
-    $hashed = crypt($password, '$2y$10$salt');
+    $hashed = crypt($password, '$1$saltsalt$');
+    return $hashed;
+}
+
+function vulnerable_crypt_sha256_password($password) {
+    // ruleid: laravel-weak-password-hash
+    $hashed = crypt($password, '$5$rounds=5000$saltsaltsalt$');
+    return $hashed;
+}
+
+function safe_crypt_bcrypt($password) {
+    // ok: laravel-weak-password-hash
+    $hashed = crypt($password, '$2y$10$abcdefghijklmnopqrstuu');
     return $hashed;
 }
 

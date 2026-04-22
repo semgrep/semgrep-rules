@@ -28,6 +28,6 @@ class AnotherSafeModel extends Model
      * Using guarded to block specific fields is also acceptable.
      */
     // ok: laravel-mass-assignment-fillable-star
-    protected $fillable = ['title', 'body', 'slug'];
+    protected $guarded = ['id', 'is_admin'];
 }
 ?>
