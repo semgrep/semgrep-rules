@@ -1,0 +1,73 @@
+---
+rules:
+  - id: dependabot-missing-cooldown
+    pattern-either:
+      # Branch 1: Missing cooldown
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern: |
+              - package-ecosystem: $ECOSYSTEM
+                ...
+          - pattern-not: |
+              - package-ecosystem: $ECOSYSTEM
+                ...
+                cooldown:
+                  ...
+                ...
+
+      # Branch 2: default-days too low
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern-regex: 'default-days\s*:\s*(?P<DAYS>\d+)'
+          - metavariable-comparison:
+              metavariable: $DAYS
+              comparison: int($DAYS) < 7
+          - focus-metavariable: $DAYS
+
+      # Branch 3: Invalid default-days value
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern: |
+              cooldown:
+                default-days: $DAYS
+          - metavariable-regex:
+              metavariable: $DAYS
+              regex: '^\D'
+          - focus-metavariable: $DAYS
+
+    message: >-
+      This Dependabot configuration does not set a cooldown period. Newly
+      published packages can be malicious or unstable. Add a `cooldown` block
+      with `default-days: 7` to each `package-ecosystem` entry under `updates` to wait 7 days
+      before proposing updates to newly published package versions.
+      Reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#cooldown
+    languages:
+      - yaml
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/.github/dependabot.yml"
+        - "**/.github/dependabot.yaml"
+    metadata:
+      category: security
+      technology:
+        - dependabot
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#cooldown

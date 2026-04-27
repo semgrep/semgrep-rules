@@ -1,0 +1,80 @@
+---
+rules:
+  - id: renovate-missing-minimum-release-age
+    pattern-either:
+      # Branch 1: Missing entirely
+      - patterns:
+          - pattern-inside: |
+              "packageRules": [
+                ...
+              ]
+          - pattern-either:
+              - pattern: |
+                  { ..., "matchPackageNames": [...], ... }
+              - pattern: |
+                  { ..., "matchPackagePatterns": [...], ... }
+              - pattern: |
+                  { ..., "matchDepTypes": [...], ... }
+          - pattern-not: |
+              {
+                ...,
+                "minimumReleaseAge": $AGE,
+                ...
+              }
+      # Branch 2: Present but too low
+      - patterns:
+          - pattern-inside: |
+              "packageRules": [
+                ...
+              ]
+          - pattern-regex: '"minimumReleaseAge":\s*"(?P<AGE>\d+) days?"'
+          - metavariable-comparison:
+              metavariable: $AGE
+              comparison: int($AGE) < 7
+          - focus-metavariable: $AGE
+      # Branch 3: Invalid format (not matching "N days")
+      - patterns:
+          - pattern-inside: |
+              "packageRules": [
+                ...
+              ]
+          - pattern: |
+              "minimumReleaseAge": "$AGE"
+          - metavariable-regex:
+              metavariable: $AGE
+              regex: '^(?!\d+ days?$)'
+          - focus-metavariable: $AGE
+    message: >-
+      This Renovate configuration does not set a minimum release age.
+      Newly published packages can be malicious or unstable.
+      Add `"minimumReleaseAge": "7 days"` within a `packageRules`
+      entry to wait 7 days before proposing updates to newly
+      published package versions.
+      Added in: v42
+      Reference: https://docs.renovatebot.com/configuration-options/#minimumreleaseage
+    languages:
+      - json
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/renovate.json"
+        - "**/.renovaterc"
+        - "**/.renovaterc.json"
+        - "**/renovate.json5"
+    metadata:
+      category: security
+      technology:
+        - renovate
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.renovatebot.com/configuration-options/#minimumreleaseage
