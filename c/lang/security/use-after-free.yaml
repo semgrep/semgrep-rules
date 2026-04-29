@@ -5,32 +5,29 @@ rules:
         - pattern: $VAR->$ACCESSOR
         - pattern: (*$VAR).$ACCESSOR
         - pattern: $VAR[$NUM]
+        - pattern: (*$VAR)
       - pattern-inside:
           free($VAR);
           ...
       - pattern-not-inside:
           $VAR = NULL;
           ...
-      - pattern-not-inside:
-          free($VAR);
-          ...
-          $VAR = malloc(...);
-          ...
-      - pattern-not-inside:
-          free($VAR);
-          ...
-          $VAR = calloc(...);
-          ...
-      - pattern-not-inside:
-          free($VAR);
-          ...
-          $VAR = realloc(...);
-          ...
-      - pattern-not-inside:
-          free($VAR);
-          ...
-          $VAR = strdup(...);
-          ...
+      - pattern-not:
+          patterns:
+            - pattern-inside: |
+                free($VAR);
+                ...
+                $VAR = $ALLOC(...);
+                ...
+            - metavariable-pattern:
+                metavariable: $ALLOC
+                pattern-either:
+                  - pattern: malloc
+                  - pattern: calloc
+                  - pattern: realloc
+                  - pattern: reallocarray
+                  - pattern: strdup
+                  - pattern: strndup
     message: >-
       Variable '$VAR' was used after being freed. This can lead to undefined behavior.
     metadata:

@@ -7,30 +7,23 @@ rules:
       $VAR = NULL;
       ...
       free($VAR);
-  - pattern-not: |
-      free($VAR);
-      ...
-      $VAR = malloc(...);
-      ...
-      free($VAR);
-  - pattern-not: |
-      free($VAR);
-      ...
-      $VAR = calloc(...);
-      ...
-      free($VAR);
-  - pattern-not: |
-      free($VAR);
-      ...
-      $VAR = realloc(...);
-      ...
-      free($VAR);
-  - pattern-not: |
-      free($VAR);
-      ...
-      $VAR = strdup(...);
-      ...
-      free($VAR);
+  - pattern-not:
+      patterns:
+        - pattern-inside: |
+            free($VAR);
+            ...
+            $VAR = $ALLOC(...);
+            ...
+            free($VAR);
+        - metavariable-pattern:
+            metavariable: $ALLOC
+            pattern-either:
+              - pattern: malloc
+              - pattern: calloc
+              - pattern: realloc
+              - pattern: reallocarray
+              - pattern: strdup
+              - pattern: strndup
   - pattern-not: |
       free($VAR);
       ...

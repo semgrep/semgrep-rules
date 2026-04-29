@@ -220,3 +220,32 @@ int ok_code9_strdup() {
     char c = var[0];
     return 0;
 }
+
+// direct dereference write after free
+int bad_code8_deref_write() {
+    int *var = (int *)malloc(sizeof(int));
+    free(var);
+    // ruleid: use-after-free
+    (*var) = 42;
+    return 0;
+}
+
+// direct dereference read after free
+int bad_code9_deref_read() {
+    int *var = (int *)malloc(sizeof(int));
+    *var = 1;
+    free(var);
+    // ruleid: use-after-free
+    int x = (*var);
+    return x;
+}
+
+// direct dereference safe after reallocation
+int ok_code10_deref_realloc() {
+    int *var = (int *)malloc(sizeof(int));
+    free(var);
+    var = (int *)calloc(1, sizeof(int));
+    // ok: use-after-free
+    (*var) = 42;
+    return 0;
+}
