@@ -84,3 +84,103 @@ public class User03Controller {
 
 }
 
+
+@RestController
+@RequestMapping("/proxy")
+public class ProxyController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    // The first positional arg of every RestTemplate request method is the URL,
+    // so a tainted @RequestParam reaching it is server-side request forgery.
+    @GetMapping("/fetch")
+    public ResponseEntity<byte[]> fetch(@RequestParam("url") String url) {
+        // ruleid: tainted-url-host
+        return restTemplate.getForEntity(url, byte[].class);
+    }
+
+    @GetMapping("/post")
+    public String proxyPost(@RequestParam("target") String target, @RequestBody String body) {
+        // ruleid: tainted-url-host
+        return restTemplate.postForObject(target, body, String.class);
+    }
+
+    @PutMapping("/replace")
+    public void proxyPut(@RequestParam("target") String target, @RequestBody String body) {
+        // ruleid: tainted-url-host
+        restTemplate.put(target, body);
+    }
+
+    @DeleteMapping("/wipe")
+    public void proxyDelete(@RequestParam("target") String target) {
+        // ruleid: tainted-url-host
+        restTemplate.delete(target);
+    }
+
+    @GetMapping("/exchange")
+    public ResponseEntity<String> proxyExchange(@RequestParam("target") String target) {
+        // ruleid: tainted-url-host
+        return restTemplate.exchange(target, HttpMethod.GET, null, String.class);
+    }
+}
+
+
+@RestController
+@RequestMapping("/uri")
+public class UriController {
+
+    // java.net.URI / java.net.URL constructed directly from request data.
+    @GetMapping("/parse")
+    public String parseUri(@RequestParam("url") String url) {
+        // ruleid: tainted-url-host
+        URI parsed = URI.create(url);
+        return parsed.toString();
+    }
+
+    @GetMapping("/parse-fq")
+    public String parseFqUri(@RequestParam("url") String url) {
+        // ruleid: tainted-url-host
+        java.net.URI parsed = java.net.URI.create(url);
+        return parsed.toString();
+    }
+}
+
+
+@RestController
+@RequestMapping("/apache")
+public class ApacheHttpClientController {
+
+    // Apache HttpClient request constructors take the URL as the only argument.
+    @GetMapping("/get")
+    public void apacheGet(@RequestParam("url") String url) throws Exception {
+        // ruleid: tainted-url-host
+        HttpGet req = new HttpGet(url);
+        HttpClient client = HttpClients.createDefault();
+        client.execute(req);
+    }
+
+    @GetMapping("/post")
+    public void apachePost(@RequestParam("url") String url) throws Exception {
+        // ruleid: tainted-url-host
+        HttpPost req = new HttpPost(url);
+        HttpClient client = HttpClients.createDefault();
+        client.execute(req);
+    }
+}
+
+
+@RestController
+@RequestMapping("/webclient")
+public class WebClientController {
+
+    @Autowired
+    private WebClient webClient;
+
+    @GetMapping("/fetch")
+    public Mono<String> fetch(@RequestParam("url") String url) {
+        // ruleid: tainted-url-host
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class);
+    }
+}
+
