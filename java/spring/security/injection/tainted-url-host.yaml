@@ -27,7 +27,7 @@ rules:
       - patterns:
           - pattern-either:
               - pattern-inside: |
-                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE 
+                  $METHODNAME(..., @$REQ($LOOKUP) $TYPE
                   $SOURCE,...) {
                     ...
                   }
@@ -39,10 +39,40 @@ rules:
           - metavariable-regex:
               metavariable: $REQ
               regex: (RequestBody|PathVariable|RequestParam)
+          # Numeric primitives can't carry a hostname, so exclude them so a
+          # tainted @RequestParam("id") Integer that only ever ends up in the
+          # path/query is not flagged as host-level SSRF.
+          - metavariable-regex:
+              metavariable: $TYPE
+              regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
           - pattern: $SOURCE
     pattern-sinks:
     - pattern-either:
       - pattern: new URL($ONEARG)
+      - pattern: java.net.URI.create($ONEARG)
+      - pattern: URI.create($ONEARG)
+      # Spring RestTemplate. Every overload that takes a URL takes it as the
+      # first positional argument, so any tainted value reaching that
+      # position is a sink hit.
+      - pattern: $RT.getForObject($ONEARG, ...)
+      - pattern: $RT.getForEntity($ONEARG, ...)
+      - pattern: $RT.postForObject($ONEARG, ...)
+      - pattern: $RT.postForEntity($ONEARG, ...)
+      - pattern: $RT.put($ONEARG, ...)
+      - pattern: $RT.delete($ONEARG, ...)
+      - pattern: $RT.patchForObject($ONEARG, ...)
+      - pattern: $RT.exchange($ONEARG, ...)
+      # Spring 6 WebClient and Java 11 HttpRequest builders.
+      - pattern: $WC.uri($ONEARG)
+      - pattern: $REQB.uri($ONEARG)
+      # Apache HttpClient request constructors.
+      - pattern: new org.apache.http.client.methods.HttpGet($ONEARG)
+      - pattern: new org.apache.http.client.methods.HttpPost($ONEARG)
+      - pattern: new HttpGet($ONEARG)
+      - pattern: new HttpPost($ONEARG)
+      - pattern: new HttpPut($ONEARG)
+      - pattern: new HttpDelete($ONEARG)
+      - pattern: new HttpPatch($ONEARG)
       - patterns:
         - pattern-either:
           - pattern: |
