@@ -1,0 +1,369 @@
+rules:
+- id: idna-ip-literal-smuggle
+  message: >-
+    Untrusted hostname passes through golang.org/x/net/idna UTS-46
+    ToASCII mapping and then reaches a network destination with no
+    post-mapping IP-literal recheck. UTS-46 NFKC mapping folds 100
+    non-ASCII codepoints across 8 classes (Latin-1 superscripts,
+    mathematical super- and subscripts, circled digits, fullwidth
+    digits, mathematical styled digits, segmented digits) to ASCII
+    digits 0-9. An input like "0.<superscript-1>.0.0" passes a pre-IDNA
+    `net.ParseIP` check because it is not ASCII, gets mapped to
+    "0.1.0.0" by ToASCII, and reaches a network sink as if it were a
+    DNS name. The result is SSRF against link-local, RFC 1918,
+    loopback, or cloud metadata ranges.
+
+    Fix: after the IDNA call, trim trailing dots with
+    `strings.TrimRight(host, ".")` (not `TrimSuffix`, because UTS-46
+    mapping can produce multiple trailing ASCII dots when fullwidth or
+    ideographic dot characters compose with ASCII dots, and TrimSuffix
+    strips only one) and recheck with `netip.ParseAddr` (preferred, Go
+    1.18+) or `net.ParseIP`. The trim is required:
+    `idna.Lookup.ToASCII("0.<superscript-1>.0.0.")` returns "0.1.0.0.",
+    which `net.ParseIP` rejects on its own, so a recheck without the
+    trim silently passes the smuggle through. If the parse succeeds,
+    reject the input. The digit-fold layer turned it into an IP
+    literal.
+
+    Pattern: callers that apply UTS-46 IDNA mapping to a host string
+    and pass the result to a network sink without rechecking against
+    IP-literal parsers.
+
+    Tier note: this rule analyzes within a single function. Cross-file
+    taint flow is not modeled in the OSS tier; an interfile variant
+    and a CodeQL companion query live at
+    https://github.com/astrogilda/idna-ip-literal-smuggle-rules
+
+  languages: [go]
+  severity: WARNING
+  mode: taint
+  options:
+    taint_assume_safe_functions: false
+
+  pattern-sources:
+  # Label PRE_IDNA: untrusted hostname inputs.
+  - label: PRE_IDNA
+    patterns:
+    - pattern-either:
+      # HTTP request fields commonly carrying user-supplied hostnames.
+      - patterns:
+        - pattern: $REQ.Host
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $REQ.URL.Host
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $REQ.URL.Hostname()
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $URL.Host
+        - metavariable-type:
+            metavariable: $URL
+            type: "*url.URL"
+      - patterns:
+        - pattern: $URL.Hostname()
+        - metavariable-type:
+            metavariable: $URL
+            type: "*url.URL"
+      # Process inputs.
+      - pattern: os.Getenv($_)
+      - pattern: os.Args[$_]
+      - pattern: flag.String(...)
+      - pattern: flag.StringVar(...)
+      # HTTP header lookups and request plumbing.
+      - patterns:
+        - pattern: $REQ.Header.Get($_)
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $REQ.URL.Query().Get($_)
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $REQ.FormValue($_)
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      - patterns:
+        - pattern: $REQ.PostFormValue($_)
+        - metavariable-type:
+            metavariable: $REQ
+            type: "*http.Request"
+      # Stdin / scanned input.
+      - patterns:
+        - pattern: $S.Text()
+        - metavariable-type:
+            metavariable: $S
+            type: "*bufio.Scanner"
+      # Decoded JSON via *encoding/json.Decoder.
+      - patterns:
+        - pattern: $D.Decode($_)
+        - metavariable-type:
+            metavariable: $D
+            type: "*json.Decoder"
+      # Database row scans (first-arg destination).
+      - patterns:
+        - pattern: $R.Scan($DST, ...)
+        - metavariable-type:
+            metavariable: $R
+            type: "*sql.Rows"
+
+  # A hardcoded fold-class codepoint flowing into ToASCII is high
+  # confidence regardless of taint origin.
+  - label: PRE_IDNA
+    patterns:
+    - pattern: $X
+    - metavariable-regex:
+        metavariable: $X
+        # 100-codepoint UTS-46 NFKC digit-fold catalogue, derived by
+        # enumerating the Unicode 16 table shipped with x/text v0.21.0.
+        # Classes (counts):
+        #   Latin-1 superscripts U+00B2/B3/B9                              (3)
+        #   Math superscripts    U+2070, U+2074-U+2079                     (7)
+        #   Math subscripts      U+2080-U+2089                            (10)
+        #   Circled digits       U+2460-U+2468, U+24EA                    (10)
+        #   Fullwidth digits     U+FF10-U+FF19                            (10)
+        #   Math styled digits   U+1D7CE-U+1D7FF (bold/dbl/sans/mono)     (50)
+        #   Segmented digits     U+1FBF0-U+1FBF9                          (10)
+        # Excluded (status V Valid, not mapped): Arabic-Indic U+0660-0669,
+        # Extended Arabic-Indic U+06F0-06F9, Devanagari U+0966-096F.
+        regex: '"[^"]*[\x{00B2}\x{00B3}\x{00B9}\x{2070}\x{2074}-\x{2079}\x{2080}-\x{2089}\x{2460}-\x{2468}\x{24EA}\x{FF10}-\x{FF19}\x{1D7CE}-\x{1D7FF}\x{1FBF0}-\x{1FBF9}][^"]*"'
+
+  # Label transformation: when PRE_IDNA-tainted data reaches a UTS-46-mapping
+  # ToASCII call site, that call site emits a value labeled POST_IDNA. Semgrep's
+  # idiom for label transformation is a labeled source with `requires:`, not a
+  # propagator (propagators carry the same label across an expression).
+  #
+  # The package-level `idna.ToASCII` and `idna.Punycode.ToASCII` are excluded:
+  # both dispatch to the Punycode profile, which has nil mapping (no UTS-46 NFKC
+  # fold) and therefore cannot produce the digit-fold smuggle this rule targets.
+  - label: POST_IDNA
+    requires: PRE_IDNA
+    patterns:
+    - pattern-either:
+      - pattern: idna.Lookup.ToASCII(...)
+      - pattern: idna.Display.ToASCII(...)
+      - pattern: idna.Registration.ToASCII(...)
+      - pattern: idna.New(...).ToASCII(...)
+      # Var-bound profile fallback: `p := idna.Lookup; p.ToASCII(s)` and similar.
+      - patterns:
+        - pattern: $P.ToASCII(...)
+        - metavariable-type:
+            metavariable: $P
+            type: "*idna.Profile"
+
+  pattern-sinks:
+  - requires: POST_IDNA
+    patterns:
+    - pattern-either:
+      # Direct dial / resolution.
+      - pattern: net.JoinHostPort($HOST, $_)
+      - pattern: net.Dial($_, $HOST)
+      - pattern: net.DialTimeout($_, $HOST, $_)
+      - patterns:
+        - pattern: $D.Dial($_, $HOST)
+        - metavariable-type:
+            metavariable: $D
+            type: "*net.Dialer"
+      - patterns:
+        - pattern: $D.DialContext($_, $_, $HOST)
+        - metavariable-type:
+            metavariable: $D
+            type: "*net.Dialer"
+      - pattern: net.LookupHost($HOST)
+      - pattern: net.LookupIP($HOST)
+      - patterns:
+        - pattern: $R.LookupHost($_, $HOST)
+        - metavariable-type:
+            metavariable: $R
+            type: "*net.Resolver"
+      - patterns:
+        - pattern: $R.LookupIPAddr($_, $HOST)
+        - metavariable-type:
+            metavariable: $R
+            type: "*net.Resolver"
+      # http.Client convenience methods (host is embedded in the URL string).
+      - pattern: http.Get($HOST)
+      - pattern: http.Head($HOST)
+      - pattern: http.Post($HOST, $_, $_)
+      - pattern: http.PostForm($HOST, $_)
+      - patterns:
+        - pattern: $C.Get($HOST)
+        - metavariable-type:
+            metavariable: $C
+            type: "*http.Client"
+      - patterns:
+        - pattern: $C.Head($HOST)
+        - metavariable-type:
+            metavariable: $C
+            type: "*http.Client"
+      - patterns:
+        - pattern: $C.Post($HOST, $_, $_)
+        - metavariable-type:
+            metavariable: $C
+            type: "*http.Client"
+      - patterns:
+        - pattern: $C.PostForm($HOST, $_)
+        - metavariable-type:
+            metavariable: $C
+            type: "*http.Client"
+      - pattern: http.NewRequest($_, $HOST, $_)
+      - pattern: http.NewRequestWithContext($_, $_, $HOST, $_)
+      # URL / TLS / cookie field assignments.
+      - patterns:
+        - pattern: $U.Host = $HOST
+        - metavariable-type:
+            metavariable: $U
+            type: "*url.URL"
+      - pattern: |
+          url.URL{..., Host: $HOST, ...}
+      - patterns:
+        - pattern: $T.ServerName = $HOST
+        - metavariable-type:
+            metavariable: $T
+            type: "*tls.Config"
+      - pattern: |
+          tls.Config{..., ServerName: $HOST, ...}
+      - patterns:
+        - pattern: $CK.Domain = $HOST
+        - metavariable-type:
+            metavariable: $CK
+            type: "*http.Cookie"
+      - pattern: |
+          http.Cookie{..., Domain: $HOST, ...}
+      # gRPC dial.
+      - pattern: grpc.Dial($HOST, ...)
+      - pattern: grpc.DialContext($_, $HOST, ...)
+      - pattern: grpc.NewClient($HOST, ...)
+    focus-metavariable: $HOST
+
+  # Sanitizer: post-IDNA recheck only counts if a trailing-dot trim
+  # ran first. Without the trim, "0.<superscript-1>.0.0." maps to
+  # "0.1.0.0." and both net.ParseIP and netip.ParseAddr reject it, so
+  # the recheck passes and the smuggle survives.
+  #
+  # TrimRight (preferred) handles the multi-trailing-dot variants that
+  # UTS-46 mapping produces when fullwidth (U+FF0E) or ideographic
+  # (U+3002) dot characters compose with ASCII dots. TrimSuffix is
+  # accepted as a lenient barrier (it reduces FP volume on widely-used
+  # real-world callers) but is incomplete for the multi-dot variant.
+  pattern-sanitizers:
+  - by-side-effect: true
+    requires: POST_IDNA
+    patterns:
+    - pattern-either:
+      # Modern: netip.ParseAddr with prior TrimRight or TrimSuffix.
+      - pattern: |
+          $H = strings.TrimRight($H, ".")
+          ...
+          if _, $ERR := netip.ParseAddr($H); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          $H = strings.TrimRight($H, ".")
+          ...
+          if $ADDR, $ERR := netip.ParseAddr($H); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          $H = strings.TrimSuffix($H, ".")
+          ...
+          if _, $ERR := netip.ParseAddr($H); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          $H = strings.TrimSuffix($H, ".")
+          ...
+          if $ADDR, $ERR := netip.ParseAddr($H); $ERR == nil {
+            ...
+          }
+      # Legacy: net.ParseIP with prior TrimRight or TrimSuffix.
+      - pattern: |
+          $H = strings.TrimRight($H, ".")
+          ...
+          if net.ParseIP($H) != nil {
+            ...
+          }
+      - pattern: |
+          $H = strings.TrimSuffix($H, ".")
+          ...
+          if net.ParseIP($H) != nil {
+            ...
+          }
+      # Fresh-variable form. Matches the inline pattern, e.g.
+      # `if _, err := netip.ParseAddr(strings.TrimRight(out, ".")); err == nil`.
+      - pattern: |
+          $T := strings.TrimRight($H, ".")
+          ...
+          if net.ParseIP($T) != nil {
+            ...
+          }
+      - pattern: |
+          $T := strings.TrimSuffix($H, ".")
+          ...
+          if net.ParseIP($T) != nil {
+            ...
+          }
+      - pattern: |
+          $T := strings.TrimRight($H, ".")
+          ...
+          if _, $ERR := netip.ParseAddr($T); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          $T := strings.TrimSuffix($H, ".")
+          ...
+          if _, $ERR := netip.ParseAddr($T); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          if _, $ERR := netip.ParseAddr(strings.TrimRight($H, ".")); $ERR == nil {
+            ...
+          }
+      - pattern: |
+          if net.ParseIP(strings.TrimRight($H, ".")) != nil {
+            ...
+          }
+
+  # Note: `idna.StrictNoIPLiteral()` is a proposed upstream Option that
+  # has not yet landed in golang.org/x/net/idna. When it ships, add a
+  # sanitizer pattern matching
+  # `idna.New(..., idna.StrictNoIPLiteral(), ...)`
+  # to recognise callers that opt in.
+  # The Punycode profile (`idna.Punycode` / package-level `idna.ToASCII`)
+  # is out of scope for this rule: it has nil mapping and therefore cannot
+  # produce the UTS-46 digit-fold smuggle, so it is excluded from
+  # propagators rather than carved out as a sanitizer.
+
+  metadata:
+    cwe:
+    - "CWE-20: Improper Input Validation"
+    - "CWE-918: Server-Side Request Forgery (SSRF)"
+    - "CWE-176: Improper Handling of Unicode Encoding"
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    - A03:2021 - Injection
+    references:
+    - https://www.unicode.org/reports/tr46/
+    - https://pkg.go.dev/golang.org/x/net/idna
+    - https://nvd.nist.gov/vuln/detail/CVE-2021-29923
+    - https://github.com/golang/go/issues/29098
+    - https://github.com/astrogilda/idna-ip-literal-smuggle-rules
+    category: security
+    technology:
+    - go
+    - net
+    - http
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    subcategory:
+    - vuln
