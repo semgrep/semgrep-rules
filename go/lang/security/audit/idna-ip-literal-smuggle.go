@@ -22,6 +22,10 @@
 //              P6a, P6b
 //     Class 7  Trailing-dot bypass / propagator-shape coverage (residual)
 //              P7a, P7b
+//     Class 8  ToUnicode entry point on a digit-folding profile
+//              (validateAndMap runs before the encode-vs-decode branch,
+//              so ToUnicode folds digits identically to ToASCII).
+//              P8a, P8b
 //
 //   Source-pattern coverage (each new untrusted-input source shape):
 //     S1  *http.Request.URL.Hostname()
@@ -234,6 +238,29 @@ func p7bNewProfileMultiOption(rawHost string) {
 	profile := idna.New(idna.MapForLookup(), idna.Transitional(true))
 	ace, _ := profile.ToASCII(rawHost)
 	_, _ = net.Dial("tcp", net.JoinHostPort(ace, "80")) // todoruleid: idna-ip-literal-smuggle
+}
+
+// =====================================================================
+// Class 8: ToUnicode entry point. The library runs validateAndMap before
+// the encode-vs-decode branch, so ToUnicode produces the same digit-fold
+// ASCII output as ToASCII for in-scope codepoints. Empirically verified
+// against golang.org/x/net/idna v0.53.0:
+//   Lookup.ToUnicode("0.¹.0.0")  -> "0.1.0.0"
+//   Display.ToUnicode("10.⁹.0.1") -> "10.9.0.1"
+// =====================================================================
+
+// P8a: Latin-1 superscript via Lookup.ToUnicode -> http.Get.
+func p8aLatin1ToUnicode() {
+	host := "0.¹.0.0"
+	out, _ := idna.Lookup.ToUnicode(host)
+	_, _ = http.Get("https://" + out + "/") // ruleid: idna-ip-literal-smuggle
+}
+
+// P8b: Math superscript via Display.ToUnicode -> net.LookupHost.
+func p8bMathSuperscriptToUnicode() {
+	host := "10.⁹.0.1"
+	out, _ := idna.Display.ToUnicode(host)
+	_, _ = net.LookupHost(out) // ruleid: idna-ip-literal-smuggle
 }
 
 // =====================================================================
