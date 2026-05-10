@@ -1,0 +1,44 @@
+rules:
+  - id: mcp-typosquatted-tool-name-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      MCP tool name appears to be a typosquatted variant of a well-known
+      tool (e.g. "githbu_search" instead of "github_search", "filesytem_read"
+      instead of "filesystem_read"). Typosquatting is a documented supply
+      chain attack vector against MCP skill registries. Rename the tool to
+      its canonical spelling, or audit and document why a near-duplicate
+      name is required.
+    metadata:
+      cwe: "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+      category: security
+      confidence: MEDIUM
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [mcp]
+      references:
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  @$MCP.tool()
+                  def $NAME(...):
+                      ...
+              - pattern: |
+                  @$MCP.tool(name=$STR, ...)
+                  def $X(...):
+                      ...
+          - metavariable-regex:
+              metavariable: $NAME
+              regex: '^(?:filesytem|filsystem|file_sytem|flie_system|filessystem|filesystm|filsystm|filesysem|gtihub|githbu|gihtub|gthub|g1thub|githuub|guthub|databse|databaes|dtabase|datbase|databasse|databasee|dataase)_(?:read|write|list|delete|search|api|commit|pr|issue|repo|query|exec|connect)'
+      - patterns:
+          - pattern: |
+              @$MCP.tool(name=$STR, ...)
+              def $X(...):
+                  ...
+          - metavariable-regex:
+              metavariable: $STR
+              regex: '^["''](?:filesytem|filsystem|file_sytem|flie_system|filessystem|filesystm|filsystm|filesysem|gtihub|githbu|gihtub|gthub|g1thub|githuub|guthub|databse|databaes|dtabase|datbase|databasse|databasee|dataase)[-_](?:read|write|list|delete|search|api|commit|pr|issues?|repos?|query|exec|connect)["'']$'
