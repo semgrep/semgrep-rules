@@ -1,0 +1,46 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # TP: mutable tag references — these should all fire
+      # ruleid: github-actions-mutable-action-tag
+      - uses: actions/checkout@v3
+      # ruleid: github-actions-mutable-action-tag
+      - uses: actions/checkout@v4.1.0
+      # ruleid: github-actions-mutable-action-tag
+      - uses: bridgecrewio/checkov-action@master
+      # ruleid: github-actions-mutable-action-tag
+      - uses: jfrog/frogbot@v2
+      # ruleid: github-actions-mutable-action-tag
+      - uses: aquasecurity/trivy-action@v0.29.0
+      # ruleid: github-actions-mutable-action-tag
+      - uses: returntocorp/semgrep-action@v1
+      # ruleid: github-actions-mutable-action-tag
+      - uses: jfrog/setup-jfrog-cli@v2
+      # ruleid: github-actions-mutable-action-tag
+      - uses: aquasecurity/trivy-action@0.29.0
+      # ruleid: github-actions-mutable-action-tag
+      - uses: actions/checkout@latest
+
+      # TN: SHA-pinned — 40-character lowercase hex commit SHA
+      # ok: github-actions-mutable-action-tag
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+      # ok: github-actions-mutable-action-tag
+      - uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c
+      # ok: github-actions-mutable-action-tag
+      - uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
+
+      # TN: local action reference (no owner/repo@)
+      # ok: github-actions-mutable-action-tag
+      - uses: ./.github/actions/my-local-action
+
+      # TN: docker action reference (no owner/repo@)
+      # ok: github-actions-mutable-action-tag
+      - uses: docker://alpine:3.18
+
+      # TN: commented-out line should not fire
+      # ok: github-actions-mutable-action-tag
+      # uses: actions/checkout@v3

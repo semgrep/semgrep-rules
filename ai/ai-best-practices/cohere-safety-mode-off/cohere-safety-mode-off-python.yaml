@@ -1,0 +1,19 @@
+rules:
+  - id: cohere-safety-mode-off-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Cohere safety mode explicitly set to 'OFF', disabling all safety
+      guardrails. Use 'STRICT' or 'CONTEXTUAL' instead. See
+      https://docs.cohere.com/docs/safety-modes
+    metadata:
+      cwe: "CWE-1188: Initialization with an Insecure Default"
+      category: security
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [cohere]
+      references:
+        - https://docs.cohere.com/docs/safety-modes
+    pattern: $CLIENT.chat(..., safety_mode="OFF", ...)

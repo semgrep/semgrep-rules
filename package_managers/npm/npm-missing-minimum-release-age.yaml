@@ -1,0 +1,60 @@
+---
+rules:
+  - id: npm-missing-minimum-release-age
+    pattern-either:
+      # Branch 1: Missing min-release-age
+      - patterns:
+        - pattern-regex: '(?:(?:^---\n)(?:[^\n]*\n)|^)(?P<TARGET>(?:(?!\n---)[\s\S])*\S(?:(?!\n---)[\s\S])*)'
+        - pattern-not-regex: 'min-release-age'
+        - focus-metavariable: $TARGET
+
+      # Branch 2: Value too low (< 7 days)
+      - patterns:
+          - pattern-regex: 'min-release-age\s*=\s*\d+'
+          - pattern-regex: '=\s*(?P<AGE>\d+)'
+          - metavariable-comparison:
+              metavariable: $AGE
+              comparison: int($AGE) < 7
+          - focus-metavariable: $AGE
+
+      # Branch 3: Invalid format (non-numeric)
+      - patterns:
+          - pattern-regex: '(?m)min-release-age[ \t]*=[ \t]*(?P<VAL>[^\s\d][^\n]*)'
+          - focus-metavariable: $VAL
+
+      # Branch 4: Empty value
+      - patterns:
+          - pattern-regex: '(?m)min-release-age\s*=\s*$'
+
+    message: >-
+      This .npmrc does not set a minimum release age or sets it too low.
+      Newly published packages can be malicious or unstable. Add
+      `min-release-age = 7` to wait 7 days before resolving newly
+      published package versions.
+      Added in: v11.10
+      Reference: https://github.blog/changelog/2026-02-18-npm-bulk-trusted-publishing-config-and-script-security-now-generally-available/
+    languages:
+      - generic
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/.npmrc"
+    metadata:
+      category: security
+      technology:
+        - npm
+        - javascript
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://github.blog/changelog/2026-02-18-npm-bulk-trusted-publishing-config-and-script-security-now-generally-available/
+        - https://github.com/npm/cli/pull/8965

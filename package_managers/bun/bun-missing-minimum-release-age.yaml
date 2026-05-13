@@ -1,0 +1,61 @@
+---
+rules:
+  - id: bun-missing-minimum-release-age
+    pattern-either:
+      # Branch 1: Missing minimumReleaseAge in [install]
+      - patterns:
+          - pattern-regex: '(?ms)\[install\](?P<TARGET>[^\[]*?)(?=\[|\z)'
+          - metavariable-regex:
+              metavariable: $TARGET
+              regex: '^(?![\s\S]*minimumReleaseAge)'
+          - focus-metavariable: $TARGET
+
+      # Branch 2: Value too low
+      - patterns:
+          - pattern-regex: 'minimumReleaseAge\s*=\s*\d+'
+          - pattern-regex: '=\s*(?P<AGE>\d+)'
+          - metavariable-comparison:
+              metavariable: $AGE
+              comparison: int($AGE) < 604800
+          - focus-metavariable: $AGE
+
+      # Branch 3: Invalid format (non-numeric)
+      - patterns:
+          - pattern-regex: '(?m)minimumReleaseAge[ \t]*=[ \t]*(?P<VAL>[^\s\d][^\n]*)'
+          - focus-metavariable: $VAL
+
+      # Branch 4: Empty value
+      - patterns:
+          - pattern-regex: '(?m)minimumReleaseAge\s*=\s*$'
+
+    message: >-
+      This bunfig.toml does not set a minimum release age or sets it too low.
+      Newly published packages can be malicious or unstable. Add
+      `minimumReleaseAge = 604800` under the `[install]` section to wait 7 days
+      before resolving newly published package versions.
+      Added in: v1.3 Reference: https://bun.sh/docs/runtime/bunfig
+    languages:
+      - generic
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/bunfig.toml"
+        - "**/.bunfig.toml"
+    metadata:
+      category: security
+      technology:
+        - bun
+        - javascript
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://bun.sh/docs/runtime/bunfig

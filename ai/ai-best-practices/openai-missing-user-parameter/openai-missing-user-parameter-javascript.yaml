@@ -1,0 +1,21 @@
+rules:
+  - id: openai-missing-user-parameter-javascript
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      OpenAI chat completion created without a 'user' parameter. Including a
+      unique user identifier helps OpenAI detect and prevent abuse. See
+      https://platform.openai.com/docs/guides/safety-best-practices
+    metadata:
+      cwe: "CWE-778: Insufficient Logging"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices/
+    patterns:
+      - pattern: "$CLIENT.chat.completions.create({...})"
+      - pattern-not: "$CLIENT.chat.completions.create({..., user: $USER, ...})"

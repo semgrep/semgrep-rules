@@ -5,6 +5,7 @@ on:
   pull_request:
 
 jobs:
+  # TP-1: github.event.pull_request.head.sha (actions/checkout)
   build:
     name: Build and test
     runs-on: ubuntu-latest
@@ -28,6 +29,7 @@ jobs:
           message: |
             Thank you!
 
+  # TP-2: github.event.pull_request.head.sha (versioned action)
   build2:
     name: Build and test 2
     runs-on: ubuntu-latest
@@ -51,6 +53,7 @@ jobs:
           message: |
             Thank you!
 
+  # TN: no checkout at all
   this-is-safe-because-no-checkout:
     name: Echo
     runs-on: ubuntu-latest
@@ -61,6 +64,7 @@ jobs:
           echo "Hello, world"
 
   # cf. https://github.com/justinsteven/advisories/blob/master/2021_github_actions_checkspelling_token_leak_via_advice_symlink.md
+  # TP-3: refs/pull/.../merge (fork merge ref)
   spelling:
     name: Spell checking
     runs-on: ubuntu-latest
@@ -71,3 +75,42 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: refs/pull/${{github.event.pull_request.number}}/merge
+
+  # TP-4: github.head_ref (shorthand form)
+  tp_head_ref:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: pull-request-target-code-checkout
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - run: npm test
+
+  # TP-5: github.event.pull_request.head.sha || github.ref
+  tp_sha_or_ref:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: pull-request-target-code-checkout
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+      - run: go vet ./...
+
+  # TP-6: github.event.pull_request.head.ref (full path variant)
+  tp_head_ref_full:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: pull-request-target-code-checkout
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - run: make build
+
+  # TN: no ref override — checks out base branch code (safe)
+  tn_no_ref:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: semgrep ci
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}

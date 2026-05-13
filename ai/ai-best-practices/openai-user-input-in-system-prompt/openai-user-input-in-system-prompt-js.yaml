@@ -1,0 +1,30 @@
+rules:
+  - id: openai-user-input-in-system-prompt-js
+    mode: taint
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      User input flows into the OpenAI system prompt. This enables prompt
+      injection attacks where users can override system instructions. Validate
+      and sanitize user input, or move user input to the 'user' role message
+      instead.
+    metadata:
+      cwe: "CWE-77: Command Injection"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [openai]
+      references:
+        - https://platform.openai.com/docs
+    pattern-sources:
+      - pattern: req.body.$F
+      - pattern: req.query.$F
+      - pattern: req.params.$F
+      - pattern: req.body
+    pattern-sinks:
+      - patterns:
+          - pattern: |
+              {role: "system", content: $SINK}
+          - focus-metavariable: $SINK

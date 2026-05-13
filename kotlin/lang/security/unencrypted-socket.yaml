@@ -28,6 +28,25 @@ rules:
   severity: WARNING
   languages:
   - kt
-  pattern-either:
-  - pattern: ServerSocket(...)
-  - pattern: Socket(...)
+  patterns:
+  - pattern-either:
+    - pattern: ServerSocket(...)
+    - pattern: Socket(...)
+  - pattern-not-inside: |
+      fun $FN(...): Int {
+          ...
+          val $SS = ServerSocket(0)
+          ...
+          $SS.close()
+          ...
+      }
+  - pattern-not-inside: |
+      fun $FN(...): Int {
+          ...
+          val $SS = ServerSocket(0)
+          ...
+          $SS.localPort
+          ...
+          $SS.close()
+          ...
+      }

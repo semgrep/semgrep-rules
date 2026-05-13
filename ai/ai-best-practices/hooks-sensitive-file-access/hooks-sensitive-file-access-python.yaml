@@ -1,0 +1,43 @@
+rules:
+  - id: hooks-sensitive-file-access-python
+    mode: taint
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Hook input flows into a file operation without checking for sensitive
+      files. Claude Code and Cursor hooks receive JSON input that may reference sensitive
+      files such as ~/.ssh/*, ~/.aws/credentials, or .env files. Filter or
+      block access to sensitive paths using a validation function like
+      check_sensitive() or is_sensitive() before performing file operations.
+    metadata:
+      cwe: "CWE-538: Insertion of Sensitive Information into Externally-Accessible File or Directory"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern-sources:
+      - pattern: json.loads(...)
+      - pattern: json.load(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: open($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.remove($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: shutil.copy($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: shutil.move($SINK, ...)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: validate_path(...)
+      - pattern: check_sensitive(...)
+      - pattern: is_sensitive(...)
+      - pattern: os.path.realpath(...)
