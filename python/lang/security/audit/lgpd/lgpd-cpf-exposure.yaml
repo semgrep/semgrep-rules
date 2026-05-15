@@ -1,0 +1,65 @@
+rules:
+- id: lgpd-cpf-logged
+  languages:
+  - python
+  message: >-
+    Possível exposição de CPF em logs. Sob a LGPD (Lei Geral de Proteção de
+    Dados - Lei nº 13.709/2018), CPF é dado pessoal sensível e não deve ser
+    registrado em logs sem anonimização ou mascaramento. Considere mascarar
+    o CPF antes de logar, por exemplo: '***.***.789-**'.
+  metadata:
+    cwe:
+    - "CWE-532: Insertion of Sensitive Information into Log File"
+    references:
+    - https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+    - https://www.gov.br/anpd/pt-br
+    category: security
+    technology:
+    - python
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  severity: WARNING
+  pattern-either:
+  - pattern: logging.$METHOD(..., $X + $CPF, ...)
+  - pattern: logging.$METHOD(f"...{$CPF}...")
+  - pattern: logging.$METHOD("...".format(..., $CPF, ...))
+  - pattern: print($CPF)
+  - pattern: print(f"...{$CPF}...")
+  - pattern: print("..." + $CPF)
+  - pattern: print("...".format(..., $CPF, ...))
+
+- id: lgpd-cpf-hardcoded
+  languages:
+  - python
+  message: >-
+    CPF hardcoded detectado no código-fonte. Sob a LGPD (Lei nº 13.709/2018),
+    dados pessoais como CPF não devem ser incluídos diretamente no código.
+    Remova o CPF do código e utilize variáveis de ambiente ou banco de dados.
+  metadata:
+    cwe:
+    - "CWE-312: Cleartext Storage of Sensitive Information"
+    references:
+    - https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+    category: security
+    technology:
+    - python
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  severity: ERROR
+  patterns:
+  - pattern: $X = "$CPF"
+  - metavariable-regex:
+      metavariable: $CPF
+      regex: '^\d{3}\.\d{3}\.\d{3}-\d{2}$'
