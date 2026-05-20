@@ -1,13 +1,15 @@
 rules:
 - id: oauth-state-unsigned-base64
+  mode: taint
   message: >-
     OAuth `state` parameter is being deserialized from base64-encoded
-    JSON without an adjacent HMAC verification. An unauthenticated
+    JSON without HMAC verification of the same value. An unauthenticated
     attacker can forge `state` values to inject arbitrary identifiers
     (e.g. `organization_id`, `tenant_id`) into the OAuth callback and
     bind their own third-party account into a victim's tenant. Sign
-    `state` with an HMAC on the authorization endpoint and verify the
-    signature on the callback before deserializing.
+    `state` with an HMAC (or use a signed/encrypted token) on the
+    authorization endpoint and verify the signature on the callback
+    before deserializing.
   metadata:
     cwe:
     - 'CWE-345: Insufficient Verification of Data Authenticity'
@@ -31,19 +33,25 @@ rules:
   - javascript
   - typescript
   severity: ERROR
-  patterns:
-  - pattern-either:
-    - pattern: JSON.parse(Buffer.from($STATE, "base64").toString(...))
-    - pattern: JSON.parse(atob($STATE))
-  - pattern-not-inside: |
-      {
-        ...
-        $H = createHmac(...);
-        ...
-      }
-  - pattern-not-inside: |
-      {
-        ...
-        timingSafeEqual(...);
-        ...
-      }
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $REQ.query.state
+      - pattern: $REQ.body.state
+      - pattern: $REQ.query["state"]
+      - pattern: $REQ.body["state"]
+      - pattern: $X.searchParams.get("state")
+      - pattern: $X.searchParams.get('state')
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: JSON.parse(Buffer.from($X, "base64").toString(...))
+      - pattern: JSON.parse(Buffer.from($X, "base64").toString())
+      - pattern: JSON.parse(atob($X))
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: crypto.timingSafeEqual(...)
+      - pattern: timingSafeEqual(...)
+      - pattern: jwt.verify(...)
+      - pattern: $JWT.verify(...)
