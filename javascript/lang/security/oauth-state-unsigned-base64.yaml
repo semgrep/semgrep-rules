@@ -1,0 +1,49 @@
+rules:
+- id: oauth-state-unsigned-base64
+  message: >-
+    OAuth `state` parameter is being deserialized from base64-encoded
+    JSON without an adjacent HMAC verification. An unauthenticated
+    attacker can forge `state` values to inject arbitrary identifiers
+    (e.g. `organization_id`, `tenant_id`) into the OAuth callback and
+    bind their own third-party account into a victim's tenant. Sign
+    `state` with an HMAC on the authorization endpoint and verify the
+    signature on the callback before deserializing.
+  metadata:
+    cwe:
+    - 'CWE-345: Insufficient Verification of Data Authenticity'
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A01:2025 - Broken Access Control
+    references:
+    - https://datatracker.ietf.org/doc/html/rfc6749#section-10.12
+    - https://shippedwithbugs.com/writeups/outrank
+    category: security
+    technology:
+    - oauth
+    - javascript
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: JSON.parse(Buffer.from($STATE, "base64").toString(...))
+    - pattern: JSON.parse(atob($STATE))
+  - pattern-not-inside: |
+      {
+        ...
+        $H = createHmac(...);
+        ...
+      }
+  - pattern-not-inside: |
+      {
+        ...
+        timingSafeEqual(...);
+        ...
+      }
