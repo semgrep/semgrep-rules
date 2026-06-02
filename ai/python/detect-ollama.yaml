@@ -1,0 +1,20 @@
+rules:
+  - id: detect-ollama
+    languages:
+      - python
+    severity: INFO
+    message: "Possibly found usage of AI: Ollama"
+    pattern-either:
+      - pattern: import ollama
+      - pattern: from ollama import $ANYTHING
+      - pattern: ollama.chat(...)
+      - pattern: ollama.generate(...)
+      - pattern: $CLIENT.chat(...,model=...,...)
+    metadata:
+      references:
+        - https://semgrep.dev/blog/2024/detecting-shadow-ai
+      category: maintainability
+      technology:
+        - genAI
+        - LLMs
+      confidence: LOW
