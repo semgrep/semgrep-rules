@@ -1,0 +1,59 @@
+rules:
+- id: fastapi-pickle-deserialization
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: await $REQUEST.body()
+        - pattern: await $REQUEST.json()
+        - pattern: await $REQUEST.stream()
+        - patterns:
+          - pattern-inside: |
+              @$APP.$METHOD(...)
+              async def $FUNC($REQ: Request, ...):
+                ...
+          - pattern: await $REQ.body()
+        - patterns:
+          - pattern-inside: |
+              async def $FUNC($REQ: Request, ...):
+                ...
+          - pattern: await $REQ.body()
+  pattern-sinks:
+    - patterns:
+      - pattern-either:
+        - pattern: pickle.loads($DATA)
+        - pattern: pickle.load($DATA)
+        - pattern: _pickle.loads($DATA)
+        - pattern: _pickle.load($DATA)
+      - focus-metavariable: $DATA
+  message: >-
+    Detected `pickle.loads()` called with data sourced from a FastAPI request.
+    Deserializing untrusted data with `pickle` is unsafe because a crafted
+    payload can execute arbitrary Python code on the server during unpickling.
+    An attacker who controls the request body can achieve full remote code
+    execution (RCE). Replace `pickle` with a safe serialization format such
+    as `json.loads()`, or if binary serialization is required, use `msgpack`
+    with strict schema validation. Never deserialize `pickle` data from an
+    untrusted client.
+  metadata:
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - "CWE-502: Deserialization of Untrusted Data"
+    references:
+    - https://docs.python.org/3/library/pickle.html
+    - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+    category: security
+    technology:
+    - python
+    - fastapi
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+  languages: [python]
+  severity: ERROR
