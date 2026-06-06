@@ -23,4 +23,7 @@ subprocess.run("grep -R {} .".format(sys.argv[1]), shell=True)
 subprocess.check_output("grep -R {} .".format(sys.argv[1]), shell=True)
 
 # ruleid:subprocess-shell-true
+subprocess.check_call("grep -R {} .".format(sys.argv[1]), shell=True)
+
+# ruleid:subprocess-shell-true
 subprocess.Popen("grep -R {} .".format(sys.argv[1]), shell=True)
