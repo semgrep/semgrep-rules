@@ -1,0 +1,40 @@
+---
+rules:
+  - id: poetry-missing-solver-min-release-age
+    message: >-
+      This poetry.toml does not set a dependency cooldown via `solver.min-release-age`.
+      Without a cooldown, Poetry may resolve newly published package versions that have
+      not yet been vetted by the community. Supply chain attacks frequently involve
+      publishing a malicious version of a popular package and waiting for it to be pulled
+      in — most are detected and removed within days. Set `min-release-age = 7` under
+      `[solver]` to require that package versions are at least 7 days old before they
+      are considered during dependency resolution.
+      Added in: v2.4.0
+    languages:
+      - generic
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/poetry.toml"
+        - "**/config.toml"
+    pattern-either:
+      - pattern-regex: '(?m)^\[solver\]\n(?:^(?!min-release-age|\[|---).*\n)*(?=^\[|^---|\z)'
+      - pattern-regex: "(?ms)^\\[solver\\](?:[^\\[]*?)min-release-age\\s*=\\s*(?P<TARGET>\"[^\"]*\"|[0-6](?:\\s|#|$)|false)"
+    metadata:
+      category: security
+      technology:
+        - poetry
+        - python
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://python-poetry.org/docs/configuration/#solvermin-release-age

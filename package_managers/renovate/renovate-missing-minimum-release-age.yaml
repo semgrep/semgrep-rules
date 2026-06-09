@@ -21,6 +21,12 @@ rules:
                 "minimumReleaseAge": $AGE,
                 ...
               }
+          - pattern-not: |
+              {
+                ...,
+                "minimumReleaseAge": false,
+                ...
+              }
       # Branch 2: Present but too low
       - patterns:
           - pattern-inside: |
@@ -50,17 +56,18 @@ rules:
       Add `"minimumReleaseAge": "7 days"` within a `packageRules`
       entry to wait 7 days before proposing updates to newly
       published package versions.
+      Set `"minimumReleaseAge": false` to set an exception for minimal release age for the package rule.
       Added in: v42
-      Reference: https://docs.renovatebot.com/configuration-options/#minimumreleaseage
     languages:
       - json
     severity: MEDIUM
     paths:
       include:
         - "**/renovate.json"
+        - "**/renovate.json5"
         - "**/.renovaterc"
         - "**/.renovaterc.json"
-        - "**/renovate.json5"
+        - "**/.renovaterc.json5"
     metadata:
       category: security
       technology:
