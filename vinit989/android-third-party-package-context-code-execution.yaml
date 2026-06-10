@@ -3,7 +3,7 @@ rules:
   languages:
   - kotlin
   severity: CRITICAL
-  message: |
+  message: >-
     Dangerous third-party package context usage detected. App loads code from an externally installed package via createPackageContext() with CONTEXT_INCLUDE_CODE/CONTEXT_IGNORE_SECURITY flags, or invokes it via reflection without signature verification. A malicious app matching the expected package prefix can achieve arbitrary code execution in this app's process. Fix: add PackageManager.checkSignatures() verification before loading any third-party module.
   pattern-either:
   - pattern: createPackageContext($PKG, Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)
