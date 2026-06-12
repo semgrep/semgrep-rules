@@ -31,6 +31,8 @@ rules:
     confidence: MEDIUM
   languages: [python]
   severity: WARNING
-  pattern-either:
-  - pattern: hashlib.new("=~/[M|m][D|d][4|5]/", ...)
-  - pattern: hashlib.new(..., name="=~/[M|m][D|d][4|5]/", ...)
+  patterns:
+  - pattern-either:
+    - pattern: hashlib.new("=~/[M|m][D|d][4|5]/", ...)
+    - pattern: hashlib.new(..., name="=~/[M|m][D|d][4|5]/", ...)
+  - pattern-not: hashlib.new(..., usedforsecurity=False, ...)
