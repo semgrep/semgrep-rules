@@ -58,6 +58,22 @@ make_response(t)
 
 unk = fxn()
 
+# ok: make-response-with-unknown-content
+resp2 = flask.make_response(unk)
+resp2.content_type = "application/json"
+
+# ok: make-response-with-unknown-content
+resp3 = flask.make_response(unk)
+resp3.mimetype = "application/json"
+
+# ok: make-response-with-unknown-content
+resp4 = flask.make_response(unk)
+resp4.headers["Content-Type"] = "application/json"
+
+# ok: make-response-with-unknown-content
+resp5 = flask.make_response(unk)
+resp5.mimetype = MIME_TYPE['json']
+
 # ruleid: make-response-with-unknown-content
 make_response(unk)
 

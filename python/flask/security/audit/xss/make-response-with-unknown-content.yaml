@@ -21,6 +21,30 @@ rules:
           $X = json.dumps(...)
           ...
           flask.make_response($X, ...)
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.content_type = "..."
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.mimetype = "..."
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.content_type = $CTYPE
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.mimetype = $MIME
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.headers["Content-Type"] = "..."
+      - pattern-not-inside: |
+          $RESP = flask.make_response(...)
+          ...
+          $RESP.headers["content-type"] = "..."
     message: >-
       Be careful with `flask.make_response()`. If this response is rendered onto a webpage,
       this could create a cross-site scripting (XSS) vulnerability. `flask.make_response()`
