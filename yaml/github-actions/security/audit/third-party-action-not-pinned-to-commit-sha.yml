@@ -18,6 +18,11 @@ rules:
             - pattern-not-regex: "@[0-9a-f]{40}$"
             # Docker action with pinned image digest
             - pattern-not-regex: "^docker://.*@sha256:[0-9a-f]{64}$"
+    paths:
+      include:
+        - ".github/workflows"
+        - "action.yaml"
+        - "action.yml"
     message: >-
       An action sourced from a third-party repository on GitHub is not pinned
       to a full length commit SHA. Pinning an action to a full length commit SHA
@@ -36,7 +41,7 @@ rules:
       references:
         - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
         - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
-      category: security
+      category: audit
       technology:
         - github-actions
       subcategory:
