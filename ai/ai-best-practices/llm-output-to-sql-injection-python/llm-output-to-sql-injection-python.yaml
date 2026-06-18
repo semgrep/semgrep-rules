@@ -1,0 +1,59 @@
+rules:
+  - id: llm-output-to-sql-injection-python
+    mode: taint
+    languages:
+      - python
+    message: >-
+      LLM API response data flows into an unparameterized SQL execution sink.
+      This is an instance of OWASP LLM05 (Improper Output Handling) and CWE-89.
+      When an attacker manipulates the LLM via prompt injection, the resulting
+      LLM-generated SQL can be executed directly, leading to SQL injection.
+      Always validate LLM-generated SQL with a parser or allowlist, and use
+      parameterized queries where possible.
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements in an SQL Command ('SQL Injection')"
+        - "CWE-943: Improper Neutralization of Special Elements in Data Query Logic"
+      owasp:
+        - A03:2021 - Injection
+      owasp_llm:
+        - "LLM05: Improper Output Handling"
+      category: security
+      subcategory:
+        - vuln
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - openai
+        - anthropic
+        - gemini
+        - llm
+      references:
+        - https://genai.owasp.org/llm-top-10/llm05-improper-output-handling/
+        - https://atlas.mitre.org/techniques/AML.T0102
+        - https://github.com/semgrep/semgrep-rules/tree/develop/ai/ai-best-practices/llm-output-to-exec
+      license: "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license"
+      author: "sajjad rahim nouri"
+      vulnerability_class:
+        - SQL Injection
+    pattern-sources:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern: $CLIENT.messages.create(...)
+      - pattern: $MODEL.generate_content(...)
+      - pattern: $CLIENT.chat(...)
+      - pattern: $RESP.choices[0].message.content
+      - pattern: $RESP.content[0].text
+      - pattern: $RESP.text
+      - pattern: $RESP.content
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $CURSOR.execute($QUERY)
+              - pattern: $CURSOR.executescript($QUERY)
+              - pattern: $CONN.execute($QUERY)
+              - pattern: $DB.execute($QUERY)
+              - pattern: $SESSION.execute($QUERY)
+              - pattern: $ENGINE.execute($QUERY)
+          - focus-metavariable: $QUERY
