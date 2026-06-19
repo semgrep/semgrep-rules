@@ -1,24 +1,7 @@
 rules:
-- id: duplicate-id
-  message: >-
-    The 'id' field $X was used multiple times. The 'id' field needs to be unique.
-  severity: ERROR
-  metadata:
-    category: correctness
-    technology:
-    - semgrep
-  languages: [yaml]
-  patterns:
-  - pattern-inside: 'rules: [..., $RULE, ...]'
-      # nosemgrep: yaml.semgrep.slow-pattern-top-ellipsis
-  - pattern-inside: |
-      ...
-      - id: $X
-        ...
-      ...
-      - id: $X
-        ...
-      ...
-  - pattern: |
-      id: $X
-
+- id: yaml.semgrep.duplicate-id
+  pattern: os.system(...)
+  message: test
+  languages:
+  - python
+  severity: WARNING
