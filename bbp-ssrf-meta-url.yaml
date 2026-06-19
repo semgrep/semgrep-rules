@@ -1,0 +1,10 @@
+rules:
+- id: bbp-ssrf-meta-url
+  pattern: os.system($X)
+  message: SSRF test via metadata.url
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    url: http://169.254.169.254/latest/meta-data/
+    category: security
