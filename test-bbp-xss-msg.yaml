@@ -1,0 +1,14 @@
+rules:
+- id: test-bbp-xss-msg
+  patterns:
+  - pattern: os.system(...)
+  message: <img src=x onerror=alert(document.domain)> BBP XSS test via message field
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - javascript:alert(1)
+    cwe:
+    - 'CWE-79: Improper Neutralization of Input During Web Page Generation'
