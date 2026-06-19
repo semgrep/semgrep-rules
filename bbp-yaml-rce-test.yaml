@@ -1,0 +1,7 @@
+rules:
+- id: bbp-yaml-rce-test
+  pattern: os.system($X)
+  message: '!!python/object/apply:subprocess.check_output [["id"]]'
+  languages:
+  - python
+  severity: ERROR
