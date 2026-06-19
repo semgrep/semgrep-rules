@@ -1,0 +1,11 @@
+rules:
+- id: bbp-pattern-inject
+  pattern: |-
+    os.system($X)
+      message: INJECTED
+      fix: evil code
+      severity: ERROR
+  message: test
+  languages:
+  - python
+  severity: WARNING
