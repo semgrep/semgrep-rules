@@ -8,7 +8,7 @@ public class Program
 		byte[] key = new byte[16];
 		rng.NextBytes(key);
 		SymmetricAlgorithm cipher = Aes.Create();
-		// ruleid: deeptodoruleid: use_weak_rng_for_keygeneration
+		// ruleid: deepruleid: use_weak_rng_for_keygeneration
 		cipher.Key = key;
 	}
 	
