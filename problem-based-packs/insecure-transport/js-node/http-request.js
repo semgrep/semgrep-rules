@@ -10,35 +10,35 @@ function bad_http() {
     const { statusCode } = res;})
 
     // ruleid: http-request
-    const options = {
+    const options1 = {
         port: 80,
         hostname: 'www.google.com',
         path: '/upload'
     }
 
-    const req = http.request(options, (res) => {
+    const req1 = http.request(options1, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 
     // ok: http-request
-    const options = {
+    const options2 = {
         port: 80,
         hostname: 'www.google.com',
         path: '/upload'
     }
 
-    const req = https.request(options, (res) => {
+    const req2 = https.request(options2, (res) => {
     console.log(`STATUS: ${res.statusCode}`);})
 
     // ruleid: http-request
-    const options = new URL('http://abc:xyz@example.com');
+    const options3 = new URL('http://abc:xyz@example.com');
 
-    const req = http.request(options, (res) => {
+    const req3 = http.request(options3, (res) => {
     });
 
     // ok: http-request
-    const options = new URL('http://abc:xyz@example.com');
+    const options4 = new URL('http://abc:xyz@example.com');
 
-    const req = https.request(options, (res) => {
+    const req4 = https.request(options4, (res) => {
     });
 };
 
