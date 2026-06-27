@@ -1,0 +1,85 @@
+rules:
+  - id: path-traversal-file-response
+    languages:
+      - python
+    severity: WARNING
+    mode: taint
+    message: >-
+      Untrusted path-parameter input from a FastAPI route is reaching a
+      `FileResponse(...)` call without an `is_relative_to()` or
+      `os.path.commonpath()` containment check. An attacker can supply `../`
+      sequences in the route variable to read arbitrary files outside the
+      intended directory. Fix by resolving the candidate and verifying
+      containment, then falling back to a safe default on mismatch:
+      `candidate = (BASE / user_path).resolve();
+      if not candidate.is_relative_to(BASE.resolve()): return safe_fallback`.
+      Note that `str.startswith(base)` without a trailing `os.sep` is a known
+      flawed guard (see CVE-2026-54014, CVE-2026-33497) and does NOT count as
+      containment.
+    metadata:
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp:
+        - A01:2021 - Broken Access Control
+        - A01:2025 - Broken Access Control
+      category: security
+      technology:
+        - python
+        - fastapi
+        - starlette
+      cwe2022-top25: true
+      cwe2021-top25: true
+      confidence: MEDIUM
+      likelihood: HIGH
+      impact: HIGH
+      vulnerability_class:
+        - Path Traversal
+      subcategory:
+        - vuln
+      references:
+        - https://cwe.mitre.org/data/definitions/22.html
+        - https://owasp.org/www-community/attacks/Path_Traversal
+        - https://github.com/advisories/GHSA-j2c8-v969-8r5c
+        - https://github.com/advisories/GHSA-vvxm-vxmr-624h
+        - https://github.com/advisories/GHSA-ph9w-r52h-28p7
+        - https://github.com/advisories/GHSA-pj2x-hxmc-9rc3
+        - https://github.com/advisories/GHSA-v5gw-mw7f-84px
+        - https://github.com/fastapi/fastapi/discussions/8259
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  @$APP.get($ROUTE, ...)
+                  def $FUNC(..., $VAR, ...):
+                      ...
+              - pattern: |
+                  @$APP.get($ROUTE, ...)
+                  async def $FUNC(..., $VAR, ...):
+                      ...
+              - pattern: |
+                  @$APP.post($ROUTE, ...)
+                  def $FUNC(..., $VAR, ...):
+                      ...
+              - pattern: |
+                  @$APP.post($ROUTE, ...)
+                  async def $FUNC(..., $VAR, ...):
+                      ...
+              - pattern: |
+                  @$APP.api_route($ROUTE, ...)
+                  def $FUNC(..., $VAR, ...):
+                      ...
+              - pattern: |
+                  @$APP.api_route($ROUTE, ...)
+                  async def $FUNC(..., $VAR, ...):
+                      ...
+          - metavariable-regex:
+              metavariable: $ROUTE
+              regex: '.*\{[^}]*:path\}.*'
+          - focus-metavariable: $VAR
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: FileResponse($X, ...)
+              - pattern: starlette.responses.FileResponse($X, ...)
+              - pattern: fastapi.responses.FileResponse($X, ...)
+          - focus-metavariable: $X
