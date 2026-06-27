@@ -13,9 +13,13 @@ rules:
       containment, then falling back to a safe default on mismatch:
       `candidate = (BASE / user_path).resolve();
       if not candidate.is_relative_to(BASE.resolve()): return safe_fallback`.
-      Note that `str.startswith(base)` without a trailing `os.sep` is a known
-      flawed guard (see CVE-2026-54014, CVE-2026-33497) and does NOT count as
-      containment.
+      Two common flawed-guard patterns do NOT count as containment:
+      (1) `str.startswith(base)` without a trailing `os.sep` permits the
+      sibling-prefix bypass (see CVE-2026-54014, CVE-2026-33497); and
+      (2) filtering for the literal string `'..'` in the input is bypassed
+      by URL-encoded variants (`%2E%2E`, `%2F`), which Starlette decodes
+      *after* route matching, so the decoded `..` segments reach the
+      handler.
     metadata:
       cwe:
         - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
