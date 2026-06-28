@@ -17,6 +17,22 @@ class WebAppController
         return $this->redirect('https://'. $addr);
     }
 
+    public function test3(): RedirectResponse
+    {
+        $url = $request->query->get('url');
+        // ruleid: symfony-non-literal-redirect
+        return new RedirectResponse($url);
+    }
+
+    public function test4(): RedirectResponse
+    {
+        $url = $request->query->get('url');
+        $response = new RedirectResponse('/');
+        // ruleid: symfony-non-literal-redirect
+        $response->setTargetUrl($url);
+        return $response;
+    }
+
     public function okTest1(): RedirectResponse
     {
         $foobar = $session->get('foobar');
@@ -36,4 +52,17 @@ class WebAppController
         return $this->redirect();
     }
 
+    public function okTest4(): RedirectResponse
+    {
+        // ok: symfony-non-literal-redirect
+        return new RedirectResponse('http://symfony.com/doc');
+    }
+
+    public function okTest5(): RedirectResponse
+    {
+        $response = new RedirectResponse('/');
+        // ok: symfony-non-literal-redirect
+        $response->setTargetUrl('http://symfony.com/doc');
+        return $response;
+    }
 }

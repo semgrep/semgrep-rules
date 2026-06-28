@@ -1,9 +1,27 @@
 rules:
 - id: symfony-non-literal-redirect
   patterns:
-  - pattern: $this->redirect(...)
-  - pattern-not: $this->redirect("...")
-  - pattern-not: $this->redirect()
+  - pattern-either:
+    - patterns:
+      - pattern: $this->redirect(...)
+      - pattern-not: $this->redirect("...")
+      - pattern-not: $this->redirect()
+    - patterns:
+      - pattern: new RedirectResponse(...)
+      - pattern-not: new RedirectResponse("...")
+    - patterns:
+      - pattern: $RESPONSE->setTargetUrl(...)
+      - pattern-not: $RESPONSE->setTargetUrl("...")
+  - pattern-either:
+    - pattern-inside: |
+        use Symfony\Component\HttpFoundation\RedirectResponse;
+        ...
+    - pattern-inside: |
+        use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+        ...
+    - pattern-inside: |
+        use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+        ...
   message: >-
     The `redirect()` method does not check its destination in any way. If you redirect to a URL provided
     by end-users, your
@@ -27,4 +45,7 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Open Redirect
   severity: WARNING
