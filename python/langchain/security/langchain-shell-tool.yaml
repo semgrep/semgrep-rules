@@ -1,0 +1,47 @@
+rules:
+- id: langchain-shell-tool
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    - A03:2025 - Injection
+    cwe:
+    - 'CWE-77: Improper Neutralization of Special Elements used in a Command'
+    - 'CWE-78: OS Command Injection'
+    references:
+    - https://python.langchain.com/docs/security/
+    - https://python.langchain.com/api_reference/community/tools/langchain_community.tools.shell.tool.ShellTool.html
+    category: security
+    technology:
+    - python
+    - langchain
+    - llm
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: LOW
+    vulnerability_class:
+    - Command Injection
+  languages:
+    - python
+  message: >-
+    LangChain `ShellTool`, `BashProcess`, and `TerminalTool` execute
+    strings emitted by a language model against the system shell.
+    When the tool is bound to an agent without an explicit command
+    allowlist and without process isolation, any prompt or context
+    that reaches the model can produce arbitrary command execution on
+    the host running the agent.
+    Instead, wrap shell access in a purpose-built tool that (1) accepts
+    a structured argument (not a free-form string), (2) validates
+    `argv[0]` against an allowlist, and (3) runs inside a container
+    with a read-only filesystem and no outbound network. Do not rely
+    on prompt-level instructions to constrain command output.
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: ShellTool(...)
+    - pattern: BashProcess(...)
+    - pattern: TerminalTool(...)
+    - pattern: langchain_community.tools.ShellTool(...)
+    - pattern: langchain_community.tools.shell.tool.ShellTool(...)
+    - pattern: langchain_experimental.llm_bash.bash.BashProcess(...)
