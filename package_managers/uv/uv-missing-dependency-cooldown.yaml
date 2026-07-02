@@ -12,18 +12,20 @@ rules:
 
       # Branch 2: Value too low (< 7 days)
       - patterns:
-          - pattern-regex: 'exclude-newer\s*=\s*"(?P<DAYS>\d+) days?"'
+          - pattern-regex: 'exclude-newer\s*=\s*"(?P<DAYS>\d+)\s*d(?:ays?)?"'
           - metavariable-comparison:
               metavariable: $DAYS
               comparison: int($DAYS) < 7
           - focus-metavariable: $DAYS
 
-      # Branch 3: Invalid format (not days, date, or timestamp)
+      # Branch 3: Not a recognized relative cooldown -> flag. Concrete
+      # dates/timestamps are intentionally rejected: a fixed date can't be
+      # verified to provide an ongoing >= 7-day cooldown.
       - patterns:
           - pattern-regex: 'exclude-newer\s*=\s*"(?P<VAL>[^"]+)"'
           - metavariable-regex:
               metavariable: $VAL
-              regex: '^(?!\d+ days?$)(?!\d{4}-\d{2}-\d{2}$)(?!\d{4}-\d{2}-\d{2}T)'
+              regex: '(?i)^(?!\d+\s*d(?:ays?)?\b)(?!\d+\s*(?:weeks?|wks?|w|months?|mos?|mo|years?|yrs?|y)\b)(?!P[^Tt]*[WMY])(?!P(?:[7-9]|[1-9]\d+)D\b)'
           - focus-metavariable: $VAL
     message: >-
       This pyproject.toml configures uv but does not set a dependency cooldown.
