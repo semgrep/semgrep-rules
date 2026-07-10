@@ -1,4 +1,7 @@
 # ruleid: detect-groq
+import groq
+
+# ruleid: detect-groq
 from groq import Groq
 
 # ruleid: detect-groq
@@ -15,3 +18,6 @@ from groq import AsyncGroq
 
 # ruleid: detect-groq
 async_client = AsyncGroq()
+
+# ok: detect-groq
+import unrelated_sdk
