@@ -1,0 +1,210 @@
+rules:
+- id: limit-overrun-race-condition
+  message: |
+    Potential TOCTOU limit overrun! A specific property (`$FIELD`) of `$RECORD` is checked  and then mutated. Concurrent requests can bypass this check.  Use atomic database updates instead (e.g. `UPDATE ... WHERE field > 0`), or use pessimistic locking.
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  metadata:
+    cwe: CWE-367
+    impact: MEDIUM
+    likelihood: HIGH
+    category: security
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    owasp:
+    - A4:2021 Insecure Design
+    technology:
+    - express
+    - nest
+    references:
+    - https://portswigger.net/web-security/race-conditions
+    - https://cwe.mitre.org/data/definitions/367.html
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) {
+              ...
+              await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) { ... return ...; }
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) return ...;
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) { ... throw ...; }
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) throw ...;
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            { ..., $FIELD, ... } = $RECORD;
+            ...
+            if (<... $FIELD ...>) {
+              ...
+              await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) {
+              ...
+              await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) { ... return ...; }
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) return ...;
+            ...
+            await $OBJ2.$UPDATE(..., $PAYLOAD, ...);
+      - metavariable-pattern:
+          metavariable: $PAYLOAD
+          pattern-either:
+          - pattern: '{ ..., $FIELD: ..., ... }'
+          - pattern: '{ ..., $WRAPPER: { ..., $FIELD: ..., ... }, ... }'
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) {
+              ...
+              $MUTATION;
+              ...
+              $SAVE;
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) { ... return ...; }
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) return ...;
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) { ... throw ...; }
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            if (<... $RECORD.$FIELD ...>) throw ...;
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            { ..., $FIELD, ... } = $RECORD;
+            ...
+            if (<... $FIELD ...>) {
+              ...
+              $MUTATION;
+              ...
+              $SAVE;
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) {
+              ...
+              $MUTATION;
+              ...
+              $SAVE;
+              ...
+            }
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) { ... return ...; }
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+        - pattern: |
+            $RECORD = await $OBJ.$READ(...);
+            ...
+            $COND = <... $RECORD.$FIELD ...>;
+            ...
+            if ($COND) return ...;
+            ...
+            $MUTATION;
+            ...
+            $SAVE;
+      - metavariable-pattern:
+          metavariable: $MUTATION
+          pattern-either:
+          - pattern: $RECORD.$FIELD = ...
+          - pattern: $RECORD.$FIELD += ...
+          - pattern: $RECORD.$FIELD -= ...
+          - pattern: $RECORD.$FIELD++
+          - pattern: $RECORD.$FIELD--
+          - pattern: ++$RECORD.$FIELD
+          - pattern: --$RECORD.$FIELD
+      - metavariable-pattern:
+          metavariable: $SAVE
+          pattern-either:
+          - pattern: await $RECORD.$UPDATE(...)
+          - pattern: await $OBJ3.$UPDATE($RECORD, ...)
+  - metavariable-regex:
+      metavariable: $READ
+      regex: ^(findOne|findUnique|findFirst|findById|findByPk|find|findOneBy)$
+  - metavariable-regex:
+      metavariable: $UPDATE
+      regex: ^(update|updateOne|updateMany|save|findByIdAndUpdate|findOneAndUpdate)$
