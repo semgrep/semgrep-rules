@@ -59,7 +59,6 @@ rules:
         - pattern: ${{ ... github.base_ref ... }}
         - pattern: ${{ ... github.head_ref ... }}
         - pattern: ${{ ... github.ref_name ... }}
-        - pattern: ${{ ... github.workflow ... }}
         - pattern: ${{ ... github.event.inputs ... }}
         - pattern: ${{ ... github.event.discussion.title ... }}
         - pattern: ${{ ... github.event.discussion.body ... }}
@@ -98,7 +97,6 @@ rules:
       - pattern-not: ${{ ... github.base_ref && ... }}
       - pattern-not: ${{ ... github.head_ref && ... }}
       - pattern-not: ${{ ... github.ref_name && ... }}
-      - pattern-not: ${{ ... github.workflow && ... }}
       - pattern-not: ${{ ... github.event.inputs && ... }}
       - pattern-not: ${{ ... github.event.discussion.title && ... }}
       - pattern-not: ${{ ... github.event.discussion.body && ... }}
