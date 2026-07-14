@@ -1,0 +1,47 @@
+rules:
+  - id: hooks-path-traversal-python
+    mode: taint
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Hook input flows into a file path without validation. Claude Code and Cursor hooks
+      receive JSON input that may contain user-controlled paths. An attacker
+      could craft input with path traversal sequences (e.g., '../../etc/passwd')
+      to read, modify, or delete arbitrary files. Use os.path.realpath() or
+      os.path.abspath() to resolve and validate paths before file operations.
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [claude-code, cursor]
+      references:
+        - https://docs.anthropic.com/en/docs/claude-code/hooks
+        - https://cursor.com/docs/agent/hooks
+    pattern-sources:
+      - pattern: json.loads(...)
+      - pattern: json.load(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: open($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.remove($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.unlink($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: shutil.copy($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: shutil.move($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: pathlib.Path($SINK)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: os.path.realpath(...)
+      - pattern: os.path.abspath(...)

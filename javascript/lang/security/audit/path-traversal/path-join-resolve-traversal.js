@@ -11,7 +11,7 @@ function test1() {
 }
 
 function test2() {
-    function someFunc(val) {
+    function someFunc2(val) {
         createFile({
             // ruleid:path-join-resolve-traversal
             filePath: path.resolve(opts.path, val)

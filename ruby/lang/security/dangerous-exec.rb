@@ -57,24 +57,24 @@ def test_calls(user_input)
     exec(["ls", "-lah", "/tmp"])
   end
 
-  def test_params()
+  def test_params2()
     user_input = params['some_key']
   # ruleid: dangerous-exec
     exec("ls -lah #{user_input}")
-  
+
   # ruleid: dangerous-exec
     Process.spawn([user_input, "smth"])
-  
+
   # ruleid: dangerous-exec
     output = exec(["sh", "-c", user_input])
-  
+
   # ruleid: dangerous-exec
     pid = spawn(["bash", user_input])
-  
+
     commands = "ls -lah /raz/dva"
   # ok: dangerous-exec
     system(commands)
-  
+
     cmd_name = "sh"
   # ok: dangerous-exec
     Process.exec([cmd_name, "ls", "-la"])

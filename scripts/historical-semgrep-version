@@ -1,12 +1,46 @@
 #!/bin/bash
+set -euo pipefail
+
+# Fetch a recent-but-not-newest Semgrep release tag and pull the matching
+# Docker image, so we can validate/test rules against an older Semgrep.
+#
+# We reverse the releases list (so it is oldest-first), keep the last
+# HISTORICAL_VERSIONS (the most recent N releases), then take the first
+# RETRIES of those (the oldest within that window). Each candidate is tried
+# in turn until a Docker image successfully pulls.
+
 HISTORICAL_VERSIONS=10
 RETRIES=3
 
-versions=$(gh api --method GET /repos/returntocorp/semgrep/releases | jq 'reverse' | jq -r '.[].tag_name' | tail "-n${HISTORICAL_VERSIONS}" | head -n "${RETRIES}" | tr -d v)
+# The repo was renamed from returntocorp/semgrep to semgrep/semgrep. Use the
+# canonical path; the rename redirect does not work reliably with the
+# scoped GITHUB_TOKEN in workflows, which silently produced an empty
+# response and made the script fail with no diagnostics.
+api_path="/repos/semgrep/semgrep/releases"
 
-for version in $(echo "${versions}"); do
-  docker pull "returntocorp/semgrep:${version}"
-  if [[ "$?" == 0 ]]; then
+if ! releases_json="$(gh api --method GET "${api_path}" 2>&1)"; then
+  echo "Failed to fetch ${api_path} from GitHub:"
+  echo "${releases_json}"
+  exit 1
+fi
+
+versions="$(echo "${releases_json}" \
+  | jq -r 'reverse | .[].tag_name' \
+  | tail -n "${HISTORICAL_VERSIONS}" \
+  | head -n "${RETRIES}" \
+  | tr -d v)"
+
+if [[ -z "${versions}" ]]; then
+  echo "No candidate versions found in ${api_path} response (first 500 chars):"
+  echo "${releases_json}" | head -c 500
+  echo
+  exit 1
+fi
+
+echo "Candidate historical versions: $(echo ${versions})"
+
+for version in ${versions}; do
+  if docker pull "returntocorp/semgrep:${version}"; then
     echo "${version}"
     echo "SEMGREP_OLD_VERSION=${version}" >> "${GITHUB_ENV}"
     exit 0

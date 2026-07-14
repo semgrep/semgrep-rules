@@ -72,8 +72,8 @@ public class TestController {
         return rs;
     }
 
-    @RequestMapping(value = "/test5", method = RequestMethod.POST, produces = "plain/text")
-    ResultSet test5(@RequestBody String name) {
+    @RequestMapping(value = "/test5ok", method = RequestMethod.POST, produces = "plain/text")
+    ResultSet test5ok(@RequestBody String name) {
         try {
             // ok: tainted-sql-string
             throw new Exception(String.format("Update request from %s to %s isn't allowed",

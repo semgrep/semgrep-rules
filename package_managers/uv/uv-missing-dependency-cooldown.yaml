@@ -1,0 +1,61 @@
+---
+rules:
+  - id: uv-missing-dependency-cooldown
+    pattern-either:
+      # Branch 1a: pyproject.toml missing exclude-newer in [tool.uv]
+      - patterns:
+          - pattern-regex: '(?ms)\[tool\.uv\](?P<TARGET>[^\[]*?)(?=\[|\z)'
+          - metavariable-regex:
+              metavariable: $TARGET
+              regex: '^(?![\s\S]*exclude-newer)'
+          - focus-metavariable: $TARGET
+
+      # Branch 2: Value too low (< 7 days)
+      - patterns:
+          - pattern-regex: 'exclude-newer\s*=\s*"(?P<DAYS>\d+)\s*d(?:ays?)?"'
+          - metavariable-comparison:
+              metavariable: $DAYS
+              comparison: int($DAYS) < 7
+          - focus-metavariable: $DAYS
+
+      # Branch 3: Not a recognized relative cooldown -> flag. Concrete
+      # dates/timestamps are intentionally rejected: a fixed date can't be
+      # verified to provide an ongoing >= 7-day cooldown.
+      - patterns:
+          - pattern-regex: 'exclude-newer\s*=\s*"(?P<VAL>[^"]+)"'
+          - metavariable-regex:
+              metavariable: $VAL
+              regex: '(?i)^(?!\d+\s*d(?:ays?)?\b)(?!\d+\s*(?:weeks?|wks?|w|months?|mos?|mo|years?|yrs?|y)\b)(?!P[^Tt]*[WMY])(?!P(?:[7-9]|[1-9]\d+)D\b)'
+          - focus-metavariable: $VAL
+    message: >-
+      This pyproject.toml configures uv but does not set a dependency cooldown.
+      Newly published packages can be malicious or unstable. Add
+      `exclude-newer = "7 days"` under `[tool.uv]` to wait 7 days
+      before resolving newly published package versions.
+      Added in: 0.9.17
+      Reference: https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns
+    languages:
+      - generic
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/pyproject.toml"
+        - "**/uv.toml"
+    metadata:
+      category: security
+      technology:
+        - uv
+        - python
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.astral.sh/uv/concepts/resolution/#dependency-cooldowns

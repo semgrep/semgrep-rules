@@ -19,20 +19,21 @@ rules:
   metadata:
     category: security
     owasp:
-    - A01:2021 - Broken Access Control
-    - A01:2025 - Broken Access Control
+    - A08:2021 - Software and Data Integrity Failures
+    - A08:2025 - Software and Data Integrity Failures
     cwe:
-    - 'CWE-913: Improper Control of Dynamically-Managed Code Resources'
+    - 'CWE-829: Inclusion of Functionality from Untrusted Control Sphere'
     references:
     - https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+    - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
     - https://github.com/justinsteven/advisories/blob/master/2021_github_actions_checkspelling_token_leak_via_advice_symlink.md
     technology:
     - github-actions
     subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
   patterns:
   - pattern-either:
     - pattern-inside: |
@@ -67,5 +68,8 @@ rules:
       language: generic
       metavariable: $EXPR
       patterns:
-      - pattern: ${{ github.event.pull_request ... }}
-  severity: WARNING
+      - pattern-inside: "${{ ... }}"
+      - pattern-either:
+        - pattern: github.event.pull_request ...
+        - pattern: github.head_ref ...
+  severity: ERROR

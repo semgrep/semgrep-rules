@@ -16,7 +16,7 @@
     render file: "/some/path/#{page}"
   end
 
-  def test_render_with_modern_param
+  def test_render_with_modern_param_sanitized
     page = params[:page]
     #ok: check-render-local-file-include
     render file: File.basename("/some/path/#{page}")

@@ -1,0 +1,49 @@
+---
+rules:
+  - id: pnpm-trust-policy
+    message: >-
+      Missing or incorrect trustPolicy. Set `trustPolicy: no-downgrade`
+      to prevent malicious package updates from downgrading security settings.
+      Added in: v10.21.0
+      Reference: https://pnpm.io/settings#trustpolicy
+    languages:
+      - yaml
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/pnpm-workspace.yaml"
+    pattern-either:
+      # Branch 1: Missing entirely
+      - patterns:
+          - pattern-regex: '(?ms)(?:\A|^---$\n)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?P<TARGET>^(?:packages|catalog)\s*:)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?=^---$|\z)'
+          - focus-metavariable: $TARGET
+
+      # Branch 2: Wrong value (not no-downgrade)
+      - patterns:
+          - pattern: |
+              trustPolicy: $VAL
+          - metavariable-regex:
+              metavariable: $VAL
+              regex: '^(?!no-downgrade$).+'
+          - focus-metavariable: $VAL
+
+      # Branch 3: Empty value
+      - patterns:
+          - pattern-regex: '(?m)^\s*trustPolicy\s*:\s*$'
+    metadata:
+      category: security
+      technology:
+        - pnpm
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://pnpm.io/settings#minimumreleaseage

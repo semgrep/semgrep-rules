@@ -1,0 +1,22 @@
+rules:
+  - id: gemini-missing-system-instruction-python
+    languages: [python]
+    severity: WARNING
+    message: >-
+      Gemini GenerativeModel created without 'system_instruction' parameter. A
+      system instruction helps establish behavioral guidelines and safety
+      boundaries for the model. See
+      https://ai.google.dev/gemini-api/docs/safety-guidance
+    metadata:
+      cwe: "CWE-1188: Initialization with an Insecure Default"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      technology: [gemini]
+      references:
+        - https://ai.google.dev/gemini-api/docs/safety-guidance
+    patterns:
+      - pattern: genai.GenerativeModel(...)
+      - pattern-not: genai.GenerativeModel(..., system_instruction=$SI, ...)

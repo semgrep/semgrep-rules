@@ -1,0 +1,25 @@
+rules:
+  - id: openai-no-error-handling
+    languages: [python]
+    severity: WARNING
+    message: >-
+      OpenAI API call without error handling. Wrap API calls in try/except to
+      handle rate limits (RateLimitError), API errors (APIError), and network
+      issues gracefully.
+    metadata:
+      cwe: "CWE-252: Unchecked Return Value"
+      category: security
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      technology: [openai]
+      references:
+        - https://developers.openai.com/api/docs/guides/safety-best-practices/
+    patterns:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern-not-inside: |
+          try:
+              ...
+          except ...:
+              ...

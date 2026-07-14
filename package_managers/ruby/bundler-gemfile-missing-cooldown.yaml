@@ -1,0 +1,54 @@
+---
+rules:
+  - id: bundler-gemfile-missing-cooldown
+    message: >-
+      A Gemfile `source` declaration without a `cooldown` (or with a cooldown
+      below 7 days) allows Bundler to resolve newly published gem versions
+      immediately, before the community has had time to detect malicious
+      releases. The May 2026 RubyGems supply-chain attack demonstrated that
+      threat actors can push compromised gem versions and have them automatically
+      pulled into builds within minutes. Add `cooldown: 7` to each public source
+      declaration so Bundler ignores gem versions published within the last 7
+      days during dependency resolution (e.g. `source "https://rubygems.org", cooldown: 7`).
+      If you operate an internal or private registry where the supply-chain risk is lower,
+      use `cooldown: 0` as an explicit bypass. Note: this feature requires
+      Bundler >= 4.0.13. Cooldown only applies during `bundle update` and
+      `bundle add`; `bundle install` with an existing lockfile is unaffected.
+    languages:
+      - ruby
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/Gemfile"
+        - "**/gems.rb"
+      exclude:
+        - "**/vendor/**"
+        - "**/.bundle/**"
+    pattern-either:
+      - patterns:
+          - pattern: source "...", ...
+          - pattern-not: "source \"...\", ..., cooldown: $N, ..."
+      - patterns:
+          - pattern: "source \"...\", ..., cooldown: $N, ..."
+          - metavariable-comparison:
+              metavariable: $N
+              comparison: "$N > 0 and $N < 7"
+          - focus-metavariable: $N
+    metadata:
+      category: security
+      technology:
+        - bundler
+        - ruby
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://blog.rubygems.org/2026/06/03/cooldown-let-new-gems-be-vetted.html
