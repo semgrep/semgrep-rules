@@ -149,6 +149,13 @@ jobs:
             const ref = "${{ github.event.deployment.ref }}";
             console.log(ref);
 
+      - name: Script with workflow name
+        uses: actions/github-script@v6
+        with:
+          # ok: github-script-injection
+          script: |
+            console.log("Workflow: ${{ github.workflow }}");
+
       - name: Ok script 1
         uses: not-github/custom-action@latest
         with:
