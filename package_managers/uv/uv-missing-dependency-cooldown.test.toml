@@ -18,6 +18,20 @@ dev-dependencies = ["pytest"]
 [tool.uv]
 exclude-newer = "7 days"
 
+# ok: uv-missing-dependency-cooldown
+[tool.uv]
+constraint-dependencies = ["grpcio<1.65"]
+exclude-newer = "7 days"
+
+# ok: uv-missing-dependency-cooldown
+[tool.uv]
+# A comment containing [square brackets] is not a TOML table header.
+exclude-newer = "7 days"
+
+# ruleid: uv-missing-dependency-cooldown
+[tool.uv]
+constraint-dependencies = ["grpcio<1.65"]
+
 [tool.uv]
 # ruleid: uv-missing-dependency-cooldown
 exclude-newer = "3 days"

@@ -4,7 +4,7 @@ rules:
     pattern-either:
       # Branch 1a: pyproject.toml missing exclude-newer in [tool.uv]
       - patterns:
-          - pattern-regex: '(?ms)\[tool\.uv\](?P<TARGET>[^\[]*?)(?=\[|\z)'
+          - pattern-regex: '(?ms)^\s*\[tool\.uv\](?P<TARGET>.*?)(?=^\s*\[|\z)'
           - metavariable-regex:
               metavariable: $TARGET
               regex: '^(?![\s\S]*exclude-newer)'
