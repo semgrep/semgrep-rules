@@ -28,7 +28,7 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-v1|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Install pre-commit
-        run: uv tool install pre-commit --with pre-commit-uv
+        run: UV_EXCLUDE_NEWER="1 week" uv tool install pre-commit --with pre-commit-uv
       - name: Run pre-commit
         env:
           SKIP: yamlfmt
