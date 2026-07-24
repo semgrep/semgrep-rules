@@ -7,12 +7,6 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
-    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-      with:
-        python-version: '3.10'
-    - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
-      env:
-        SKIP: yamlfmt
+    uses: semgrep/release-workflows/.github/workflows/pre-commit.yaml@c04907222197635bc8fc0d80b1d5fec8f945eb43 # develop
+    with:
+      skip: yamlfmt
