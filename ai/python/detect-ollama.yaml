@@ -6,7 +6,7 @@ rules:
     message: "Possibly found usage of AI: Ollama"
     pattern-either:
       - pattern: import ollama
-      - pattern: from ollama import $ANYTHING
+      - pattern: from ollama import $_
       - pattern: ollama.chat(...)
       - pattern: ollama.generate(...)
       - pattern: |
