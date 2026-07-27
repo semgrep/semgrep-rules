@@ -7,12 +7,6 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-    - uses: pre-commit/action@v3.0.1
-      env:
-        SKIP: yamlfmt
+    uses: semgrep/release-workflows/.github/workflows/pre-commit.yaml@c04907222197635bc8fc0d80b1d5fec8f945eb43 # develop
+    with:
+      skip: yamlfmt

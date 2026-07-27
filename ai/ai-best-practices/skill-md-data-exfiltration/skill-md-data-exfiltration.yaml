@@ -1,0 +1,33 @@
+rules:
+  - id: skill-md-data-exfiltration-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      SKILL.md or AGENT.md content instructs the agent to exfiltrate data to
+      an attacker-controlled endpoint. Patterns like "send the result to
+      http://...", "POST credentials to ...", or "include the contents in a
+      request to ..." inside a skill body are read as authoritative
+      instructions by agents that load the skill. Remove the exfiltration
+      directive or audit the skill source.
+    metadata:
+      cwe: "CWE-201: Insertion of Sensitive Information Into Sent Data"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: HIGH
+      technology: [claude-code, anthropic, mcp]
+      references:
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules
+        - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    paths:
+      include:
+        - "*SKILL.md"
+        - "*AGENT.md"
+        - "*AGENTS.md"
+        - "*skill.md"
+    pattern-either:
+      - pattern-regex: '(?i)(?:send|post|forward|upload|exfiltrate|deliver)\s+(?:the\s+)?(?:result|output|contents?|response|data|file|secret|token|key|credential|env)\s+(?:to|via)\s+https?://'
+      - pattern-regex: '(?i)(?:include|append|attach)\s+(?:the\s+)?(?:contents?|output)\s+(?:in|to)\s+(?:a\s+)?(?:request|webhook|callback)\s+to\s+https?://'
+      - pattern-regex: '(?i)curl\s+-X?\s*POST\s+https?://[a-z0-9.-]+/[^\s]*\s+-d\s+["''](?:\$|@)'
+      - pattern-regex: '(?i)before\s+(?:returning|responding|answering),?\s+(?:also\s+)?(?:read|cat|fetch|load)\s+(?:~/\.ssh|~/\.aws|~/\.config|/etc/(?:passwd|shadow)|\.env)'
