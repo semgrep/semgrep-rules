@@ -22,3 +22,15 @@ hashlib.new('sha256')
 
 # ok:insecure-hash-function
 hashlib.new('SHA512')
+
+# ok:insecure-hash-function
+hashlib.new('md5', usedforsecurity=False)  # nosemgrep: python.lang.security.insecure-hash-function.insecure-hash-function
+
+# ok:insecure-hash-function
+hashlib.new('md4', string=b'test', usedforsecurity=False)  # nosemgrep: python.lang.security.insecure-hash-function.insecure-hash-function
+
+# ok:insecure-hash-function
+hashlib.new(name='md5', usedforsecurity=False)  # nosemgrep: python.lang.security.insecure-hash-function.insecure-hash-function
+
+# ruleid:insecure-hash-function
+hashlib.new('md5', usedforsecurity=True)
