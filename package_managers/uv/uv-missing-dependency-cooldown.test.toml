@@ -32,6 +32,18 @@ exclude-newer = "7 days"
 [tool.uv]
 constraint-dependencies = ["grpcio<1.65"]
 
+# ruleid: uv-missing-dependency-cooldown
+[tool.uv]
+override-dependencies = ["urllib3<2"]
+# TODO [security]: configure exclude-newer after rollout
+
+# ok: uv-missing-dependency-cooldown
+[tool.uv]
+constraint-dependencies = [
+  ["nested"],
+]
+exclude-newer = "7 days"
+
 [tool.uv]
 # ruleid: uv-missing-dependency-cooldown
 exclude-newer = "3 days"
