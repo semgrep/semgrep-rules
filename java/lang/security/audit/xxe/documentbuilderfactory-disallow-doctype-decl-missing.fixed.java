@@ -179,3 +179,13 @@ class GoodDocumentBuilderFactoryAccessExternalDtd {
         dbf.newDocumentBuilder();
     }
 }
+
+class BadDocumentBuilderFactoryUnrelatedConstant {
+    public void unrelatedConstantNamedLikeJaxp() throws ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setAttribute(MyOwnConfig.ACCESS_EXTERNAL_DTD, "");
+        //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        dbf.newDocumentBuilder();
+    }
+}
