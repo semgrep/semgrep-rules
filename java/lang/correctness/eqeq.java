@@ -21,3 +21,19 @@ class Bar {
         }
     }
 }
+
+class TernaryCondition {
+    void main() {
+        BooleanExpression expr = null;
+        BooleanExpression other = null;
+
+        // ok:eqeq
+        expr = (expr != null ? expr.and(other) : other);
+    }
+}
+
+class BooleanExpression {
+    BooleanExpression and(BooleanExpression other) {
+        return other;
+    }
+}
