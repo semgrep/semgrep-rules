@@ -66,6 +66,17 @@ public class JdoSql {
         return pmfInstance.getPersistenceManager();
     }
 
+    public void testJdoQueriesFormatted(String input) {
+        PersistenceManager pm = getPM();
+        // ruleid: jdo-sqli
+        pm.newQuery("select * from Users where name = %s".formatted(input));
+        // ruleid: jdo-sqli
+        pm.newQuery(UserEntity.class, new ArrayList(), "id == %s".formatted(input));
+
+        // ok: jdo-sqli
+        pm.newQuery("select * from Config".formatted());
+    }
+
     public void testJdoQueries(String input) {
         PersistenceManager pm = getPM();
         // ruleid: jdo-sqli
