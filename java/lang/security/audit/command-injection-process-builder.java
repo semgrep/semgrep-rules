@@ -49,3 +49,36 @@ public class TestExecutor {
 
 
 }
+
+class ProcessBuilderChainedAndLaterArgs {
+    public void chainedCommand(String userInput) {
+        // ruleid: command-injection-process-builder
+        new ProcessBuilder().command(userInput);
+    }
+
+    public void chainedCommandSplit(String userInput) {
+        // ruleid: command-injection-process-builder
+        ProcessBuilder builder = new ProcessBuilder().command(userInput.split(" "));
+    }
+
+    public void dynamicArgInConstructor(String userInput) {
+        // ruleid: command-injection-process-builder
+        ProcessBuilder builder = new ProcessBuilder("ls", userInput);
+    }
+
+    public void dynamicArgInCommand(String userInput) {
+        ProcessBuilder builder = new ProcessBuilder();
+        // ruleid: command-injection-process-builder
+        builder.command("java", "-jar", userInput);
+    }
+
+    public void allArgumentsAreLiterals() {
+        // ok: command-injection-process-builder
+        ProcessBuilder builder = new ProcessBuilder("ls", "-la");
+    }
+
+    public void chainedCommandWithLiterals() {
+        // ok: command-injection-process-builder
+        new ProcessBuilder().command("ls", "-la");
+    }
+}
