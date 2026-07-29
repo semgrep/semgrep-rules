@@ -10,6 +10,34 @@
   </div>
 </div>
 
+<!-- a token in a following sibling form must not suppress this finding -->
+<div class="container">
+<!-- ruleid: django-no-csrf-token -->
+  <form method="post">
+      <input type="text" name="unprotected">
+      <button type="submit">Submit</button>
+  </form>
+  <form method="post">
+      {% csrf_token %}
+      <input type="text" name="protected">
+      <button type="submit">Submit</button>
+  </form>
+</div>
+
+<!-- a token in a preceding sibling form must not suppress this finding -->
+<div class="container">
+  <form method="post">
+      {% csrf_token %}
+      <input type="text" name="protected">
+      <button type="submit">Submit</button>
+  </form>
+<!-- ruleid: django-no-csrf-token -->
+  <form method="post">
+      <input type="text" name="unprotected">
+      <button type="submit">Submit</button>
+  </form>
+</div>
+
 <div class="container">
   <div class="row">
       <div class="col-6">
