@@ -10,6 +10,34 @@
   </div>
 </div>
 
+<!-- a token in a following sibling form must not suppress this finding -->
+<div class="container">
+<!-- ruleid: django-no-csrf-token -->
+  <form method="post">
+      <input type="text" name="unprotected">
+      <button type="submit">Submit</button>
+  </form>
+  <form method="post">
+      {% csrf_token %}
+      <input type="text" name="protected">
+      <button type="submit">Submit</button>
+  </form>
+</div>
+
+<!-- a token in a preceding sibling form must not suppress this finding -->
+<div class="container">
+  <form method="post">
+      {% csrf_token %}
+      <input type="text" name="protected">
+      <button type="submit">Submit</button>
+  </form>
+<!-- ruleid: django-no-csrf-token -->
+  <form method="post">
+      <input type="text" name="unprotected">
+      <button type="submit">Submit</button>
+  </form>
+</div>
+
 <div class="container">
   <div class="row">
       <div class="col-6">
@@ -96,4 +124,50 @@
         </form>
       </div>
   </div>
+</div>
+
+<!-- a nested {% if %} around a multi-line element must not hide the csrf_token -->
+<div class="container">
+  <form method="post">
+      {% csrf_token %}
+      <div>
+          {% if x %}
+              <div>
+                  {{ y }}
+              </div>
+          {% endif %}
+      </div>
+      <div>
+<!-- ok: django-no-csrf-token -->
+          <button type="submit">Go</button>
+      </div>
+  </form>
+</div>
+
+<!-- a longer form without a csrf_token is still reported -->
+<div class="container">
+<!-- ruleid: django-no-csrf-token -->
+  <form method="post">
+      <div class="row-0"><input type="text" name="field_0"></div>
+      <div class="row-1"><input type="text" name="field_1"></div>
+      <div class="row-2"><input type="text" name="field_2"></div>
+      <div class="row-3"><input type="text" name="field_3"></div>
+      <div class="row-4"><input type="text" name="field_4"></div>
+      <div class="row-5"><input type="text" name="field_5"></div>
+      <div class="row-6"><input type="text" name="field_6"></div>
+      <div class="row-7"><input type="text" name="field_7"></div>
+      <div class="row-8"><input type="text" name="field_8"></div>
+      <div class="row-9"><input type="text" name="field_9"></div>
+      <div class="row-10"><input type="text" name="field_10"></div>
+      <div class="row-11"><input type="text" name="field_11"></div>
+      <div class="row-12"><input type="text" name="field_12"></div>
+      <div class="row-13"><input type="text" name="field_13"></div>
+      <div class="row-14"><input type="text" name="field_14"></div>
+      <div class="row-15"><input type="text" name="field_15"></div>
+      <div class="row-16"><input type="text" name="field_16"></div>
+      <div class="row-17"><input type="text" name="field_17"></div>
+      <div class="row-18"><input type="text" name="field_18"></div>
+      <div class="row-19"><input type="text" name="field_19"></div>
+      <button type="submit">Go</button>
+  </form>
 </div>
