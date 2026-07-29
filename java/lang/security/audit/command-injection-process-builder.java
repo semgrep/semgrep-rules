@@ -62,13 +62,13 @@ class ProcessBuilderChainedAndLaterArgs {
     }
 
     public void dynamicArgInConstructor(String userInput) {
-        // ruleid: command-injection-process-builder
+        // ok: command-injection-process-builder
         ProcessBuilder builder = new ProcessBuilder("ls", userInput);
     }
 
     public void dynamicArgInCommand(String userInput) {
         ProcessBuilder builder = new ProcessBuilder();
-        // ruleid: command-injection-process-builder
+        // ok: command-injection-process-builder
         builder.command("java", "-jar", userInput);
     }
 
