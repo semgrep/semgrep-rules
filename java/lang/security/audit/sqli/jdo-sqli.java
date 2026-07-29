@@ -60,6 +60,8 @@ public class JdoSql {
 
     private static final PersistenceManagerFactory pmfInstance =
             JDOHelper.getPersistenceManagerFactory("transactions-optional");
+    private static final String QUERY_TEMPLATE =
+            "select * from Users where name = %s";
 
 
     public static PersistenceManager getPM() {
@@ -73,8 +75,20 @@ public class JdoSql {
         // ruleid: jdo-sqli
         pm.newQuery(UserEntity.class, new ArrayList(), "id == %s".formatted(input));
 
+        String sql = QUERY_TEMPLATE.formatted(input);
+        // ruleid: jdo-sqli
+        pm.newQuery(sql);
+        // ruleid: jdo-sqli
+        pm.newQuery(QUERY_TEMPLATE.formatted(input));
+
         // ok: jdo-sqli
         pm.newQuery("select * from Config".formatted());
+        // ok: jdo-sqli
+        pm.newQuery("select * from Config".formatted(input));
+        // ok: jdo-sqli
+        pm.newQuery("select '%%' from Config".formatted(input));
+        // ok: jdo-sqli
+        pm.newQuery("select %n from Config".formatted(input));
     }
 
     public void testJdoQueries(String input) {
