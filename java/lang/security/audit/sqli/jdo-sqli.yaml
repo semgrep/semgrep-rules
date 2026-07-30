@@ -12,6 +12,9 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
+              String $SQL = "...".formatted(...);
+              ...
+          - pattern-inside: |
               $TYPE $FUNC(...,String $SQL,...) {
                 ...
               }
@@ -21,6 +24,8 @@ rules:
         - pattern: $Q.$METHOD($SQL,...)
       - pattern: |
           $Q.$METHOD(String.format(...),...);
+      - pattern: |
+          $Q.$METHOD("...".formatted(...),...);
       - pattern: |
           $Q.$METHOD($X + $Y,...);
     - pattern-either:
@@ -47,6 +52,9 @@ rules:
               String $SQL = String.format(...);
               ...
           - pattern-inside: |
+              String $SQL = "...".formatted(...);
+              ...
+          - pattern-inside: |
               $VAL $FUNC(...,String $SQL,...) {
                 ...
               }
@@ -56,6 +64,8 @@ rules:
         - pattern: $PM.newQuery(...,$SQL,...)
       - pattern: |
           $PM.newQuery(...,String.format(...),...);
+      - pattern: |
+          $PM.newQuery(...,"...".formatted(...),...);
       - pattern: |
           $PM.newQuery(...,$X + $Y,...);
     - pattern-either:
