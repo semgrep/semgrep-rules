@@ -29,6 +29,20 @@ public class Cls extends HttpServlet
         byte[] cipherText = c.doFinal(plainText);
     }
 
+    protected void danger_lowercase(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // ruleid: des-is-deprecated
+        Cipher c = Cipher.getInstance("des");
+        c.init(Cipher.ENCRYPT_MODE, k, iv);
+        byte[] cipherText = c.doFinal(plainText);
+    }
+
+    protected void danger_lowercase_with_mode(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // ruleid: des-is-deprecated
+        Cipher c = Cipher.getInstance("des/ecb/pkcs5padding");
+        c.init(Cipher.ENCRYPT_MODE, k, iv);
+        byte[] cipherText = c.doFinal(plainText);
+    }
+
     protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // ok: des-is-deprecated
         Cipher c = Cipher.getInstance("AES/GCM/NoPadding");

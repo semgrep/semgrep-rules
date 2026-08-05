@@ -38,6 +38,6 @@ rules:
         java.security.MessageDigest.getInstance("$ALGO", ...);
     - metavariable-regex:
         metavariable: $ALGO
-        regex: (SHA1|SHA-1)
+        regex: (?i)^(SHA1|SHA-1)$
   - pattern: |
       $DU.getSha1Digest().digest(...)
