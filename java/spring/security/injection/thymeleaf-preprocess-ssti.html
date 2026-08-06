@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SSTI DEMO</title>
+  </head>
+  <body>
+    <!-- ruleid: spring-thymeleaf-preprocess-ssti -->
+    <h1 th:text="@{'/login?redirectAfterLogin=__${Referer}__'}"></h1>
+
+    <!-- normal expression without preprocessing -->
+    <!-- ok: spring-thymeleaf-preprocess-ssti -->
+    <h1 th:text="@{'/login?redirectAfterLogin=${Referer}'}"></h1>
+  </body>
+</html>
