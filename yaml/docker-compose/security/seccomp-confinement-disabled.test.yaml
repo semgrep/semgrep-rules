@@ -13,3 +13,22 @@ services:
     image: mysql
     security_opt:
       - seccomp:unconfined
+---
+services:
+  # ruleid: seccomp-confinement-disabled
+  versionless:
+    image: alpine:latest
+    security_opt:
+      - seccomp:unconfined
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      # ok: seccomp-confinement-disabled
+      docker:
+        image: docker:dind
+        security_opt:
+          - seccomp:unconfined

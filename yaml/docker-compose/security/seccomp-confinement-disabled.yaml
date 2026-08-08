@@ -2,10 +2,15 @@ rules:
 - id: seccomp-confinement-disabled
   patterns:
   - pattern-inside: |
-      version: ...
-      ...
       services:
         ...
+  - pattern-not-inside: |
+      jobs:
+        ...
+        $JOB:
+          ...
+          services:
+            ...
   - pattern: |
       $SERVICE:
         ...
@@ -19,7 +24,7 @@ rules:
     the service in an unrestricted state. Remove 'seccomp:unconfined' to prevent this.
   metadata:
     cwe:
-    - 'CWE-284: Improper Access Control'
+    - 'CWE-250: Execution with Unnecessary Privileges'
     references:
     - https://docs.docker.com/engine/security/seccomp/
     category: security

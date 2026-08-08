@@ -2,10 +2,15 @@ rules:
 - id: selinux-separation-disabled
   patterns:
   - pattern-inside: |
-      version: ...
-      ...
       services:
         ...
+  - pattern-not-inside: |
+      jobs:
+        ...
+        $JOB:
+          ...
+          services:
+            ...
   - pattern: |
       $SERVICE:
         ...
@@ -19,7 +24,7 @@ rules:
     service as an unconfined type. Remove 'label:disable' to prevent this.
   metadata:
     cwe:
-    - 'CWE-284: Improper Access Control'
+    - 'CWE-250: Execution with Unnecessary Privileges'
     references:
     - https://www.projectatomic.io/blog/2016/03/dwalsh_selinux_containers/
     - https://docs.docker.com/engine/reference/run/#security-configuration

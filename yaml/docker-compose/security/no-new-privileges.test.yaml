@@ -14,3 +14,18 @@ services:
     security_opt:
       - no-new-privileges:true
       - another-opt:true
+---
+services:
+  # ruleid: no-new-privileges
+  versionless:
+    image: nginx:alpine
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      # ok: no-new-privileges
+      postgres:
+        image: postgres:16
