@@ -2,18 +2,57 @@ rules:
   - id: wildcard-cors
     languages:
       - python
-    message: CORS policy allows any origin (using wildcard '*'). This is insecure
-      and should be avoided.
+    message: CORS policy allows any origin using a wildcard or broad origin regex.
+      Prefer an explicit allowlist of trusted origins.
     mode: taint
     pattern-sources:
-      - pattern: '[..., "*", ...]'
+      - pattern-either:
+          - pattern: '[..., "*", ...]'
+          - pattern: '"=~/^\\.\\*$/"'
+          - pattern: '"=~/^\\.\\+$/"'
     pattern-sinks:
       - patterns:
-          - pattern: |
-              $APP.add_middleware(
-                CORSMiddleware,
-                allow_origins=$ORIGIN,
-                ...);
+          - pattern-either:
+              - pattern: |
+                  $APP.add_middleware(
+                    CORSMiddleware,
+                    allow_origins=$ORIGIN,
+                    ...)
+              - pattern: |
+                  $APP.add_middleware(
+                    CORSMiddleware,
+                    allow_origin_regex=$ORIGIN,
+                    ...)
+              - pattern: |
+                  Middleware(
+                    CORSMiddleware,
+                    allow_origins=$ORIGIN,
+                    ...)
+              - pattern: |
+                  Middleware(
+                    CORSMiddleware,
+                    allow_origin_regex=$ORIGIN,
+                    ...)
+              - pattern: |
+                  CORSMiddleware(
+                    $APP,
+                    allow_origins=$ORIGIN,
+                    ...)
+              - pattern: |
+                  CORSMiddleware(
+                    $APP,
+                    allow_origin_regex=$ORIGIN,
+                    ...)
+              - pattern: |
+                  CORSMiddleware(
+                    app=$APP,
+                    allow_origins=$ORIGIN,
+                    ...)
+              - pattern: |
+                  CORSMiddleware(
+                    app=$APP,
+                    allow_origin_regex=$ORIGIN,
+                    ...)
           - focus-metavariable: $ORIGIN
     severity: WARNING
     metadata:
@@ -29,6 +68,8 @@ rules:
       references:
         - https://owasp.org/Top10/A05_2021-Security_Misconfiguration
         - https://cwe.mitre.org/data/definitions/942.html
+        - https://fastapi.tiangolo.com/tutorial/cors/
+        - https://www.starlette.io/middleware/#corsmiddleware
       likelihood: HIGH
       impact: LOW
       confidence: MEDIUM
