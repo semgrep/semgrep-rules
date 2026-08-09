@@ -1,0 +1,35 @@
+rules:
+- id: vitejs-loadenv-direct-use
+  languages:
+  - typescript
+  severity: ERROR
+  message: Directly passing `process.env` to ViteJS via a `loadEnv($...ARGS,$PREFIX)`
+    call is dangerous as the **empty prefix ($PREFIX)** matches all environment variables.
+    This could potentially result in backend environment variables being leaked into
+    frontend JS bundles.
+  patterns:
+  - pattern: loadEnv($...ARGS,$PREFIX)
+  - metavariable-regex:
+      metavariable: $PREFIX
+      regex: '[''"][''"]'
+  fix: loadEnv($...ARGS, "SOME_PREFIX")
+  paths:
+    include:
+    - vite.config.ts
+    - vite.config.js
+  focus-metavariable: $PREFIX
+  metadata:
+    cwe: 'CWE-402: Transmission of Private Resources into a New Sphere (''Resource
+      Leak'')'
+    technology:
+    - javascript
+    references:
+    - https://kawing-ho.github.io/research/posts/footguns-beware/#2-vitejs-processenv-direct-use
+    category: security
+    owasp: A08:2025 Software or Data Integrity Failures
+    confidence: HIGH
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - vuln
+    vulnerability_class: Dangerous Method or Function
