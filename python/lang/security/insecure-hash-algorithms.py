@@ -7,4 +7,7 @@ import hashlib
 hashlib.sha1(1)
 
 # ok:insecure-hash-algorithm-sha1
+hashlib.sha1(1,usedforsecurity=False)
+
+# ok:insecure-hash-algorithm-sha1
 hashlib.sha256(1)
