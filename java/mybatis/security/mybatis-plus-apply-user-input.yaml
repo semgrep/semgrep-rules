@@ -1,0 +1,34 @@
+rules:
+  - id: mybatis-plus-apply-user-input
+    languages:
+      - java
+    severity: ERROR
+    message: >-
+      MyBatis-Plus QueryWrapper apply() method received a non-literal argument.
+      The apply() method concatenates raw SQL fragments into the query without
+      parameterization. If the argument contains user-controllable input, it can
+      lead to SQL injection. Use eq(), ne(), like(), in() and other safe
+      condition-building methods instead, or validate and escape inputs before
+      passing them to apply().
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      category: security
+      technology:
+        - mybatis-plus
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://baomidou.com/guides/wrapper/#apply
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+      vulnerability_class:
+        - SQL Injection
+    patterns:
+      - pattern: $X.apply(...)
+      - pattern-not-regex: '\.apply\s*\(\s*"[^"]*"\s*\)'
