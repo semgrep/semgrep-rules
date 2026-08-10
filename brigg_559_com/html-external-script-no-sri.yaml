@@ -1,0 +1,25 @@
+rules:
+- id: html-external-script-no-sri
+  metadata:
+    category: best-practice
+    technology:
+    - html
+    owasp:
+    - A06:2021 - Vulnerable and Outdated Components (integrity hardening)
+    cwe:
+    - 'CWE-353: Missing Support for Integrity Check'
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+    vulnerability_class:
+    - Subresource Integrity
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    references:
+    - https://developer.mozilla.org/docs/Web/Security/Subresource_Integrity
+  message: script src without Subresource Integrity (integrity=...).
+  severity: INFO
+  languages:
+  - generic
+  pattern-regex: (?is)(?<!<!--)(?<!<!-- )<script\b(?=[^>]*\bsrc\b)(?![^>]*\bintegrity\b)[^>]*>
