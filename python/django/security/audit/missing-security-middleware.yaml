@@ -1,0 +1,38 @@
+rules:
+  - id: django-missing-security-middleware
+    patterns:
+      - pattern: |
+          MIDDLEWARE = [...]
+      - pattern-not: |
+          MIDDLEWARE = [..., "django.middleware.security.SecurityMiddleware", ...]
+    message: >-
+      Django's SecurityMiddleware is missing from the MIDDLEWARE setting.
+      SecurityMiddleware provides several security enhancements including
+      HTTPS redirection, HSTS headers, and content type sniffing protection.
+      For ecommerce and other sensitive applications handling payment or
+      personal data, this middleware is critical for PCI-DSS compliance
+      and general web application security. Add
+      'django.middleware.security.SecurityMiddleware' to your MIDDLEWARE list,
+      ideally as the first entry.
+    languages:
+      - python
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - django
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-16: Configuration"
+      references:
+        - https://docs.djangoproject.com/en/stable/ref/middleware/#django.middleware.security.SecurityMiddleware
+        - https://docs.djangoproject.com/en/stable/topics/security/
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - Misconfiguration
