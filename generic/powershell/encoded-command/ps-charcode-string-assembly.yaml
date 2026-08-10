@@ -1,0 +1,29 @@
+rules:
+  - id: ps-charcode-string-assembly
+    message: >-
+      Character-code string assembly detected (T1027). Chains of [char] casts
+      concatenated with + are used by Invoke-Obfuscation TOKEN mode to construct
+      cmdlet names (e.g., IEX, Invoke-Expression, AmsiUtils) from numeric values,
+      defeating string-based detection. Three or more consecutive [char]
+      expressions indicate deliberate obfuscation rather than legitimate use.
+    severity: WARNING
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1027/
+        - https://github.com/danielbohannon/Invoke-Obfuscation
+      technology:
+        - powershell
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    pattern-regex: '(?i)(\[c(?:h(?:ar?)?)?\]\s*\(?\s*\d+\s*\)?\s*\+\s*){2,}\[c(?:h(?:ar?)?)?\]\s*\(?\s*\d+\s*\)?'
