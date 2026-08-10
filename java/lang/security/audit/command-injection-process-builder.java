@@ -47,5 +47,25 @@ public class TestExecutor {
       return "foo";
     }
 
+    public String fluentTest1(String userInput) {
+      // ruleid: command-injection-process-builder
+      new ProcessBuilder().command(userInput);
+      return "foo";
+    }
+
+    public String fluentTest2(String command) {
+      try {
+        // ruleid: command-injection-process-builder
+        new ProcessBuilder().redirectErrorStream(true).command("/bin/bash", "-c", command).start();
+      } catch (Exception e) {}
+      return "foo";
+    }
+
+    public String fluentOkTest() {
+      // ok: command-injection-process-builder
+      new ProcessBuilder().command("bash", "-c", "ls");
+      return "foo";
+    }
+
 
 }
