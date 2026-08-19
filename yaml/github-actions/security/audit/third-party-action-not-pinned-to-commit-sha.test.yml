@@ -24,6 +24,11 @@ jobs:
           arg1: ${{ secrets.supersecret1 }}
 
       # ok: third-party-action-not-pinned-to-commit-sha
+      - uses: $/.github/actions/do-an-internal-action
+        with:
+          arg1: ${{ secrets.supersecret1 }}
+
+      # ok: third-party-action-not-pinned-to-commit-sha
       - uses: completely/fakeaction@5fd3084fc36e372ff1fff382a39b10d03659f355
         with:
           arg2: ${{ secrets.supersecret2 }}
