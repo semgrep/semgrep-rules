@@ -51,6 +51,12 @@ app.post('/test5', function (req,res) {
     }
 })
 
+app.get('/test-replace', function (req,res) {
+    const sanitized = req.query.path.replace(/\.\.\//g, '');
+    // ruleid:express-path-join-resolve-traversal
+    return path.join(opts.path, sanitized);
+})
+
 app.post('/ok-test1', function okTest1(req,res) {
     let data = ['one', 'two', 'three'];
     for (let x of data) {
@@ -71,10 +77,10 @@ app.post('/ok-test2', function okTest2() {
     someFunc()
 })
 
-app.post('/ok-test3', function (req,res) {
+app.post('/test-replace-prefix', function testReplacePrefix(req,res) {
     let somePath = req.body.path;
     somePath = somePath.replace(/^(\.\.(\/|\\|$))+/, '');
-    // ok:express-path-join-resolve-traversal
+    // ruleid:express-path-join-resolve-traversal
     return path.join(opts.path, somePath);
 })
 
