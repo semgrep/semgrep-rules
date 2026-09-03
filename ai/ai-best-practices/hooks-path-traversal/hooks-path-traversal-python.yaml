@@ -7,8 +7,10 @@ rules:
       Hook input flows into a file path without validation. Claude Code and Cursor hooks
       receive JSON input that may contain user-controlled paths. An attacker
       could craft input with path traversal sequences (e.g., '../../etc/passwd')
-      to read, modify, or delete arbitrary files. Use os.path.realpath() or
-      os.path.abspath() to resolve and validate paths before file operations.
+      to read, modify, or delete arbitrary files. os.path.realpath() and
+      os.path.abspath() only normalize a path, they don't confirm it stays inside
+      an allowed directory. Resolve the path and then check it with a validation
+      function like validate_path() before performing file operations.
     metadata:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       category: security
@@ -43,5 +45,4 @@ rules:
           - pattern: pathlib.Path($SINK)
           - focus-metavariable: $SINK
     pattern-sanitizers:
-      - pattern: os.path.realpath(...)
-      - pattern: os.path.abspath(...)
+      - pattern: validate_path(...)

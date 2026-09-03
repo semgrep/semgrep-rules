@@ -20,15 +20,20 @@ payload = json.loads(sys.stdin.read())
 # ruleid: hooks-path-traversal-python
 p = pathlib.Path(payload["file"])
 
-# ok: hooks-path-traversal-python
+# ruleid: hooks-path-traversal-python
 data = json.loads(sys.stdin.read())
-safe_path = os.path.realpath(data["file_path"])
-f = open(safe_path, "r")
+resolved_path = os.path.realpath(data["file_path"])
+f = open(resolved_path, "r")
 
-# ok: hooks-path-traversal-python
+# ruleid: hooks-path-traversal-python
 data = json.loads(sys.stdin.read())
 abs_path = os.path.abspath(data["file_path"])
 os.remove(abs_path)
+
+# ok: hooks-path-traversal-python
+data = json.loads(sys.stdin.read())
+safe_path = validate_path(data["file_path"])
+f = open(safe_path, "r")
 
 # ok: hooks-path-traversal-python
 hardcoded = open("/tmp/known_file.txt", "r")
