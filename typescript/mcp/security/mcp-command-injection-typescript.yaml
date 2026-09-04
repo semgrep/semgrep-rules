@@ -1,0 +1,81 @@
+rules:
+  - id: mcp-command-injection-typescript
+    mode: taint
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      User-controlled MCP tool or request-handler argument flows to a shell
+      execution sink without validation. Tool arguments originate from LLM or
+      client input. Use execFile() with an explicit argument array, or validate
+      with zod.parse() / schema.parse() before calling exec() or execSync().
+    metadata:
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      confidence: HIGH
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - mcp
+        - typescript
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              $SRV.setRequestHandler(..., async ($REQ) => {
+                ...
+              })
+          - pattern: $REQ.params.arguments.$ARG
+      - patterns:
+          - pattern-inside: |
+              $SRV.setRequestHandler(..., ($REQ) => {
+                ...
+              })
+          - pattern: $REQ.params.arguments.$ARG
+      - patterns:
+          - pattern-inside: |
+              $SRV.tool(..., async ($ARGS) => {
+                ...
+              })
+          - pattern: $ARGS
+      - patterns:
+          - pattern-inside: |
+              $SRV.tool(..., async ({ $FIELD }) => {
+                ...
+              })
+          - pattern: $FIELD
+      - patterns:
+          - pattern-inside: |
+              $SRV.registerTool(..., async ($ARGS) => {
+                ...
+              })
+          - pattern: $ARGS
+      - patterns:
+          - pattern-inside: |
+              $SRV.registerTool(..., async ({ $FIELD }) => {
+                ...
+              })
+          - pattern: $FIELD
+    pattern-sinks:
+      - patterns:
+          - pattern: exec($CMD, ...)
+          - focus-metavariable: $CMD
+      - patterns:
+          - pattern: execSync($CMD, ...)
+          - focus-metavariable: $CMD
+      - patterns:
+          - pattern: $CP.exec($CMD, ...)
+          - focus-metavariable: $CMD
+      - patterns:
+          - pattern: $CP.execSync($CMD, ...)
+          - focus-metavariable: $CMD
+      - patterns:
+          - pattern: eval($CMD)
+          - focus-metavariable: $CMD
+    pattern-sanitizers:
+      - pattern: z.parse(...)
+      - pattern: zod.parse(...)
+      - pattern: $SCHEMA.parse(...)
