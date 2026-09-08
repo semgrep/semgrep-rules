@@ -10,6 +10,15 @@ jobs:
     if: github.repository == 'semgrep/semgrep-rules'
     name: Update semgrep.dev
     runs-on: ubuntu-latest
+    # POST /api/admin/update-registry is admin-gated (SECENG-12). Send an admin
+    # machine token from a secret; never hardcode it.
+    # DEPENDS ON semgrep-app accepting an admin machine token on this endpoint
+    # (today it requires a JWT, so a static token returns 404). Tracked by SECENG-12.
+    env:
+      REGISTRY_ADMIN_TOKEN_PROD: ${{ secrets.REGISTRY_ADMIN_TOKEN_PROD }}
     steps:
     - name: update semgrep.dev
-      run: curl --fail -X POST -L https://semgrep.dev/api/admin/update-registry?rule_type=sast
+      run: |
+        curl --fail --silent --show-error -X POST -L \
+          -H "Authorization: Bearer ${REGISTRY_ADMIN_TOKEN_PROD}" \
+          "https://semgrep.dev/api/admin/update-registry?rule_type=sast"
