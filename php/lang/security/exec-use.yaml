@@ -5,7 +5,7 @@ rules:
   - pattern-not: $FUNC('...', ...);
   - metavariable-regex:
       metavariable: $FUNC
-      regex: exec|passthru|proc_open|popen|shell_exec|system|pcntl_exec
+      regex: (?i)exec|passthru|proc_open|popen|shell_exec|system|pcntl_exec
   message: >-
     Executing non-constant commands. This can lead to command injection.
   metadata:
