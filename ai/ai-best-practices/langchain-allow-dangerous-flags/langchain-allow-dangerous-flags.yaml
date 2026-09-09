@@ -1,0 +1,33 @@
+rules:
+  - id: langchain-allow-dangerous-flags-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      A LangChain "dangerous" capability flag is explicitly enabled.
+      `allow_dangerous_code=True` lets an LLM-generated payload execute as
+      Python; `allow_dangerous_deserialization=True` unpickles data, which is
+      arbitrary code execution unless the source is fully trusted; and
+      `allow_dangerous_requests=True` permits unrestricted outbound HTTP,
+      which reaches internal services and cloud metadata endpoints (SSRF).
+      LangChain gates each of these behind an explicit opt-in precisely
+      because enabling it removes the safety boundary: if any part of the
+      chain's input is attacker-influenced, prompt injection escalates to
+      code execution or SSRF. Only enable these when every input and model
+      source is fully trusted.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [langchain]
+      references:
+        - https://python.langchain.com/docs/security/
+    pattern-either:
+      - pattern: $OBJ(..., allow_dangerous_code=True, ...)
+      - pattern: $OBJ(..., allow_dangerous_deserialization=True, ...)
+      - pattern: $OBJ(..., allow_dangerous_requests=True, ...)
+      - pattern: '{..., "allow_dangerous_code": True, ...}'
+      - pattern: '{..., "allow_dangerous_deserialization": True, ...}'
+      - pattern: '{..., "allow_dangerous_requests": True, ...}'
