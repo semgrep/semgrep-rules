@@ -24,41 +24,41 @@ rules:
         - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
     pattern-sources:
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.setRequestHandler(..., async ($REQ) => {
                 ...
               })
-          - pattern: $REQ.params.arguments.$ARG
+          - focus-metavariable: $REQ
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.setRequestHandler(..., ($REQ) => {
                 ...
               })
-          - pattern: $REQ.params.arguments.$ARG
+          - focus-metavariable: $REQ
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.tool(..., async ($ARGS) => {
                 ...
               })
-          - pattern: $ARGS
+          - focus-metavariable: $ARGS
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.tool(..., async ({ $FIELD }) => {
                 ...
               })
-          - pattern: $FIELD
+          - focus-metavariable: $FIELD
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.registerTool(..., async ($ARGS) => {
                 ...
               })
-          - pattern: $ARGS
+          - focus-metavariable: $ARGS
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.registerTool(..., async ({ $FIELD }) => {
                 ...
               })
-          - pattern: $FIELD
+          - focus-metavariable: $FIELD
     pattern-sinks:
       - patterns:
           - pattern: exec($CMD, ...)
@@ -72,9 +72,7 @@ rules:
       - patterns:
           - pattern: $CP.execSync($CMD, ...)
           - focus-metavariable: $CMD
-      - patterns:
-          - pattern: eval($CMD)
-          - focus-metavariable: $CMD
+      - pattern: eval(...)
     pattern-sanitizers:
       - pattern: z.parse(...)
       - pattern: zod.parse(...)

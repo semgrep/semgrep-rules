@@ -28,6 +28,12 @@ server.registerTool(
   }
 );
 
+server.tool("patch-url", { url: z.string() }, async ({ url }) => {
+  // ruleid: mcp-ssrf-typescript
+  await axios.patch(url);
+  return { content: [{ type: "text" as const, text: "done" }] };
+});
+
 server.tool("safe-fetch", { url: z.string() }, async ({ url }) => {
   const safeUrl = urlSchema.parse(url);
   // ok: mcp-ssrf-typescript

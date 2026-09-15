@@ -24,59 +24,62 @@ rules:
         - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
     pattern-sources:
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.setRequestHandler(..., async ($REQ) => {
                 ...
               })
-          - pattern: $REQ.params.arguments.$ARG
+          - focus-metavariable: $REQ
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.setRequestHandler(..., ($REQ) => {
                 ...
               })
-          - pattern: $REQ.params.arguments.$ARG
+          - focus-metavariable: $REQ
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.tool(..., async ($ARGS) => {
                 ...
               })
-          - pattern: $ARGS
+          - focus-metavariable: $ARGS
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.tool(..., async ({ $FIELD }) => {
                 ...
               })
-          - pattern: $FIELD
+          - focus-metavariable: $FIELD
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.registerTool(..., async ($ARGS) => {
                 ...
               })
-          - pattern: $ARGS
+          - focus-metavariable: $ARGS
       - patterns:
-          - pattern-inside: |
+          - pattern: |
               $SRV.registerTool(..., async ({ $FIELD }) => {
                 ...
               })
-          - pattern: $FIELD
+          - focus-metavariable: $FIELD
     pattern-sinks:
       - patterns:
           - pattern: fetch($URL, ...)
           - focus-metavariable: $URL
       - patterns:
-          - pattern: axios.get($URL, ...)
+          - pattern: $AXIOS($URL, ...)
           - focus-metavariable: $URL
       - patterns:
-          - pattern: axios.post($URL, ...)
+          - pattern: $AXIOS.get($URL, ...)
           - focus-metavariable: $URL
       - patterns:
-          - pattern: axios.put($URL, ...)
+          - pattern: $AXIOS.post($URL, ...)
           - focus-metavariable: $URL
       - patterns:
-          - pattern: axios.delete($URL, ...)
+          - pattern: $AXIOS.put($URL, ...)
           - focus-metavariable: $URL
       - patterns:
-          - pattern: axios($URL, ...)
+          - pattern: $AXIOS.delete($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.patch($URL, ...)
           - focus-metavariable: $URL
     pattern-sanitizers:
       - pattern: z.parse(...)

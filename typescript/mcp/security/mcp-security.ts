@@ -40,6 +40,12 @@ server.registerTool(
   }
 );
 
+server.tool("eval-concat", { command: z.string() }, async ({ command }) => {
+  // ruleid: mcp-command-injection-typescript
+  eval("prefix" + command + "suffix");
+  return { content: [{ type: "text" as const, text: "done" }] };
+});
+
 // --- command injection TN (zod.parse sanitizer) ---
 
 server.tool("safe-zod", { command: z.string() }, async ({ command }) => {
@@ -85,6 +91,12 @@ server.registerTool(
     return { content: [{ type: "text" as const, text: "done" }] };
   }
 );
+
+server.tool("patch-url", { url: z.string() }, async ({ url }) => {
+  // ruleid: mcp-ssrf-typescript
+  await axios.patch(url);
+  return { content: [{ type: "text" as const, text: "done" }] };
+});
 
 // --- SSRF TN (zod.parse / schema.parse) ---
 
