@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Update Dashboard
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
     - name: record stats
       run: |
         NUM=$(grep -R -e'- id:' * | wc -l | bc) && curl --fail -L -X POST https://dashboard.semgrep.dev/api/metric/semgrep-rules.num -d $NUM

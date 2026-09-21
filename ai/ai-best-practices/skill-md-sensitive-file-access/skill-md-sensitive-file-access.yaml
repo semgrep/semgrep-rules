@@ -1,0 +1,32 @@
+rules:
+  - id: skill-md-sensitive-file-access-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      SKILL.md or AGENT.md instructs the agent to read sensitive credential
+      files such as ~/.ssh/id_rsa, ~/.aws/credentials, /etc/shadow, .env, or
+      browser cookie stores. Agents that load this skill will treat the
+      directive as authoritative and may exfiltrate the contents. Remove
+      the file-access directive or scope it to user-supplied paths.
+    metadata:
+      cwe: "CWE-538: Insertion of Sensitive Information into Externally-Accessible File or Directory"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: HIGH
+      technology: [claude-code, anthropic, mcp]
+      references:
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules
+        - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    paths:
+      include:
+        - "*SKILL.md"
+        - "*AGENT.md"
+        - "*AGENTS.md"
+        - "*skill.md"
+    pattern-either:
+      - pattern-regex: '(?i)(?:read|cat|load|parse|open|access|fetch)\s+(?:the\s+)?(?:~/\.ssh/id_(?:rsa|ed25519|ecdsa|dsa)\b|~/\.ssh/known_hosts|~/\.aws/credentials|~/\.config/gcloud/[^\s]*credential|/etc/shadow|/etc/passwd)'
+      - pattern-regex: '(?i)(?:read|cat|load|parse|open|access|fetch)\s+(?:the\s+contents?\s+of\s+)?(?:~/\.npmrc|~/\.pypirc|~/\.docker/config\.json|~/\.kube/config|~/\.netrc)'
+      - pattern-regex: '(?i)(?:read|cat|load|parse|open|access|fetch|grep)\s+(?:the\s+)?\.env(?:\.\w+)?\s+(?:file|and)'
+      - pattern-regex: '(?i)(?:read|cat|load|parse|open|access|fetch)\s+(?:browser\s+)?cookies?\s+(?:from|in)\s+(?:Chrome|Firefox|Safari|Edge|~/Library/Application Support/(?:Google/Chrome|Firefox))'

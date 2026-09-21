@@ -1,0 +1,35 @@
+rules:
+  - id: skill-md-prompt-injection-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      SKILL.md or AGENT.md frontmatter description contains prompt-injection
+      markers that may override agent behavior. Phrases like "ignore previous
+      instructions", "system: you are", or "<IMPORTANT>" inside a skill
+      description are read as authoritative instructions by agents that load
+      the skill, bypassing the user's intent. Remove the override directive
+      from the description, or move authoritative system text out of the
+      shared skill manifest.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: HIGH
+      technology: [claude-code, anthropic, mcp]
+      references:
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules
+        - https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+    paths:
+      include:
+        - "*SKILL.md"
+        - "*AGENT.md"
+        - "*AGENTS.md"
+        - "*skill.md"
+    pattern-either:
+      - pattern-regex: '(?i)description\s*:\s*["''][^"''\n]*ignore\s+(?:all\s+)?previous\s+instructions[^"''\n]*["'']'
+      - pattern-regex: '(?i)description\s*:\s*["''][^"''\n]*disregard\s+(?:the\s+)?(?:above|prior|previous)[^"''\n]*["'']'
+      - pattern-regex: '(?i)description\s*:\s*["''][^"''\n]*<IMPORTANT>[^"''\n]*'
+      - pattern-regex: '(?i)description\s*:\s*["''][^"''\n]*system\s*:\s*you\s+are[^"''\n]*["'']'
+      - pattern-regex: '(?si)description\s*:\s*[|>][^\n]*(?:\n[ \t]+[^\n]*){0,15}\n[ \t]+[^\n]*(?:ignore\s+(?:all\s+)?previous\s+instructions|<IMPORTANT>|disregard\s+(?:the\s+)?(?:above|prior|previous))'
