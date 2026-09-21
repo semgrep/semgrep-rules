@@ -1,0 +1,32 @@
+rules:
+  - id: skill-md-base64-payload-generic
+    languages: [generic]
+    severity: WARNING
+    message: >-
+      SKILL.md or AGENT.md instructs the agent to decode and execute a
+      base64 (or hex) blob, which is a common encoding-evasion pattern used
+      to smuggle malicious instructions past human review. Document the
+      content in plain text or remove the encoded payload, and audit the
+      decoded value before reintroducing it.
+    metadata:
+      cwe: "CWE-506: Embedded Malicious Code"
+      category: security
+      confidence: MEDIUM
+      subcategory: [audit]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [claude-code, anthropic, mcp]
+      references:
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules
+        - https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+    paths:
+      include:
+        - "*SKILL.md"
+        - "*AGENT.md"
+        - "*AGENTS.md"
+        - "*skill.md"
+    pattern-either:
+      - pattern-regex: '(?i)(?:decode|run|execute|eval)\s+(?:this\s+|the\s+following\s+)?base64[^\n]{0,40}[A-Za-z0-9+/]{60,}={0,2}'
+      - pattern-regex: '(?i)base64\s+-d\s*<<<\s*["'']?[A-Za-z0-9+/]{60,}={0,2}'
+      - pattern-regex: '(?i)echo\s+["'']?[A-Za-z0-9+/]{60,}={0,2}["'']?\s*\|\s*base64\s+(?:-d|--decode)'
+      - pattern-regex: '(?i)(?:decode|run|execute)\s+(?:this\s+)?hex(?:\s+payload)?[^\n]{0,40}(?:[0-9a-fA-F]{2}\s?){40,}'
