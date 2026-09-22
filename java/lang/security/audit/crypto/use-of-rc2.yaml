@@ -1,6 +1,10 @@
 rules:
 - id: use-of-rc2
-  pattern: $CIPHER.getInstance("RC2") 
+  patterns:
+  - pattern: $CIPHER.getInstance("$ALG")
+  - metavariable-regex:
+      metavariable: $ALG
+      regex: (?i)^RC2$
   metadata:
     functional-categories:
       - 'crypto::search::symmetric-algorithm::javax.crypto'

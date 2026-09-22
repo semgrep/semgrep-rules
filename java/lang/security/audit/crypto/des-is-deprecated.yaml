@@ -34,13 +34,13 @@ rules:
   severity: WARNING
   patterns:
   - pattern-either:
-    - pattern-inside: $CIPHER.getInstance("=~/DES/.*/")
-    - pattern-inside: $CIPHER.getInstance("DES")
+    - pattern-inside: $CIPHER.getInstance("=~/(?i)DES/.*/")
+    - pattern-inside: $CIPHER.getInstance("=~/(?i)^DES$/")
   - pattern-either:
     - pattern: |
-        "=~/DES/.*/"
+        "=~/(?i)DES/.*/"
     - pattern: |
-        "DES"
+        "=~/(?i)^DES$/"
   fix: |
     "AES/GCM/NoPadding"
   languages:

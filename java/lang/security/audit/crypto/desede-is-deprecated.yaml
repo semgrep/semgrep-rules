@@ -27,9 +27,13 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        $CIPHER.getInstance("=~/DESede.*/")
-    - pattern: |
-        $CRYPTO.KeyGenerator.getInstance("DES")
+        $CIPHER.getInstance("=~/(?i)DESede.*/")
+    - patterns:
+      - pattern: |
+          $CRYPTO.KeyGenerator.getInstance("$ALG")
+      - metavariable-regex:
+          metavariable: $ALG
+          regex: (?i)^DES$
   languages:
   - java
   - kt

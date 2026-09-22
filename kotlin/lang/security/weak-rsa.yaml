@@ -29,7 +29,7 @@ rules:
   patterns:
   - pattern-either:
     - pattern: |
-        $KEY = $G.getInstance("RSA")
+        $KEY = $G.getInstance("=~/(?i)^RSA$/")
         ...
         $KEY.initialize($BITS)
   - metavariable-comparison:
