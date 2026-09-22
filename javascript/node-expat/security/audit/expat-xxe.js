@@ -33,3 +33,19 @@ function okTest5(input) {
     const parser = new Parser('UTF-8')
     parser.write(input)
 }
+
+// ruleid: expat-xxe
+import * as expat from 'node-expat'
+
+function test6(input) {
+    const parser = new expat.Parser('UTF-8')
+    parser.parse(input)
+}
+
+// ruleid: expat-xxe
+import { Parser } from 'node-expat'
+
+function test7(input) {
+    const parser = new Parser('UTF-8')
+    parser.write(input)
+}
