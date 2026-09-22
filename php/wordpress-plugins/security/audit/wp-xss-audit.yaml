@@ -1,0 +1,72 @@
+rules:
+- id: wp-xss-audit
+  languages:
+  - php
+  severity: WARNING
+  message: >-
+    Detected user input flowing into an output sink without escaping, which could
+    lead to cross-site scripting (XSS). Escape the value for its output context
+    before printing it - esc_html() for element text, esc_attr() for attribute
+    values, esc_url() for URLs, esc_js() for inline script data, or
+    wp_kses()/wp_kses_post() when limited HTML must be preserved. Values that
+    should be numeric can be cast with intval()/absint() instead.
+  mode: taint
+  pattern-sources:
+    - patterns:
+      - pattern-either:
+        - pattern: $_GET[...]
+        - pattern: $_POST[...]
+        - pattern: $_REQUEST[...]
+        - pattern: get_option(...)
+        - pattern: get_user_meta(...)
+        - pattern: get_query_var(...)
+        - pattern: $wp_query->get(...)
+  pattern-sanitizers:
+    - patterns:
+      - pattern-either:
+        - pattern: esc_html(...)
+        - pattern: esc_html__(...)
+        - pattern: esc_html_e(...)
+        - pattern: esc_attr(...)
+        - pattern: esc_attr__(...)
+        - pattern: esc_attr_e(...)
+        - pattern: esc_url(...)
+        - pattern: esc_url_raw(...)
+        - pattern: esc_js(...)
+        - pattern: esc_textarea(...)
+        - pattern: wp_kses(...)
+        - pattern: wp_kses_post(...)
+        - pattern: sanitize_text_field(...)
+        - pattern: htmlspecialchars(...)
+        - pattern: htmlentities(...)
+        - pattern: intval(...)
+        - pattern: absint(...)
+        - pattern: floatval(...)
+  pattern-sinks:
+    - patterns:
+      - focus-metavariable: $SINK
+      - pattern-either:
+        - pattern: echo $SINK;
+        - pattern: print $SINK;
+        - pattern: printf($FMT, ..., $SINK, ...)
+  paths:
+    include:
+    - '**/wp-content/plugins/**/*.php'
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp: A03:2021 - Injection
+    category: security
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://developer.wordpress.org/apis/security/escaping/
+    - https://developer.wordpress.org/reference/functions/esc_html/
+    - https://developer.wordpress.org/reference/functions/wp_kses/
+    vulnerability_class:
+    - Cross-Site Scripting (XSS)
