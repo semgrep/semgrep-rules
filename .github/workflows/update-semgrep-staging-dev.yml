@@ -3,19 +3,35 @@ name: Deploy to dev.semgrep.dev and staging.semgrep.dev
 on:
   push:
     branches:
-    - develop 
+    - develop
 
 jobs:
   do-update:
     if: github.repository == 'semgrep/semgrep-rules'
     name: Update semgrep.dev
     runs-on: ubuntu-latest
+    # Per-host Semgrep admin tokens (SECENG-12). Each host is a separate deployment
+    # with its own admin users, so tokens are per host. Never hardcode; use secrets.
+    # DEPENDS ON semgrep-app accepting an admin machine token on this endpoint.
+    env:
+      REGISTRY_ADMIN_TOKEN_DEV2: ${{ secrets.REGISTRY_ADMIN_TOKEN_DEV2 }}
+      REGISTRY_ADMIN_TOKEN_DEV3: ${{ secrets.REGISTRY_ADMIN_TOKEN_DEV3 }}
+      REGISTRY_ADMIN_TOKEN_STAGING: ${{ secrets.REGISTRY_ADMIN_TOKEN_STAGING }}
     steps:
     - name: update dev2.semgrep.dev
-      run: curl --fail -X POST -L https://dev2.semgrep.dev/api/admin/update-registry?rule_type=sast
+      run: |
+        curl --fail --silent --show-error -X POST -L \
+          -H "Authorization: Bearer ${REGISTRY_ADMIN_TOKEN_DEV2}" \
+          "https://dev2.semgrep.dev/api/admin/update-registry?rule_type=sast"
       continue-on-error: true
     - name: update dev3.semgrep.dev
-      run: curl --fail -X POST -L https://dev3.semgrep.dev/api/admin/update-registry?rule_type=sast
+      run: |
+        curl --fail --silent --show-error -X POST -L \
+          -H "Authorization: Bearer ${REGISTRY_ADMIN_TOKEN_DEV3}" \
+          "https://dev3.semgrep.dev/api/admin/update-registry?rule_type=sast"
       continue-on-error: true
     - name: update staging.semgrep.dev
-      run: curl --fail -X POST -L https://staging.semgrep.dev/api/admin/update-registry?rule_type=sast
+      run: |
+        curl --fail --silent --show-error -X POST -L \
+          -H "Authorization: Bearer ${REGISTRY_ADMIN_TOKEN_STAGING}" \
+          "https://staging.semgrep.dev/api/admin/update-registry?rule_type=sast"
