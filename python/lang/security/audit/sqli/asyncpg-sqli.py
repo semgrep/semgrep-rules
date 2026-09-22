@@ -130,3 +130,10 @@ def ok11(user_input):
     # ok: asyncpg-sqli
     stmt = await con.prepare('SELECT ($1::int, $2::text)')
     print(stmt.get_parameters())
+
+async def bad12(conn: asyncpg.Connection, user_input: str):
+    sql_query = 'SELECT * FROM {}'.format(user_input)
+    sql_query_copy = sql_query
+    # ruleid: asyncpg-sqli
+    cur = await conn.cursor(sql_query_copy)
+
