@@ -27,12 +27,38 @@ rules:
     likelihood: LOW
     impact: HIGH
     confidence: LOW
+  # Restrict bash nested parse to default-shell / bash / sh steps (issue #4001).
   patterns:
   - pattern-inside: 'steps: [...]'
-  - pattern-inside: |
-      - run: ...
-        ...
-  - pattern: 'run: $SHELL'
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          - run: ...
+            ...
+      - pattern-not-inside: |
+          - shell: ...
+            ...
+      - pattern: |
+          run: $SHELL
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            shell: bash
+            ...
+            run: $SHELL
+        - pattern: |
+            run: $SHELL
+            ...
+            shell: bash
+        - pattern: |
+            shell: sh
+            ...
+            run: $SHELL
+        - pattern: |
+            run: $SHELL
+            ...
+            shell: sh
+  - focus-metavariable: $SHELL
   - metavariable-pattern:
       language: bash
       metavariable: $SHELL
@@ -41,4 +67,5 @@ rules:
           $DATA=<... curl ...>
           ...
           eval <... $DATA ...>
+
   severity: ERROR
