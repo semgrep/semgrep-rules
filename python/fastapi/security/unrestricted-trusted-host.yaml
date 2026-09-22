@@ -1,0 +1,172 @@
+rules:
+  - id: unrestricted-trusted-host
+    languages:
+      - python
+    message: TrustedHostMiddleware allows any host. Configure allowed_hosts with
+      explicit trusted hostnames.
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $APP.add_middleware(
+                TrustedHostMiddleware,
+                ...,
+                allowed_hosts=[..., "*", ...],
+                ...)
+          - pattern: |
+              Middleware(
+                TrustedHostMiddleware,
+                ...,
+                allowed_hosts=[..., "*", ...],
+                ...)
+          - pattern: |
+              TrustedHostMiddleware(
+                $APP,
+                ...,
+                allowed_hosts=[..., "*", ...],
+                ...)
+          - pattern: |
+              TrustedHostMiddleware(
+                app=$APP,
+                ...,
+                allowed_hosts=[..., "*", ...],
+                ...)
+          - pattern: |
+              Middleware(
+                TrustedHostMiddleware,
+                [..., "*", ...],
+                ...)
+          - pattern: |
+              $APP.add_middleware(
+                TrustedHostMiddleware,
+                [..., "*", ...],
+                ...)
+          - pattern: |
+              TrustedHostMiddleware(
+                $APP,
+                [..., "*", ...],
+                ...)
+          - patterns:
+              - pattern-inside: |
+                  $HOSTS = [..., "*", ...]
+                  ...
+              - pattern-either:
+                  - pattern: |
+                      $APP.add_middleware(
+                        TrustedHostMiddleware,
+                        ...,
+                        allowed_hosts=$HOSTS,
+                        ...)
+                  - pattern: |
+                      Middleware(
+                        TrustedHostMiddleware,
+                        ...,
+                        allowed_hosts=$HOSTS,
+                        ...)
+                  - pattern: |
+                      TrustedHostMiddleware(
+                        $APP,
+                        ...,
+                        allowed_hosts=$HOSTS,
+                        ...)
+                  - pattern: |
+                      TrustedHostMiddleware(
+                        app=$APP,
+                        ...,
+                        allowed_hosts=$HOSTS,
+                        ...)
+                  - pattern: |
+                      Middleware(
+                        TrustedHostMiddleware,
+                        $HOSTS,
+                        ...)
+                  - pattern: |
+                      $APP.add_middleware(
+                        TrustedHostMiddleware,
+                        $HOSTS,
+                        ...)
+                  - pattern: |
+                      TrustedHostMiddleware(
+                        $APP,
+                        $HOSTS,
+                        ...)
+          - patterns:
+              - pattern: |
+                  $APP.add_middleware(
+                    TrustedHostMiddleware,
+                    ...)
+              - pattern-not: |
+                  $APP.add_middleware(
+                    TrustedHostMiddleware,
+                    ...,
+                    allowed_hosts=$HOSTS,
+                    ...)
+              - pattern-not: |
+                  $APP.add_middleware(
+                    TrustedHostMiddleware,
+                    $HOSTS,
+                    ...)
+          - patterns:
+              - pattern: |
+                  Middleware(
+                    TrustedHostMiddleware,
+                    ...)
+              - pattern-not: |
+                  Middleware(
+                    TrustedHostMiddleware,
+                    ...,
+                    allowed_hosts=$HOSTS,
+                    ...)
+              - pattern-not: |
+                  Middleware(
+                    TrustedHostMiddleware,
+                    $HOSTS,
+                    ...)
+          - patterns:
+              - pattern: |
+                  TrustedHostMiddleware(
+                    $APP,
+                    ...)
+              - pattern-not: |
+                  TrustedHostMiddleware(
+                    $APP,
+                    ...,
+                    allowed_hosts=$HOSTS,
+                    ...)
+              - pattern-not: |
+                  TrustedHostMiddleware(
+                    $APP,
+                    $HOSTS,
+                    ...)
+          - patterns:
+              - pattern: |
+                  TrustedHostMiddleware(
+                    app=$APP,
+                    ...)
+              - pattern-not: |
+                  TrustedHostMiddleware(
+                    app=$APP,
+                    ...,
+                    allowed_hosts=$HOSTS,
+                    ...)
+    severity: WARNING
+    metadata:
+      cwe:
+        - "CWE-940: Improper Verification of Source of a Communication Channel"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A02:2025 - Security Misconfiguration
+      category: security
+      technology:
+        - python
+        - fastapi
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/17-Testing_for_Host_Header_Injection
+        - https://fastapi.tiangolo.com/advanced/middleware/#trustedhostmiddleware
+        - https://starlette.dev/middleware/#trustedhostmiddleware
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      vulnerability_class:
+        - Configuration
+      subcategory:
+        - audit
