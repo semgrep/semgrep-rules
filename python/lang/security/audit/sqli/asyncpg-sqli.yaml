@@ -34,7 +34,9 @@ rules:
   patterns:
   - pattern-either:
     - patterns:
-      - pattern: $CONN.$METHOD(...,$QUERY,...)
+      - pattern-either:
+        - pattern: $CONN.$METHOD($QUERY, ...)
+        - pattern: $CONN.$METHOD(query=$QUERY, ...)
       - pattern-either:
         - pattern-inside: |
             $QUERY = $X + $Y
@@ -63,11 +65,16 @@ rules:
       - pattern-not-inside: |
           $QUERY = '...' % ()
           ...
-    - pattern: $CONN.$METHOD(..., $X + $Y, ...)
-    - pattern: $CONN.$METHOD(..., $Y.format(...), ...)
-    - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
-    - pattern: $CONN.$METHOD(..., '...' % (...), ...)
-    - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
+    - pattern: $CONN.$METHOD($X + $Y, ...)
+    - pattern: $CONN.$METHOD(query=$X + $Y, ...)
+    - pattern: $CONN.$METHOD($Y.format(...), ...)
+    - pattern: $CONN.$METHOD(query=$Y.format(...), ...)
+    - pattern: $CONN.$METHOD('...'.format(...), ...)
+    - pattern: $CONN.$METHOD(query='...'.format(...), ...)
+    - pattern: $CONN.$METHOD('...' % (...), ...)
+    - pattern: $CONN.$METHOD(query='...' % (...), ...)
+    - pattern: $CONN.$METHOD(f'...{$USERINPUT}...', ...)
+    - pattern: $CONN.$METHOD(query=f'...{$USERINPUT}...', ...)
   - pattern-either:
     - pattern-inside: |
         $CONN = await asyncpg.connect(...)
@@ -87,9 +94,12 @@ rules:
     - pattern-inside: |
         def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
             ...
-  - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
-  - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
-  - pattern-not: $CONN.$METHOD(..., '...'%(), ...)
+  - pattern-not: $CONN.$METHOD("..." + "...", ...)
+  - pattern-not: $CONN.$METHOD(query="..." + "...", ...)
+  - pattern-not: $CONN.$METHOD('...'.format(), ...)
+  - pattern-not: $CONN.$METHOD(query='...'.format(), ...)
+  - pattern-not: $CONN.$METHOD('...'%(), ...)
+  - pattern-not: $CONN.$METHOD(query='...'%(), ...)
   - metavariable-regex:
       metavariable: $METHOD
       regex: ^(fetch|fetchrow|fetchval|execute|executemany|prepare|cursor|copyfromquery)$
