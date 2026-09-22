@@ -1,0 +1,168 @@
+rules:
+- id: mcp-auth-passthrough-taint-copy
+  message: |
+    Detected authentication credentials (authorization headers, tokens, API keys) from MCP tool
+    parameters being passed to an HTTP request. This is a critical security vulnerability where:
+
+    1. An attacker can provide a malicious URL as a tool parameter
+    2. The tool passes the user's authentication credentials to that URL
+    3. The attacker receives the victim's credentials and can impersonate them
+
+    This is particularly dangerous because:
+    - The attacker gains access to the user's authentication tokens
+    - The credentials can be used to access other services
+    - The user may not realize their credentials were leaked
+    - It enables privilege escalation attacks
+
+    To fix this:
+    1. Never pass authentication credentials to user-controlled URLs
+    2. Use an allowlist of trusted domains before passing credentials
+    3. Validate URLs before making authenticated requests
+    4. Consider using separate authentication per downstream service
+    5. Implement proper credential scoping and rotation
+    6. Log and monitor authenticated requests to detect anomalies
+  severity: CRITICAL
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+    interfile: true
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-522: Insufficiently Protected Credentials'
+    cwe2020-top25: true
+    cwe2021-top25: true
+    display-name: Authentication Credential Pass-Through in MCP Tools
+    functional-categories:
+    - ai::source::mcp-context::fastmcp
+    - ai::source::mcp-tool-parameter::fastmcp
+    - ai::source::mcp-tool-parameter::mcp-server
+    - net::sink::http-request::python
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A04:2021 - Insecure Design
+    - A06:2025 - Insecure Design
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+    - https://cwe.mitre.org/data/definitions/522.html
+    - https://modelcontextprotocol.io/specification/2025-06-18/server/authentication#authorization-requirements
+    - https://owasp.org/Top10/2025/A06_2025-Insecure_Design/
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    - https://owasp.org/www-community/vulnerabilities/Insecure_Direct_Object_References
+    technology:
+    - fastmcp
+    - mcp
+    - python
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Cryptographic Issues
+  languages:
+  - python
+  mode: taint
+  min-version: 1.71.0
+  options:
+    symbolic_propagation: true
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        @$SERVER.call_tool(...)
+        async def $FUNC(..., $PARAM, ...):
+          ...
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$SERVER.call_tool(...)
+        async def $FUNC(..., $PARAM: $TYPE, ...):
+          ...
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$SERVER.call_tool(...)
+        async def $FUNC(..., $PARAM: $TYPE = ..., ...):
+          ...
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$SERVER.call_tool(...)
+        def $FUNC(..., $PARAM, ...):
+          ...
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$SERVER.call_tool(...)
+        def $FUNC(..., $PARAM: $TYPE, ...):
+          ...
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$MCP.tool(...)
+        def $FUNC(...):
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            @$MCP.tool(...)
+            def $FUNC(..., $PARAM, ...):
+              ...
+        - focus-metavariable: $PARAM
+      - patterns:
+        - pattern-inside: |
+            @$MCP.tool(...)
+            def $FUNC(..., $PARAM: $TYPE, ...):
+              ...
+        - focus-metavariable: $PARAM
+      - patterns:
+        - pattern-inside: |
+            @$MCP.tool(...)
+            def $FUNC(..., $PARAM: $TYPE = Field(...), ...):
+              ...
+        - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @mcp.tool(...)
+        def $FUNC(...):
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            @mcp.tool(...)
+            def $FUNC(..., $PARAM, ...):
+              ...
+        - focus-metavariable: $PARAM
+      - patterns:
+        - pattern-inside: |
+            @mcp.tool(...)
+            def $FUNC(..., $PARAM: $TYPE, ...):
+              ...
+        - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$MCP.tool(...)
+        async def $FUNC($CTX: Context, ...):
+          ...
+    - focus-metavariable: $CTX
+  pattern-sinks:
+  - pattern: requests.get(..., headers=$HEADERS, ...)
+  - pattern: requests.post(..., headers=$HEADERS, ...)
+  - pattern: requests.put(..., headers=$HEADERS, ...)
+  - pattern: requests.patch(..., headers=$HEADERS, ...)
+  - pattern: requests.delete(..., headers=$HEADERS, ...)
+  - pattern: requests.request(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.get(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.post(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.put(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.request(..., headers=$HEADERS, ...)
+  - pattern: httpx.get(..., headers=$HEADERS, ...)
+  - pattern: httpx.post(..., headers=$HEADERS, ...)
+  - pattern: httpx.request(..., headers=$HEADERS, ...)
+  - pattern: $CLIENT.get(..., headers=$HEADERS, ...)
+  - pattern: $CLIENT.post(..., headers=$HEADERS, ...)
+  - pattern: $CLIENT.request(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.get(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.post(..., headers=$HEADERS, ...)
+  - pattern: $SESSION.request(..., headers=$HEADERS, ...)
+  - pattern: urllib.request.Request(..., headers=$HEADERS, ...)
+  - pattern: $REQ.add_header($NAME, $VALUE)
