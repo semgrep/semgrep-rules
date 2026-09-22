@@ -1,0 +1,33 @@
+rules:
+  - id: mybatis-plus-last-user-input
+    languages:
+      - java
+    severity: ERROR
+    message: >-
+      MyBatis-Plus QueryWrapper last() method received a non-literal argument.
+      The last() method appends raw SQL fragments to the end of the query without
+      parameterization. If the argument contains user-controllable input, it can
+      lead to SQL injection. Use orderBy() or orderByAsc()/orderByDesc() for
+      dynamic sorting, or ensure last() only receives hardcoded constants.
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      category: security
+      technology:
+        - mybatis-plus
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://baomidou.com/guides/wrapper/#last
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+      vulnerability_class:
+        - SQL Injection
+    patterns:
+      - pattern: $X.last(...)
+      - pattern-not-regex: '\.last\s*\(\s*"[^"]*"\s*\)'
