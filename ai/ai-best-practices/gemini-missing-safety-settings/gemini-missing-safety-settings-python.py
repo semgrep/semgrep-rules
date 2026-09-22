@@ -1,12 +1,20 @@
-import google.generativeai as genai
 
-model = genai.GenerativeModel("gemini-pro")
+from google import genai
+from google.genai import types
+
+client = genai.Client()
 
 # ruleid: gemini-missing-safety-settings-python
-response = model.generate_content("Tell me about history")
+response = client.models.generate_content(
+    model="gemini-3-flash-preview",
+    contents="Tell me about history",
+)
 
 # ok: gemini-missing-safety-settings-python
-response = model.generate_content(
-    "Tell me about history",
-    safety_settings=safety_config
+response = client.model.generate_content(
+    model="gemini-3-flash-preview",
+    content="Tell me about history",
+    config={
+        "safety_settings": safety_config
+    }
 )
