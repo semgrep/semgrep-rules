@@ -1,0 +1,40 @@
+rules:
+  - id: nextjs-images-wildcard-hostname
+    message: >-
+      Avoid using '**' for images.remotePatterns.hostname (overly permissive, security risk).
+      Using wildcard hostnames allows loading images from any domain, which can lead to:
+      - Image injection attacks
+      - Data exfiltration through image requests
+      - Potential SSRF vulnerabilities
+      Instead, specify exact domains or use more restrictive patterns.
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    patterns:
+      - pattern: |
+          {
+            hostname: "**"
+          }
+      - pattern-inside: |
+          images: {
+            remotePatterns: [
+              ...
+            ]
+          }
+    metadata:
+      category: security
+      technology:
+        - nextjs
+      subcategory:
+        - vuln
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: MEDIUM
+      cwe:
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      references:
+        - https://nextjs.org/docs/app/api-reference/next-config-js/images#remotepatterns
+        - https://nextjs.org/docs/pages/api-reference/next-config-js/images#remotepatterns
