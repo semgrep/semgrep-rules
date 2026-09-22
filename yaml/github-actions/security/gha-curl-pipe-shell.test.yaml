@@ -32,6 +32,10 @@ jobs:
       # ruleid: gha-curl-pipe-shell
       - run: wget -qO- https://example.com/setup.sh | bash
 
+      - shell: bash
+        # ruleid: gha-curl-pipe-shell
+        run: curl -fsSL https://example.com/install.sh | bash
+
       - name: multiline curl pipe bash
         # ruleid: gha-curl-pipe-shell
         run: |
@@ -57,3 +61,12 @@ jobs:
           curl -fsSL https://example.com/install.sh -o /tmp/install.sh
           sha256sum /tmp/install.sh
           bash /tmp/install.sh
+
+      - name: Prepare Windows cache
+        shell: pwsh
+        # ok: gha-curl-pipe-shell
+        run: |
+          $cacheDirs = @("D:\cache")
+          foreach ($dir in $cacheDirs) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+          }
