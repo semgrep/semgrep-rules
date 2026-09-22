@@ -1,0 +1,32 @@
+rules:
+- id: wp-hook-missing-auth-closures
+  languages:
+  - php
+  severity: INFO
+  message: These hooks did not have a corresponding current_user_can() for their callback,
+    which might indicate a missing authorization vulnerability. Only hooks usually
+    associated with high-severity access control vulnerabilities are marked.
+  patterns:
+  - pattern: add_action("$HOOK", function(...) {...}, ...);
+  - pattern-not: "add_action(\"$HOOK\", \nfunction(...) {\n  ...\n  if (<... current_user_can(...)
+      ...>)\n  {\n    ...\n  }\n  else { ... }\n  ...\n}, ...);\n"
+  - metavariable-regex:
+      metavariable: $HOOK
+      regex: (wp_ajax_.*|admin_init|admin_post_.*|admin_action_.*|profile_update|personal_options_update|admin_menu)
+  metadata:
+    category: security
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - (Pages 5-11) https://www.wordfence.com/wp-content/uploads/2021/07/Common-WordPress-Vulnerabilities-and-Prevention-Through-Secure-Coding-Best-Practices.pdf
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-285: Improper Authorization'
+    vulnerability_class:
+    - Improper Authorization
