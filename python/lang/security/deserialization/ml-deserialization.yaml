@@ -1,0 +1,134 @@
+rules:
+  - id: avoid-torch-load-untrusted
+    metadata:
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+        - A08:2025 - Software or Data Integrity Failures
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      references:
+        - https://pytorch.org/docs/stable/generated/torch.load.html
+        - https://cwe.mitre.org/data/definitions/502.html
+      category: security
+      technology:
+        - python
+        - pytorch
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    languages:
+      - python
+    message: >-
+      Avoid calling `torch.load()` without `weights_only=True`. It unpickles the
+      checkpoint, so a malicious model file can execute arbitrary code on load
+      (CWE-502) - the model-file attack surface behind many AI/ML CVEs. Pass
+      `weights_only=True`, or use `safetensors` for weights.
+    severity: WARNING
+    patterns:
+      - pattern: torch.load(...)
+      - pattern-not: torch.load(..., weights_only=True)
+      - pattern-not: torch.load("...", ...)
+  - id: avoid-joblib-load
+    metadata:
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+        - A08:2025 - Software or Data Integrity Failures
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      references:
+        - https://joblib.readthedocs.io/en/stable/generated/joblib.load.html
+        - https://cwe.mitre.org/data/definitions/502.html
+      category: security
+      technology:
+        - python
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    languages:
+      - python
+    message: >-
+      Avoid `joblib.load()` on untrusted input. joblib deserialises with
+      `pickle`, so a malicious file can execute arbitrary code on load
+      (CWE-502). Only load artifacts from a trusted source.
+    severity: WARNING
+    patterns:
+      - pattern: joblib.load(...)
+      - pattern-not: joblib.load("...", ...)
+  - id: avoid-pandas-read-pickle
+    metadata:
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+        - A08:2025 - Software or Data Integrity Failures
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      references:
+        - https://pandas.pydata.org/docs/reference/api/pandas.read_pickle.html
+        - https://cwe.mitre.org/data/definitions/502.html
+      category: security
+      technology:
+        - python
+        - pandas
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    languages:
+      - python
+    message: >-
+      Avoid `pandas.read_pickle()` on untrusted input. It unpickles the data,
+      so a malicious file can execute arbitrary code on load (CWE-502). Prefer a
+      safe format such as CSV or Parquet for untrusted data.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: pandas.read_pickle(...)
+          - pattern: pd.read_pickle(...)
+      - pattern-not: pandas.read_pickle("...", ...)
+      - pattern-not: pd.read_pickle("...", ...)
+  - id: avoid-numpy-allow-pickle
+    metadata:
+      owasp:
+        - A08:2017 - Insecure Deserialization
+        - A08:2021 - Software and Data Integrity Failures
+        - A08:2025 - Software or Data Integrity Failures
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      references:
+        - https://numpy.org/doc/stable/reference/generated/numpy.load.html
+        - https://cwe.mitre.org/data/definitions/502.html
+      category: security
+      technology:
+        - python
+        - numpy
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    languages:
+      - python
+    message: >-
+      Avoid `numpy.load(..., allow_pickle=True)` on untrusted input. Enabling
+      pickle lets a malicious .npy/.npz file execute arbitrary code on load
+      (CWE-502). Leave `allow_pickle=False` (the default) for untrusted data.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: numpy.load(..., allow_pickle=True, ...)
+          - pattern: np.load(..., allow_pickle=True, ...)
