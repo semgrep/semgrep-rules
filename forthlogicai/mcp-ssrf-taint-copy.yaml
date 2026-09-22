@@ -1,0 +1,121 @@
+rules:
+- id: mcp-ssrf-taint-copy
+  message: |
+    Detected MCP tool parameter data flowing into an HTTP request function.
+    This could result in a Server-Side Request Forgery (SSRF) vulnerability if an attacker
+    can control the URL. MCP tool parameters come from external clients and should be
+    treated as untrusted input. An attacker could use this to:
+    - Access internal services and APIs (e.g., http://localhost, http://169.254.169.254)
+    - Scan internal networks and port scan
+    - Exfiltrate sensitive data to external servers
+    - Bypass firewall restrictions
+    - Access cloud metadata endpoints (AWS, GCP, Azure)
+
+    To fix this:
+    1. Avoid making HTTP requests to user-controlled URLs
+    2. Use an allowlist of permitted domains or URL prefixes
+    3. Validate and parse URLs to ensure they match expected patterns
+    4. Block requests to private IP ranges (RFC 1918) and localhost
+    5. Use a dedicated service or proxy for external requests
+  severity: CRITICAL
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+    interfile: true
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    display-name: Server-Side Request Forgery (SSRF) via MCP Tool Parameters
+    functional-categories:
+    - ai::source::mcp-client-request::nodejs
+    - ai::source::mcp-handler-params::nodejs
+    - ai::source::mcp-server-config::nodejs
+    - ai::source::mcp-transport-data::nodejs
+    - net::sink::http-request::node-fetch
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    - A01:2025 - Broken Access Control
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    - https://modelcontextprotocol.io/specification/2025-06-18/server/authentication#authorization-requirements
+    - https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/
+    - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29
+    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+    - https://portswigger.net/web-security/ssrf
+    technology:
+    - javascript
+    - mcp
+    - nodejs
+    - typescript
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Server-Side Request Forgery (SSRF)
+  languages:
+  - javascript
+  - typescript
+  mode: taint
+  min-version: 1.71.0
+  options:
+    symbolic_propagation: true
+  pattern-sources:
+  - patterns:
+    - pattern-inside: $SERVER.registerTool(..., async ({..., $PARAM, ...}) => {...})
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: $SERVER.registerTool(..., ({..., $PARAM, ...}) => {...})
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: $SERVER.setRequestHandler($TYPE.$METHOD, async ($PARAMS) =>
+        {...})
+    - focus-metavariable: $PARAMS
+  - patterns:
+    - pattern-inside: $SERVER.setRequestHandler($TYPE.$METHOD, async ($PARAMS) =>
+        {...})
+    - pattern: $PARAMS.$FIELD
+  - pattern: $REQUEST.params
+  - pattern: $REQUEST.method
+  - pattern: $REQUEST[$KEY]
+  - pattern: $CONFIG.args
+  - pattern: $CONFIG.args[$INDEX]
+  - pattern: $CONFIG.env
+  - pattern: $CONFIG.env[$KEY]
+  - pattern: $PARAMS.arguments
+  - pattern: $PARAMS.arguments.$FIELD
+  - pattern: $PARAMS[$KEY]
+  - pattern: $REQ.body
+  - pattern: $REQ.body.$FIELD
+  - pattern: $REQ.params
+  - pattern: $REQ.params.$PARAM
+  - pattern: $REQ.query
+  - pattern: $REQ.query.$PARAM
+  - pattern: $REQ.headers
+  - pattern: $REQ.headers[$HEADER]
+  - pattern: $MESSAGE.data
+  - pattern: $MESSAGE.payload
+  - pattern: $RESULT.content
+  - pattern: $RESULT.content[0].text
+  - pattern: $RESULT.toolResult
+  - pattern: $RESOURCE.contents
+  - pattern: $RESOURCE.uri
+  - pattern: $PROMPT.arguments
+  - pattern: $PROMPT.arguments.$ARG
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $HTTP.fetch($SINK, ...)
+      - pattern: $HTTP($SINK, ...)
+    - semgrep-internal-metavariable-name:
+        metavariable: $HTTP
+        module: node-fetch
+    - focus-metavariable: $SINK
+  pattern-sanitizers:
+  - pattern: sanitizeVapiAgentId(...)
+  - pattern: sanitizeVapiFileId(...)
+  - pattern: buildVapiUrl(...)
+  - pattern: buildAssistantUrl(...)
+  - pattern: buildFileUrl(...)
