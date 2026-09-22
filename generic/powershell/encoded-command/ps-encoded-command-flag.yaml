@@ -1,0 +1,31 @@
+rules:
+  - id: ps-encoded-command-flag
+    message: >-
+      PowerShell -EncodedCommand invocation detected (T1059.001). The
+      -EncodedCommand flag (also -enc, -en, -e) passes a base64-encoded script
+      to PowerShell, bypassing ScriptBlock logging for the inner payload and
+      hiding command content from process-creation event logs. This technique
+      is present in virtually all commodity PowerShell malware delivery chains.
+      Decode the base64 argument and re-scan the resulting script.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-116: Improper Encoding or Escaping of Output"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1059/001/
+        - https://attack.mitre.org/techniques/T1140/
+        - https://redcanary.com/threat-detection-report/techniques/powershell/
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)-(?:EncodedCommand|EncodedC(?:o(?:m(?:m(?:and?)?)?)?)?|enc?|e)\s+([A-Za-z0-9+/]{20,}={0,2})'

@@ -1,0 +1,33 @@
+rules:
+  - id: ps-shellcode-byte-array
+    message: >-
+      Shellcode byte array literal detected (T1059.001 / T1055). A large
+      numeric array starting with 0xfc (x64 CLD instruction, canonical
+      Metasploit/Cobalt Strike shellcode prologue) or 0xd9 (x86 fnstenv
+      prologue) is characteristic of inline shellcode buffers produced by
+      msfvenom or Cobalt Strike artifact kit. These are embedded in PowerShell
+      scripts to avoid writing shellcode to disk. Treat this as a live payload;
+      detonate only in a controlled sandbox environment.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1059/001/
+        - https://attack.mitre.org/techniques/T1055/
+      technology:
+        - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)\[(?:Byte\[\]|byte\[\])\]\s*\$\w+\s*=\s*0x(?:fc|d9|4d|e8)(,\s*0x[0-9a-fA-F]{2}){5,}'

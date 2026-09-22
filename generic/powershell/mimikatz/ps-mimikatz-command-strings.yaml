@@ -1,0 +1,35 @@
+rules:
+  - id: ps-mimikatz-command-strings
+    message: >-
+      Mimikatz command string detected (T1003.001). Strings such as
+      sekurlsa::logonpasswords, lsadump::sam, lsadump::dcsync, and
+      privilege::debug are internal mimikatz module::command identifiers.
+      Their presence in a PowerShell script indicates either Invoke-Mimikatz
+      (PowerSploit) execution or a wrapper script calling mimikatz.exe directly.
+      Credential dumping is the almost certain intent. Treat as high-severity
+      incident indicator.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-522: Insufficiently Protected Credentials"
+      owasp:
+        - "A07:2021 - Identification and Authentication Failures"
+        - "A07:2025 - Identification and Authentication Failures"
+      references:
+        - https://attack.mitre.org/techniques/T1003/001/
+        - https://attack.mitre.org/techniques/T1003/002/
+        - https://attack.mitre.org/techniques/T1003/006/
+        - https://www.elastic.co/docs/reference/security/prebuilt-rules/rules/windows/credential_access_mimikatz_powershell_module
+      technology:
+        - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(sekurlsa::|lsadump::|privilege::debug|crypto::certificates|DumpCreds|DumpCerts|lsadump::lsa|lsadump::sam|lsadump::dcsync)'

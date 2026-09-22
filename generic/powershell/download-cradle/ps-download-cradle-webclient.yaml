@@ -1,0 +1,35 @@
+rules:
+  - id: ps-download-cradle-webclient
+    message: >-
+      PowerShell WebClient download cradle detected (T1105). New-Object
+      Net.WebClient combined with DownloadString or DownloadFile is the
+      canonical pattern for fetching remote payloads. When combined with
+      an execution primitive (IEX, ScriptBlock, etc.) this forms a complete
+      in-memory execution chain. Even without an explicit execution primitive
+      in scope, the download itself should be reviewed for the URL target
+      and whether the script belongs in your environment.
+    severity: WARNING
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://attack.mitre.org/techniques/T1105/
+        - https://attack.mitre.org/techniques/T1059/001/
+      technology:
+        - powershell
+      subcategory:
+        - audit
+      likelihood: HIGH
+      impact: HIGH
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: (New-Object Net.WebClient).DownloadString($A)
+      - pattern: (New-Object System.Net.WebClient).DownloadString($A)
+      - pattern: (New-Object Net.WebClient).DownloadFile($A, $B)
+      - pattern: (New-Object System.Net.WebClient).DownloadFile($A, $B)
