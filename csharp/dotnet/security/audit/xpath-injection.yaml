@@ -20,6 +20,9 @@ rules:
     - vuln
     technology:
     - .net
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - XPath Injection
   languages:
   - csharp
   mode: taint
@@ -31,7 +34,14 @@ rules:
   - pattern-either:
     - pattern: XPathExpression $EXPR = $NAV.Compile("..." + $INPUT + "...");
     - pattern: var $EXPR = $NAV.Compile("..." + $INPUT + "...");
+    - pattern: XPathExpression $EXPR = $NAV.Compile($"...{$INPUT}...");
+    - pattern: var $EXPR = $NAV.Compile($"...{$INPUT}...");
     - pattern: XPathNodeIterator $NODE = $NAV.Select("..." + $INPUT + "...");
     - pattern: var $NODE = $NAV.Select("..." + $INPUT + "...");
+    - pattern: Object $OBJ = $NAV.Select("..." + $INPUT + "...");
+    - pattern: var $NODE = $NAV.Select($"...{$INPUT}...");
+    - pattern: var $NODE = $NAV.SelectSingleNode("..." + $INPUT + "...");
+    - pattern: var $NODE = $NAV.SelectSingleNode($"...{$INPUT}...");
     - pattern: Object $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
     - pattern: var $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
+    - pattern: var $OBJ = $NAV.Evaluate($"...{$INPUT}...");
