@@ -179,6 +179,48 @@ resource "aws_alb_listener" "tls_1_3_1_3" {
   }
 }
 
+resource "aws_alb_listener" "tls_1_2_fips" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls_1_2_res_fips" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls_1_2_fips_pq" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "TLS"
+  port              = "8080"
+  # ok: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-FIPS-PQ-2025-09"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
 resource "aws_lb_target_group" "foo" {
     name = "foo"
     port = 80
@@ -255,6 +297,34 @@ resource "aws_alb_listener" "tls_fs_1_0" {
   port              = "8080"
   # ruleid: insecure-load-balancer-tls-version
   ssl_policy        = "ELBSecurityPolicy-FS-2018-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls13_1_1_fips" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "HTTPS"
+  port              = "443"
+  # ruleid: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-1-FIPS-2023-04"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = var.aws_lb_target_group_arn
+  }
+}
+
+resource "aws_alb_listener" "tls13_1_0_pq" {
+  load_balancer_arn = var.aws_lb_arn
+  protocol          = "HTTPS"
+  port              = "443"
+  # ruleid: insecure-load-balancer-tls-version
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-0-PQ-2025-09"
   certificate_arn   = var.certificate_arn
 
   default_action {
