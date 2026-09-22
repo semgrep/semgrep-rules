@@ -264,3 +264,22 @@ services:
     # ruleid: exposing-docker-socket-volume
     volumes:
       - /var/run/docker.sock:/run/docker.sock
+---
+services:
+  versionless:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:dind
+        # ok: exposing-docker-socket-volume
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
