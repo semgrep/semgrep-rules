@@ -1,0 +1,47 @@
+rules:
+  - id: mcp-ssrf-typescript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      An HTTP request is made with a dynamic URL inside an MCP tool handler.
+      Tool arguments flow from LLM/user input and may redirect requests to
+      internal network resources (SSRF). Validate and restrict URLs with an
+      allowlist before making requests — parse with new URL() and check the
+      hostname against an allowlist of permitted external origins.
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $SERVER.tool($NAME, ..., async (...) => {
+                ...
+              })
+          - pattern-inside: |
+              $SERVER.registerTool($NAME, ..., async (...) => {
+                ...
+              })
+      - pattern-either:
+          - pattern: fetch($URL, ...)
+          - pattern: axios.get($URL, ...)
+          - pattern: axios.post($URL, ...)
+          - pattern: axios.put($URL, ...)
+          - pattern: axios.delete($URL, ...)
+          - pattern: axios($URL, ...)
+          - pattern: $HTTPS.get($URL, ...)
+          - pattern: $HTTPS.request($URL, ...)
+      - pattern-not: fetch("...", ...)
+      - pattern-not: axios.get("...", ...)
+      - pattern-not: axios.post("...", ...)
+      - pattern-not: axios.put("...", ...)
+      - pattern-not: axios.delete("...", ...)
+      - pattern-not: axios("...", ...)
+      - pattern-not: $HTTPS.get("...", ...)
+      - pattern-not: $HTTPS.request("...", ...)
