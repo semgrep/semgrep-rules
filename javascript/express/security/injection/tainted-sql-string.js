@@ -5,10 +5,12 @@ const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory:')
 const util = require('util')
 
-app.get('/test', (req, res) => {
-  // ruleid: tainted-sql-string
-  const query = "SELECT * FROM `users`" + " WHERE id = '" + req.query.message + "'"
-  const [results, metadata] = await sequelize.query(query);
+app.get('/test', async (req, res) => {
+  // ok: tainted-sql-string
+  const query = "SELECT * FROM `users` WHERE id = ?"
+  const [results, metadata] = await sequelize.query(query, {
+    replacements: [req.query.message]
+  });
   res.send(results)
 })
 
