@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 int DST_BUFFER_SIZE = 120;
 
