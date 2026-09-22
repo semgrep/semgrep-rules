@@ -1,6 +1,8 @@
 rules:
 - id: insecure-hash-algorithm-sha1
-  pattern: hashlib.sha1(...)
+  patterns: 
+    - pattern: hashlib.sha1(...)
+    - pattern-not: hashlib.sha1(..., usedforsecurity=False, ...)
   fix-regex:
     regex: sha1
     replacement: sha256
