@@ -2,9 +2,12 @@ rules:
 - id: insecure-use-strtok-fn
   pattern: strtok(...)
   message: >-
-    Avoid using 'strtok()'. This function directly modifies the first argument buffer,
-    permanently erasing the
-    delimiter character. Use 'strtok_r()' instead.
+    Avoid 'strtok()': it is not reentrant, and the C standard does not require it to
+    be thread-safe. It keeps the scan position in hidden static state, so interleaved
+    calls (even on unrelated strings) clobber each other. It also modifies its input
+    in place, replacing each token-ending delimiter with a NUL byte. Use the
+    reentrant 'strtok_r()' (POSIX) or 'strtok_s()' (C11 Annex K), which keep the scan
+    state in a caller-provided context.
   metadata:
     cwe:
     - 'CWE-676: Use of Potentially Dangerous Function'
