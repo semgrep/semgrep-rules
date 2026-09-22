@@ -1,0 +1,44 @@
+rules:
+- id: android-third-party-package-context-code-execution
+  languages:
+  - kotlin
+  severity: CRITICAL
+  message: |
+    Dangerous third-party package context usage detected. App loads code from an externally installed package via createPackageContext() with CONTEXT_INCLUDE_CODE/CONTEXT_IGNORE_SECURITY flags, or invokes it via reflection without signature verification. A malicious app matching the expected package prefix can achieve arbitrary code execution in this app's process. Fix: add PackageManager.checkSignatures() verification before loading any third-party module.
+  pattern-either:
+  - pattern: createPackageContext($PKG, Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)
+  - pattern: createPackageContext($PKG, Context.CONTEXT_IGNORE_SECURITY or Context.CONTEXT_INCLUDE_CODE)
+  - pattern: |-
+      $CTX.classLoader
+        .loadClass(...)
+        .getMethod(...)
+        .invoke(...)
+  - patterns:
+    - pattern: |-
+        for ($INFO in $PM.getInstalledPackages(...)) {
+          ...
+          $PKG.startsWith(...)
+          ...
+          createPackageContext(...)
+          ...
+        }
+    - pattern-not: |-
+        for ($INFO in $PM.getInstalledPackages(...)) {
+          ...
+          checkSignatures(...)
+          ...
+        }
+  metadata:
+    category: security
+    cwe: CWE-470
+    owasp: "A8:2021 \u2013 Software and Data Integrity Failures"
+    confidence: HIGH
+    references:
+    - https://oversecured.com/blog/android-arbitrary-code-execution-via-third-party-package-contexts
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - Android
+    source_rule_url: https://semgrep.dev/playground/r/oqUy38g/vinit989.android-third-party-package-context-code-execution
