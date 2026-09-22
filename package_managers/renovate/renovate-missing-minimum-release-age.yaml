@@ -27,6 +27,16 @@ rules:
                 "minimumReleaseAge": false,
                 ...
               }
+          # A top-level minimumReleaseAge applies to all packages, so
+          # packageRules entries without their own value are still covered.
+          - pattern-not-inside: |
+              {
+                ...,
+                "minimumReleaseAge": "$TOPAGE",
+                ...,
+                "packageRules": [...],
+                ...
+              }
       # Branch 2: Present but too low
       - patterns:
           - pattern-inside: |
