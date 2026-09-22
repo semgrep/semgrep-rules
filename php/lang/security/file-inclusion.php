@@ -44,3 +44,21 @@ require_once( dirname( __FILE__ ) . '/admin.php' );
 // ok: file-inclusion
 $pth = 'foo/bar.php';
 require_once $pth;
+
+// ruleid: file-inclusion
+file_get_contents($user_input);
+
+// ok: file-inclusion
+file_get_contents('constant.php');
+
+// ruleid: file-inclusion
+readfile($user_input);
+
+// ok: file-inclusion
+readfile('constant.php');
+
+// ruleid: file-inclusion
+fopen($user_input, 'r');
+
+// ok: file-inclusion
+fopen('constant.php', 'r');
