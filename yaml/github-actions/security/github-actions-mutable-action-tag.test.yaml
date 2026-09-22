@@ -37,6 +37,10 @@ jobs:
       # ok: github-actions-mutable-action-tag
       - uses: ./.github/actions/my-local-action
 
+      # TN: same-repository reference (resolves to this repo at the running commit)
+      # ok: github-actions-mutable-action-tag
+      - uses: $/.github/actions/my-internal-action
+
       # TN: docker action reference (no owner/repo@)
       # ok: github-actions-mutable-action-tag
       - uses: docker://alpine:3.18
