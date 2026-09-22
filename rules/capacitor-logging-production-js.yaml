@@ -1,0 +1,35 @@
+rules:
+- id: capacitor-logging-production-js
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+  paths:
+    include:
+    - capacitor.config.ts
+    - capacitor.config.js
+    - capacitor.config.json
+  message: "The `production` flag for `loggingBehavior` is misleading and will produce\nfull
+    logs to the browser or device log. \nConsider using **'none'** or **'debug'**
+    in production environments.\n"
+  pattern-either:
+  - pattern: |
+      loggingBehavior: 'production'
+  - pattern: |
+      loggingBehavior: "production"
+  - pattern: "\"loggingBehavior\": \"production\"  \n"
+  fix: 'loggingBehavior: "none"'
+  metadata:
+    cwe:
+    - 'CWE-532: Insertion of Sensitive Information into Log File'
+    - 'CWE-489: Active Debug Code (4.19.1)'
+    technology: javascript
+    references: https://capacitorjs.com/docs/config#schema
+    category: security
+    owasp: A06:2025 Insecure Design
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory: secure default
+    vulnerability_class: Active Debug Code
+    source_rule_url: https://kawing-ho.github.io/research/posts/footguns-beware/#1-capacitor-logging-in-production
