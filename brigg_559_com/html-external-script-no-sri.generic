@@ -1,0 +1,27 @@
+<!-- ruleid: html-external-script-no-sri -->
+<script src="https://cdn.example.com/lib.min.js"></script>
+
+<!-- ruleid: html-external-script-no-sri -->
+<script async src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- ruleid: html-external-script-no-sri -->
+<script defer src="/static/app.bundle.js"></script>
+
+<!-- TRUE NEGATIVES (should NOT match: integrity present) -->
+
+<!-- ok: html-external-script-no-sri -->
+<script src="https://cdn.example.com/lib.min.js"
+        integrity="sha384-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        crossorigin="anonymous"></script>
+
+<!-- ok: html-external-script-no-sri -->
+<script src="/static/app.bundle.js"
+        integrity="sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"></script>
+
+<!-- NEUTRALS (not in scope for this rule) -->
+
+<!-- No src at all (inline script) -->
+<script>console.log('inline');</script>
+
+<!-- Commented out; should not be matched -->
+<!-- <script src="https://cdn.example.com/no-sri.js"></script> -->
