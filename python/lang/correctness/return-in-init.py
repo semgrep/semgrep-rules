@@ -76,6 +76,16 @@ class H:
         # ok:return-in-init
         return None
 
+class Lambda:
+    def __init__(self):
+        # ok:return-in-init
+        self.silly = lambda: 42
+
+class LambdaWithArg:
+    def __init__(self):
+        # ok:return-in-init
+        self.fn = lambda x: x + 1
+
 class Odd:
     def __init__(self, numbers):
         def is_odd(n):
