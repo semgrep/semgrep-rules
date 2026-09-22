@@ -1,0 +1,61 @@
+rules:
+- id: laravel-unvalidated-redirect
+  patterns:
+  - pattern-either:
+    - pattern: |
+        redirect($request->input(...))
+    - pattern: |
+        redirect($request->get(...))
+    - pattern: |
+        redirect($request->query(...))
+    - pattern: |
+        Redirect::to($request->input(...))
+    - pattern: |
+        Redirect::to($request->get(...))
+    - pattern: |
+        Redirect::to($request->query(...))
+    - pattern: |
+        redirect()->to($request->input(...))
+    - pattern: |
+        redirect()->to($request->get(...))
+    - pattern: |
+        redirect()->to($request->query(...))
+    - pattern: |
+        redirect($_GET[...])
+    - pattern: |
+        redirect($_POST[...])
+    - pattern: |
+        redirect($_REQUEST[...])
+    - pattern: |
+        Redirect::to($_GET[...])
+    - pattern: |
+        Redirect::to($_POST[...])
+    - pattern: |
+        Redirect::to($_REQUEST[...])
+  message: >-
+    User-controlled input is passed directly to a redirect function without validation.
+    This allows attackers to redirect users to malicious external sites (open redirect),
+    which can be used for phishing or credential theft. Validate the redirect target
+    against an allowlist of permitted URLs or use `redirect()->intended()` with a
+    safe default.
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A01:2025 - Broken Access Control
+    technology:
+    - php
+    - laravel
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+    - https://laravel.com/docs/10.x/redirects
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
