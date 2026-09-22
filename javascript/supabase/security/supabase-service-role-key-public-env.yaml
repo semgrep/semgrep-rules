@@ -1,0 +1,51 @@
+rules:
+- id: supabase-service-role-key-public-env
+  message: >-
+    The Supabase service role key is read from an environment variable with the
+    'NEXT_PUBLIC_' prefix. Next.js inlines every 'NEXT_PUBLIC_' variable into the
+    JavaScript bundle sent to the browser, so anyone can extract this key. The
+    service role key bypasses Row Level Security (RLS) and grants full read/write
+    access to the database. Rename the variable without the 'NEXT_PUBLIC_' prefix,
+    use it only in server-side code (e.g. with `import "server-only"`), and rotate
+    the leaked key in the Supabase dashboard.
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    - 'CWE-522: Insufficiently Protected Credentials'
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A05:2021 - Security Misconfiguration
+    - A01:2025 - Broken Access Control
+    - A02:2025 - Security Misconfiguration
+    category: security
+    technology:
+    - supabase
+    - nextjs
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+    references:
+    - https://nextjs.org/docs/app/guides/environment-variables#bundling-environment-variables-for-the-browser
+    - https://supabase.com/docs/guides/api/api-keys
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  pattern-either:
+  - patterns:
+    - pattern: process.env.$VAR
+    - metavariable-regex:
+        metavariable: $VAR
+        regex: (?i)^NEXT_PUBLIC_.*SERVICE_(ROLE|KEY)
+  - patterns:
+    - pattern: process.env[$VAR]
+    - metavariable-regex:
+        metavariable: $VAR
+        regex: (?i)^["'`]NEXT_PUBLIC_.*SERVICE_(ROLE|KEY)
+  - patterns:
+    - pattern: const {$VAR} = process.env
+    - metavariable-regex:
+        metavariable: $VAR
+        regex: (?i)^NEXT_PUBLIC_.*SERVICE_(ROLE|KEY)
