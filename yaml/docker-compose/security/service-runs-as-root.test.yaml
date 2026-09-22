@@ -1,0 +1,50 @@
+services:
+  named-root:
+    image: nginx:alpine
+    # ruleid: service-runs-as-root
+    user: root
+  named-root-with-group:
+    build: .
+    # ruleid: service-runs-as-root
+    user: root:root
+  quoted-named-root:
+    image: nginx:alpine
+    # ruleid: service-runs-as-root
+    user: "root"
+  numeric-root:
+    image: nginx:alpine
+    # ruleid: service-runs-as-root
+    user: 0
+  quoted-numeric-root-with-group:
+    image: nginx:alpine
+    # ruleid: service-runs-as-root
+    user: "0:1000"
+  non-root-name:
+    image: nginx:alpine
+    # ok: service-runs-as-root
+    user: app
+  root-prefixed-name:
+    image: nginx:alpine
+    # ok: service-runs-as-root
+    user: rootless
+  non-root-id:
+    image: nginx:alpine
+    # ok: service-runs-as-root
+    user: 1000
+  root-group-only:
+    image: nginx:alpine
+    # ok: service-runs-as-root
+    user: app:root
+  interpolated-user:
+    image: nginx:alpine
+    # ok: service-runs-as-root
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+  nested-configuration:
+    image: nginx:alpine
+    x-process-settings:
+      # ok: service-runs-as-root
+      user: root
+
+x-service-template:
+  # ok: service-runs-as-root
+  user: root
