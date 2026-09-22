@@ -1,0 +1,22 @@
+rules:
+  - id: android-webview-javascript-enabled-xss
+    message: >-
+      WebView with `setJavaScriptEnabled(true)` is vulnerable to Cross-Site Scripting (XSS)
+      if untrusted content is loaded. Disable JavaScript or ensure strict content validation.
+      Also consider disabling file access and using a WebViewClient.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - android
+        - java
+        - kotlin
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A07:2017 - Cross-Site Scripting (XSS)"
+    languages:
+      - java
+      - kotlin
+    patterns:
+      - pattern-inside: |
+          $WEBVIEW.getSettings()
+      - pattern: $SETTINGS.setJavaScriptEnabled(true)
