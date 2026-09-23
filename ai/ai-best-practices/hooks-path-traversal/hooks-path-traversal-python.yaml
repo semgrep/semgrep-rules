@@ -7,8 +7,11 @@ rules:
       Hook input flows into a file path without validation. Claude Code and Cursor hooks
       receive JSON input that may contain user-controlled paths. An attacker
       could craft input with path traversal sequences (e.g., '../../etc/passwd')
-      to read, modify, or delete arbitrary files. Use os.path.realpath() or
-      os.path.abspath() to resolve and validate paths before file operations.
+      to read, modify, or delete arbitrary files. Resolving the path with
+      os.path.realpath() or os.path.abspath() alone is not enough, since the
+      resolved path may still point outside the intended directory: always
+      verify the resolved path stays inside an allowlisted base directory
+      (e.g. with a startswith() check) before file operations.
     metadata:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       category: security
@@ -43,5 +46,37 @@ rules:
           - pattern: pathlib.Path($SINK)
           - focus-metavariable: $SINK
     pattern-sanitizers:
-      - pattern: os.path.realpath(...)
-      - pattern: os.path.abspath(...)
+      # Resolving a path does not validate it: only treat a resolved path as
+      # sanitized when it is also checked against an allowlisted base directory.
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = os.path.realpath(...)
+              ...
+              if $P.startswith(...):
+                ...
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = os.path.abspath(...)
+              ...
+              if $P.startswith(...):
+                ...
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = os.path.realpath(...)
+              ...
+              if not $P.startswith(...):
+                ...
+                raise ...
+              ...
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = os.path.abspath(...)
+              ...
+              if not $P.startswith(...):
+                ...
+                raise ...
+              ...

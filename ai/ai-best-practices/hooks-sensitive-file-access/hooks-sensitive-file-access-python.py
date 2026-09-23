@@ -19,6 +19,11 @@ payload = json.loads(sys.stdin.read())
 # ruleid: hooks-sensitive-file-access-python
 shutil.move(payload["file"], "/tmp/moved")
 
+data = json.loads(sys.stdin.read())
+resolved = os.path.realpath(data["file_path"])
+# ruleid: hooks-sensitive-file-access-python
+f = open(resolved, "r")
+
 # ok: hooks-sensitive-file-access-python
 data = json.loads(sys.stdin.read())
 path = validate_path(data["file_path"])
@@ -26,8 +31,8 @@ f = open(path, "r")
 
 # ok: hooks-sensitive-file-access-python
 data = json.loads(sys.stdin.read())
-safe_path = os.path.realpath(data["file_path"])
-f = open(safe_path, "r")
+checked = check_sensitive(os.path.realpath(data["file_path"]))
+f = open(checked, "r")
 
 # ok: hooks-sensitive-file-access-python
 hardcoded = open("/tmp/known_file.txt", "r")
