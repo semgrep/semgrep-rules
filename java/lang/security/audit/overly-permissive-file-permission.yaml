@@ -30,7 +30,14 @@ rules:
     impact: MEDIUM
     confidence: LOW
   pattern-either:
+  - pattern: $FILE.setReadable(true, false);
+  - pattern: $FILE.setWritable(true, false);
+  - pattern: $FILE.setExecutable(true, false);
   - pattern: java.nio.file.Files.setPosixFilePermissions($FILE, java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
+  - pattern: $ATTRS.setPermissions(java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/"));
+  - pattern: java.nio.file.Files.createFile($FILE, java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/")));
+  - pattern: java.nio.file.Files.createTempDirectory(..., java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/")));
+  - pattern: java.nio.file.Files.createTempFile(..., java.nio.file.attribute.PosixFilePermissions.asFileAttribute(java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/")));
   - pattern: |
       $TYPE $P = java.nio.file.attribute.PosixFilePermissions.fromString("=~/(^......r..$)|(^.......w.$)|(^........x$)/");
       ...
