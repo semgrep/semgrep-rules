@@ -24,19 +24,21 @@ rules:
   severity: WARNING
   languages:
   - python
-  pattern-either:
-  - pattern: $DB.execute("..." % ...)
-  - pattern: $DB.execute("...".format(...))
-  - pattern: $DB.execute(f"...")
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $SQL = "..." % ...
-          ...
-      - pattern-inside: |
-          $SQL = "...".format(...)
-          ...
-      - pattern-inside: |
-          $SQL = f"...{$X}..."
-          ...
-    - pattern: $DB.execute($SQL)
+  patterns:
+  - pattern-either:
+    - pattern: $DB.execute("..." % ...)
+    - pattern: $DB.execute("...".format(...))
+    - pattern: $DB.execute(f"...")
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $SQL = "..." % ...
+            ...
+        - pattern-inside: |
+            $SQL = "...".format(...)
+            ...
+        - pattern-inside: |
+            $SQL = f"...{$X}..."
+            ...
+      - pattern: $DB.execute($SQL)
+  - pattern-not: $DB.execute("...", ...)

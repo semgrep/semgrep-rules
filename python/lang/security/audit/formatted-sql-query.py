@@ -53,3 +53,13 @@ def search_customer():
                         </html>
                         ''' % str(e)
                     return render_template_string(template, dir=dir, help=help, locals=locals), 404
+
+TABLE = "customer"
+
+def count_customers():
+    # ok:formatted-sql-query
+    return db.engine.execute(f"SELECT count(*) FROM {TABLE}")
+
+def count_rows(table):
+    # ruleid:formatted-sql-query
+    return db.engine.execute(f"SELECT count(*) FROM {table}")
