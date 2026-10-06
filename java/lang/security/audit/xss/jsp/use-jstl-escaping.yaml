@@ -26,7 +26,7 @@ rules:
     likelihood: LOW
     impact: LOW
     confidence: LOW
-  pattern-regex: <(?![A-Za-z0-9]+:out).*?\$\{.*?\}.*>
+  pattern-regex: <(?![A-Za-z0-9]+:out)(?:(?!<[A-Za-z0-9]+:out).)*?\$\{.*?\}.*>
   paths:
     include:
     - '*.jsp'
