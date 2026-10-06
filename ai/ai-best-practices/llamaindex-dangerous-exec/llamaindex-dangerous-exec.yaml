@@ -11,7 +11,12 @@ rules:
       with attacker-controlled code, resulting in remote code execution on the
       host running the agent. LlamaIndex's own docstring for this class warns
       it "is not recommended to be used in a production setting, and would
-      require heavy sandboxing or virtual machines."
+      require heavy sandboxing or virtual machines." Avoid wiring this
+      ToolSpec into production agents; if arbitrary code execution is truly
+      required, run it in an isolated, network-restricted sandbox or
+      ephemeral VM with least-privilege permissions instead of directly on
+      the host process, and never expose it to an agent that consumes
+      untrusted or externally-influenced input.
     metadata:
       cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
       category: security
