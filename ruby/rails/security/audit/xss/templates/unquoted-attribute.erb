@@ -20,6 +20,27 @@
 
     <!-- ok: unquoted-attribute -->
     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= current_user.name.pluralize %> Account <b class="caret"></b></a>
+
+    <!-- ok: unquoted-attribute -->
+    <div style="max-width: <%= width || "100%" %>;"> </div>
+
+    <!-- ok: unquoted-attribute -->
+    <div style='max-width: <%= width || '100%' %>;'> </div>
+
+    <!-- ok: unquoted-attribute -->
+    <div href="foo/<%= "%>" %>"> </div>
+
+    <!-- ok: unquoted-attribute -->
+    <div class="<%= active ? "on" : "off" %>"> </div>
+
+    <!-- ruleid: unquoted-attribute -->
+    <div class=<%= active ? "on" : "off" %>> </div>
+
+    <!-- ruleid: unquoted-attribute -->
+    <div style=max-width:<%= width || "100%" %>> </div>
+
+    <!-- ruleid: unquoted-attribute -->
+    <a class="nav" href=<%= link %> title="Click me">Click me</a>
 </div>
 
 </html>
