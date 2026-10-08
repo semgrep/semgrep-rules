@@ -10,3 +10,20 @@ services:
   # ok: privileged-service
   db:
     image: mysql
+---
+services:
+  versionless:
+    image: alpine:latest
+    # ruleid: privileged-service
+    privileged: true
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:dind
+        # ok: privileged-service
+        privileged: true
