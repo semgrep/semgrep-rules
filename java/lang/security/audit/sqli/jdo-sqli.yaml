@@ -11,6 +11,13 @@ rules:
           - pattern-inside: |
               String $SQL = String.format(...);
               ...
+          - patterns:
+            - pattern-inside: |
+                String $SQL = $FMT.formatted($X,...);
+                ...
+            - metavariable-regex:
+                metavariable: $FMT
+                regex: '^(?:[^"].*|".*%(?:[1-9][0-9]*\$|<)?[-#+ 0,(]*[0-9]*(?:\.[0-9]+)?(?:[bBhHsScCdoxXeEfgGaA]|[tT][A-Za-z]).*")$'
           - pattern-inside: |
               $TYPE $FUNC(...,String $SQL,...) {
                 ...
@@ -21,6 +28,12 @@ rules:
         - pattern: $Q.$METHOD($SQL,...)
       - pattern: |
           $Q.$METHOD(String.format(...),...);
+      - patterns:
+        - pattern: |
+            $Q.$METHOD($FMT.formatted($X,...),...);
+        - metavariable-regex:
+            metavariable: $FMT
+            regex: '^(?:[^"].*|".*%(?:[1-9][0-9]*\$|<)?[-#+ 0,(]*[0-9]*(?:\.[0-9]+)?(?:[bBhHsScCdoxXeEfgGaA]|[tT][A-Za-z]).*")$'
       - pattern: |
           $Q.$METHOD($X + $Y,...);
     - pattern-either:
@@ -46,6 +59,13 @@ rules:
           - pattern-inside: |
               String $SQL = String.format(...);
               ...
+          - patterns:
+            - pattern-inside: |
+                String $SQL = $FMT.formatted($X,...);
+                ...
+            - metavariable-regex:
+                metavariable: $FMT
+                regex: '^(?:[^"].*|".*%(?:[1-9][0-9]*\$|<)?[-#+ 0,(]*[0-9]*(?:\.[0-9]+)?(?:[bBhHsScCdoxXeEfgGaA]|[tT][A-Za-z]).*")$'
           - pattern-inside: |
               $VAL $FUNC(...,String $SQL,...) {
                 ...
@@ -56,6 +76,12 @@ rules:
         - pattern: $PM.newQuery(...,$SQL,...)
       - pattern: |
           $PM.newQuery(...,String.format(...),...);
+      - patterns:
+        - pattern: |
+            $PM.newQuery(...,$FMT.formatted($X,...),...);
+        - metavariable-regex:
+            metavariable: $FMT
+            regex: '^(?:[^"].*|".*%(?:[1-9][0-9]*\$|<)?[-#+ 0,(]*[0-9]*(?:\.[0-9]+)?(?:[bBhHsScCdoxXeEfgGaA]|[tT][A-Za-z]).*")$'
       - pattern: |
           $PM.newQuery(...,$X + $Y,...);
     - pattern-either:
