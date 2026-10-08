@@ -4,10 +4,10 @@ rules:
     pattern-either:
       # Branch 1a: pyproject.toml missing exclude-newer in [tool.uv]
       - patterns:
-          - pattern-regex: '(?ms)\[tool\.uv\](?P<TARGET>[^\[]*?)(?=\[|\z)'
+          - pattern-regex: '(?ms)^\[tool\.uv\](?P<TARGET>.*?)(?=^\[|\z)'
           - metavariable-regex:
               metavariable: $TARGET
-              regex: '^(?![\s\S]*exclude-newer)'
+              regex: '(?m)^(?![\s\S]*^[ \t]*exclude-newer[ \t]*=)'
           - focus-metavariable: $TARGET
 
       # Branch 2: Value too low (< 7 days)
