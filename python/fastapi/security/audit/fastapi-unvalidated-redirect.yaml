@@ -1,0 +1,86 @@
+rules:
+  - id: fastapi-unvalidated-redirect
+    languages:
+      - python
+    severity: WARNING
+    mode: taint
+    message: >-
+      User-controlled request data flows into `RedirectResponse` without validation.
+      This is an unvalidated (open) redirect and could be exploited for phishing
+      from a trusted domain. This pattern is especially risky in login and
+      OAuth/OIDC callback handlers where parameters such as `next` or
+      `redirect_uri` select the post-authentication destination. Validate the
+      destination against an allowlist of hosts or permit only known-safe
+      relative paths (e.g. with
+      `django.utils.http.url_has_allowed_host_and_scheme`), and never append
+      authorization codes or tokens to an unvalidated URL.
+    metadata:
+      cwe:
+        - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp:
+        - A01:2021 - Broken Access Control
+        - A01:2025 - Broken Access Control
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/601.html
+        - https://fastapi.tiangolo.com/advanced/custom-response/#redirectresponse
+        - https://www.starlette.io/responses/#redirectresponse
+      category: security
+      technology:
+        - python
+        - fastapi
+        - starlette
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: $REQ.query_params.get(...)
+              - pattern: $REQ.query_params[...]
+              - pattern: $REQ.path_params.get(...)
+              - pattern: $REQ.path_params[...]
+              - pattern: $REQ.headers.get(...)
+              - pattern: $REQ.headers[...]
+              - pattern: $REQ.cookies.get(...)
+              - pattern: $REQ.cookies[...]
+              - pattern: await $REQ.json(...)
+              - pattern: (await $REQ.json(...)).get(...)
+              - pattern: (await $REQ.json(...))[...]
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  @$APP.$METHOD(...)
+                  def $FUNC(..., $PARAM, ...):
+                    ...
+              - pattern-inside: |
+                  @$APP.$METHOD(...)
+                  async def $FUNC(..., $PARAM, ...):
+                    ...
+          - pattern: $PARAM
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: ^(get|post|put|delete|patch|head|options|route|api_route)$
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern: is_safe_url($VAR, ...)
+              - pattern: url_has_allowed_host_and_scheme($VAR, ...)
+              - pattern: django.utils.http.is_safe_url($VAR, ...)
+              - pattern: django.utils.http.url_has_allowed_host_and_scheme($VAR, ...)
+          - focus-metavariable: $VAR
+        by-side-effect: true
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: RedirectResponse($URL, ...)
+              - pattern: RedirectResponse(url=$URL, ...)
+              - pattern: starlette.responses.RedirectResponse($URL, ...)
+              - pattern: starlette.responses.RedirectResponse(url=$URL, ...)
+              - pattern: fastapi.responses.RedirectResponse($URL, ...)
+              - pattern: fastapi.responses.RedirectResponse(url=$URL, ...)
+              - pattern: responses.RedirectResponse($URL, ...)
+              - pattern: responses.RedirectResponse(url=$URL, ...)
+          - focus-metavariable: $URL
