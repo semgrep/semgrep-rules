@@ -3,6 +3,7 @@ package example;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.XMLConstants;
 
 
 class GoodDocumentBuilderFactory {
@@ -162,4 +163,24 @@ class GoodDocumentBuilderFactoryCtr3 {
         dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
     }
 
+}
+
+class GoodDocumentBuilderFactoryAccessExternalDtd {
+    public void blockExternalDtd() throws ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
+
+class BadDocumentBuilderFactoryUnrelatedConstant {
+    public void unrelatedConstantNamedLikeJaxp() throws ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setAttribute(MyOwnConfig.ACCESS_EXTERNAL_DTD, "");
+        //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
 }
