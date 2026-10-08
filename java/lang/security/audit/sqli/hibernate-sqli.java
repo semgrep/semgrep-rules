@@ -2,6 +2,7 @@ package testcode.sqli;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SharedSessionContract;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
@@ -42,5 +43,15 @@ public class HibernateSql {
         // ok: hibernate-sqli
         criteria.add(Restrictions.sqlRestriction("param1  = ? and param2 = ?", new String[] {input}, new Type[] {StandardBasicTypes.STRING}));
 
+    }
+
+    public void testSharedSessionContract(SessionFactory sessionFactory, String input) {
+        SharedSessionContract session = sessionFactory.openSession();
+        String hql = "from UserEntity where name = '" + input + "'";
+        // ruleid: hibernate-sqli
+        session.createQuery(hql);
+
+        // ok: hibernate-sqli
+        session.createQuery("from UserEntity");
     }
 }
