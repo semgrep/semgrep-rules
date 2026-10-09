@@ -1,0 +1,29 @@
+rules:
+- id: anthropic-hardcoded-api-key-go-copy-copy
+  languages:
+  - go
+  severity: ERROR
+  message: Anthropic API key is hardcoded in source code. Use environment variables
+    or a secrets manager instead.
+  patterns:
+  - pattern-either:
+    - pattern: option.WithAPIKey("$KEY")
+    - pattern: ''
+  - metavariable-regex:
+      metavariable: $KEY
+      regex: ^sk-ant-
+  metadata:
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    category: security
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    technology:
+    - anthropic
+    references:
+    - https://docs.anthropic.com/en/docs/initial-setup
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Hard-coded Secrets
