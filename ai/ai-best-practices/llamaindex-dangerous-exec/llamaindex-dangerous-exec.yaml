@@ -1,0 +1,38 @@
+rules:
+  - id: llamaindex-dangerous-exec-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      LlamaIndex's CodeInterpreterToolSpec is instantiated. This tool exposes a
+      `code_interpreter` function (via `spec_functions`) that runs arbitrary
+      Python through `subprocess.run([sys.executable, "-c", code], ...)`. When
+      this ToolSpec is wired into an agent (e.g. via `to_tool_list()`), any
+      prompt injection that reaches the agent can invoke `code_interpreter`
+      with attacker-controlled code, resulting in remote code execution on the
+      host running the agent. LlamaIndex's own docstring for this class warns
+      it "is not recommended to be used in a production setting, and would
+      require heavy sandboxing or virtual machines." Avoid wiring this
+      ToolSpec into production agents; if arbitrary code execution is truly
+      required, run it in an isolated, network-restricted sandbox or
+      ephemeral VM with least-privilege permissions instead of directly on
+      the host process, and never expose it to an agent that consumes
+      untrusted or externally-influenced input.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [audit]
+      likelihood: HIGH
+      impact: MEDIUM
+      technology: [llamaindex]
+      references:
+        - https://github.com/run-llama/llama_index/blob/main/llama-index-integrations/tools/llama-index-tools-code-interpreter/llama_index/tools/code_interpreter/base.py
+        - https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/
+    patterns:
+      - pattern-either:
+          - pattern: CodeInterpreterToolSpec(...)
+          - patterns:
+              - pattern-inside: |
+                  from $MOD import CodeInterpreterToolSpec as $ALIAS
+                  ...
+              - pattern: $ALIAS(...)
