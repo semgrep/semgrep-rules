@@ -10,6 +10,9 @@ rules:
           patterns:
             # Locally-defined action
             - pattern-not-regex: "^[.]/"
+            # Same-repository action: `$/` resolves to the workflow's own
+            # repository at the commit that is running
+            - pattern-not-regex: "^[$]/"
             # GitHub-owned action
             - pattern-not-regex: "^actions/"
             # GitHub-owned action

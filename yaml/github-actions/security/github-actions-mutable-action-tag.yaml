@@ -36,5 +36,9 @@ rules:
           language: generic
           patterns:
             - pattern-not-regex: '^\./'
+            # Same-repository reference: `$/` resolves to the workflow's own
+            # repository at the commit that is running, so it cannot be
+            # repointed and needs no SHA.
+            - pattern-not-regex: '^\$/'
             - pattern-not-regex: '^docker://'
             - pattern-not-regex: '@[0-9a-f]{40}(\s|$)'
