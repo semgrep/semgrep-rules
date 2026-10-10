@@ -1,0 +1,37 @@
+rules:
+  - id: sveltekit-csrf-check-origin-disabled
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      SvelteKit's `kit.csrf.checkOrigin` is explicitly set to `false` in
+      svelte.config.js. By default SvelteKit verifies that the `origin`
+      header of incoming POST, PUT, PATCH, and DELETE requests matches the
+      server's own origin, which blocks cross-site form submissions
+      (CSRF). Setting `checkOrigin` to `false` disables this check for the
+      entire application, allowing any external site to submit forms (and
+      therefore trigger state-changing actions) on behalf of a logged-in
+      user. SvelteKit's own docs flag this option with "Be careful!". If
+      you need to accept legitimate cross-origin form submissions (e.g.
+      from a payment provider), use the `kit.csrf.trustedOrigins` allowlist
+      to name the specific origins you trust instead of disabling the
+      check globally.
+    metadata:
+      cwe:
+        - "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp:
+        - "A01:2021 - Broken Access Control"
+      category: security
+      confidence: MEDIUM
+      subcategory: [audit]
+      likelihood: LOW
+      impact: MEDIUM
+      technology: [sveltekit]
+      references:
+        - https://svelte.dev/docs/kit/configuration#csrf
+    patterns:
+      - pattern: |
+          { ..., kit: { ..., csrf: { ..., checkOrigin: $FALSE, ... }, ... }, ... }
+      - metavariable-regex:
+          metavariable: $FALSE
+          regex: ^false$
+      - focus-metavariable: $FALSE
