@@ -1,17 +1,21 @@
 rules:
 - id: spring-actuator-fully-enabled-yaml
-  patterns:
-  - pattern-inside: |
-      management:
-        ...
-        endpoints:
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        management:
           ...
-          web:
+          endpoints:
             ...
-            exposure:
+            web:
               ...
+              exposure:
+                ...
+    - pattern: |
+        include: "*"
+  # Spring Boot reads a dotted key in YAML as the nested form.
   - pattern: |
-      include: "*"
+      management.endpoints.web.exposure.include: "*"
   message: >-
     Spring Boot Actuator is fully enabled. This exposes sensitive endpoints such as /actuator/env, /actuator/logfile,
     /actuator/heapdump and others.
@@ -21,7 +25,7 @@ rules:
   languages: [yaml]
   metadata:
     cwe:
-    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    - 'CWE-497: Exposure of Sensitive System Information to an Unauthorized Control Sphere'
     owasp:
     - A01:2021 - Broken Access Control
     - A01:2025 - Broken Access Control
@@ -32,7 +36,6 @@ rules:
     category: security
     technology:
     - spring
-    cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: MEDIUM
