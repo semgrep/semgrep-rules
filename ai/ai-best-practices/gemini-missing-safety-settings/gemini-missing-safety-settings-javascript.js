@@ -1,17 +1,18 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI("api-key");
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+const ai = new GoogleGenAI({});
 
 async function test() {
     // ruleid: gemini-missing-safety-settings-javascript
-    const response = await model.generateContent({
-        contents: [{ role: "user", parts: [{ text: "Hello" }] }]
+    const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: "Hello",
     });
 
     // ok: gemini-missing-safety-settings-javascript
-    const response2 = await model.generateContent({
-        contents: [{ role: "user", parts: [{ text: "Hello" }] }],
-        safetySettings: safetyConfig
+    const response2 = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: "Hello",
+        config: { safetySettings: safetyConfig }
     });
 }
