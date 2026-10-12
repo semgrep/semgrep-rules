@@ -1,0 +1,30 @@
+rules:
+- id: detect-langchain-with-model
+  message: 'Possibly found usage of AI tooling: LangChain with $MODEL'
+  severity: INFO
+  metadata:
+    confidence: LOW
+    category: maintainability
+    references:
+    - https://semgrep.dev/blog/2024/detecting-shadow-ai
+    technology:
+    - genAI
+    - LLMs
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+  languages:
+  - python
+  pattern-either:
+  - pattern: import langchain_openai
+  - pattern: ChatOpenAI(...)
+  - pattern: ChatOpenAI(...,model=$MODEL,...)
+  - pattern: import langchain_community
+  - pattern: Ollama(...,model=$MODEL,...)
+  - pattern: Ollama(...)
+  - pattern: import langchain_anthropic
+  - pattern: ChatAnthropic(...,model=$MODEL,...)
+  - pattern: ChatAnthropic(...)
+  - pattern: import langchain_cohere
+  - pattern: ChatCohere(...,model=$MODEL,...)
+  - pattern: ChatCohere(...)
+  - pattern: import langchain_core
+  - pattern: import langchain
