@@ -1,0 +1,59 @@
+rules:
+  - id: python.mlflow.security.unguarded-pickle-deserialization
+    metadata:
+      author: Kartik Nair
+      category: security
+      confidence: MEDIUM
+      cwe:
+        - "CWE-502: Deserialization of Untrusted Data"
+      ghsa: GHSA-cxjq-35gw-4m9f
+      impact: HIGH
+      likelihood: MEDIUM
+      references:
+        - https://github.com/advisories/GHSA-cxjq-35gw-4m9f
+        - https://cwe.mitre.org/data/definitions/502.html
+      subcategory:
+        - vuln
+      technology:
+        - mlflow
+        - python
+    message: >
+      Unsafe pickle/cloudpickle deserialization detected without the
+      MLFLOW_ALLOW_PICKLE_DESERIALIZATION guard. Deserializing untrusted
+      pickle data allows arbitrary code execution (CWE-502).
+      Related advisory: GHSA-cxjq-35gw-4m9f
+    severity: ERROR
+    languages:
+      - python
+    patterns:
+      - pattern-either:
+          - pattern: pickle.load(...)
+          - pattern: pickle.loads(...)
+          - pattern: cloudpickle.load(...)
+      - pattern-inside: |
+          def $FUNC(...):
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              if not MLFLOW_ALLOW_PICKLE_DESERIALIZATION.get():
+                  ...
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              if MLFLOW_ALLOW_PICKLE_DESERIALIZATION.get() == False:
+                  ...
+              ...
+      - pattern-not-inside: |
+          def $FUNC(...):
+              ...
+              if not MLFLOW_ALLOW_PICKLE_DESERIALIZATION:
+                  ...
+              ...
+    fix: |
+      if not MLFLOW_ALLOW_PICKLE_DESERIALIZATION.get():
+          raise MlflowException(
+              "Deserialization of untrusted pickle data is disabled. "
+              "Set MLFLOW_ALLOW_PICKLE_DESERIALIZATION=true to opt in.",
+          )
