@@ -27,5 +27,10 @@ rules:
   pattern-either:
   - pattern: |
       new java.util.Random(...).$FUNC(...)
+  - patterns:
+    - pattern: $RNG.$FUNC(...)
+    - metavariable-type:
+        metavariable: $RNG
+        type: java.util.Random
   - pattern: |
       java.lang.Math.random(...)
