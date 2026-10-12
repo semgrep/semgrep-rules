@@ -1,0 +1,61 @@
+---
+rules:
+  - id: npmrc-allow-git-unrestricted
+    message: >-
+      This `.npmrc` does not restrict git-sourced dependencies. The `allow-git`
+      setting controls which git-URL dependencies npm will resolve: `all`
+      (default) allows any git dependency; `root` allows only git dependencies
+      defined in your project's own `package.json`; `none` blocks all git
+      dependencies. A malicious git dependency can bundle its own `.npmrc` that
+      overrides the git executable itself, achieving arbitrary code execution
+      even when `ignore-scripts=true` is set — this is the one attack vector
+      that `ignore-scripts` alone cannot close. `root` is insufficient: it still
+      permits git-sourced packages in the root project. Set `allow-git=none` to
+      prevent npm from resolving any git-sourced dependency. Available since npm
+      11.10.0.
+    languages:
+      - generic
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/.npmrc"
+      exclude:
+        - "**/node_modules/**"
+        - "**/test/**"
+        - "**/tests/**"
+        - "**/fixtures/**"
+        - "**/__fixtures__/**"
+    pattern-either:
+      # Branch 1: allow-git key is absent entirely.
+      # Matches the whole document as $TARGET so pattern-not-regex checks the
+      # full document scope regardless of key ordering.
+      - patterns:
+          - pattern-regex: '(?:(?:^---\n)(?:[^\n]*\n)|^)(?P<TARGET>(?:(?!\n---)[\s\S])*\S(?:(?!\n---)[\s\S])*)'
+          - pattern-not-regex: '(?m)^allow-git\s*='
+          - focus-metavariable: $TARGET
+      # Branch 2: allow-git set to any value other than the exact canonical
+      # "none". "all", "root", boolean aliases ("true", "false", "yes", "no"),
+      # numeric aliases, and mixed-case variants are all flagged — only
+      # lowercase "none" is safe.
+      - pattern-regex: '(?m)^allow-git\s*=\s*(?!none\b)\S[^\n]*'
+      # Branch 3: allow-git set to empty value (bare equals sign).
+      # Branch 2 requires \S so it cannot match an empty RHS.
+      - pattern-regex: '(?m)^allow-git\s*=\s*$'
+    metadata:
+      category: security
+      technology:
+        - npm
+        - nodejs
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://docs.npmjs.com/cli/v11/using-npm/config#allow-git

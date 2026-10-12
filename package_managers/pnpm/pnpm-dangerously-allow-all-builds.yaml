@@ -1,0 +1,51 @@
+---
+rules:
+  - id: pnpm-dangerously-allow-all-builds
+    message: >-
+      This pnpm workspace has `dangerouslyAllowAllBuilds` enabled. When set to
+      `true`, all build scripts (preinstall, install, postinstall) from
+      dependencies run automatically during installation without requiring
+      per-package approval via the `allowBuilds` allowlist. This completely
+      disables pnpm's build script approval mechanism, making every
+      dependency capable of executing arbitrary code at install time (the
+      primary vector for supply-chain attacks). Set
+      `dangerouslyAllowAllBuilds: false` and use `allowBuilds` to explicitly
+      approve trusted packages that require build scripts.
+      Added in: v10.9.0
+    languages:
+      - yaml
+    severity: HIGH
+    paths:
+      include:
+        - "**/pnpm-workspace.yaml"
+    pattern-either:
+      # Branch 1: Key present with any value other than canonical false
+      - patterns:
+          - pattern: |
+              dangerouslyAllowAllBuilds: $VAL
+          - metavariable-regex:
+              metavariable: $VAL
+              regex: '^(?!false$).+'
+          - focus-metavariable: $VAL
+
+      # Branch 3: Key present with empty value (bare colon)
+      - patterns:
+          - pattern-regex: '(?m)^\s*dangerouslyAllowAllBuilds\s*:\s*$'
+    metadata:
+      category: security
+      technology:
+        - pnpm
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://pnpm.io/settings#dangerouslyallowallbuilds
+        - https://pnpm.io/settings#allowbuilds
