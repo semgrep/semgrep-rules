@@ -1,0 +1,41 @@
+rules:
+  - id: mcp-command-injection-typescript
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      A child_process execution function is called with a dynamic argument inside
+      an MCP tool handler. Tool arguments flow from LLM/user input and may carry
+      injected shell commands. Use execFile() with an explicit argument array
+      instead of exec() or execSync(), or sanitize input strictly before executing
+      shell commands.
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [mcp]
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $SERVER.tool($NAME, ..., async (...) => {
+                ...
+              })
+          - pattern-inside: |
+              $SERVER.registerTool($NAME, ..., async (...) => {
+                ...
+              })
+      - pattern-either:
+          - pattern: exec($CMD, ...)
+          - pattern: execSync($CMD)
+          - pattern: $CP.exec($CMD, ...)
+          - pattern: $CP.execSync($CMD)
+          - pattern: eval($CMD)
+      - pattern-not: exec("...", ...)
+      - pattern-not: execSync("...")
+      - pattern-not: $CP.exec("...", ...)
+      - pattern-not: $CP.execSync("...")
+      - pattern-not: eval("...")
