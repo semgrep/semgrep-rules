@@ -1,0 +1,41 @@
+rules:
+  - id: agent-config-backdoor-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      An npm install-time execution primitive or an AI-agent auto-run config surface
+      (.claude/setup.mjs, .cursor/rules/*.mdc, .gemini/settings.json, .vscode/tasks.json) is
+      co-located with a process spawn or remote fetch (child_process, execSync, spawn, curl,
+      wget, base64 -d, pipe-to-shell). This is the Miasma npm-worm backdoor shape: a gyp
+      command substitution fetches a payload during install, or a write into an agent auto-run
+      file executes code on the next folder open. Remove the install or auto-run hook, audit
+      the package that shipped it, and pin to a known-good version. The gyp syntax or a benign
+      folderOpen task alone is not flagged; the fetch-and-run or spawn token must sit within a
+      few hundred characters of the agent surface.
+    metadata:
+      cwe: "CWE-506: Embedded Malicious Code"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: HIGH
+      technology: [mcp, npm]
+      owasp:
+        - "LLM03:2025 Supply Chain"
+        - "LLM06:2025 Excessive Agency"
+      references:
+        - https://www.stepsecurity.io/blog/binding-gyp-npm-supply-chain-attack-spreads-like-worm
+        - https://www.ox.security/blog/600000-monthly-downloads-affected-miasma-supply-chain-attack-is-back-on-npm/
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules/blob/main/rules/tool-poisoning/ATR-2026-00575-miasma-npm-worm-agent-config-backdoor.yaml
+      source-rule-url: https://github.com/Agent-Threat-Rule/agent-threat-rules/blob/main/rules/tool-poisoning/ATR-2026-00575-miasma-npm-worm-agent-config-backdoor.yaml
+    paths:
+      include:
+        - "*.py"
+        - "*.js"
+        - "*.ts"
+        - "*.mjs"
+        - "*.json"
+        - "*.gyp"
+    patterns:
+      - pattern-regex: >-
+          (?i)<!@?\([^)]{0,200}(?:\bcurl\s|\bwget\s|https?://|base64\s+-d|\|\s*(?:sh|bash)\b)|(?i)(?:\.claude[/\\]setup\.mjs|\.cursor[/\\]rules[/\\]\S*\.mdc|\.gemini[/\\]settings\.json|\.vscode[/\\]tasks\.json)[\s\S]{0,300}(?:child_process|exec(?:Sync)?\s*\(|spawn(?:Sync)?\s*\(|\bcurl\s|\bwget\s|base64\s+-d|powershell|\|\s*(?:sh|bash)\b)|(?i)(?:child_process|exec(?:Sync)?\s*\(|spawn(?:Sync)?\s*\(|\bcurl\s+-|\bwget\s|base64\s+-d|powershell\s+-[en])[\s\S]{0,300}(?:\.claude[/\\]setup\.mjs|\.cursor[/\\]rules[/\\]\S*\.mdc|\.gemini[/\\]settings\.json|\.vscode[/\\]tasks\.json)
