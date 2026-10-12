@@ -133,6 +133,10 @@ jobs:
         # ruleid: run-shell-injection
         run: |
           echo "${{ inputs.message_to_print }}"
+      - name: truthiness check on input, not interpolated
+        # ok: run-shell-injection
+        run: |
+          echo "${{ inputs.message_to_print && 'yes' }}"
       - name: Use steps output
         # ok: run-shell-injection
         run: |
