@@ -31,66 +31,42 @@ rules:
     likelihood: LOW
     impact: HIGH
     confidence: LOW
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: $CONN.$METHOD(...,$QUERY,...)
-      - pattern-either:
-        - pattern-inside: |
-            $QUERY = $X + $Y
-            ...
-        - pattern-inside: |
-            $QUERY += $X
-            ...
-        - pattern-inside: |
-            $QUERY = '...'.format(...)
-            ...
-        - pattern-inside: |
-            $QUERY = '...' % (...)
-            ...
-        - pattern-inside: |
-            $QUERY = f'...{$USERINPUT}...'
-            ...
-      - pattern-not-inside: |
-          $QUERY += "..."
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $X + $Y
+      - pattern: $X += $Y
+      - pattern: $Y.format(...)
+      - pattern: '"..." % $ANYTHING'
+      - pattern: f"...{$ANYTHING}..."
+    - pattern-not: '"..." + "..."'
+    - pattern-not: $X += "..."
+    - pattern-not: '"...".format()'
+    - pattern-not: '"..." % ()'
+  pattern-sinks:
+  - patterns:
+    - pattern: $CONN.$METHOD(..., $QUERY, ...)
+    - pattern-either:
+      - pattern-inside: |
+          $CONN = await asyncpg.connect(...)
           ...
-      - pattern-not-inside: |
-          $QUERY = "..." + "..."
+      - pattern-inside: |
+          async with asyncpg.create_pool(...) as $CONN:
+              ...
+      - pattern-inside: |
+          async with $POOL.acquire(...) as $CONN:
+              ...
+      - pattern-inside: |
+          $CONN = await $POOL.acquire(...)
           ...
-      - pattern-not-inside: |
-          $QUERY = '...'.format()
-          ...
-      - pattern-not-inside: |
-          $QUERY = '...' % ()
-          ...
-    - pattern: $CONN.$METHOD(..., $X + $Y, ...)
-    - pattern: $CONN.$METHOD(..., $Y.format(...), ...)
-    - pattern: $CONN.$METHOD(..., '...'.format(...), ...)
-    - pattern: $CONN.$METHOD(..., '...' % (...), ...)
-    - pattern: $CONN.$METHOD(..., f'...{$USERINPUT}...', ...)
-  - pattern-either:
-    - pattern-inside: |
-        $CONN = await asyncpg.connect(...)
-        ...
-    - pattern-inside: |
-        async with asyncpg.create_pool(...) as $CONN:
-            ...
-    - pattern-inside: |
-        async with $POOL.acquire(...) as $CONN:
-            ...
-    - pattern-inside: |
-        $CONN = await $POOL.acquire(...)
-        ...
-    - pattern-inside: |
-        def $FUNCNAME(..., $CONN: Connection, ...):
-            ...
-    - pattern-inside: |
-        def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
-            ...
-  - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
-  - pattern-not: $CONN.$METHOD(..., '...'.format(), ...)
-  - pattern-not: $CONN.$METHOD(..., '...'%(), ...)
-  - metavariable-regex:
-      metavariable: $METHOD
-      regex: ^(fetch|fetchrow|fetchval|execute|executemany|prepare|cursor|copyfromquery)$
+      - pattern-inside: |
+          def $FUNCNAME(..., $CONN: Connection, ...):
+              ...
+      - pattern-inside: |
+          def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
+              ...
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(fetch|fetchrow|fetchval|execute|executemany|prepare|cursor|copyfromquery)$
   severity: WARNING
