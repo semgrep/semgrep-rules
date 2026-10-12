@@ -1,0 +1,59 @@
+rules:
+  - id: llm-output-to-xss-python
+    mode: taint
+    languages:
+      - python
+    message: >-
+      LLM API response data flows into an unsanitized HTML rendering sink
+      (mark_safe or Markup). This is an instance of OWASP LLM05 (Improper
+      Output Handling) and CWE-79. When an attacker manipulates the LLM via
+      prompt injection, the resulting LLM-generated HTML can contain malicious
+      scripts that execute in the browser. Always sanitize LLM-generated HTML
+      with a library like bleach or html.escape before rendering, or use a
+      safe templating engine with auto-escaping.
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp:
+        - A03:2021 - Injection
+      owasp_llm:
+        - "LLM05: Improper Output Handling"
+      category: security
+      subcategory:
+        - vuln
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - openai
+        - anthropic
+        - gemini
+        - llm
+      references:
+        - https://genai.owasp.org/llm-top-10/llm05-improper-output-handling/
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+        - https://github.com/semgrep/semgrep-rules/tree/develop/ai/ai-best-practices/llm-output-to-exec
+      license: "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license"
+      author: "sajjad rahim nouri"
+      vulnerability_class:
+        - Cross-Site Scripting (XSS)
+    pattern-sources:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern: $CLIENT.messages.create(...)
+      - pattern: $MODEL.generate_content(...)
+      - pattern: $CLIENT.chat(...)
+      - pattern: $RESP.choices[0].message.content
+      - pattern: $RESP.content[0].text
+      - pattern: $RESP.text
+      - pattern: $RESP.content
+    pattern-sanitizers:
+      - pattern: html.escape(...)
+      - pattern: bleach.clean(...)
+      - pattern: bleach.linkify(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: mark_safe($SINK)
+              - pattern: Markup($SINK)
+          - focus-metavariable: $SINK
