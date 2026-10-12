@@ -46,6 +46,12 @@ function test5(req,res) {
     }
 }
 
+function testReplace(userInput: string) {
+    const sanitized = userInput.replace(/\.\.\//g, '');
+    // ruleid:path-join-resolve-traversal
+    return join('/tmp/semgrep-root', sanitized);
+}
+
 function okTest1(req,res) {
     let data = ['one', 'two', 'three'];
     for (let x of data) {
@@ -66,10 +72,10 @@ function okTest2() {
     someFunc()
 }
 
-function okTest3(req,res) {
+function testReplacePrefix(req,res) {
     let somePath = req.body.path;
     somePath = somePath.replace(/^(\.\.(\/|\\|$))+/, '');
-    // ok:path-join-resolve-traversal
+    // ruleid:path-join-resolve-traversal
     return join(opts.path, somePath);
 }
 
