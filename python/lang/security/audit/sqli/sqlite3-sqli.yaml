@@ -1,0 +1,84 @@
+rules:
+- id: sqlite3-sqli
+  languages:
+  - python
+  message: >-
+    Detected string concatenation with a non-literal variable in a sqlite3
+    Python SQL statement. This could lead to SQL injection if the variable
+    is user-controlled and not properly sanitized. In order to prevent SQL
+    injection, use parameterized queries instead.
+    For example: 'cur.execute("SELECT * FROM table WHERE id=?", (user_id,))'
+  metadata:
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command\
+      \ ('SQL Injection')"
+    references:
+    - https://docs.python.org/3/library/sqlite3.html#sqlite3-placeholders
+    category: security
+    technology:
+    - sqlite3
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    - A05:2025 - Injection
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: LOW
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: $CUR.$METHOD(..., $QUERY, ...)
+      - pattern-either:
+        - pattern-inside: |
+            $QUERY = $X + $Y
+            ...
+        - pattern-inside: |
+            $QUERY += $X
+            ...
+        - pattern-inside: |
+            $QUERY = '...'.format(...)
+            ...
+        - pattern-inside: |
+            $QUERY = '...' % (...)
+            ...
+        - pattern-inside: |
+            $QUERY = f'...{$USERINPUT}...'
+            ...
+      - pattern-not-inside: |
+          $QUERY += "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = "..." + "..."
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...'.format()
+          ...
+      - pattern-not-inside: |
+          $QUERY = '...' % ()
+          ...
+    - pattern: $CUR.$METHOD(..., $X + $Y, ...)
+    - pattern: $CUR.$METHOD(..., '...'.format(...), ...)
+    - pattern: $CUR.$METHOD(..., '...' % (...), ...)
+    - pattern: $CUR.$METHOD(..., f'...{$USERINPUT}...', ...)
+  - pattern-either:
+    - pattern-inside: |
+        $CONN = sqlite3.connect(...)
+        ...
+        $CUR = $CONN.cursor(...)
+        ...
+    - pattern-inside: |
+        $CONN = sqlite3.connect(...)
+        ...
+        with $CONN:
+          ...
+  - pattern-not: $CUR.$METHOD(..., "..." + "...", ...)
+  - pattern-not: $CUR.$METHOD(..., '...'.format(), ...)
+  - pattern-not: $CUR.$METHOD(..., '...'%(), ...)
+  - metavariable-regex:
+      metavariable: $METHOD
+      regex: ^(execute|executemany|executescript)$
+  severity: WARNING
