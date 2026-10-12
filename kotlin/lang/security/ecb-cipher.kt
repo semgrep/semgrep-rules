@@ -14,6 +14,13 @@ class ECBCipher {
     val cipherText = c.doFinal(plainText)
   }
 
+  public fun ecbCipher_lowercase(): Void {
+    // ruleid: ecb-cipher
+    var c = Cipher.getInstance("aes/ecb/nopadding")
+    c.init(Cipher.ENCRYPT_MODE, k, iv)
+    val cipherText = c.doFinal(plainText)
+  }
+
   public fun noEcbCipher(): Void {
     // ok: ecb-cipher
     var c = Cipher.getInstance("AES/GCM/NoPadding")
