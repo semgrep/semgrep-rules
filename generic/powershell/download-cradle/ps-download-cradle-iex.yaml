@@ -1,0 +1,32 @@
+rules:
+  - id: ps-download-cradle-iex
+    message: >-
+      PowerShell download-and-execute cradle detected (T1059.001 / T1105). A
+      download primitive (DownloadString, iwr, irm, Invoke-WebRequest,
+      Invoke-RestMethod) appears near an execution primitive (IEX,
+      Invoke-Expression, ScriptBlock::Create, .Invoke()). This pattern is used
+      in stager payloads (Emotet, QakBot, Empire, Cobalt Strike) to download
+      and execute remote code entirely in memory, bypassing the filesystem and
+      file-based AV scanning. Investigate the URL target immediately.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://attack.mitre.org/techniques/T1059/001/
+        - https://attack.mitre.org/techniques/T1105/
+        - https://www.danielbohannon.com/blog-1/2017/12/2/the-invoke-cradlecrafter-overview
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: MEDIUM
+    pattern-regex: '(?i)(I`?E`?X|Invoke-Expression|InvokeExpression|\[ScriptBlock\]::Create|\.Invoke\(\))(.{0,300})(DownloadString|DownloadFile|Invoke-WebRequest|Invoke-RestMethod|\biwr\b|\birm\b)'

@@ -1,0 +1,32 @@
+rules:
+  - id: ps-assembly-load-byte-array
+    message: >-
+      In-memory .NET assembly load detected (T1620). [System.Reflection.Assembly]::Load()
+      or [Reflection.Assembly]::Load() invoked directly loads a .NET assembly
+      entirely in memory, bypassing file-based AV scanning. This is the core
+      loading mechanism of Invoke-Mimikatz, reflective PE injectors, and
+      embedded C2 implant loaders. Determine the source of the byte array
+      being loaded.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-494: Download of Code Without Integrity Check"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+        - "A08:2025 - Software and Data Integrity Failures"
+      references:
+        - https://attack.mitre.org/techniques/T1620/
+        - https://attack.mitre.org/techniques/T1059/001/
+      technology:
+        - powershell
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-either:
+      - pattern: '[System.Reflection.Assembly]::Load($X)'
+      - pattern: '[Reflection.Assembly]::Load($X)'
