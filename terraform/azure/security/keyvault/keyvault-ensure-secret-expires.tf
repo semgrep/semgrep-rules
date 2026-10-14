@@ -65,5 +65,5 @@ resource "azurerm_key_vault_secret" "secret" {
     "verify",
     "wrapKey",
   ]
-  expiration_date = timeadd("1982-12-31T00:00:00Z", 1h)
+  expiration_date = timeadd("1982-12-31T00:00:00Z", "1h")
 }
