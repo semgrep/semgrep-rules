@@ -13,3 +13,22 @@ services:
     image: mysql
     security_opt:
       - label:disable
+---
+services:
+  # ruleid: selinux-separation-disabled
+  versionless:
+    image: alpine:latest
+    security_opt:
+      - label:disable
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      # ok: selinux-separation-disabled
+      docker:
+        image: docker:dind
+        security_opt:
+          - label:disable
