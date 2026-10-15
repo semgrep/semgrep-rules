@@ -1,22 +1,56 @@
 rules:
 - id: spring-actuator-dangerous-endpoints-enabled-yaml
-  patterns:
-  - pattern-inside: |
-      management:
-        ...
-        endpoints:
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        management:
           ...
-          web:
+          endpoints:
             ...
-            exposure:
+            web:
               ...
-              include:
+              exposure:
                 ...
-  - pattern: |
-      include: [..., $ACTUATOR, ...]
-  - metavariable-comparison:
-      metavariable: $ACTUATOR
-      comparison: not str($ACTUATOR) in ["health","*"]
+                include:
+                  ...
+    - pattern: |
+        include: [..., $ACTUATOR, ...]
+    - metavariable-comparison:
+        metavariable: $ACTUATOR
+        comparison: not str($ACTUATOR) in ["health","*"]
+  # Spring Boot also accepts the list as one comma-separated string ("health,env").
+  - patterns:
+    - pattern-inside: |
+        management:
+          ...
+          endpoints:
+            ...
+            web:
+              ...
+              exposure:
+                ...
+    - pattern: |
+        include: $ACTUATOR
+    - pattern-not: |
+        include: [...]
+    - metavariable-comparison:
+        metavariable: $ACTUATOR
+        comparison: not str($ACTUATOR) in ["health","*"]
+  # Spring Boot reads a dotted key in YAML as the nested form.
+  - patterns:
+    - pattern: |
+        management.endpoints.web.exposure.include: [..., $ACTUATOR, ...]
+    - metavariable-comparison:
+        metavariable: $ACTUATOR
+        comparison: not str($ACTUATOR) in ["health","*"]
+  - patterns:
+    - pattern: |
+        management.endpoints.web.exposure.include: $ACTUATOR
+    - pattern-not: |
+        management.endpoints.web.exposure.include: [...]
+    - metavariable-comparison:
+        metavariable: $ACTUATOR
+        comparison: not str($ACTUATOR) in ["health","*"]
   message: Spring Boot Actuator "$ACTUATOR" is enabled. Depending on the actuator, this can pose a significant
     security risk. Please double-check if the actuator is needed and properly secured.
   severity: WARNING
@@ -24,7 +58,7 @@ rules:
   - yaml
   metadata:
     cwe:
-    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    - 'CWE-497: Exposure of Sensitive System Information to an Unauthorized Control Sphere'
     owasp:
     - A01:2021 - Broken Access Control
     - A01:2025 - Broken Access Control
@@ -35,7 +69,6 @@ rules:
     category: security
     technology:
     - spring
-    cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: MEDIUM

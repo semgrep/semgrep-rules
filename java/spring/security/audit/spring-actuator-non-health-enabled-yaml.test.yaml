@@ -11,3 +11,52 @@ management:
           - "health"  # Should be OK (but will still be shown in the output)
           - "prometheus"  # Should match
           - "logfile"  # Should match
+
+---
+# Spring Boot also accepts the list as one comma-separated string.
+management:
+  endpoints:
+    web:
+      exposure:
+        # ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+        include: health,env,heapdump
+
+---
+management:
+  endpoints:
+    web:
+      exposure:
+        # ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+        include: env
+
+---
+management:
+  endpoints:
+    web:
+      exposure:
+        # ok: spring-actuator-dangerous-endpoints-enabled-yaml
+        include: health
+
+---
+# Spring Boot reads a dotted key in YAML as the nested form.
+# ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+management.endpoints.web.exposure.include: [health, env]
+
+---
+# ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+management.endpoints.web.exposure.include: health,env
+
+---
+# ok: spring-actuator-dangerous-endpoints-enabled-yaml
+management.endpoints.web.exposure.include: health
+
+---
+# ruleid: spring-actuator-dangerous-endpoints-enabled-yaml
+management.endpoints.web.exposure.include:
+  - health
+  - env
+
+---
+# "*" is reported by spring-actuator-fully-enabled-yaml.
+# ok: spring-actuator-dangerous-endpoints-enabled-yaml
+management.endpoints.web.exposure.include: "*"
