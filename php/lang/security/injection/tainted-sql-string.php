@@ -91,3 +91,38 @@ function ok_test7() {
     $info = do_smth($select);
     return $info;
 }
+
+function ok_test8() {
+    $id = intval($_GET['id']);
+    // ok: tainted-sql-string
+    $query = "DELETE FROM categories WHERE id = " . $id;
+    return mysql_query($query);
+}
+
+function ok_test9() {
+    $price = floatval($_POST['price']);
+    // ok: tainted-sql-string
+    $query = "UPDATE products SET price = " . $price;
+    return mysql_query($query);
+}
+
+function ok_test10() {
+    $id = (int) $_REQUEST['id'];
+    // ok: tainted-sql-string
+    $query = "SELECT * FROM users WHERE id = " . $id;
+    return mysql_query($query);
+}
+
+function ok_test11() {
+    $id = (integer) $_GET['id'];
+    // ok: tainted-sql-string
+    $query = "SELECT * FROM orders WHERE id = " . $id;
+    return mysql_query($query);
+}
+
+function ok_test12() {
+    $coord = (float) $_GET['lat'];
+    // ok: tainted-sql-string
+    $query = "SELECT * FROM map WHERE latitude = " . $coord;
+    return mysql_query($query);
+}
