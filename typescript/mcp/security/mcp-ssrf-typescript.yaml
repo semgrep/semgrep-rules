@@ -1,0 +1,87 @@
+rules:
+  - id: mcp-ssrf-typescript
+    mode: taint
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      User-controlled MCP tool or request-handler argument flows to an HTTP
+      request URL without validation. An attacker may supply internal network
+      URLs (SSRF). Validate URLs with zod.parse() or an allowlist before
+      calling fetch() or axios.
+    metadata:
+      cwe:
+        - "CWE-918: Server-Side Request Forgery (SSRF)"
+      category: security
+      confidence: HIGH
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - mcp
+        - typescript
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+    pattern-sources:
+      - patterns:
+          - pattern: |
+              $SRV.setRequestHandler(..., async ($REQ) => {
+                ...
+              })
+          - focus-metavariable: $REQ
+      - patterns:
+          - pattern: |
+              $SRV.setRequestHandler(..., ($REQ) => {
+                ...
+              })
+          - focus-metavariable: $REQ
+      - patterns:
+          - pattern: |
+              $SRV.tool(..., async ($ARGS) => {
+                ...
+              })
+          - focus-metavariable: $ARGS
+      - patterns:
+          - pattern: |
+              $SRV.tool(..., async ({ $FIELD }) => {
+                ...
+              })
+          - focus-metavariable: $FIELD
+      - patterns:
+          - pattern: |
+              $SRV.registerTool(..., async ($ARGS) => {
+                ...
+              })
+          - focus-metavariable: $ARGS
+      - patterns:
+          - pattern: |
+              $SRV.registerTool(..., async ({ $FIELD }) => {
+                ...
+              })
+          - focus-metavariable: $FIELD
+    pattern-sinks:
+      - patterns:
+          - pattern: fetch($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.get($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.post($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.put($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.delete($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: $AXIOS.patch($URL, ...)
+          - focus-metavariable: $URL
+    pattern-sanitizers:
+      - pattern: z.parse(...)
+      - pattern: zod.parse(...)
+      - pattern: $SCHEMA.parse(...)
