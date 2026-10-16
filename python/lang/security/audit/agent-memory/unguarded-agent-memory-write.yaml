@@ -1,0 +1,43 @@
+rules:
+- id: unguarded-agent-memory-write
+  patterns:
+  - pattern-either:
+    - pattern: $MEMORY[$KEY] = $VALUE
+    - pattern: $MEMORY.update(...)
+    - pattern: $MEMORY.setdefault($KEY, $VALUE)
+  - metavariable-regex:
+      metavariable: $MEMORY
+      regex: .*(memory|mem|store|history|context|scratchpad|state|cache).*
+  - pattern-not-inside: |
+      guard.write(...)
+      ...
+  message: >-
+    Unguarded write to agent memory store '$MEMORY'. Content written to an AI agent's persistent memory
+    is replayed into later prompts, so an injected value can change the agent's behavior across sessions
+    (memory poisoning, OWASP Top 10 for Agentic Applications ASI06; MITRE ATLAS AML.T0080.000). Validate
+    and screen content before it is persisted to agent memory (source class, embedded instructions, sensitive
+    data) and verify the integrity of protected keys on read. An open-source reference implementation
+    is OWASP Agent Memory Guard.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe:
+    - 'CWE-501: Trust Boundary Violation'
+    - 'CWE-1427: Improper Neutralization of Input Used for LLM Prompting'
+    technology:
+    - python
+    - ai
+    - llm
+    - agents
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    - https://atlas.mitre.org/techniques/AML.T0080.000
+    - https://github.com/OWASP/www-project-agent-memory-guard
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]

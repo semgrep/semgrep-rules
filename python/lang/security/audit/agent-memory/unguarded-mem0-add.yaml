@@ -1,0 +1,40 @@
+rules:
+- id: unguarded-mem0-add
+  patterns:
+  - pattern: $CLIENT.add($CONTENT, ...)
+  - metavariable-regex:
+      metavariable: $CLIENT
+      regex: .*(mem0|memory|mem_client).*
+  - pattern-not-inside: |
+      guard.write(...)
+      ...
+  message: >-
+    Unguarded mem0 memory write. Content passed to `add()` is persisted and loaded into future agent sessions
+    without validation; a prompt-injection payload written here survives context resets (memory poisoning,
+    OWASP Agentic Top 10 ASI06; MITRE ATLAS AML.T0080.000). Validate and screen content before it is persisted
+    to agent memory (source class, embedded instructions, sensitive data) and verify the integrity of
+    protected keys on read. An open-source reference implementation is OWASP Agent Memory Guard.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe:
+    - 'CWE-501: Trust Boundary Violation'
+    - 'CWE-1427: Improper Neutralization of Input Used for LLM Prompting'
+    technology:
+    - python
+    - ai
+    - llm
+    - agents
+    - mem0
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    - https://atlas.mitre.org/techniques/AML.T0080.000
+    - https://github.com/OWASP/www-project-agent-memory-guard
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
