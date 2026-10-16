@@ -5,6 +5,8 @@ from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("test-server")
 
+ALLOWED_HOSTS = {"api.example.com"}
+
 @mcp.tool()
 def fetch_url(url: str) -> str:
     # ruleid: mcp-ssrf-python
@@ -24,8 +26,27 @@ def open_url(url: str) -> str:
     return response.read().decode()
 
 @mcp.tool()
-def safe_fetch(url: str) -> str:
+def parsed_but_unchecked(url: str) -> str:
+    # urlparse alone does not validate: geturl() round-trips the attacker URL
     parsed = urllib.parse.urlparse(url)
+    # ruleid: mcp-ssrf-python
+    response = requests.get(parsed.geturl())
+    return response.text
+
+@mcp.tool()
+def allowlisted_fetch(url: str) -> str:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.hostname in ALLOWED_HOSTS:
+        # ok: mcp-ssrf-python
+        response = requests.get(parsed.geturl())
+        return response.text
+    raise ValueError("host not allowlisted")
+
+@mcp.tool()
+def guard_raise_fetch(url: str) -> str:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.hostname not in ALLOWED_HOSTS:
+        raise ValueError("host not allowlisted")
     # ok: mcp-ssrf-python
     response = requests.get(parsed.geturl())
     return response.text
