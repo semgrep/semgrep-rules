@@ -7,8 +7,11 @@ rules:
       Hook input flows into a file path without validation. Claude Code and Cursor hooks
       receive JSON input that may contain user-controlled paths. An attacker
       could craft input with path traversal sequences (e.g., '../../etc/passwd')
-      to read, modify, or delete arbitrary files. Use realpath or readlink -f
-      to resolve and validate paths before file operations.
+      to read, modify, or delete arbitrary files. Resolving the path with
+      realpath or readlink -f alone is not enough, since the resolved path may
+      still point outside the intended directory: always verify the resolved
+      path stays inside an allowlisted base directory (e.g. with a
+      [[ $SAFE_PATH == $BASE_DIR/* ]] guard) before file operations.
     metadata:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       category: security
@@ -33,5 +36,39 @@ rules:
           - pattern-not-inside: |
               $X=$(... | jq ...)
     pattern-sanitizers:
-      - pattern: realpath ...
-      - pattern: readlink -f ...
+      # Resolving a path does not validate it: only treat a resolved path as
+      # sanitized when it is also checked against an allowlisted base directory.
+      # (The assignment must directly precede the guard: a `...` gap between
+      # them breaks $P unification in bash patterns and over-sanitizes.)
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P=$(realpath ...)
+              if [[ $P == $BASE/* ]]; then
+                ...
+              fi
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P=$(readlink -f ...)
+              if [[ $P == $BASE/* ]]; then
+                ...
+              fi
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P=$(realpath ...)
+              if [[ $P != $BASE/* ]]; then
+                ...
+                exit ...
+              fi
+              ...
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P=$(readlink -f ...)
+              if [[ $P != $BASE/* ]]; then
+                ...
+                exit ...
+              fi
+              ...
