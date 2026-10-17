@@ -1,0 +1,100 @@
+rules:
+  - id: per-chunk-filter-without-carry-over
+    languages: [javascript, typescript]
+    severity: WARNING
+    mode: taint
+    message: >-
+      A redaction or filtering pattern is applied to '$CHUNK', one chunk of a stream, and
+      nothing from the previous chunk is carried into the match. A value split across two
+      chunks (an email sent as "jane.doe@exa" then "mple.com") matches in neither chunk and
+      is forwarded unchanged. Keep the unmatched tail of each chunk, scan it together with
+      the next chunk, and scan what is left in flush().
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      function $M($CHUNK, ...) { ... }
+                  - metavariable-regex:
+                      metavariable: $M
+                      regex: ^_?(transform|write)$
+              - pattern-inside: |
+                  $S.on("data", function ($CHUNK, ...) { ... })
+              - pattern-inside: |
+                  $S.on("data", ($CHUNK, ...) => { ... })
+              - patterns:
+                  - pattern-inside: |
+                      $T(function ($CHUNK, $ENC, $CB) { ... })
+                  - metavariable-regex:
+                      metavariable: $T
+                      regex: ^(through2|through|through2\.obj)$
+              # Semgrep matches a plain for...of here too, so the loop variable must be named like a chunk
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          for await (const $CHUNK of $STREAM) { ... }
+                      - pattern-inside: |
+                          for await (let $CHUNK of $STREAM) { ... }
+                  - metavariable-regex:
+                      metavariable: $CHUNK
+                      regex: (?i)^(chunk|\w+_chunk|chunk_\w+|\w*Chunk|delta|\w+_delta|\w*Delta|event|evt|frag|fragment|token|segment|piece|packet)$
+          - pattern: $CHUNK
+    pattern-sanitizers:
+      # carry-over: the chunk is joined to held text before it is scanned
+      - pattern: $A + $B
+      - pattern: $A.concat(...)
+      - pattern: $A.join(...)
+      - pattern: |
+          `${$A}${$B}`
+      # carry-over: chunks are accumulated into a buffer that is scanned instead
+      - patterns:
+          - pattern-inside: |
+              for await (const $C of $S) {
+                ...
+                $BUF += $Y;
+              }
+              ...
+          - pattern: $BUF
+    pattern-sinks:
+      - patterns:
+          - pattern: $X.$F($RE, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(replace|replaceAll|match|matchAll|search)$
+          # a one-character literal cannot straddle a boundary
+          - metavariable-regex:
+              metavariable: $RE
+              regex: ^(?!(["'](\\.|.)["']|/(\\.|[^/\\])/[a-z]*)$)
+          - focus-metavariable: $X
+      - patterns:
+          - pattern: $RE.$F($X)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(test|exec)$
+          - focus-metavariable: $X
+      - patterns:
+          - pattern-either:
+              - pattern: $FN($X, ...)
+              - pattern: $OBJ.$FN($X, ...)
+          - metavariable-regex:
+              metavariable: $FN
+              # unmask/unredact restore placeholders; they do not filter
+              regex: (?i)^(?!_*un(mask|redact|anonymi))\w*(redact|anonymi[sz]e|scrub|sanitiz|mask|censor|deidentif|desensitiz|filterPii|detectPii|checkPii|scan|moderat)\w*$
+          - focus-metavariable: $X
+    metadata:
+      category: security
+      subcategory: [audit]
+      cwe:
+        - "CWE-693: Protection Mechanism Failure"
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp:
+        - "A04:2021 - Insecure Design"
+        - "LLM02:2025 - Sensitive Information Disclosure"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://cwe.mitre.org/data/definitions/693.html
+        - https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/
+        - https://github.com/mastra-ai/mastra/pull/26082
+      technology: [streaming, llm, redaction, nodejs]
