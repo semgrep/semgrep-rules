@@ -1,0 +1,30 @@
+rules:
+- id: vitejs-process-env-direct-use
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+  paths:
+    include:
+    - vite.config.ts
+    - vite.config.js
+  message: Directly passing `process.env` to ViteJS is dangerous as backend environment
+    variables may be leaked into frontend JS bundles.
+  pattern-regex: '["'']process.env["'']\s*:\s*process.env'
+  fix: '"process.env": {}'
+  metadata:
+    cwe: 'CWE-402: Transmission of Private Resources into a New Sphere (''Resource
+      Leak'')'
+    technology:
+    - javascript
+    references:
+    - https://kawing-ho.github.io/research/posts/footguns-beware/#2-vitejs-processenv-direct-use
+    category: security
+    owasp: A08:2025 Software or Data Integrity Failures
+    confidence: HIGH
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - vuln
+    vulnerability_class: Mishandled Sensitive information
+    source_rule_url: https://kawing-ho.github.io/research/posts/footguns-beware/#2-vitejs-processenv-direct-use
