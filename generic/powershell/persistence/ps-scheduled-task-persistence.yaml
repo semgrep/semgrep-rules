@@ -1,0 +1,31 @@
+rules:
+  - id: ps-scheduled-task-persistence
+    message: >-
+      Scheduled task creation with suspicious action detected (T1053.005).
+      Register-ScheduledTask or New-ScheduledTaskAction combined with an
+      encoded command, download URL, or PowerShell invocation is used for
+      persistent code execution. Scheduled tasks are used by ransomware
+      operators and APT groups for post-exploitation persistence. Review the
+      -Execute and -Argument values of the task action for the full payload.
+    severity: WARNING
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1053/005/
+      technology:
+        - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    pattern-regex: '(?i)(Register-ScheduledTask|New-ScheduledTaskAction|schtasks\s+/create)(.{0,500})(-enc\b|EncodedCommand|http://|https://|DownloadString|powershell\s+-|cmd\s+/c)'
