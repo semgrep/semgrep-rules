@@ -1,0 +1,34 @@
+rules:
+  - id: observability.metrics.metric-name-change
+    message: "Metric name change detected - verify dashboards and alerts are updated before deploying"
+    severity: WARNING
+    languages: [javascript, typescript, python, go]
+    patterns:
+      - pattern-either:
+        - pattern: |
+            metrics.counter("$METRIC_NAME", ...)
+        - pattern: |
+            prometheus.Counter({name: "$METRIC_NAME", ...})
+        - pattern: |
+            statsd.increment("$METRIC_NAME", ...)
+        - pattern: |
+            statsd.counter("$METRIC_NAME", ...)
+        - pattern: |
+            client.increment("$METRIC_NAME", ...)
+        - pattern: |
+            meter.counter("$METRIC_NAME", ...)
+    metadata:
+      category: observability
+      subcategory: metrics
+      impact: dashboard-breaking
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      technology:
+        - metrics
+        - monitoring
+        - observability
+      references:
+        - https://prometheus.io/docs/practices/naming/
+        - https://grafana.com/docs/grafana/latest/dashboards/
+      cwe:
+        - "CWE-778: Insufficient Logging"
