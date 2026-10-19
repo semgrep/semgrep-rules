@@ -1,0 +1,21 @@
+rules:
+  - id: android-webview-file-access
+    message: >-
+      WebView with `setAllowFileAccess(true)` allows access to local files.
+      This can leak sensitive data if untrusted content is loaded. Disable
+      file access unless strictly necessary.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - android
+        - java
+        - kotlin
+      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+    languages:
+      - java
+      - kotlin
+    patterns:
+      - pattern-inside: |
+          $WEBVIEW.getSettings()
+      - pattern: $SETTINGS.setAllowFileAccess(true)
