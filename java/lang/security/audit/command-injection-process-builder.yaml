@@ -41,6 +41,48 @@ rules:
     - pattern-not: |
         $PB.command(Arrays.asList("...",...),...)
   - patterns:
+    - pattern: |
+        $PB.command($CMD,...)
+    - metavariable-pattern:
+        metavariable: $PB
+        patterns:
+        - pattern: |
+            <... new ProcessBuilder(...) ...>
+    - pattern-not: |
+        $PB.command("...",...)
+    - pattern-not: |
+        $PB.command(new String[]{"...",...},...)
+    - pattern-not: |
+        $PB.command(Arrays.asList("...",...),...)
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          $PB.command("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
+      - pattern: |
+          $PB.command("cmd","/c",$ARG,...)
+      - pattern: |
+          $PB.command(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
+      - pattern: |
+          $PB.command(Arrays.asList("cmd","/c",$ARG,...),...)
+      - pattern: |
+          $PB.command(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+      - pattern: |
+          $PB.command(new String[]{"cmd","/c",$ARG,...},...)
+    - metavariable-pattern:
+        metavariable: $PB
+        patterns:
+        - pattern: |
+            <... new ProcessBuilder(...) ...>
+    - pattern-not-inside: |
+        $ARG = "...";
+        ...
+    - pattern-not: |
+        $PB.command("...","...","...",...)
+    - pattern-not: |
+        $PB.command(new String[]{"...","...","...",...},...)
+    - pattern-not: |
+        $PB.command(Arrays.asList("...","...","...",...),...)
+  - patterns:
     - pattern-either:
       - pattern: |
           new ProcessBuilder("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
