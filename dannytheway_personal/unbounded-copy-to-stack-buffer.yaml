@@ -1,0 +1,120 @@
+rules:
+- id: unbounded-copy-to-stack-buffer
+  languages:
+  - cpp
+  severity: ERROR
+  message: The function `$FUN` does not impose any size limitation to what it writes
+    to `$BUF`. That may lead to a stack buffer overflow if there is no validation
+    on the size of the input.
+  patterns:
+  - pattern-inside: |-
+      $TY $BUF[$SIZE];
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern: <... $FUN($BUF, $STR) ...>
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: strcpy
+            - pattern: std::strcpy
+      - focus-metavariable: $FUN
+    - patterns:
+      - pattern: <... $FUN($BUF) ...>
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: gets
+            - pattern: std::gets
+      - focus-metavariable: $FUN
+    - patterns:
+      - pattern: <... $FUN($STDIN, "$FMT_STRING", ..., <... $BUF ...>) ...>
+      - metavariable-regex:
+          metavariable: $FMT_STRING
+          regex: ^(%l?s.*|.*[^%]%l?s.*)$
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: fscanf
+            - pattern: std::fscanf
+            - pattern: sscanf
+            - pattern: std::sscanf
+            - pattern: fwscanf
+            - pattern: std::fwscanf
+            - pattern: swscanf
+            - pattern: std::swscanf
+      - focus-metavariable: $FUN
+    - patterns:
+      - pattern: <... $FUN($BUF, "$FMT_STRING", ...) ...>
+      - metavariable-regex:
+          metavariable: $FMT_STRING
+          regex: ^(%l?s.*|.*[^%]%l?s.*)$
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: sprintf
+            - pattern: std::sprintf
+            - pattern: swprintf
+            - pattern: std::swprintf
+      - focus-metavariable: $FUN
+    - patterns:
+      - pattern: <... $FUN($SOURCE, "$FMT_STRING", $VA) ...>
+      - pattern-inside: |-
+          va_start($VA, $BUF);
+          ...
+          <... $FUN($SOURCE, "$FMT_STRING", $VA) ...>;
+      - metavariable-regex:
+          metavariable: $FMT_STRING
+          regex: ^(%l?s.*|.*[^%]%l?s.*)$
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: vfscanf
+            - pattern: std::vfscanf
+      - focus-metavariable: $FUN
+    - patterns:
+      - pattern: <... $FUN("$FMT_STRING", $VA) ...>
+      - pattern-inside: |-
+          va_start($VA, $BUF);
+          ...
+          <... $FUN("$FMT_STRING", $VA) ...>;
+      - metavariable-regex:
+          metavariable: $FMT_STRING
+          regex: ^(%l?s.*|.*[^%]%l?s.*)$
+      - metavariable-pattern:
+          metavariable: $FUN
+          patterns:
+          - pattern-either:
+            - pattern: vscanf
+            - pattern: std::vscanf
+      - focus-metavariable: $FUN
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    subcategory:
+    - vuln
+    cert:
+    - C
+    - C++
+    - L1
+    - STR31-C
+    cwe:
+    - 'CWE-120: Buffer Copy without Checking Size of Input (''Classic Buffer Overflow'')'
+    display-name: Buffer Overflow
+    functional-categories:
+    - memory::sink::buffer-overflow
+    references:
+    - https://wiki.sei.cmu.edu/confluence/display/c/STR31-C.+Guarantee+that+storage+for+strings+has+sufficient+space+for+character+data+and+the+null+terminator
+    technology:
+    - cpp
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Other
+  min-version: 1.59.0
