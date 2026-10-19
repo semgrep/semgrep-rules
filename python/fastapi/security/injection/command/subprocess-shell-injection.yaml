@@ -1,0 +1,61 @@
+rules:
+  - id: subprocess-shell-injection
+    languages:
+      - python
+    severity: ERROR
+    message: >
+      Detected user-controlled input from a FastAPI route passed to a subprocess
+      call with `shell=True`. This allows an attacker to inject arbitrary OS
+      commands. Pass arguments as a list and remove `shell=True`, or use
+      `shlex.quote()` to sanitize the input before use.
+    metadata:
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://owasp.org/www-community/attacks/Command_Injection
+        - https://docs.python.org/3/library/subprocess.html#security-considerations
+      category: security
+      technology:
+        - fastapi
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-either:
+      # subprocess.run / call / check_call / check_output with shell=True and f-string
+      - patterns:
+          - pattern: subprocess.$FUNC(<... shell=True ...>, ...)
+          - pattern-either:
+              - pattern-inside: |
+                  @$APP.$METHOD($ROUTE)
+                  async def $HANDLER(..., $INPUT: $TYPE, ...):
+                    ...
+                    subprocess.$FUNC(<... $INPUT ...>, shell=True, ...)
+              - pattern-inside: |
+                  @$APP.$METHOD($ROUTE)
+                  def $HANDLER(..., $INPUT: $TYPE, ...):
+                    ...
+                    subprocess.$FUNC(<... $INPUT ...>, shell=True, ...)
+          - pattern-not: subprocess.$FUNC([...], shell=True, ...)
+
+      # subprocess.Popen with shell=True and route param
+      - patterns:
+          - pattern: subprocess.Popen(<... shell=True ...>, ...)
+          - pattern-either:
+              - pattern-inside: |
+                  @$APP.$METHOD($ROUTE)
+                  async def $HANDLER(..., $INPUT: $TYPE, ...):
+                    ...
+                    subprocess.Popen(<... $INPUT ...>, shell=True, ...)
+              - pattern-inside: |
+                  @$APP.$METHOD($ROUTE)
+                  def $HANDLER(..., $INPUT: $TYPE, ...):
+                    ...
+                    subprocess.Popen(<... $INPUT ...>, shell=True, ...)
+          - pattern-not: subprocess.Popen([...], shell=True, ...)
