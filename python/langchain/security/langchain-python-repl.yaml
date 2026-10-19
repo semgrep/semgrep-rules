@@ -1,0 +1,45 @@
+rules:
+- id: langchain-python-repl
+  metadata:
+    owasp:
+    - A03:2021 - Injection
+    - A03:2025 - Injection
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code'
+    - 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code'
+    references:
+    - https://python.langchain.com/docs/security/
+    - https://python.langchain.com/api_reference/experimental/tools/langchain_experimental.tools.python.tool.PythonREPLTool.html
+    category: security
+    technology:
+    - python
+    - langchain
+    - llm
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: LOW
+    vulnerability_class:
+    - Code Injection
+  languages:
+    - python
+  message: >-
+    `PythonREPLTool`, `PythonAstREPLTool`, and the underlying
+    `PythonREPL` primitive execute language-model output as Python
+    inside the host process. The default constructor does not sandbox
+    the execution. Passing a `globals` or `locals` dict does not
+    sandbox either, as dunder traversal reaches the builtins.
+    Instead, run tool calls in a subprocess with `seccomp`, `gVisor`,
+    or `Firecracker`, or hand the code off to a dedicated
+    code-execution service (an ephemeral Jupyter kernel per session).
+    Do not rely on the `globals={}` argument as a security boundary.
+  severity: WARNING
+  patterns:
+  - pattern-either:
+    - pattern: PythonREPL(...)
+    - pattern: PythonREPLTool(...)
+    - pattern: PythonAstREPLTool(...)
+    - pattern: langchain_experimental.tools.python.tool.PythonREPLTool(...)
+    - pattern: langchain_experimental.utilities.python.PythonREPL(...)
+    - pattern: langchain_experimental.tools.PythonREPLTool(...)
