@@ -246,3 +246,22 @@ with engine.connect() as connection:
   ]
   # ruleid: sqlalchemy-execute-raw-query
   connection.execute(stmt, values)
+
+##########################################################################
+# Query built only from constants
+##########################################################################
+
+SCHEMA = "app"
+
+def migrate(engine):
+    # ok: sqlalchemy-execute-raw-query
+    engine.execute(f"DROP TYPE IF EXISTS {SCHEMA}.status_enum")
+    # ok: sqlalchemy-execute-raw-query
+    engine.execute("SELECT * FROM " + SCHEMA + ".person")
+    query = f"SELECT * FROM {SCHEMA}.person"
+    # ok: sqlalchemy-execute-raw-query
+    engine.execute(query)
+
+def drop_type(engine, schema):
+    # ruleid: sqlalchemy-execute-raw-query
+    engine.execute(f"DROP TYPE IF EXISTS {schema}.status_enum")
