@@ -20,6 +20,14 @@ public class WeakHashes {
     return hashValue
   }
 
+  public fun md5_lowercase(password: String): ByteArray {
+    // ruleid: use-of-md5
+    val md5Digest: MessageDigest = MessageDigest.getInstance("md5")
+    md5Digest.update(password.getBytes())
+    val hashValue: ByteArray = md5Digest.digest()
+    return hashValue
+  }
+
   public fun md5_digestutil(password: String): ByteArray {
     // ruleid: use-of-md5
     val hashValue: ByteArray = DigestUtils.getMd5Digest().digest(password.getBytes())

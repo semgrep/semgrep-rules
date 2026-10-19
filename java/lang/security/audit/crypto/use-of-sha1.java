@@ -16,6 +16,11 @@ public class Bad {
     return hashValue;
   }
 
+  public void bad3_lowercase() {
+    // ruleid: use-of-sha1
+    java.security.MessageDigest md = java.security.MessageDigest.getInstance("sha-1", "SUN");
+  }
+
   public void bad3() {
     // ruleid: use-of-sha1
     java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA1", "SUN");

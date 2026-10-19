@@ -1,6 +1,10 @@
 rules:
 - id: use-of-blowfish
-  pattern: $CIPHER.getInstance("Blowfish") 
+  patterns:
+  - pattern: $CIPHER.getInstance("$ALG")
+  - metavariable-regex:
+      metavariable: $ALG
+      regex: (?i)^Blowfish$
   metadata:
     functional-categories:
       - 'crypto::search::symmetric-algorithm::javax.crypto'
