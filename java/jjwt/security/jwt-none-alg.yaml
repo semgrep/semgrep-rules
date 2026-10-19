@@ -34,9 +34,5 @@ rules:
   patterns:
   - pattern: |
       io.jsonwebtoken.Jwts.builder();
-  - pattern-not-inside: |-
-      $RETURNTYPE $FUNC(...) {
-        ...
-        $JWTS.signWith(...);
-        ...
-      }
+  - pattern-not-inside: |
+      io.jsonwebtoken.Jwts.builder().....signWith(...);
