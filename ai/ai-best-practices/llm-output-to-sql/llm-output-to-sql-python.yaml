@@ -1,0 +1,44 @@
+rules:
+  - id: llm-output-to-sql-python
+    mode: taint
+    languages: [python]
+    severity: ERROR
+    message: >-
+      LLM API response data flows into a raw SQL query. A compromised or
+      manipulated LLM response (e.g. via prompt injection or RAG context
+      poisoning) can inject SQL and read, modify, or destroy data. Never build
+      SQL by interpolating LLM output; use parameterized queries / bound
+      parameters and validate the model output first.
+    metadata:
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      category: security
+      confidence: HIGH
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [openai, anthropic, gemini, langchain]
+      owasp:
+        - "A03:2021 - Injection"
+      vulnerability_class:
+        - "SQL Injection"
+      references:
+        - https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+    pattern-sources:
+      - pattern: $CLIENT.chat.completions.create(...)
+      - pattern: $CLIENT.messages.create(...)
+      - pattern: $MODEL.generate_content(...)
+      - pattern: $CLIENT.chat(...)
+      - pattern: $LLM.invoke(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: $CURSOR.execute($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $CURSOR.executemany($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: sqlalchemy.text($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $MODEL.objects.raw($SINK, ...)
+          - focus-metavariable: $SINK
