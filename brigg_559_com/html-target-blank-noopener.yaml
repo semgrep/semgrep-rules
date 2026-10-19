@@ -1,0 +1,28 @@
+rules:
+- id: html-target-blank-noopener
+  metadata:
+    category: security
+    technology:
+    - html
+    owasp:
+    - A01:2021 - Broken Access Control (reverse tabnabbing risk)
+    cwe:
+    - 'CWE-1022: Use of Weak Link Protection Mechanism'
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: HIGH
+    vulnerability_class:
+    - Reverse-Tabnabbing
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    references:
+    - https://web.dev/external-anchors-use-rel-noopener/
+  message: target="_blank" without rel="noopener" or rel="noreferrer".
+  severity: WARNING
+  languages:
+  - html
+  pattern-regex: (?i)(?<!<!--)(?<!<!-- )<a\b(?=[^>]*\btarget\s*=\s*[\"']_blank[\"'])(?![^>]*\brel\s*=\s*[\"'][^\"']*(?:noopener|noreferrer)[^\"']*[\"'])[^>]*>
+  fix-regex:
+    regex: (<a\b[^>]*target="_blank"[^>]*)(>)
+    replacement: \\1 rel="noopener noreferrer"\\2
