@@ -1,0 +1,190 @@
+rules:
+  - id: netsuite-no-console-log
+    languages:
+      - javascript
+    severity: WARNING
+    message: "**NetSuite Disclosure/Audit Risk:** Use NetSuite's native `N/log`
+      module (`log.debug, log.audit, log.error`) instead of `console.log` for
+      persistent audit trails. Bad if left in Production."
+    pattern: console.log(...)
+    metadata:
+      type: Security
+      category: best-practice
+      risk: Console
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      origami-rationale: console.log is transient and doesn't write to the Execution Log. Using it in production leaves zero audit trail for troubleshooting.
+      technology:
+        - netsuite
+      references:
+        - https://www.origamiprecision.com/
+
+  - id: netsuite-no-record-load-save-in-loop
+    languages:
+      - javascript
+      - typescript
+    message: >
+      **NetSuite Governance Trap:** Performance Risk: Database call (load/save/submit) detected inside a loop. 
+      While small loops in Suitelets with usage-limit checks may be valid, this pattern often leads to SSS_USAGE_LIMIT_EXCEEDED. 
+      Ensure you are either using N/search or have explicit logic to offload to Map/Reduce if governance is low.
+    severity: WARNING
+    metadata:
+      type: Governance
+      category: best-practice
+      risk: Blow-up
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      origami-rationale: Standard O(n) operations become O(n^2) governance killers when inside loops.
+      references:
+        - https://www.origamiprecision.com/
+      technology:
+        - netsuite
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              for (...) { ... }
+          - pattern-inside: |
+              while (...) { ... }
+          - pattern-inside: |
+              $ARRAY.forEach(...)
+      - pattern-either:
+          - pattern: $RECORD.load(...)
+          - pattern: $RECORD.save(...)
+
+  - id: netsuite-unhandled-aftersubmit-try-catch
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+    metadata:
+      type: Reliability
+      category: best-practice
+      risk: Try/Catch
+      license: commons
+      author: Joshua Meiri (Origami Precision, LLC)
+      origami-rationale: Prevents silent crashes that leave integrations or related records in an inconsistent state.
+      technology:
+        - netsuite
+      source_rule_url:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
+      references:
+        - https://www.origamiprecision.com/
+    message: "**NetSuite Reliability Risk:** Root try-catch missing in afterSubmit. 
+             While NetSuite handles uncaught exceptions, explicit error handling allows for better logging, notification of admins, and graceful recovery of side-effects
+             (like integrations or related record updates) that occur post-save."
+    # Removed $(SOMETHING) at the end, makes it trully function level 
+    patterns:
+      - pattern-inside: |
+          function afterSubmit($CONTEXT) {
+            ...
+          }
+      - pattern-not-inside: |
+          function afterSubmit($CONTEXT) {
+            try {
+              ...
+            } catch ($E) {
+              ...
+            }
+          }
+
+  # Add-ons
+  - id: netsuite-unbounded-search
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Scalability
+      author: Based on feedback from r/netsuite
+      origami-rationale: Searches that work in Sandbox with 10 records will timeout in Prod with 10k+ records. Enforcing paged searches prevents this common scalability pitfall.
+    message: "**Scalability Risk:** Unbounded search detected. Always use `.getRange()` or `runPaged()` to prevent script timeouts as the dataset grows in Production."
+    patterns:
+      - pattern-either:
+          - pattern: $SEARCH.run().each(...)
+          - pattern: $SEARCH.run().get(...)
+      - pattern-not: $SEARCH.run().getRange(...)
+      - pattern-not: $SEARCH.runPaged(...)
+
+  - id: netsuite-no-query-search-in-loop
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Performance
+      author: Joshua Meiri (Origami Precision, LLC) and feedback from r/netsuite
+      references: [https://www.origamiprecision.com/]
+      origami-rationale: Search and Query setup have high fixed costs. Running them inside loops creates O(n) performance that can be refactored to O(1) with an 'anyof' filter.
+    message: "**Performance Warning:** N/search or N/query execution detected inside a loop. Consider refactoring to a single search with an 'anyof' filter to save governance."
+    patterns:
+      - pattern-inside: |
+          for (...) { ... }
+      - pattern-either:
+          - pattern: $SEARCH.create(...)
+          - pattern: $QUERY.run(...)
+
+  - id: netsuite-enforce-sri-cdn
+    languages: [javascript, typescript, html]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Security
+      category: best-practice
+      author: Based on feedback from Simon Camilleri
+      origami-rationale: CDN compromises are increasingly common. Subresource Integrity (SRI) allows browsers to verify that the fetched resource has not been tampered with. Enforcing SRI on CDN imports is a critical security measure to protect NetSuite Portals from compromised 3rd-party CDNs injecting malicious JS.
+    message: "**Security Risk:** CDN import missing Subresource Integrity (SRI). Always include 'integrity' and 'crossorigin' attributes for external libraries."
+    patterns:
+      - pattern-regex: '<script[^>]+src=["''](http|https)://[^"'']+["''](?![^>]*integrity=)[^>]*>'
+
+  - id: netsuite-no-generic-custom-ids
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Maintainability
+      author: Joshua Meiri (Origami Precision, LLC) and feedback from Craig Silk
+      references: [https://www.origamiprecision.com/]
+      origami-rationale: Generic IDs are "technical debt" that make the codebase unreadable for future devs. Descriptive slugs improve readability and maintainability, making it clear what each record represents without needing to cross-reference the NetSuite UI.
+    message: "**Architecture Risk:** Generic NetSuite ID detected ('$ID'). Avoid auto-generated IDs like 'custrecord123'. Use descriptive slugs (e.g., custrecord_op_vendor_tier)."
+    patterns:
+      - pattern-regex: '(?i)cust(record|body|item|entity|script|entry)\d+'
+
+  - id: netsuite-hardcoded-internal-id
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Reliability
+      author: Joshua Meiri (Origami Precision, LLC)
+      references: [https://www.origamiprecision.com/]
+      origami-rationale: Hardcoded Internal IDs are the No. 1 reason scripts fail during deployment to new environments. Using Script Parameters or descriptive Script IDs ensures that your code is portable and doesn't break when moving from Sandbox to Production, where Internal IDs often differ.
+    message: "**Portability Risk:** Hardcoded Internal ID detected. Internal IDs change across environments (Sandbox to Prod). Use Script Parameters or descriptive Script IDs instead."
+    patterns:
+      - pattern-either:
+          - pattern: "record.load({..., id: $ID, ...})"
+          - pattern: "$V: $ID"
+      - metavariable-regex:
+          metavariable: $ID
+          # Refined regex: strictly 4+ digits to avoid flagging 0, 1, 10, etc.
+          regex: '^\d{4,10}$'
+      - pattern-not: "{..., start: $ID, ...}"
+      - pattern-not: "{..., end: $ID, ...}"
+
+  - id: netsuite-prefer-submit-fields
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      technology: [netsuite]
+      type: Performance
+      author: Joshua Meiri (Origami Precision, LLC) and based on feedback from Stephen Lemp
+      origami-rationale: Loading a full object when only a single field needs updating is high-overhead.
+    message: "**Optimization Opportunity:** record.load/save detected for body field updates. If you are only updating body fields (no sublists), use `record.submitFields()` instead to save 10-20x governance units and CPU time."
+    patterns:
+      - pattern: |
+          var $REC = record.load(...);
+          ...
+          $REC.setValue(...);
+          ...
+          $REC.save();
+      - pattern-not: |
+          ...
+          $REC.insertLine(...)
+          ...
