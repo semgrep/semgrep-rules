@@ -22,13 +22,25 @@ rules:
     confidence: MEDIUM
   message: >-
     Detected anonymous LDAP bind.
-    This permits anonymous users to execute LDAP statements. Consider enforcing
-    authentication for LDAP. See https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
+    Setting SECURITY_AUTHENTICATION to "none" permits anonymous users to execute
+    LDAP statements. Consider enforcing authentication for LDAP. See
+    https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
     for more information.
   severity: WARNING
-  pattern: |
-    $ENV.put($CTX.SECURITY_AUTHENTICATION, "none")
-    ...
-    $DCTX = InitialDirContext($ENV, ...)
+  # Match the "none" assignment on its own instead of requiring the
+  # InitialDirContext call in the same function (see #3758).
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: $ENV.$PUT($CTX.SECURITY_AUTHENTICATION, "none")
+      - pattern: $ENV.$PUT(SECURITY_AUTHENTICATION, "none")
+      - pattern: $ENV.$PUT("java.naming.security.authentication", "none")
+    - metavariable-regex:
+        metavariable: $PUT
+        regex: ^(put|setProperty)$
+  # idiomatic Kotlin: indexed set and mapOf(... to ...)
+  - pattern: $ENV[$CTX.SECURITY_AUTHENTICATION] = "none"
+  - pattern: $ENV[SECURITY_AUTHENTICATION] = "none"
+  - pattern: $CTX.SECURITY_AUTHENTICATION to "none"
   languages:
   - kt
