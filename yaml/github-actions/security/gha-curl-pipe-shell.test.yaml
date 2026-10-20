@@ -57,3 +57,18 @@ jobs:
           curl -fsSL https://example.com/install.sh -o /tmp/install.sh
           sha256sum /tmp/install.sh
           bash /tmp/install.sh
+
+      - name: curl pipe bash after another command
+        # ruleid: gha-curl-pipe-shell
+        run: |
+          echo "installing the toolchain"
+          curl -fsSL https://example.com/install.sh | bash
+
+      - name: GitHub expressions and no download
+        # ok: gha-curl-pipe-shell
+        run: |
+          ${{ env.PRERELEASE_FLAG }} ${{ env.LATEST_FLAG }}
+
+      - name: double-quoted scalar with an escaped line break
+        # ruleid: gha-curl-pipe-shell
+        run: "echo installing\ncurl -fsSL https://example.com/install.sh | bash"

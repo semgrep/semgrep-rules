@@ -34,6 +34,9 @@ rules:
       - run: ...
         ...
   - pattern: 'run: $SHELL'
+  - metavariable-regex:
+      metavariable: $SHELL
+      regex: (?s).*?(curl|wget)
   - metavariable-pattern:
       language: bash
       metavariable: $SHELL
