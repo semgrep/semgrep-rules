@@ -1,0 +1,53 @@
+rules:
+- id: php-session-upload-progress-enabled
+  patterns:
+  - pattern-either:
+    # php.ini / conf.d, including the stock commented-out default (still On)
+    - pattern-regex: (?im)^[ \t]*;?[ \t]*session\.upload_progress\.enabled[ \t]*=[ \t]*["']?(1|on|true|yes)["']?[ \t]*$
+    # PHP-FPM pool: php_value[...] / php_admin_value[...] / php_flag[...]
+    - pattern-regex: (?i)php_(admin_)?(value|flag)\[session\.upload_progress\.enabled\][ \t]*=[ \t]*["']?(1|on|true|yes)\b
+    # Apache mod_php: php_value / php_admin_flag ... in a vhost or .htaccess
+    - pattern-regex: (?i)\bphp_(admin_)?(value|flag)[ \t]+session\.upload_progress\.enabled[ \t]+["']?(1|on|true|yes)\b
+  languages:
+  - generic
+  severity: ERROR
+  message: >-
+    `session.upload_progress.enabled` is on (explicitly, or commented out, which leaves PHP's
+    default of On). The session upload progress handler runs while PHP parses a multipart
+    request, before any application code, and is the entry point for CVE-2026-109619
+    (stale request state reused across requests, leading to RCE). Upgrade to PHP 8.2.35,
+    8.3.36, 8.4.27, 8.5.12 or later. Until then, set `session.upload_progress.enabled = Off`
+    in php.ini, the PHP-FPM pool, or the web server config, and restart all workers.
+    `ini_set()` and `.user.ini` do not take effect early enough.
+  paths:
+    include:
+    - '*.ini'
+    - '*.conf'
+    - '*.vhost'
+    - '.htaccess'
+    - '**/php-fpm.d/*'
+    - '**/pool.d/*'
+    - '**/sites-available/*'
+    - '**/sites-enabled/*'
+    exclude:
+    - '*.user.ini'
+  metadata:
+    cwe:
+    - 'CWE-416: Use After Free'
+    references:
+    - https://www.php.net/archive/2026.php#2026-10-20-1
+    - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+    - https://www.php.net/manual/en/session.configuration.php#ini.session.upload-progress.enabled
+    category: security
+    technology:
+    - php
+    - php-fpm
+    - apache
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
