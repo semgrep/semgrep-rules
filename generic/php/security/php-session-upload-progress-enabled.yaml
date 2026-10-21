@@ -18,7 +18,8 @@ rules:
     (stale request state reused across requests, leading to RCE). Upgrade to PHP 8.2.35,
     8.3.36, 8.4.27, 8.5.12 or later. Until then, set `session.upload_progress.enabled = Off`
     in php.ini, the PHP-FPM pool, or the web server config, and restart all workers.
-    `ini_set()` and `.user.ini` do not take effect early enough.
+    `ini_set()` and `.user.ini` do not take effect early enough. This blocks the confirmed
+    session paths but not other variants, so it does not replace the update.
   paths:
     include:
     - '*.ini'
@@ -35,7 +36,7 @@ rules:
     cwe:
     - 'CWE-416: Use After Free'
     references:
-    - https://www.php.net/archive/2026.php#2026-10-20-1
+    - https://www.php.net/archive/2026.php#2026-10-21-5
     - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
     - https://www.php.net/manual/en/session.configuration.php#ini.session.upload-progress.enabled
     category: security
