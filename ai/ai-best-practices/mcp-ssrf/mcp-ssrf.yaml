@@ -6,8 +6,10 @@ rules:
     message: >-
       User input from an MCP tool handler flows into an HTTP request URL without
       validation. An attacker could supply internal network URLs to access
-      internal services (SSRF). Validate and restrict URLs with an allowlist
-      or parse with urllib.parse.urlparse() before making requests.
+      internal services (SSRF). Validate and restrict URLs with an allowlist:
+      parse the URL with urllib.parse.urlparse() and check its hostname
+      against the allowlist before making requests — parsing alone does not
+      prevent SSRF.
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       category: security
@@ -42,4 +44,21 @@ rules:
           - pattern: urllib.request.urlopen($SINK)
           - focus-metavariable: $SINK
     pattern-sanitizers:
-      - pattern: urllib.parse.urlparse(...)
+      # Parsing a URL does not validate it: only treat a parsed URL as
+      # sanitized when its hostname is also checked against an allowlist.
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = urllib.parse.urlparse(...)
+              ...
+              if $P.hostname in $ALLOWLIST:
+                ...
+      - patterns:
+          - pattern: $P
+          - pattern-inside: |
+              $P = urllib.parse.urlparse(...)
+              ...
+              if $P.hostname not in $ALLOWLIST:
+                ...
+                raise ...
+              ...
