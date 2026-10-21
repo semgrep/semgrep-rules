@@ -111,23 +111,74 @@ rules:
         - pattern-not: subprocess.SubprocessError(...)
         - pattern: subprocess.$FUNC($CMD, ...)
       - patterns:
-        - pattern-not: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...)
-        - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c", $CMD)
+        - pattern-not: subprocess.$FUNC(args="...", ...)
+        - pattern-not: subprocess.$FUNC(args=["...",...], ...)
+        - pattern-not: subprocess.$FUNC(args=("...",...), ...)
+        - pattern: subprocess.$FUNC(args=$CMD, ...)
       - patterns:
-        - pattern-not: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...],...)
-        - pattern-not: subprocess.$FUNC(("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c","...",...),...)
+        - pattern-not: subprocess.$FUNC("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...)
+        - pattern: subprocess.$FUNC("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...)
+      - patterns:
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...), ...)
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...), ...)
         - pattern-either:
-          - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c", $CMD], ...)
-          - pattern: subprocess.$FUNC(("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c", $CMD), ...)
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...), ...)
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...), ...)
       - patterns:
-        - pattern-not: subprocess.$FUNC("=~/(python)/","...",...)
-        - pattern: subprocess.$FUNC("=~/(python)/", $CMD)
-      - patterns:
-        - pattern-not: subprocess.$FUNC(["=~/(python)/","...",...],...)
-        - pattern-not: subprocess.$FUNC(("=~/(python)/","...",...),...)
+        - pattern-not: subprocess.$FUNC(["...", "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...], ..., executable="=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ...)
+        - pattern-not: subprocess.$FUNC(("...", "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...), ..., executable="=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ...)
         - pattern-either:
-          - pattern: subprocess.$FUNC(["=~/(python)/", $CMD],...)
-          - pattern: subprocess.$FUNC(("=~/(python)/", $CMD),...)
+          - pattern: subprocess.$FUNC([..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...], ..., executable="=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ...)
+          - pattern: subprocess.$FUNC((..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...), ..., executable="=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ...)
+      - patterns:
+        - pattern-not: subprocess.$FUNC("=~/^(.*\\/)?python[0-9.]*$/","...",...)
+        - pattern: subprocess.$FUNC("=~/^(.*\\/)?python[0-9.]*$/", $CMD)
+      - patterns:
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?python[0-9.]*$/","...",...],...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?python[0-9.]*$/","...",...),...)
+        - pattern-either:
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?python[0-9.]*$/", $CMD],...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?python[0-9.]*$/", $CMD),...)
+      - patterns:
+        - pattern-not: subprocess.$FUNC("=~/^(.*\\/)?python[0-9.]*$/", "-c", "...", ...)
+        - pattern-not: subprocess.$FUNC("=~/^(.*\\/)?node$/", "-e", "...", ...)
+        - pattern-not: subprocess.$FUNC("=~/^(.*\\/)?perl[0-9.]*$/", "-e", "...", ...)
+        - pattern-either:
+          - pattern: subprocess.$FUNC("=~/^(.*\\/)?python[0-9.]*$/", "-c", $CMD, ...)
+          - pattern: subprocess.$FUNC("=~/^(.*\\/)?node$/", "-e", $CMD, ...)
+          - pattern: subprocess.$FUNC("=~/^(.*\\/)?perl[0-9.]*$/", "-e", $CMD, ...)
+      - patterns:
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?python[0-9.]*$/", "-c", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?python[0-9.]*$/", "-c", "...", ...), ...)
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?node$/", "-e", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?node$/", "-e", "...", ...), ...)
+        - pattern-not: subprocess.$FUNC(["=~/^(.*\\/)?perl[0-9.]*$/", "-e", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(("=~/^(.*\\/)?perl[0-9.]*$/", "-e", "...", ...), ...)
+        - pattern-either:
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?python[0-9.]*$/", "-c", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?python[0-9.]*$/", "-c", $CMD, ...), ...)
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?node$/", "-e", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?node$/", "-e", $CMD, ...), ...)
+          - pattern: subprocess.$FUNC(["=~/^(.*\\/)?perl[0-9.]*$/", "-e", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(("=~/^(.*\\/)?perl[0-9.]*$/", "-e", $CMD, ...), ...)
+      - patterns:
+        - pattern-not: subprocess.$FUNC(args=["=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(args=("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...), ...)
+        - pattern-not: subprocess.$FUNC(args=["=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(args=["=~/^(.*\\/)?python[0-9.]*$/", "-c", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(args=["=~/^(.*\\/)?node$/", "-e", "...", ...], ...)
+        - pattern-not: subprocess.$FUNC(args=["=~/^(.*\\/)?perl[0-9.]*$/", "-e", "...", ...], ...)
+        - pattern-either:
+          - pattern: subprocess.$FUNC(args=["=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(args=("=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...), ...)
+          - pattern: subprocess.$FUNC(args=["=~/^(.*\\/)?env$/", ..., "=~/^(.*\\/)?(sh|bash|ksh|csh|tcsh|zsh)$/", ..., "=~/^-[a-zA-Z]*c[a-zA-Z]*$/", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(args=["=~/^(.*\\/)?python[0-9.]*$/", "-c", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(args=["=~/^(.*\\/)?node$/", "-e", $CMD, ...], ...)
+          - pattern: subprocess.$FUNC(args=["=~/^(.*\\/)?perl[0-9.]*$/", "-e", $CMD, ...], ...)
     - focus-metavariable: $CMD
   message: >-
     Detected subprocess function '$FUNC' with user controlled data. A malicious actor
