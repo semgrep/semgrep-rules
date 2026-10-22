@@ -33,6 +33,9 @@ rules:
       - run: ...
         ...
   - pattern: 'run: $SHELL'
+  - metavariable-regex:
+      metavariable: $SHELL
+      regex: (?s).*?curl.*eval
   - metavariable-pattern:
       language: bash
       metavariable: $SHELL
