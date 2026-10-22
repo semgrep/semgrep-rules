@@ -1,0 +1,40 @@
+rules:
+  - id: ai-rules-file-backdoor-generic
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      An instruction targets an AI coding-assistant rules file (.cursorrules, .clinerules,
+      CLAUDE.md, copilot-instructions.md, aider.conf, windsurf.rules) and pairs it with an
+      exfiltration or injection directive: emit a script tag into generated code, post file
+      contents to a webhook, log credentials when the user asks for auth code, or pull in a
+      malicious dependency. This is the rules-file backdoor supply-chain attack, where the
+      assistant is silently re-programmed to poison everything it generates. Reject the change
+      and review the rules-file history. This differs from a hidden-Unicode rules-file rule;
+      here the backdoor is plain readable text combining a rules-file path with a malicious
+      behavioral directive. Benign rules-file edits set style preferences (TypeScript, ESLint,
+      naming conventions) with no send or inject verb.
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: HIGH
+      impact: HIGH
+      technology: [claude-code, cursor]
+      owasp:
+        - "LLM01:2025 Prompt Injection"
+      references:
+        - https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents
+        - https://github.com/Agent-Threat-Rule/agent-threat-rules/blob/main/rules/prompt-injection/ATR-2026-00512-rules-file-backdoor-injection.yaml
+      source-rule-url: https://github.com/Agent-Threat-Rule/agent-threat-rules/blob/main/rules/prompt-injection/ATR-2026-00512-rules-file-backdoor-injection.yaml
+    paths:
+      include:
+        - "*.md"
+        - "*.mdc"
+        - "*.txt"
+        - ".cursorrules"
+        - ".clinerules"
+        - ".windsurfrules"
+    patterns:
+      - pattern-regex: >-
+          (?i)(?:(?:\b(?:add\s+to|update|modify|edit|write\s+to|append\s+to|insert\s+in|inject\s+into|change)\s+.{0,30}(?:\.cursorrules|\.clinerules|\.continuerc|\.codeium|claude\.md|copilot[-._]instructions\.md|copilot[/-]instructions|aider\.conf|\.aiderignore|cursor\.rules|windsurf\.rules|\.github/copilot)\b)|(?:\b(?:in|to)\s+(?:\.cursorrules|\.clinerules|\.continuerc|\.codeium|claude\.md|copilot[-._]instructions\.md|copilot[/-]instructions|aider\.conf|\.aiderignore|cursor\.rules|windsurf\.rules|\.github/copilot).{0,20}(?:add|update|modify|insert|inject|append|include)\s*:?)).{0,200}(?:exfiltrate|send\s+its\s+contents|post\s+to|forward\s+to|webhook|<script|curl|fetch\s*\(|eval\s*\(|exec|spawn|rm\s+-rf|credentials?|api\s+key|ssh\s+key|password|token|malicious|backdoor)|(?i)\bwhenever\s+(?:the\s+)?user\s+(?:asks?|mentions?|requests?|says?|types?|inputs?|provides?).{0,60}\b(?:credentials?|passwords?|tokens?|api\s+keys?|ssh\s+keys?|secrets?|auth\s*(?:entication)?|login|2fa|mfa|otp)\b.{0,100}(?:log|send|forward|post|upload|exfiltrate|save\s+to|transmit|collect|capture|record)
