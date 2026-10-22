@@ -1,0 +1,27 @@
+rules:
+  - id: php-version-usage
+    languages:
+      - dockerfile
+    severity: ERROR
+    message: >-
+      This Dockerfile uses a PHP version with known critical vulnerabilities. Update to a secure PHP version as soon as possible.
+    metadata:
+      category: security
+      subcategory:
+        - vuln
+      technology:
+      - dockerfile
+      cwe: 
+      - 'CWE-1104: Use of Unmaintained Third Party Components'
+      owasp:
+      - A06:2021 - Vulnerable and Outdated Components
+      references:
+      - https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    patterns:
+      - pattern: FROM php:$PVERSION
+      - metavariable-regex:
+          metavariable: $PVERSION
+          regex: ^(?!(?:8\.5\.12|8\.4\.27|8\.3\.36|8\.2\.35)(?!\d))(?:5\.(?:[4-9]|[1-9]\d+)|(?:[6-9]|[1-9]\d+)(?:\.\d+)?)
