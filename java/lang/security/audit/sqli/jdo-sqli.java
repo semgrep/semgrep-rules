@@ -23,6 +23,13 @@ public class JdoSqlFilter {
         q.setFilter("id == "+filterValue);
     }
 
+    public void testJdoUnsafeFilterFormatted(String filterValue) {
+        PersistenceManager pm = getPM();
+        Query q = pm.newQuery(UserEntity.class);
+        // ruleid: jdo-sqli
+        q.setFilter("id == %s".formatted(filterValue));
+    }
+
     public void testJdoSafeFilter(String filterValue) {
         PersistenceManager pm = getPM();
         Query q = pm.newQuery(UserEntity.class);
@@ -87,10 +94,14 @@ public class JdoSql {
         PersistenceManager pm = getPM();
         // ruleid: jdo-sqli
         pm.newQuery(UserEntity.class,new ArrayList(),"id == "+ input);
+        // ruleid: jdo-sqli
+        pm.newQuery(UserEntity.class,new ArrayList(),"id == %s".formatted(input));
         // ok: jdo-sqli
         pm.newQuery(UserEntity.class,new ArrayList(),"id == 1");
         // ruleid: jdo-sqli
         pm.newQuery(UserEntity.class,"id == "+ input);
+        // ruleid: jdo-sqli
+        pm.newQuery(UserEntity.class,"id == %s".formatted(input));
         // ok: jdo-sqli
         pm.newQuery(UserEntity.class,"id == 1");
         // ruleid: jdo-sqli
