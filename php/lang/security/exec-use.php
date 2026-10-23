@@ -23,3 +23,15 @@ $output = system($user_input, $retval);
 
 // ruleid: exec-use
 pcntl_exec($path);
+
+// ruleid: exec-use
+EXEC($user_input);
+
+// ruleid: exec-use
+\exec($user_input);
+
+// ok: exec-use
+executeTask($job);
+
+// ok: exec-use
+ExecuteTask($job);
