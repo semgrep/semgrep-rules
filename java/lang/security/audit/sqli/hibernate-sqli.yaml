@@ -48,7 +48,14 @@ rules:
           org.hibernate.Session $SESSION = ...;
           ...
       - pattern-inside: |
+          org.hibernate.SharedSessionContract $SESSION = ...;
+          ...
+      - pattern-inside: |
           $TYPE $FUNC(...,org.hibernate.Session $SESSION,...) {
+            ...
+          }
+      - pattern-inside: |
+          $TYPE $FUNC(...,org.hibernate.SharedSessionContract $SESSION,...) {
             ...
           }
     - pattern-not: |
