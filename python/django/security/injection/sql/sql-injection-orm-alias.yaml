@@ -1,0 +1,114 @@
+rules:
+- id: django-orm-alias-injection
+  message: >-
+    Request data is used as a field name or column alias in a Django QuerySet
+    (values(), values_list(), order_by(), or the keyword names passed to
+    annotate(), alias() or aggregate() with ** expansion). Names are written
+    into the SQL as identifiers, which parameter binding does not protect: this
+    is the shape behind CVE-2024-42005 and CVE-2025-57833. Even on a fixed
+    Django, it lets the client choose which columns come back. Map the input
+    through an allowlist of known field names.
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - "A01:2017 - Injection"
+    - "A03:2021 - Injection"
+    - "A05:2025 - Injection"
+    technology:
+    - python
+    - django
+    references:
+    - https://docs.djangoproject.com/en/stable/releases/security/
+    - https://www.djangoproject.com/weblog/2024/aug/06/security-releases/
+    - https://www.djangoproject.com/weblog/2025/sep/03/security-releases/
+    - https://nvd.nist.gov/vuln/detail/CVE-2024-42005
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-57833
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    vulnerability_class:
+    - SQL Injection
+  languages:
+  - python
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: request.$ATTR
+      - pattern: self.request.$ATTR
+    - metavariable-regex:
+        metavariable: $ATTR
+        regex: ^(GET|POST|COOKIES|META|FILES|body|headers|data|query_params)$
+  # URL arguments: the parameters after `request` in a view.
+  - patterns:
+    - pattern-inside: |
+        def $VIEW(request, ..., $PARAM, ...):
+          ...
+    - focus-metavariable: $PARAM
+    - metavariable-regex:
+        metavariable: $VIEW
+        regex: ^(?!test_)
+    - metavariable-regex:
+        metavariable: $PARAM
+        regex: ^(?!(self|request|args|kwargs)$)
+  pattern-sanitizers:
+  # Conversions to a number or a UUID.
+  - pattern-either:
+    - pattern: int(...)
+    - pattern: float(...)
+    - pattern: len(...)
+    - pattern: uuid.UUID(...)
+  # Looking the value up in a constant table (ALLOWED[name], ALLOWED.get(name))
+  # replaces it with a value chosen by the code.
+  - patterns:
+    - pattern-either:
+      - pattern: $TABLE[$KEY]
+      - pattern: $TABLE.get($KEY, ...)
+    - metavariable-regex:
+        metavariable: $TABLE
+        regex: ^[A-Z][A-Z0-9_]*$
+  # A membership test (if name in ALLOWED / if name not in ALLOWED) is how an
+  # allowlist is written; treat the value as checked from there on.
+  - by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: $VALUE in $ALLOWED
+      - pattern: $VALUE not in $ALLOWED
+    - focus-metavariable: $VALUE
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: $QS.values(..., $NAME, ...)
+      - pattern: $QS.values_list(..., $NAME, ...)
+      - pattern: $QS.order_by(..., $NAME, ...)
+    - focus-metavariable: $NAME
+  - patterns:
+    - pattern-either:
+      - pattern: $QS.annotate(..., **$NAMES, ...)
+      - pattern: $QS.alias(..., **$NAMES, ...)
+      - pattern: $QS.aggregate(..., **$NAMES, ...)
+      - pattern: $QS.values(..., **$NAMES, ...)
+    - focus-metavariable: $NAMES
+  # The same through a dict comprehension, whose keys taint does not follow.
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $NAMES = {$KEY: $VALUE for $KEY, $ITEM in $SRC.items()}
+          ...
+          $QS.$METHOD(..., **$NAMES, ...)
+      - pattern-inside: |
+          $NAMES = {$KEY: $VALUE for $KEY in $SRC}
+          ...
+          $QS.$METHOD(..., **$NAMES, ...)
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(annotate|alias|aggregate|values)$
+    - pattern-either:
+      - pattern-inside: '{$KEY: $VALUE for $KEY, $ITEM in $SRC.items()}'
+      - pattern-inside: '{$KEY: $VALUE for $KEY in $SRC}'
+    - pattern: $SRC
