@@ -113,6 +113,11 @@ rules:
                   ...
 
                   $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+              - patterns:
+                  - pattern: $FACTORY.setAttribute($ATTR, "")
+                  - metavariable-regex:
+                      metavariable: $ATTR
+                      regex: ^(javax\.xml\.)?XMLConstants\.ACCESS_EXTERNAL_DTD$|^ACCESS_EXTERNAL_DTD$
             - focus-metavariable: $FACTORY
           - patterns:
               - pattern-either:
