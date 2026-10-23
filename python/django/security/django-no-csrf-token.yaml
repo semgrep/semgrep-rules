@@ -14,6 +14,11 @@ rules:
           regex: (?i)(post|put|delete|patch)
       - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
       - pattern-not-inside: "<form...>...{{ $VAR.csrf_token }}...</form>"
+    options:
+      # the default limit of 10 newlines per ellipsis is smaller than a realistic
+      # form body, which both hides the csrf_token exemption and stops the rule
+      # from matching longer forms at all
+      generic_ellipsis_max_span: 50
     message: Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
     languages: [generic]
     severity: WARNING
