@@ -15,19 +15,19 @@ rules:
     - patterns:
       - pattern-either:
         - pattern: | 
-            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $ARG,...)
+            $RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", ...,$ARG,...)
         - pattern: |
-            $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
+            $RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...,$ARG,...),...)
         - pattern: |
-            $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...},...)
+            $RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",...,$ARG,...},...)
         - patterns:
           - pattern-either:
             - pattern: |
-                $RUNTIME.exec($CMD,"-c",$ARG,...)
+                $RUNTIME.exec($CMD,"-c",...,$ARG,...)
             - pattern: |
-                $RUNTIME.exec(Arrays.asList($CMD,"-c",$ARG,...),...)
+                $RUNTIME.exec(Arrays.asList($CMD,"-c",...,$ARG,...),...)
             - pattern: |
-                $RUNTIME.exec(new String[]{$CMD,"-c",$ARG,...},...)
+                $RUNTIME.exec(new String[]{$CMD,"-c",...,$ARG,...},...)
           - pattern-inside: |
               $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
               ...
@@ -52,12 +52,11 @@ rules:
       - pattern-not-inside: |
           $ARG = "...";
           ...
-      - pattern-not: |
-          $RUNTIME.exec("...","...","...",...)
-      - pattern-not: |
-          $RUNTIME.exec(new String[]{"...","...","...",...},...)
-      - pattern-not: |
-          $RUNTIME.exec(Arrays.asList("...","...","...",...),...)
+      - metavariable-pattern:
+          metavariable: $ARG
+          patterns:
+          - pattern-not: |
+              "..."
   message: >-
     A formatted or concatenated string was detected as input to a java.lang.Runtime
     call.
