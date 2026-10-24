@@ -1,0 +1,64 @@
+rules:
+  - id: bash-reverse-shell
+    message: >-
+      This command opens an interactive shell over a network connection, which can
+      give a remote host control of the machine. Remove the reverse shell and use an
+      authenticated, access-controlled remote administration mechanism instead.
+    severity: ERROR
+    languages:
+      - bash
+    metadata:
+      cwe:
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp:
+        - A03:2021 - Injection
+        - A05:2025 - Injection
+      category: security
+      technology:
+        - bash
+      confidence: HIGH
+      references:
+        - https://attack.mitre.org/techniques/T1059/004/
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      vulnerability_class:
+        - Code Injection
+    pattern-either:
+      - patterns:
+          - pattern-regex: (?m)(?:^|[;&|][&|]?)[\t ]*(?:/bin/)?(?:ba|da|k|z)?sh[\t ]+-[a-zA-Z]*i[a-zA-Z]*[^\n]*(?:>|<&|>&)[^\n]*/dev/(?:tcp|udp)/[^/[:space:]]+/[0-9]+
+          - pattern-not-regex: (?m)^[\t ]*(?:echo|printf)\b[^\n]*(?:'[^'\n]*/dev/(?:tcp|udp)/[^'\n]*'|"[^"\n]*/dev/(?:tcp|udp)/[^"\n]*")[^\n]*$
+      - pattern-regex: (?m)(?:^|[;&|][&|]?)[\t ]*(?:/bin/)?(?:ba|da|k|z)?sh[\t ]+-[a-zA-Z]*c[a-zA-Z]*[\t ]+['"][^\n]*(?:/bin/)?(?:ba|da|k|z)?sh[\t ]+-[a-zA-Z]*i[a-zA-Z]*[^\n]*/dev/(?:tcp|udp)/[^/[:space:]]+/[0-9]+
+      - patterns:
+          - pattern: $NETCAT ... $EXEC $SHELL ...
+          - metavariable-regex:
+              metavariable: $NETCAT
+              regex: ^(?:(?:/usr)?/bin/)?(?:nc|ncat|netcat)$
+          - metavariable-regex:
+              metavariable: $EXEC
+              regex: ^(?:-e|--exec|-c|--sh-exec)$
+          - metavariable-regex:
+              metavariable: $SHELL
+              regex: ^(?:/bin/)?(?:ba|da|k|z)?sh$
+      - patterns:
+          - pattern-either:
+              - pattern: $SHELL -i ... | $NETCAT ...
+              - pattern: ... | $SHELL -i ... | $NETCAT ...
+          - metavariable-regex:
+              metavariable: $SHELL
+              regex: ^(?:/bin/)?(?:ba|da|k|z)?sh$
+          - metavariable-regex:
+              metavariable: $NETCAT
+              regex: ^(?:(?:/usr)?/bin/)?(?:nc|ncat|netcat)$
+      - patterns:
+          - pattern: $SOCAT ... $NETWORK ... $EXEC ...
+          - metavariable-regex:
+              metavariable: $SOCAT
+              regex: ^(?:(?:/usr)?/bin/)?socat$
+          - metavariable-regex:
+              metavariable: $NETWORK
+              regex: ^(?:TCP|UDP|OPENSSL)(?:4|6)?(?::.*)?$
+          - metavariable-regex:
+              metavariable: $EXEC
+              regex: ^EXEC:(?:/bin/)?(?:ba|da|k|z)?sh(?:,.*)?$
