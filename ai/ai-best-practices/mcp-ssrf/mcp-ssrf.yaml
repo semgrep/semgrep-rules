@@ -39,7 +39,46 @@ rules:
           - pattern: requests.delete($SINK, ...)
           - focus-metavariable: $SINK
       - patterns:
+          - pattern: requests.patch($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.head($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.options($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: requests.request($METHOD, $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
           - pattern: urllib.request.urlopen($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.get($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.post($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.put($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.delete($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.patch($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.head($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.options($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.request($METHOD, $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: httpx.stream($METHOD, $SINK, ...)
           - focus-metavariable: $SINK
     pattern-sanitizers:
       - pattern: urllib.parse.urlparse(...)
