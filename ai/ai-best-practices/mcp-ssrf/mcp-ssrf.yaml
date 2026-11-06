@@ -18,6 +18,7 @@ rules:
       technology: [mcp]
       references:
         - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+        - https://docs.aiohttp.org/en/stable/client_reference.html
     pattern-sources:
       - patterns:
           - pattern: |
@@ -40,6 +41,30 @@ rules:
           - focus-metavariable: $SINK
       - patterns:
           - pattern: urllib.request.urlopen($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-inside: |
+              async with aiohttp.ClientSession(...) as $SESSION:
+                  ...
+          - pattern-either:
+              - pattern: $SESSION.$METHOD($SINK, ...)
+              - pattern: $SESSION.$METHOD(url=$SINK, ...)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: '^(get|post|put|patch|delete|head|options)$'
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-inside: |
+              async with aiohttp.ClientSession(...) as $SESSION:
+                  ...
+          - pattern-either:
+              - pattern: $SESSION.request($METHOD, $SINK, ...)
+              - pattern: $SESSION.request(..., url=$SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-either:
+              - pattern: aiohttp.request($METHOD, $SINK, ...)
+              - pattern: aiohttp.request(..., url=$SINK, ...)
           - focus-metavariable: $SINK
     pattern-sanitizers:
       - pattern: urllib.parse.urlparse(...)
