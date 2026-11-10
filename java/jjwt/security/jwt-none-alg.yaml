@@ -34,9 +34,17 @@ rules:
   patterns:
   - pattern: |
       io.jsonwebtoken.Jwts.builder();
-  - pattern-not-inside: |-
-      $RETURNTYPE $FUNC(...) {
-        ...
-        $JWTS.signWith(...);
-        ...
-      }
+  # A signWith() call anywhere in the enclosing method used to suppress
+  # every builder() in that method, which hid unsigned builders in sibling
+  # branches (issue #3759). Instead, require signWith() to be chained on the
+  # same builder, or called on the variable the builder was assigned to.
+  - pattern-not-inside: |
+      io.jsonwebtoken.Jwts.builder(). ... .signWith(...);
+  - pattern-not-inside: |
+      $TYPE $BUILDER = io.jsonwebtoken.Jwts.builder(). ... ;
+      ...
+      $BUILDER. ... .signWith(...);
+  - pattern-not-inside: |
+      $BUILDER = io.jsonwebtoken.Jwts.builder(). ... ;
+      ...
+      $BUILDER. ... .signWith(...);
