@@ -1,5 +1,5 @@
 rules:
-  - id: feature-flag-fails-open
+  - id: guardian-feature-flag-fails-open
     patterns:
       - pattern-either:
           # os.environ.get("X_ENABLED", "true"), flags.get("x_rollout", True), getattr(settings, "X", True)
@@ -38,6 +38,7 @@ rules:
     languages: [python]
     severity: WARNING
     metadata:
+      source: Generated from Guardian AI findings
       category: correctness
       technology:
         - python

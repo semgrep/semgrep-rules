@@ -1,5 +1,5 @@
 rules:
-  - id: blocking-call-in-async-code
+  - id: guardian-blocking-call-in-async-code
     patterns:
       - pattern-inside: |
           async def $FN(...):
@@ -52,6 +52,7 @@ rules:
     languages: [python]
     severity: WARNING
     metadata:
+      source: Generated from Guardian AI findings
       category: correctness
       technology:
         - python

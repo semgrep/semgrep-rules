@@ -1,5 +1,5 @@
 rules:
-  - id: django-session-change-on-get
+  - id: guardian-django-session-change-on-get
     patterns:
       - pattern-either:
           # Class-based view: the get() handler
@@ -59,9 +59,8 @@ rules:
               - metavariable-regex:
                   metavariable: $K
                   regex: (?i).*(user|account|household|org|team|tenant|workspace|member|_auth)
-      - pattern: $SINK
     message: >-
-      '$SINK' changes which user or tenant the session belongs to in a view that
+      This changes which user or tenant the session belongs to in a view that
       also handles GET. Django's CSRF protection does not check GET requests, so
       a link or image on another site can log a victim in or switch their
       session. Only accept this on POST (for example with @require_POST) behind
@@ -69,6 +68,7 @@ rules:
     languages: [python]
     severity: WARNING
     metadata:
+      source: Generated from Guardian AI findings
       category: security
       subcategory:
         - audit

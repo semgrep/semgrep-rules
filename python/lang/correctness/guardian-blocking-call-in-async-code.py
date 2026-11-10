@@ -8,53 +8,53 @@ import requests
 
 
 async def investigate_archive(path):
-    # ruleid: blocking-call-in-async-code
+    # ruleid: guardian-blocking-call-in-async-code
     out = subprocess.run(["unzip", "-l", path], capture_output=True)
     # covered by sync-sleep-in-async-code
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     time.sleep(1)
-    # ruleid: blocking-call-in-async-code
+    # ruleid: guardian-blocking-call-in-async-code
     requests.get("https://example.com")
-    # ruleid: blocking-call-in-async-code
+    # ruleid: guardian-blocking-call-in-async-code
     httpx.post("https://example.com", json={})
     return out
 
 
 async def upload(bucket, key, body):
     s3 = boto3.client("s3")
-    # ruleid: blocking-call-in-async-code
+    # ruleid: guardian-blocking-call-in-async-code
     s3.put_object(Bucket=bucket, Key=key, Body=body)
 
 
 async def popen_wait(cmd):
     p = subprocess.Popen(cmd)
-    # ruleid: blocking-call-in-async-code
+    # ruleid: guardian-blocking-call-in-async-code
     p.wait()
 
 
 async def ok_async(cmd):
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     proc = await asyncio.create_subprocess_exec(*cmd)
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     await asyncio.sleep(1)
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     await asyncio.to_thread(subprocess.run, cmd)
     loop = asyncio.get_running_loop()
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     await loop.run_in_executor(None, lambda: subprocess.run(cmd))
     async with httpx.AsyncClient() as client:
-        # ok: blocking-call-in-async-code
+        # ok: guardian-blocking-call-in-async-code
         await client.get("https://example.com")
 
     def helper():
-        # ok: blocking-call-in-async-code
+        # ok: guardian-blocking-call-in-async-code
         return subprocess.run(cmd)
 
     return await asyncio.to_thread(helper)
 
 
 def sync_is_fine(cmd):
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     subprocess.run(cmd)
-    # ok: blocking-call-in-async-code
+    # ok: guardian-blocking-call-in-async-code
     time.sleep(1)

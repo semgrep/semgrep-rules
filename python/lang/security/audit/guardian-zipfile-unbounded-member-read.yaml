@@ -1,5 +1,5 @@
 rules:
-  - id: zipfile-unbounded-member-read
+  - id: guardian-zipfile-unbounded-member-read
     patterns:
       - pattern-either:
           - patterns:
@@ -32,15 +32,15 @@ rules:
             ...
           else:
             ...
-      - pattern: $EXPR
     message: >-
-      '$EXPR' decompresses the whole ZIP member into memory before any size
+      This read decompresses the whole ZIP member into memory before any size
       check or truncation. A small archive can expand to gigabytes (zip bomb)
       and exhaust memory. Check 'ZipInfo.file_size' first, or stream with
       'with zf.open(name) as f: f.read(LIMIT + 1)'.
     languages: [python]
     severity: WARNING
     metadata:
+      source: Generated from Guardian AI findings
       category: security
       subcategory:
         - audit
