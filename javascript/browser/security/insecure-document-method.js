@@ -26,3 +26,20 @@ function ok2() {
 // ok: insecure-document-method
   document.write("<div>it's ok</div>");
 }
+
+// Preserve the distinct innerHTML cases from the retired rule's fixture.
+function badInnerHtmlDirect(userInput) {
+  // ruleid: insecure-document-method
+  document.body.innerHTML = userInput;
+}
+
+function badInnerHtmlAlias(userInput) {
+  const name = '<div>' + userInput + '</div>';
+  // ruleid: insecure-document-method
+  document.body.innerHTML = name;
+}
+
+function okInnerHtmlLiteral() {
+  // ok: insecure-document-method
+  document.body.innerHTML = "<div>it's ok</div>";
+}
