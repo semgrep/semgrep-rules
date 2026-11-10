@@ -1,0 +1,45 @@
+rules:
+  - id: guardian-hardcoded-tenant-id-special-case
+    paths:
+      exclude:
+        - "**/test/**"
+        - "**/tests/**"
+        - "**/test_*.py"
+        - "**/*_test.py"
+        - "**/conftest.py"
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: $ID == $LIT
+                  - pattern: $LIT == $ID
+                  - pattern: $ID != $LIT
+                  - pattern: $LIT != $ID
+              - metavariable-regex:
+                  metavariable: $LIT
+                  regex: ^(\d+|['"]?[0-9a-fA-F-]{4,}['"]?)$
+          - patterns:
+              - pattern-either:
+                  - pattern: $ID in [$LIT, ...]
+                  - pattern: $ID in ($LIT, ...)
+                  - pattern: $ID in {$LIT, ...}
+                  - pattern: $ID not in [$LIT, ...]
+                  - pattern: $ID not in ($LIT, ...)
+                  - pattern: $ID not in {$LIT, ...}
+              - metavariable-regex:
+                  metavariable: $LIT
+                  regex: ^(\d+|['"]?[0-9a-fA-F-]{4,}['"]?)$
+      - metavariable-regex:
+          metavariable: $ID
+          regex: (?i)^(.*[._])?(deployment|org|organization|tenant|customer|account)(_|\.)?id$
+    message: >-
+      '$ID' is compared against a hard-coded ID. Per-customer special cases in
+      code are easy to forget, drift silently and can leak behavior across
+      tenants. Move the override into a feature flag or a per-tenant setting.
+      Generated from Guardian AI findings.
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: maintainability
+      technology:
+        - python

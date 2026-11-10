@@ -1,0 +1,61 @@
+rules:
+  - id: guardian-blocking-call-in-async-code
+    patterns:
+      - pattern-inside: |
+          async def $FN(...):
+            ...
+      # Code in a nested sync def or lambda runs wherever it is called
+      # (often in an executor), not on the event loop.
+      - pattern-not-inside: |
+          async def $FN(...):
+            ...
+            def $INNER(...):
+              ...
+      - pattern-not-inside: "lambda $...ARGS: $BODY"
+      # time.sleep is covered by sync-sleep-in-async-code.
+      - pattern-either:
+          - patterns:
+              - pattern: subprocess.$SUB(...)
+              - metavariable-regex:
+                  metavariable: $SUB
+                  regex: ^(run|call|check_call|check_output|getoutput|getstatusoutput)$
+          - pattern: os.system(...)
+          - pattern: os.popen(...)
+          - pattern: os.waitpid(...)
+          - pattern: requests.$M(...)
+          - pattern: requests.Session().$M(...)
+          - pattern: urllib.request.urlopen(...)
+          - patterns:
+              - pattern: httpx.$HM(...)
+              - metavariable-regex:
+                  metavariable: $HM
+                  regex: ^(get|post|put|patch|delete|head|options|request|stream)$
+          - pattern: boto3.$CL(...).$M(...)
+          - patterns:
+              - pattern-inside: |
+                  $C = boto3.$CL(...)
+                  ...
+              - pattern: $C.$M(...)
+          - patterns:
+              - pattern-inside: |
+                  $P = subprocess.Popen(...)
+                  ...
+              - pattern-either:
+                  - pattern: $P.wait(...)
+                  - pattern: $P.communicate(...)
+      - pattern: $CALL(...)
+    message: >-
+      Blocking call '$CALL' inside 'async def $FN'. It stalls the event loop, so
+      every other coroutine waits until it returns. Use the async equivalent
+      (asyncio.create_subprocess_exec, httpx.AsyncClient, aioboto3) or offload it
+      with 'await asyncio.to_thread(...)'.
+      Generated from Guardian AI findings.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - python
+        - asyncio
+      references:
+        - https://docs.python.org/3/library/asyncio-dev.html#running-blocking-code

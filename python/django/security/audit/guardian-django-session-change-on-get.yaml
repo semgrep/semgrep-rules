@@ -1,0 +1,86 @@
+rules:
+  - id: guardian-django-session-change-on-get
+    patterns:
+      - pattern-either:
+          # Class-based view: the get() handler
+          - pattern-inside: |
+              def get(self, $REQ, ...):
+                ...
+          # Function view not restricted to POST
+          - patterns:
+              - pattern-inside: |
+                  def $VIEW($REQ, ...):
+                    ...
+              - metavariable-regex:
+                  metavariable: $REQ
+                  regex: ^(request|req)$
+              - pattern-not-inside: |
+                  @require_POST
+                  def $VIEW(...):
+                    ...
+              - pattern-not-inside: |
+                  @$D.require_POST
+                  def $VIEW(...):
+                    ...
+              - pattern-not-inside: |
+                  @require_http_methods($METHODS)
+                  def $VIEW(...):
+                    ...
+              - pattern-not-inside: |
+                  @$D.require_http_methods($METHODS)
+                  def $VIEW(...):
+                    ...
+              - pattern-not-inside: |
+                  def get(self, ...):
+                    ...
+              - pattern-not-inside: |
+                  def post(self, ...):
+                    ...
+      # Method guards inside the view
+      - pattern-not-inside: |
+          if $REQ.method == "POST":
+            ...
+      - pattern-not-inside: |
+          if $REQ.method != "POST":
+            ...
+            return ...
+          ...
+      - pattern-not-inside: |
+          if $REQ.method == "GET":
+            ...
+            return ...
+          ...
+      - pattern-either:
+          - pattern: django.contrib.auth.login($REQ, ...)
+          - pattern: django.contrib.auth.logout($REQ, ...)
+          - pattern: $REQ.session.cycle_key()
+          - patterns:
+              - pattern: $REQ.session[$K] = $V
+              - metavariable-regex:
+                  metavariable: $K
+                  regex: (?i).*(user|account|household|org|team|tenant|workspace|member|_auth)
+    message: >-
+      This changes which user or tenant the session belongs to in a view that
+      also handles GET. Django's CSRF protection does not check GET requests, so
+      a link or image on another site can log a victim in or switch their
+      session. Only accept this on POST (for example with @require_POST) behind
+      a confirmation form.
+      Generated from Guardian AI findings.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      cwe:
+        - "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp:
+        - A01:2021 - Broken Access Control
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      technology:
+        - django
+      references:
+        - https://docs.djangoproject.com/en/stable/ref/csrf/
+        - https://owasp.org/www-community/attacks/csrf

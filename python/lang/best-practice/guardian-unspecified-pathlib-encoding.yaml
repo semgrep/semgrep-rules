@@ -1,0 +1,35 @@
+rules:
+  - id: guardian-unspecified-pathlib-encoding
+    # open() is covered by unspecified-open-encoding.
+    patterns:
+      - pattern-either:
+          - pattern: $P.read_text(...)
+          - pattern: $P.write_text(...)
+          - pattern: pathlib.Path(...).open(...)
+          # Path.open(): only path-looking receivers, so zipfile/tarfile/fs .open() stay quiet.
+          - patterns:
+              - pattern: $P.open(...)
+              - metavariable-regex:
+                  metavariable: $P
+                  regex: (?i).*(path|file)
+      - pattern-not: $P.read_text(..., encoding=$E, ...)
+      - pattern-not: $P.write_text(..., encoding=$E, ...)
+      - pattern-not: $P.open(..., encoding=$E, ...)
+      # Binary mode never decodes.
+      - pattern-not: $P.open("=~/b/", ...)
+      - pattern-not: $P.open(..., mode="=~/b/", ...)
+    message: >-
+      Missing 'encoding' parameter. pathlib's read_text(), write_text() and
+      open() use the locale encoding by default (cp1252 on most Windows
+      machines), so UTF-8 files fail or decode wrongly there. Pass
+      encoding="utf-8".
+      Generated from Guardian AI findings.
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: best-practice
+      technology:
+        - python
+      references:
+        - https://peps.python.org/pep-0597/
+        - https://docs.python.org/3/library/pathlib.html#pathlib.Path.read_text
