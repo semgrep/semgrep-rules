@@ -1,0 +1,28 @@
+rules:
+  - id: haskell_lang_disabled_ghc_warnings
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '\{-#\s*OPTIONS_GHC\b[^#\n]*?(?:-fdefer-type-errors|(?<![A-Za-z-])-w(?![A-Za-z-])|-(?:Wno-|fno-warn-)(?:incomplete-patterns|incomplete-uni-patterns|incomplete-record-updates|missing-fields|missing-methods|overlapping-patterns|partial-fields))'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      A module-level `OPTIONS_GHC` pragma turns off a safety check (`-w`, `-fdefer-type-
+      errors`, or `-Wno-` for incomplete patterns, missing fields/methods, overlapping
+      patterns or partial fields). These warnings are what catch a missing `case` branch or
+      an uninitialised record field before it becomes a runtime crash.
+      Remove the pragma and fix the warnings; if one specific site really is total,
+      restructure it or add a comment-backed local `error` branch instead of hiding all
+      warnings for the module.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      references:
+        - https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html

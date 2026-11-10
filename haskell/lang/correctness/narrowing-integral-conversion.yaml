@@ -1,0 +1,34 @@
+rules:
+  - id: haskell_lang_narrowing_integral_conversion
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:fromIntegral|fromInteger)(?![A-Za-z0-9_''])(?:[^\n]*?::\s*|\s+@[^\n@]*@\s*|\s+@\s*)(?:Int8|Int16|Int32|Word|Word8|Word16|Word32|Natural|CInt|CUInt|CShort)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `fromIntegral`/`fromInteger` converts to a narrower or unsigned type (`Int32`, `Word`,
+      `Word8`, `Natural`, `CInt`, ...). Out-of-range values silently wrap (a negative amount
+      becomes a huge `Word`, 3 billion paise becomes a negative `Int32`), and conversion to
+      `Natural` throws on negatives (STAN-0021, CWE-197).
+      Use `toIntegralSized` from `Data.Bits` (returns `Maybe`) or an explicit range check
+      before converting, especially for amounts, counts and lengths from external input.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-197: Numeric Truncation Error'
+      likelihood: LOW
+      impact: HIGH
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/Data-Bits.html#v:toIntegralSized
+        - https://github.com/kowainik/stan/wiki/All-Inspections

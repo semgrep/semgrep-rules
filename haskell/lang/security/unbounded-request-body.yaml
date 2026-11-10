@@ -1,0 +1,39 @@
+rules:
+  - id: haskell_lang_unbounded_request_body
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(strictRequestBody|lazyRequestBody|consumeRequestBodyStrict|consumeRequestBodyLazy)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      The whole request body is read into memory (`strictRequestBody`, `lazyRequestBody`,
+      `consumeRequestBodyStrict`/`Lazy`). Neither WAI nor servant limits body size by
+      default, so a client can send a multi-gigabyte body and exhaust memory (CWE-770).
+      Large JSON bodies also make aeson's parsing and number-conversion DoS bugs
+      (HSEC-2023-0001, HSEC-2026-0007) easier to hit.
+      Add `requestSizeLimitMiddleware` from `wai-extra` (or check `Content-Length` and read
+      with `getRequestBodyChunk` up to a cap) in front of every handler that reads a body.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-770: Allocation of Resources Without Limits or Throttling'
+      owasp:
+        - A04:2021 - Insecure Design
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/wai-extra/docs/Network-Wai-Middleware-RequestSizeLimit.html
+        - https://osv.dev/vulnerability/HSEC-2026-0007

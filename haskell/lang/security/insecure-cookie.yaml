@@ -1,0 +1,40 @@
+rules:
+  - id: haskell_lang_insecure_cookie
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: 'setCookieSecure\s*=\s*False|setCookieHttpOnly\s*=\s*False|setCookieSameSite\s*=\s*Just\s+sameSiteNone'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Cookie built with `setCookieSecure = False`, `setCookieHttpOnly = False` or
+      `SameSite=None`. A cookie without `Secure` is sent over plain HTTP, one without
+      `HttpOnly` can be read by injected script, and `SameSite=None` sends it on cross-site
+      requests (CWE-614, CWE-1004).
+      Set `setCookieSecure = True`, `setCookieHttpOnly = True` and `setCookieSameSite = Just
+      sameSiteLax` (or `Strict`) for session and auth cookies. Note that `defaultSetCookie`
+      leaves `Secure` off, so set it explicitly.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+        - 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://hackage.haskell.org/package/cookie/docs/Web-Cookie.html
+        - https://owasp.org/www-community/controls/SecureCookieAttribute

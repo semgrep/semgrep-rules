@@ -1,0 +1,39 @@
+rules:
+  - id: haskell_lang_jwt_unverified_decode
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:JWT|Jwt|WebJWT)\.decode(?![A-Za-z0-9_''])|(?<![A-Za-z0-9_''])unverifiedClaims(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      JWT decoded without verifying its signature (`JWT.decode` from the `jwt` package
+      returns an `UnverifiedJWT`). Claims read from it (subject, merchant id, expiry, roles)
+      are whatever the sender wrote, so anyone can forge a token and act as another user or
+      merchant (CWE-347).
+      Use `decodeAndVerifySignature` (`jwt`) or `verifyClaims`/`verifyJWT` (`jose`) with the
+      expected key and algorithm, and check `exp`, `nbf`, `iss` and `aud` before trusting
+      any claim. Only read unverified claims to pick a key id, never to authorise.
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-347: Improper Verification of Cryptographic Signature'
+      owasp:
+        - A07:2021 - Identification and Authentication Failures
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/jwt/docs/Web-JWT.html
+        - https://hackage.haskell.org/package/jose/docs/Crypto-JWT.html

@@ -1,0 +1,30 @@
+rules:
+  - id: haskell_lang_lazy_foldl
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])foldl(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Lazy `foldl` builds a chain of unevaluated thunks for long lists and can exhaust the
+      stack, especially with strict accumulators or large inputs. Use `foldl'` from
+      `Data.List` (strict in the accumulator) instead, which is almost always the correct
+      choice in application code.
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/Data-List.html
+        - https://wiki.haskell.org/Foldr_Foldl_Foldl'

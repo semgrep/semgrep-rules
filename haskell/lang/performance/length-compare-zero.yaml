@@ -1,0 +1,29 @@
+rules:
+  - id: haskell_lang_length_compare_zero
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])length\s+(?:[A-Za-z0-9_''.]+|\([^()\n]*\))\s*(?:(?:==|/=|>|<=)\s*0|(?:>=|<)\s*1)(?![0-9.])|(?<![0-9.])(?:0\s*(?:==|/=|<|>=)|1\s*(?:<=|>))\s*length(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Emptiness checked with `length`. `length` walks the whole list (O(n)), never finishes
+      on an infinite list, and for `Text`/lazy structures forces everything just to answer a
+      yes/no question.
+      Use `null xs` / `not (null xs)` (also available as `T.null`, `Map.null`, `V.null`).
+    severity: INFO
+    metadata:
+      category: performance
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: LOW
+      confidence: HIGH
+      references:
+        - https://github.com/ndmitchell/hlint/blob/master/data/hlint.yaml

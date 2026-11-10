@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_sql_injection_unsafe_interpolate
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])unsafe(From)?Sql(Query|Value|Function|BinOp|CastAs|Entity|Case|)(?![A-Za-z0-9_''])|\bQ\.sql\b|RawSql\s*\('
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      Raw SQL built with an interpolation helper (`unsafeSqlQuery`, `unsafeSql`,
+      `unsafeFromSqlQuery`, `Q.sql`, or a `RawSql` literal). Splicing values directly into a
+      SQL string is the classic SQL-injection shape: any value that originates from a request
+      can terminate the intended statement and run attacker-controlled SQL (CWE-89).
+      Use the parameterised query API of your database library (placeholders such as `?`/`$1`
+      with the values bound separately). If a raw fragment is genuinely unavoidable, never
+      concatenate request-derived data into it.
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp:
+        - A03:2021 - Injection
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://owasp.org/www-community/attacks/SQL_Injection
+        - https://hackage.haskell.org/package/beam-postgres/docs/Database-Beam-Postgres-Syntax.html

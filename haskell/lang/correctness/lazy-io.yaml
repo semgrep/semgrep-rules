@@ -1,0 +1,32 @@
+rules:
+  - id: haskell_lang_lazy_io
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''.])(?:readFile|getContents|hGetContents|interact)(?![A-Za-z0-9_''])|(?<![A-Za-z0-9_''])(?:BL|BSL|LBS|TL|LT|TLIO|LazyBS|LazyText)\.(?:readFile|getContents|hGetContents)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Lazy I/O (`Prelude.readFile`, `getContents`, `hGetContents`, `interact`, or the lazy
+      `ByteString`/`Text` variants). The handle stays open until the whole result has been
+      evaluated, so file descriptors leak under load, I/O errors surface later inside pure
+      code, and the file can change while it is still being read.
+      Use the strict versions (`Data.ByteString.readFile`, `Data.Text.IO.readFile`), or
+      stream with `conduit`/`streaming` for large inputs.
+    severity: INFO
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://wiki.haskell.org/Lazy_I/O
+        - https://hackage.haskell.org/package/bytestring/docs/Data-ByteString.html#v:readFile

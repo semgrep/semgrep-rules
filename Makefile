@@ -31,6 +31,7 @@ LANG_DIRS=\
  dockerfile \
  generic \
  go \
+ haskell \
  html \
  java \
  javascript \

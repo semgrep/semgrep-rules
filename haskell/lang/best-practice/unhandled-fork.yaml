@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_unhandled_fork
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(forkIO|forkOS|forkOn|forkIOWithUnmask)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Thread started with `forkIO`/`forkOS`/`forkOn`. An exception in the forked thread is
+      only printed to stderr and the parent never learns the work failed; the thread is also
+      not cancelled when the parent exits, so it can leak.
+      Use `async`/`withAsync`/`concurrently` from the `async` (or `unliftio`) package, which
+      propagate exceptions and clean up child threads, or wrap the body in an explicit
+      handler that logs and reports the failure.
+    severity: INFO
+    metadata:
+      category: best-practice
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/async/docs/Control-Concurrent-Async.html

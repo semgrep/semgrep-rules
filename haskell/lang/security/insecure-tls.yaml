@@ -1,0 +1,35 @@
+rules:
+  - id: haskell_lang_insecure_tls
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])TLSSettingsSimple\s+True(?![A-Za-z0-9_''])|onServerCertificate\s*=\s*\\[^>]*->\s*(pure|return)\s*\[\s*\]|settingDisableCertificateValidation\s*=\s*True|\\[^\n>]*->\s*(pure|return)\s*(\$\s*)?ValidationCachePass'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      TLS certificate validation appears to be disabled (`TLSSettingsSimple True`, or an
+      `onServerCertificate` handler that always returns an empty list of errors). When certificate verification is turned off,
+      the connection is trivially vulnerable to man-in-the-middle attacks: any attacker able
+      to intercept traffic can present their own certificate and read or modify the traffic.
+      Keep validation enabled and, where you control the server, pin the expected CA or
+      certificate instead of skipping verification entirely.
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - "CWE-295: Improper Certificate Validation"
+      likelihood: HIGH
+      impact: HIGH
+      confidence: MEDIUM
+      subcategory:
+        - vuln
+      references:
+        - https://hackage.haskell.org/package/connection/docs/Network-Connection.html
+        - https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning

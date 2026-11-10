@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_off_by_one_length_range
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '\[\s*0\s*\.\.\s*(?:[A-Z][A-Za-z0-9_'']*\.)?length\s+(?![^\]\n]*-\s*1)[^\]\n]*\]'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `[0 .. length xs]` produces one index more than `xs` has. Indexing with the last value
+      (`xs !! length xs`, `V.!`) throws, and loops run one extra time (STAN-0201, CWE-193).
+      Use `[0 .. length xs - 1]`, or better `zip [0 ..] xs` / `V.imap` so no index
+      arithmetic is needed.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-193: Off-by-one Error'
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      references:
+        - https://github.com/kowainik/stan/wiki/All-Inspections

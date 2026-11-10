@@ -1,0 +1,32 @@
+rules:
+  - id: haskell_lang_partial_extreme
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?<!\bNE\.)(?<!NonEmpty\.)(maximum|minimum|maximumBy|minimumBy)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Partial extremum lookup (`maximum`, `minimum`, `maximumBy`, `minimumBy`). These throw a
+      runtime exception on an empty container, so an empty list/map/set becomes a crash.
+      Use `Data.Foldable.foldl'` with a seed, `Data.Maybe.listToMaybe`, `Data.List.NonEmpty`
+      (`NE.maximum` is total on `NonEmpty`), or a `Maybe`-returning helper
+      (`Data.Foldable.maximum` can be wrapped with `foldr`/`Maybe`) so the empty case is
+      handled.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/stan/docs/Stan-Inspection-Partial.html
+        - https://github.com/kowainik/stan/wiki/All-Inspections

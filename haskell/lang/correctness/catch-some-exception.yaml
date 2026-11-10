@@ -1,0 +1,34 @@
+rules:
+  - id: haskell_lang_catch_some_exception
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '::\s*SomeException\s*\)|@SomeException(?![A-Za-z0-9_''])|(?<![A-Za-z0-9_''])(catchAll|handleAll|tryAll)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `SomeException` is caught (`\(e :: SomeException) -> ...`, `try @SomeException`,
+      `catchAll`). With `Control.Exception`/`exceptions` this also catches asynchronous
+      exceptions such as `ThreadKilled`, `UserInterrupt` and `timeout`, so the thread can no
+      longer be cancelled and timeouts silently stop working.
+      Catch the specific exception type you expect, or use `UnliftIO.Exception` / `safe-
+      exceptions` (`catchAny`, `tryAny`), which re-throw asynchronous exceptions. If this
+      module already imports `UnliftIO.Exception` or `Control.Exception.Safe`, this finding
+      can be ignored.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: LOW
+      references:
+        - https://www.fpcomplete.com/haskell/tutorial/exceptions/
+        - https://hackage.haskell.org/package/safe-exceptions

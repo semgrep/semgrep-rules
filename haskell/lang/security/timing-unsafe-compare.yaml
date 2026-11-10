@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_timing_unsafe_compare
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?i:[A-Za-z0-9_''.]*(?:signature|hmac|digest|token|secret|otp|checksum|apikey|api_key|password)''?)(?![A-Za-z0-9_''])\s*(?:==|/=)(?!\s*(?:\d|Nothing\b|Just\b|True\b|False\b|\"\"|\[\]|mempty\b|[A-Z][A-Z0-9_]*\b(?!\.)))|[A-Za-z_'')]\s*(?:==|/=)\s*(?i:[A-Za-z0-9_''.]*(?:signature|hmac|digest|token|secret|otp|checksum|apikey|api_key|password)''?)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      A secret-looking value (signature, HMAC, digest, token, OTP, checksum, API key,
+      password) is compared with `==`/`/=`. `==` on `ByteString`/`Text` stops at the first
+      differing byte, so response timing leaks how much of a forged signature or token was
+      correct, which lets an attacker recover it byte by byte (CWE-208).
+      Compare with a constant-time function such as `Data.ByteArray.constEq` (`memory`/
+      `crypton`) after decoding both sides to bytes.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-208: Observable Timing Discrepancy'
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/memory/docs/Data-ByteArray.html#v:constEq
+        - https://cwe.mitre.org/data/definitions/208.html

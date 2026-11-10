@@ -1,0 +1,34 @@
+rules:
+  - id: haskell_lang_char8_encoding
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: 'Data\.ByteString\.Char8|(?<![A-Za-z0-9_''])Char8\.(pack|unpack|head|last|lines|unlines|words|unwords|readFile|writeFile)'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      `Data.ByteString.Char8` is in use here. `Char8` operates on `Word8`, not on Unicode
+      `Char`: `pack`/`unpack` silently truncate any code point above U+00FF, and `head`/`last`/
+      `lines`/`words` confuse bytes with characters. Any non-ASCII input (accented names,
+      emoji, CJK) is corrupted rather than rejected.
+      This is an audit marker, not a confirmed defect: Semgrep cannot resolve the import alias
+      to tell which calls reach `Char8`, so review each call site. Use
+      `Data.Text`/`Data.Text.Encoding` (`encodeUtf8`/`decodeUtf8`) for text or
+      `Data.ByteString` for raw bytes; keep `Char8` only where the data is provably ASCII and
+      that invariant is enforced at the boundary.
+    severity: INFO
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/bytestring/docs/Data-ByteString-Char8.html
+        - https://github.com/kowainik/stan/wiki/All-Inspections

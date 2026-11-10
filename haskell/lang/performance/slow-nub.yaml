@@ -1,0 +1,32 @@
+rules:
+  - id: haskell_lang_slow_nub
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])nub(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `Data.List.nub` is quadratic (O(n^2)): it compares every element against all previously
+      kept elements. On a large list this dominates the running time and can turn a fast
+      request path into a stall.
+      For unordered deduplication use `Data.List.NonEmpty.nubOrd`/`Data.Containers.ListUtils.nubOrd`
+      (O(n log n) via `Ord`), `nubHash` (`hashable`), or `Set`/`HashSet`. Reserve `nub` for
+      tiny lists or `Ord`-less element types where nothing else applies.
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/stan/docs/Stan-Inspection-AntiPattern.html
+        - https://hackage.haskell.org/package/containers/docs/Data-Containers-ListUtils.html

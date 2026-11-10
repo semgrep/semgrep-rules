@@ -1,0 +1,39 @@
+rules:
+  - id: haskell_lang_sensitive_data_logging
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:[A-Z][A-Za-z0-9_'']*\.)*(?:log[A-Z][A-Za-z0-9_'']*|logger|putStrLn|putTextLn|hPutStrLn|print|say|trace|traceShow)(?![A-Za-z0-9_''])(?![ \t]*::)(?:(?!>>|=<<|\bpure\b|\breturn\b)[^\n])*\K(?:(?<![A-Za-z])(?:cvv|cvc|cvv2|pan|pin|otp|password|passwd|cardNumber|card_number|cardNo|secret|apiKey|api_key|accessToken|access_token|authToken|auth_token|clientSecret)|(?<!mb)(?<!is)(?<!has)(?<!maybe)(?:Cvv|Cvc|Pan|Pin|Otp|Password|Passwd|CardNumber|CardNo|Secret|ApiKey|AccessToken|AuthToken|ClientSecret))(?![a-z])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      A card or credential field (`cvv`, `pan`, `cardNumber`, `pin`, `otp`, `password`,
+      `secret`, `apiKey`, `accessToken`, ...) is passed to a logging or print call. Logs are
+      shipped to many systems and people; writing full card data or credentials there is a
+      PCI DSS violation (requirement 3) and exposes them to anyone with log access
+      (CWE-532).
+      Log a masked form (last 4 digits, a hash or a reference id) instead, and add the field
+      to the logger's redaction list.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-532: Insertion of Sensitive Information into Log File'
+      owasp:
+        - A09:2021 - Security Logging and Monitoring Failures
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://cwe.mitre.org/data/definitions/532.html
+        - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/

@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_command_injection
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(callCommand|spawnShell)(?![A-Za-z0-9_''])|(?:^|[=$(,]|<-|>>=?|\bdo\b|\bthen\b|\belse\b|->)\s*(?:[A-Z][A-Za-z0-9_'']*\.)*(?:system|shell)\s+(?=[A-Za-z_("$\[])|readProcess\s+["''](?:sh|bash|zsh|dash)["'']'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      Shell command execution detected (`System.Process.system`, `callCommand`,
+      `spawnShell`, `shell`, or `readProcess` invoked on a shell interpreter). All of these
+      hand the command string to a shell, so any user-controlled value inside that string can
+      inject arbitrary commands and execute them with the privileges of this service (CWE-78).
+      Prefer `callProcess`/`readProcess` with an explicit argument vector so the shell is
+      never invoked, and validate or allow-list any user-supplied value before it becomes part
+      of a command.
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp:
+        - A03:2021 - Injection
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/process/docs/System-Process.html
+        - https://owasp.org/www-community/attacks/Command_Injection

@@ -1,0 +1,30 @@
+rules:
+  - id: haskell_lang_partial_from_just
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])fromJust(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `fromJust` is a partial function: it throws a runtime exception when given `Nothing`.
+      That turns a missing value into a crash instead of an error you can handle.
+      Handle the `Nothing` case explicitly (`case`, `maybe`, `Data.Maybe.fromMaybe` with a
+      real default, or `Either`/`Maybe` in the return type), or use `NonEmpty`/pattern
+      matching so the empty case cannot occur.
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/Data-Maybe.html

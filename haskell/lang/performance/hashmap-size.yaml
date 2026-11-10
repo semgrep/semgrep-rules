@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_hashmap_size
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:HM|HMS|HML|HashMap|HS|HSet|HashSet)\.(?:size|length)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `HashMap.size`/`HashSet.size` is O(n) in `unordered-containers`: it walks the whole
+      structure. Calling it in a loop or on every request over a large map is unexpectedly
+      slow (STAN-0204, STAN-0205).
+      Use `Data.Map`/`Data.Set` (O(1) `size`), track the count alongside the map, or use
+      `HM.null` when you only need an emptiness check.
+    severity: INFO
+    metadata:
+      category: performance
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: LOW
+      confidence: HIGH
+      references:
+        - https://hackage.haskell.org/package/unordered-containers/docs/Data-HashMap-Strict.html#v:size
+        - https://github.com/kowainik/stan/wiki/All-Inspections

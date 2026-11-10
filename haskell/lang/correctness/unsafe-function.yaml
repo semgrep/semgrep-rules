@@ -1,0 +1,37 @@
+rules:
+  - id: haskell_lang_unsafe_function
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(undefined|unsafeCoerce|unsafeInterleaveIO|unsafeDupablePerformIO|unsafeFixIO)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Unchecked unsafe function used (`undefined`, `unsafeCoerce`, `unsafeInterleaveIO`,
+      `unsafeDupablePerformIO`, `unsafeFixIO`), mirroring STAN-0212. `undefined` crashes at
+      runtime whenever the branch is reached. `unsafeCoerce` casts without any compile-time
+      or runtime check; a wrong cast is undefined behaviour that can corrupt heap data or
+      crash the RTS with no diagnostic.
+      `unsafeInterleaveIO`/`unsafeDupablePerformIO`/`unsafeFixIO` break the `IO`/purity
+      contract: the action may run zero, one, or several times and can be reordered by the
+      optimiser. For `unsafeCoerce`, add a checked wrapper that proves the invariant (e.g.
+      pattern match on the source constructor, or `Data.Typeable.cast`) and keep the unsafe
+      cast in one place with a comment. For `undefined`, return `Maybe`/`Either` or throw a
+      typed error from a call site that can handle it.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/stan/docs/Stan-Inspection-AntiPattern.html
+        - https://github.com/kowainik/stan/wiki/All-Inspections

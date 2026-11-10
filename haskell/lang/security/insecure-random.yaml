@@ -1,0 +1,40 @@
+rules:
+  - id: haskell_lang_insecure_random
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(randomRIO|randomIO|newStdGen|getStdGen|mkStdGen|getStdRandom|initStdGen|globalStdGen|randomRs|randoms)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `System.Random` generator in use (`randomRIO`, `newStdGen`, `mkStdGen`, ...). These
+      are statistical PRNGs, not cryptographically secure: their output can be predicted
+      from earlier values or from the seed. If this value becomes an OTP, token, nonce,
+      session id, salt or reference number an attacker can guess, it is a vulnerability
+      (CWE-338).
+      For anything security-relevant use `Crypto.Random.getRandomBytes` (`crypton`) or
+      `System.Entropy.getEntropy`. Plain `System.Random` is fine for jitter, sampling and
+      tests.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/random/docs/System-Random.html
+        - https://hackage.haskell.org/package/crypton/docs/Crypto-Random.html

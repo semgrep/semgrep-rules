@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_debug_trace
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(trace|traceShow|traceShowId|traceIO|traceStack|traceEvent|Debug\.Trace)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Debug tracing (`Debug.Trace.trace`, `traceShow`, `traceShowId`, `traceIO`,
+      `traceStack`, `traceEvent`) found in the source. `Debug.Trace` output goes to stderr
+      unconditionally and is not tied to the `IO` context, so it leaks data into production
+      logs, breaks purity, and can be reordered or dropped by the optimiser.
+      Replace it with a proper logging call from your logging framework (with the right level
+      and structured fields) or remove it before merging.
+    severity: WARNING
+    metadata:
+      category: best-practice
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: LOW
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/Debug-Trace.html

@@ -1,0 +1,37 @@
+rules:
+  - id: haskell_lang_cors_allow_all
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])simpleCors(?![A-Za-z0-9_''])|corsOrigins\s*=\s*Nothing'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      CORS allows every origin (`simpleCors`, or `corsOrigins = Nothing` in `wai-cors`). Any
+      website can then call this API from a victim's browser and read the response
+      (CWE-942).
+      Pass an explicit allow-list: `corsOrigins = Just (["https://dashboard.example.com"],
+      True)`, and only enable credentials for origins you control.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/wai-cors/docs/Network-Wai-Middleware-Cors.html
+        - https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny

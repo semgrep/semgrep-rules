@@ -1,0 +1,32 @@
+rules:
+  - id: haskell_lang_partial_container_function
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:[A-Z][A-Za-z0-9_'']*\.)+(?:!(?![!#$%&*+./<=>?@\\^|~:-])|(?<!NES\.)(?<!NEM\.)(?<!NESet\.)(?<!NEMap\.)(?:findMin|findMax|deleteFindMin|deleteFindMax|elemAt|findIndex|deleteAt)(?![A-Za-z0-9_'']))|(?<![A-Za-z0-9_''])(?:NE|NonEmpty)\.fromList(?![A-Za-z0-9_''])(?!\s*\[[^\]\s])|(?<![A-Za-z0-9_''.])(?:cycle|genericIndex)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Partial container function (`Map.!`, `Vector.!`, `Map.findMin`/`findMax`, `elemAt`,
+      `findIndex`, `deleteFindMin`, `NE.fromList`, `cycle`, `genericIndex`). These throw on
+      a missing key, an empty container or an out-of-range index, which turns unexpected
+      input into a crash.
+      Use the total versions: `Map.lookup`/`Map.!?`, `V.!?`, `Map.lookupMin`/`lookupMax`,
+      `Map.lookupIndex` and `NE.nonEmpty`.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/stan/docs/Stan-Inspection-Partial.html
+        - https://hackage.haskell.org/package/containers/docs/Data-Map-Strict.html

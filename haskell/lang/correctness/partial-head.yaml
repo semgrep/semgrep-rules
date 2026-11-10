@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_partial_head
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?<!\bNE\.)(?<!NonEmpty\.)head(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `head` is a partial function: it throws a runtime exception on an empty list. A crash
+      inside a handler or a worker thread is hard to recover from and turns an empty input
+      into an outage.
+      Use pattern matching (`(x:_) -> ...`, `[] -> ...`), `listToMaybe`/`Data.Maybe`, or a
+      total alternative such as `NonEmpty` (`Data.List.NonEmpty.head`) so the empty case is
+      handled explicitly.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/Prelude.html#v:head

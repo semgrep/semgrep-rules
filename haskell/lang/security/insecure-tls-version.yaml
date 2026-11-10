@@ -1,0 +1,36 @@
+rules:
+  - id: haskell_lang_insecure_tls_version
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(SSL2|SSL3|TLS10|TLS11)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      TLS client or server configured with an obsolete protocol version (`SSL2`, `SSL3`,
+      `TLS10`, `TLS11` in `supportedVersions`). These versions have known downgrade and
+      padding-oracle attacks and are prohibited by PCI DSS and RFC 8996 (CWE-327).
+      Allow only `TLS12` and `TLS13`, for example `supportedVersions = [TLS13, TLS12]`.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      likelihood: LOW
+      impact: HIGH
+      confidence: HIGH
+      subcategory:
+        - vuln
+      references:
+        - https://hackage.haskell.org/package/tls/docs/Network-TLS.html
+        - https://datatracker.ietf.org/doc/html/rfc8996

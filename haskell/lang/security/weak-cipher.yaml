@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_weak_cipher
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(DES|DES_EDE2|DES_EDE3|DES_EEE2|DES_EEE3|RC4|Blowfish(?:64|128|256|448)?|ecbEncrypt|ecbDecrypt)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Weak or misused cipher (`DES`/3DES, `RC4`, `Blowfish`, or ECB mode via
+      `ecbEncrypt`/`ecbDecrypt`). DES and Blowfish have 64-bit blocks and small keys, RC4
+      has biased output, and ECB encrypts identical blocks to identical ciphertext, which
+      leaks the structure of the plaintext (CWE-327).
+      Use an authenticated mode such as AES-GCM (`aeadInit AEAD_GCM`) or ChaCha20-Poly1305
+      from `crypton`, with a fresh random nonce per message.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp:
+        - A02:2021 - Cryptographic Failures
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/crypton/docs/Crypto-Cipher-Types.html
+        - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/

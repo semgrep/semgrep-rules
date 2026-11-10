@@ -1,0 +1,32 @@
+rules:
+  - id: haskell_lang_partial_list_function
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?<!\bNE\.)(?<!NonEmpty\.)((tail|init|last|read|pred|succ)(?![A-Za-z0-9_''])|!!(?!=))'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Partial list/value function used (`tail`, `init`, `last`, `!!`, `read`, `pred`,
+      `succ`). These all throw a runtime exception on inputs they cannot handle
+      (empty list, out-of-range index, malformed string), which turns an unexpected input into
+      a crash.
+      Prefer total alternatives: pattern matching, `NonEmpty`, `Data.Maybe`, `readMaybe`,
+      `Data.List` helpers, or return `Maybe`/`Either` so the failure is representable.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: LOW
+      references:
+        - https://hackage.haskell.org/package/base/docs/Prelude.html
+        - https://wiki.haskell.org/Partial_functions

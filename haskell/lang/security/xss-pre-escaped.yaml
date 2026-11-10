@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_xss_pre_escaped
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(preEscapedToHtml|preEscapedToMarkup|preEscapedText|preEscapedLazyText|preEscapedString|preEscapedToValue|preEscapedTextValue|unsafeByteString|unsafeLazyByteString|unsafeByteStringValue|toHtmlRaw)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      HTML is emitted without escaping (`preEscapedToHtml`, `preEscapedText`,
+      `unsafeByteString` in blaze, `toHtmlRaw` in lucid). If any part of the value comes
+      from a request, a database field or a partner response, it can inject script into the
+      page (CWE-79).
+      Use `toHtml`/`text`, which escape, and only use the raw variants for constant markup
+      or output from a trusted HTML sanitiser.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site Scripting'')'
+      owasp:
+        - A03:2021 - Injection
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/blaze-html/docs/Text-Blaze-Html.html
+        - https://owasp.org/www-community/attacks/xss/

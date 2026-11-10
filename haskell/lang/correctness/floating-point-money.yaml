@@ -1,0 +1,35 @@
+rules:
+  - id: haskell_lang_floating_point_money
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?i:[A-Za-z0-9_'']*(?:amount|amt|price|fee|fees|balance|cost|charge|charges|money|tax|discount|surcharge|payout)''?)\s*::\s*(?:!\s*)?(?:Maybe\s+)?(?:Double|Float)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      A money-like value (amount, price, fee, balance, refund, tax, ...) is typed as
+      `Double`/`Float`. Binary floating point cannot represent most decimal fractions (`0.1
+      + 0.2 /= 0.3`), so totals, fees and refunds drift by fractions of a paisa/cent and
+      reconciliation fails (CWE-1339).
+      Store money as an integer number of minor units (`Int64` paise/cents), or as
+      `Data.Fixed`/`Scientific`/a dedicated money type such as `safe-money`'s `Dense`/
+      `Discrete`, and convert only at display time.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-1339: Insufficient Precision or Accuracy of a Real Number'
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/safe-money
+        - https://cwe.mitre.org/data/definitions/1339.html

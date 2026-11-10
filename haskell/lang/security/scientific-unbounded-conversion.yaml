@@ -1,0 +1,40 @@
+rules:
+  - id: haskell_lang_scientific_unbounded_conversion
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:truncate|floor|ceiling|round|toRational|realToFrac|fromRational)(?![A-Za-z0-9_''])(?=[^\n]*(?:\bScientific\b|\bsci[A-Z0-9_'']|\bSci\.))|(?<![A-Za-z0-9_''])(?:Sci|Scientific)\.(?:coefficient|toRational)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      A `Scientific` (aeson's number type) is converted with `round`/`floor`/`truncate`/
+      `toRational`/`realToFrac`/`fromRational`. These materialise the full exact value: a
+      JSON number like `1e1000000000` or `1e-999999999` becomes a billion-digit `Integer`
+      and exhausts memory or CPU. This is the root cause of aeson's HSEC-2026-0007 and of
+      `scientific`'s HSEC-2026-0011/0012 (CWE-400, CWE-407).
+      Use `toBoundedInteger` or `toBoundedRealFloat` from `Data.Scientific`, which reject
+      out-of-range exponents, and keep `aeson >= 2.2.5.1` and `scientific >= 0.3.10.0`.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-400: Uncontrolled Resource Consumption'
+      owasp:
+        - A04:2021 - Insecure Design
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/scientific/docs/Data-Scientific.html#v:toBoundedInteger
+        - https://osv.dev/vulnerability/HSEC-2026-0007
+        - https://github.com/haskell/security-advisories/tree/main/advisories/hackage/scientific

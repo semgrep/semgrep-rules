@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_filepath_join_for_url
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?i:[A-Za-z0-9_''.]*(?:url|uri|endpoint|host))(?![A-Za-z0-9_''])\s*</>|\"https?://[^\"\n]*\"\s*</>'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      `</>` from `System.FilePath` is used to build a URL. It is a file-path operator: on
+      Windows it inserts `\`, it drops the left side when the right side starts with `/`,
+      and it does no percent-encoding, so user-supplied segments can rewrite the path
+      (STAN-0211).
+      Build URLs with a URL library (`Network.URI`, `req`'s `/:` / `/~`, servant-client's
+      typed routes) or join with `<> "/" <>` after encoding each segment.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://github.com/kowainik/stan/wiki/All-Inspections
+        - https://hackage.haskell.org/package/filepath/docs/System-FilePath.html#v:-60--47--62-

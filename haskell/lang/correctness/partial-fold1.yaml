@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_partial_fold1
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])fold[lr]1''?(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Partial fold (`foldl1`, `foldl1'`, `foldr1`) used. These reduce a list with no seed
+      element and throw a runtime exception on an empty list, so an unexpected empty input
+      becomes a crash.
+      Use `foldl'`/`foldr` with an explicit initial value, or make the input non-empty by
+      construction (`Data.List.NonEmpty.foldl1` is total on `NonEmpty`).
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/stan/docs/Stan-Inspection-Partial.html
+        - https://github.com/kowainik/stan/wiki/All-Inspections

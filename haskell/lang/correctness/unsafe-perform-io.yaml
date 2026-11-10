@@ -1,0 +1,34 @@
+rules:
+  - id: haskell_lang_unsafe_perform_io
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])unsafePerformIO(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `unsafePerformIO` runs an `IO` action as though it were a pure value. This breaks the
+      referential-transparency guarantee that the compiler relies on for optimisation: the
+      action may run zero, one, or many times, and may run in an order you do not expect,
+      leading to non-deterministic behaviour, subtle concurrency bugs, and crashes that are
+      extremely hard to reproduce.
+      Only use it as a last resort behind a top-level CAF (constant applicative form) that is
+      genuinely a singleton, and never for anything with observable effects. Prefer threading
+      `IO` explicitly through your program instead.
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: MEDIUM
+      references:
+        - https://hackage.haskell.org/package/base/docs/System-IO-Unsafe.html
+        - https://wiki.haskell.org/Top_level_mutable_state

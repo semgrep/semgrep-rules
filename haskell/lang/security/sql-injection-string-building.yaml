@@ -1,0 +1,39 @@
+rules:
+  - id: haskell_lang_sql_injection_string_building
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?:rawSql|rawExecute|rawQuery|rawExecuteCount)\s*\(?[^\n]*(?:<>|\+\+)|(?<![A-Za-z0-9_''])(?:query|query_|execute|execute_|executeMany|returning|fold|fold_|forEach|forEach_)\s+[A-Za-z0-9_''.]+\s*(?:\$\s*)?\(?\s*(?:fromString|Query\s*[($])|(?<![A-Za-z0-9_''])Query\s*[($]\s*(?:[A-Za-z0-9]+\.)?(?:encodeUtf8|pack)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+    message: >-
+      SQL text is built at runtime and passed to a query function (`fromString`/`Query` in
+      `postgresql-simple`/`mysql-simple`, or a `rawSql`/`rawExecute` string joined with
+      `<>`/`++` in `persistent`). Any request-derived value in that string can change the
+      statement and run attacker-controlled SQL (CWE-89).
+      Keep the SQL a constant literal with `?` placeholders and pass the values as the
+      separate parameter argument (`query conn "... WHERE id = ?" (Only uid)`, `rawSql "...
+      WHERE id = ?" [toPersistValue tid]`).
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command (''SQL Injection'')'
+      owasp:
+        - A03:2021 - Injection
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      subcategory:
+        - vuln
+      references:
+        - https://hackage.haskell.org/package/postgresql-simple/docs/Database-PostgreSQL-Simple.html
+        - https://hackage.haskell.org/package/persistent/docs/Database-Persist-Sql.html#v:rawSql
+        - https://owasp.org/www-community/attacks/SQL_Injection

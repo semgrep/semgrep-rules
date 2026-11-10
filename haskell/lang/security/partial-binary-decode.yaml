@@ -1,0 +1,38 @@
+rules:
+  - id: haskell_lang_partial_binary_decode
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(?<!rightToMaybe \. )(?<!hush \. )(?:Binary|Bin|DB|Data\.Binary)\.decode(?:File)?(?![A-Za-z0-9_''])|(?<![A-Za-z0-9_''.])decodeFile(?![A-Za-z0-9_''])|(?<![A-Za-z0-9_''])(?:(?:CBOR|Serialise|Codec\.Serialise)\.)?deserialise(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      `Data.Binary.decode`/`decodeFile` or `Codec.Serialise.deserialise` is used. These
+      throw an exception on malformed or truncated input. On data from the network, a queue
+      or a cache, a corrupted or malicious payload crashes the handler instead of being
+      rejected, and a huge length prefix can allocate excessive memory (CWE-502, CWE-400).
+      Use `decodeOrFail` / `decodeFileOrFail` / `deserialiseOrFail` and handle the `Left`
+      case; cap the input size before decoding untrusted data.
+    severity: WARNING
+    metadata:
+      category: security
+      technology:
+        - haskell
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      owasp:
+        - A08:2021 - Software and Data Integrity Failures
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      subcategory:
+        - audit
+      references:
+        - https://hackage.haskell.org/package/binary/docs/Data-Binary.html#v:decodeOrFail
+        - https://hackage.haskell.org/package/serialise/docs/Codec-Serialise.html

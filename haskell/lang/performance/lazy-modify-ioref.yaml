@@ -1,0 +1,31 @@
+rules:
+  - id: haskell_lang_lazy_modify_ioref
+    languages: [generic]
+    paths:
+      include:
+        - "*.hs"
+    patterns:
+      - pattern-regex: '(?<![A-Za-z0-9_''])(modifyIORef|modifySTRef|atomicModifyIORef)(?![A-Za-z0-9_''])'
+      - pattern-not-regex: '(?m)^import\b[^\n]*(?:\n[ \t]+[^\n]*)*'
+      - pattern-not-regex: '(?m)^module\b[\s\S]*?\bwhere\b'
+      - pattern-not-regex: '\{-[\s\S]*?-\}'
+      - pattern-not-regex: '(?m)^#[^\n]*'
+      - pattern-not-regex: '(?<![!#$%&*+./<=>?@\\^|~:-])--+(?![!#$%&*+./<=>?@\\^|~:])[^\n]*'
+      - pattern-not-regex: '"(?:[^"\\\n]|\\.)*"'
+    message: >-
+      Lazy `modifyIORef`/`modifySTRef`/`atomicModifyIORef`. Each update stores an
+      unevaluated thunk on top of the previous one, so a counter or cache that is updated
+      often grows a chain of thunks until it is read, which leaks memory and can overflow
+      the stack when it is finally forced.
+      Use the strict variants `modifyIORef'`, `modifySTRef'` or `atomicModifyIORef'`.
+    severity: WARNING
+    metadata:
+      category: performance
+      technology:
+        - haskell
+      likelihood: MEDIUM
+      impact: MEDIUM
+      confidence: HIGH
+      references:
+        - https://hackage.haskell.org/package/base/docs/Data-IORef.html#v:modifyIORef
+        - https://github.com/ndmitchell/hlint/blob/master/data/hlint.yaml
