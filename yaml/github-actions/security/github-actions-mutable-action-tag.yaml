@@ -3,10 +3,16 @@ rules:
     message: >-
       GitHub Actions step uses a mutable tag or branch reference. Tags and
       branch names can be silently repointed by the action owner, enabling
-      supply-chain attacks — as seen in the trivy-action and
+      supply-chain attacks, as seen in the trivy-action and
       kics-github-action compromises. Pin the reference to a full 40-character
       commit SHA instead, e.g.
       `uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.
+      If this workflow is onboarded to `.github/workflows/actions.lock` and
+      the action is listed there with a commit pin, GitHub already runs that
+      immutable commit; suppress this finding on that step with
+      `# nosemgrep: github-actions-mutable-action-tag`. Reusable workflow
+      calls (`jobs.<job_id>.uses`) are not covered by actions.lock and should
+      still be SHA-pinned.
     severity: WARNING
     languages:
       - yaml
@@ -20,6 +26,9 @@ rules:
         - "A08:2025 - Software and Data Integrity Failures"
       references:
         - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+        - https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles
+        - https://docs.github.com/en/actions/how-tos/secure-your-work/lock-workflow-dependencies
+        - https://github.blog/changelog/2026-10-28-github-actions-workflow-lockfiles-are-generally-available/
       technology:
         - github-actions
       subcategory:

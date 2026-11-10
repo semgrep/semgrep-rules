@@ -44,3 +44,10 @@ jobs:
       # TN: commented-out line should not fire
       # ok: github-actions-mutable-action-tag
       # uses: actions/checkout@v3
+
+      # TN: tag ref pinned via .github/workflows/actions.lock (Semgrep cannot
+      # yet correlate the lockfile; nosemgrep is the supported suppression
+      # until cross-file lock coverage lands). See issue #4132.
+      # ok: github-actions-mutable-action-tag
+      # nosemgrep: github-actions-mutable-action-tag
+      - uses: actions/checkout@v7.0.1
