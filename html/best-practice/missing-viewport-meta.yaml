@@ -1,0 +1,20 @@
+rules:
+  - id: missing-viewport-meta
+    paths:
+      include:
+        - "*.html"
+        - "*.htm"
+    # A <head>...</head> block that never mentions name="viewport".
+    pattern-regex: (?is)<head\b[^>]*>(?:(?!name\s*=\s*["']?viewport)(?!</head>).)*</head>
+    message: >-
+      This page has a <head> but no viewport meta tag, so mobile browsers render
+      it at desktop width and zoom out. Add
+      <meta name="viewport" content="width=device-width, initial-scale=1">.
+    languages: [regex]
+    severity: INFO
+    metadata:
+      category: best-practice
+      technology:
+        - html
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag

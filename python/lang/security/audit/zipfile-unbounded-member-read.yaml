@@ -1,0 +1,58 @@
+rules:
+  - id: zipfile-unbounded-member-read
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      $Z = zipfile.ZipFile(...)
+                      ...
+                  - pattern-inside: |
+                      with zipfile.ZipFile(...) as $Z:
+                        ...
+                  - pattern-inside: |
+                      def $F(..., $Z: zipfile.ZipFile, ...):
+                        ...
+              - pattern-either:
+                  - pattern: $Z.read(...)
+                  - pattern: $Z.open(...).read()
+                  - patterns:
+                      - pattern-inside: |
+                          with $Z.open(...) as $FH:
+                            ...
+                      - pattern: $FH.read()
+          - pattern: zipfile.ZipFile(...).read(...)
+      # A size check on the member before the read is treated as safe.
+      - pattern-not-inside: |
+          if <... $INFO.file_size ...>:
+            ...
+          ...
+      - pattern-not-inside: |
+          if <... $INFO.file_size ...>:
+            ...
+          else:
+            ...
+      - pattern: $EXPR
+    message: >-
+      '$EXPR' decompresses the whole ZIP member into memory before any size
+      check or truncation. A small archive can expand to gigabytes (zip bomb)
+      and exhaust memory. Check 'ZipInfo.file_size' first, or stream with
+      'with zf.open(name) as f: f.read(LIMIT + 1)'.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - audit
+      cwe:
+        - "CWE-409: Improper Handling of Highly Compressed Data (Data Amplification)"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      technology:
+        - python
+        - zipfile
+      references:
+        - https://docs.python.org/3/library/zipfile.html#decompression-pitfalls

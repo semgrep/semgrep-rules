@@ -1,0 +1,45 @@
+rules:
+  - id: feature-flag-fails-open
+    patterns:
+      - pattern-either:
+          # os.environ.get("X_ENABLED", "true"), flags.get("x_rollout", True), getattr(settings, "X", True)
+          - patterns:
+              - pattern-either:
+                  - pattern: os.environ.get($KEY, $DEFAULT)
+                  - pattern: os.getenv($KEY, $DEFAULT)
+                  - pattern: $CFG.get($KEY, $DEFAULT)
+                  - pattern: getattr($CFG, $KEY, $DEFAULT)
+              - metavariable-regex:
+                  metavariable: $DEFAULT
+                  regex: (?i)^(True|['"](true|1|yes|on|enabled?)['"]|1)$
+          # os.getenv("X_ENABLED") != "false": an unset value compares as enabled
+          - patterns:
+              - pattern-either:
+                  - pattern: $GET != $OFF
+                  - pattern: $GET not in ($OFF, ...)
+                  - pattern: $GET not in [$OFF, ...]
+                  - pattern: $GET not in {$OFF, ...}
+              - metavariable-pattern:
+                  metavariable: $GET
+                  pattern-either:
+                    - pattern: <... os.environ.get($KEY, ...) ...>
+                    - pattern: <... os.getenv($KEY, ...) ...>
+                    - pattern: <... $CFG.get($KEY, ...) ...>
+              - metavariable-regex:
+                  metavariable: $OFF
+                  regex: (?i)^['"](false|0|no|off|disabled?)['"]$
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(enable|disable|feature|flag|rollout|toggle|kill_?switch)
+    message: >-
+      Flag $KEY defaults to enabled when it is unset. A missing environment
+      variable, setting or flag-service value turns the feature on. Default
+      rollout and feature flags to off and enable them explicitly.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: correctness
+      technology:
+        - python
+      references:
+        - https://cwe.mitre.org/data/definitions/636.html
