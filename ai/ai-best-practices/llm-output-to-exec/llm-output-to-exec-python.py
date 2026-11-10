@@ -36,3 +36,39 @@ def safe_no_exec():
 def safe_hardcoded():
     # ok: llm-output-to-exec-python
     subprocess.run(["ls", "-la"], shell=False)
+
+def vulnerable_run_capture_output():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ruleid: llm-output-to-exec-python
+    subprocess.run(cmd, shell=True, capture_output=True)
+
+def vulnerable_popen_stdout():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ruleid: llm-output-to-exec-python
+    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+
+def vulnerable_check_output():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ruleid: llm-output-to-exec-python
+    subprocess.check_output(cmd, shell=True)
+
+def vulnerable_check_call():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ruleid: llm-output-to-exec-python
+    subprocess.check_call(cmd, shell=True)
+
+def vulnerable_os_popen():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ruleid: llm-output-to-exec-python
+    os.popen(cmd)
+
+def safe_check_output_no_shell():
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": "run command"}])
+    cmd = response.choices[0].message.content
+    # ok: llm-output-to-exec-python
+    subprocess.check_output(["echo", cmd])

@@ -27,3 +27,9 @@ def safe_fetch(url: str) -> str:
 def local_only() -> str:
     # ok: mcp-unsanitized-return-python
     return "hello world"
+
+@mcp.tool(description="Fetch a page")
+def fetch_with_description() -> str:
+    response = requests.get("https://example.com")
+    # ruleid: mcp-unsanitized-return-python
+    return response.text

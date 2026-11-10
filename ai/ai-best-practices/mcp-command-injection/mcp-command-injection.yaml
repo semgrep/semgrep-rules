@@ -21,7 +21,7 @@ rules:
     pattern-sources:
       - patterns:
           - pattern: |
-              @$SERVER.tool()
+              @$SERVER.tool(...)
               def $FUNC(..., $PARAM, ...):
                   ...
           - focus-metavariable: $PARAM
@@ -37,6 +37,24 @@ rules:
           - focus-metavariable: $SINK
       - patterns:
           - pattern: subprocess.Popen($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.popen($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.check_call($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.check_output($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.getoutput($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.getstatusoutput($SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: asyncio.create_subprocess_shell($SINK, ...)
           - focus-metavariable: $SINK
       - patterns:
           - pattern: eval($SINK)

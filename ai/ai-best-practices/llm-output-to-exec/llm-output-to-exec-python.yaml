@@ -31,13 +31,22 @@ rules:
           - pattern: exec($SINK)
           - focus-metavariable: $SINK
       - patterns:
-          - pattern: subprocess.run($SINK, ..., shell=True)
+          - pattern: subprocess.run($SINK, ..., shell=True, ...)
           - focus-metavariable: $SINK
       - patterns:
-          - pattern: subprocess.call($SINK, ..., shell=True)
+          - pattern: subprocess.call($SINK, ..., shell=True, ...)
           - focus-metavariable: $SINK
       - patterns:
-          - pattern: subprocess.Popen($SINK, ..., shell=True)
+          - pattern: subprocess.Popen($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.check_call($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: subprocess.check_output($SINK, ..., shell=True, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.popen($SINK, ...)
           - focus-metavariable: $SINK
       - patterns:
           - pattern: os.system($SINK)

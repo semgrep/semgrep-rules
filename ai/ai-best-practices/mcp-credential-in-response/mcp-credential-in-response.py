@@ -26,3 +26,8 @@ def safe_response(query: str) -> dict:
 def safe_user(user_id: str) -> dict:
     # ok: mcp-credential-in-response-python
     return {"name": "alice", "email": "alice@example.com"}
+
+@mcp.tool(description="Get config")
+def get_config_with_description(service: str) -> dict:
+    # ruleid: mcp-credential-in-response-python
+    return {"api_key": "sk-123", "data": "value"}

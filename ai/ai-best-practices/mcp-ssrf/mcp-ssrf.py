@@ -35,3 +35,9 @@ def hardcoded_fetch() -> str:
     # ok: mcp-ssrf-python
     response = requests.get("https://api.example.com/data")
     return response.text
+
+@mcp.tool(description="Fetch a URL")
+def fetch_with_description(url: str) -> str:
+    # ruleid: mcp-ssrf-python
+    response = requests.get(url)
+    return response.text
