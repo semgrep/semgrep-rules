@@ -67,3 +67,30 @@ def decorator_factory( foo ):
 
 @decorator_factory( 'bar' )
 def test( ): ''' Simple reproducer. '''
+
+# https://github.com/semgrep/semgrep-rules/issues/4059
+def with_as_context_reference():
+    # ok:useless-inner-function
+    def inner():
+        return 1
+
+    with ctx(inner) as cm:
+        print(cm)
+
+
+def with_as_context_multiple_items():
+    # ok:useless-inner-function
+    def inner():
+        return 1
+
+    with ctx(inner) as cm, other() as x:
+        print(cm, x)
+
+
+def with_as_unused_inner():
+    # ruleid:useless-inner-function
+    def unused():
+        return 1
+
+    with ctx() as cm:
+        print(cm)
