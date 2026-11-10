@@ -11,3 +11,18 @@ services:
   db:
     image: mysql
     read_only: true
+---
+services:
+  # ruleid: writable-filesystem-service
+  versionless:
+    image: nginx:alpine
+---
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      # ok: writable-filesystem-service
+      postgres:
+        image: postgres:16
