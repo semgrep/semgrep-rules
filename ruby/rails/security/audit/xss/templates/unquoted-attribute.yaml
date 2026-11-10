@@ -35,6 +35,10 @@ rules:
   - pattern-not-inside: ="<%= ... %>"
   - pattern-not-inside: ='...'
   - pattern-not-inside: ='<%= ... %>'
+  # Quoted attribute values with text around the tag, where the Ruby
+  # expression may itself contain quotes or "%>" inside a string.
+  - pattern-not-regex: =\s*"[^"<>\n]*<%=.*?%>[^"<>\n]*"
+  - pattern-not-regex: =\s*'[^'<>\n]*<%=.*?%>[^'<>\n]*'
   - pattern: <%= ... %>
   fix-regex:
     regex: <%=(.*?)%>
