@@ -24,7 +24,7 @@ rules:
           - pattern-not: |
               {
                 ...,
-                "minimumReleaseAge": false,
+                "minimumReleaseAge": "0 days",
                 ...
               }
       # Branch 2: Present but too low
@@ -36,7 +36,7 @@ rules:
           - pattern-regex: '"minimumReleaseAge":\s*"(?P<AGE>\d+) days?"'
           - metavariable-comparison:
               metavariable: $AGE
-              comparison: int($AGE) < 7
+              comparison: int($AGE) > 0 and int($AGE) < 7
           - focus-metavariable: $AGE
       # Branch 3: Invalid format (not matching "N days")
       - patterns:
@@ -50,13 +50,21 @@ rules:
               metavariable: $AGE
               regex: '^(?!\d+ days?$)'
           - focus-metavariable: $AGE
+      # Branch 4: Invalid boolean exception
+      - patterns:
+          - pattern-inside: |
+              "packageRules": [
+                ...
+              ]
+          - pattern: |
+              "minimumReleaseAge": false
     message: >-
       This Renovate configuration does not set a minimum release age.
       Newly published packages can be malicious or unstable.
       Add `"minimumReleaseAge": "7 days"` within a `packageRules`
       entry to wait 7 days before proposing updates to newly
       published package versions.
-      Set `"minimumReleaseAge": false` to set an exception for minimal release age for the package rule.
+      Set `"minimumReleaseAge": "0 days"` to make an exception for the package rule.
       Added in: v42
     languages:
       - json
