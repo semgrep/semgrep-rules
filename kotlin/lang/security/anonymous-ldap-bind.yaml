@@ -2,7 +2,7 @@ rules:
 - id: anonymous-ldap-bind
   metadata:
     cwe:
-    - 'CWE-287: Improper Authentication'
+    - 'CWE-1390: Weak Authentication'
     owasp:
     - A02:2017 - Broken Authentication
     - A07:2021 - Identification and Authentication Failures
@@ -13,8 +13,6 @@ rules:
     - kotlin
     references:
     - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: LOW
@@ -22,13 +20,25 @@ rules:
     confidence: MEDIUM
   message: >-
     Detected anonymous LDAP bind.
-    This permits anonymous users to execute LDAP statements. Consider enforcing
-    authentication for LDAP. See https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
+    Setting SECURITY_AUTHENTICATION to "none" permits anonymous users to execute
+    LDAP statements. Consider enforcing authentication for LDAP. See
+    https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html
     for more information.
   severity: WARNING
-  pattern: |
-    $ENV.put($CTX.SECURITY_AUTHENTICATION, "none")
-    ...
-    $DCTX = InitialDirContext($ENV, ...)
+  # Match the "none" assignment on its own instead of requiring the
+  # InitialDirContext call in the same function (see #3758).
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: $ENV.$PUT($CTX.SECURITY_AUTHENTICATION, "none")
+      - pattern: $ENV.$PUT(SECURITY_AUTHENTICATION, "none")
+      - pattern: $ENV.$PUT("java.naming.security.authentication", "none")
+    - metavariable-regex:
+        metavariable: $PUT
+        regex: ^(put|setProperty)$
+  # idiomatic Kotlin: indexed set and mapOf(... to ...)
+  - pattern: $ENV[$CTX.SECURITY_AUTHENTICATION] = "none"
+  - pattern: $ENV[SECURITY_AUTHENTICATION] = "none"
+  - pattern: $CTX.SECURITY_AUTHENTICATION to "none"
   languages:
   - kt
