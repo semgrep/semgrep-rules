@@ -1,0 +1,46 @@
+rules:
+  - id: express-open-cors-on-loopback-server
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      This Express app enables CORS for every origin and listens on a loopback
+      address. Binding to 127.0.0.1 keeps other hosts out, but the user's own
+      browser is a loopback client too, so any page it has open can call this
+      API and read the responses. List the origins that need access, and add
+      authentication if the API holds private data. `origin: true` reflects
+      every request origin and can be combined with credentials, so it is
+      broader than "*".
+    metadata:
+      cwe:
+        - "CWE-942: Permissive Cross-domain Policy with Untrusted Domains"
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A02:2025 - Security Misconfiguration
+      category: security
+      subcategory:
+        - audit
+      technology:
+        - express
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://github.com/GuyMannDude/mnemo-cortex/security/advisories/GHSA-682p-grrx-wrwg
+        - https://github.com/expressjs/cors#configuration-options
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $APP.use(...);
+              ...
+              $APP.listen($PORT, $HOST, ...);
+          - pattern-inside: |
+              $APP.use(...);
+              ...
+              $SERVER = $APP.listen($PORT, $HOST, ...);
+      - metavariable-regex:
+          metavariable: $HOST
+          regex: ^["'`](127\.0\.0\.1|localhost|::1)["'`]$
+      - pattern-either:
+          - pattern: $APP.use(cors())
+          - pattern: '$APP.use(cors({..., origin: "*", ...}))'
+          - pattern: '$APP.use(cors({..., origin: true, ...}))'

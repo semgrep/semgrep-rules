@@ -1,0 +1,71 @@
+rules:
+  - id: host-origin-guard-skips-safe-methods
+    languages: [go]
+    severity: WARNING
+    message: >-
+      This HTTP middleware passes some requests to the next handler, based on
+      the request method, before it checks Host or Origin. A page that rebinds
+      its hostname to 127.0.0.1 is same-origin to the browser, so it can read
+      the responses of every route that skips the check (DNS rebinding). On an
+      unauthenticated loopback server, GET routes that return secrets or proxy
+      to another system with the user's credentials are reachable this way.
+      Check Host on every request, and Origin whenever it is present. If this
+      middleware is only CSRF protection and Host is checked against an
+      allowlist elsewhere for every method, the finding can be closed.
+    metadata:
+      cwe:
+        - "CWE-346: Origin Validation Error"
+      owasp:
+        - A07:2021 - Identification and Authentication Failures
+        - A07:2025 - Authentication Failures
+      category: security
+      subcategory:
+        - audit
+      technology:
+        - go
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://github.com/devantler-tech/ksail/security/advisories/GHSA-g57x-rm7r-hf26
+        - https://github.com/devantler-tech/ksail/pull/7850
+    patterns:
+      - pattern-inside: |
+          func($W http.ResponseWriter, $R *http.Request) {
+            ...
+          }
+      - pattern-either:
+          - pattern-inside: |
+              if <... $R.Method ...> {
+                ...
+              }
+              ...
+              if <... $R.Host ...> {
+                ...
+              }
+          - pattern-inside: |
+              if <... $R.Method ...> {
+                ...
+              }
+              ...
+              if <... $R.Header.Get("Origin") ...> {
+                ...
+              }
+          - pattern-inside: |
+              if <... $R.Method ...> {
+                ...
+              }
+              ...
+              $V := <... $R.Host ...>
+          - pattern-inside: |
+              if <... $R.Method ...> {
+                ...
+              }
+              ...
+              $V := <... $R.Header.Get("Origin") ...>
+      - pattern: |
+          if <... $R.Method ...> {
+            ...
+            $NEXT.ServeHTTP($W, $R)
+            ...
+          }

@@ -1,0 +1,59 @@
+rules:
+  - id: mcp-http-transport-without-host-validation
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: >-
+      This MCP HTTP transport is served from a plain express() app that does
+      not validate the Host header. The transport's own
+      enableDnsRebindingProtection option defaults to false, so nothing checks
+      Host or Origin. A web page that rebinds its hostname to 127.0.0.1 is
+      same-origin to the browser and can call this server's tools and read the
+      results (DNS rebinding). Create the app with createMcpExpressApp() from
+      @modelcontextprotocol/sdk/server/express.js, which validates Host for
+      loopback binds, or add hostHeaderValidation() or
+      localhostHostValidation() middleware before the MCP routes.
+    metadata:
+      cwe:
+        - "CWE-346: Origin Validation Error"
+      owasp:
+        - A07:2021 - Identification and Authentication Failures
+        - A07:2025 - Authentication Failures
+      category: security
+      subcategory:
+        - audit
+      technology:
+        - mcp
+        - express
+        - typescript
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#security-warning
+        - https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-w48q-cv73-mx4w
+        - https://github.com/devantler-tech/ksail/security/advisories/GHSA-g57x-rm7r-hf26
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $APP = express(...);
+              ...
+          - pattern-inside: |
+              $APP = express.default(...);
+              ...
+      - pattern-not-inside: |
+          $APP = express(...);
+          ...
+          $APP.use(<... hostHeaderValidation(...) ...>);
+          ...
+      - pattern-not-inside: |
+          $APP = express(...);
+          ...
+          $APP.use(<... localhostHostValidation(...) ...>);
+          ...
+      - pattern-either:
+          - pattern: new StreamableHTTPServerTransport(...)
+          - pattern: new SSEServerTransport(...)
+      - pattern-not: |
+          new StreamableHTTPServerTransport({..., enableDnsRebindingProtection: true, ...})
+      - pattern-not: |
+          new SSEServerTransport($ENDPOINT, $RES, {..., enableDnsRebindingProtection: true, ...})
