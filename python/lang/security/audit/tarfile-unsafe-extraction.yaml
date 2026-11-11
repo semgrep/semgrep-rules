@@ -1,0 +1,68 @@
+rules:
+  - id: tarfile-unsafe-extraction
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: |
+                  with tarfile.open(...) as $TAR:
+                    ...
+              - pattern-either:
+                  - pattern: $TAR.extractall(...)
+                  - pattern: $TAR.extract(...)
+          - patterns:
+              - pattern-inside: |
+                  $TAR = tarfile.open(...)
+                  ...
+              - pattern-either:
+                  - pattern: $TAR.extractall(...)
+                  - pattern: $TAR.extract(...)
+          - pattern: tarfile.open(...).extractall(...)
+          - pattern: tarfile.open(...).extract(...)
+          - patterns:
+              - pattern-inside: |
+                  def $FUNC(..., $TAR: tarfile.TarFile, ...):
+                    ...
+              - pattern-either:
+                  - pattern: $TAR.extractall(...)
+                  - pattern: $TAR.extract(...)
+          - patterns:
+              - pattern-inside: |
+                  def $FUNC(..., $TAR: TarFile, ...):
+                    ...
+              - pattern-either:
+                  - pattern: $TAR.extractall(...)
+                  - pattern: $TAR.extract(...)
+      - pattern-not: $ANY.extractall(..., filter=$F, ...)
+      - pattern-not: $ANY.extract(..., filter=$F, ...)
+      - pattern-not: tarfile.open(...).extractall(..., filter=$F, ...)
+      - pattern-not: tarfile.open(...).extract(..., filter=$F, ...)
+    message: >-
+      Extracting a tar archive with `extractall()`/`extract()` and no `filter=`
+      argument does not contain extracted paths. A crafted archive can use
+      `../` sequences, absolute paths, or symlink/hardlink members to write
+      files outside the destination directory (CVE-2007-4559 "tarslip" class;
+      e.g. CVE-2026-43637). If the archive is attacker-influenced (downloaded,
+      uploaded, or fetched from a cache), this is arbitrary file write and can
+      lead to code execution. On Python 3.12+ pass `filter='data'`
+      (or `filter=tarfile.data_filter`); otherwise validate every member so its
+      resolved path stays within the destination and reject absolute paths,
+      `..`, and links before extracting.
+    metadata:
+      owasp:
+        - A01:2021 - Broken Access Control
+        - A05:2021 - Security Misconfiguration
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      category: security
+      technology:
+        - python
+      references:
+        - https://docs.python.org/3/library/tarfile.html#extraction-filters
+        - https://nvd.nist.gov/vuln/detail/CVE-2007-4559
+      subcategory:
+        - audit
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+    languages: [python]
+    severity: WARNING
