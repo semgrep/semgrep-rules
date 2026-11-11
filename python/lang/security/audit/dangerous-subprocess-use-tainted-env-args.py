@@ -2,6 +2,7 @@
 
 import subprocess
 import sys
+import os
 
 
 def ok():
@@ -81,3 +82,67 @@ def fn2(payload: str) -> None:
             ["python2", str(python_file)], stdin=subprocess.PIPE, text=True
         )
         program.communicate(input=payload, timeout=1)
+
+
+def bad_list_forms():
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["bash", "-lc", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["bash", "-e", "-c", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["sh", "-c", sys.argv[1], "arg0"])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["env", "sh", "-c", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["python3", "-c", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["node", "-e", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["perl", "-e", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["task", "-c", sys.argv[1]], executable="/bin/sh")
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(args=sys.argv[1], shell=True)
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(args=["sh", "-c", sys.argv[1]])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(("bash", "-lc", sys.argv[1]))
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run("bash", "-lc", os.environ["CMD"])
+
+    # ruleid:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["/bin/sh", "-c", os.environ["CMD"]])
+
+
+def ok_list_forms():
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["ssh", "-c", sys.argv[1]])
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["bash", "-e", "-c", "/bin/ls"])
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["env", "sh", "-c", "/bin/ls"])
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["python3", "-c", "print('hello')"])
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["task", "-c", "/bin/ls"], executable="/bin/sh")
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(args="/bin/ls", shell=True)
+
+    # ok:dangerous-subprocess-use-tainted-env-args
+    subprocess.run(["ls", "-l", sys.argv[1]])
