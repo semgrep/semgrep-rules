@@ -1,0 +1,95 @@
+rules:
+  - id: per-chunk-filter-without-carry-over
+    languages: [python]
+    severity: WARNING
+    mode: taint
+    message: >-
+      A redaction or filtering pattern is applied to '$CHUNK', one chunk of a stream, and
+      nothing from the previous chunk is carried into the match. A value split across two
+      chunks (an email sent as "jane.doe@exa" then "mple.com") matches in neither chunk and
+      is forwarded unchanged. Keep the unmatched tail of each chunk, scan it together with
+      the next chunk, and scan what is left when the stream ends.
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  for $CHUNK in $STREAM:
+                    ...
+              - pattern-inside: |
+                  async for $CHUNK in $STREAM:
+                    ...
+          - metavariable-regex:
+              metavariable: $CHUNK
+              regex: (?i)^(chunk|\w+_chunk|chunk_\w+|\w*Chunk|delta|\w+_delta|\w*Delta|event|evt|frag|fragment|token|segment|piece|packet)$
+          - pattern: $CHUNK
+    pattern-sanitizers:
+      # carry-over: the chunk is joined to held text before it is scanned
+      - pattern: $A + $B
+      - pattern: $S.join(...)
+      # carry-over: chunks are accumulated into a buffer that is scanned instead
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  for $C in $S:
+                    ...
+                    $BUF += $Y
+                  ...
+              - pattern-inside: |
+                  async for $C in $S:
+                    ...
+                    $BUF += $Y
+                  ...
+          - pattern: $BUF
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: re.$F($PAT, $X, ...)
+              - pattern: re.$F($PAT, $REPL, $X, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(search|match|fullmatch|findall|finditer|sub|subn)$
+          - focus-metavariable: $X
+      - patterns:
+          - pattern-either:
+              - pattern: $RX.$F($X, ...)
+              - pattern: $RX.$F($REPL, $X, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(search|match|fullmatch|findall|finditer|sub|subn)$
+          - metavariable-regex:
+              metavariable: $RX
+              regex: ^(?!re$)
+          - focus-metavariable: $X
+      - patterns:
+          - pattern-either:
+              - pattern: $FN($X, ...)
+              - pattern: $OBJ.$FN($X, ...)
+          - metavariable-regex:
+              metavariable: $FN
+              # unmask/unredact restore placeholders; they do not filter
+              regex: (?i)^(?!_*un(mask|redact|anonymi))\w*(redact|anonymi[sz]e|scrub|sanitiz|mask|censor|deidentif|desensitiz|strip_pii|filter_pii|detect_pii|check_pii|scan|moderat)\w*$
+          - focus-metavariable: $X
+      - patterns:
+          - pattern: $X.replace($OLD, $NEW, ...)
+          # a one-character literal cannot straddle a boundary
+          - metavariable-regex:
+              metavariable: $OLD
+              regex: ^(?!["'](\\.|.)["']$)
+          - focus-metavariable: $X
+    metadata:
+      category: security
+      subcategory: [audit]
+      cwe:
+        - "CWE-693: Protection Mechanism Failure"
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp:
+        - "A04:2021 - Insecure Design"
+        - "LLM02:2025 - Sensitive Information Disclosure"
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://cwe.mitre.org/data/definitions/693.html
+        - https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/
+        - https://github.com/mastra-ai/mastra/pull/26082
+      technology: [streaming, llm, redaction]
