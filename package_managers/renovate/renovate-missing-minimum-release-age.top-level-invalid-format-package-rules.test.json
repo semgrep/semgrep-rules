@@ -1,0 +1,17 @@
+{
+  "extends": ["config:recommended"],
+  // ruleid: renovate-missing-minimum-release-age
+  "minimumReleaseAge": "1 week",
+  "packageRules": [
+    // ok: renovate-missing-minimum-release-age
+    {
+      "matchPackageNames": ["webpack"],
+      "groupName": "Webpack build system"
+    },
+    {
+      "matchPackageNames": ["eslint"],
+      // ruleid: renovate-missing-minimum-release-age
+      "minimumReleaseAge": "3 days"
+    }
+  ]
+}

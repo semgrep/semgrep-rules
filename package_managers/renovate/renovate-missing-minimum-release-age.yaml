@@ -27,6 +27,15 @@ rules:
                 "minimumReleaseAge": false,
                 ...
               }
+          # Inherited from the top level, checked by Branch 4
+          - pattern-not-inside: |
+              {
+                ...,
+                "minimumReleaseAge": "$TOP",
+                ...,
+                "packageRules": [...],
+                ...
+              }
       # Branch 2: Present but too low
       - patterns:
           - pattern-inside: |
@@ -50,12 +59,35 @@ rules:
               metavariable: $AGE
               regex: '^(?!\d+ days?$)'
           - focus-metavariable: $AGE
+      # Branch 4: Top-level value too low or invalid format
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  {
+                    ...,
+                    "minimumReleaseAge": "$AGE",
+                    ...,
+                    "packageRules": [...],
+                    ...
+                  }
+              - patterns:
+                  - pattern: |
+                      { ..., "minimumReleaseAge": "$AGE", ... }
+                  - pattern-not-inside: |
+                      "$KEY": { ... }
+                  - pattern-not-inside: |
+                      [ ... ]
+          # Anything but "N days" with N >= 7
+          - metavariable-regex:
+              metavariable: $AGE
+              regex: '^(?!0*([7-9]|[1-9]\d+) days?$)'
+          - focus-metavariable: $AGE
     message: >-
-      This Renovate configuration does not set a minimum release age.
+      This Renovate configuration does not set a minimum release age or sets it too low.
       Newly published packages can be malicious or unstable.
-      Add `"minimumReleaseAge": "7 days"` within a `packageRules`
-      entry to wait 7 days before proposing updates to newly
-      published package versions.
+      Add `"minimumReleaseAge": "7 days"` at the top level or within a
+      `packageRules` entry to wait 7 days before proposing updates to
+      newly published package versions.
       Set `"minimumReleaseAge": false` to set an exception for minimal release age for the package rule.
       Added in: v42
     languages:

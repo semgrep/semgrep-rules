@@ -1,0 +1,41 @@
+{
+  "extends": ["config:recommended"],
+  "packageRules": [
+    // ok: renovate-missing-minimum-release-age
+    {
+      "matchPackageNames": ["webpack"],
+      "groupName": "Webpack build system"
+    },
+    // ok: renovate-missing-minimum-release-age
+    {
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "Dev dependencies"
+    },
+    // ok: renovate-missing-minimum-release-age
+    {
+      "matchPackageNames": ["webpack"],
+      "minimumReleaseAge": "14 days"
+    },
+    // ok: renovate-missing-minimum-release-age
+    {
+      "matchPackageNames": ["webpack"],
+      "minimumReleaseAge": false
+    },
+    {
+      "matchPackageNames": ["eslint"],
+      // ruleid: renovate-missing-minimum-release-age
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "matchPackageNames": ["eslint"],
+      // ruleid: renovate-missing-minimum-release-age
+      "minimumReleaseAge": "72 hours"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    // ok: renovate-missing-minimum-release-age
+    "minimumReleaseAge": "0 days"
+  },
+  // ok: renovate-missing-minimum-release-age
+  "minimumReleaseAge": "7 days"
+}
