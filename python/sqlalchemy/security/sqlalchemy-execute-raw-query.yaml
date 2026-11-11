@@ -32,36 +32,38 @@ rules:
   severity: ERROR
   languages:
   - python
-  pattern-either:
-  - pattern: |
-      $CONNECTION.execute( $SQL + ..., ... )
-  - pattern: |
-      $CONNECTION.execute( $SQL % (...), ...)
-  - pattern: |
-      $CONNECTION.execute( $SQL.format(...), ... )
-  - pattern: |
-      $CONNECTION.execute(f"...{...}...", ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = $SQL + ...
-        ...
+  patterns:
+  - pattern-either:
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns: 
-    - pattern-inside: |
-        $QUERY = $SQL % (...)
-        ...
+        $CONNECTION.execute( $SQL + ..., ... )
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = $SQL.format(...)
-        ...
+        $CONNECTION.execute( $SQL % (...), ...)
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = f"...{...}..."
-        ...
+        $CONNECTION.execute( $SQL.format(...), ... )
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
+        $CONNECTION.execute(f"...{...}...", ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL + ...
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL % (...)
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL.format(...)
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = f"...{...}..."
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+  - pattern-not: $CONNECTION.execute("...", ...)
