@@ -63,3 +63,66 @@ def check_ruamel_yaml():
     yaml.load("thing.yaml")
     # ok:avoid-pyyaml-load
     yaml.load_all("thing.yaml")
+
+# --- #4135: unsafe_load_all + positional Loader ---
+
+def unsafe_load_all_stream(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.unsafe_load_all(stream)
+
+def positional_unsafe_loader(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load(stream, yaml.UnsafeLoader)
+
+def positional_loader(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load(stream, yaml.Loader)
+
+def positional_cloader(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load(stream, yaml.CLoader)
+
+def positional_load_all_unsafe(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load_all(stream, yaml.UnsafeLoader)
+
+def positional_load_all_loader(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load_all(stream, yaml.Loader)
+
+def positional_load_all_cloader(stream):
+    #ruleid:avoid-pyyaml-load
+    return yaml.load_all(stream, yaml.CLoader)
+
+def positional_safe_loader_ok(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.load(stream, yaml.SafeLoader)
+
+def positional_csafe_loader_ok(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.load(stream, yaml.CSafeLoader)
+
+def positional_base_loader_ok(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.load(stream, yaml.BaseLoader)
+
+def positional_full_load_ok(stream):
+    #ok:avoid-pyyaml-load
+    return yaml.full_load(stream)
+
+def from_import_positional():
+    from yaml import load, UnsafeLoader
+    payload = "!!python/object/new:os.system [echo EXPLOIT!]"
+    #ruleid:avoid-pyyaml-load
+    return load(payload, UnsafeLoader)
+
+def from_import_load_all_cloader():
+    from yaml import load_all, CLoader
+    payload = "!!python/object/new:os.system [echo EXPLOIT!]"
+    #ruleid:avoid-pyyaml-load
+    return load_all(payload, CLoader)
+
+def from_import_unsafe_load_all(stream):
+    from yaml import unsafe_load_all
+    #ruleid:avoid-pyyaml-load
+    return unsafe_load_all(stream)
