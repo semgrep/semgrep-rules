@@ -41,5 +41,14 @@ rules:
       - patterns:
           - pattern: urllib.request.urlopen($SINK)
           - focus-metavariable: $SINK
+      - patterns:
+          - pattern: $X.request($METHOD, $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: urllib3.request($METHOD, $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: websockets.connect($SINK, ...)
+          - focus-metavariable: $SINK
     pattern-sanitizers:
       - pattern: urllib.parse.urlparse(...)

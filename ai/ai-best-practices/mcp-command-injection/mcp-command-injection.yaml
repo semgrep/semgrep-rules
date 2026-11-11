@@ -44,5 +44,23 @@ rules:
       - patterns:
           - pattern: exec($SINK)
           - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.execv($PATH, $SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.execve($PATH, $SINK, $ENV)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.execl($PATH, ..., $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.execvp($PATH, $SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: os.execle($PATH, ..., $SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern: pty.spawn($SINK)
+          - focus-metavariable: $SINK
     pattern-sanitizers:
       - pattern: shlex.quote(...)
