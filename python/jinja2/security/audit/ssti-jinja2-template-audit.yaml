@@ -1,0 +1,43 @@
+rules:
+- id: ssti-jinja2-template-audit
+  patterns:
+  - pattern-either:
+    - pattern: jinja2.Template($SINK, ...)
+    - pattern: $ENV.from_string($SINK, ...)
+  - focus-metavariable: $SINK
+  - pattern-not: jinja2.Template("...", ...)
+  - pattern-not: $ENV.from_string("...", ...)
+  - metavariable-regex:
+      metavariable: $SINK
+      regex: ^(?!_*[A-Z][A-Z0-9_]*$).
+  message: >-
+    A non-constant string is compiled into a Jinja2 template with
+    'jinja2.Template(...)' or 'Environment.from_string(...)'. If any part of that
+    string is attacker-controllable this is Server-Side Template Injection (SSTI),
+    which commonly leads to remote code execution; HTML-escaping does not help
+    because the engine evaluates the template before escaping applies. This audit
+    rule flags dynamic templates regardless of where the data originates; the
+    taint-mode rule 'ssti-jinja2-template' covers the request-to-sink data flow.
+    Compile a static template once and pass user input as a context variable to
+    '.render()', e.g. Template("Hello {{ name }}").render(name=user_input).
+  metadata:
+    cwe:
+    - "CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine"
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://portswigger.net/research/server-side-template-injection
+    - https://owasp.org/www-community/attacks/Server_Side_Template_Injection
+    category: security
+    technology:
+    - jinja2
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: LOW
+    vulnerability_class:
+    - Code Injection
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+  languages: [python]
+  severity: WARNING

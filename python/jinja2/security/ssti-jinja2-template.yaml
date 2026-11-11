@@ -1,0 +1,68 @@
+rules:
+  - id: ssti-jinja2-template
+    mode: taint
+    options:
+      symbolic_propagation: true
+    message: >-
+      Attacker-controllable request data flows into a Jinja2 template string
+      that is then compiled with 'jinja2.Template(...)' or
+      'Environment.from_string(...)'. When user input becomes part of the
+      template itself, an attacker can inject template syntax (e.g. {{7*7}})
+      and reach Server-Side Template Injection (SSTI), which commonly leads to
+      remote code execution. HTML-escaping the input does not help, because the
+      engine evaluates the string before escaping applies. Do not build the
+      template from request data. Compile a static template once and pass user
+      input as a context variable to '.render()', e.g.
+      Template("Hello {{ name }}").render(name=user_input).
+    metadata:
+      category: security
+      cwe:
+        - "CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine"
+      owasp:
+        - A03:2021 - Injection
+      references:
+        - https://portswigger.net/research/server-side-template-injection
+        - https://owasp.org/www-community/attacks/Server_Side_Template_Injection
+      technology:
+        - jinja2
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      vulnerability_class:
+        - Code Injection
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    languages:
+      - python
+    severity: ERROR
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: flask.request.$W
+              - pattern: flask.request.$W.get(...)
+              - pattern: flask.request.$W[...]
+              - pattern: request.$W
+              - pattern: request.$W.get(...)
+              - pattern: request.$W[...]
+          - metavariable-pattern:
+              metavariable: $W
+              patterns:
+                - pattern-either:
+                    - pattern: args
+                    - pattern: form
+                    - pattern: values
+                    - pattern: json
+                    - pattern: data
+                    - pattern: cookies
+                    - pattern: headers
+                    - pattern: files
+                    - pattern: view_args
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: jinja2.Template($SINK, ...)
+              - pattern: $ENV.from_string($SINK, ...)
+          - focus-metavariable: $SINK
+    pattern-sanitizers:
+      - pattern: int(...)
