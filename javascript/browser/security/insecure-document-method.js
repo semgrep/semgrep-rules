@@ -16,6 +16,11 @@ function bad3(userInput) {
   document.write(name);
 }
 
+function bad4(userInput) {
+// ruleid: insecure-document-method
+  document.body.innerHTML = userInput;
+}
+
 function ok1() {
   const name = "<div>it's ok</div>";
 // ok: insecure-document-method
