@@ -24,6 +24,18 @@ def safe_fetch(url: str) -> str:
     return clean
 
 @mcp.tool()
+def strip_whitespace(url: str) -> str:
+    response = requests.get(url)
+    # ruleid: mcp-unsanitized-return-python
+    return str.strip(response.text)
+
+@mcp.tool()
+def strip_method(url: str) -> str:
+    response = requests.get(url)
+    # ruleid: mcp-unsanitized-return-python
+    return response.text.strip()
+
+@mcp.tool()
 def local_only() -> str:
     # ok: mcp-unsanitized-return-python
     return "hello world"
