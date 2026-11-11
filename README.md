@@ -17,6 +17,22 @@ In addition to the rules in this repository, the [Semgrep Registry](https://semg
 
 To start writing and using Semgrep rules, see [Learn Semgrep syntax](https://semgrep.dev/learn) and [Writing rules](https://semgrep.dev/docs/writing-rules/overview/). Then, run existing and custom Semgrep rules locally with the [Semgrep command line interface (Semgrep CLI)](https://semgrep.dev/docs/getting-started/) or [continuously with Semgrep in CI while using Semgrep AppSec Platform](https://semgrep.dev/docs/semgrep-app/getting-started-with-semgrep-app/).
 
+## Windows and endpoint protection
+
+Some rule test fixtures intentionally contain malware-like sample code so Semgrep can verify detections (for example `python/lang/security/audit/python-reverse-shell.py`). Endpoint protection products such as Microsoft Defender may quarantine those fixtures when the full repository is checked out on Windows. That is expected for the fixture content; it does not mean Semgrep itself is malicious.
+
+If you only need the rule definitions, use a blobless sparse checkout and keep language directories that hold `.yaml` / `.yml` rules:
+
+```bash
+git clone --filter=blob:none --sparse https://github.com/semgrep/semgrep-rules.git
+cd semgrep-rules
+git sparse-checkout set --cone python java go javascript typescript ruby
+```
+
+Adjust the language directories for the ecosystems you scan. Avoid broad Defender exclusions for this repository; restore an individual quarantined fixture only if you need to run its Semgrep tests locally.
+
+See https://github.com/semgrep/semgrep-rules/issues/4030 for background.
+
 ## Writing Semgrep rules
 
 See [Writing rules](https://semgrep.dev/docs/writing-rules/overview/) for information including:
