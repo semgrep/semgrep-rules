@@ -1,0 +1,51 @@
+rules:
+- id: php-fatal-error-backtraces-enabled
+  patterns:
+  - pattern-either:
+    # php.ini / conf.d, including a commented-out line (default is On in PHP 8.5)
+    - pattern-regex: (?im)^[ \t]*;?[ \t]*fatal_error_backtraces[ \t]*=[ \t]*["']?(1|on|true|yes)["']?[ \t]*$
+    # PHP-FPM pool
+    - pattern-regex: (?i)php_(admin_)?(value|flag)\[fatal_error_backtraces\][ \t]*=[ \t]*["']?(1|on|true|yes)\b
+    # Apache mod_php
+    - pattern-regex: (?i)\bphp_(admin_)?(value|flag)[ \t]+fatal_error_backtraces[ \t]+["']?(1|on|true|yes)\b
+  languages:
+  - generic
+  severity: WARNING
+  message: >-
+    `fatal_error_backtraces` is on (explicitly, or commented out, which leaves PHP 8.5's default
+    of On). The fatal error backtrace path is a confirmed route to CVE-2026-109619 (stale request
+    state reused across requests, leading to RCE). Upgrade to PHP 8.5.12 or later. Until then,
+    set `fatal_error_backtraces = 0` in php.ini, the PHP-FPM pool, or the web server config and
+    restart all workers. This blocks the fatal backtrace path only, so it does not replace the
+    update. The setting does not exist before PHP 8.5.
+  paths:
+    include:
+    - '*.ini'
+    - '*.conf'
+    - '*.vhost'
+    - '.htaccess'
+    - '**/php-fpm.d/*'
+    - '**/pool.d/*'
+    - '**/sites-available/*'
+    - '**/sites-enabled/*'
+    exclude:
+    - '*.user.ini'
+  metadata:
+    cwe:
+    - 'CWE-416: Use After Free'
+    references:
+    - https://www.php.net/archive/2026.php#2026-10-21-5
+    - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+    category: security
+    technology:
+    - php
+    - php-fpm
+    - apache
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM

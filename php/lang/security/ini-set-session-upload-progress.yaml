@@ -1,0 +1,36 @@
+rules:
+- id: ini-set-session-upload-progress
+  patterns:
+  - pattern-either:
+    - pattern: ini_set($KEY, ...)
+    - pattern: ini_alter($KEY, ...)
+  - metavariable-regex:
+      metavariable: $KEY
+      regex: ^['"]session\.upload_progress\.enabled['"]$
+  message: >-
+    `session.upload_progress.enabled` is PHP_INI_PERDIR, so `ini_set()` cannot change it and
+    returns false. It also runs too late: the session upload progress handler fires while
+    PHP parses the multipart request, before any script code. This call does not mitigate
+    CVE-2026-109619. Set `session.upload_progress.enabled = Off` in php.ini, the PHP-FPM pool,
+    or the web server config, restart all workers, and upgrade to PHP 8.2.35, 8.3.36, 8.4.27,
+    8.5.12 or later.
+  metadata:
+    cwe:
+    - 'CWE-416: Use After Free'
+    references:
+    - https://www.php.net/archive/2026.php#2026-10-21-5
+    - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+    - https://www.php.net/manual/en/session.configuration.php#ini.session.upload-progress.enabled
+    category: security
+    technology:
+    - php
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+  languages: [php]
+  severity: WARNING
