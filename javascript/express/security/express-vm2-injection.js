@@ -1,5 +1,7 @@
 const fs = require('fs');
 const {VM, NodeVM} = require('vm2');
+const vm2Namespace = require('vm2');
+const unrelatedNamespace = require('unrelated-library');
 const express = require('express')
 const app = express()
 const port = 3000
@@ -158,5 +160,39 @@ app.get('/ok-test5', function okTest2() {
   const nodeVM = new NodeVM({timeout: 40 * 1000, sandbox});
   return nodeVM.run('console.log("Hello world")')
 })
+
+// Regression: a namespace require of the vm2 module must be recognized.
+app.get('/test-namespace-vm', function (req, res) {
+  // ruleid:express-vm2-injection
+  new vm2Namespace.VM({timeout: 1000}).run(req.query.input);
+});
+
+app.post('/test-namespace-nodevm', function (req, res) {
+  // ruleid:express-vm2-injection
+  new vm2Namespace.NodeVM({timeout: 1000}).run(req.body.input);
+});
+
+// Regression: stored VM instances must also be recognized.
+app.get('/test-namespace-vm-stored', function (req, res) {
+  const runner = new vm2Namespace.VM({timeout: 1000});
+  // ruleid:express-vm2-injection
+  runner.run(req.query.input);
+});
+
+app.post('/test-namespace-nodevm-stored', function (req, res) {
+  const runner = new vm2Namespace.NodeVM({timeout: 1000});
+  // ruleid:express-vm2-injection
+  runner.run(req.body.input);
+});
+
+app.get('/ok-test-namespace-constant', function (req, res) {
+  // ok:express-vm2-injection
+  new vm2Namespace.VM({timeout: 1000}).run('1 + 1');
+});
+
+app.get('/ok-test-unrelated-vm', function (req, res) {
+  // ok:express-vm2-injection
+  new unrelatedNamespace.VM({timeout: 1000}).run(req.query.input);
+});
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

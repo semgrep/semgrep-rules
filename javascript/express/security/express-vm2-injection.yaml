@@ -82,3 +82,32 @@ rules:
           new VM(...)
       - pattern: |-
           new NodeVM(...)
+
+  # Namespace import syntax: const vm2 = require('vm2'); new vm2.VM(...)
+  # Tie the module metavariable to require('vm2') so that unrelated
+  # libraries exposing VM / NodeVM are not reported.
+  - patterns:
+    - pattern-inside: |
+        const $VM2 = require('vm2');
+        ...
+    - pattern-either:
+      - pattern: |
+          new $VM2.VM(...).run(...)
+      - pattern: |
+          new $VM2.NodeVM(...).run(...)
+      - pattern: |
+          new $VM2.VMScript(...)
+      - patterns:
+        - pattern-either:
+          - pattern-inside: |
+              $VM = new $VM2.VM(...)
+              ...
+          - pattern-inside: |
+              $VM = new $VM2.NodeVM(...)
+              ...
+        - pattern: |
+            $VM.run(...)
+      - pattern: |
+          new $VM2.VM(...)
+      - pattern: |-
+          new $VM2.NodeVM(...)
