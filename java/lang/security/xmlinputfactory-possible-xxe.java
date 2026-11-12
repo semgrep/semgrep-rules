@@ -63,3 +63,53 @@ class MaybeBadXMLInputFactory {
         final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     }
 }
+
+class GoodNewInstanceXMLInputFactory {
+    public void blah() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        // ok
+        xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+    }
+}
+
+class GoodNewDefaultFactoryXMLInputFactory {
+    public GoodNewDefaultFactoryXMLInputFactory() {
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newDefaultFactory();
+
+        xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        // ok
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+    }
+}
+
+class BadXMLInputFactory3 {
+    public BadXMLInputFactory3() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", true);
+    }
+}
+
+class BadXMLInputFactory4 {
+    public BadXMLInputFactory4() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newDefaultFactory();
+        xmlInputFactory.setProperty(IS_SUPPORTING_EXTERNAL_ENTITIES, true);
+    }
+}
+
+class MaybeBadXMLInputFactory2 {
+    public void foobar() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    }
+}
+
+class MaybeBadXMLInputFactory3 {
+    public void foobar() {
+        // ruleid:xmlinputfactory-possible-xxe
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newDefaultFactory();
+    }
+}
