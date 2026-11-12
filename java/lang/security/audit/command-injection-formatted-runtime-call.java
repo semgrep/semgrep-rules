@@ -59,4 +59,16 @@ class Cls {
         // ruleid: command-injection-formatted-runtime-call
         Runtime.getRuntime().exec(command, "-c", input);
     }
+
+    public void test7(String input) {
+        Runtime r = Runtime.getRuntime();
+        // ruleid: command-injection-formatted-runtime-call
+        r.exec(new String[]{"/bin/sh", "-c", "some_tool", input});
+    }
+
+    public void okTest3(String input) {
+        Runtime r = Runtime.getRuntime();
+        // ok: command-injection-formatted-runtime-call
+        r.exec(new String[]{"/bin/sh", "-c", "some_tool", "literal"});
+    }
 }
