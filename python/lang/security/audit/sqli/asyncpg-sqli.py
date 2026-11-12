@@ -69,6 +69,10 @@ def bad11(conn: asyncpg.Connection):
     # ruleid: asyncpg-sqli
     cur = conn.fetch(common.bad_query_1.format(user_input))
 
+def bad12(conn: asyncpg.Connection, user_input):
+    # ruleid: asyncpg-sqli
+    cur = conn.fetch(query=f'SELECT * FROM {user_input}')
+
 def ok1(user_input):
     con = await asyncpg.connect(user='postgres')
     # ok: asyncpg-sqli
@@ -130,3 +134,12 @@ def ok11(user_input):
     # ok: asyncpg-sqli
     stmt = await con.prepare('SELECT ($1::int, $2::text)')
     print(stmt.get_parameters())
+
+async def ok12(conn: asyncpg.Connection, task_id, row, e):
+    # ok: asyncpg-sqli
+    await conn.execute(
+        "UPDATE atlassian.scheduled_tasks SET status = 'failed', attempts = $2, last_error = $3 WHERE id = $1",
+        task_id,
+        row["attempts"] + 1,
+        str(e),
+    )
