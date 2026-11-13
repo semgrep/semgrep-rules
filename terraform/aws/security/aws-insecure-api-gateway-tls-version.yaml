@@ -14,12 +14,17 @@ rules:
             domain_name_configuration {...}
             ...
         }
-  - pattern-not: |
-      resource "aws_api_gateway_domain_name" $ANYTHING {
+  - pattern-not:
+      patterns:
+      - pattern: |
+          resource "aws_api_gateway_domain_name" $ANYTHING {
               ...
-              security_policy = "TLS_1_2"
+              security_policy = $POLICY
               ...
           }
+      - metavariable-regex:
+          metavariable: $POLICY
+          regex: ^['\"](TLS_1_2|SecurityPolicy_TLS1[23]_[A-Z0-9_]+)['\"]$
   - pattern-not: |
       resource "aws_apigatewayv2_domain_name" $ANYTHING {
               ...
@@ -30,7 +35,9 @@ rules:
               }
           }
   message: Detected AWS API Gateway to be using an insecure version of TLS. To fix this issue make sure
-    to set "security_policy" equal to "TLS_1_2".
+    to set "security_policy" equal to "TLS_1_2". For "aws_api_gateway_domain_name" you can also use an
+    enhanced security policy that starts with "SecurityPolicy_TLS12" or "SecurityPolicy_TLS13", such as
+    "SecurityPolicy_TLS13_1_3_2025_09" or the post-quantum "SecurityPolicy_TLS13_1_2_PQ_2025_09".
   languages:
   - terraform
   severity: WARNING
@@ -47,6 +54,7 @@ rules:
     - terraform
     references:
     - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    - https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-security-policies-list.html
     subcategory:
     - vuln
     likelihood: MEDIUM
