@@ -69,7 +69,48 @@ rules:
       - pattern: requests.request($METHOD, $URL, ...)
       - pattern: httpx.$METHOD($URL, ...)
       - pattern: httpx.$METHOD(..., url=$URL, ...)
+      - pattern: httpx.request($METHOD, $URL, ...)
+      - pattern: aiohttp.request($METHOD, $URL, ...)
+      - pattern: urllib3.request($METHOD, $URL, ...)
       - pattern: urllib.request.urlopen($URL, ...)
       - pattern: jwt.PyJWKClient($URL, ...)
       - pattern: jwt.jwks_client.PyJWKClient($URL, ...)
+    - focus-metavariable: $URL
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $CLIENT.$METHOD($URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|patch|delete|head|options)$
+      - patterns:
+        - pattern: $CLIENT.$METHOD(..., url=$URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|patch|delete|head|options|request|stream)$
+      - patterns:
+        - pattern: $CLIENT.$METHOD($VERB, $URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(request|stream)$
+    - pattern-either:
+      - pattern-inside: |
+          $CLIENT = $FACTORY(...)
+          ...
+      - pattern-inside: |
+          with $FACTORY(...) as $CLIENT:
+            ...
+      - pattern-inside: |
+          async with $FACTORY(...) as $CLIENT:
+            ...
+      - pattern-inside: $FACTORY(...).$METHOD(...)
+    - metavariable-pattern:
+        metavariable: $FACTORY
+        pattern-either:
+        - pattern: requests.Session
+        - pattern: requests.session
+        - pattern: httpx.Client
+        - pattern: httpx.AsyncClient
+        - pattern: aiohttp.ClientSession
+        - pattern: urllib3.PoolManager
     - focus-metavariable: $URL
