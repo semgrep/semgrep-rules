@@ -1,0 +1,116 @@
+rules:
+- id: jwt-python-untrusted-jku
+  message: >-
+    The 'jku' or 'x5u' header of an unverified JWT is used as the URL to fetch
+    the verification keys. These headers are chosen by whoever creates the token,
+    so an attacker can point them to a key set they control, sign a forged token
+    with their own key, and have it accepted as valid. This also allows
+    server-side request forgery (SSRF). Do not fetch keys from a URL taken from
+    the token: use a fixed, trusted JWKS URL from configuration (for example
+    with 'jwt.PyJWKClient(TRUSTED_JWKS_URL)'), or check the exact URL against an
+    allowlist of trusted locations before using it.
+  metadata:
+    cwe:
+    - 'CWE-347: Improper Verification of Cryptographic Signature'
+    owasp:
+    - A02:2017 - Broken Authentication
+    - A07:2021 - Identification and Authentication Failures
+    - A07:2025 - Authentication Failures
+    references:
+    - https://datatracker.ietf.org/doc/html/rfc8725#section-3.10
+    - https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.2
+    - https://portswigger.net/web-security/jwt#injecting-self-signed-jwts-via-the-jku-parameter
+    category: security
+    technology:
+    - jwt
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+  languages: [python]
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $GET_HEADER(...)[$KEY]
+      - pattern: $GET_HEADER(...).get($KEY, ...)
+      - patterns:
+        - pattern-inside: |
+            $HEADER = $GET_HEADER(...)
+            ...
+        - pattern-either:
+          - pattern: $HEADER[$KEY]
+          - pattern: $HEADER.get($KEY, ...)
+    - metavariable-pattern:
+        metavariable: $GET_HEADER
+        pattern-either:
+        - pattern: jwt.get_unverified_header
+        - pattern: jose.jwt.get_unverified_header
+        - pattern: jose.jwt.get_unverified_headers
+        - pattern: jose.jws.get_unverified_header
+        - pattern: jose.jws.get_unverified_headers
+    - metavariable-regex:
+        metavariable: $KEY
+        regex: ^["'](jku|x5u)["']$
+  pattern-sanitizers:
+  - by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: $URL in $ALLOWED
+      - pattern: $URL not in $ALLOWED
+    - focus-metavariable: $URL
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: requests.$METHOD($URL, ...)
+      - pattern: requests.$METHOD(..., url=$URL, ...)
+      - pattern: requests.request($METHOD, $URL, ...)
+      - pattern: httpx.$METHOD($URL, ...)
+      - pattern: httpx.$METHOD(..., url=$URL, ...)
+      - pattern: httpx.request($METHOD, $URL, ...)
+      - pattern: aiohttp.request($METHOD, $URL, ...)
+      - pattern: urllib3.request($METHOD, $URL, ...)
+      - pattern: urllib.request.urlopen($URL, ...)
+      - pattern: jwt.PyJWKClient($URL, ...)
+      - pattern: jwt.jwks_client.PyJWKClient($URL, ...)
+    - focus-metavariable: $URL
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: $CLIENT.$METHOD($URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|patch|delete|head|options)$
+      - patterns:
+        - pattern: $CLIENT.$METHOD(..., url=$URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(get|post|put|patch|delete|head|options|request|stream)$
+      - patterns:
+        - pattern: $CLIENT.$METHOD($VERB, $URL, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^(request|stream)$
+    - pattern-either:
+      - pattern-inside: |
+          $CLIENT = $FACTORY(...)
+          ...
+      - pattern-inside: |
+          with $FACTORY(...) as $CLIENT:
+            ...
+      - pattern-inside: |
+          async with $FACTORY(...) as $CLIENT:
+            ...
+      - pattern-inside: $FACTORY(...).$METHOD(...)
+    - metavariable-pattern:
+        metavariable: $FACTORY
+        pattern-either:
+        - pattern: requests.Session
+        - pattern: requests.session
+        - pattern: httpx.Client
+        - pattern: httpx.AsyncClient
+        - pattern: aiohttp.ClientSession
+        - pattern: urllib3.PoolManager
+    - focus-metavariable: $URL
