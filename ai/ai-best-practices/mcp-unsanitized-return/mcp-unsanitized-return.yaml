@@ -33,7 +33,9 @@ rules:
           - pattern: return $SINK
           - focus-metavariable: $SINK
     pattern-sanitizers:
+      # Stripping whitespace is not sanitization for this rule's threat model:
+      # prompt-injection payloads and malicious content pass through str.strip()
+      # unchanged, so it must not suppress the finding.
       - pattern: sanitize(...)
       - pattern: bleach.clean(...)
       - pattern: html.escape(...)
-      - pattern: str.strip(...)
