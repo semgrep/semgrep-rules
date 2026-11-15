@@ -8,3 +8,11 @@ management:
       exposure:
         # ruleid: spring-actuator-fully-enabled-yaml
         include: "*"
+---
+# Spring Boot reads a dotted key in YAML as the nested form.
+# ruleid: spring-actuator-fully-enabled-yaml
+management.endpoints.web.exposure.include: "*"
+
+---
+# ok: spring-actuator-fully-enabled-yaml
+management.endpoints.web.exposure.include: "health"
