@@ -125,3 +125,104 @@ rules:
         $RES.addHeader("Location",$REQ.getParameter(...));
         ...
       }
+  # Helper-returned redirect targets (fixes #3822, duplicate #3834):
+  # the redirect target is read from the request inside a helper method and
+  # only reaches the sink through the helper return value, so the
+  # same-method getParameter patterns above never see it. These patterns
+  # match the call site where a helper that receives the request returns
+  # the target, assigned to a variable or used inline, and the target then
+  # reaches sendRedirect or a Location header, optionally wrapped in
+  # encodeRedirectURL. The request parameter is matched by type name
+  # (any type containing "Request"), so HttpServletRequest and request
+  # wrappers such as SecurityRequestWrapper (the CVE-2022-23618 call site
+  # declares its request that way) both match. Requiring the request to be
+  # passed to the helper keeps helpers that return constants out of scope.
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.sendRedirect($URL);
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.sendRedirect($URL);
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.sendRedirect($RES.encodeRedirectURL($URL));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.sendRedirect($RES.encodeRedirectURL($URL));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.addHeader("Location",$URL);
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            String $URL = $HELPER(..., $REQ, ...);
+            ...
+            $RES.addHeader("Location",$URL);
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            $RES.sendRedirect($HELPER(..., $REQ, ...));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            $RES.sendRedirect($HELPER(..., $REQ, ...));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            $RES.sendRedirect($RES.encodeRedirectURL($HELPER(..., $REQ, ...)));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            $RES.sendRedirect($RES.encodeRedirectURL($HELPER(..., $REQ, ...)));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,$RT $REQ,...,HttpServletResponse $RES,...) {
+            ...
+            $RES.addHeader("Location",$HELPER(..., $REQ, ...));
+            ...
+          }
+      - pattern: |
+          $X $METHOD(...,HttpServletResponse $RES,...,$RT $REQ,...) {
+            ...
+            $RES.addHeader("Location",$HELPER(..., $REQ, ...));
+            ...
+          }
+    - metavariable-regex:
+        metavariable: $RT
+        regex: .*[Rr]equest.*
