@@ -1,0 +1,76 @@
+rules:
+- id: tainted-html-response
+  languages:
+  - python
+  severity: WARNING
+  message: >-
+    Untrusted data, from the request or read back from a database, is written into an aiohttp
+    response served as HTML without being escaped. This is a cross-site scripting
+    vulnerability: an attacker who controls the data, now or when it was stored, can run
+    JavaScript in other users' browsers. Escape each value with `html.escape()` before
+    building the HTML, or render it with a template engine that escapes by default, such as
+    `aiohttp_jinja2` with autoescaping on.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    - A05:2025 - Injection
+    category: security
+    technology:
+    - aiohttp
+    references:
+    - https://docs.aiohttp.org/en/stable/web_reference.html#response
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    - https://arxiv.org/abs/2502.11844
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  mode: taint
+  pattern-sources:
+  # Request data
+  - patterns:
+    - pattern-either:
+      - pattern: $REQ.query
+      - pattern: $REQ.rel_url.query
+      - pattern: $REQ.match_info
+      - pattern: $REQ.headers
+      - pattern: $REQ.cookies
+      - pattern: await $REQ.json(...)
+      - pattern: await $REQ.post()
+      - pattern: await $REQ.text()
+      - pattern: await $REQ.read()
+      - pattern: await $REQ.multipart()
+    - metavariable-regex:
+        metavariable: $REQ
+        regex: ^(request|req|r)$
+  # Rows read back from a database: stored XSS, where the payload was saved
+  # by an earlier request.
+  - patterns:
+    - pattern-either:
+      - pattern: $CURSOR.fetchone()
+      - pattern: $CURSOR.fetchall()
+      - pattern: $CURSOR.fetchmany(...)
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: html.escape(...)
+    - pattern: markupsafe.escape(...)
+    - pattern: markupsafe.Markup.escape(...)
+    - pattern: jinja2.escape(...)
+    - pattern: int(...)
+    - pattern: float(...)
+    - pattern: len(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: aiohttp.web.Response(..., text=$BODY, ..., content_type="$CT", ...)
+      - pattern: aiohttp.web.Response(..., body=$BODY, ..., content_type="$CT", ...)
+    - metavariable-regex:
+        metavariable: $CT
+        regex: ^\s*text/html
+    - focus-metavariable: $BODY
