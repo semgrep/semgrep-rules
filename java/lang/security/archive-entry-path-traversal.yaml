@@ -1,0 +1,62 @@
+rules:
+- id: archive-entry-path-traversal
+  metadata:
+    cwe:
+    - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    - A01:2025 - Broken Access Control
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#PATH_TRAVERSAL_IN
+    references:
+    - https://www.owasp.org/index.php/Path_Traversal
+    category: security
+    technology:
+    - java
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+  message: >-
+    Detected a potential path traversal. The name of an archive entry
+    (ZipEntry or JarEntry) is attacker controlled when the archive comes
+    from an untrusted source, and it is used to build a file path without
+    validation. A malicious archive could write files outside the target
+    directory with '../' (ZipSlip). To address this, validate that the
+    canonical path of the destination file stays inside the target
+    directory. You may also consider using a utility method such as
+    org.apache.commons.io.FilenameUtils.getName(...) to only retrieve
+    the file name from the path.
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: (java.util.zip.ZipEntry $ENTRY).getName(...)
+      - pattern: (java.util.jar.JarEntry $ENTRY).getName(...)
+      - pattern: (java.util.zip.ZipInputStream $ZIS).getNextEntry().getName(...)
+      - pattern: (java.util.jar.JarInputStream $JIS).getNextJarEntry().getName(...)
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          (java.io.File $FILE) = ...
+      - pattern: |
+          (java.io.FileOutputStream $FOS) = ...
+      - pattern: |
+          new java.io.FileInputStream(...)
+      - pattern: |
+          java.nio.file.Files.write(...)
+      - pattern: |
+          java.nio.file.Files.newOutputStream(...)
+      - pattern: |
+          java.nio.file.Files.copy(...)
+      - pattern: |
+          (java.nio.file.Path $PATH).resolve(...)
+  severity: ERROR
+  languages:
+  - java
