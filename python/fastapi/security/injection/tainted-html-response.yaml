@@ -1,0 +1,84 @@
+rules:
+- id: tainted-html-response
+  languages:
+  - python
+  severity: WARNING
+  message: >-
+    Untrusted data, from the request or read back from a database, is written into a FastAPI
+    response served as HTML without being escaped. This is a cross-site scripting
+    vulnerability: an attacker who controls the data, now or when it was stored, can run
+    JavaScript in other users' browsers. Escape each value with `html.escape()` before
+    building the HTML, or render it with `Jinja2Templates`, which escapes by default.
+  metadata:
+    cwe:
+    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    - A05:2025 - Injection
+    category: security
+    technology:
+    - fastapi
+    references:
+    - https://fastapi.tiangolo.com/advanced/custom-response/#htmlresponse
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    - https://arxiv.org/abs/2502.11844
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+  mode: taint
+  pattern-sources:
+  # Route parameters: path, query and body values, and the raw Request
+  - patterns:
+    - pattern-inside: |
+        @$APP.$METHOD(...)
+        def $FUNC(..., $PARAM, ...):
+          ...
+    - metavariable-regex:
+        metavariable: $METHOD
+        regex: ^(get|post|put|patch|delete|api_route)$
+    - pattern: $PARAM
+  # Rows read back from a database: stored XSS, where the payload was saved
+  # by an earlier request.
+  - pattern-either:
+    - pattern: $CURSOR.fetchone()
+    - pattern: $CURSOR.fetchall()
+    - pattern: $CURSOR.fetchmany(...)
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: html.escape(...)
+    - pattern: markupsafe.escape(...)
+    - pattern: markupsafe.Markup.escape(...)
+    - pattern: jinja2.escape(...)
+    - pattern: int(...)
+    - pattern: float(...)
+    - pattern: len(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: fastapi.responses.HTMLResponse($BODY, ...)
+      - pattern: fastapi.responses.HTMLResponse(..., content=$BODY, ...)
+      - pattern: starlette.responses.HTMLResponse($BODY, ...)
+      - pattern: starlette.responses.HTMLResponse(..., content=$BODY, ...)
+      - patterns:
+        - pattern-either:
+          - pattern: fastapi.responses.Response(..., content=$BODY, ..., media_type="$MT", ...)
+          - pattern: fastapi.Response(..., content=$BODY, ..., media_type="$MT", ...)
+          - pattern: starlette.responses.Response(..., content=$BODY, ..., media_type="$MT", ...)
+        - metavariable-regex:
+            metavariable: $MT
+            regex: ^\s*text/html
+      - patterns:
+        - pattern-inside: |
+            @$APP.$METHOD(..., response_class=$CLS, ...)
+            def $FUNC(...):
+              ...
+        - metavariable-regex:
+            metavariable: $CLS
+            regex: (^|\.)HTMLResponse$
+        - pattern: return $BODY
+    - focus-metavariable: $BODY
