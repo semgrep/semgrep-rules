@@ -22,6 +22,19 @@ rules:
           exec.Command("...","...","...",...)
       - pattern-not: |
           exec.CommandContext($CTX,"...","...","...",...)
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            exec.Command($SH,"-c",$CMD,...)
+        - pattern: |
+            exec.CommandContext($CTX,$SH,"-c",$CMD,...)
+      - pattern-inside: |
+          $SH,$ERR := exec.LookPath("=~/(sh|bash|ksh|csh|tcsh|zsh)/");
+          ...
+      - pattern-not: |
+          exec.Command($SH,"-c","...",...)
+      - pattern-not: |
+          exec.CommandContext($CTX,$SH,"-c","...",...)
     - pattern-either:
         - pattern: |
             exec.Command("=~/\/bin\/env/","=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$CMD,...)

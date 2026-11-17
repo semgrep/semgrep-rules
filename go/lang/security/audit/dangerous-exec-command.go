@@ -89,6 +89,57 @@ func runcommand6(s string) (string, error) {
 	return string(stdoutStderr), nil
 }
 
+func runcommand7(userInput string) {
+
+	sh, err := exec.LookPath("sh")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// ruleid:dangerous-exec-command
+	cmd := exec.Command(sh, "-c", userInput)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error:", err)
+	}
+
+}
+
+func runcommand8(userInput string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+
+	bash, err := exec.LookPath("bash")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// ruleid:dangerous-exec-command
+	cmd := exec.CommandContext(ctx, bash, "-c", userInput)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error:", err)
+	}
+
+}
+
+func runcommand9(userInput string) {
+
+	if sh, err := exec.LookPath("sh"); err == nil {
+		// ruleid:dangerous-exec-command
+		exec.Command(sh, "-c", userInput).Run()
+	}
+
+}
+
 func okCommand1(userInput string) {
 
 	goExec, _ := exec.LookPath("go")
@@ -130,4 +181,58 @@ func okCommand3(s string) (string, error) {
 	}
 
 	return string(stdoutStderr), nil
+}
+
+func okCommand4(s string) (string, error) {
+
+	sh, err := exec.LookPath("sh")
+	if err != nil {
+		return "", err
+	}
+
+	// ok:dangerous-exec-command
+	cmd := exec.Command(sh, "-c", "ls -la")
+	stdoutStderr, err := cmd.CombinedOutput()
+
+	if err != nil {
+		return "", fmt.Errorf("shellCommand: unexpected error: out = %s, error = %v", stdoutStderr, err)
+	}
+
+	return string(stdoutStderr), nil
+}
+
+func okCommand5(userInput string) {
+
+	sh, err := exec.LookPath("sh")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// ok:dangerous-exec-command
+	cmd := exec.Command(sh, "version")
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error:", err)
+	}
+
+}
+
+func okCommand6(userInput string) {
+
+	goExec, _ := exec.LookPath("go")
+
+	// ok:dangerous-exec-command
+	cmd := exec.Command(goExec, "-c", userInput)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error:", err)
+	}
+
 }
