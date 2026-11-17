@@ -1,0 +1,212 @@
+rules:
+  - id: mcp-dynamic-shell-command
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: >-
+      Potential dynamic shell command. The command string appears to be built from a value
+      that is not fixed in the source: an interpolated template literal, a concatenation, a
+      variable assembled from either, or spawn/execFile arguments that the shell option joins
+      into one string. If the callee runs a shell (child_process exec/execSync, a promisified
+      alias of it, a wrapper around them, or a call with the shell option or an explicit
+      `sh -c`), the shell re-parses the value; quoting it does not neutralize it. In MCP
+      servers this value is often a tool argument that the handler passes on to a helper
+      function, a path that handler-scoped dataflow rules do not follow. Check whether a tool
+      caller can influence the value. Prefer execFile() or spawn() with an argument array and
+      without the shell option, so that arguments are passed to the program unparsed.
+    metadata:
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+      category: security
+      subcategory:
+        - audit
+      confidence: LOW
+      likelihood: MEDIUM
+      impact: HIGH
+      technology:
+        - mcp
+        - typescript
+        - node.js
+      references:
+        - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+        - https://nodejs.org/api/child_process.html#child_processexeccommand-options-callback
+    pattern-either:
+      # Bare call: child_process exec/execSync and the usual promisify(exec) alias names.
+      # String.raw keeps backslashes but does not escape the interpolated value.
+      - patterns:
+          - pattern-either:
+              - pattern: $F(`...${$X}...`, ...)
+              - pattern: $F(String.raw`...${$X}...`, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(exec|execSync|execAsync|execPromise|execShell|shellExec|runShell)$
+      # A promisify(exec) alias under any name, followed from its binding.
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $F = $PROMISIFY(exec);
+                  ...
+              - pattern-inside: |
+                  $F = $PROMISIFY($CP.exec);
+                  ...
+          - metavariable-regex:
+              metavariable: $PROMISIFY
+              regex: ^(\w+\.)?promisify$
+          - pattern-either:
+              - pattern: $F(`...${$X}...`, ...)
+              - pattern: $F(String.raw`...${$X}...`, ...)
+      # Member call: cp.exec, or a plugin/tool context object exposing a shell-backed exec.
+      - patterns:
+          - pattern-either:
+              - pattern: $OBJ.$F(`...${$X}...`, ...)
+              - pattern: $OBJ.$F(String.raw`...${$X}...`, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(exec|execSync|execAsync|execPromise|execShell|shellExec|runShell)$
+          # RegExp.prototype.exec takes the subject string: skip regex literals,
+          # new RegExp(...), names containing Regex/RegExp, and names ending in
+          # Pattern/Matcher/Re (a suffix only, so patternRunner stays matched).
+          - metavariable-regex:
+              metavariable: $OBJ
+              regex: ^(?!/)(?!new\s+RegExp\b)(?!.*(?:[Rr]e[Gg]ex|RegExp))(?!.*(?:[Pp]attern|[Mm]atcher|[a-z0-9]Re|^re|_[Rr][Ee])$)
+          # SQLite/Postgres Database#exec runs SQL without a shell: skip bodies that
+          # start with a SQL statement, optionally after SQL comments. Bash `select x in`
+          # is shell syntax and stays matched. The leading whitespace and comments are an
+          # atomic group so that backtracking cannot stop short of the statement keyword.
+          # A String.raw tag in front of the literal is allowed.
+          - pattern: $OBJ.$F($CMD, ...)
+          - metavariable-regex:
+              metavariable: $CMD
+              regex: (?is)^(?:String\.raw)?`(?>\s*(?:(?:--.*?(?:\n|\\n)|/\*.*?\*/)\s*)*)(?!(?:pragma\s|select\s(?!\s*\w+\s+in\b)|insert\s+into|update\s+\w+\s+set|delete\s+from|create\s+(?:table|index|unique)|drop\s+(?:table|index)|alter\s+table|truncate\s+table|with\s+\w+\s+as\s*\())
+      # A command built by concatenation, or assembled into a variable first, passed to
+      # a bare exec/execSync name or a promisify(exec) alias. Generic .exec members are
+      # left to the template-literal branch above: RegExp#exec and Database#exec take
+      # built strings far more often than shells do.
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern: $F($A + $B, ...)
+                  - pattern-not: $F("..." + "...", ...)
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          $CMD = `...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = String.raw`...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = $A + $B;
+                          ...
+                  - pattern-not-inside: |
+                      $CMD = "..." + "...";
+                      ...
+                  - pattern: $F($CMD, ...)
+          - metavariable-regex:
+              metavariable: $F
+              regex: ^(exec|execSync|execAsync|execPromise|execShell|shellExec|runShell)$
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $F = $PROMISIFY(exec);
+                  ...
+              - pattern-inside: |
+                  $F = $PROMISIFY($CP.exec);
+                  ...
+          - metavariable-regex:
+              metavariable: $PROMISIFY
+              regex: ^(\w+\.)?promisify$
+          - pattern-either:
+              - patterns:
+                  - pattern: $F($A + $B, ...)
+                  - pattern-not: $F("..." + "...", ...)
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          $CMD = `...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = String.raw`...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = $A + $B;
+                          ...
+                  - pattern-not-inside: |
+                      $CMD = "..." + "...";
+                      ...
+                  - pattern: $F($CMD, ...)
+      # The same built commands passed to exec/execSync on the child_process module object.
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  import * as $CPM from "$MOD";
+                  ...
+              - pattern-inside: |
+                  import $CPM from "$MOD";
+                  ...
+              - pattern-inside: |
+                  $CPM = require("$MOD");
+                  ...
+          - metavariable-regex:
+              metavariable: $MOD
+              regex: ^(node:)?child_process$
+          - pattern-either:
+              - patterns:
+                  - pattern: $CPM.$M($A + $B, ...)
+                  - pattern-not: $CPM.$M("..." + "...", ...)
+              - patterns:
+                  - pattern-either:
+                      - pattern-inside: |
+                          $CMD = `...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = String.raw`...${$X}...`;
+                          ...
+                      - pattern-inside: |
+                          $CMD = $A + $B;
+                          ...
+                  - pattern-not-inside: |
+                      $CMD = "..." + "...";
+                      ...
+                  - pattern: $CPM.$M($CMD, ...)
+          - metavariable-regex:
+              metavariable: $M
+              regex: ^(exec|execSync)$
+      # spawn/execFile with the shell option: Node joins the command and the arguments
+      # into one string for the shell. Reported unless both are plain literals.
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-either:
+                      - pattern: '$FN($CMD, {..., shell: $S, ...}, ...)'
+                      - pattern: '$FN($CMD, $ARGS, {..., shell: $S, ...}, ...)'
+                  # A literal, or a choice between two literals, is fixed in the source.
+                  - metavariable-regex:
+                      metavariable: $CMD
+                      regex: ^(?!(?:(?:'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`$\\]|\\.|\$(?!\{))*`)|(?:[^?]|\?[.?])*\?(?![.?])\s*(?:'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`$\\]|\\.|\$(?!\{))*`)\s*:\s*(?:'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`$\\]|\\.|\$(?!\{))*`))$)
+              - patterns:
+                  - pattern: '$FN($CMD, $ARGS, {..., shell: $S, ...}, ...)'
+                  - metavariable-regex:
+                      metavariable: $ARGS
+                      regex: ^(?!\[\s*(?:(?:'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`$\\]|\\.|\$(?!\{))*`)\s*,?\s*)*\]$)
+          - pattern-not: '$FN($CMD, ..., {..., shell: false, ...}, ...)'
+          - metavariable-regex:
+              metavariable: $FN
+              regex: ^(?:[\w$]+\.)?(spawn|spawnSync|execFile|execFileSync)$
+      # An explicit shell given its script with -c (or cmd /c, PowerShell -Command).
+      - patterns:
+          - pattern: $FN($SH, [..., $FLAG, $SCRIPT, ...], ...)
+          - metavariable-regex:
+              metavariable: $FN
+              regex: ^(?:[\w$]+\.)?(spawn|spawnSync|execFile|execFileSync)$
+          - metavariable-regex:
+              metavariable: $SH
+              regex: ^["'`](?:/(?:usr/)?bin/)?(?:sh|bash|zsh|dash|ksh|cmd|cmd\.exe|powershell|powershell\.exe|pwsh|pwsh\.exe)["'`]$
+          - metavariable-regex:
+              metavariable: $FLAG
+              # sh-style bundles (-c, -lc, -ec, -ce), cmd /c, and PowerShell -c/-Command in any case.
+              regex: ^["'`](?:-[a-z]*c[a-z]*|/[cC]|-(?i:c|command))["'`]$
+          - metavariable-regex:
+              metavariable: $SCRIPT
+              regex: ^(?!(?:'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`$\\]|\\.|\$(?!\{))*`)$)
