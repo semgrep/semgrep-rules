@@ -1,0 +1,32 @@
+rules:
+  - id: ps-scriptblock-create-invoke
+    message: >-
+      [ScriptBlock]::Create().Invoke() execution pattern detected (T1059.001 /
+      T1620). This is a functional equivalent of Invoke-Expression (IEX) used
+      specifically to evade IEX-based detection rules. When the argument to
+      Create() is a variable, base64 blob, or downloaded string, this pattern
+      represents dynamic code execution from an untrusted source. Review the
+      argument to Create() to determine the payload being executed.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1059/001/
+        - https://attack.mitre.org/techniques/T1620/
+      technology:
+        - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: MEDIUM
+    pattern-regex: '(?i)(?:&\s*\(?\s*\[ScriptBlock\]::Create|\bInvoke-Command\s+\(?\s*\[scriptblock\]::Create|\[ScriptBlock\]::Create\s*\(.{0,300}\.Invoke\s*\()'

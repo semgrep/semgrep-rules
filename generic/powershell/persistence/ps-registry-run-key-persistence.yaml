@@ -1,0 +1,33 @@
+rules:
+  - id: ps-registry-run-key-persistence
+    message: >-
+      Registry Run key persistence detected (T1547.001). Writing to
+      HKLM\...\Run, HKCU\...\Run, RunOnce, or RunServices via
+      Set-ItemProperty, New-ItemProperty, reg add, or RegSetValue establishes
+      a process that runs on every user logon or system boot. This is the
+      most prevalent persistence mechanism in commodity malware (Emotet,
+      QakBot, numerous RATs). Verify the value being written — if it contains
+      an encoded command, download URL, or unusual executable path, treat as
+      confirmed malicious.
+    severity: ERROR
+    languages:
+      - powershell
+    metadata:
+      category: security
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+        - "A03:2025 - Injection"
+      references:
+        - https://attack.mitre.org/techniques/T1547/001/
+      technology:
+        - powershell
+      cwe2021-top25: true
+      cwe2022-top25: true
+      subcategory:
+        - vuln
+      likelihood: HIGH
+      impact: HIGH
+      confidence: HIGH
+    pattern-regex: '(?i)(Set-ItemProperty|New-ItemProperty|reg\s+add|RegSetValue|SetValue)(.{0,200})(CurrentVersion\\Run(?:Once|Services)?|\\Run\b)'
