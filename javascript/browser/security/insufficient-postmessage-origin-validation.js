@@ -67,3 +67,50 @@ window.addEventListener("message", (evt) => {
     console.log(message.data);
   }
 });
+
+// ruleid: insufficient-postmessage-origin-validation
+window.onmessage = function (evt) {
+  console.log('onmessage inline function without origin check!');
+};
+
+// ruleid: insufficient-postmessage-origin-validation
+window.onmessage = (evt) => {
+  console.log('onmessage inline arrow function without origin check!');
+};
+
+function onmessageHandler(evt) {
+  console.log('onmessage named handler without origin check!');
+}
+
+// ruleid: insufficient-postmessage-origin-validation
+window.onmessage = onmessageHandler;
+
+// ok: insufficient-postmessage-origin-validation
+window.onmessage = function (evt) {
+  if (evt.origin !== "http://example.com") {
+    return;
+  }
+  console.log('onmessage inline function with origin validation');
+};
+
+// ok: insufficient-postmessage-origin-validation
+window.onmessage = (evt) => {
+  if (evt.origin === "http://example.com") {
+    console.log('onmessage arrow function with origin validation');
+  }
+};
+
+function checkedOnmessageHandler(evt) {
+  if (evt.origin == "http://example.com") {
+    console.log('onmessage named handler with origin validation');
+  }
+}
+
+// ok: insufficient-postmessage-origin-validation
+window.onmessage = checkedOnmessageHandler;
+
+const worker = new Worker('worker.js');
+// ok: insufficient-postmessage-origin-validation
+worker.onmessage = function (evt) {
+  console.log('Worker messages have no origin; not a window message handler');
+};
