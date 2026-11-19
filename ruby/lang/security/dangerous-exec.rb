@@ -114,3 +114,48 @@ def test_calls(user_input)
     # ok: dangerous-exec
       exec(["ls", "-lah", "/tmp"])
     end
+
+  def test_issue_3396(inputs)
+    @input = inputs[1]
+    # Case 1 from issue #3396: a single-string command with an
+    # interpolated instance variable goes through a shell.
+    # ruleid: dangerous-exec
+    system "echo #{@input}"
+    # Case 2 from issue #3396: the multi-argument form does not invoke
+    # a shell, so the tainted argument is passed directly and is safe.
+    # ok: dangerous-exec
+    system "echo", @input
+  end
+
+  def test_issue_3396_cross_method
+    # Case 3 from issue #3396: the same interpolated instance variable
+    # in another method. Instance variables can be set from user input
+    # in a different method, which intra-procedural taint cannot see,
+    # so an interpolated instance variable is treated as untrusted.
+    # ruleid: dangerous-exec
+    system "echo #{@input}"
+    # Case 4 from issue #3396: multi-argument form, safe.
+    # ok: dangerous-exec
+    system "echo", @input
+  end
+
+  def test_issue_3396_shell_flag(user_input)
+    # A shell invoked with -c in multi-argument form is still dangerous.
+    # ruleid: dangerous-exec
+    system("sh", "-c", user_input)
+    # ruleid: dangerous-exec
+    system({"FOO" => "bar"}, "sh", "-c", user_input)
+    # Multi-argument form with extra flags is safe when the command is
+    # a literal and no shell is involved.
+    # ok: dangerous-exec
+    system("echo", "-n", user_input)
+    # ok: dangerous-exec
+    system({"FOO" => "bar"}, "echo", user_input)
+    # A single tainted argument is still a shell command.
+    # ruleid: dangerous-exec
+    system(user_input)
+    # Interpolation of a plain local holding a literal is not tainted.
+    safe = "world"
+    # ok: dangerous-exec
+    system("echo #{safe}")
+  end
