@@ -1,0 +1,34 @@
+rules:
+- id: python.gitpython.argument-injection
+  languages:
+  - python
+  mode: taint
+  severity: WARNING
+  message: Potential CWE-88 argument injection. A function parameter flows into a
+    GitPython command argument. Verify that the value is validated and cannot be interpreted
+    as a Git command-line option.
+  metadata:
+    cwe:
+    - CWE-88
+    category: security
+    technology:
+    - gitpython
+    confidence: MEDIUM
+    rule-origin-note: published from python-git-argument-injection.yml in None
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    references:
+    - https://cwe.mitre.org/data/definitions/88.html
+    - https://owasp.org/Top10/A03_2021-Injection
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        def $FUNC(..., $PARAM, ...):
+          ...
+    - focus-metavariable: $PARAM
+  pattern-sinks:
+  - patterns:
+    - pattern: $REPO.git.$COMMAND(..., $ARG, ...)
+    - focus-metavariable: $ARG
