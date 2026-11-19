@@ -10,18 +10,51 @@ rules:
     - focus-metavariable: $ARG
   - pattern: params
   - pattern: cookies
+  - patterns:
+    - pattern: |
+        "...#{$X}..."
+    - focus-metavariable: $X
+    - metavariable-regex:
+        metavariable: $X
+        regex: ^@
   pattern-sinks:
   - patterns:
     - pattern: |
         $EXEC(...)
     - pattern-not: |
-        $EXEC("...","...","...",...)
-    - pattern-not: |
         $EXEC(["...","...","...",...],...)
     - pattern-not: |
-        $EXEC({...},"...","...","...",...)
-    - pattern-not: |
         $EXEC({...},["...","...","...",...],...)
+    - pattern-not:
+        patterns:
+        - pattern: |
+            $EXEC("...", ...)
+        - pattern-not: |
+            $EXEC("sh", "-c", ...)
+        - pattern-not: |
+            $EXEC("bash", "-c", ...)
+        - pattern-not: |
+            $EXEC("zsh", "-c", ...)
+        - pattern-not: |
+            $EXEC("dash", "-c", ...)
+        - pattern-not: |
+            $EXEC("/bin/sh", "-c", ...)
+        - pattern-not: |
+            $EXEC("/bin/bash", "-c", ...)
+        - pattern-not: |
+            $EXEC("/bin/zsh", "-c", ...)
+    - pattern-not:
+        patterns:
+        - pattern: |
+            $EXEC({...}, "...", ...)
+        - pattern-not: |
+            $EXEC({...}, "sh", "-c", ...)
+        - pattern-not: |
+            $EXEC({...}, "bash", "-c", ...)
+        - pattern-not: |
+            $EXEC({...}, "/bin/sh", "-c", ...)
+        - pattern-not: |
+            $EXEC({...}, "/bin/bash", "-c", ...)
     - metavariable-regex:
         metavariable: $EXEC
         regex: ^(system|exec|spawn|Process.exec|Process.spawn|Open3.capture2|Open3.capture2e|Open3.capture3|Open3.popen2|Open3.popen2e|Open3.popen3|IO.popen|Gem::Util.popen|PTY.spawn)$
