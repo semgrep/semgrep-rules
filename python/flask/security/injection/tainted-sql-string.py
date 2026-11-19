@@ -60,8 +60,9 @@ def insert_person_path(path):
     lastname = "you don't get to pick >:)"
 
     # String concatenation using + operator
-    # ruleid: tainted-sql-string
-    engine.execute("INSERT INTO person (name) VALUES ('" + name + "')")
+    # ok: tainted-sql-string
+    stmt = text("INSERT INTO person (name) VALUES (:name)")
+    engine.execute(stmt, name=name)
 
     # ruleid: tainted-sql-string
     engine.execute("INSERT INTO person (firstname, lastname) VALUES ('" + name + "','" + lastname + "')")
