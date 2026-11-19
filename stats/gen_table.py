@@ -8,6 +8,7 @@
 import json
 import os
 import sys
+from pathlib import Path
 import yaml
 import pandas as pd
 
@@ -34,7 +35,7 @@ def create_metacategory_map(path: str) -> Dict[str, str]:
 
 def parse_cwe_mc_counts(data: Dict[str, Any]) -> Dict[str, Any]:
     mc_cwe_counts = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
-    cwe_to_mc = create_metacategory_map('cwe_to_metacategory.yml')
+    cwe_to_mc = create_metacategory_map(str(Path(__file__).with_name('cwe_to_metacategory.yml')))
     cwe_data = data.get('cwe').get('per_technology')
     for cwe in cwe_data:
         cwe_num = get_cwe_num(cwe)
@@ -60,7 +61,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Add arguments here
 
-    parser.add_argument("--input-file", "-i", help="file containing input json data")
+    parser.add_argument("--input-file", "-i", required=True, help="file containing input json data")
     parser.add_argument("--output-file", "-o", help="file to save markdown output table to")
     parser.add_argument("--high-signal", "-hs", help="mark the chart as high signal", action='store_true')
 
