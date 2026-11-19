@@ -12,7 +12,13 @@ rules:
       - metavariable-regex:
           metavariable: $METHOD
           regex: (?i)(post|put|delete|patch)
-      - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
+      # Exempt forms that contain {% csrf_token %} anywhere in the body. The
+      # previous "<form...>...{% csrf_token %}...</form>" generic ellipsis missed
+      # the token when the form body had a nested multi-line {% if %} block, so a
+      # form with a valid token was still flagged (issue #3816). The regex below
+      # matches an opening <form> tag followed by {% csrf_token %} before any
+      # other form boundary, so nested blocks no longer break the exemption.
+      - pattern-not-regex: '(?s)<form\b(?:(?!</?form\b).)*?\{%\s*csrf_token\s*%\}'
       - pattern-not-inside: "<form...>...{{ $VAR.csrf_token }}...</form>"
     message: Manually-created forms in django templates should specify a csrf_token to prevent CSRF attacks.
     languages: [generic]

@@ -97,3 +97,36 @@
       </div>
   </div>
 </div>
+
+<!-- https://github.com/semgrep/semgrep-rules/issues/3816 -->
+<!-- csrf_token is present but the form body has a nested {% if %} wrapping a -->
+<!-- multi-line element with a {{ ... }} interpolation, followed by a sibling block. -->
+<form method="post">
+<!-- ok: django-no-csrf-token -->
+    {% csrf_token %}
+    <div>
+        {% if x %}
+            <div>
+                {{ y }}
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <button type="submit">Go</button>
+    </div>
+</form>
+
+<!-- Same nested-if shape but with NO csrf_token: must still be flagged. -->
+<!-- ruleid: django-no-csrf-token -->
+<form method="post">
+    <div>
+        {% if x %}
+            <div>
+                {{ y }}
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <button type="submit">Go</button>
+    </div>
+</form>
