@@ -21,6 +21,24 @@ rules:
         new ProcessBuilder(Arrays.asList("...",...),...)
   - patterns:
     - pattern: |
+        new ProcessBuilder().command($CMD,...)
+    - pattern-not-inside: |
+        $CMD = "...";
+        ...
+    - pattern-not-inside: |
+        $CMD = Arrays.asList("...",...);
+        ...
+    - pattern-not-inside: |
+        $CMD = new String[]{"...",...};
+        ...
+    - pattern-not: |
+        new ProcessBuilder().command("...",...)
+    - pattern-not: |
+        new ProcessBuilder().command(new String[]{"...",...},...)
+    - pattern-not: |
+        new ProcessBuilder().command(Arrays.asList("...",...),...)
+  - patterns:
+    - pattern: |
         $PB.command($CMD,...)
     - pattern-inside: |
         $TYPE $PB = new ProcessBuilder(...);
