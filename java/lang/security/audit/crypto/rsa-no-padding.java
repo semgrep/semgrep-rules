@@ -9,6 +9,11 @@ class RSAPadding {
     useCipher(Cipher.getInstance("RSA/None/NoPadding"));
   }
 
+  public void rsaNoPadding_lowercase() {
+    // ruleid: rsa-no-padding
+    Cipher.getInstance("rsa/none/nopadding");
+  }
+
   public void rsaPadding() {
     // ok: rsa-no-padding
     Cipher.getInstance("RSA/ECB/OAEPWithMD5AndMGF1Padding");

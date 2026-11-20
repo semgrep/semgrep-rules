@@ -30,9 +30,12 @@ rules:
     confidence: HIGH
   patterns:
   - pattern: |
-      KeyPairGenerator $KEY = $G.getInstance("RSA");
+      KeyPairGenerator $KEY = $G.getInstance("$ALG");
       ...
       $KEY.initialize($BITS);
+  - metavariable-regex:
+      metavariable: $ALG
+      regex: (?i)^RSA$
   - metavariable-comparison:
       metavariable: $BITS
       comparison: $BITS < 2048

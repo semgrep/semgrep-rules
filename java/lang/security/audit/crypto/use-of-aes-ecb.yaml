@@ -1,6 +1,10 @@
 rules:
 - id: use-of-aes-ecb
-  pattern: $CIPHER.getInstance("=~/AES/ECB.*/") 
+  patterns:
+  - pattern: $CIPHER.getInstance("$ALG")
+  - metavariable-regex:
+      metavariable: $ALG
+      regex: (?i)^AES/ECB
   metadata:
     functional-categories:
       - 'crypto::search::mode::javax.crypto'

@@ -31,9 +31,12 @@ rules:
   - java
   patterns:
   - pattern: |
-      $KEYGEN = KeyGenerator.getInstance("Blowfish");
+      $KEYGEN = KeyGenerator.getInstance("$ALG");
       ...
       $KEYGEN.init($SIZE);
+  - metavariable-regex:
+      metavariable: $ALG
+      regex: (?i)^Blowfish$
   - metavariable-comparison:
       metavariable: $SIZE
       comparison: $SIZE < 128

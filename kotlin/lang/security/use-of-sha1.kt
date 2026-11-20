@@ -16,6 +16,14 @@ public class WeakHashes {
       val hashValue: Array<Byte> = sha1Digest.digest()
       return hashValue
   }
+  public fun sha1_lowercase(password: String): Array<Byte> {
+      // ruleid: use-of-sha1
+      var sha1Digest: MessageDigest = MessageDigest.getInstance("sha-1")
+      sha1Digest.update(password.getBytes())
+      val hashValue: Array<Byte> = sha1Digest.digest()
+      return hashValue
+  }
+
   public fun sha1_digestutil(password: String): Array<Byte> {
     // ruleid: use-of-sha1
     val hashValue: Array<Byte> = DigestUtils.getSha1Digest().digest(password.getBytes())

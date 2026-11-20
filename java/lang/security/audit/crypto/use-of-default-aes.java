@@ -47,6 +47,11 @@ class AES{
     useCipher(javax.crypto.KeyGenerator.getInstance("AES"));
   }
 
+  public void useofAES_lowercase() {
+    // ruleid: use-of-default-aes
+    Cipher.getInstance("aes");
+  }
+
   public void ok() {
     // ok: use-of-default-aes
     Cipher.getInstance("AES/CBC/PKCS7PADDING");
