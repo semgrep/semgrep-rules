@@ -59,6 +59,18 @@ rules:
                 ...
               })
           - focus-metavariable: $FIELD
+      - patterns:
+          - pattern: |
+              $SRV.addTool({..., execute: async ($ARGS) => {
+                ...
+              }, ...})
+          - focus-metavariable: $ARGS
+      - patterns:
+          - pattern: |
+              $SRV.addTool({..., execute: async ({ $FIELD }) => {
+                ...
+              }, ...})
+          - focus-metavariable: $FIELD
     pattern-sinks:
       - patterns:
           - pattern: exec($CMD, ...)
@@ -71,6 +83,16 @@ rules:
           - focus-metavariable: $CMD
       - patterns:
           - pattern: $CP.execSync($CMD, ...)
+          - focus-metavariable: $CMD
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $EXEC = promisify($CP.exec);
+                  ...
+              - pattern-inside: |
+                  $EXEC = $UTIL.promisify($CP.exec);
+                  ...
+          - pattern: $EXEC($CMD, ...)
           - focus-metavariable: $CMD
       - pattern: eval(...)
     pattern-sanitizers:
