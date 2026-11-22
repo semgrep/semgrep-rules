@@ -1,0 +1,49 @@
+rules:
+  - id: ai-agent-action-allow-all-users
+    languages:
+      - yaml
+    severity: ERROR
+    message: >-
+      This step runs an AI coding agent action (`anthropics/claude-code-action`
+      or `openai/codex-action`) and sets its allow-list to `*`. Any GitHub user
+      (or bot) can then trigger the agent with text they control, such as an
+      issue, a comment or a pull request body, without needing write access to
+      the repository. That text is a prompt-injection path into the agent and
+      into whatever token, secrets and tools the job has. Replace `*` with an
+      explicit list of trusted usernames, and keep the job's permissions
+      and secrets to the minimum the agent needs.
+    metadata:
+      category: security
+      cwe:
+        - "CWE-863: Incorrect Authorization"
+      owasp:
+        - A01:2021 - Broken Access Control
+        - A01:2025 - Broken Access Control
+      references:
+        - https://github.com/anthropics/claude-code-action/blob/main/docs/security.md
+        - https://github.com/anthropics/claude-code-action/blob/main/action.yml
+        - https://github.com/openai/codex-action/blob/main/docs/security.md
+        - https://github.com/openai/codex-action/blob/main/action.yml
+      technology:
+        - github-actions
+      subcategory:
+        - vuln
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: HIGH
+    patterns:
+      - pattern-inside: |
+          jobs:
+            ...
+      - pattern: |
+          ...
+          uses: "$ACTION"
+          with:
+            ...
+            $KEY: "*"
+      - metavariable-regex:
+          metavariable: $ACTION
+          regex: ^(anthropics/claude-code-action|openai/codex-action)(/[^@]*)?@.*
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^(allowed_non_write_users|allowed_bots|allow-users)$
