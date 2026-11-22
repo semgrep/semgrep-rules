@@ -264,3 +264,24 @@ services:
     # ruleid: exposing-docker-socket-volume
     volumes:
       - /var/run/docker.sock:/run/docker.sock
+  service45:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  service46:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - "/run/docker.sock:/run/docker.sock:rw"
+  service47:
+    image: alpine:latest
+    # ruleid: exposing-docker-socket-volume
+    volumes:
+      - ./config:/etc/app:ro
+      - '/var/run/docker.sock:/tmp/docker.sock:ro,z'
+  service48:
+    image: alpine:latest
+    # ok: exposing-docker-socket-volume
+    volumes:
+      - ./data:/var/lib/data:ro
