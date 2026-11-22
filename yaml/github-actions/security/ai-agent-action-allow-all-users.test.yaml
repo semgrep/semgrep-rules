@@ -1,0 +1,107 @@
+name: AI agent
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  claude-all-users:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_non_write_users: "*"
+
+  claude-all-bots-single-quoted:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          allowed_bots: '*'
+
+  claude-pinned-by-sha:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@0123456789abcdef0123456789abcdef01234567
+        with:
+          allowed_non_write_users: "*"
+
+  claude-subpath:
+    runs-on: ubuntu-latest
+    steps:
+      # ruleid: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action/base-action@v1
+        with:
+          allowed_bots: "*"
+
+  codex-all-users:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # ruleid: ai-agent-action-allow-all-users
+      - uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          allow-users: "*"
+
+  claude-named-users:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          allowed_non_write_users: "octocat,hubot"
+
+  claude-named-bot:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          allowed_bots: "dependabot[bot]"
+
+  claude-default-write-access-only:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+  codex-named-users:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: openai/codex-action@v1
+        with:
+          allow-users: "octocat"
+
+  codex-allow-bots-boolean:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: openai/codex-action@v1
+        with:
+          allow-bots: true
+
+  other-action-same-key:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: some-org/unrelated-action@v1
+        with:
+          allowed_non_write_users: "*"
+
+  other-key-star-value:
+    runs-on: ubuntu-latest
+    steps:
+      # ok: ai-agent-action-allow-all-users
+      - uses: anthropics/claude-code-action@v1
+        with:
+          allowed_tools: "*"
