@@ -1,0 +1,68 @@
+rules:
+- id: laravel-raw-db-statement
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: $_GET
+      - pattern: $_POST
+      - pattern: $_COOKIE
+      - pattern: $_REQUEST
+      - pattern: $_SERVER
+  - patterns:
+    - pattern-either:
+      - pattern: $request->input(...)
+      - pattern: $request->get(...)
+      - pattern: $request->query(...)
+      - pattern: $request->post(...)
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: intval(...)
+      - pattern: (int) $X
+      - pattern: (integer) $X
+      - pattern: (float) $X
+      - pattern: (double) $X
+      - pattern: (bool) $X
+      - pattern: (boolean) $X
+      - pattern: floatval(...)
+      - pattern: boolval(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: DB::statement($QUERY, ...)
+      - pattern: DB::select($QUERY, ...)
+      - pattern: DB::insert($QUERY, ...)
+      - pattern: DB::update($QUERY, ...)
+      - pattern: DB::delete($QUERY, ...)
+      - pattern: DB::raw($QUERY)
+    - focus-metavariable: $QUERY
+  message: >-
+    User-controlled input flows into a raw database statement via `DB::statement()`,
+    `DB::select()`, `DB::raw()`, or similar methods without parameterization.
+    This can lead to SQL injection. Use parameterized queries with bound
+    parameters instead (e.g., `DB::select('SELECT * FROM users WHERE id = ?', [$id])`).
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    - A05:2025 - Injection
+    technology:
+    - php
+    - laravel
+    references:
+    - https://laravel.com/docs/10.x/database#running-queries
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM

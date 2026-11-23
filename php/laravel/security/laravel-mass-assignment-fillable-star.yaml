@@ -1,0 +1,37 @@
+rules:
+- id: laravel-mass-assignment-fillable-star
+  patterns:
+  - pattern: |
+      $fillable = ['*'];
+  - pattern-inside: |
+      class $CLASS extends Model {
+        ...
+      }
+  message: >-
+    Setting `$fillable` to `['*']` allows mass assignment of all attributes on this
+    Eloquent model, including sensitive fields like `role`, `is_admin`, or `password`.
+    This defeats Laravel's built-in mass assignment protection and can allow attackers
+    to modify unintended columns. Explicitly list only the fields that should be
+    mass-assignable in the `$fillable` array.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes'
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    - A08:2025 - Software or Data Integrity Failures
+    technology:
+    - php
+    - laravel
+    - eloquent
+    references:
+    - https://laravel.com/docs/10.x/eloquent#mass-assignment
+    - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
