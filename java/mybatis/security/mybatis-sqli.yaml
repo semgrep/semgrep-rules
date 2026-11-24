@@ -1,0 +1,42 @@
+rules:
+  - id: mybatis-sqli
+    patterns:
+      - pattern-either:
+          - pattern: "@Select($SQL)"
+          - pattern: "@Update($SQL)"
+          - pattern: "@Insert($SQL)"
+          - pattern: "@Delete($SQL)"
+      - metavariable-regex:
+          metavariable: $SQL
+          regex: '[\s\S]*\$\{[\s\S]*'
+    message: >-
+      Detected a MyBatis mapper annotation that uses the `${}` substitution
+      syntax. In MyBatis, `${}` performs direct string substitution into the
+      SQL statement without using a bound parameter, so any attacker-controlled
+      value placed inside `${}` leads to SQL injection. Use the `#{}` syntax
+      instead, which binds the value as a `PreparedStatement` parameter. `${}`
+      should only be used for trusted, non-user-controlled fragments such as
+      a fixed column or table name, and even then the value must be validated
+      against an allow-list.
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      category: security
+      subcategory:
+        - vuln
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+      references:
+        - https://mybatis.org/mybatis-3/sqlmap-xml.html#string-substitution
+        - https://owasp.org/Top10/A03_2021-Injection
+      technology:
+        - mybatis
+      cwe2021-top25: true
+      cwe2022-top25: true
