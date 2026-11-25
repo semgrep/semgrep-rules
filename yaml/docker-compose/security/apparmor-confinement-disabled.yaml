@@ -1,0 +1,36 @@
+rules:
+- id: apparmor-confinement-disabled
+  patterns:
+  - pattern: |
+      services:
+        ...
+        $SERVICE:
+          ...
+          security_opt:
+            - ...
+            - apparmor:unconfined
+  - focus-metavariable: $SERVICE
+  message: >-
+    Docker Compose service '$SERVICE' explicitly disables AppArmor
+    confinement with 'apparmor:unconfined'. This removes an additional
+    mandatory access control boundary. Use an appropriate AppArmor
+    profile instead of disabling confinement.
+  metadata:
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    references:
+    - https://docs.docker.com/engine/security/apparmor/
+    - https://docs.docker.com/reference/compose-file/services/#security_opt
+    category: security
+    technology:
+    - docker-compose
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: HIGH
+  languages: [yaml]
+  severity: WARNING
