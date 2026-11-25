@@ -9,7 +9,10 @@ rules:
           ipc: host
   - focus-metavariable: $SERVICE
   message: >-
-    fault private IPC namespace unless host IPC access is explicitly required.
+    Docker Compose service '$SERVICE' shares the host IPC namespace,
+    weakening isolation of shared memory and other interprocess communication
+    resources. Use a private IPC namespace unless host IPC access is
+    explicitly required.
   metadata:
     cwe:
     - 'CWE-653: Improper Isolation or Compartmentalization'
