@@ -1,0 +1,24 @@
+services:
+  # ruleid: host-network-namespace
+  explicit_host:
+    image: alpine:latest
+    network_mode: host
+  # ruleid: host-network-namespace
+  quoted_host:
+    build: .
+    network_mode: "host"
+  # ok: host-network-namespace
+  isolated:
+    image: alpine:latest
+    network_mode: bridge
+  # ok: host-network-namespace
+  different_mode:
+    image: alpine:latest
+    network_mode: "service:database"
+  # ok: host-network-namespace
+  omitted_mode:
+    image: alpine:latest
+  database:
+    image: postgres:latest
+x-service-template:
+  network_mode: host
