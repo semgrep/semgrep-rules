@@ -1,0 +1,32 @@
+rules:
+- id: host-cgroup-namespace
+  patterns:
+  - pattern: |
+      services:
+        ...
+        $SERVICE:
+          ...
+          cgroup: host
+  - focus-metavariable: $SERVICE
+  message: >-
+    Docker Compose service '$SERVICE' joins the host cgroup namespace,
+    exposing host cgroup hierarchy details and weakening container isolation.
+    Use a private cgroup namespace unless host cgroup access is required.
+  metadata:
+    cwe:
+    - 'CWE-653: Improper Isolation or Compartmentalization'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    references:
+    - https://docs.docker.com/reference/compose-file/services/#cgroup
+    category: security
+    technology:
+    - docker-compose
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [yaml]
+  severity: WARNING
