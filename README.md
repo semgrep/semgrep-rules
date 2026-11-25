@@ -1,13 +1,3 @@
-## About this fork
-
-This is a development fork of [semgrep/semgrep-rules](https://github.com/semgrep/semgrep-rules), the collection of Semgrep Community Edition rules. The language and framework directories provide examples for applying code checks to software you develop or maintain, and for understanding how rule patterns, messages, and tests fit together.
-
-The fork's [upstream PR #4085](https://github.com/semgrep/semgrep-rules/pull/4085) proposes a C# authorization-rule false-positive correction for explicit authentication schemes. It was open on 17 October 2026 and is tracked on the linked feature branch.
-
-Start with the [official rule-writing documentation](https://semgrep.dev/docs/writing-rules/overview/) and the usage links below. [Compare the default branch with upstream](https://github.com/jdotc1/semgrep-rules/compare/semgrep:develop...jdotc1:develop). The original contribution instructions and Semgrep Rules License information remain intact.
-
----
-
 # semgrep-rules
 
 [![powered by semgrep](https://img.shields.io/badge/powered%20by%20semgrep-2ACFA6)](https://semgrep.dev/)
