@@ -1,0 +1,20 @@
+services:
+  # ruleid: host-pid-namespace
+  host_processes:
+    image: alpine
+    pid: host
+  # ruleid: host-pid-namespace
+  quoted_host:
+    image: alpine
+    pid: "host"
+  # ok: host-pid-namespace
+  isolated:
+    image: alpine
+  # ok: host-pid-namespace
+  other_container:
+    image: alpine
+    pid: "service:isolated"
+  # ok: host-pid-namespace
+  private_explicit:
+    image: alpine
+    pid: private

@@ -1,0 +1,35 @@
+rules:
+- id: host-pid-namespace
+  patterns:
+  - pattern: |
+      services:
+        ...
+        $SERVICE:
+          ...
+          pid: host
+  - focus-metavariable: $SERVICE
+  message: >-
+    Docker Compose service '$SERVICE' joins the host PID namespace with
+    'pid: host'. This weakens process isolation and may expose host
+    process information or permit process interference subject to
+    container privileges. Use a private PID namespace unless host
+    access is explicitly required.
+  metadata:
+    cwe:
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    references:
+    - https://docs.docker.com/reference/compose-file/services/#pid
+    - https://docs.docker.com/engine/security/#linux-kernel-capabilities
+    category: security
+    technology:
+    - docker-compose
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [yaml]
+  severity: WARNING
