@@ -56,10 +56,10 @@ function okTest2() {
     someFunc()
 }
 
-function okTest3(req,res) {
+function replaceBypass(req,res) {
     let somePath = req.body.path;
     somePath = somePath.replace(/^(\.\.(\/|\\|$))+/, '');
-    // ok:path-join-resolve-traversal
+    // ruleid:path-join-resolve-traversal
     return path.join(opts.path, somePath);
 }
 

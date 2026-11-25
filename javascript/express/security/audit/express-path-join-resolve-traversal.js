@@ -71,10 +71,10 @@ app.post('/ok-test2', function okTest2() {
     someFunc()
 })
 
-app.post('/ok-test3', function (req,res) {
+app.post('/replace-bypass', function (req,res) {
     let somePath = req.body.path;
     somePath = somePath.replace(/^(\.\.(\/|\\|$))+/, '');
-    // ok:express-path-join-resolve-traversal
+    // ruleid:express-path-join-resolve-traversal
     return path.join(opts.path, somePath);
 })
 
