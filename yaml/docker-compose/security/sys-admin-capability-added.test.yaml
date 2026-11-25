@@ -1,0 +1,40 @@
+services:
+  # ruleid: sys-admin-capability-added
+  sys_admin:
+    image: alpine
+    cap_add:
+      - SYS_ADMIN
+  # ruleid: sys-admin-capability-added
+  sys_admin_after_other:
+    image: alpine
+    cap_add:
+      - NET_BIND_SERVICE
+      - SYS_ADMIN
+  # ruleid: sys-admin-capability-added
+  inline_sys_admin:
+    image: alpine
+    cap_add: [SYS_ADMIN]
+  # ruleid: sys-admin-capability-added
+  cap_prefix:
+    image: alpine
+    cap_add:
+      - CAP_SYS_ADMIN
+  # ruleid: sys-admin-capability-added
+  inline_cap_prefix:
+    image: alpine
+    cap_add: [CAP_SYS_ADMIN]
+  # ok: sys-admin-capability-added
+  least_privilege:
+    image: alpine
+    cap_add:
+      - NET_BIND_SERVICE
+  # ok: sys-admin-capability-added
+  dropped_admin:
+    image: alpine
+    cap_drop:
+      - SYS_ADMIN
+  # ok: sys-admin-capability-added
+  defaults:
+    image: alpine
+x-template:
+  cap_add: [SYS_ADMIN]
