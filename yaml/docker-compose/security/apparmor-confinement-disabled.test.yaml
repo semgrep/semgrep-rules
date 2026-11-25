@@ -1,0 +1,25 @@
+services:
+  # ruleid: apparmor-confinement-disabled
+  unconstrained:
+    image: busybox
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:unconfined
+  # ruleid: apparmor-confinement-disabled
+  alone:
+    image: alpine
+    security_opt:
+      - apparmor:unconfined
+  # ok: apparmor-confinement-disabled
+  custom_profile:
+    image: alpine
+    security_opt:
+      - apparmor:my-profile
+  # ok: apparmor-confinement-disabled
+  seccomp_only:
+    image: alpine
+    security_opt:
+      - seccomp:unconfined
+  # ok: apparmor-confinement-disabled
+  default:
+    image: alpine
