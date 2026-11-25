@@ -9,7 +9,10 @@ rules:
           network_mode: host
   - focus-metavariable: $SERVICE
   message: >-
-    es. Use an isolated network unless host networking is explicitly required.
+    Docker Compose service '$SERVICE' shares the host network namespace,
+    bypassing container network isolation and exposing host network
+    interfaces and services. Use an isolated network unless host networking
+    is explicitly required.
   metadata:
     cwe:
     - 'CWE-653: Improper Isolation or Compartmentalization'
