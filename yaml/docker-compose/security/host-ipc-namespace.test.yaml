@@ -1,0 +1,24 @@
+services:
+  # ruleid: host-ipc-namespace
+  explicit_host:
+    image: alpine:latest
+    ipc: host
+  # ruleid: host-ipc-namespace
+  quoted_host:
+    build: .
+    ipc: "host"
+  # ok: host-ipc-namespace
+  isolated:
+    image: alpine:latest
+    ipc: private
+  # ok: host-ipc-namespace
+  different_mode:
+    image: alpine:latest
+    ipc: "service:database"
+  # ok: host-ipc-namespace
+  omitted_mode:
+    image: alpine:latest
+  database:
+    image: postgres:latest
+x-service-template:
+  ipc: host
