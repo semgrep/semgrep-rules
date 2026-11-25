@@ -1,0 +1,37 @@
+services:
+  web:
+    image: nginx:alpine
+    # ruleid: root-user-service
+    user: root
+  numeric:
+    image: alpine
+    # ruleid: root-user-service
+    user: 0
+  quoted:
+    image: alpine
+    # ruleid: root-user-service
+    user: "root"
+  root_with_group:
+    image: alpine
+    # ruleid: root-user-service
+    user: "0:1000"
+  group_name:
+    image: alpine
+    # ruleid: root-user-service
+    user: root:staff
+  standard:
+    image: alpine
+    # ok: root-user-service
+    user: app
+  nonroot_uid:
+    image: alpine
+    # ok: root-user-service
+    user: "1000:0"
+  nonroot_numeric:
+    image: alpine
+    # ok: root-user-service
+    user: 1000
+  omitted:
+    image: alpine
+    # ok: root-user-service
+    read_only: true

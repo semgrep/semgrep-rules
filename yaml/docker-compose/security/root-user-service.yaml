@@ -1,0 +1,37 @@
+rules:
+- id: root-user-service
+  patterns:
+  - pattern-inside: |
+      services:
+        ...
+        $SERVICE:
+          ...
+          user: $USER
+  - focus-metavariable: $USER
+  - metavariable-regex:
+      metavariable: $USER
+      regex: '(?i)^["'']?(?:root|0)(?::[a-z0-9_.-]+)?["'']?$'
+  message: >-
+    Docker Compose service '$SERVICE' explicitly runs its container process
+    as root (UID 0). This overrides a non-root USER in the image and grants
+    unnecessary privileges inside the container. Configure a non-root user
+    unless the service specifically requires root access.
+  metadata:
+    cwe:
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    references:
+    - https://docs.docker.com/reference/compose-file/services/#user
+    - https://docs.docker.com/engine/security/#docker-daemon-attack-surface
+    category: security
+    technology:
+    - docker-compose
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [yaml]
+  severity: WARNING
