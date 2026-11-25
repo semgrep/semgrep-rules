@@ -1,0 +1,30 @@
+rules:
+- id: host-ipc-namespace
+  patterns:
+  - pattern: |
+      services:
+        ...
+        $SERVICE:
+          ...
+          ipc: host
+  - focus-metavariable: $SERVICE
+  message: >-
+    fault private IPC namespace unless host IPC access is explicitly required.
+  metadata:
+    cwe:
+    - 'CWE-653: Improper Isolation or Compartmentalization'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A02:2025 - Security Misconfiguration
+    references:
+    - https://docs.docker.com/reference/compose-file/services/#ipc
+    category: security
+    technology:
+    - docker-compose
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+  languages: [yaml]
+  severity: WARNING
