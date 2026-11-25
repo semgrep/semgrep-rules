@@ -1,0 +1,28 @@
+services:
+  # ruleid: all-capabilities-added
+  explicit_all:
+    image: alpine
+    cap_add:
+      - ALL
+  # ruleid: all-capabilities-added
+  after_specific:
+    image: alpine
+    cap_add:
+      - NET_BIND_SERVICE
+      - ALL
+  # ruleid: all-capabilities-added
+  inline:
+    image: alpine
+    cap_add: [ALL]
+  # ok: all-capabilities-added
+  limited:
+    image: alpine
+    cap_add:
+      - NET_BIND_SERVICE
+  # ok: all-capabilities-added
+  empty_list:
+    image: alpine
+    cap_add: []
+  # ok: all-capabilities-added
+  default:
+    image: alpine
