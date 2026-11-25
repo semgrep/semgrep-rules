@@ -9,7 +9,9 @@ rules:
           userns_mode: host
   - focus-metavariable: $SERVICE
   message: >-
-    n user namespace remapping unless this exception is required and reviewed.
+    Docker Compose service '$SERVICE' disables user namespace remapping for
+    this container when daemon-level remapping is enabled. Retain remapping
+    unless this exception is required and reviewed.
   metadata:
     cwe:
     - 'CWE-653: Improper Isolation or Compartmentalization'
