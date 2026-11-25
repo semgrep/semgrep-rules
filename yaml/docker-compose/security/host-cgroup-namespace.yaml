@@ -9,7 +9,9 @@ rules:
           cgroup: host
   - focus-metavariable: $SERVICE
   message: >-
-    refer the private cgroup namespace unless host cgroup access is necessary.
+    Docker Compose service '$SERVICE' joins the host cgroup namespace,
+    exposing host cgroup hierarchy details and weakening container isolation.
+    Use a private cgroup namespace unless host cgroup access is required.
   metadata:
     cwe:
     - 'CWE-653: Improper Isolation or Compartmentalization'
