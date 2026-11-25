@@ -32,7 +32,9 @@ rules:
             cap_add: [CAP_SYS_ADMIN]
   - focus-metavariable: $SERVICE
   message: >-
-    ove SYS_ADMIN and grant only the narrow capabilities the service requires.
+    Docker Compose service '$SERVICE' grants CAP_SYS_ADMIN, a broad Linux
+    capability allowing privileged kernel operations. Avoid SYS_ADMIN unless
+    necessary and grant only the narrowest required capabilities.
   metadata:
     cwe:
     - 'CWE-250: Execution with Unnecessary Privileges'
