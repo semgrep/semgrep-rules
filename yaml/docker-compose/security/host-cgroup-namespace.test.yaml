@@ -1,0 +1,24 @@
+services:
+  # ruleid: host-cgroup-namespace
+  explicit_host:
+    image: alpine:latest
+    cgroup: host
+  # ruleid: host-cgroup-namespace
+  quoted_host:
+    build: .
+    cgroup: "host"
+  # ok: host-cgroup-namespace
+  isolated:
+    image: alpine:latest
+    cgroup: private
+  # ok: host-cgroup-namespace
+  different_mode:
+    image: alpine:latest
+    cgroup: "other"
+  # ok: host-cgroup-namespace
+  omitted_mode:
+    image: alpine:latest
+  database:
+    image: postgres:latest
+x-service-template:
+  cgroup: host
