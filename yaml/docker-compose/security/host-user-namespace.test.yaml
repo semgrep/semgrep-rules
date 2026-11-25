@@ -1,0 +1,24 @@
+services:
+  # ruleid: host-user-namespace
+  explicit_host:
+    image: alpine:latest
+    userns_mode: host
+  # ruleid: host-user-namespace
+  quoted_host:
+    build: .
+    userns_mode: "host"
+  # ok: host-user-namespace
+  isolated:
+    image: alpine:latest
+    userns_mode: private
+  # ok: host-user-namespace
+  different_mode:
+    image: alpine:latest
+    userns_mode: "auto"
+  # ok: host-user-namespace
+  omitted_mode:
+    image: alpine:latest
+  database:
+    image: postgres:latest
+x-service-template:
+  userns_mode: host
