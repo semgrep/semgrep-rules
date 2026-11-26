@@ -7,6 +7,10 @@ rules:
       # See: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies
       - pattern-not-regex: "ELBSecurityPolicy-TLS13-1-[23]-[(Res)0-9-]+"
       - pattern-not-regex: "ELBSecurityPolicy-FS-1-2-[(Res)0-9-]+"
+      # AWS FIPS policies (ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04 and the Res-FIPS
+      # and FIPS-PQ variants) keep the TLS 1.2/1.3 floor encoded by the version
+      # segment before the FIPS token, and add no static-RSA or SHA1-HMAC suites.
+      - pattern-not-regex: "ELBSecurityPolicy-TLS13-1-[23]-(Res-)?FIPS-"
     - patterns:
       - pattern: protocol = "HTTP"
       - pattern-not-inside: |
