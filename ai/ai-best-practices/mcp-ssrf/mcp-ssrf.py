@@ -115,6 +115,25 @@ async def aiohttp_constructor_alias(url: str) -> str:
 
 
 @mcp.tool()
+async def aiohttp_assigned_session(url: str) -> str:
+    client = aiohttp.ClientSession()
+    try:
+        # ruleid: mcp-ssrf-python
+        await client.get(url)
+        # ruleid: mcp-ssrf-python
+        await client.post(url=url)
+        # ruleid: mcp-ssrf-python
+        await client.request("GET", url)
+        # ruleid: mcp-ssrf-python
+        async with client.get(url) as response:
+            await response.text()
+        # ruleid: mcp-ssrf-python
+        async with client.request(method="GET", url=url) as response:
+            return await response.text()
+    finally:
+        await client.close()
+
+@mcp.tool()
 async def aiohttp_url_propagation(url: str) -> str:
     destination = url
     async with aiohttp.ClientSession() as client:
@@ -176,6 +195,8 @@ async def non_http_receivers(url: str) -> str:
 @mcp.tool()
 async def reassigned_session(url: str) -> str:
     client = aiohttp.ClientSession()
+    # ruleid: mcp-ssrf-python
+    await client.get(url)
     await client.close()
     client = Cache()
     # ok: mcp-ssrf-python
