@@ -4,7 +4,7 @@ rules:
       - pattern: RUN $CMD ...
       - metavariable-regex:
           metavariable: $CMD
-          regex: (shutdown|service|ps|free|top|kill|mount|ifconfig|nano|vim)
+          regex: ^(shutdown|service|ps|free|top|kill|mount|ifconfig|nano|vim)$
     message: >-
       Some commands such as `$CMD` do not make sense in a container. Do not use
       these.
