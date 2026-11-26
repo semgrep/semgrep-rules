@@ -18,6 +18,7 @@ rules:
       technology: [mcp]
       references:
         - https://modelcontextprotocol.io/specification/draft/basic/security_best_practices
+        - https://docs.aiohttp.org/en/stable/client_reference.html
     pattern-sources:
       - patterns:
           - pattern: |
@@ -40,6 +41,101 @@ rules:
           - focus-metavariable: $SINK
       - patterns:
           - pattern: urllib.request.urlopen($SINK)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-inside: |
+              async with aiohttp.ClientSession(...) as $SESSION:
+                  ...
+          - pattern-either:
+              - pattern: $SESSION.$METHOD($SINK, ...)
+              - pattern: $SESSION.$METHOD(url=$SINK, ...)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: '^(get|post|put|patch|delete|head|options)$'
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  <... $SESSION.$METHOD($SINK, ...) ...>
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  <... $SESSION.$METHOD(url=$SINK, ...) ...>
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  async with $SESSION.$METHOD($SINK, ...) as $RESPONSE:
+                      ...
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  async with $SESSION.$METHOD(url=$SINK, ...) as $RESPONSE:
+                      ...
+          - pattern-not: |
+              $SESSION = aiohttp.ClientSession(...)
+              ...
+              $SESSION = ...
+              ...
+              <... $SESSION.$METHOD(...) ...>
+          - pattern-not: |
+              $SESSION = aiohttp.ClientSession(...)
+              ...
+              $SESSION = ...
+              ...
+              async with $SESSION.$METHOD(...) as $RESPONSE:
+                  ...
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: '^(get|post|put|patch|delete|head|options)$'
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-inside: |
+              async with aiohttp.ClientSession(...) as $SESSION:
+                  ...
+          - pattern-either:
+              - pattern: $SESSION.request($METHOD, $SINK, ...)
+              - pattern: $SESSION.request(..., url=$SINK, ...)
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-either:
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  <... $SESSION.request($METHOD, $SINK, ...) ...>
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  <... $SESSION.request(..., url=$SINK, ...) ...>
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  async with $SESSION.request($METHOD, $SINK, ...) as $RESPONSE:
+                      ...
+              - pattern: |
+                  $SESSION = aiohttp.ClientSession(...)
+                  ...
+                  async with $SESSION.request(..., url=$SINK, ...) as $RESPONSE:
+                      ...
+          - pattern-not: |
+              $SESSION = aiohttp.ClientSession(...)
+              ...
+              $SESSION = ...
+              ...
+              <... $SESSION.request(...) ...>
+          - pattern-not: |
+              $SESSION = aiohttp.ClientSession(...)
+              ...
+              $SESSION = ...
+              ...
+              async with $SESSION.request(...) as $RESPONSE:
+                  ...
+          - focus-metavariable: $SINK
+      - patterns:
+          - pattern-either:
+              - pattern: aiohttp.request($METHOD, $SINK, ...)
+              - pattern: aiohttp.request(..., url=$SINK, ...)
           - focus-metavariable: $SINK
     pattern-sanitizers:
       - pattern: urllib.parse.urlparse(...)
