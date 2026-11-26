@@ -23,3 +23,16 @@ RUN pip3 install semgrep
 
 # ok: nonsensical-command
 RUN semgrep -f p/xss
+
+# Commands that only share a prefix with a nonsensical command must not match.
+# ok: nonsensical-command
+RUN psql -c "SELECT 1"
+
+# ok: nonsensical-command
+RUN topgrade --dry-run
+
+# ok: nonsensical-command
+RUN mountpoint /data
+
+# ok: nonsensical-command
+RUN freebsd-version
