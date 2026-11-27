@@ -163,3 +163,58 @@ class GoodDocumentBuilderFactoryCtr3 {
     }
 
 }
+
+// Factory field hardened in the constructor, used from another method (#3764)
+class GoodDocumentBuilderFactoryFieldCtr {
+    private final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+    public GoodDocumentBuilderFactoryFieldCtr() throws ParserConfigurationException {
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    }
+
+    public void parse() throws ParserConfigurationException {
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
+
+class GoodDocumentBuilderFactoryFieldCtrThis {
+    private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+    GoodDocumentBuilderFactoryFieldCtrThis() throws ParserConfigurationException {
+        this.dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        this.dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+    }
+
+    public void parse() throws ParserConfigurationException {
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
+
+class GoodDocumentBuilderFactoryFieldAssignedInCtr {
+    private final DocumentBuilderFactory dbf;
+
+    public GoodDocumentBuilderFactoryFieldAssignedInCtr() throws ParserConfigurationException {
+        dbf = DocumentBuilderFactory.newInstance();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    }
+
+    public void parse() throws ParserConfigurationException {
+        //ok:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
+
+class BadDocumentBuilderFactoryFieldCtr {
+    private final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+    public BadDocumentBuilderFactoryFieldCtr() throws ParserConfigurationException {
+        dbf.setFeature("not-a-secure-feature", true);
+    }
+
+    public void parse() throws ParserConfigurationException {
+        //ruleid:documentbuilderfactory-disallow-doctype-decl-missing
+        dbf.newDocumentBuilder();
+    }
+}
