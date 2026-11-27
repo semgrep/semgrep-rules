@@ -1,0 +1,21 @@
+rules:
+  - id: android-webview-universal-access
+    message: >-
+      `setAllowUniversalAccessFromFileURLs(true)` allows file:// URLs to access
+      any origin, breaking same-origin policy. This is extremely dangerous and
+      should never be used in production.
+    severity: ERROR
+    metadata:
+      category: security
+      technology:
+        - android
+        - java
+        - kotlin
+      cwe: "CWE-668: Exposure of Resource to Wrong Sphere"
+    languages:
+      - java
+      - kotlin
+    patterns:
+      - pattern-inside: |
+          $WEBVIEW.getSettings()
+      - pattern: $SETTINGS.setAllowUniversalAccessFromFileURLs(true)
