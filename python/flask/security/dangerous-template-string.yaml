@@ -60,3 +60,7 @@ rules:
       $V = f"...{$X}..."
       ...
       return flask.render_template_string($V, ...), $CODE
+  - pattern: flask.render_template_string(f"...{$X}...", ...)
+  - pattern: flask.render_template_string("...".format(...), ...)
+  - pattern: flask.render_template_string("..." % $X, ...)
+  - pattern: flask.render_template_string($A + $B, ...)
