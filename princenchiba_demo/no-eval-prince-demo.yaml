@@ -1,0 +1,30 @@
+rules:
+- id: no-eval-prince-demo
+  languages:
+  - javascript
+  severity: ERROR
+  message: Semgrep found a match
+  pattern: eval("...")
+  metadata:
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-749: Exposed Dangerous Method or Function'
+    confidence: HIGH
+    likelihood: LOW
+    impact: MEDIUM
+    owasp:
+    - A3:2021 Injection
+    references:
+    - ''
+    technology:
+    - django
+    - docker
+    - dockerfile
+    - flask
+    - gorilla
+    - kubernetes
+    - nginx
+    - terraform
+    - react
