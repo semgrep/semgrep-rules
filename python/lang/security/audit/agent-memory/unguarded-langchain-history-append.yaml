@@ -1,0 +1,44 @@
+rules:
+- id: unguarded-langchain-history-append
+  patterns:
+  - pattern-either:
+    - pattern: $HISTORY.add_message(...)
+    - pattern: $HISTORY.add_user_message(...)
+    - pattern: $HISTORY.add_ai_message(...)
+  - metavariable-regex:
+      metavariable: $HISTORY
+      regex: .*(history|chat_history|message_history|memory).*
+  - pattern-not-inside: |
+      guard.write(...)
+      ...
+  message: >-
+    Unguarded LangChain chat-history write. Messages added to a persistent chat history are loaded into
+    future sessions and can carry prompt-injection payloads that change agent behavior after a context
+    reset (memory poisoning, OWASP Agentic Top 10 ASI06; MITRE ATLAS AML.T0080.000). Validate and screen
+    content before it is persisted to agent memory (source class, embedded instructions, sensitive data)
+    and verify the integrity of protected keys on read. An open-source reference implementation is OWASP
+    Agent Memory Guard.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe:
+    - 'CWE-501: Trust Boundary Violation'
+    - 'CWE-1427: Improper Neutralization of Input Used for LLM Prompting'
+    technology:
+    - python
+    - ai
+    - llm
+    - agents
+    - langchain
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    - https://atlas.mitre.org/techniques/AML.T0080.000
+    - https://github.com/OWASP/www-project-agent-memory-guard
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
