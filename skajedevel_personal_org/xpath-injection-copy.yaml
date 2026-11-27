@@ -1,0 +1,52 @@
+rules:
+- id: xpath-injection-copy
+  message: XPath queries are constructed dynamically on user-controlled input. This
+    vulnerability in code could lead to an XPath Injection exploitation.
+  severity: ERROR
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-643: Improper Neutralization of Data within XPath Expressions (''XPath
+      Injection'')'
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection/
+    - https://cwe.mitre.org/data/definitions/643.html
+    subcategory:
+    - vuln
+    technology:
+    - .net
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - XPath Injection
+  languages:
+  - csharp
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: $T $M($INPUT,...) {...}
+    - pattern: |
+        $T $M(...) {
+          ...
+          string $INPUT;
+        }
+  pattern-sinks:
+  - pattern-either:
+    - pattern: XPathExpression $EXPR = $NAV.Compile("..." + $INPUT + "...");
+    - pattern: XPathExpression $EXPR = $NAV.Compile($"...{$INPUT}...");
+    - pattern: var $EXPR = $NAV.Compile("..." + $INPUT + "...");
+    - pattern: var $EXPR = $NAV.Compile($"...{$INPUT}...");
+    - pattern: XPathNodeIterator $NODE = $NAV.Select("..." + $INPUT + "...");
+    - pattern: XPathNodeIterator $NODE = $NAV.Select($"...{$INPUT}...");
+    - pattern: var $NODE = $NAV.Select("..." + $INPUT + "...");
+    - pattern: var $NODE = $NAV.Select($"...{$INPUT}...");
+    - pattern: var $NODE = $NAV.SelectSingleNode("..." + $INPUT + "...");
+    - pattern: var $NODE = $NAV.SelectSingleNode($"...{$INPUT}...");
+    - pattern: Object $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
+    - pattern: Object $OBJ = $NAV.Evaluate($"...{$INPUT}...");
+    - pattern: var $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
+    - pattern: var $OBJ = $NAV.Evaluate($"...{$INPUT}...");
