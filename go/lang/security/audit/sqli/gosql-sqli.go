@@ -1,5 +1,6 @@
 package main
 
+import "context"
 import "database/sql"
 import "fmt"
 
@@ -34,6 +35,12 @@ func bad4(db *sql.DB) {
 func bad5(db *sql.DB) {
     // ruleid: gosql-sqli
     db.Exec(fmt.Sprintf("SELECT * FROM users WHERE email='%s';", email))
+}
+
+func bad6(db *sql.DB) {
+    query = "SELECT name FROM users WHERE age=" + req.FormValue("age")
+    // ruleid: gosql-sqli
+    db.ExecContext(context.Background(), query)
 }
 
 func ok1(db *sql.DB) {
