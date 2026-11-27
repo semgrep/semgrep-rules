@@ -20,6 +20,10 @@ rules:
         proxy_http_version 1.1 ...;
         ...
         proxy_set_header Connection ...;
+  - pattern-not: |
+      proxy_set_header Upgrade websocket;
+  - pattern-not: |
+      proxy_set_header Upgrade "websocket";
   - pattern-inside: |
       location ... {
         ...
