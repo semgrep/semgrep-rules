@@ -36,6 +36,13 @@ public interface IBSidesServiceOK extends Remote {
    void poke(Integer attende) throws RemoteException;
 }
 
+// ok:server-dangerous-object-deserialization
+public interface IBSidesServiceArrayOK extends Remote {
+   boolean registerTicket(String[] ticketIDs) throws RemoteException;
+   void vistTalk(String talkID) throws RemoteException;
+   void poke(int[] attendees) throws RemoteException;
+}
+
 public class BSidesServer {
     public static void main(String[] args) {
         try {
