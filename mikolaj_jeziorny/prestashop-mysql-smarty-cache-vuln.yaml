@@ -1,0 +1,26 @@
+rules:
+- id: prestashop-mysql-smarty-cache-vuln
+  metadata:
+    category: security
+    technology:
+    - Prestashop
+    references:
+    - ''
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-1255: Comparison Logic is Vulnerable to Power Side-Channel Attacks'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    source_rule_url: https://build.prestashop-project.org/news/2022/major-security-vulnerability-on-prestashop-websites/
+  pattern: if (Configuration::get('PS_SMARTY_CACHING_TYPE') == 'mysql') { ... }
+  fix: ''
+  message: The mysql caching for Smarty is popular using to attack Prestashop instances
+  languages:
+  - php
+  severity: ERROR
+  paths:
+    include:
+    - config/smarty.config.inc.php
+    - '**/config/smarty.config.inc.php'
