@@ -1,0 +1,30 @@
+rules:
+- id: nextjs-middleware-ssrf
+  languages:
+  - ts
+  severity: ERROR
+  message: User-controllable request headers ($REQ.$HEADERS) are insecurely passed
+    to NextResponse.next. This pattern could lead to Server-Side Request Forgery (SSRF).
+  pattern-sources:
+  - pattern: '($REQ: NextRequest).$HEADERS'
+  pattern-sinks:
+  - pattern: 'NextResponse.next({ headers: $HEADERS })'
+  pattern-sanitizers:
+  - pattern: '{ request: { headers: $HEADERS } }'
+  mode: taint
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    references:
+    - https://github.com/vercel/next.js/security/advisories/GHSA-4342-x723-ch2f
+    - https://vercel.com/changelog/cve-2025-57822
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    owasp:
+    - A10:2021 Server-Side Request Forgery (SSRF)
+    technology:
+    - nextjs
