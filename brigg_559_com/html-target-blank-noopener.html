@@ -1,0 +1,22 @@
+<!-- ruleid: html-target-blank-noopener -->
+<a class="btn" target="_blank" href="https://owasp.org">OWASP site</a>
+
+<!-- ruleid: html-target-blank-noopener -->
+<a href="https://example.com" target="_blank" rel="nofollow">Missing noopener/noreferrer</a>
+
+<!-- TRUE NEGATIVES: target=_blank with proper rel -->
+<!-- ok: html-target-blank-noopener -->
+<a href="https://example.com" target="_blank" rel="noopener">Safe (noopener)</a>
+
+<!-- ok: html-target-blank-noopener -->
+<a href="https://example.com" target="_blank" rel="noreferrer">Safe (noreferrer)</a>
+
+<!-- ok: html-target-blank-noopener -->
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">Safe (both)</a>
+
+<!-- NEUTRALS: not in scope for the rule -->
+<a href="https://example.com">No target attribute</a>
+<a href="https://example.com" rel="noopener">No target, rel present</a>
+
+<!-- Commented out; should not be matched -->
+<!-- <a href="https://example.com" target="_blank">Commented out</a> -->
