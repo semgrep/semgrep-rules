@@ -1,0 +1,67 @@
+rules:
+- id: un-gated-agent-tool-execution
+  message: >-
+    Detected un-gated AI agent tool execution. Passing LLM/agent output directly to mutating execution sinks 
+    (such as shell commands, SQL queries, or state-modifying APIs) without an ActionBoundary or human-in-the-loop 
+    prove token violates the zero-trust execution principle ('never_equate_intent_to_approval: true') and 
+    exposes systems to OWASP LLM06 (Excessive Agency). Wrap tool execution in an ActionBoundary or ActionGate.
+  severity: WARNING
+  languages:
+  - python
+  metadata:
+    cwe:
+    - "CWE-250: Execution with Unnecessary Privileges"
+    - "CWE-862: Missing Authorization"
+    - "CWE-863: Incorrect Authorization"
+    - "OWASP-LLM06: Excessive Agency"
+    category: security
+    technology:
+    - langchain
+    - crewai
+    - autogen
+    - llama-index
+    confidence: HIGH
+    references:
+    - https://owasp.org/www-project-top-10-for-large-language-model-applications/
+    - https://a2zsoc.com/productized-services#instant-audit-tripwire
+  patterns:
+  - pattern-either:
+    - pattern: |
+        subprocess.run($AGENT_TOOL_CALL.get(...), ...)
+    - pattern: |
+        subprocess.Popen($AGENT_TOOL_CALL.get(...), ...)
+    - pattern: |
+        os.system($AGENT_OUTPUT)
+    - pattern: |
+        $CURSOR.execute($AGENT_OUTPUT)
+    - pattern: |
+        $DB.session.execute($AGENT_OUTPUT)
+    - pattern: |
+        requests.delete($AGENT_OUTPUT, ...)
+    - pattern: |
+        requests.post($AGENT_OUTPUT, ...)
+
+- id: never-equate-intent-to-approval
+  message: >-
+    Detected direct execution bypass based solely on LLM agent confidence or intent string without a cryptographic 
+    prove token or deterministic ActionGate. Model confidence cannot be equated to authorization in production 
+    agent swarms.
+  severity: ERROR
+  languages:
+  - python
+  metadata:
+    cwe:
+    - "CWE-862: Missing Authorization"
+    - "OWASP-LLM06: Excessive Agency"
+    category: security
+    technology:
+    - ai-agents
+    - langchain
+    - autogen
+    confidence: MEDIUM
+    references:
+    - https://a2zsoc.com/consultation
+  patterns:
+  - pattern: |
+      if $AGENT_DECISION.confidence > $THRESHOLD:
+          $TOOL.execute(...)
