@@ -80,7 +80,7 @@ resource "google_container_node_pool" "success" {
   node_config {
     disk_size_gb = "400"
     disk_type    = "pd-ssd"
-    image_type   = "COS"
+    image_type   = "COS_CONTAINERD"
 
     labels = {
       async = "true"
