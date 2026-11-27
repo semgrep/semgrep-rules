@@ -17,5 +17,18 @@ rules:
       references:
         - https://ai.google.dev/gemini-api/docs/safety-settings
     patterns:
+      - pattern-either:
+          - pattern-inside: |
+              from google import genai
+              ...
+          - pattern-inside: |
+              from google import genai as $ANY
+              ...
+          - pattern-inside: |
+              import google.genai
+              ...
+          - pattern-inside: |
+              import google.genai as $ANY
+              ...
       - pattern: $MODEL.generate_content(...)
-      - pattern-not: $MODEL.generate_content(..., safety_settings=$SETTINGS, ...)
+      - pattern-not: $MODEL.generate_content(..., config={..., "safety_settings":$SETTINGS, ...}, ...)
