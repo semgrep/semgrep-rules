@@ -1,0 +1,39 @@
+rules:
+- id: string-format
+  message: >-
+    Usage of `printf` function family without providing a format string can lead to format string vulnerabilities.
+    Prefer the usage of `puts` family of functions or provide a format string to mitigate this issue. 
+  metadata:
+    cwe:
+    - 'CWE-134: Use of Externally-Controlled Format String'
+    references:
+    - https://owasp.org/www-community/attacks/Format_string_attack
+    category: security
+    technology:
+    - c
+    confidence: MEDIUM
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+  languages: [c]
+  severity: ERROR
+  patterns:
+  - pattern-either:
+      - patterns:
+        - pattern: printf(...)
+        - pattern-not: printf("$FMT", ...)
+      - patterns:
+        - pattern: $FUN($FD, ...)
+        - pattern-not: $FUN($FD, "$FMT", ...)
+        - metavariable-pattern:
+            metavariable: $FUN
+            pattern-either:
+              - pattern: fprintf
+              - pattern: dprintf
+      - patterns:
+        - pattern: sprintf($BUF, ...)
+        - pattern-not: sprintf($BUF, "$FMT", ...) 
+      - patterns:
+        - pattern: snprintf($BUF, $SIZE, ...)
+        - pattern-not: snprintf($BUF, $SIZE, "$FMT", ...)
