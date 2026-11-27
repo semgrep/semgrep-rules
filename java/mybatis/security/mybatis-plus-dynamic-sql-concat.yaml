@@ -1,0 +1,47 @@
+rules:
+  - id: mybatis-plus-dynamic-sql-concat
+    languages:
+      - java
+    severity: WARNING
+    message: >-
+      MyBatis-Plus QueryWrapper condition method received a dynamically
+      concatenated string argument for column/table names. If the concatenated
+      content originates from user input, it may allow SQL injection via
+      column name manipulation. Use hardcoded column names or validate
+      dynamic identifiers against a whitelist before use.
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      category: security
+      technology:
+        - mybatis-plus
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      references:
+        - https://baomidou.com/guides/wrapper/
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+      subcategory:
+        - vuln
+      likelihood: LOW
+      impact: MEDIUM
+      confidence: MEDIUM
+      vulnerability_class:
+        - SQL Injection
+    patterns:
+      - pattern-either:
+          - pattern: $W.eq($S + ..., ...)
+          - pattern: $W.ne($S + ..., ...)
+          - pattern: $W.like($S + ..., ...)
+          - pattern: $W.in($S + ..., ...)
+          - pattern: $W.notIn($S + ..., ...)
+          - pattern: $W.between($S + ..., ...)
+          - pattern: $W.notBetween($S + ..., ...)
+          - pattern: $W.gt($S + ..., ...)
+          - pattern: $W.ge($S + ..., ...)
+          - pattern: $W.lt($S + ..., ...)
+          - pattern: $W.le($S + ..., ...)
+          - pattern: $W.orderByAsc($S + ...)
+          - pattern: $W.orderByDesc($S + ...)
+          - pattern: $W.groupBy($S + ...)
+          - pattern: $W.having($S + ..., ...)
