@@ -1,0 +1,31 @@
+rules:
+  - id: apache-remoteipheader
+    message: The "RemoteIPHeader" directive is configured, this can lead to unexpected DNS queries.
+    severity: INFO
+    languages:
+      - generic
+    patterns:
+      - pattern: |
+          RemoteIPHeader $HEADER
+      - metavariable-regex:
+          metavariable: $HEADER
+          regex: "[A-Za-z0-9-]+"
+    fix: >
+      Verify that a rewrite rule "RewriteCond" is present to ensure that
+      the specified header contains a valid IPv4 or IPv6 address, and
+      reject the HTTP request if this is not the case.
+    references:
+      - https://httpd.apache.org/docs/current/mod/mod_remoteip.html
+      - https://httpd.apache.org/docs/current/mod/mod_rewrite.html
+    paths:
+      include:
+        - "**/*.conf"
+    cwe:
+      - "CWE-610: Externally Controlled Reference to a Resource in Another Sphere"
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    subcategory:
+      - audit
+    technology:
+    - apache
