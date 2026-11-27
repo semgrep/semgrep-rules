@@ -1,0 +1,61 @@
+rules:
+  - id: fastapi-httpx-ssrf
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Data from a FastAPI route parameter is passed into an outbound httpx
+      request. This could lead to a server-side request forgery (SSRF).
+      To mitigate, validate the destination against an allowlist of hosts
+      before making the request.
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  @$APP.$METHOD(...)
+                  async def $FUNC(..., $PARAM, ...):
+                      ...
+              - pattern-inside: |
+                  @$APP.$METHOD(...)
+                  def $FUNC(..., $PARAM, ...):
+                      ...
+          - focus-metavariable: $PARAM
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - patterns:
+                  - pattern-inside: |
+                      with httpx.Client() as $CLIENT:
+                          ...
+                  - pattern: $CLIENT.$METODO($URL)
+              - patterns:
+                  - pattern-inside: |
+                      async with httpx.AsyncClient() as $CLIENT:
+                          ...
+                  - pattern: $CLIENT.$METODO($URL)
+              - pattern: httpx.$METODO($URL)
+          - metavariable-regex:
+              metavariable: $METODO
+              regex: ^(get|post|put|delete|patch|head|options)$
+          - focus-metavariable: $URL
+    metadata:
+      cwe:
+        - "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp:
+        - "A10:2021 - Server-Side Request Forgery (SSRF)"
+        - "A01:2025 - Broken Access Control"
+      category: security
+      technology:
+        - python
+        - fastapi
+        - httpx
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+        - https://cwe.mitre.org/data/definitions/918.html
+      likelihood: MEDIUM
+      impact: HIGH
+      confidence: MEDIUM
+      subcategory:
+        - vuln
+      vulnerability_class:
+        - Server-Side Request Forgery (SSRF)
