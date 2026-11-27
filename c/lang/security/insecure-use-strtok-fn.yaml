@@ -2,9 +2,13 @@ rules:
 - id: insecure-use-strtok-fn
   pattern: strtok(...)
   message: >-
-    Avoid using 'strtok()'. This function directly modifies the first argument buffer,
-    permanently erasing the
-    delimiter character. Use 'strtok_r()' instead.
+    Avoid using 'strtok()'. This function is not thread-safe because it uses
+    internal static state to track parsing position. Concurrent or nested calls
+    to 'strtok()' on different strings will corrupt each other's state, leading
+    to incorrect parsing or undefined behavior. It also modifies the input buffer
+    in place by overwriting delimiter characters with null bytes.
+    Use 'strtok_r()' (POSIX) or 'strtok_s()' (C11 Annex K) instead, which take
+    an explicit save pointer and are safe for both threaded and nested use.
   metadata:
     cwe:
     - 'CWE-676: Use of Potentially Dangerous Function'
