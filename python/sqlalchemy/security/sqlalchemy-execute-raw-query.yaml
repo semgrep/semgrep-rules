@@ -32,36 +32,49 @@ rules:
   severity: ERROR
   languages:
   - python
-  pattern-either:
-  - pattern: |
-      $CONNECTION.execute( $SQL + ..., ... )
-  - pattern: |
-      $CONNECTION.execute( $SQL % (...), ...)
-  - pattern: |
-      $CONNECTION.execute( $SQL.format(...), ... )
-  - pattern: |
-      $CONNECTION.execute(f"...{...}...", ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = $SQL + ...
-        ...
+  patterns:
+  - pattern-either:
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns: 
-    - pattern-inside: |
-        $QUERY = $SQL % (...)
-        ...
+        $CONNECTION.execute( $SQL + ..., ... )
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = $SQL.format(...)
-        ...
+        $CONNECTION.execute( $SQL % (...), ...)
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
-  - patterns:
-    - pattern-inside: |
-        $QUERY = f"...{...}..."
-        ...
+        $CONNECTION.execute( $SQL.format(...), ... )
     - pattern: |
-        $CONNECTION.execute($QUERY, ...)
+        $CONNECTION.execute(f"...{...}...", ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL + ...
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL % (...)
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = $SQL.format(...)
+          ...
+      - pattern-not-inside: |
+          $QUERY = psycopg2.sql.SQL("...").format(...)
+          ...
+      - pattern-not-inside: |
+          $QUERY = psycopg.sql.SQL("...").format(...)
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+    - patterns:
+      - pattern-inside: |
+          $QUERY = f"...{...}..."
+          ...
+      - pattern: |
+          $CONNECTION.execute($QUERY, ...)
+  # psycopg's composition API (sql.SQL("...").format(sql.Identifier(...), ...))
+  # quotes identifiers and literals itself: it is the documented safe way to
+  # build dynamic SQL. Only a literal template is excluded: sql.SQL(variable)
+  # is still raw SQL and keeps being reported.
+  - pattern-not: $CONNECTION.execute(psycopg2.sql.SQL("...").format(...), ...)
+  - pattern-not: $CONNECTION.execute(psycopg.sql.SQL("...").format(...), ...)

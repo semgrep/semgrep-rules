@@ -246,3 +246,28 @@ with engine.connect() as connection:
   ]
   # ruleid: sqlalchemy-execute-raw-query
   connection.execute(stmt, values)
+
+##########################################################################
+# psycopg composition API (sql.SQL / sql.Identifier)
+##########################################################################
+
+from psycopg2 import sql
+from psycopg import sql as pg3_sql
+
+def drop_table(cursor, schema, table):
+    # ok: sqlalchemy-execute-raw-query
+    cursor.execute(sql.SQL("DROP TABLE IF EXISTS {}").format(sql.Identifier(schema, table)))
+    query = sql.SQL("DELETE FROM {} WHERE id = %s").format(sql.Identifier(schema, table))
+    # ok: sqlalchemy-execute-raw-query
+    cursor.execute(query, (1,))
+    # ok: sqlalchemy-execute-raw-query
+    cursor.execute(pg3_sql.SQL("DROP TABLE IF EXISTS {}").format(pg3_sql.Identifier(table)))
+
+def drop_table_unsafe(cursor, user_sql, table):
+    # ruleid: sqlalchemy-execute-raw-query
+    cursor.execute(sql.SQL(user_sql).format(sql.Identifier(table)))
+    # ruleid: sqlalchemy-execute-raw-query
+    cursor.execute("DROP TABLE IF EXISTS {}".format(table))
+    query = "DELETE FROM {} WHERE id = 1".format(table)
+    # ruleid: sqlalchemy-execute-raw-query
+    cursor.execute(query)
