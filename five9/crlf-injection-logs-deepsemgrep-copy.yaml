@@ -1,0 +1,61 @@
+rules:
+- id: crlf-injection-logs-deepsemgrep-custom
+  message: When data from an untrusted source is put into a logger and not neutralized
+    correctly, an attacker could forge log entries or include malicious content.
+  severity: ERROR
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    interfile: true
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-93: Improper Neutralization of CRLF Sequences (''CRLF Injection'')'
+    functional-categories:
+    - web::source::cookie::Servlet
+    - web::source::http-params::Servlet
+    - web::source::http-body::Servlet
+    - web::source::header::Servlet
+    - log::sink::log::log4j
+    - log::sink::log::java.util
+    owasp:
+    - A03:2021 - Injection
+    - A05:2025 - Injection
+    references:
+    - https://cwe.mitre.org/data/definitions/117.html
+    - https://cwe.mitre.org/data/definitions/93.html
+    - https://owasp.org/www-community/attacks/Log_Injection
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#CRLF_INJECTION_LOGS
+    technology:
+    - java
+    - servlets
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Improper Validation
+  languages:
+  - java
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: (HttpServletRequest $REQ).$REQFUNC(...)
+      - pattern: (ServletRequest $REQ).$REQFUNC(...)
+    - metavariable-regex:
+        metavariable: $REQFUNC
+        regex: (getInputStream|getParameter|getParameterMap|getParameterValues|getReader|getCookies|getHeader|getHeaderNames|getHeaders|getPart|getParts|getQueryString)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: (Logger $LOG).$LEVEL(...);
+        - metavariable-regex:
+            metavariable: $LEVEL
+            regex: (debug|error|fatal|info|log|warn|trace|severe|warning|info|config|fine|finer|finest|all)
+      - pattern: $LOG.log(...);
+  pattern-sanitizers:
+  - pattern: Jsoup.clean(...)
+  - pattern: new Cleaner(...).clean(...)
+  - pattern: (Cleaner $CL).clean(...)
+  - pattern: $VALUE.replaceAll("[\\r\\n]", "_")
