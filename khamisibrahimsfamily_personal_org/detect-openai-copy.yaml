@@ -1,0 +1,19 @@
+rules:
+- id: detect-openai-copy
+  languages:
+  - csharp
+  severity: INFO
+  message: 'Possibly found usage of AI: OpenAI'
+  pattern-either:
+  - pattern: using OpenAI
+  - pattern: (ChatClient $CLIENT)
+  - pattern: (ChatClient $CLIENT).$FUNC(...)
+  metadata:
+    references:
+    - https://semgrep.dev/blog/2024/detecting-shadow-ai
+    category: portability
+    technology:
+    - genAI
+    - LLMs
+    confidence: LOW
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
