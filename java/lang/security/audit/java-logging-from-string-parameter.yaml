@@ -1,0 +1,44 @@
+rules:
+  - id: java-logging-from-string-parameter
+    languages:
+      - java
+    severity: WARNING
+    message: An unsanitized string parameter is passed to a web controller method and subsequently used in a logger call, which could lead to a log injection vulnerability.
+    patterns:
+      - pattern-inside: |
+          @$ANNO(...)
+          $TYPE $METHOD(..., String $PARAM, ...) {
+            ...
+          }
+      - metavariable-pattern:
+          metavariable: $ANNO
+          pattern-regex: "(GetMapping|PostMapping|PutMapping|DeleteMapping|PatchMapping|RequestMapping|GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS|WebMethod)"          
+      - pattern-either:
+          - pattern: $LOGGER.trace($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.debug($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.info($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.warn($FORMAT_STRING, $PARAM, ...)
+          - pattern: $LOGGER.error($FORMAT_STRING, $PARAM, ...)
+    fix: Ensure that a validation is in place prior to use a user-controller information to create a log event.
+    paths:
+      include:
+        - "**/*.java"
+    metadata:
+      category: security
+      owasp:
+        - A03:2021 Injection
+      technology:
+        - java
+      references:
+        - https://capec.mitre.org/data/definitions/93.html
+        - https://vulncat.fortify.com/en/weakness?q=log%20forging
+        - https://learn.snyk.io/lesson/logging-vulnerabilities/?ecosystem=java
+        - https://owasp.org/www-project-java-encoder/
+        - https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+      cwe:
+        - "CWE-117: Improper Output Neutralization for Logs"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit
