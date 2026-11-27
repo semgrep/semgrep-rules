@@ -1,0 +1,1302 @@
+rules:
+- id: detect-huggingface-unsafe-agent-run-copy
+  message: Semgrep found untrusted user input from a web request being passed to HuggingFace's
+    `CodeAgent.run(...)`. This is unsafe and can lead to arbitrary code execution
+    in the context of your agent process.
+  severity: ERROR
+  metadata:
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-77: Improper Neutralization of Special Elements used in a Command (''Command
+      Injection'')'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    display-name: HuggingFace Code Agent with Untrusted User Input
+    functional-categories:
+    - ai::sink::llm_call::huggingface
+    - serverless::source::function-params::aws-lambda
+    - web::source::cookie::cherrypy
+    - web::source::cookie::django
+    - web::source::cookie::django_allauth
+    - web::source::cookie::django_channels
+    - web::source::cookie::django_rest_frameworkapi
+    - web::source::cookie::fastapi
+    - web::source::cookie::flask
+    - web::source::form-data::cherrypy
+    - web::source::form-data::django
+    - web::source::form-data::django_allauth
+    - web::source::form-data::django_channels
+    - web::source::form-data::django_rest_frameworkapi
+    - web::source::form-data::fastapi
+    - web::source::form-data::flask
+    - web::source::form-data::flask-wtf
+    - web::source::form-data::wtforms
+    - web::source::header::cherrypy
+    - web::source::header::django
+    - web::source::header::django_allauth
+    - web::source::header::django_channels
+    - web::source::header::django_rest_frameworkapi
+    - web::source::header::fastapi
+    - web::source::header::flask
+    - web::source::http-body::cherrypy
+    - web::source::http-body::django
+    - web::source::http-body::django_allauth
+    - web::source::http-body::django_channels
+    - web::source::http-body::django_rest_frameworkapi
+    - web::source::http-body::fastapi
+    - web::source::http-body::flask
+    - web::source::url-path-params::cherrypy
+    - web::source::url-path-params::django
+    - web::source::url-path-params::django_allauth
+    - web::source::url-path-params::django_channels
+    - web::source::url-path-params::django_rest_frameworkapi
+    - web::source::url-path-params::fastapi
+    - web::source::url-path-params::flask
+    - web::source::url-query-string::cherrypy
+    - web::source::url-query-string::django
+    - web::source::url-query-string::django_allauth
+    - web::source::url-query-string::django_channels
+    - web::source::url-query-string::django_rest_frameworkapi
+    - web::source::url-query-string::fastapi
+    - web::source::url-query-string::flask
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://huggingface.co/docs/transformers/en/main_classes/agent#transformers.CodeAgent
+    - https://owasp.org/Top10/A03_2021-Injection
+    technology:
+    - aws
+    - aws-lambda
+    - cherrypy
+    - cloud
+    - django
+    - django.views
+    - django.views.generic
+    - django_allauth
+    - django_channels
+    - django_rest_frameworkapi
+    - fastapi
+    - flask
+    - flask-wtf
+    - genAI
+    - huggingface
+    - llms
+    - serverless
+    - web
+    - wtforms
+    license: Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license
+    vulnerability_class:
+    - Other
+  languages:
+  - python
+  mode: taint
+  options:
+    interfile: true
+    symbolic_propagation: true
+  pattern-sources:
+  - pattern-either:
+    - patterns:
+      - pattern: flask.request.$FUNC()
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: ^(from_values|get_data|get_json)$
+    - patterns:
+      - pattern-either:
+        - pattern: flask.request.$PROPERTY
+        - pattern: flask.request.$PROPERTY[...]
+        - pattern: flask.request.$PROPERTY.get(...)
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: ^(args|cookies|data|files|form|full_path|headers|input_stream|json|path|stream|values|view_args)$
+    - patterns:
+      - pattern: |
+          @$APP.$ROUTE
+          def $FUNC(..., $PARAM, ...):
+            ...
+      - metavariable-regex:
+          metavariable: $ROUTE
+          regex: ^(endpoint)$
+      - metavariable-type:
+          metavariable: $APP
+          types:
+          - flask.Flask
+          - flask.Blueprint
+      - focus-metavariable: $PARAM
+  - patterns:
+    - pattern: |
+        @$APP.$ROUTE(...)
+        def $FUNC(..., $PARAM, ...):
+          ...
+    - metavariable-regex:
+        metavariable: $ROUTE
+        regex: ^(route|delete|get|patch|post|put)$
+    - metavariable-type:
+        metavariable: $APP
+        types:
+        - flask.Flask
+        - flask.Blueprint
+    - focus-metavariable: $PARAM
+  - patterns:
+    - pattern-inside: |
+        @$APP.$ROUTE(...)
+        def $FUNC(...):
+          ...
+    - pattern: $FORM.$FIELD.data
+    - metavariable-regex:
+        metavariable: $ROUTE
+        regex: ^(route|delete|get|patch|post|put|endpoint)$
+    - metavariable-type:
+        metavariable: $FORM
+        type: FlaskForm
+    - metavariable-type:
+        metavariable: $APP
+        types:
+        - flask.Flask
+        - flask.Blueprint
+  - patterns:
+    - pattern: |
+        @$APP.$ROUTE("$ROUTESTRING", ...)
+        async def $FUNC(..., $PARAM, ...):
+          ...
+    - metavariable-type:
+        metavariable: $APP
+        types:
+        - fastapi.FastAPI
+        - fastapi.APIRouter
+    - metavariable-comparison:
+        comparison: str($PARAM) not in $ROUTESTRING
+    - metavariable-regex:
+        metavariable: $ROUTE
+        regex: ^(websocket|get|put|post|delete|options|head|patch|trace)$
+    - metavariable-type:
+        metavariable: $PARAM
+        types:
+        - str | None
+        - str
+        - Optional[str]
+        - typing.Union[str, None]
+        - list[str] | None
+        - list[str]
+        - typing.List[str] | None
+        - typing.List[str]
+        - typing.Optional[typing.List[str]]
+        - typing.Union[list[str], None]
+        - fastapi.Query(...)
+        - typing.Annotated[...,  fastapi.Query(...)]
+        - fastapi.Path(...)
+        - typing.Annotated[...,  fastapi.Path(...)]
+        - fastapi.Body(...)
+        - typing.Annotated[...,  fastapi.Body(...)]
+        - fastapi.Cookie(...)
+        - typing.Annotated[...,  fastapi.Cookie(...)]
+        - fastapi.Header(...)
+        - typing.Annotated[...,  fastapi.Header(...)]
+        - fastapi.Form(...)
+        - typing.Annotated[...,  fastapi.Form(...)]
+        - fastapi.File(...)
+        - fastapi.UploadFile
+        - typing.List[fastapi.UploadFile]
+        - list[fastapi.UploadFile]
+        - typing.Annotated[...,  fastapi.File(...)]
+        - pydantic.BaseModel
+        - typing.Annotated[..., fastapi.Cookie()]
+        - fastapi.Cookie(...)
+        - typing.Annotated[..., fastapi.Header()]
+        - fastapi.Header(...)
+    - focus-metavariable: $PARAM
+  - label: FASTAPI_REQUEST
+    patterns:
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: |
+              @$APP.middleware(...)
+              async def $FUNC($FASTAPI_REQUEST, ...):
+                ...
+          - metavariable-type:
+              metavariable: $APP
+              types:
+              - fastapi.FastAPI
+              - fastapi.APIRouter
+        - patterns:
+          - pattern: |
+              def $FUNC(..., $FASTAPI_REQUEST, ...):
+                ...
+          - metavariable-type:
+              metavariable: $FASTAPI_REQUEST
+              types:
+              - fastapi.Request
+              - fastapi.requests.Request
+              - starlette.requests.Request
+      - focus-metavariable: $FASTAPI_REQUEST
+  - label: __SOURCE__
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $FASTAPI_REQUEST.url.path
+        - pattern: $FASTAPI_REQUEST.base_url
+        - pattern: $FASTAPI_REQUEST.headers
+        - pattern: $FASTAPI_REQUEST.query_params
+        - pattern: $FASTAPI_REQUEST.cookies
+        - pattern: $FASTAPI_REQUEST.stream()
+        - pattern: $FASTAPI_REQUEST.read(...)
+        - pattern: $FASTAPI_REQUEST.form(...)
+        - pattern: $FASTAPI_REQUEST._get_form(...)
+        - pattern: $FASTAPI_REQUEST.body()
+        - pattern: $FASTAPI_REQUEST.json()
+    requires: FASTAPI_REQUEST
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            @$APP.$ROUTE("$ROUTESTRING")
+            async def $FUNC(..., $PARAM, ...):
+              ...
+        - metavariable-type:
+            metavariable: $APP
+            types:
+            - fastapi.FastAPI
+            - fastapi.APIRouter
+        - metavariable-comparison:
+            comparison: str($PARAM) in $ROUTESTRING
+        - metavariable-regex:
+            metavariable: $ROUTE
+            regex: ^(websocket|get|put|post|delete|options|head|patch|trace)$
+        - metavariable-type:
+            metavariable: $PARAM
+            types:
+            - str | None
+            - str
+            - Optional[str]
+            - Union[str, None]
+            - list[str] | None
+            - list[str]
+            - Optional[List[str]]
+            - Union[list[str], None]
+        - focus-metavariable: $PARAM
+  - label: FASTAPI_REQUEST
+    patterns:
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: |
+              @$APP.middleware(...)
+              async def $FUNC($FASTAPI_REQUEST, ...):
+                ...
+          - metavariable-type:
+              metavariable: $APP
+              types:
+              - fastapi.FastAPI
+              - fastapi.APIRouter
+        - patterns:
+          - pattern: |
+              def $FUNC(..., $FASTAPI_REQUEST, ...):
+                ...
+          - metavariable-type:
+              metavariable: $FASTAPI_REQUEST
+              types:
+              - fastapi.Request
+              - fastapi.requests.Request
+              - starlette.requests.Request
+      - focus-metavariable: $FASTAPI_REQUEST
+  - label: __SOURCE__
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $FASTAPI_REQUEST.path_params
+    requires: FASTAPI_REQUEST
+  - label: __SOURCE__
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $CLS(..., django.views.View, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.View, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.TemplateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.RedirectView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.DetailView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.ListView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.FormView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.CreateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.UpdateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.DeleteView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.ArchiveIndexView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.YearArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.MonthArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.WeekArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DayArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.TodayArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DateDetailView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.ContextMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.TemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.SingleObjectMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.SingleObjectTemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.MultipleObjectMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.MultipleObjectTemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.FormMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.ModelFormMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.ProcessFormView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.DeletionMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.YearMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.MonthMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DayMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.WeekMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DateMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.BaseDateListView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., haystack.forms.SearchForm, ...):
+              ...
+        - patterns:
+          - pattern-inside: |
+              class $CLS(...):
+                  ...
+          - semgrep-internal-metavariable-name:
+              kind: django-view
+              metavariable: $CLS
+      - pattern-either:
+        - pattern: self.get_year()
+        - pattern: super().get_year()
+        - pattern: self.year
+        - pattern: super().year
+        - pattern: self.get_month()
+        - pattern: super().get_month()
+        - pattern: self.month
+        - pattern: super().month
+        - pattern: self.get_day()
+        - pattern: super().get_day()
+        - pattern: self.day
+        - pattern: super().day
+        - pattern: self.get_week()
+        - pattern: super().get_week()
+        - pattern: self.week
+        - pattern: super().week
+        - pattern: self.cleaned_data
+        - pattern: super().cleaned_data
+  - label: __SOURCE__
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $DJANGO_REQUEST.query_params
+        - pattern: $DJANGO_REQUEST.stream
+        - pattern: $DJANGO_REQUEST.content_type
+        - pattern: $DJANGO_REQUEST.data
+        - pattern: $DJANGO_REQUEST.user_agent_string
+        - pattern: $DJANGO_REQUEST.user_agent
+        - pattern: $DJANGO_REQUEST.body
+        - pattern: $DJANGO_REQUEST.headers
+        - pattern: $DJANGO_REQUEST.path
+        - pattern: $DJANGO_REQUEST.path_info
+        - patterns:
+          - pattern: $DJANGO_REQUEST.META
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_LENGTH
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_TYPE
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_ENCODING
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_LANGUAGE
+          - pattern-not: $DJANGO_REQUEST.META.REMOTE_ADDR
+          - pattern-not: $DJANGO_REQUEST.META.REQUEST_METHOD
+          - pattern-not: $DJANGO_REQUEST.META.SERVER_PORT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_X_FORWARDED_FOR
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_LENGTH")
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_TYPE")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_ENCODING")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_LANGUAGE")
+          - pattern-not: $DJANGO_REQUEST.META.get("REMOTE_ADDR")
+          - pattern-not: $DJANGO_REQUEST.META.get("REQUEST_METHOD")
+          - pattern-not: $DJANGO_REQUEST.META.get("SERVER_PORT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_X_FORWARDED_FOR")
+        - pattern: $DJANGO_REQUEST.REQUEST
+        - pattern: $DJANGO_REQUEST.GET
+        - pattern: $DJANGO_REQUEST.POST
+        - pattern: $DJANGO_REQUEST.FILES
+        - pattern: $DJANGO_REQUEST.DATA
+        - pattern: $DJANGO_REQUEST.QUERY_PARAMS
+        - pattern: $DJANGO_REQUEST.COOKIES
+        - pattern: $DJANGO_REQUEST.get_host()
+        - pattern: $DJANGO_REQUEST.get_full_path(...)
+        - pattern: $DJANGO_REQUEST.get_full_path_info(...)
+        - pattern: $DJANGO_REQUEST.get_raw_uri(...)
+        - pattern: $DJANGO_REQUEST.encoding(...)
+        - pattern: $DJANGO_REQUEST.body(...)
+        - pattern: $DJANGO_REQUEST.read(...)
+        - pattern: $DJANGO_REQUEST.readline()
+        - pattern: $DJANGO_REQUEST.readlines()
+        - pattern: $DJANGO_REQUEST.get_signed_cookie(...)
+    requires: DJANGO_REQUEST
+  - label: DJANGO_REQUEST
+    patterns:
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: |
+              @rest_framework.decorators.api_view(...)
+              def $FUNC($DJANGO_REQUEST, ...):
+                ...
+          - focus-metavariable: $DJANGO_REQUEST
+        - patterns:
+          - pattern: |
+              class $CLS(..., $PARENT_CLASS, ...):
+                  ...
+                  def $FUNC(self, $DJANGO_REQUEST, ...):
+                    ...
+          - metavariable-pattern:
+              metavariable: $PARENT_CLASS
+              patterns:
+              - pattern-either:
+                - pattern: rest_framework.views.APIView
+                - pattern: rest_framework.generics.CreateAPIView
+                - pattern: rest_framework.generics.DestroyAPIView
+                - pattern: rest_framework.generics.GenericAPIView
+                - pattern: rest_framework.generics.ListAPIView
+                - pattern: rest_framework.generics.ListCreateAPIView
+                - pattern: rest_framework.generics.RetrieveAPIView
+                - pattern: rest_framework.generics.RetrieveDestroyAPIView
+                - pattern: rest_framework.generics.RetrieveUpdateAPIView
+                - pattern: rest_framework.generics.RetrieveUpdateDestroyAPIView
+                - pattern: rest_framework.generics.UpdateAPIView
+                - pattern: rest_framework.viewsets.GenericViewSet
+                - pattern: rest_framework.viewsets.ModelViewSet
+                - pattern: rest_framework.viewsets.ReadOnlyModelViewSet
+                - pattern: rest_framework.viewsets.ViewSet
+                - pattern: rest_framework.viewsets.ViewSetMixin
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: get|post|put|patch|delete|head|options|dispatch|initial|throttled|retrieve|update|partial_update|destroy|list|create
+          - focus-metavariable: $DJANGO_REQUEST
+        - patterns:
+          - pattern-either:
+            - pattern-inside: |
+                class $CLS(..., django.views.View, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.base.View, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.base.TemplateView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.base.RedirectView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.detail.DetailView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.list.ListView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.FormView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.CreateView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.UpdateView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.DeleteView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.ArchiveIndexView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.YearArchiveView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.MonthArchiveView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.WeekArchiveView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.DayArchiveView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.TodayArchiveView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.DateDetailView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.base.ContextMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.base.TemplateResponseMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.detail.SingleObjectMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.detail.SingleObjectTemplateResponseMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.list.MultipleObjectMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.list.MultipleObjectTemplateResponseMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.FormMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.ModelFormMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.ProcessFormView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.edit.DeletionMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.YearMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.MonthMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.DayMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.WeekMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.DateMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., django.views.generic.dates.BaseDateListView, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., haystack.forms.SearchForm, ...):
+                  ...
+            - patterns:
+              - pattern-inside: |
+                  class $CLS(...):
+                      ...
+              - semgrep-internal-metavariable-name:
+                  kind: django-view
+                  metavariable: $CLS
+          - pattern-either:
+            - patterns:
+              - pattern: |
+                  def $FUNC($SELF, $DJANGO_REQUEST, ...):
+                    ...
+              - metavariable-regex:
+                  metavariable: $FUNC
+                  regex: ^(setup|dispatch|http_method_not_allowed|options|get|post|delete|head|put|patch)$
+              - focus-metavariable: $DJANGO_REQUEST
+            - pattern: self.request
+        - patterns:
+          - pattern: |
+              def $VIEW($DJANGO_REQUEST, ...):
+                ...
+          - semgrep-internal-metavariable-name:
+              kind: django-view
+              metavariable: $VIEW
+          - focus-metavariable: $DJANGO_REQUEST
+        - patterns:
+          - pattern-either:
+            - pattern-inside: |
+                class $CLS(..., rest_framework.viewsets.ViewSet, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., rest_framework.viewsets.ViewSetMixin, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., rest_framework.viewsets.GenericViewSet, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., rest_framework.viewsets.ModelViewSet, ...):
+                  ...
+            - pattern-inside: |
+                class $CLS(..., rest_framework.viewsets.ReadOnlyModelViewSet, ...):
+                  ...
+          - pattern-either:
+            - patterns:
+              - pattern: |
+                  def $FUNC($SELF, $DJANGO_REQUEST, ...):
+                    ...
+              - metavariable-regex:
+                  metavariable: $FUNC
+                  regex: ^(list|create|retrieve|update|partial_update|destroy)$
+              - focus-metavariable: $DJANGO_REQUEST
+            - patterns:
+              - pattern: |
+                  @rest_framework.decorators.action(...)
+                  def $FUNC($SELF, $DJANGO_REQUEST, ...):
+                    ...
+              - focus-metavariable: $DJANGO_REQUEST
+            - pattern: self.request
+  - patterns:
+    - pattern: |
+        def $VIEW($DJANGO_REQUEST, ..., $PARAM, ...):
+          ...
+    - semgrep-internal-metavariable-name:
+        kind: django-view
+        metavariable: $VIEW
+    - focus-metavariable: $PARAM
+  - label: __SOURCE__
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $DJANGO_FORM.cleaned_data
+    requires: DJANGO_FORM
+  - label: DJANGO_FORM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $CLS(..., django.views.View, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.View, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.TemplateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.RedirectView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.DetailView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.ListView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.FormView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.CreateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.UpdateView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.DeleteView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.ArchiveIndexView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.YearArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.MonthArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.WeekArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DayArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.TodayArchiveView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DateDetailView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.ContextMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.base.TemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.SingleObjectMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.detail.SingleObjectTemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.MultipleObjectMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.list.MultipleObjectTemplateResponseMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.FormMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.ModelFormMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.ProcessFormView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.edit.DeletionMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.YearMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.MonthMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DayMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.WeekMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.DateMixin, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., django.views.generic.dates.BaseDateListView, ...):
+              ...
+        - pattern-inside: |
+            class $CLS(..., haystack.forms.SearchForm, ...):
+              ...
+        - patterns:
+          - pattern-inside: |
+              class $CLS(...):
+                  ...
+          - semgrep-internal-metavariable-name:
+              kind: django-view
+              metavariable: $CLS
+      - pattern-either:
+        - patterns:
+          - pattern: |
+              def $FUNC($SELF, $FORM, ...):
+                ...
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(form_valid|form_invalid)$
+          - focus-metavariable: $FORM
+        - pattern-either:
+          - pattern: self.get_form_kwargs()
+          - pattern: super().get_form_kwargs()
+          - pattern: self.get_form()
+          - pattern: super().get_form()
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          class $LOGINFORM(..., allauth.account.forms.LoginForm, ...):
+            ...
+      - pattern-inside: |
+          def login(self, *$ARGS, **$KWARGS):
+            ...
+      - pattern-either:
+        - pattern: $ARGS
+        - pattern: $KWARGS
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $FORM(..., allauth.account.forms.AddEmailForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.account.forms.ChangePasswordForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.account.forms.SetPasswordForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.account.forms.ResetPasswordForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.account.forms.ResetPasswordKeyForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.socialaccount.forms.SignupForm, ...):
+              ...
+        - pattern-inside: |
+            class $FORM(..., allauth.socialaccount.forms.DisconectForm, ...):
+              ...
+      - pattern-inside: |
+          def save(self, $DJANGO_REQUEST):
+            ...
+      - pattern-either:
+        - pattern: self.request
+        - pattern: $DJANGO_REQUEST.query_params
+        - pattern: $DJANGO_REQUEST.stream
+        - pattern: $DJANGO_REQUEST.content_type
+        - pattern: $DJANGO_REQUEST.data
+        - pattern: $DJANGO_REQUEST.user_agent_string
+        - pattern: $DJANGO_REQUEST.user_agent
+        - pattern: $DJANGO_REQUEST.body
+        - pattern: $DJANGO_REQUEST.headers
+        - pattern: $DJANGO_REQUEST.path
+        - pattern: $DJANGO_REQUEST.path_info
+        - patterns:
+          - pattern: $DJANGO_REQUEST.META
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_LENGTH
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_TYPE
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_ENCODING
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_LANGUAGE
+          - pattern-not: $DJANGO_REQUEST.META.REMOTE_ADDR
+          - pattern-not: $DJANGO_REQUEST.META.REQUEST_METHOD
+          - pattern-not: $DJANGO_REQUEST.META.SERVER_PORT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_X_FORWARDED_FOR
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_LENGTH")
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_TYPE")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_ENCODING")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_LANGUAGE")
+          - pattern-not: $DJANGO_REQUEST.META.get("REMOTE_ADDR")
+          - pattern-not: $DJANGO_REQUEST.META.get("REQUEST_METHOD")
+          - pattern-not: $DJANGO_REQUEST.META.get("SERVER_PORT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_X_FORWARDED_FOR")
+        - pattern: $DJANGO_REQUEST.REQUEST
+        - pattern: $DJANGO_REQUEST.GET
+        - pattern: $DJANGO_REQUEST.POST
+        - pattern: $DJANGO_REQUEST.FILES
+        - pattern: $DJANGO_REQUEST.DATA
+        - pattern: $DJANGO_REQUEST.QUERY_PARAMS
+        - pattern: $DJANGO_REQUEST.COOKIES
+        - pattern: $DJANGO_REQUEST.get_host()
+        - pattern: $DJANGO_REQUEST.get_full_path(...)
+        - pattern: $DJANGO_REQUEST.get_full_path_info(...)
+        - pattern: $DJANGO_REQUEST.get_raw_uri(...)
+        - pattern: $DJANGO_REQUEST.encoding(...)
+        - pattern: $DJANGO_REQUEST.body(...)
+        - pattern: $DJANGO_REQUEST.read(...)
+        - pattern: $DJANGO_REQUEST.readline()
+        - pattern: $DJANGO_REQUEST.readlines()
+        - pattern: $DJANGO_REQUEST.get_signed_cookie(...)
+    - patterns:
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              class $ADAPTER (..., allauth.account.adapter.DefaultAccountAdapter, ...):
+                ...
+          - pattern-inside: |
+              def $FUNC(self, $DJANGO_REQUEST, ...):
+                ...
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(add_message|authenticate|confirm_email|get_email_confirmation_url|get_login_redirect_url|get_logout_redirect_url|get_password_change_redirect_url|is_email_verified|is_open_for_signup|new_user|populate_username|save_user)$
+        - patterns:
+          - pattern-inside: |
+              class $ADAPTER (..., allauth.socialaccount.adapter.DefaultSocialAccountAdapter, ...):
+                ...
+          - pattern-inside: |
+              def $FUNC(self, $DJANGO_REQUEST, ...):
+                ...
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(get_connect_redirect_url|get_provider|is_open_for_signup|list_apps|new_user|on_authentication_error|populate_user|pre_social_login|save_user)$
+      - pattern-either:
+        - pattern: $DJANGO_REQUEST.query_params
+        - pattern: $DJANGO_REQUEST.stream
+        - pattern: $DJANGO_REQUEST.content_type
+        - pattern: $DJANGO_REQUEST.data
+        - pattern: $DJANGO_REQUEST.user_agent_string
+        - pattern: $DJANGO_REQUEST.user_agent
+        - pattern: $DJANGO_REQUEST.body
+        - pattern: $DJANGO_REQUEST.headers
+        - pattern: $DJANGO_REQUEST.path
+        - pattern: $DJANGO_REQUEST.path_info
+        - patterns:
+          - pattern: $DJANGO_REQUEST.META
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_LENGTH
+          - pattern-not: $DJANGO_REQUEST.META.CONTENT_TYPE
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_ENCODING
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_ACCEPT_LANGUAGE
+          - pattern-not: $DJANGO_REQUEST.META.REMOTE_ADDR
+          - pattern-not: $DJANGO_REQUEST.META.REQUEST_METHOD
+          - pattern-not: $DJANGO_REQUEST.META.SERVER_PORT
+          - pattern-not: $DJANGO_REQUEST.META.HTTP_X_FORWARDED_FOR
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_LENGTH")
+          - pattern-not: $DJANGO_REQUEST.META.get("CONTENT_TYPE")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_ENCODING")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_ACCEPT_LANGUAGE")
+          - pattern-not: $DJANGO_REQUEST.META.get("REMOTE_ADDR")
+          - pattern-not: $DJANGO_REQUEST.META.get("REQUEST_METHOD")
+          - pattern-not: $DJANGO_REQUEST.META.get("SERVER_PORT")
+          - pattern-not: $DJANGO_REQUEST.META.get("HTTP_X_FORWARDED_FOR")
+        - pattern: $DJANGO_REQUEST.REQUEST
+        - pattern: $DJANGO_REQUEST.GET
+        - pattern: $DJANGO_REQUEST.POST
+        - pattern: $DJANGO_REQUEST.FILES
+        - pattern: $DJANGO_REQUEST.DATA
+        - pattern: $DJANGO_REQUEST.QUERY_PARAMS
+        - pattern: $DJANGO_REQUEST.COOKIES
+        - pattern: $DJANGO_REQUEST.get_host()
+        - pattern: $DJANGO_REQUEST.get_full_path(...)
+        - pattern: $DJANGO_REQUEST.get_full_path_info(...)
+        - pattern: $DJANGO_REQUEST.get_raw_uri(...)
+        - pattern: $DJANGO_REQUEST.encoding(...)
+        - pattern: $DJANGO_REQUEST.body(...)
+        - pattern: $DJANGO_REQUEST.read(...)
+        - pattern: $DJANGO_REQUEST.readline()
+        - pattern: $DJANGO_REQUEST.readlines()
+        - pattern: $DJANGO_REQUEST.get_signed_cookie(...)
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $CONSUMER(..., channels.generic.websocket.WebsocketConsumer, ...):
+              ...
+        - pattern-inside: |
+            class $CONSUMER(..., channels.generic.websocket.AsyncWebsocketConsumer, ...):
+              ...
+        - pattern-inside: |
+            class $CONSUMER(..., channels.generic.websocket.JsonWebsocketConsumer, ...):
+              ...
+        - pattern-inside: |
+            class $CONSUMER(..., channels.generic.websocket.AsyncJsonWebsocketConsumer, ...):
+              ...
+        - pattern-inside: |
+            class $CONSUMER(..., channels.generic.http.AsyncHttpConsumer, ...):
+              ...
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              def $FUNC(self, ...):
+                ...
+          - pattern: self.scope["$SCOPE_ATTRIBUTE"]
+          - metavariable-regex:
+              metavariable: $SCOPE_ATTRIBUTE
+              regex: ^(url_route|headers|path|raw_path|root_path|query_string)$
+        - patterns:
+          - pattern-inside: |
+              def $FUNC(self, ..., $ARG, ...):
+                ...
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: ^(receive|receive_json|handle)$
+          - pattern: $ARG
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: cherrypy.request.$PROPERTY
+        - pattern: cherrypy.request.$PROPERTY[...]
+        - pattern: cherrypy.request.$PROPERTY.get(...)
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: ^(body|cookie|header_list|headers|login|params|query_string|request_line)$
+    - patterns:
+      - pattern: |
+          @cherrypy.expose
+          def $FUNC(..., $INPUT, ...):
+            ...
+      - focus-metavariable: $INPUT
+    - patterns:
+      - pattern-inside: |
+          @cherrypy.expose
+          class $CLS(...):
+            ...
+      - pattern: |
+          def $FUNC(..., $INPUT, ...):
+            ...
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: ^(GET|POST|PUT|HEAD|DELETE)$
+      - focus-metavariable: $INPUT
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: cherrypy.request.$PROPERTY
+        - pattern: cherrypy.request.$PROPERTY[...]
+        - pattern: cherrypy.request.$PROPERTY.get(...)
+      - metavariable-regex:
+          metavariable: $PROPERTY
+          regex: ^(path_info)$
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: |
+            def $HANDLER($EVENT, context):
+                ...
+        - metavariable-regex:
+            metavariable: $EVENT
+            regex: ^(event)$
+      - patterns:
+        - pattern: |
+            def $HANDLER($EVENT, $CONTEXT):
+                ...
+        - metavariable-regex:
+            metavariable: $HANDLER
+            regex: .*(aws_lambda|lambda_handler).*
+    - focus-metavariable: $EVENT
+  pattern-propagators:
+  - from: $DEFAULT
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $DICT = { ... }
+            ...
+        - pattern-inside: |
+            $DICT = dict(...)
+            ...
+      - pattern-either:
+        - pattern: $DICT.get($FIELD, $DEFAULT)
+        - pattern: $DICT.setdefault($KEY, $DEFAULT)
+    to: $DICT
+  - from: $FROM_DICT
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $TO_DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $TO_DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $TO_DICT = { ... }
+            ...
+        - pattern-inside: |
+            $TO_DICT = dict(...)
+            ...
+        - pattern-inside: |
+            $FROM_DICT[$KEY]
+            ...
+        - pattern-inside: |
+            $FROM_DICT.get($KEY, $DEFAULT)
+            ...
+        - pattern-inside: |
+            $FROM_DICT = { ... }
+            ...
+        - pattern-inside: |
+            $FROM_DICT = dict(...)
+            ...
+      - pattern-either:
+        - pattern: $TO_DICT.update($FROM_DICT)
+        - pattern: $TO_DICT | $FROM_DICT
+        - pattern: $TO_DICT |= $FROM_DICT
+    to: $TO_DICT
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $LIST = [ ... ]
+            ...
+        - pattern-inside: |
+            $LIST = list(...)
+            ...
+      - pattern-either:
+        - pattern: $LIST.append($FROM)
+        - pattern: $LIST.extend($FROM)
+        - pattern: $LIST.insert($INDEX, $FROM)
+    to: $LIST
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $FROM.$LOG($SINK, ...)
+        - pattern: $FROM.$LOG(..., msg=$SINK, ...)
+        - pattern: $APP.logger.$LOG($SINK, ...)
+      - metavariable-regex:
+          metavariable: $LOG
+          regex: ^(info|warning|error|critical|log|exception|handle)$
+    to: $SINK
+  - from: $FROM
+    patterns:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            $SET = { $ITEM, ... }
+            ...
+        - pattern-inside: |
+            $SET = set(...)
+            ...
+        - pattern-inside: |
+            $OTHERSET = { $ITEM, ... }
+            ...
+        - pattern-inside: |
+            $OTHERSET = set(...)
+            ...
+      - pattern-either:
+        - pattern: $SET.update(..., $FROM, ...)
+        - pattern: $SET.intersection_update(..., $FROM, ...)
+        - pattern: $SET.difference_update(..., $FROM, ...)
+        - pattern: $SET.symmetric_difference_update(..., $FROM, ...)
+        - pattern: $SET.add($FROM)
+        - pattern: $SET |= $FROM
+        - pattern: $SET &= $FROM
+        - pattern: $SET -= $FROM
+        - pattern: $SET ^= $FROM
+    to: $SET
+  - from: $FORM
+    patterns:
+    - pattern: $FORM.populate_obj($OBJ)
+    to: $OBJ
+  pattern-sinks:
+  - pattern: transformers.agents.CodeAgent(...).run(...)
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: int(...)
+      - pattern: bool(...)
+      - pattern: float(...)
+      - pattern: complex(...)
+      - pattern: oct(...)
+      - pattern: hex(...)
+      - pattern: bin(...)
+      - pattern: round(...)
+      - pattern: id(...)
+      - pattern: hash(...)
+      - pattern: len(...)
+      - pattern: type(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $DICT[$KEY]
+          ...
+      - pattern-inside: |
+          $DICT = { $KEY: $VALUE for ... in ...}
+          ...
+      - pattern-inside: |
+          $DICT.get($KEY, $DEFAULT)
+          ...
+      - pattern-inside: |
+          $DICT = { }
+          ...
+      - pattern-inside: |
+          $DICT = { $KEY: $VALUE, ... }
+          ...
+      - pattern-inside: |
+          $DICT = dict(...)
+          ...
+    - pattern-either:
+      - pattern: $DICT.clear()
+      - pattern: $DICT.len()
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $LIST = [ ... ]
+          ...
+      - pattern-inside: |
+          $LIST = list(...)
+          ...
+    - pattern-either:
+      - pattern: $LIST.clear()
+      - pattern: $LIST.count(...)
+      - pattern: $LIST.index(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $SET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $SET = set(...)
+          ...
+    - pattern-either:
+      - pattern: $SET.len()
+      - pattern: $SET.clear()
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $SET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $SET = { $ITEM for ... in ...}
+          ...
+      - pattern-inside: |
+          $SET = set(...)
+          ...
+      - pattern-inside: |
+          $SET = frozenset(...)
+          ...
+      - pattern-inside: |
+          $OTHERSET = { $ITEM, ... }
+          ...
+      - pattern-inside: |
+          $OTHERSET = set(...)
+          ...
+    - pattern-either:
+      - pattern: $SET.isdisjoint($OTHERSET)
+      - pattern: $SET.difference($OTHERSET)
+      - pattern: $SET.issubset($OTHERSET)
+      - pattern: $SET < $OTHERSET
+      - pattern: $SET <= $OTHERSET
+      - pattern: $SET.issuperset($OTHERSET)
+      - pattern: $SET > $OTHERSET
+      - pattern: $SET >= $OTHERSET
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $TUPLE = ( $ITEM, ... )
+          ...
+      - pattern-inside: |
+          $TUPLE = $ITEM, ...
+          ...
+      - pattern-inside: |
+          $TUPLE = tuple(...)
+          ...
+    - pattern-either:
+      - pattern: $TUPLE.len()
+  - pattern: django.shortcuts.get_object_or_404(...)
+  - pattern: django.shortcuts.get_list_or_404(...)
