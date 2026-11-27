@@ -1,0 +1,31 @@
+rules:
+  - id: use-of-xml-canonicalization-method-excluding-comments
+    languages:
+      - java
+    severity: INFO
+    message: Detected usage of an XML canonicalization method that excludes XML comments from the computation of Digest and Signature.
+    pattern-either:
+      - pattern: $XML_SIGNATURE_FACTORY_OBJ.newCanonicalizationMethod(CanonicalizationMethod.EXCLUSIVE,$PARAM)
+      - pattern: $XML_SIGNATURE_FACTORY_OBJ.newCanonicalizationMethod("http://www.w3.org/2001/10/xml-exc-c14n#",$PARAM)      
+    fix: The canonicalization method "xml-exc-c14n#WithComments" should be used for Digest and Signature to include comments into their computation.
+    paths:
+      include:
+        - "**/*.java"
+    metadata:
+      category: security
+      owasp:
+        - A02:2021 Cryptographic Failures
+      technology:
+        - java
+      references:
+        - https://nvd.nist.gov/vuln/detail/CVE-2025-29775
+        - https://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/#WithComments
+        - https://www.nccgroup.com/research-blog/saml-xml-injection/
+        - https://workos.com/blog/samlstorm
+      cwe:
+        - "CWE-347: Improper Verification of Cryptographic Signature"
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      subcategory:
+        - audit
