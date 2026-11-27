@@ -1,0 +1,49 @@
+---
+rules:
+  - id: pnpm-strict-dep-builds-disabled
+    message: >-
+      This pnpm workspace has `strictDepBuilds` disabled. When set to `false`,
+      pnpm will not exit with a non-zero code when dependencies have unreviewed
+      build scripts, silently allowing build scripts to run without triggering
+      a CI failure. The default (`true`) ensures any dependency with an
+      unapproved build script causes the install to fail, forcing explicit
+      review via the `allowBuilds` allowlist. Set `strictDepBuilds: true`
+      explicitly to restore this protection.
+      Added in: v10.3.0.
+    languages:
+      - yaml
+    severity: MEDIUM
+    paths:
+      include:
+        - "**/pnpm-workspace.yaml"
+    pattern-either:
+      # Branch 1: Key present with any value other than canonical true
+      - patterns:
+          - pattern: |
+              strictDepBuilds: $VAL
+          - metavariable-regex:
+              metavariable: $VAL
+              regex: '^(?!true$).+'
+          - focus-metavariable: $VAL
+
+      # Branch 3: Key present with empty value (bare colon)
+      - patterns:
+          - pattern-regex: '(?m)^\s*strictDepBuilds\s*:\s*$'
+    metadata:
+      category: security
+      technology:
+        - pnpm
+      cwe:
+        - "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp:
+        - "A08:2021 - Software and Data Integrity Failures"
+      confidence: HIGH
+      likelihood: LOW
+      impact: HIGH
+      subcategory:
+        - audit
+      vulnerability_class:
+        - Insecure Configuration
+      references:
+        - https://pnpm.io/settings#strictdepbuilds
+        - https://pnpm.io/settings#allowbuilds

@@ -5,7 +5,6 @@ rules:
       Missing or incorrect trustPolicy. Set `trustPolicy: no-downgrade`
       to prevent malicious package updates from downgrading security settings.
       Added in: v10.21.0
-      Reference: https://pnpm.io/settings#trustpolicy
     languages:
       - yaml
     severity: MEDIUM
@@ -15,7 +14,7 @@ rules:
     pattern-either:
       # Branch 1: Missing entirely
       - patterns:
-          - pattern-regex: '(?ms)(?:\A|^---$\n)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?P<TARGET>^(?:packages|catalog)\s*:)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?=^---$|\z)'
+          - pattern-regex: '(?ms)(?:\A|^---$\n)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?P<TARGET>^(?:packages|catalog|catalogs)\s*:)(?:(?!^trustPolicy\s*:)(?!^---$)[\s\S])*?(?=^---$|\z)'
           - focus-metavariable: $TARGET
 
       # Branch 2: Wrong value (not no-downgrade)
