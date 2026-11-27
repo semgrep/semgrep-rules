@@ -1,0 +1,60 @@
+rules:
+  - id: nextjs-rewrite-dynamic-hostname-ssrf
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      A `rewrites()`/`redirects()` rule in next.config builds its external
+      destination hostname from a request-controlled value — a `:name` token
+      taken from a dynamic path segment or from a captured `has` condition —
+      instead of a static host. Next.js does not constrain such a
+      request-controlled hostname to the intended domain, so an attacker can
+      substitute an arbitrary host regardless of any suffix the rule appears
+      to enforce. For `rewrites()` this results in Server-Side Request
+      Forgery, since the Next.js server fetches the attacker-controlled host
+      and serves the response back from your application's own origin; for
+      `redirects()` it results in an Open Redirect. This exact pattern was
+      fixed as a framework bug in Next.js 15.5.21/16.2.11 (CVE-2026-64645),
+      but the underlying practice is risky on any version and should not be
+      reintroduced. Avoid building a rewrite/redirect destination hostname
+      from request-controlled input; if a dynamic subdomain is genuinely
+      required, restrict the captured value to a strict allowlist character
+      class (e.g. `(?<region>[a-z0-9-]+)`) and validate it against a known
+      set of hosts before it reaches the destination.
+    metadata:
+      cwe:
+        - "CWE-918: Server-Side Request Forgery (SSRF)"
+        - "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      category: security
+      confidence: MEDIUM
+      subcategory: [vuln]
+      likelihood: MEDIUM
+      impact: HIGH
+      technology: [nextjs]
+      owasp:
+        - "A10:2021 - Server-Side Request Forgery (SSRF)"
+      references:
+        - https://nextjs.org/blog/july-2026-security-release
+        - https://github.com/advisories/GHSA-p9j2-gv94-2wf4
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              async rewrites() { ... }
+          - pattern-inside: |
+              rewrites() { ... }
+          - pattern-inside: |
+              rewrites: async () => { ... }
+          - pattern-inside: |
+              rewrites: () => { ... }
+          - pattern-inside: |
+              async redirects() { ... }
+          - pattern-inside: |
+              redirects() { ... }
+          - pattern-inside: |
+              redirects: async () => { ... }
+          - pattern-inside: |
+              redirects: () => { ... }
+      - pattern: |
+          { ..., destination: $DEST, ... }
+      - metavariable-regex:
+          metavariable: $DEST
+          regex: "^['\"]https?://[^/]*:[A-Za-z_]"
