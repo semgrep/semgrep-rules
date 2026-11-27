@@ -29,10 +29,29 @@ public class BenchmarkTest00023 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private static final java.util.Random rng = new java.util.Random();
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doPost(request, response);
+    }
+
+    public int storedInstanceRandom() {
+        // ruleid: weak-random
+        return rng.nextInt();
+    }
+
+    public int localInstanceRandom() {
+        java.util.Random localRng = new java.util.Random();
+        // ruleid: weak-random
+        return localRng.nextInt();
+    }
+
+    public int secureRandomInstance() {
+        java.security.SecureRandom secureRng = new java.security.SecureRandom();
+        // ok: weak-random
+        return secureRng.nextInt();
     }
 
     @Override
