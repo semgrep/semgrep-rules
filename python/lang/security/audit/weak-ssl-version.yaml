@@ -36,6 +36,12 @@ rules:
   - pattern: ssl.PROTOCOL_SSLv3
   - pattern: ssl.PROTOCOL_TLSv1
   - pattern: ssl.PROTOCOL_TLSv1_1
+  - pattern: $CONTEXT.minimum_version = ssl.TLSVersion.SSLv3
+  - pattern: $CONTEXT.maximum_version = ssl.TLSVersion.SSLv3
+  - pattern: $CONTEXT.minimum_version = ssl.TLSVersion.TLSv1
+  - pattern: $CONTEXT.maximum_version = ssl.TLSVersion.TLSv1
+  - pattern: $CONTEXT.minimum_version = ssl.TLSVersion.TLSv1_1
+  - pattern: $CONTEXT.maximum_version = ssl.TLSVersion.TLSv1_1
   - pattern: pyOpenSSL.SSL.SSLv2_METHOD
   - pattern: pyOpenSSL.SSL.SSLv23_METHOD
   - pattern: pyOpenSSL.SSL.SSLv3_METHOD
