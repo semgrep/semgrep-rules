@@ -21,3 +21,16 @@ foo = hashlib.md5(data, usedforsecurity=True)
 
 # ok
 bar = hashlib.md5(data, usedforsecurity=False)
+
+
+def file_digests(fileobj):
+    # ruleid:insecure-hash-algorithm-md5
+    hashlib.file_digest(fileobj, "md5")
+    # ruleid:insecure-hash-algorithm-md5
+    hashlib.file_digest(fileobj, hashlib.md5)
+    # ok:insecure-hash-algorithm-md5
+    hashlib.file_digest(fileobj, "sha256")
+    # ok:insecure-hash-algorithm-md5
+    hashlib.file_digest(fileobj, hashlib.sha256)
+    # ok:insecure-hash-algorithm-md5
+    hashlib.file_digest(fileobj, lambda: hashlib.md5(usedforsecurity=False))

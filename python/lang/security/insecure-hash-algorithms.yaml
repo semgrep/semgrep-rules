@@ -1,9 +1,18 @@
 rules:
 - id: insecure-hash-algorithm-sha1
-  pattern: hashlib.sha1(...)
+  pattern-either:
+  - pattern: hashlib.sha1(...)
+  - patterns:
+    - pattern: hashlib.file_digest($FILE, $DIGEST, ...)
+    - metavariable-pattern:
+        metavariable: $DIGEST
+        pattern-either:
+        - pattern: '"sha1"'
+        - pattern: hashlib.sha1
   fix-regex:
-    regex: sha1
-    replacement: sha256
+    regex: '^((?:[A-Za-z_][A-Za-z0-9_]*\.)+)sha1(?=\s*\()'
+    replacement: '\1sha256'
+    count: 1
   message: >-
     Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic
