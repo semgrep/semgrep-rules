@@ -4,7 +4,7 @@ rules:
     - pattern-either:
         - patterns:
           - pattern: |
-              jwt.decode(..., options={..., "verify_signature": $BOOL, ...}, ...)
+              jwt.$DECODE(..., options={..., "verify_signature": $BOOL, ...}, ...)
           - metavariable-pattern:
               metavariable: $BOOL
               pattern: |
@@ -14,14 +14,17 @@ rules:
             - pattern: |
                 $OPTS = {..., "verify_signature": $BOOL, ...}
                 ...
-                jwt.decode(..., options=$OPTS, ...)
+                jwt.$DECODE(..., options=$OPTS, ...)
             - metavariable-pattern:
                 metavariable: $BOOL
                 pattern: |
                   False
             - focus-metavariable: $BOOL
+    - metavariable-regex:
+        metavariable: $DECODE
+        regex: ^(decode|decode_complete)$
   message: >-
-    Detected JWT token decoded with 'verify=False'. This bypasses any integrity
+    Detected JWT token decoded with 'verify_signature=False'. This bypasses any integrity
     checks for the token which means the token could be tampered with by
     malicious actors. Ensure that the JWT token is verified.
   metadata:
@@ -32,6 +35,7 @@ rules:
     cwe:
     - 'CWE-287: Improper Authentication'
     references:
+    - https://pyjwt.readthedocs.io/en/stable/api.html#jwt.decode_complete
     - https://github.com/we45/Vulnerable-Flask-App/blob/752ee16087c0bfb79073f68802d907569a1f0df7/app/app.py#L96
     category: security
     technology:
