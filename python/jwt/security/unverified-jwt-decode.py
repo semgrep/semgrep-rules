@@ -31,3 +31,31 @@ def tests(token):
     # ok:unverified-jwt-decode
     jwt.decode(encoded, key)
 
+
+
+def complete_decode_tests(encoded, key):
+    # ruleid:unverified-jwt-decode
+    jwt.decode_complete(encoded, key, options={"verify_signature": False})
+
+    # ruleid:unverified-jwt-decode
+    options = {"verify_signature": False, "verify_exp": True}
+    jwt.decode_complete(encoded, key, options=options)
+
+    # ok:unverified-jwt-decode
+    jwt.decode_complete(encoded, key, options={"verify_signature": True})
+
+    # ok:unverified-jwt-decode
+    jwt.decode_complete(encoded, key)
+
+    # ok:unverified-jwt-decode
+    jwt.decode_complete(encoded, key, options={"verify_exp": False})
+
+    # ok:unverified-jwt-decode
+    jwt.decode_other(encoded, key, options={"verify_signature": False})
+
+
+def imported_complete_decode_test(encoded, key):
+    from jwt import decode_complete
+
+    # ruleid:unverified-jwt-decode
+    decode_complete(encoded, key, options={"verify_signature": False})
