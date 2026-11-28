@@ -15,3 +15,17 @@ conn = httplib.client.HTTPSConnection("123.123.21.21", context=ssl._create_unver
 # ruleid:unverified-ssl-context
 ssl._create_default_https_context = ssl._create_unverified_context
 urllib2.urlopen("https://google.com").read()
+
+
+# ruleid:unverified-ssl-context
+context = ssl._create_stdlib_context()
+
+# ruleid:unverified-ssl-context
+ssl._create_default_https_context = ssl._create_stdlib_context
+
+from ssl import _create_stdlib_context as create_context
+# ruleid:unverified-ssl-context
+context = create_context()
+
+# ok:unverified-ssl-context
+context = ssl.create_default_context()
