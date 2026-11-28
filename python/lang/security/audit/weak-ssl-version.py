@@ -55,3 +55,28 @@ def open_ssl_socket(version=SSL.SSLv23_METHOD):
 # ruleid:weak-ssl-version
 def open_ssl_socket(version=SSL.TLSv1_1_METHOD):
     pass
+
+
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+# ruleid:weak-ssl-version
+context.minimum_version = ssl.TLSVersion.TLSv1
+# ruleid:weak-ssl-version
+context.minimum_version = ssl.TLSVersion.TLSv1_1
+# ruleid:weak-ssl-version
+context.maximum_version = ssl.TLSVersion.SSLv3
+# ruleid:weak-ssl-version
+context.maximum_version = ssl.TLSVersion.TLSv1_1
+# ok:weak-ssl-version
+context.minimum_version = ssl.TLSVersion.TLSv1_2
+# ok:weak-ssl-version
+context.maximum_version = ssl.TLSVersion.TLSv1_3
+# ok:weak-ssl-version
+context.maximum_version = ssl.TLSVersion.MAXIMUM_SUPPORTED
+
+from ssl import TLSVersion
+# ruleid:weak-ssl-version
+context.minimum_version = TLSVersion.TLSv1
+
+# ok:weak-ssl-version
+if context.minimum_version <= ssl.TLSVersion.TLSv1_1:
+    raise ValueError("TLS 1.2 or newer is required")
