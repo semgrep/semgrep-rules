@@ -1,6 +1,9 @@
 rules:
 - id: insecure-hash-algorithm-sha1
-  pattern: hashlib.sha1(...)
+  pattern-either:
+  - pattern: hashlib.sha1(...)
+  - pattern: hashlib.file_digest($FILE, "sha1", ...)
+  - pattern: hashlib.file_digest($FILE, hashlib.sha1, ...)
   fix-regex:
     regex: sha1
     replacement: sha256

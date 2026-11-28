@@ -1,7 +1,10 @@
 rules:
 - id: insecure-hash-algorithm-md5
   patterns:
-    - pattern: hashlib.md5(...)
+    - pattern-either:
+      - pattern: hashlib.md5(...)
+      - pattern: hashlib.file_digest($FILE, "md5", ...)
+      - pattern: hashlib.file_digest($FILE, hashlib.md5, ...)
     - pattern-not: hashlib.md5(..., usedforsecurity=False, ...)
   message: >-
     Detected MD5 hash algorithm which is considered insecure. MD5 is not

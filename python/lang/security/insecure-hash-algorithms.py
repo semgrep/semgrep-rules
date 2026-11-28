@@ -8,3 +8,14 @@ hashlib.sha1(1)
 
 # ok:insecure-hash-algorithm-sha1
 hashlib.sha256(1)
+
+
+def file_digests(fileobj):
+    # ruleid:insecure-hash-algorithm-sha1
+    hashlib.file_digest(fileobj, "sha1")
+    # ruleid:insecure-hash-algorithm-sha1
+    hashlib.file_digest(fileobj, hashlib.sha1)
+    # ok:insecure-hash-algorithm-sha1
+    hashlib.file_digest(fileobj, "sha256")
+    # ok:insecure-hash-algorithm-sha1
+    hashlib.file_digest(fileobj, hashlib.sha256)
