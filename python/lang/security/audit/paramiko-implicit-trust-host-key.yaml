@@ -1,13 +1,20 @@
 rules:
 - id: paramiko-implicit-trust-host-key
   patterns:
-  - pattern-inside: |
-      $CLIENT = paramiko.client.SSHClient(...)
-      ...
-      $CLIENT.set_missing_host_key_policy(...)
+  - pattern-either:
+    - pattern-inside: |
+        $CLIENT = paramiko.client.SSHClient(...)
+        ...
+        $CLIENT.set_missing_host_key_policy(...)
+    - pattern-inside: |
+        $CLIENT = paramiko.SSHClient(...)
+        ...
+        $CLIENT.set_missing_host_key_policy(...)
   - pattern-either:
     - pattern: paramiko.client.AutoAddPolicy
     - pattern: paramiko.client.WarningPolicy
+    - pattern: paramiko.AutoAddPolicy
+    - pattern: paramiko.WarningPolicy
   message: >-
     Detected a paramiko host key policy that implicitly trusts a server's
     host key. Host keys should be verified to ensure the connection
